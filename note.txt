@@ -1,0 +1,60 @@
+Package--
+Google Translate- https://packagist.org/packages/stichoza/google-translate-php
+
+Category Name Issue in 
+Pages & Menus 
+
+Product- 
+    General-
+        Virtual - 
+    -selling_price (database)
+
+
+HasMany sync -> 
+1. https://stackoverflow.com/questions/47489530/laravel-sync-hasmany-with-belongsto-array
+2. https://www.youtube.com/watch?v=21M38_1lLBo
+3. https://www.youtube.com/watch?v=V5xINbA-z9o
+
+Many to Many Relationship- fetch data from pivot, attach, detach, sync
+https://laraveldaily.com/pivot-tables-and-many-to-many-relationships/
+
+//-----My Test---
+
+// $product->tags()->attach(1);
+// $product->tags()->detach(1);
+// $product->tags()->sync([1,2]);
+
+
+//$product = Product::find(54);
+// // $data = $product->tags->first();
+// // return $data->slug;
+
+// $data = $product->tags;
+// return $data[0];
+// return $data[0]->slug;
+
+
+// // $product->tags()->attach(2,['name'=>'Irfan']);
+// // return "ok";
+// foreach ($product->tags as $tag) {
+//     // return $tag->pivot->name;
+//     return $tag->pivot->name;
+// }
+
+
+###### Need To Correction #######
+1. attributes.category_id to attribute_category
+2. URL in Attribute
+3. attribute_translations.attribute_set_id //testing purpose //(no need)
+4. attribute_value_translations.attribute_id - //wroking
+
+
+
+
+//People Pro
+1. There is no any option for night shift like Clock in on 10:00 PM: 03/15/2021 and  Clock out on 05:00 AM: 03/16/2021, there is only one shift can you please resolve this issue.
+2. Add Job Apply - 
+    i.   Contact Number (Required) & 
+    ii.  Address Optional  - 
+    iii. Short Description (Correction- Laravel Developer)
+3. One Company has multiple locatin - (less priority)
