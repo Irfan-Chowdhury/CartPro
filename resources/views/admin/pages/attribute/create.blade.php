@@ -38,7 +38,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Attribute Set <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
-                                                            <select name="attribute_set_id" id="attributeSetId" class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute Set')}}'>                                                        
+                                                            <select name="attribute_set_id" id="attributeSetId" required class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute Set')}}'>                                                        
                                                                 @foreach ($attributeSets as $item)
                                                                     @if ($item->attributeSetTranslation->count()>0)
                                                                         @foreach ($item->attributeSetTranslation as $key => $value)
@@ -64,7 +64,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Attribute Name <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="attribute_name" id="navbarText" class="form-control @error('attribute_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Attribute Name" >
+                                                            <input type="text" required name="attribute_name" id="navbarText" class="form-control @error('attribute_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Attribute Name" >
                                                             @error('attribute_name')
                                                                 <div class="text-danger">{{ $message }}</div>
                                                             @enderror
@@ -74,7 +74,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
                                                         <div class="col-sm-8">
-                                                            <select name="category_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                                                            <select name="category_id[]" class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                                                 @foreach ($categories as $item)
                                                                     @if ($item->categoryTranslation->count()>0)
                                                                         @foreach ($item->categoryTranslation as $key => $value)
@@ -132,7 +132,7 @@
                                                 <div class="row">
                                                     <div class="col-6 form-group">
                                                         <label>{{__('Value Name')}}</label>
-                                                        <input type="text" name="value_name[]" required class="form-control" placeholder="{{__('Type Value Name')}}">
+                                                        <input type="text" name="value_name[]" class="form-control" placeholder="{{__('Type Value Name')}}">
                                                     </div>
                                                     <div class="col-2">
                                                         <label>Delete</label><br>

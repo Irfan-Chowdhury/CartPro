@@ -32,8 +32,18 @@ class Attribute extends Model
     //For AttibuteController 
     public function attributeValues()
     {
-    	return $this->hasMany(AttributeValue::class,'attribute_id');
+        return $this->hasMany(AttributeValue::class,'attribute_id');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class); //db: attribute_category
+    }
+
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class,'category_attribute');
+    // }
 
     //For Produc
     // public function attributeValueTranslation()

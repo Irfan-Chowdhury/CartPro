@@ -139,11 +139,20 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->value_name;
+        // $attributeValueNameArray= $request->value_name;
+
+        // if(array_filter($attributeValueNameArray) != []){
+        //     // return "Array is empty | Not Execute";
+        //     return "Array is non- empty | Line Execute";
+        // }
+        // else {
+        //     // return "Array is non- empty | Line Execute";
+        //     return "Array is empty | Not Execute";
+        // }
 
         $validator = Validator::make($request->only('attribute_set_id','attribute_name'),[ 
             'attribute_set_id'=> 'required',
-            'attribute_name'  => 'required',
+            'attribute_name'  => 'required|unique:attribute_translations',
         ]);
 
         if ($validator->fails()){
@@ -174,11 +183,20 @@ class AttributeController extends Controller
         $attributeTranslation->attribute_name = $request->attribute_name;
         $attributeTranslation->save();
 
-        //Value
-        if ($request->value_name) {
-            // $attributeValue = new AttributeValue();
-            // $attributeValue->attribute_id = $attribute->id;
-            // $attributeValue->save();
+        //----------------- Attribute-Category Sync --------------
+        if (!empty($request->category_id)) {       
+            $categoryArrayIds = $request->category_id;
+            $attribute->categories()->sync($categoryArrayIds);
+        }
+        //-----------------/ Attribute-Category Sync ----------------------
+
+
+
+        //-------- Attribute-Value ----------
+
+        $attributeValueNameArray= $request->value_name;
+
+        if(array_filter($attributeValueNameArray) != []){ //if value_empty it show  [null] when use return, checking that way.
 
             $attributeValueArray = $request->value_name;
             foreach ($attributeValueArray as $key => $value) {
@@ -194,6 +212,7 @@ class AttributeController extends Controller
                 $attributeValueTranslation->save();
             }
         }
+        //--------/ Attribute-Value ----------
 
         session()->flash('type','success');
         session()->flash('message','Data Saved Successfully.');
@@ -236,7 +255,8 @@ class AttributeController extends Controller
     public function edit($id)
     {
         $local = Session::get('currentLocal');
-        $attribute                 = Attribute::find($id);
+        // $attribute                 = Attribute::find($id);
+        $attribute                 = Attribute::with('categories')->where('id',$id)->first();
         $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('local',Session::get('currentLocal'))->first();
 
 
@@ -315,6 +335,14 @@ class AttributeController extends Controller
                 'attribute_name' => $request->attribute_name,
             ]
         );
+
+
+        //----------------- Attribute-Category Sync --------------
+        if (!empty($request->category_id)) {       
+            $categoryArrayIds = $request->category_id;
+            $attribute->categories()->sync($categoryArrayIds);
+        }
+        //-----------------/ Attribute-Category Sync ----------------------
 
 
         //--------- Value Part--------

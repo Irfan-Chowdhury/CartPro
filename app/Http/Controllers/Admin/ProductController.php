@@ -174,7 +174,7 @@ class ProductController extends Controller
         $product->price         = $request->price;
         $product->special_price = $request->special_price;
         $product->special_price_type = $request->special_price_type;
-        $product->special_price_start = date("Y-m-d",strtotime($request->special_price_start));
+        $product->special_price_start= date("Y-m-d",strtotime($request->special_price_start));
         $product->special_price_end  = date("Y-m-d",strtotime($request->special_price_end));
         $product->selling_price = $request->special_price;
         $product->sku           = $request->sku;

@@ -69,15 +69,21 @@
                                             <div class="form-group row">
                                                 <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
                                                 <div class="col-sm-8">
-                                                    <select name="category_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                                                    <select name="category_id[]" multiple class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                                         @foreach ($categories as $item)
                                                             @if ($item->categoryTranslation->count()>0)
                                                                 @foreach ($item->categoryTranslation as $key => $value)
                                                                     @if ($key<1)
                                                                         @if ($value->local==$local)
-                                                                            <option value="{{$item->id}}" @if($item->id==$attribute->category_id) selected @endif>{{$value->category_name}}</option>
+                                                                            <option value="{{$item->id}}" @foreach($attribute->categories as $attributeCategory)
+                                                                                                                @if($attributeCategory->id==$item->id) 
+                                                                                                                    selected 
+                                                                                                                @endif
+                                                                                                         @endforeach>
+                                                                                                         {{$value->category_name}}
+                                                                                                        </option>
                                                                         @elseif($value->local=='en')
-                                                                            <option value="{{$item->id}}" @if($item->id==$attribute->category_id) selected @endif>{{$value->category_name}}</option>
+                                                                            <option value="{{$item->id}}" @if($item->id==9) selected @endif>{{$value->category_name}}</option>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach
