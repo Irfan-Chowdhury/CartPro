@@ -133,6 +133,9 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/','ProductController@index')->name('admin.products.index');
         Route::get('/create','ProductController@create')->name('admin.products.create');
         Route::post('/store','ProductController@store')->name('admin.products.store');
+        Route::get('/edit/{id}','ProductController@edit')->name('admin.products.edit');
+        Route::get('/active','ProductController@active')->name('admin.products.active');
+        Route::get('/inactive','ProductController@inactive')->name('admin.products.inactive');
     });
 
 

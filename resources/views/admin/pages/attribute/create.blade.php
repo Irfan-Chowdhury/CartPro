@@ -74,7 +74,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
                                                         <div class="col-sm-8">
-                                                            <select name="category_id[]" class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                                                            <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                                                 @foreach ($categories as $item)
                                                                     @if ($item->categoryTranslation->count()>0)
                                                                         @foreach ($item->categoryTranslation as $key => $value)
@@ -169,6 +169,14 @@
 
     $(document).on('click', '.del-row', function(){
         $(this).parent().parent().html('');
+    })
+
+    $(document).ready(function(){
+        $(".mul-select").select2({
+                placeholder: "Select Category", //placeholder
+                tags: true,
+                tokenSeparators: ['/',',',';'," "] 
+        });
     })
 </script>
 

@@ -83,7 +83,13 @@
                                                                                                          {{$value->category_name}}
                                                                                                         </option>
                                                                         @elseif($value->local=='en')
-                                                                            <option value="{{$item->id}}" @if($item->id==9) selected @endif>{{$value->category_name}}</option>
+                                                                        <option value="{{$item->id}}" @foreach($attribute->categories as $attributeCategory)
+                                                                                                            @if($attributeCategory->id==$item->id) 
+                                                                                                                selected 
+                                                                                                            @endif
+                                                                     @endforeach>
+                                                                     {{$value->category_name}}
+                                                                    </option>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach

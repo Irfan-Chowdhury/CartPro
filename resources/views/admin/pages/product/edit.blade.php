@@ -23,7 +23,7 @@
     @include('admin.includes.alert_message')
 
     <div class="container-fluid mb-3">
-        <h3 class="font-weight-bold mt-3">Create Product</h3>
+        <h3 class="font-weight-bold mt-3">Edit Product</h3>
         <div id="success_alert" role="alert"></div>
     </div>
 
@@ -63,7 +63,7 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Product Name')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="product_name" id="productName" class="form-control @error('product_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Product Name" >
+                                                                <input type="text" name="product_name" id="productName" class="form-control @error('product_name') is-invalid @enderror" id="inputEmail3" @if(isset($product->productTranslation[0]->product_name)) value="{{$product->productTranslation[0]->product_name}}" @else placeholder="Type Product Name" @endif>
                                                                 @error('product_name')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -73,7 +73,9 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Description')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                <textarea name="description" id="description" class="form-control text-editor"></textarea>
+                                                                <textarea name="description" id="description" class="form-control text-editor">
+                                                                    @if(isset($product->productTranslation[0]->product_name)) {{$product->productTranslation[0]->description}} @endif
+                                                                </textarea>
                                                                 @error('description')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -89,9 +91,23 @@
                                                                             @foreach ($item->brandTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->brand_name}}</option>
+                                                                                        <option value="{{$item->id}}" 
+                                                                                            @if(isset($product->brand_id))
+                                                                                                @if($item->id==$product->brand_id) 
+                                                                                                    selected
+                                                                                                @endif 
+                                                                                            @endif>
+                                                                                            {{$value->brand_name}}
+                                                                                        </option>
                                                                                     @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->brand_name}}</option>
+                                                                                        <option value="{{$item->id}}"
+                                                                                            @if(isset($product->brand_id))
+                                                                                                @if($item->id==$product->brand_id) 
+                                                                                                    selected
+                                                                                                @endif 
+                                                                                            @endif>
+                                                                                            {{$value->brand_name}}
+                                                                                        </option>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -113,9 +129,23 @@
                                                                             @foreach ($item->categoryTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
+                                                                                        <option value="{{$item->id}}" 
+                                                                                            @foreach($product->categories as $productCategory)
+                                                                                                @if($productCategory->id == $item->id) 
+                                                                                                    selected 
+                                                                                                @endif
+                                                                                            @endforeach>
+                                                                                            {{$value->category_name}}
+                                                                                        </option>
                                                                                     @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
+                                                                                        <option value="{{$item->id}}" 
+                                                                                            @foreach($product->categories as $productCategory)
+                                                                                                @if($productCategory->id == $item->id) 
+                                                                                                    selected 
+                                                                                                @endif
+                                                                                            @endforeach>
+                                                                                            {{$value->category_name}}
+                                                                                        </option>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -159,9 +189,23 @@
                                                                             @foreach ($item->tagTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->tag_name}}</option>
+                                                                                        <option value="{{$item->id}}" 
+                                                                                            @foreach($product->tags as $producttag)
+                                                                                                @if($producttag->id == $item->id) 
+                                                                                                    selected 
+                                                                                                @endif
+                                                                                            @endforeach>
+                                                                                            {{$value->tag_name}}
+                                                                                        </option>
                                                                                     @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->tag_name}}</option>
+                                                                                        <option value="{{$item->id}}" 
+                                                                                            @foreach($product->tags as $producttag)
+                                                                                                @if($producttag->id == $item->id) 
+                                                                                                    selected 
+                                                                                                @endif
+                                                                                            @endforeach>
+                                                                                            {{$value->tag_name}}
+                                                                                        </option>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -187,7 +231,7 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
                                                             <div class="col-sm-8">
                                                                 <div class="form-group form-check">
-                                                                    <input type="checkbox" class="form-check-input" name="is_active" value="1" id="isActive">
+                                                                    <input type="checkbox" class="form-check-input" name="is_active" @if($product->is_active==1) checked @endif value="1" id="isActive">
                                                                     <span>{{__('Enable the product')}}</span>
                                                                 </div>
                                                             </div>
@@ -219,14 +263,14 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Price')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="price" id="price" class="form-control" id="inputEmail3" placeholder="Type Product Price" >
+                                                                <input type="text" name="price" id="price" class="form-control" id="inputEmail3" value="{{$product->price}}">
                                                             </div>
                                                         </div>
                                                         
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" placeholder="Type Special Price" >
+                                                                <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" value="{{$product->special_price}}">
                                                             </div>
                                                         </div>
                                                         
@@ -234,8 +278,8 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Type')}}</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Price Type')}}'>
-                                                                    <option value="Fixed">{{__('Fixed')}}</option>
-                                                                    <option value="Parcent">{{__('Parcent')}}</option>
+                                                                    <option value="Fixed" @if($product->special_price_type=='Fixed') selected @endif>{{__('Fixed')}}</option>
+                                                                    <option value="Parcent" @if($product->special_price_type=='Parcent') selected @endif>>{{__('Parcent')}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -243,14 +287,14 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Start')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="special_price_start" id="specialPriceStart" class="form-control datepicker">
+                                                                <input type="text" name="special_price_start" value="{{$product->special_price_start}}" id="specialPriceStart" class="form-control datepicker">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price End')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="special_price_end" id="specialPriceEnd" class="form-control">
+                                                                <input type="text" name="special_price_end" value="{{$product->special_price_end}}" id="specialPriceEnd" class="form-control">
                                                             </div>
                                                         </div>
 
@@ -280,7 +324,7 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('SKU')}} </b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" id="inputEmail3" placeholder="Type SKU" >
+                                                                <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" id="inputEmail3" value="{{$product->sku}}">
                                                                 @error('sku')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -291,23 +335,28 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Inventroy Management')}}</b></label>
                                                             <div class="col-sm-8">
                                                                 <select class="form-control selectpicker" name="manage_stock" id="manageStock" data-live-search="true" data-live-search-style="begins" title='{{__('Select Inventory')}}'>
-                                                                    <option value="0">{{__("Don't Track Inventory")}}</option>
-                                                                    <option value="1">{{__('Track Inventory')}}</option>
+                                                                    <option value="0" @if($product->manage_stock==0) selected @endif>{{__("Don't Track Inventory")}}</option>
+                                                                    <option value="1" @if($product->manage_stock==1) selected @endif>{{__('Track Inventory')}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
 
 
                                                         <div class="form-group row" id="quantityField">
-                                                            
+                                                            @if ($product->qty)
+                                                                <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Quantity')}} &nbsp;<span class="text-danger">*</span> </b></label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="number" min="0" name="qty" id="qty" class="form-control" id="inputEmail3" value="{{$product->qty}}">
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Stock Availibility')}}</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="in_stock" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Stock')}}'>
-                                                                    <option value="1">{{__("In Stock")}}</option>
-                                                                    <option value="0">{{__('Out Stock')}}</option>
+                                                                    <option value="1" @if($product->manage_stock==10) selected @endif>{{__("In Stock")}}</option>
+                                                                    <option value="0" @if($product->manage_stock==0) selected @endif>{{__('Out Stock')}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -387,7 +436,10 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Basic Image')}} </b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror">
+                                                                <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror" onchange="showImage(this,'item_photo')">
+                                                                @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))
+                                                                    <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
+                                                                @endif 
                                                                 @error('base_image')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -398,6 +450,11 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Additional Images')}} </b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="file" name="additional_images[]" multiple id="multipleImages" class="form-control @error('additional_images') is-invalid @enderror">
+                                                                @if($product->additionalImage!==null)
+                                                                    @foreach ($product->additionalImage as $item)
+                                                                        <img id="item_photo" src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
+                                                                    @endforeach
+                                                                @endif
                                                                 @error('additional_images')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -579,7 +636,10 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Short Description')}} </b></label>
                                                             <div class="col-sm-8">
-                                                                <textarea name="short_description" id="short_description" class="form-control" rows="5"></textarea>
+                                                                <textarea name="short_description" id="short_description" class="form-control" rows="5">
+                                                                    @if(isset($product->productTranslation[0]->short_description)) {{$product->productTranslation[0]->short_description}} @endif
+
+                                                                </textarea>
                                                                 @error('short_description')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -589,14 +649,14 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Product New From')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="new_from" id="newFrom" class="form-control datepicker">
+                                                                <input type="text" name="new_from" id="newFrom" value="{{date('Y-m-d',strtotime($product->new_from))}}" class="form-control datepicker">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Product New To')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="new_to" id="newTo" class="form-control datepicker">
+                                                                <input type="text" name="new_to" id="newTo" value="{{date('Y-m-d',strtotime($product->new_to))}}" class="form-control datepicker">
                                                             </div>
                                                         </div>
                                                         
@@ -827,6 +887,29 @@
 
         //     console.log(attributeValueId);
         // });
+
+        //Image Show Before Upload Start
+        $(document).ready(function(){
+            $('input[type="file"]').change(function(e){
+                var fileName = e.target.files[0].name;
+                if (fileName){
+                    $('#fileLabel').html(fileName);
+                }
+            });
+        });
+
+        function showImage(data, imgId){
+            if(data.files && data.files[0]){
+                var obj = new FileReader();
+
+                obj.onload = function(d){
+                    var image = document.getElementById(imgId);
+                    image.src = d.target.result;
+                }
+                obj.readAsDataURL(data.files[0]);
+            }
+        }
+        //Image Show Before Upload End
 
 </script>
 

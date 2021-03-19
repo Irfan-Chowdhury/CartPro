@@ -24,11 +24,11 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>    
+        		    <th scope="col">{{__('Thumbnail')}}</th>
         		    <th scope="col">{{__('Name')}}</th>
-        		    {{-- <th scope="col">{{__('Attribute Set')}}</th>
-        		     <th scope="col">{{__('Filterable')}}</th>
-        		    <th scope="col">{{trans('file.Status')}}</th>
-        		   <th scope="col">{{trans('file.action')}}</th> --}}
+        		    <th scope="col">{{__('Price')}}</th>
+					<th scope="col">{{trans('file.Status')}}</th>
+					<th scope="col">{{trans('file.action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -83,25 +83,34 @@
 					searchable: false
 				},
 				{
+					data: 'image',
+					name: 'image',
+				},
+				{
 					data: 'product_name',
 					name: 'product_name',
 				},
-				// {
-				// 	data: 'is_active',
-				// 	name: 'is_active',
-				// 	render:function (data) {
-				// 		if (data == 1) {
-				// 			return "<span class='p-2 badge badge-success'>Active</span>";
-				// 		}else{
-				// 			return "<span class='p-2 badge badge-danger'>Inactive</span>";
-				// 		}
-				// 	}
-				// },
-				// {
-				// 	data: 'action',
-				// 	name: 'action',
-				// 	orderable: false,
-				// }
+				{
+					data: 'price',
+					name: 'price',
+				},
+				
+				{
+					data: 'is_active',
+					name: 'is_active',
+					render:function (data) {
+						if (data == 1) {
+							return "<span class='p-2 badge badge-success'>Active</span>";
+						}else{
+							return "<span class='p-2 badge badge-danger'>Inactive</span>";
+						}
+					}
+				},
+				{
+					data: 'action',
+					name: 'action',
+					orderable: false,
+				}
 			],
 
 			"order": [],
@@ -171,6 +180,55 @@
 			],
 		});
 		new $.fn.dataTable.FixedHeader(table);
+	});
+
+
+	//---------- Active -------------
+	$(document).on("click",".active",function(e){
+		e.preventDefault();
+		var productId = $(this).data("id");
+		console.log(productId);
+
+		$.ajax({
+			url: "{{route('admin.products.active')}}",
+			type: "GET",
+			data: {product_id:productId},
+			success: function(data){
+				console.log(data);
+				if(data.success){
+                    $('#productTable').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }              
+			}
+		});
+	});
+
+	//---------- Inactive -------------
+	$(document).on("click",".inactive",function(e){
+		e.preventDefault();
+		var productId = $(this).data("id");
+		console.log(productId);
+
+		$.ajax({
+			url: "{{route('admin.products.inactive')}}",
+			type: "GET",
+			data: {product_id:productId},
+			success: function(data){
+				console.log(data);
+				if(data.success){
+                    $('#productTable').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }              
+			}
+		});
 	});
 </script>
 

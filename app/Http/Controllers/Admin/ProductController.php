@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+
 use Image;
 
 class ProductController extends Controller
@@ -26,24 +27,43 @@ class ProductController extends Controller
         $this->middleware('auth:admin');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Products
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
     public function index()
     {
         $local = Session::get('currentLocal');
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($local){
+
+        $products = Product::with(['baseImage','productTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
             ->orderBy('id','DESC');
         }])
-        ->where('is_active',1)
         ->orderBy('id','DESC')
         ->get();
+
+        //return $products;
 
         if (request()->ajax())
         {
             return datatables()->of($products)
             ->setRowId(function ($row){
                 return $row->id;
+            })
+            ->addColumn('image', function ($row)
+            {   
+                if (($row->baseImage==null) || ($row->baseImage->type!='base')) {
+                    return '<img src="'.url("public/images/products/empty.jpg").'" alt="" height="50px" width="50px">';
+                }elseif ($row->baseImage->type=='base') {
+                    $url = url("public/".$row->baseImage->image); 
+                    return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                }      
             })
             ->addColumn('product_name', function ($row) use ($local)
             {   
@@ -61,7 +81,29 @@ class ProductController extends Controller
                     return "NULL";
                 }
             })
-            // ->rawColumns(['action'])
+            ->addColumn('price', function ($row)
+            {   
+                if ($row->special_price) {
+                    return  '<span>'.$row->special_price.'</span></br><span class="text-danger"><del>'.$row->price.'</del></span>';
+                }else {
+                    return '$ '.$row->price;
+                }
+                
+            })
+            ->addColumn('action', function ($row)
+            {
+                $actionBtn = "";
+                $actionBtn .= '<a href="'.route('admin.products.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                                &nbsp; ';
+                if ($row->is_active==1) {
+                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                }else {
+                    $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                }
+                            
+                return $actionBtn;
+            })
+            ->rawColumns(['image','action','price'])
             ->make(true);
         }
 
@@ -69,8 +111,21 @@ class ProductController extends Controller
         return view('admin.pages.product.index');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Product Create
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
     public function create()
     {
+        // $data = Attribute::get()->groupBy('attribute_set_id');
+        // $data = Attribute::distinct()->get('attribute_set_id');
+        // return $data;
+
+
         $local = Session::get('currentLocal');
 
         $brands = Brand::with(['brandTranslation'=> function ($query) use ($local){
@@ -94,7 +149,7 @@ class ProductController extends Controller
             ->orWhere('local','en')
             ->orderBy('id','DESC'); 
         }])->get();
-
+        
         $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
@@ -103,39 +158,46 @@ class ProductController extends Controller
         ->where('is_active',1)
         ->get();
 
-        // return $attributes->AttributeValueTranslation->count();
-
-
-        //-------------- Test ----------
-        // $attribute_sets = DB::table('attribute_sets')
-        //                 ->join('attribute_set_translations','attribute_set_translations.attribute_set_id','attribute_sets.id')
-        //                 ->join('attributes','attributes.attribute_set_id','attribute_sets.id')
-        //                 ->join('attribute_translations','attribute_translations.attribute_id','attributes.id')
-        //                 ->where('attribute_set_translations.local',$local)
-        //                 ->where('attribute_translations.local',$local)
-        //                 ->select('attribute_sets.id AS attribute_set_id','attribute_set_translations.attribute_set_name','attributes.id AS attribute_id','attribute_translations.attribute_name')
-        //                 ->get();
-
-        // return $attribute_sets;
-
-
-         // $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
-        //     $query->where('local',$local)
-        //     ->orWhere('local','en')
-        //     ->orderBy('id','DESC'); 
-        // },
-        // 'attributes','attributeTranslation'
-        
-        // ])
-        // ->orderBy('id','DESC')
-        // ->get();
-
-        // return $attributeSets;
-        // return $attributeSets[3]->attributes[1]->slug;
-        //-------------- Test ----------
-
+        // return $attributes;
 
         return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes'));
+
+
+
+        //-------------- <optgroup label="Name"> <option>Asteroids</option> </optgroup> --------------
+
+        // $data = Attribute::distinct()->get('attribute_set_id');
+
+        // $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
+        //     $query->where('local',$local)
+        //     ->orWhere('local','en')
+        //     ->orderBy('id','DESC');
+        // }])
+        // ->where('is_active',1)
+        // ->get()
+        // ->groupBy('attribute_set_id');
+
+        // return $attributes;
+        // return $attributes[5];
+        // return $attributes[5][0];
+        // return $attributes[5][0]->slug;
+        // return $attributes[5][0]->attributeTranslation[0]->attribute_name;
+
+
+        // $data = [];
+        // $data[0] = $attributes[5];
+        // $data[1] = $attributes[7];
+
+        // return $data;
+        // return $data[0][0];
+        // return $data[0][0]->slug;
+        // return $data[0][0]->attributeTranslation;
+        // return $data[0][0]->attributeTranslation[0]->attribute_name;
+
+        //-------------- <optgroup label="Name"> <option>Asteroids</option> </optgroup> --------------
+        
+        // https://thdoan.github.io/bootstrap-select/examples.html
+        // return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data'));
     }
 
     public function make_slug($string) 
@@ -146,16 +208,25 @@ class ProductController extends Controller
         return preg_replace('/\s+/u', '-', trim($string));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Product Store
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
     public function store(Request $request)
     {
         // return $request->all();
 
         $validator = Validator::make($request->all(),[ 
-            'product_name'=> 'required',
+            'product_name'=> 'required|unique:product_translations',
             'description' => 'required',
             'price'       => 'required',
             'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'multiple_images'=> 'nullable|unique:product_translations',
         ]);
 
         if ($validator->fails()){
@@ -216,13 +287,13 @@ class ProductController extends Controller
 
 
         //----------------- Multiple Image ---------------
-        if (!empty($request->multiple_images)) {       
-            $multipleImagesArray = $request->multiple_images;
-            foreach($multipleImagesArray as $key => $image){
+        if (!empty($request->additional_images)) {       
+            $additionalImagesArray = $request->additional_images;
+            foreach($additionalImagesArray as $key => $image){
                 $data = [];
                 $data['product_id'] = $product->id;
                 $data['image'] =  $this->imageStore($image);
-                $data['type']  = 'multiple';
+                $data['type']  = 'additional';
                 ProductImage::insert($data);
             }
         }
@@ -253,6 +324,119 @@ class ProductController extends Controller
         session()->flash('message','Data Saved Successfully.');
         
         return redirect()->back();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Product Edit
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    public function edit($id)
+    {
+        $local = Session::get('currentLocal');
+
+        // $product = Product::with(['productTranslation'=> function ($query) use ($local){
+        //     $query->where('local',$local)
+        //     ->first();
+        // },'brandTranslation'=> function ($query) use ($local){
+        //     $query->where('local',$local)
+        //     ->first();
+        // }])
+        // ->where('id',$id)
+        // ->first();
+        // return $product->brandTranslation->brand_name;
+        //return $product->productTranslation[0]->product_name;
+
+        $product = Product::with(['productTranslation'=> function ($query) use ($local){
+            $query->where('local',$local)
+            ->first();
+        },'categories','tags','baseImage',
+        'additionalImage'=> function ($query){
+            $query->where('type','additional')
+                ->get();
+        }])
+        ->where('id',$id)
+        ->first();
+
+        // return $product->additionalImage;
+
+        
+
+        $brands = Brand::with(['brandTranslation'=> function ($query) use ($local){
+                $query->where('local',$local)
+                ->orWhere('local','en')
+                ->orderBy('id','DESC');
+            }])
+            ->where('is_active',1)
+            ->get();
+        
+        $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
+                $query->where('local',$local)
+                ->orWhere('local','en')
+                ->orderBy('id','DESC');
+            }])
+            ->where('is_active',1)
+            ->get();
+
+        $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
+            $query->where('local',$local)
+            ->orWhere('local','en')
+            ->orderBy('id','DESC'); 
+        }])->get();
+        
+        $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
+            $query->where('local',$local)
+            ->orWhere('local','en')
+            ->orderBy('id','DESC');
+        }])
+        ->where('is_active',1)
+        ->get();
+
+        // return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes'));
+        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Product Active
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    public function active(Request $request)
+    {
+        if ($request->ajax()) 
+        {
+            $product = Product::find($request->product_id);
+            $product->is_active = 1;
+            $product->save();
+
+            return response()->json(['success' => 'Data Active Successfully']);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Product Inactive
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    public function inactive(Request $request)
+    {
+        if ($request->ajax()) 
+        {
+            $product = Product::find($request->product_id);
+            $product->is_active = 0;
+            $product->save();
+
+            return response()->json(['success' => 'Data Inactive Successfully']);
+        }
     }
 
     protected function imageStore($image)

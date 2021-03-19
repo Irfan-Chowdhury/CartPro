@@ -41,6 +41,22 @@ class Product extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function baseImage()
+    {
+        return $this->hasOne(ProductImage::class,'product_id');
+    }
+
+    public function additionalImage()
+    {
+        return $this->hasMany(ProductImage::class,'product_id');
+    }
+
+    //For Product-Edit
+    // public function brandTranslation()
+    // {
+    // 	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id');
+    // }
     
     // public function tags()
     // {

@@ -58,3 +58,5 @@ https://laraveldaily.com/pivot-tables-and-many-to-many-relationships/
     ii.  Address Optional  - 
     iii. Short Description (Correction- Laravel Developer)
 3. One Company has multiple locatin - (less priority)
+
+//1. ভ্যালু আছে কি নাই তা চেক করার জন্য isset()
