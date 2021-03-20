@@ -4,7 +4,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 //frontend routes
-Route::get('/', 'frontend\FrontController@index');
+// Route::get('/', 'frontend\FrontController@index');
+
+Route::get('/', function () {
+    return view('general.layouts.master');
+});
 
 Route::get('collections/{slug}','frontend\ProductCategoryController@SubcategoryView');
 Route::get('products/{slug}/{sku}','frontend\ProductCategoryController@productdetailsview');
@@ -84,6 +88,8 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/delete/{id}','CategoryController@delete')->name('admin.category.delete');
         Route::post('/massdelete','CategoryController@delete_by_selection')->name('bulk_delete_categories');
         Route::get('/{id}/{status}','CategoryController@status')->name('category.status'); 
+        Route::get('/active','CategoryController@active')->name('admin.category.active');
+        Route::get('/inactive','CategoryController@inactive')->name('admin.category.inactive');
     });
 
     //brand
@@ -134,6 +140,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/create','ProductController@create')->name('admin.products.create');
         Route::post('/store','ProductController@store')->name('admin.products.store');
         Route::get('/edit/{id}','ProductController@edit')->name('admin.products.edit');
+        Route::post('/update/{id}','ProductController@update')->name('admin.products.update');
         Route::get('/active','ProductController@active')->name('admin.products.active');
         Route::get('/inactive','ProductController@inactive')->name('admin.products.inactive');
     });

@@ -28,7 +28,7 @@
     </div>
 
     <div class="container">
-        <form action="{{route('admin.products.store')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('admin.products.update',$product->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="card">
@@ -64,6 +64,7 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Product Name')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="product_name" id="productName" class="form-control @error('product_name') is-invalid @enderror" id="inputEmail3" @if(isset($product->productTranslation[0]->product_name)) value="{{$product->productTranslation[0]->product_name}}" @else placeholder="Type Product Name" @endif>
+                                                                <input type="hidden" name="product_translation_id" class="form-control" id="inputEmail3" @if(isset($product->productTranslation[0]->id)) value="{{$product->productTranslation[0]->id}}" @endif>
                                                                 @error('product_name')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -279,7 +280,7 @@
                                                             <div class="col-sm-8">
                                                                 <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Price Type')}}'>
                                                                     <option value="Fixed" @if($product->special_price_type=='Fixed') selected @endif>{{__('Fixed')}}</option>
-                                                                    <option value="Parcent" @if($product->special_price_type=='Parcent') selected @endif>>{{__('Parcent')}}</option>
+                                                                    <option value="Parcent" @if($product->special_price_type=='Parcent') selected @endif>{{__('Parcent')}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -355,8 +356,8 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Stock Availibility')}}</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="in_stock" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Stock')}}'>
-                                                                    <option value="1" @if($product->manage_stock==10) selected @endif>{{__("In Stock")}}</option>
-                                                                    <option value="0" @if($product->manage_stock==0) selected @endif>{{__('Out Stock')}}</option>
+                                                                    <option value="1" @if($product->in_stock==1) selected @endif>{{__("In Stock")}}</option>
+                                                                    <option value="0" @if($product->in_stock==0) selected @endif>{{__('Out Stock')}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -452,7 +453,7 @@
                                                                 <input type="file" name="additional_images[]" multiple id="multipleImages" class="form-control @error('additional_images') is-invalid @enderror">
                                                                 @if($product->additionalImage!==null)
                                                                     @foreach ($product->additionalImage as $item)
-                                                                        <img id="item_photo" src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
+                                                                        <img src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
                                                                     @endforeach
                                                                 @endif
                                                                 @error('additional_images')

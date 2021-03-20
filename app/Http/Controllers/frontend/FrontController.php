@@ -35,7 +35,7 @@ class frontController extends Controller
 
         $sliders = Slider::where('is_active',1)->get();
 
-        $products = Product::where('status', 1)->take(10)->get();
+        $products = Product::where('is_active', 1)->take(10)->get();
         //return $products;
         return view('pages.index',compact('products','sliders'));
     }

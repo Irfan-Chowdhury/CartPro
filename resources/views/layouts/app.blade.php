@@ -102,11 +102,11 @@ session_start();
                                             //         ->where('is_active',1)
                                             //         ->get();   
 
-                                            $storefront_menu = \App\StorefrontMenu::with('menu')->first();
+                                            $storefront_menu = \App\Models\StorefrontMenu::with('menu')->first();
 
                                             if (($storefront_menu->primary_menu_id !=NULL) && ($storefront_menu->menu->count()>0)) {
 
-                                                $data = \App\MenuItem::with('childs','page')
+                                                $data = \App\Models\MenuItem::with('childs','page')
                                                     ->where('menu_id',$storefront_menu->primary_menu_id)
                                                     ->where('parent_id',NULL)
                                                     ->where('is_active',1)

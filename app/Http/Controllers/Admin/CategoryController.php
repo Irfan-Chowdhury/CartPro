@@ -10,6 +10,9 @@ use App\Models\CategoryTranslation;
 use App\Models\Language;
 use Illuminate\Support\Facades\DB;
 use Str;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
 class CategoryController extends Controller
 {
     /**
@@ -17,14 +20,16 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
+
     public function index()
     {
-        $language = Language::where('default',1)->first();
-        $currentActiveLocal = $language->local;
+        $local = Session::get('currentLocal');
+        $currentActiveLocal = $local;
         
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($currentActiveLocal){
                     $query->where('local',$currentActiveLocal)
@@ -33,29 +38,25 @@ class CategoryController extends Controller
                 },
                 'parentCategory'
                 ])
-                // ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
                 ->get();
-            
-        // $categories = Category::with('parentCategory')->get();
-    //    return $categories;
-        // return view('admin.pages.category.index2',compact('categories','currentActiveLocal'));
 
 
         //Check Later
         if (request()->ajax())
             {
-                
                 return datatables()->of($categories)
                     ->setRowId(function ($category)
                     {
                         return $category->id;
                     })
-                    ->addColumn('category_name', function ($row) use ($currentActiveLocal)
+                    ->addColumn('category_name', function ($row) use ($local)
                     {   
                         if ($row->categoryTranslation->count()>0){
                             foreach ($row->categoryTranslation as $key => $value){
                                 if ($key<1){
-                                    if ($value->local==$currentActiveLocal){
+                                    if ($value->local==$local){
                                         return $value->category_name;
                                     }elseif($value->local=='en'){
                                         return $value->category_name;
@@ -66,13 +67,13 @@ class CategoryController extends Controller
                             return "NULL";
                         }
                     })
-                    ->addColumn('parent', function ($row) use ($currentActiveLocal)
+                    ->addColumn('parent', function ($row) use ($local)
                     {
                         if ($row->categoryTranslation->count()>0){
                             if($row->parentCategory==NULL){
-                                return "NULL";
+                                return "NONE";
                             }else{
-                                $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$currentActiveLocal)->first();
+                                $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
                                 if (empty($data)) {
                                     $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first();
                                 }
@@ -88,7 +89,7 @@ class CategoryController extends Controller
                             if($row->is_active==1){
                                 return '<span class="p-2 badge badge-success">Active</span>';
                             }else{
-                                return '<span class="p-2 badge badge-dark">Inactive</span>';
+                                return '<span class="p-2 badge badge-danger">Inactive</span>';
                             }
                         }else {
                             return "NULL";
@@ -96,14 +97,24 @@ class CategoryController extends Controller
                     })
                     ->addColumn('action', function ($row)
                     {
-                        if ($row->categoryTranslation->count()>0){
-                            $actionBtn = '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-success btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                                    &nbsp;
-                                    <a href="'.route('admin.category.delete', $row->id).'" class="delete_test btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
-                            return $actionBtn;
+                        // if ($row->categoryTranslation->count()>0){
+                        //     $actionBtn = '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-success btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                        //             &nbsp;
+                        //             <a href="'.route('admin.category.delete', $row->id).'" class="delete_test btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
+                        //     return $actionBtn;
+                        // }else {
+                        //     return "NULL &nbsp; NULL";
+                        // }
+                        $actionBtn = "";
+                        $actionBtn .= '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                                        &nbsp; ';
+                        if ($row->is_active==1) {
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                         }else {
-                            return "NULL &nbsp; NULL";
+                            $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                                    
+                        return $actionBtn;
                         
                     })
                     ->rawColumns(['is_active','action'])
@@ -112,17 +123,24 @@ class CategoryController extends Controller
             return view('admin.pages.category.index',compact('categories','currentActiveLocal'));
     }
     
-    public function make_slug($string) {
+    protected function make_slug($string) 
+    {
+        if (Session::get('currentLocal')=='en') {
+            $string = strtolower($string);
+        }
         return preg_replace('/\s+/u', '-', trim($string));
     }
     
     public function store(Request $request)
     {
-        // return 'ok';
-        // dd($request->parent);
+        $local = Session::get('currentLocal');
+
+        $validator = Validator::make($request->only('category_name'),[ 
+            'category_name' => 'required|unique:category_translations,category_name',
+        ]);
+
         $category = new Category;
         $category->slug =  $this->make_slug($request->category_name);
-
         $category->parent_id = $request->parent_id;
         $category->description = htmlspecialchars($request->description);
         $category->description_position = $request->description_position;
@@ -151,10 +169,9 @@ class CategoryController extends Controller
         }
         $category->save();
 
-        $language = Language::where('default',1)->first();
         $crandTranslation                = new CategoryTranslation();
         $crandTranslation->category_id   = $category->id;
-        $crandTranslation->local         = $language->local;
+        $crandTranslation->local         = $local;
         $crandTranslation->category_name = $request->category_name;
         $crandTranslation->save();
 
@@ -186,11 +203,12 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $language = Language::where('default',1)->first();
-        $category = Category::find($id);
-        $categoryTranslation = CategoryTranslation::where('category_id',$id)->where('local',$language->local)->first();
+        $local = Session::get('currentLocal');
 
-        return view('admin.pages.category.edit',compact('category','categoryTranslation','language'));
+        $category = Category::find($id);
+        $categoryTranslation = CategoryTranslation::where('category_id',$id)->where('local',$local)->first();
+
+        return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
     }
     
 
@@ -232,11 +250,13 @@ class CategoryController extends Controller
 
     public function update(Request $request)
     {
+        $local = Session::get('currentLocal');
+
         DB::table('category_translations')
         ->updateOrInsert(
             [
                 'category_id' => $request->category_id,
-                'local'       => $request->local,
+                'local'       =>  $local,
             ], //condition
             [
                 'category_name' => $request->category_name,
@@ -248,12 +268,6 @@ class CategoryController extends Controller
         return redirect()->back();
     }
 
-    // public function destroy($id)
-    // {
-    //     Category::where('id',$id)->update(['is_active'=>0]);
-
-    //     return response()->json(['success' => __('Data is successfully deleted')]);
-    // }
     public function delete($id)
     {
         Category::where('id',$id)->update(['is_active'=>0]);
@@ -277,25 +291,40 @@ class CategoryController extends Controller
             {
                 return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
             }
-        
-
-       
     }
 
-    public function status($id,$status)
+    public function active(Request $request)
     {
-        //echo "string";
-        //return $status;
-        Category::where('id',$id)->update(['status'=>$status]);
-        return response()->json(['success' => _('updates')]);
+        if ($request->ajax()) 
+        {
+            Category::where('id',$request->category_id)->update(['is_active'=>1]);
+            return response()->json(['success' => 'Data Active Successfully']);
+        }
     }
 
-
-     public function parentLoad()
+    public function inactive(Request $request)
     {
-        $Category = Category::all();
-
-        return response()->json(['success' => _('updates'),'data'=>$Category]);
+        if ($request->ajax()) 
+        {
+            Category::where('id',$request->category_id)->update(['is_active'=>0]);
+            return response()->json(['success' => 'Data Inactive Successfully']);
+        }
     }
+
+    // public function status($id,$status)
+    // {
+    //     //echo "string";
+    //     //return $status;
+    //     Category::where('id',$id)->update(['status'=>$status]);
+    //     return response()->json(['success' => _('updates')]);
+    // }
+
+
+    //  public function parentLoad()
+    // {
+    //     $Category = Category::all();
+
+    //     return response()->json(['success' => _('updates'),'data'=>$Category]);
+    // }
    
 }

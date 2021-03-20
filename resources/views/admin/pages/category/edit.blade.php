@@ -12,7 +12,7 @@
         @csrf
 
             <input type="hidden" name="category_id" value="{{$category->id}}">
-            <input type="hidden" name="local" value="{{$language->local}}">
+            <input type="hidden" name="local" value="{{$local}}">
             
 
             <div class="col-md-6 form-group">

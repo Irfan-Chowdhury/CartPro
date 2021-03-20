@@ -23,90 +23,10 @@
                         <th class="not-exported"></th>    
                         <th scope="col">{{__('Category Name')}}</th>
                         <th scope="col">{{__('Parent')}}</th>
-                        {{-- <th scope="col">{{__('Description Position')}}</th> --}}
-                        {{-- <th scope="col">{{__('image')}}</th> --}}
-                        {{-- <th scope="col">{{__('featured')}}</th> --}}
                         <th scope="col">{{__('status')}}</th>
                         <th scope="col">{{trans('file.action')}}</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{-- @foreach ($categories as $item)
-                        <tr>
-                            @if ($item->categoryTranslation->count()>0)
-                                @foreach ($item->categoryTranslation as $key => $value)
-                                    @if ($key<1)
-                                        @if ($value->local==$local)
-                                            <td>{{$value->category_name}}</td>
-                                        @elseif($value->local=='en')
-                                            <td>{{$value->category_name}}</td>
-                                        @endif
-                                    @endif
-                                @endforeach
-                                <td>
-                                    @if($item->parentCategory==NULL) 
-                                        NULL 
-                                    @else 
-                                        @php 
-                                            $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local',$local)->first();
-                                            if (empty($data)) {
-                                                $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local','en')->first();
-                                            }
-                                        @endphp
-                                        {{$data->category_name}} 
-                                    @endif
-                                </td>
-                                <td>@if($item->description_position==0) TOP @else BOTTOM @endif</td>
-                                <td><img class='profile-photo md' src="{{$item->image}}"/> </td>
-                                <td>{{$item->featured}}</td>
-                                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                                <td>
-                                    <a href="{{route('admin.category.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                                    <a href="{{route('admin.category.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                                </td>
-                            @else 
-                            <td>NULL</td>
-                            <td>NULL</td>
-                            <td>NULL</td>
-                            <td>NULL</td>
-                            <td>NULL</td>
-                            <td>NULL</td>
-                            <td>NULL</td>
-                        @endif
-                        </tr> --}}
-
-
-                    {{-- <td>@if($item->parentCategory==NULL) NULL @else {{$item->parentCategory->slug}} @endif</td> --}}
-
-
-                        {{-- <tr>
-                            @if ($item->brandTranslation->count()>0)
-                                @foreach ($item->brandTranslation as $key => $value)
-                                    @if ($key<1)
-                                        @if ($value->local==$local)
-                                            <td>{{$value->brand_name}}</td>
-                                        @elseif($value->local=='en')
-                                            <td>{{$value->brand_name}}</td>
-                                        @endif
-                                    @endif
-                                @endforeach
-                                <td>Logo</td>
-                                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                                <td>
-                                    <a href="{{route('brand.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                                    <a href="{{route('admin.brand.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                                </td>
-                            @else 
-                                <td>NULL</td>
-                                <td>NULL</td>
-                                <td>NULL</td>
-                            @endif
-                        </tr> --}}
-
-
-                    {{-- @endforeach
-                </tbody> --}}
-
             </table>
         </div>
     </section>
@@ -213,17 +133,6 @@
                         data: 'is_active',
                         name: 'is_active',
                     },
-                //     {
-                //         data: 'is_active',
-                //         name: 'is_active',
-                //         render:function (data) {
-                //           if (data == 1) {
-                //           return "<span class='badge badge-success'>Active</span>";
-                //         }else{
-                //           return "<span class='badge badge-danger'>Inactive</span>";
-                //         }
-                //     }
-                //   },
                     {
                         data: 'action',
                         name: 'action',
@@ -330,7 +239,6 @@
             });
         });
     
-
         $('#category_list-table').on('click','.status',function () {
             let id = $(this).data('id');
             let status = $(this).data('status');
@@ -538,5 +446,133 @@
         });
 
 
+        //---------- Active -------------
+	$(document).on("click",".active",function(e){
+		e.preventDefault();
+		var categoryId = $(this).data("id");
+		console.log(categoryId);
+
+		$.ajax({
+			url: "{{route('admin.category.active')}}",
+			type: "GET",
+			data: {category_id:categoryId},
+			success: function(data){
+				console.log(data);
+				if(data.success){
+                    $('#category_list-table').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }              
+			}
+		});
+	});
+
+	//---------- Inactive -------------
+	$(document).on("click",".inactive",function(e){
+		e.preventDefault();
+		var categoryId = $(this).data("id");
+		console.log(categoryId);
+
+		$.ajax({
+			url: "{{route('admin.category.inactive')}}",
+			type: "GET",
+			data: {category_id:categoryId},
+			success: function(data){
+				console.log(data);
+				if(data.success){
+                    $('#category_list-table').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }              
+			}
+		});
+	});
+
+
     </script>
 @endsection
+
+
+
+<tbody>
+    {{-- @foreach ($categories as $item)
+        <tr>
+            @if ($item->categoryTranslation->count()>0)
+                @foreach ($item->categoryTranslation as $key => $value)
+                    @if ($key<1)
+                        @if ($value->local==$local)
+                            <td>{{$value->category_name}}</td>
+                        @elseif($value->local=='en')
+                            <td>{{$value->category_name}}</td>
+                        @endif
+                    @endif
+                @endforeach
+                <td>
+                    @if($item->parentCategory==NULL) 
+                        NULL 
+                    @else 
+                        @php 
+                            $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local',$local)->first();
+                            if (empty($data)) {
+                                $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local','en')->first();
+                            }
+                        @endphp
+                        {{$data->category_name}} 
+                    @endif
+                </td>
+                <td>@if($item->description_position==0) TOP @else BOTTOM @endif</td>
+                <td><img class='profile-photo md' src="{{$item->image}}"/> </td>
+                <td>{{$item->featured}}</td>
+                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
+                <td>
+                    <a href="{{route('admin.category.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
+                    <a href="{{route('admin.category.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
+                </td>
+            @else 
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+        @endif
+        </tr> --}}
+
+
+    {{-- <td>@if($item->parentCategory==NULL) NULL @else {{$item->parentCategory->slug}} @endif</td> --}}
+
+
+        {{-- <tr>
+            @if ($item->brandTranslation->count()>0)
+                @foreach ($item->brandTranslation as $key => $value)
+                    @if ($key<1)
+                        @if ($value->local==$local)
+                            <td>{{$value->brand_name}}</td>
+                        @elseif($value->local=='en')
+                            <td>{{$value->brand_name}}</td>
+                        @endif
+                    @endif
+                @endforeach
+                <td>Logo</td>
+                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
+                <td>
+                    <a href="{{route('brand.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
+                    <a href="{{route('admin.brand.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
+                </td>
+            @else 
+                <td>NULL</td>
+                <td>NULL</td>
+                <td>NULL</td>
+            @endif
+        </tr> --}}
+
+
+    {{-- @endforeach
+</tbody> --}}

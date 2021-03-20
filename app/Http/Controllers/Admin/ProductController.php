@@ -17,8 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 use Image;
+use Str;
 
 class ProductController extends Controller
 {
@@ -45,6 +47,7 @@ class ProductController extends Controller
             ->orWhere('local','en')
             ->orderBy('id','DESC');
         }])
+        ->orderBy('is_active','DESC')
         ->orderBy('id','DESC')
         ->get();
 
@@ -200,14 +203,6 @@ class ProductController extends Controller
         // return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data'));
     }
 
-    public function make_slug($string) 
-    {
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Product Store
@@ -226,7 +221,7 @@ class ProductController extends Controller
             'price'       => 'required',
             'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
             //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            'multiple_images'=> 'nullable|unique:product_translations',
+            // 'multiple_images'=> 'nullable|unique:product_translations',
         ]);
 
         if ($validator->fails()){
@@ -338,32 +333,25 @@ class ProductController extends Controller
     {
         $local = Session::get('currentLocal');
 
-        // $product = Product::with(['productTranslation'=> function ($query) use ($local){
-        //     $query->where('local',$local)
-        //     ->first();
-        // },'brandTranslation'=> function ($query) use ($local){
-        //     $query->where('local',$local)
-        //     ->first();
-        // }])
-        // ->where('id',$id)
-        // ->first();
-        // return $product->brandTranslation->brand_name;
-        //return $product->productTranslation[0]->product_name;
-
         $product = Product::with(['productTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
-            ->first();
-        },'categories','tags','baseImage',
+                ->orWhere('local','en')
+                ->orderBy('id','DESC')
+                ->first();
+        },'categories','tags',
+        'baseImage'=> function ($query){
+            $query->where('type','base')
+                ->first();
+        },
         'additionalImage'=> function ($query){
             $query->where('type','additional')
                 ->get();
-        }])
+        },
+        ])
         ->where('id',$id)
         ->first();
 
-        // return $product->additionalImage;
-
-        
+        //return  $product ;
 
         $brands = Brand::with(['brandTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)
@@ -395,9 +383,139 @@ class ProductController extends Controller
         ->where('is_active',1)
         ->get();
 
-        // return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes'));
         return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product'));
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Product Update
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(),[ 
+            'product_name'=> 'required|unique:product_translations,product_name,'.$request->product_translation_id,
+            'description' => 'required',
+            'price'       => 'required',
+            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'sku'=> 'nullable|unique:products,sku,'.$id,
+        ]);
+
+        if ($validator->fails()){
+
+            session()->flash('type','danger');
+            session()->flash('message','Something Wrong');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $local = Session::get('currentLocal');
+
+        $product                = Product::find($id);
+        $product->brand_id      = $request->brand_id;
+        $product->tax_class_id  = $request->tax_class_id;
+        $product->brand_id      = $request->brand_id;
+        $product->slug          = $this->make_slug($request->product_name);
+        $product->price         = $request->price;
+        $product->special_price = $request->special_price;
+        $product->special_price_type = $request->special_price_type;
+        $product->special_price_start= date("Y-m-d",strtotime($request->special_price_start));
+        $product->special_price_end  = date("Y-m-d",strtotime($request->special_price_end));
+        $product->selling_price = $request->special_price;
+        $product->sku           = $request->sku;
+        $product->manage_stock  = $request->manage_stock;
+        $product->qty           = $request->qty;
+        $product->in_stock      = $request->in_stock;
+        $product->new_from      = date("Y-m-d",strtotime($request->new_from));
+        $product->new_to        = date("Y-m-d",strtotime($request->new_to));
+
+        if ($request->is_active==1) {
+            $product->is_active = 1;
+        }else {
+            $product->is_active = 0;
+        }
+        $product->update();
+
+        //---Product Update---
+        DB::table('product_translations')
+        ->updateOrInsert(
+            [ 
+                'product_id'  => $id,
+                'local'       => $local,
+            ], 
+            [   
+                'product_name'      => $request->product_name,
+                'description'       => $request->description,
+                'short_description' => $request->short_description,
+            ]
+        );
+
+        
+         //-- Base Image ----------
+         if (!empty($request->base_image)){
+            $productImage = ProductImage::where('product_id',$id)->where('type','base')->first();
+            if ($productImage) {
+                if (File::exists(public_path().$productImage->image)) {  
+                    File::delete(public_path().$productImage->image);
+                }
+                $productImage->image  = $this->imageStore($request->base_image); 
+                $productImage->update();
+            }else {
+                $productImage = new ProductImage();
+                $productImage->product_id = $id;
+                $productImage->image = $this->imageStore($request->base_image); 
+                $productImage->type  = 'base';
+                $productImage->save();
+            }
+            
+        }
+
+        
+        //----------------- Multiple Image ---------------        
+        if (!empty($request->additional_images)) {   
+            $data = ProductImage::where('product_id',$id)->where('type','additional')->get();
+            foreach ($data as $key => $value) {
+                
+                if (File::exists(public_path().$value->image)) {  
+                    File::delete(public_path().$value->image);
+                    $data[$key]->delete();
+                }
+                
+            }    
+            $additionalImagesArray = $request->additional_images;
+            foreach($additionalImagesArray as $key => $image){
+                $productImage = new ProductImage();
+                $productImage->product_id = $id;
+                $productImage->image = $this->imageStore($image); 
+                $productImage->type  = 'additional';
+                $productImage->save();
+            }
+        }
+        
+
+        //----------------- Category-Product --------------
+        if (!empty($request->category_id)) {       
+            $categoryArrayIds = $request->category_id;
+            $product->categories()->sync($categoryArrayIds);
+        }
+
+        //-----------------Product-Tag--------------
+        if (!empty($request->tag_id)) {
+            $tagArrayIds = $request->tag_id;
+            $product->tags()->sync($tagArrayIds);
+        }
+
+        session()->flash('type','success');
+        session()->flash('message','Data Updated Successfully.');
+        
+        return redirect()->back();
+    }
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -439,13 +557,21 @@ class ProductController extends Controller
         }
     }
 
+    protected function make_slug($string) 
+    {
+        if (Session::get('currentLocal')=='en') {
+            $string = strtolower($string);
+        }
+        return preg_replace('/\s+/u', '-', trim($string));
+    }
+
     protected function imageStore($image)
     {
         $directory  ='/images/products/';
-        $imageName  = time().'.'.$image->getClientOriginalExtension();
-        $imageUrl   = $directory.$imageName;
-        $upload_path= public_path().$imageUrl;
-        Image::make($image)->resize(1900,633)->save($upload_path);
+        $img   = Str::random(10). '.' .$image->getClientOriginalExtension();
+        $location = public_path($directory.$img);
+        Image::make($image)->resize(300,300)->save($location);
+        $imageUrl = $directory.$img;
 
         return $imageUrl;
     }
@@ -460,3 +586,16 @@ class ProductController extends Controller
 //     ];
 // }
 // ProductTag::insert($data);
+
+
+ // $product = Product::with(['productTranslation'=> function ($query) use ($local){
+        //     $query->where('local',$local)
+        //     ->first();
+        // },'brandTranslation'=> function ($query) use ($local){
+        //     $query->where('local',$local)
+        //     ->first();
+        // }])
+        // ->where('id',$id)
+        // ->first();
+        // return $product->brandTranslation->brand_name;
+        //return $product->productTranslation[0]->product_name;
