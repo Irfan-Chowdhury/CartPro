@@ -76,6 +76,7 @@ Route::get('/admin/logout','AdminController@Logout')->name('admin.logout');
 
 
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
+
     //--Category--
     Route::group(['prefix' => '/category'], function () {
         Route::get('/','CategoryController@index')->name('admin.category');

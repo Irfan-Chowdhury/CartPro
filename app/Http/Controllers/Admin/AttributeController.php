@@ -14,9 +14,12 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActiveInactiveTrait;
 
 class AttributeController extends Controller
 {
+    use ActiveInactiveTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -399,11 +402,7 @@ class AttributeController extends Controller
     {
         if ($request->ajax()) 
         {
-            $attribute = Attribute::find($request->attribute_id);
-            $attribute->is_active = 1;
-            $attribute->save();
-
-            return response()->json(['success' => 'Data Active Successfully']);
+            return $this->activeData(Attribute::find($request->attribute_id));
         }
     }
 
@@ -411,11 +410,7 @@ class AttributeController extends Controller
     {
         if ($request->ajax()) 
         {
-            $attribute = Attribute::find($request->attribute_id);
-            $attribute->is_active = 0;
-            $attribute->save();
-
-            return response()->json(['success' => 'Data Inactive Successfully']);
+            return $this->inactiveData(Attribute::find($request->attribute_id));
         }
     }
 
