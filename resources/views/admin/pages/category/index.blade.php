@@ -455,7 +455,7 @@
 		$.ajax({
 			url: "{{route('admin.category.active')}}",
 			type: "GET",
-			data: {category_id:categoryId},
+			data: {id:categoryId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
@@ -479,7 +479,7 @@
 		$.ajax({
 			url: "{{route('admin.category.inactive')}}",
 			type: "GET",
-			data: {category_id:categoryId},
+			data: {id:categoryId},
 			success: function(data){
 				console.log(data);
 				if(data.success){

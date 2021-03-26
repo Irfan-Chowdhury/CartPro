@@ -39,6 +39,7 @@ class AttributeController extends Controller
                     ->orWhere('local','en')
                     ->orderBy('id','DESC'); 
                 }])
+                ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get();
 
@@ -398,19 +399,15 @@ class AttributeController extends Controller
         return redirect()->back();
     }
 
-    public function active(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            return $this->activeData(Attribute::find($request->attribute_id));
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Attribute::find($request->id));
         }
     }
 
-    public function inactive(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            return $this->inactiveData(Attribute::find($request->attribute_id));
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Attribute::find($request->id));
         }
     }
 

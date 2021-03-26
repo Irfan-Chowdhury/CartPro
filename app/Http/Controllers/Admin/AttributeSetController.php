@@ -8,9 +8,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Traits\ActiveInactiveTrait;
 
 class AttributeSetController extends Controller
 {
+    use ActiveInactiveTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -25,6 +28,7 @@ class AttributeSetController extends Controller
             ->orWhere('local','en')
             ->orderBy('id','DESC'); 
         }])
+        ->orderBy('is_active','DESC')
         ->orderBy('id','DESC')
         ->get();
 
@@ -125,28 +129,41 @@ class AttributeSetController extends Controller
         session()->flash('message','Successfully Updated');
         return redirect()->back();
     }
+
+
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(AttributeSet::find($request->id));
+        }
+    }
+
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(AttributeSet::find($request->id));
+        }
+    }
     
-    public function active(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $attributeSet = AttributeSet::find($request->attribute_set_id);
-            $attributeSet->is_active = 1;
-            $attributeSet->save();
+    // public function active(Request $request)
+    // {
+    //     if ($request->ajax()) 
+    //     {
+    //         $attributeSet = AttributeSet::find($request->attribute_set_id);
+    //         $attributeSet->is_active = 1;
+    //         $attributeSet->save();
 
-            return response()->json(['success' => 'Data Active Successfully']);
-        }
-    }
+    //         return response()->json(['success' => 'Data Active Successfully']);
+    //     }
+    // }
 
-    public function inactive(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $attributeSet = AttributeSet::find($request->attribute_set_id);
-            $attributeSet->is_active = 0;
-            $attributeSet->save();
+    // public function inactive(Request $request)
+    // {
+    //     if ($request->ajax()) 
+    //     {
+    //         $attributeSet = AttributeSet::find($request->attribute_set_id);
+    //         $attributeSet->is_active = 0;
+    //         $attributeSet->save();
 
-            return response()->json(['success' => 'Data Inactive Successfully']);
-        }
-    }
+    //         return response()->json(['success' => 'Data Inactive Successfully']);
+    //     }
+    // }
 }

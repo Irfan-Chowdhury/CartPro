@@ -216,7 +216,7 @@ $("#submitForm").on("submit",function(e){
 		$.ajax({
 			url: "{{route('admin.attribute_set.active')}}",
 			type: "GET",
-			data: {attribute_set_id:attributeSetId},
+			data: {id:attributeSetId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
@@ -241,7 +241,7 @@ $("#submitForm").on("submit",function(e){
 		$.ajax({
 			url: "{{route('admin.attribute_set.inactive')}}",
 			type: "GET",
-			data: {attribute_set_id:attributeSetId},
+			data: {id:attributeSetId},
 			success: function(data){
 				console.log(data);
 				if(data.success){

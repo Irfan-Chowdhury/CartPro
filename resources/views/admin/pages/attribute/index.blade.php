@@ -209,7 +209,7 @@
 		$.ajax({
 			url: "{{route('admin.attribute.active')}}",
 			type: "GET",
-			data: {attribute_id:attributeId},
+			data: {id:attributeId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
@@ -234,7 +234,7 @@
 		$.ajax({
 			url: "{{route('admin.attribute.inactive')}}",
 			type: "GET",
-			data: {attribute_id:attributeId},
+			data: {id:attributeId},
 			success: function(data){
 				console.log(data);
 				if(data.success){

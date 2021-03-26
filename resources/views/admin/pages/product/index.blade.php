@@ -192,7 +192,7 @@
 		$.ajax({
 			url: "{{route('admin.products.active')}}",
 			type: "GET",
-			data: {product_id:productId},
+			data: {id:productId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
@@ -216,7 +216,7 @@
 		$.ajax({
 			url: "{{route('admin.products.inactive')}}",
 			type: "GET",
-			data: {product_id:productId},
+			data: {id:productId},
 			success: function(data){
 				console.log(data);
 				if(data.success){

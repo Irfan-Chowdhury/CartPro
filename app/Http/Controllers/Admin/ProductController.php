@@ -18,12 +18,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use App\Traits\ActiveInactiveTrait;
 
 use Image;
 use Str;
 
 class ProductController extends Controller
 {
+    use ActiveInactiveTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -519,41 +522,21 @@ class ProductController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Product Active
+    | Product Active-Inactive
     |--------------------------------------------------------------------------
     |
     |
     */
 
-    public function active(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $product = Product::find($request->product_id);
-            $product->is_active = 1;
-            $product->save();
-
-            return response()->json(['success' => 'Data Active Successfully']);
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Product::find($request->id));
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Product Inactive
-    |--------------------------------------------------------------------------
-    |
-    |
-    */
-
-    public function inactive(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $product = Product::find($request->product_id);
-            $product->is_active = 0;
-            $product->save();
-
-            return response()->json(['success' => 'Data Inactive Successfully']);
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Product::find($request->id));
         }
     }
 
@@ -576,6 +559,8 @@ class ProductController extends Controller
         return $imageUrl;
     }
 }
+
+
 
 //------------Insert Data by product_tag manually---------------
 // $data = [];

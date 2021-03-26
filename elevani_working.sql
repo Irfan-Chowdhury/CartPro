@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2021 at 06:38 PM
+-- Generation Time: Mar 26, 2021 at 08:42 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -45,8 +45,8 @@ CREATE TABLE `attributes` (
 INSERT INTO `attributes` (`id`, `slug`, `attribute_set_id`, `is_filterable`, `is_active`, `created_at`, `updated_at`) VALUES
 (2, 'size', 5, 1, 1, '2021-03-16 11:50:23', '2021-03-24 11:16:50'),
 (3, 'color', 5, 0, 1, '2021-03-16 12:59:53', '2021-03-24 11:16:46'),
-(20, 'ram', 7, 1, 1, '2021-03-17 03:35:22', '2021-03-24 11:16:44'),
-(23, 'monitor', 7, 0, 1, '2021-03-17 03:40:07', '2021-03-24 11:16:42');
+(20, 'ram', 7, 1, 1, '2021-03-17 03:35:22', '2021-03-25 12:58:37'),
+(23, 'monitor', 7, 0, 1, '2021-03-17 03:40:07', '2021-03-25 13:11:53');
 
 -- --------------------------------------------------------
 
@@ -87,10 +87,10 @@ CREATE TABLE `attribute_sets` (
 --
 
 INSERT INTO `attribute_sets` (`id`, `is_active`, `created_at`, `updated_at`) VALUES
-(5, 1, '2021-03-15 08:45:29', '2021-03-15 08:45:29'),
-(6, 1, '2021-03-15 08:45:46', '2021-03-15 08:45:46'),
-(7, 1, '2021-03-15 08:46:27', '2021-03-15 08:46:27'),
-(8, 1, '2021-03-15 08:46:43', '2021-03-15 08:46:43');
+(5, 1, '2021-03-15 08:45:29', '2021-03-25 13:17:11'),
+(6, 1, '2021-03-15 08:45:46', '2021-03-25 13:17:14'),
+(7, 1, '2021-03-15 08:46:27', '2021-03-25 13:17:09'),
+(8, 1, '2021-03-15 08:46:43', '2021-03-25 13:17:07');
 
 -- --------------------------------------------------------
 
@@ -302,13 +302,12 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `slug`, `parent_id`, `description`, `description_position`, `image`, `featured`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'electronics', NULL, 'This is Electronics', 1, NULL, 1, 1, '2021-02-21 22:59:48', '2021-03-20 04:01:51'),
+(2, 'electronics', NULL, 'This is Electronics', 1, NULL, 1, 0, '2021-02-21 22:59:48', '2021-03-25 12:57:10'),
 (3, 'clothes', NULL, 'This is Clothes', 0, NULL, 1, 1, '2021-02-21 23:39:24', '2021-03-20 04:01:53'),
-(8, 'আম', NULL, 'Test', 0, NULL, 1, 0, '2021-02-22 00:57:35', '2021-03-18 09:16:23'),
 (9, 'Computer', 2, 'This is Computer', 1, NULL, 1, 1, '2021-02-22 02:07:32', '2021-02-22 02:07:32'),
-(10, 'laptop', 2, 'this is good', 1, NULL, 1, 0, NULL, '2021-03-20 04:41:10'),
-(11, 'মিস্টি', NULL, 'test', 1, NULL, 1, 0, '2021-02-22 04:43:25', '2021-03-20 19:57:41'),
-(12, 'men', 3, 'Men Collection', 1, NULL, 0, 1, '2021-03-20 03:51:04', '2021-03-20 19:57:45');
+(10, 'laptop', 2, 'this is good', 1, NULL, 1, 1, NULL, '2021-03-25 12:53:20'),
+(11, 'মিস্টি', NULL, 'test', 1, NULL, 1, 0, '2021-02-22 04:43:25', '2021-03-25 12:54:10'),
+(12, 'men', 3, 'Men Collection', 1, NULL, 0, 0, '2021-03-20 03:51:04', '2021-03-25 12:57:05');
 
 -- --------------------------------------------------------
 
@@ -351,7 +350,6 @@ CREATE TABLE `category_translations` (
 INSERT INTO `category_translations` (`id`, `category_id`, `local`, `category_name`, `created_at`, `updated_at`) VALUES
 (2, 2, 'en', 'Electronics', '2021-02-21 22:59:48', '2021-02-21 22:59:48'),
 (3, 3, 'en', 'Clothes', '2021-02-21 23:39:24', '2021-02-21 23:39:24'),
-(9, 8, 'bn', 'Mango', '2021-02-22 00:57:36', '2021-02-22 00:57:36'),
 (11, 9, 'en', 'Computer', '2021-02-22 02:07:32', '2021-02-22 02:07:32'),
 (12, 10, 'en', 'Laptop', NULL, NULL),
 (13, 2, 'bn', 'ইলেক্ট্রনিক্স', NULL, NULL),
@@ -804,9 +802,9 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `brand_id`, `tax_class_id`, `slug`, `price`, `special_price`, `special_price_type`, `special_price_start`, `special_price_end`, `selling_price`, `sku`, `manage_stock`, `qty`, `in_stock`, `viewed`, `is_active`, `new_from`, `new_to`, `created_at`, `updated_at`) VALUES
 (1, 11, NULL, 'irfan-fanmis-men\'s-luxury-analog-quartz-gold-wrist-watches', '500.00', '400.00', 'Fixed', '2001-12-05', '2020-05-03', '400.00', 'KUPLNI', 1, 30, 1, NULL, 1, '2015-05-03 00:00:00', '2021-03-20 00:00:00', '2021-03-18 09:42:21', '2021-03-19 13:03:02'),
-(2, NULL, NULL, 'meolin-charm-creative-twisted-crystal-pendant-necklace-fashion-stylish', '15.00', NULL, 'Fixed', '1970-01-01', '1970-01-01', NULL, NULL, NULL, NULL, NULL, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-03-18 11:20:50'),
-(3, NULL, NULL, 'probook-430-g8-notebook-pc', '1000.00', '700.00', NULL, '1970-01-01', '1970-01-01', '700.00', NULL, 0, NULL, 0, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:45:56', '2021-03-20 04:40:32'),
-(4, NULL, NULL, '6548probook-430-g8-notebook-pc', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-20 01:11:04', '2021-03-20 04:40:18');
+(2, NULL, NULL, 'meolin-charm-creative-twisted-crystal-pendant-necklace-fashion-stylish', '15.00', NULL, 'Fixed', '1970-01-01', '1970-01-01', NULL, NULL, NULL, NULL, NULL, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-03-25 13:24:04'),
+(3, NULL, NULL, 'probook-430-g8-notebook-pc', '1000.00', '700.00', NULL, '1970-01-01', '1970-01-01', '700.00', NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:45:56', '2021-03-25 13:23:59'),
+(4, NULL, NULL, '6548probook-430-g8-notebook-pc', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-20 01:11:04', '2021-03-25 13:28:47');
 
 -- --------------------------------------------------------
 
@@ -1427,9 +1425,9 @@ CREATE TABLE `tags` (
 --
 
 INSERT INTO `tags` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'fashion', 1, '2021-03-18 09:20:43', '2021-03-18 09:20:43'),
+(1, 'fashion', 1, '2021-03-18 09:20:43', '2021-03-25 13:20:48'),
 (2, 'new-arrivals', 1, '2021-03-18 09:20:57', '2021-03-18 09:20:57'),
-(3, 'trendy', 1, '2021-03-18 09:21:08', '2021-03-18 09:21:08');
+(3, 'trendy', 1, '2021-03-18 09:21:08', '2021-03-25 13:20:58');
 
 -- --------------------------------------------------------
 

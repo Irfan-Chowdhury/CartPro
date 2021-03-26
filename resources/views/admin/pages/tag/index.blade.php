@@ -295,7 +295,7 @@
 		$.ajax({
 			url: "{{route('admin.tag.active')}}",
 			type: "GET",
-			data: {row_id:rowId},
+			data: {id:rowId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
@@ -320,7 +320,7 @@
 		$.ajax({
 			url: "{{route('admin.tag.inactive')}}",
 			type: "GET",
-			data: {row_id:rowId},
+			data: {id:rowId},
 			success: function(data){
 				console.log(data);
 				if(data.success){

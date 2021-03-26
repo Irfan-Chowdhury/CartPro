@@ -12,14 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActiveInactiveTrait;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use ActiveInactiveTrait;
+
 
     public function __construct()
     {
@@ -279,52 +277,29 @@ class CategoryController extends Controller
         return response()->json(['success' => __('Data is successfully deleted')]);
     }
 
-    function delete_by_selection(Request $request)
-    {
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Category::find($request->id));
+        }
+    }
+
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Category::find($request->id));
+        }
+    }
+
+    // function delete_by_selection(Request $request)
+    // {
         
-            $category_id = $request['CategoryListIdArray'];
-            $categories = Category::whereIn('id', $category_id);
-            if ($categories->delete())
-            {
-                return response()->json(['success' => __('Multi Delete', ['key' => trans('file.Account')])]);
-            } else
-            {
-                return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
-            }
-    }
-
-    public function active(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            Category::where('id',$request->category_id)->update(['is_active'=>1]);
-            return response()->json(['success' => 'Data Active Successfully']);
-        }
-    }
-
-    public function inactive(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            Category::where('id',$request->category_id)->update(['is_active'=>0]);
-            return response()->json(['success' => 'Data Inactive Successfully']);
-        }
-    }
-
-    // public function status($id,$status)
-    // {
-    //     //echo "string";
-    //     //return $status;
-    //     Category::where('id',$id)->update(['status'=>$status]);
-    //     return response()->json(['success' => _('updates')]);
+    //         $category_id = $request['CategoryListIdArray'];
+    //         $categories = Category::whereIn('id', $category_id);
+    //         if ($categories->delete())
+    //         {
+    //             return response()->json(['success' => __('Multi Delete', ['key' => trans('file.Account')])]);
+    //         } else
+    //         {
+    //             return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
+    //         }
     // }
-
-
-    //  public function parentLoad()
-    // {
-    //     $Category = Category::all();
-
-    //     return response()->json(['success' => _('updates'),'data'=>$Category]);
-    // }
-   
 }

@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActiveInactiveTrait;
 
 class TagController extends Controller
 {
+    use ActiveInactiveTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -25,7 +28,10 @@ class TagController extends Controller
             $query->where('local',$local)
             ->orWhere('local','en')
             ->orderBy('id','DESC'); 
-        }])->get();
+        }])
+        ->orderBy('is_active','DESC')
+        ->orderBy('id','DESC')
+        ->get();
 
         if (request()->ajax())
         {
@@ -156,27 +162,15 @@ class TagController extends Controller
     }
 
 
-    public function active(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $tag = Tag::find($request->row_id);
-            $tag->is_active = 1;
-            $tag->save();
-
-            return response()->json(['success' => 'Data Active Successfully']);
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Tag::find($request->id));
         }
     }
 
-    public function inactive(Request $request)
-    {
-        if ($request->ajax()) 
-        {
-            $tag = Tag::find($request->row_id);
-            $tag->is_active = 0;
-            $tag->save();
-
-            return response()->json(['success' => 'Data Inactive Successfully']);
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Tag::find($request->id));
         }
     }
 }
