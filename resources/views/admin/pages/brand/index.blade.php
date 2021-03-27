@@ -1,31 +1,37 @@
 @extends('admin.main')
 @section('admin_content')
 <section>
+@php
+    use Stichoza\GoogleTranslate\GoogleTranslate;
+    $local = Session::get('currentLocal');
+    $tr    = new GoogleTranslate($local);
+@endphp
+
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">Brand</h4>
+        <h4 class="font-weight-bold mt-3">{{$tr->translate('Brand')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
-            
+
 	    <button type="button" class="btn btn-info" name="create_record" id="create_record">
-	    	<i class="fa fa-plus"></i> {{__('Add Brand')}}
+	    	<i class="fa fa-plus"></i> {{$tr->translate('Add Brand')}}
         </button>
-            
+
         <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
+        	<i class="fa fa-minus-circle"></i> {{$tr->translate('Bulk delete')}}
         </button>
-            
+
     </div>
     <div class="table-responsive">
     	<table id="brandListTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>    
-        		    <th scope="col">{{trans('Brand Name')}}</th>
-        		    <th scope="col">{{__('Logo')}}</th>
-        		    {{-- <th scope="col">{{__('status')}}</th> --}}
-        		    <th scope="col">{{trans('file.action')}}</th>
+        		    <th class="not-exported"></th>
+        		    <th scope="col">{{$tr->translate('Brand Name')}}</th>
+        		    <th scope="col">{{$tr->translate('Logo')}}</th>
+        		    {{-- <th scope="col">{{$tr->translate('status')}}</th> --}}
+        		    <th scope="col">{{$tr->translate('Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -89,7 +95,7 @@ $(document).ready(function () {
             },
             {
                 data: 'brand_logo',
-                name: 'brand_logo',            
+                name: 'brand_logo',
             },
             {
                 data: 'action',
@@ -171,7 +177,7 @@ $(document).ready(function () {
     $("#submitForm").on("submit",function(e){
         e.preventDefault();
         // var goalType = $("#brandListTable").val();
-        
+
         $.ajax({
             url: "{{route('admin.brand.store')}}",
             method: "POST",
@@ -215,7 +221,7 @@ $(document).ready(function () {
 	// $('#brandListTable').on('click','.status',function () {
     //         let id = $(this).data('id');
     //         let status = $(this).data('status');
-            
+
     //         var target = "{{route('admin.brand')}}/" + id +'/'+ status  ;
 
     //         $.ajax({
@@ -229,11 +235,11 @@ $(document).ready(function () {
     //                 }
     //                 $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
     //             }
-    //         })  
+    //         })
     //     });
 
 	$('#sample_form').on('submit', function (event) {
-			
+
             event.preventDefault();
             if ($('#action').val() === '{{trans('file.Add')}}') {
 
@@ -318,7 +324,7 @@ $(document).ready(function () {
         //             //$('#parent').val(html.data.parent);
         //             // $('#description').val(html.data.description);
         //             //$('#description_position').val(html.data.bank_branch);
-                    
+
 
 
         //             $('#hidden_id').val(html.data.id);
@@ -338,7 +344,7 @@ $(document).ready(function () {
             $('.modal-title').text('{{__('DELETE Record')}}');
             $('#ok_button').text('{{trans('file.OK')}}');
         });
-        
+
         $('#ok_button').on('click',function(){
 
         	// let target = "{{route('admin.brand')}}/"+ delete_id + "/delete";
@@ -375,11 +381,11 @@ $(document).ready(function () {
         // 				html = '<div>'+data.success+'</div>';
         // 				$('#brandListTable').DataTable().ajax.reload();
         // 			}
-        			
+
         // 		}
         // 	});
-        	
-        // });	
+
+        // });
 
     $('#delete_test').submit(function(event){
         if(!confirm('Are you sure to delete ?')){
@@ -387,4 +393,4 @@ $(document).ready(function () {
         }
     });
 </script>
-@endsection	
+@endsection

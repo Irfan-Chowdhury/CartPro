@@ -19,13 +19,14 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\SlugTrait;
 
 use Image;
 use Str;
 
 class ProductController extends Controller
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, SlugTrait;
 
     public function __construct()
     {
@@ -63,16 +64,16 @@ class ProductController extends Controller
                 return $row->id;
             })
             ->addColumn('image', function ($row)
-            {   
+            {
                 if (($row->baseImage==null) || ($row->baseImage->type!='base')) {
                     return '<img src="'.url("public/images/products/empty.jpg").'" alt="" height="50px" width="50px">';
                 }elseif ($row->baseImage->type=='base') {
-                    $url = url("public/".$row->baseImage->image); 
+                    $url = url("public/".$row->baseImage->image);
                     return  '<img src="'. $url .'" height="50px" width="50px"/>';
-                }      
+                }
             })
             ->addColumn('product_name', function ($row) use ($local)
-            {   
+            {
                 if ($row->productTranslation->count()>0){
                     foreach ($row->productTranslation as $key => $value){
                         if ($key<1){
@@ -88,13 +89,13 @@ class ProductController extends Controller
                 }
             })
             ->addColumn('price', function ($row)
-            {   
+            {
                 if ($row->special_price) {
                     return  '<span>'.$row->special_price.'</span></br><span class="text-danger"><del>'.$row->price.'</del></span>';
                 }else {
                     return '$ '.$row->price;
                 }
-                
+
             })
             ->addColumn('action', function ($row)
             {
@@ -106,7 +107,7 @@ class ProductController extends Controller
                 }else {
                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                 }
-                            
+
                 return $actionBtn;
             })
             ->rawColumns(['image','action','price'])
@@ -141,7 +142,7 @@ class ProductController extends Controller
             }])
             ->where('is_active',1)
             ->get();
-        
+
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)
                 ->orWhere('local','en')
@@ -153,9 +154,9 @@ class ProductController extends Controller
         $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])->get();
-        
+
         $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
@@ -201,7 +202,7 @@ class ProductController extends Controller
         // return $data[0][0]->attributeTranslation[0]->attribute_name;
 
         //-------------- <optgroup label="Name"> <option>Asteroids</option> </optgroup> --------------
-        
+
         // https://thdoan.github.io/bootstrap-select/examples.html
         // return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data'));
     }
@@ -218,7 +219,7 @@ class ProductController extends Controller
     {
         // return $request->all();
 
-        $validator = Validator::make($request->all(),[ 
+        $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations',
             'description' => 'required',
             'price'       => 'required',
@@ -239,7 +240,7 @@ class ProductController extends Controller
         $product->brand_id      = $request->brand_id;
         $product->tax_class_id  = $request->tax_class_id;
         $product->brand_id      = $request->brand_id;
-        $product->slug          = $this->make_slug($request->product_name);
+        $product->slug          = $this->slug($request->product_name);
         $product->price         = $request->price;
         $product->special_price = $request->special_price;
         $product->special_price_type = $request->special_price_type;
@@ -276,16 +277,16 @@ class ProductController extends Controller
         //----------------- Base Image --------------
         if (!empty($request->base_image)){
             $productImage = [];
-            $productImage['product_id'] = $product->id; 
-            $productImage['image']      = $this->imageStore($request->base_image); 
-            $productImage['type']       = 'base'; 
+            $productImage['product_id'] = $product->id;
+            $productImage['image']      = $this->imageStore($request->base_image);
+            $productImage['type']       = 'base';
             ProductImage::insert($productImage);
         }
         //-----------------/ Base Image --------------
 
 
         //----------------- Multiple Image ---------------
-        if (!empty($request->additional_images)) {       
+        if (!empty($request->additional_images)) {
             $additionalImagesArray = $request->additional_images;
             foreach($additionalImagesArray as $key => $image){
                 $data = [];
@@ -299,9 +300,9 @@ class ProductController extends Controller
 
 
 
-        
+
         //----------------- Category-Product --------------
-        if (!empty($request->category_id)) {       
+        if (!empty($request->category_id)) {
             $categoryArrayIds = $request->category_id;
             $product->categories()->sync($categoryArrayIds);
         }
@@ -314,13 +315,13 @@ class ProductController extends Controller
             $product->tags()->sync($tagArrayIds);
         }
         //-----------------Product-Tag--------------
-        
-        
+
+
         //-----------------Product-Attribute--------------
 
         session()->flash('type','success');
         session()->flash('message','Data Saved Successfully.');
-        
+
         return redirect()->back();
     }
 
@@ -339,8 +340,8 @@ class ProductController extends Controller
         $product = Product::with(['productTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
                 ->orWhere('local','en')
-                ->orderBy('id','DESC')
-                ->first();
+                ->orderBy('id','DESC');
+                // ->first();
         },'categories','tags',
         'baseImage'=> function ($query){
             $query->where('type','base')
@@ -363,7 +364,7 @@ class ProductController extends Controller
             }])
             ->where('is_active',1)
             ->get();
-        
+
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)
                 ->orWhere('local','en')
@@ -375,9 +376,9 @@ class ProductController extends Controller
         $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])->get();
-        
+
         $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
@@ -400,7 +401,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[ 
+        $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
             'price'       => 'required',
@@ -422,7 +423,7 @@ class ProductController extends Controller
         $product->brand_id      = $request->brand_id;
         $product->tax_class_id  = $request->tax_class_id;
         $product->brand_id      = $request->brand_id;
-        $product->slug          = $this->make_slug($request->product_name);
+        $product->slug          = $this->slug($request->product_name);
         $product->price         = $request->price;
         $product->special_price = $request->special_price;
         $product->special_price_type = $request->special_price_type;
@@ -446,62 +447,62 @@ class ProductController extends Controller
         //---Product Update---
         DB::table('product_translations')
         ->updateOrInsert(
-            [ 
+            [
                 'product_id'  => $id,
                 'local'       => $local,
-            ], 
-            [   
+            ],
+            [
                 'product_name'      => $request->product_name,
                 'description'       => $request->description,
                 'short_description' => $request->short_description,
             ]
         );
 
-        
+
          //-- Base Image ----------
          if (!empty($request->base_image)){
             $productImage = ProductImage::where('product_id',$id)->where('type','base')->first();
             if ($productImage) {
-                if (File::exists(public_path().$productImage->image)) {  
+                if (File::exists(public_path().$productImage->image)) {
                     File::delete(public_path().$productImage->image);
                 }
-                $productImage->image  = $this->imageStore($request->base_image); 
+                $productImage->image  = $this->imageStore($request->base_image);
                 $productImage->update();
             }else {
                 $productImage = new ProductImage();
                 $productImage->product_id = $id;
-                $productImage->image = $this->imageStore($request->base_image); 
+                $productImage->image = $this->imageStore($request->base_image);
                 $productImage->type  = 'base';
                 $productImage->save();
             }
-            
+
         }
 
-        
-        //----------------- Multiple Image ---------------        
-        if (!empty($request->additional_images)) {   
+
+        //----------------- Multiple Image ---------------
+        if (!empty($request->additional_images)) {
             $data = ProductImage::where('product_id',$id)->where('type','additional')->get();
             foreach ($data as $key => $value) {
-                
-                if (File::exists(public_path().$value->image)) {  
+
+                if (File::exists(public_path().$value->image)) {
                     File::delete(public_path().$value->image);
                     $data[$key]->delete();
                 }
-                
-            }    
+
+            }
             $additionalImagesArray = $request->additional_images;
             foreach($additionalImagesArray as $key => $image){
                 $productImage = new ProductImage();
                 $productImage->product_id = $id;
-                $productImage->image = $this->imageStore($image); 
+                $productImage->image = $this->imageStore($image);
                 $productImage->type  = 'additional';
                 $productImage->save();
             }
         }
-        
+
 
         //----------------- Category-Product --------------
-        if (!empty($request->category_id)) {       
+        if (!empty($request->category_id)) {
             $categoryArrayIds = $request->category_id;
             $product->categories()->sync($categoryArrayIds);
         }
@@ -514,7 +515,7 @@ class ProductController extends Controller
 
         session()->flash('type','success');
         session()->flash('message','Data Updated Successfully.');
-        
+
         return redirect()->back();
     }
 
@@ -538,14 +539,6 @@ class ProductController extends Controller
         if ($request->ajax()){
             return $this->inactiveData(Product::find($request->id));
         }
-    }
-
-    protected function make_slug($string) 
-    {
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
     }
 
     protected function imageStore($image)

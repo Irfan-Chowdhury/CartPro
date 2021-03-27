@@ -19,10 +19,11 @@
             </ul>
           </li>  
            
+          <li><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('Flash Sales')}}</span></a></li>
           <li><a href="{{route('admin.coupon')}}"><i class="dripicons-list"></i><span>{{__('Coupons')}}</span></a></li>
           <li><a href="{{route('admin.page')}}"><i class="dripicons-list"></i><span>{{trans('Pages')}}</span></a></li>
           <li><a href="{{route('admin.user')}}"><i class="fa fa-user-circle"></i><span>{{trans('Users')}}</span></a></li>            
-          <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li>  
+          <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li> 
                     
           {{-- <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li> --}}
 

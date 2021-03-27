@@ -40,7 +40,7 @@ Route::post('remove-from-cart', 'frontend\CartController@removeFromCart')->name(
 //checkout route
 Route::get('checkout', 'frontend\CheckoutController@index')->name('checkout');
 Route::post('/place-order', 'frontend\OrderController@create')->name('order.create');
-// apply coupon 
+// apply coupon
 Route::post('/apply-coupon', 'frontend\CheckoutController@applyCoupon')->name('applyCoupon');
 
 //payment
@@ -78,9 +78,9 @@ Route::get('/admin/logout','AdminController@Logout')->name('admin.logout');
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
     //--Category--
-    Route::group(['prefix' => '/category'], function () {
+    Route::group(['prefix' => '/categories'], function () {
         Route::get('/','CategoryController@index')->name('admin.category');
-        Route::post('/store','CategoryController@store')->name('category_list.store');
+        Route::post('/store','CategoryController@store')->name('admin.category.store');
         Route::get('/{id}/edit','CategoryController@categoryEdit')->name('admin.category_edit'); //Remove Later
         Route::get('/edit/{id}','CategoryController@edit')->name('admin.category.edit');
         Route::post('updateCategory','CategoryController@categoryUpdate')->name('category_list.update'); //Remove Later
@@ -88,7 +88,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/{id}/delete','CategoryController@destroy')->name('category_list.destroy'); //Remove Later
         Route::get('/delete/{id}','CategoryController@delete')->name('admin.category.delete');
         Route::post('/massdelete','CategoryController@delete_by_selection')->name('bulk_delete_categories');
-        Route::get('/{id}/{status}','CategoryController@status')->name('category.status'); 
+        Route::get('/{id}/{status}','CategoryController@status')->name('category.status');
         Route::get('/active','CategoryController@active')->name('admin.category.active');
         Route::get('/inactive','CategoryController@inactive')->name('admin.category.inactive');
     });
@@ -111,15 +111,15 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/inactive','AttributeSetController@inactive')->name('admin.attribute_set.inactive');
     });
 
-    //Attributes
+    //Attributes    
     Route::group(['prefix' => 'attributes'], function () {
         Route::get('/','AttributeController@index')->name('admin.attribute.index');
         Route::get('/create','AttributeController@create')->name('admin.attribute.create');
         Route::post('/store','AttributeController@store')->name('admin.attribute.store');
         Route::get('/edit/{id}','AttributeController@edit')->name('admin.attribute.edit');
-        Route::post('/update/{id}','AttributeController@update')->name('admin.attribute.update');     
+        Route::post('/update/{id}','AttributeController@update')->name('admin.attribute.update');
         Route::get('/active','AttributeController@active')->name('admin.attribute.active');
-        Route::get('/inactive','AttributeController@inactive')->name('admin.attribute.inactive');    
+        Route::get('/inactive','AttributeController@inactive')->name('admin.attribute.inactive');
 
         //Attribute's Values
         Route::get('/get_attribute_values','AttributeController@getAttributeValues')->name('admin.attribute.get_attribute_values');
@@ -130,9 +130,9 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/','TagController@index')->name('admin.tag.index');
         Route::post('/store','TagController@store')->name('admin.tag.store');
         Route::get('/edit','TagController@edit')->name('admin.tag.edit');
-        Route::post('/update','TagController@update')->name('admin.tag.update');     
+        Route::post('/update','TagController@update')->name('admin.tag.update');
         Route::get('/active','TagController@active')->name('admin.tag.active');
-        Route::get('/inactive','TagController@inactive')->name('admin.tag.inactive');    
+        Route::get('/inactive','TagController@inactive')->name('admin.tag.inactive');
     });
 
     //Products
@@ -145,6 +145,13 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/active','ProductController@active')->name('admin.products.active');
         Route::get('/inactive','ProductController@inactive')->name('admin.products.inactive');
     });
+
+    Route::group(['prefix' => 'flash-sales'], function () {
+        Route::get('/','FlashSaleController@index')->name('admin.flash_sale.index');
+        Route::get('/create','FlashSaleController@create')->name('admin.flash_sale.create');
+        Route::post('/store','FlashSaleController@store')->name('admin.flash_sale.store');
+    });
+    
 
 
     //--Menus--
@@ -194,7 +201,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     });
 
     Route::group(['prefix' => 'setting'], function () {
-        
+
         Route::group(['prefix' => 'language'], function () {
             Route::get('/','LanguageController@index')->name('admin.setting.language');
             Route::post('/store','LanguageController@store')->name('admin.setting.language.store');

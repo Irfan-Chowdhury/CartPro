@@ -1,37 +1,39 @@
-@extends('admin.main')
-@section('admin_content')
+
+<?php $__env->startSection('admin_content'); ?>
+
+
 <section>
-
     <div class="container-fluid"><span id="general_result"></span></div>
-    <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">{{ $tr->translate('Attributes')}}</h4>
+    <div class="container-fluid mb-3">
+        <h4 class="font-weight-bold mt-3">Products</h4>
         <div id="success_alert" role="alert"></div>
         <br>
+            
+	    <a href="<?php echo e(route('admin.products.create')); ?>" class="btn btn-info">
+	    	<i class="fa fa-plus"></i> <?php echo e(__('Create Product')); ?>
 
-	    <a href="{{route('admin.attribute.create')}}" class="btn btn-info">
-	    	<i class="fa fa-plus"></i> {{$tr->translate('Create Attribute')}}
         </a>
-
-        {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button> --}}
+            
+        
     </div>
+
     <div class="table-responsive">
-    	<table id="AtttributeTable" class="table ">
+    	<table id="productTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>
-        		    <th scope="col">{{$tr->translate('Name')}}</th>
-        		    <th scope="col">{{$tr->translate('Attribute Set')}}</th>
-        		     <th scope="col">{{$tr->translate('Filterable')}}</th>
-        		    <th scope="col">{{$tr->translate('Status')}}</th>
-        		   <th scope="col">{{$tr->translate('Action')}}</th>
+        		    <th class="not-exported"></th>    
+        		    <th scope="col"><?php echo e(__('Thumbnail')); ?></th>
+        		    <th scope="col"><?php echo e(__('Name')); ?></th>
+        		    <th scope="col"><?php echo e(__('Price')); ?></th>
+					<th scope="col"><?php echo e(trans('file.Status')); ?></th>
+					<th scope="col"><?php echo e(trans('file.action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
     </div>
 </section>
+
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -42,7 +44,7 @@
 			}
 		});
 
-		let table = $('#AtttributeTable').DataTable({
+		let table = $('#productTable').DataTable({
 			initComplete: function () {
 				this.api().columns([1]).every(function () {
 					var column = this;
@@ -71,7 +73,7 @@
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "{{ route('admin.attribute.index') }}",
+				url: "<?php echo e(route('admin.products.index')); ?>",
 			},
 			columns: [
 				{
@@ -80,17 +82,18 @@
 					searchable: false
 				},
 				{
-					data: 'attribute_name',
-					name: 'attribute_name',
+					data: 'image',
+					name: 'image',
 				},
 				{
-					data: 'attribute_set_name',
-					name: 'attribute_set_name',
+					data: 'product_name',
+					name: 'product_name',
 				},
 				{
-					data: 'is_filterable',
-					name: 'is_filterable',
+					data: 'price',
+					name: 'price',
 				},
+				
 				{
 					data: 'is_active',
 					name: 'is_active',
@@ -111,12 +114,12 @@
 
 			"order": [],
 			'language': {
-				'lengthMenu': '_MENU_ {{__("records per page")}}',
-				"info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-				"search": '{{trans("file.Search")}}',
+				'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+				"info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+				"search": '<?php echo e(trans("file.Search")); ?>',
 				'paginate': {
-					'previous': '{{trans("file.Previous")}}',
-					'next': '{{trans("file.Next")}}'
+					'previous': '<?php echo e(trans("file.Previous")); ?>',
+					'next': '<?php echo e(trans("file.Next")); ?>'
 				}
 			},
 			'columnDefs': [
@@ -178,27 +181,27 @@
 		new $.fn.dataTable.FixedHeader(table);
 	});
 
+
 	//---------- Active -------------
 	$(document).on("click",".active",function(e){
 		e.preventDefault();
-		var attributeId = $(this).data("id");
-		var element = this;
-		console.log(attributeId);
+		var productId = $(this).data("id");
+		console.log(productId);
 
 		$.ajax({
-			url: "{{route('admin.attribute.active')}}",
+			url: "<?php echo e(route('admin.products.active')); ?>",
 			type: "GET",
-			data: {id:attributeId},
+			data: {id:productId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#AtttributeTable').DataTable().ajax.reload();
+                    $('#productTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }
+                }              
 			}
 		});
 	});
@@ -206,27 +209,27 @@
 	//---------- Inactive -------------
 	$(document).on("click",".inactive",function(e){
 		e.preventDefault();
-		var attributeId = $(this).data("id");
-		var element = this;
-		console.log(attributeId);
+		var productId = $(this).data("id");
+		console.log(productId);
 
 		$.ajax({
-			url: "{{route('admin.attribute.inactive')}}",
+			url: "<?php echo e(route('admin.products.inactive')); ?>",
 			type: "GET",
-			data: {id:attributeId},
+			data: {id:productId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#AtttributeTable').DataTable().ajax.reload();
+                    $('#productTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }
+                }              
 			}
 		});
 	});
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/product/index.blade.php ENDPATH**/ ?>

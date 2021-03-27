@@ -1,10 +1,8 @@
 <?php
 namespace App\Traits;
 
-use App\Models\Attribute;
-
 /**
- * 
+ *
  */
 trait ActiveInactiveTrait{
 
@@ -13,7 +11,7 @@ trait ActiveInactiveTrait{
         $data = $Model;
         $data->is_active = 1;
         $data->save();
-        
+
         return response()->json(['success' => 'Data Active Successfully']);
     }
 

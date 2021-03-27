@@ -11,7 +11,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
 
-    
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="{{ asset('public/vendor/bootstrap/css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('public/vendor/bootstrap/css/awesome-bootstrap-checkbox.css') }}"
@@ -37,9 +36,6 @@
     <!-- dropzone css -->
     <link rel="stylesheet" href="{{ asset('public/vendor/dropzone/dropzone.css') }}" type="text/css">
     <!-- table sorter stylesheet-->
-
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script type="text/javascript" src="{{ asset('public/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/jquery/jquery-ui.min.js') }}"></script>
@@ -98,26 +94,29 @@
             src="{{ asset('public/vendor/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript"
             src="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
+
+    <style>
+        label{
+                color: #000000;
+        }
+    </style>
   </head>
-  
+
   <body onload="myFunction()">
     <div id="loader"></div>
-      <!-- Side Navbar -->
-     {{-- @guest
 
-     @else --}}
-     
+
+        @include('translation')
+
+
         @include('admin.includes.header')
 
         @include('admin.includes.sidebar')
 
-        {{-- Http->Controller->Admin->(Admin related all controllers)
-        view->admin->(admin realed all blade file) --}}
 
      {{-- @endguest --}}
-      
-    <div class="page">
       <div style="" id="content" class="animate-bottom">
+        <div class="page">
         {{-- @include('flash-message') --}}
         @include('admin.includes.alert_message')
         @yield('admin_content')
@@ -133,7 +132,7 @@
         </div>
     </footer>
 
-       
+
     @yield('scripts')
     <link rel="stylesheet" type="text/css"
           href="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.css') }}">
@@ -157,7 +156,7 @@
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="{{ asset('public/css/style.default.css') }}" id="theme-stylesheet"
           type="text/css">
-    
+
     <script type="text/javascript">
       if ($(window).outerWidth() > 1199) {
           $('nav.side-navbar').removeClass('shrink');

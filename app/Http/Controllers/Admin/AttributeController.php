@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\SlugTrait;
+
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class AttributeController extends Controller
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, SlugTrait;
 
     public function __construct()
     {
@@ -28,16 +31,18 @@ class AttributeController extends Controller
     public function index()
     {
         $local = Session::get('currentLocal');
+        $tr    = new GoogleTranslate($local);
+
 
         $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
                     $query->where('local',$local)
                     ->orWhere('local','en')
-                    ->orderBy('id','DESC'); 
+                    ->orderBy('id','DESC');
                 },
                 'attributeSetTranslation' => function ($query) use ($local){
                     $query->where('local',$local)
                     ->orWhere('local','en')
-                    ->orderBy('id','DESC'); 
+                    ->orderBy('id','DESC');
                 }])
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
@@ -52,7 +57,7 @@ class AttributeController extends Controller
                     return $row->id;
                 })
                 ->addColumn('attribute_name', function ($row) use ($local)
-                {   
+                {
                     if ($row->attributeTranslation->count()>0){
                         foreach ($row->attributeTranslation as $key => $value){
                             if ($key<1){
@@ -68,7 +73,7 @@ class AttributeController extends Controller
                     }
                 })
                 ->addColumn('attribute_set_name', function ($row) use ($local)
-                {   
+                {
                     if ($row->attributeSetTranslation->count()>0){
                         foreach ($row->attributeSetTranslation as $key => $value){
                             if ($key<1){
@@ -100,13 +105,13 @@ class AttributeController extends Controller
                     }else {
                         $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                     }
-                                
+
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.pages.attribute.index',compact('attributes','local'));   
+        return view('admin.pages.attribute.index',compact('attributes','local','tr'));
     }
 
     public function create()
@@ -116,7 +121,7 @@ class AttributeController extends Controller
         $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])->get();
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
@@ -129,15 +134,6 @@ class AttributeController extends Controller
         ->get();
 
         return view('admin.pages.attribute.create',compact('local','attributeSets','categories'));
-    }
-
-
-    public function make_slug($string) {
-
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
     }
 
     public function store(Request $request)
@@ -153,7 +149,7 @@ class AttributeController extends Controller
         //     return "Array is empty | Not Execute";
         // }
 
-        $validator = Validator::make($request->only('attribute_set_id','attribute_name'),[ 
+        $validator = Validator::make($request->only('attribute_set_id','attribute_name'),[
             'attribute_set_id'=> 'required',
             'attribute_name'  => 'required|unique:attribute_translations',
         ]);
@@ -164,8 +160,7 @@ class AttributeController extends Controller
 
         $attribute = new Attribute();
         $attribute->attribute_set_id = $request->attribute_set_id;
-        // $attribute->category_id      = $request->category_id;
-        $attribute->slug             = $this->make_slug($request->attribute_name);
+        $attribute->slug             = $this->slug($request->attribute_name);
 
         if ($request->is_filterable==1) {
             $attribute->is_filterable = 1;
@@ -187,7 +182,7 @@ class AttributeController extends Controller
         $attributeTranslation->save();
 
         //----------------- Attribute-Category Sync --------------
-        if (!empty($request->category_id)) {       
+        if (!empty($request->category_id)) {
             $categoryArrayIds = $request->category_id;
             $attribute->categories()->sync($categoryArrayIds);
         }
@@ -219,7 +214,7 @@ class AttributeController extends Controller
 
         session()->flash('type','success');
         session()->flash('message','Data Saved Successfully.');
-        
+
         return redirect()->back();
     }
 
@@ -227,7 +222,7 @@ class AttributeController extends Controller
     // {
     //     $attribute                 = Attribute::find($id);
     //     $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('local',Session::get('currentLocal'))->first();
-        
+
     //     if (isset($attribute->attributeValue)) {
     //         $attributeValueTranslation = AttributeValueTranslation::where('attribute_value_id',$attribute->attributeValue->id)->where('local',Session::get('currentLocal'))->get();
     //         // return $attributeValueTranslation;
@@ -240,7 +235,7 @@ class AttributeController extends Controller
     //     $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
     //         $query->where('local',$local)
     //         ->orWhere('local','en')
-    //         ->orderBy('id','DESC'); 
+    //         ->orderBy('id','DESC');
     //     }])->get();
 
     //     $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
@@ -269,7 +264,7 @@ class AttributeController extends Controller
         $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$attributeValue)
                                                                 ->where('local',$local)
                                                                 ->get();
-        
+
         if (count($attributeValueTranslation)==0) {
             $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$attributeValue)->where('local','en')->get();
         }
@@ -281,7 +276,7 @@ class AttributeController extends Controller
         $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])->get();
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
@@ -304,7 +299,7 @@ class AttributeController extends Controller
 
         $local = Session::get('currentLocal');
 
-        $validator = Validator::make($request->only('attribute_name'),[ 
+        $validator = Validator::make($request->only('attribute_name'),[
             'attribute_name'  => 'required',
         ]);
 
@@ -333,7 +328,7 @@ class AttributeController extends Controller
             [   //condition
                 'attribute_id'  => $id,
                 'local'         => $local,
-            ], 
+            ],
             [   //set value
                 'attribute_name' => $request->attribute_name,
             ]
@@ -341,7 +336,7 @@ class AttributeController extends Controller
 
 
         //----------------- Attribute-Category Sync --------------
-        if (!empty($request->category_id)) {       
+        if (!empty($request->category_id)) {
             $categoryArrayIds = $request->category_id;
             $attribute->categories()->sync($categoryArrayIds);
         }
@@ -368,7 +363,7 @@ class AttributeController extends Controller
                         'attribute_id'  => $id,
                         'attribute_value_id'  => $attributeValueIdArray[$key],
                         'local'               => $local,
-                    ], 
+                    ],
                     [   //set value
                         'value_name' => $attributeValueNameArray[$key],
                     ]
@@ -415,7 +410,7 @@ class AttributeController extends Controller
     public function getAttributeValues(Request $request)
     {
         $attribute = Attribute::find($request->attribute_id);
-        
+
         if (isset($attribute->attributeValue)) {
             // $attributeValueTranslation = AttributeValueTranslation::where('attribute_value_id',$attribute->attributeValue->id)->where('local',Session::get('currentLocal'))->get();
             $attributeValueTranslation = AttributeValueTranslation::where('attribute_id',$request->attribute_id)->where('local',Session::get('currentLocal'))->get();
@@ -444,7 +439,7 @@ class AttributeController extends Controller
 
 
 
-        
+
         //$attributeValue = AttributeValue::where('attribute_id',$id)->pluck('id'); //show- attribute_values.id [2,3,4,5]
         // $attributeValue = AttributeValue::where('attribute_id',$id)->select('id')->get(); //show- attribute_values.id [ {id:2}, {id:3}, {id:4}, {id:5} ]
         // return $attributeValue[0]->attribute_id;
@@ -499,7 +494,7 @@ class AttributeController extends Controller
         //                 'attribute_value_id'  => $attribute->attributeValue->id,
         //                 'local'     => Session::get('currentLocal'),
         //                 // 'value_name' => $attributeValueNameArray[$key],
-        //             ], 
+        //             ],
         //             [   //set value
         //                 'value_name' => $attributeValueNameArray[$key],
         //             ]

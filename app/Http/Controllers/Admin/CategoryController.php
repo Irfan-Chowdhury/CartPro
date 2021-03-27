@@ -13,10 +13,11 @@ use Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\SlugTrait;
 
 class CategoryController extends Controller
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, SlugTrait;
 
 
     public function __construct()
@@ -28,7 +29,7 @@ class CategoryController extends Controller
     {
         $local = Session::get('currentLocal');
         $currentActiveLocal = $local;
-        
+
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($currentActiveLocal){
                     $query->where('local',$currentActiveLocal)
                     ->orWhere('local','en')
@@ -50,7 +51,7 @@ class CategoryController extends Controller
                         return $category->id;
                     })
                     ->addColumn('category_name', function ($row) use ($local)
-                    {   
+                    {
                         if ($row->categoryTranslation->count()>0){
                             foreach ($row->categoryTranslation as $key => $value){
                                 if ($key<1){
@@ -81,7 +82,7 @@ class CategoryController extends Controller
                             return "NULL";
                         }
                     })
-                    ->addColumn('is_active', function ($row) 
+                    ->addColumn('is_active', function ($row)
                     {
                         if ($row->categoryTranslation->count()>0){
                             if($row->is_active==1){
@@ -111,34 +112,33 @@ class CategoryController extends Controller
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
-                                    
+
                         return $actionBtn;
-                        
+
                     })
                     ->rawColumns(['is_active','action'])
                     ->make(true);
             }
             return view('admin.pages.category.index',compact('categories','currentActiveLocal'));
     }
-    
-    protected function make_slug($string) 
-    {
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
-    }
-    
+
     public function store(Request $request)
     {
+        // return response()->json($request->all());
+
         $local = Session::get('currentLocal');
 
-        $validator = Validator::make($request->only('category_name'),[ 
+        $validator = Validator::make($request->only('category_name'),[
             'category_name' => 'required|unique:category_translations,category_name',
         ]);
 
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
         $category = new Category;
-        $category->slug =  $this->make_slug($request->category_name);
+        $category->slug =  $this->slug($request->category_name);
         $category->parent_id = $request->parent_id;
         $category->description = htmlspecialchars($request->description);
         $category->description_position = $request->description_position;
@@ -155,7 +155,7 @@ class CategoryController extends Controller
         if ($request->featured == null) {
             $category->featured = 0;
         }
-        else 
+        else
         {
             $category->featured = 1;
         }
@@ -173,14 +173,11 @@ class CategoryController extends Controller
         $crandTranslation->category_name = $request->category_name;
         $crandTranslation->save();
 
-        // return response()->json($category);    
-        return redirect()->back();
+        return response()->json(['success' => __('Data Successfully Saved')]);
 
-        return response()->json(['success' => __('success')]);
-        
-        
+
     }
-   
+
     public function show($id)
     {
         $Category = Category::where('id',$id)->first();
@@ -196,7 +193,7 @@ class CategoryController extends Controller
             $data = Category::findOrFail($id);
 
             return response()->json(['data' => $data]);
-        } 
+        }
     }
 
     public function edit($id)
@@ -208,9 +205,9 @@ class CategoryController extends Controller
 
         return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
     }
-    
 
-   
+
+
     public function categoryUpdate(Request $request)
     {
         // $id = $request->hidden_id;
@@ -234,7 +231,7 @@ class CategoryController extends Controller
         // if ($request->featured == null) {
         //     $data['featured'] = 0;
         // }
-        // else 
+        // else
         // {
         //     $data['featured'] = 1;
         // }
@@ -242,7 +239,7 @@ class CategoryController extends Controller
         // //return response()->json($data);
         // Category::whereId($id)->update($data);
 
-        // return response()->json(['success' => __('updated')]); 
+        // return response()->json(['success' => __('updated')]);
     }
 
 
@@ -291,7 +288,7 @@ class CategoryController extends Controller
 
     // function delete_by_selection(Request $request)
     // {
-        
+
     //         $category_id = $request['CategoryListIdArray'];
     //         $categories = Category::whereIn('id', $category_id);
     //         if ($categories->delete())

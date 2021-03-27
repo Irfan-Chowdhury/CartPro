@@ -1,32 +1,30 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 <section>
 
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">{{ $tr->translate('Attributes')}}</h4>
+        <h4 class="font-weight-bold mt-3"><?php echo e($tr->translate('Attributes')); ?></h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
-	    <a href="{{route('admin.attribute.create')}}" class="btn btn-info">
-	    	<i class="fa fa-plus"></i> {{$tr->translate('Create Attribute')}}
+	    <a href="<?php echo e(route('admin.attribute.create')); ?>" class="btn btn-info">
+	    	<i class="fa fa-plus"></i> <?php echo e($tr->translate('Create Attribute')); ?>
+
         </a>
 
-        {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button> --}}
+        
     </div>
     <div class="table-responsive">
     	<table id="AtttributeTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{$tr->translate('Name')}}</th>
-        		    <th scope="col">{{$tr->translate('Attribute Set')}}</th>
-        		     <th scope="col">{{$tr->translate('Filterable')}}</th>
-        		    <th scope="col">{{$tr->translate('Status')}}</th>
-        		   <th scope="col">{{$tr->translate('Action')}}</th>
+        		    <th scope="col"><?php echo e($tr->translate('Name')); ?></th>
+        		    <th scope="col"><?php echo e($tr->translate('Attribute Set')); ?></th>
+        		     <th scope="col"><?php echo e($tr->translate('Filterable')); ?></th>
+        		    <th scope="col"><?php echo e($tr->translate('Status')); ?></th>
+        		   <th scope="col"><?php echo e($tr->translate('Action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -71,7 +69,7 @@
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "{{ route('admin.attribute.index') }}",
+				url: "<?php echo e(route('admin.attribute.index')); ?>",
 			},
 			columns: [
 				{
@@ -111,12 +109,12 @@
 
 			"order": [],
 			'language': {
-				'lengthMenu': '_MENU_ {{__("records per page")}}',
-				"info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-				"search": '{{trans("file.Search")}}',
+				'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+				"info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+				"search": '<?php echo e(trans("file.Search")); ?>',
 				'paginate': {
-					'previous': '{{trans("file.Previous")}}',
-					'next': '{{trans("file.Next")}}'
+					'previous': '<?php echo e(trans("file.Previous")); ?>',
+					'next': '<?php echo e(trans("file.Next")); ?>'
 				}
 			},
 			'columnDefs': [
@@ -186,7 +184,7 @@
 		console.log(attributeId);
 
 		$.ajax({
-			url: "{{route('admin.attribute.active')}}",
+			url: "<?php echo e(route('admin.attribute.active')); ?>",
 			type: "GET",
 			data: {id:attributeId},
 			success: function(data){
@@ -211,7 +209,7 @@
 		console.log(attributeId);
 
 		$.ajax({
-			url: "{{route('admin.attribute.inactive')}}",
+			url: "<?php echo e(route('admin.attribute.inactive')); ?>",
 			type: "GET",
 			data: {id:attributeId},
 			success: function(data){
@@ -229,4 +227,6 @@
 	});
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/attribute/index.blade.php ENDPATH**/ ?>

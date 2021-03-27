@@ -26,7 +26,7 @@ class AttributeSetController extends Controller
         $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])
         ->orderBy('is_active','DESC')
         ->orderBy('id','DESC')
@@ -39,7 +39,7 @@ class AttributeSetController extends Controller
                 return $row->id;
             })
             ->addColumn('attribute_set_name', function ($row) use ($local)
-            {   
+            {
                 if ($row->attributeSetTranslation->count()>0){
                     foreach ($row->attributeSetTranslation as $key => $value){
                         if ($key<1){
@@ -64,7 +64,6 @@ class AttributeSetController extends Controller
                 }else {
                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                 }
-                            
                 return $actionBtn;
             })
             ->rawColumns(['brand_logo','action'])
@@ -76,7 +75,7 @@ class AttributeSetController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->ajax()) 
+        if ($request->ajax())
         {
             $attributeSet = new AttributeSet();
             if ($request->is_active==1) {
@@ -103,7 +102,7 @@ class AttributeSetController extends Controller
 
         return view('admin.pages.attribute_set.edit',compact('attributeSet','attributeSetTranslation'));
     }
-    
+
     public function update(Request $request, $id)
     {
         $attributeSet = AttributeSet::find($id);
@@ -119,7 +118,7 @@ class AttributeSetController extends Controller
             [   //condition
                 'attribute_set_id'  => $request->attribute_set_id,
                 'local'             => Session::get('currentLocal'),
-            ], 
+            ],
             [   //set value
                 'attribute_set_name' => $request->attribute_set_name,
             ]
@@ -142,10 +141,10 @@ class AttributeSetController extends Controller
             return $this->inactiveData(AttributeSet::find($request->id));
         }
     }
-    
+
     // public function active(Request $request)
     // {
-    //     if ($request->ajax()) 
+    //     if ($request->ajax())
     //     {
     //         $attributeSet = AttributeSet::find($request->attribute_set_id);
     //         $attributeSet->is_active = 1;
@@ -157,7 +156,7 @@ class AttributeSetController extends Controller
 
     // public function inactive(Request $request)
     // {
-    //     if ($request->ajax()) 
+    //     if ($request->ajax())
     //     {
     //         $attributeSet = AttributeSet::find($request->attribute_set_id);
     //         $attributeSet->is_active = 0;

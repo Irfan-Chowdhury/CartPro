@@ -1,11 +1,10 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 <section>
-@php
+<?php
     use Stichoza\GoogleTranslate\GoogleTranslate;
     $local = Session::get('currentLocal');
     $tr    = new GoogleTranslate($local);
-@endphp
+?>
 
         <div class="container-fluid"><span id="success_alert"></span></div>
 
@@ -13,11 +12,11 @@
         <div class="container-fluid mb-3">
 
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record"><i
-                            class="fa fa-plus"></i> {{$tr->translate('Add Category')}}</button>
+                            class="fa fa-plus"></i> <?php echo e($tr->translate('Add Category')); ?></button>
 
 
                 <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i
-                            class="fa fa-minus-circle"></i> {{$tr->translate('Bulk delete')}}</button>
+                            class="fa fa-minus-circle"></i> <?php echo e($tr->translate('Bulk delete')); ?></button>
 
         </div>
 
@@ -26,10 +25,10 @@
                 <thead>
                     <tr>
                         <th class="not-exported"></th>
-                        <th scope="col">{{$tr->translate('Category Name')}}</th>
-                        <th scope="col">{{$tr->translate('Parent')}}</th>
-                        <th scope="col">{{$tr->translate('Status')}}</th>
-                        <th scope="col">{{$tr->translate('Action')}}</th>
+                        <th scope="col"><?php echo e($tr->translate('Category Name')); ?></th>
+                        <th scope="col"><?php echo e($tr->translate('Parent')); ?></th>
+                        <th scope="col"><?php echo e($tr->translate('Status')); ?></th>
+                        <th scope="col"><?php echo e($tr->translate('Action')); ?></th>
                     </tr>
                 </thead>
             </table>
@@ -37,27 +36,9 @@
     </section>
 
 
-    {{-- <div id="confirmModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">{{trans('file.Confirmation')}}</h2>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <h4 align="center" style="margin:0;">{{__('want to remove?')}}</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">{{trans('file.OK')}}'
-                    </button>
-                    <button type="button" class="close btn-default"
-                            data-dismiss="modal">{{trans('file.Cancel')}}</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+    
 
-    @include('admin.pages.category.create')
+    <?php echo $__env->make('admin.pages.category.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <script type="text/javascript">
 
@@ -93,7 +74,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.category') }}",
+                    url: "<?php echo e(route('admin.category')); ?>",
                 },
 
                 columns: [
@@ -130,7 +111,7 @@
                     //     data: 'image',
                     //     name: 'image',
                     //     render:function (data) {
-                    //      return "<img class='profile-photo md' src={{ URL::to('/') }}/" + data + "/>";
+                    //      return "<img class='profile-photo md' src=<?php echo e(URL::to('/')); ?>/" + data + "/>";
                     //    }
 
                     // },
@@ -148,12 +129,12 @@
 
                 "order": [],
                 'language': {
-                    'lengthMenu': '_MENU_ {{__("records per page")}}',
-                    "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                    "search": '{{trans("file.Search")}}',
+                    'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+                    "info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+                    "search": '<?php echo e(trans("file.Search")); ?>',
                     'paginate': {
-                        'previous': '{{trans("file.Previous")}}',
-                        'next': '{{trans("file.Next")}}'
+                        'previous': '<?php echo e(trans("file.Previous")); ?>',
+                        'next': '<?php echo e(trans("file.Next")); ?>'
                     }
                 },
                 'columnDefs': [
@@ -219,16 +200,16 @@
 
         $('#create_record').click(function () {
 
-            $('.modal-title').text('{{__('Add Category')}}');
-            // $('#action_button').val('{{trans("file.Add")}}');
-            // $('#action').val('{{trans("file.Add")}}');
+            $('.modal-title').text('<?php echo e(__('Add Category')); ?>');
+            // $('#action_button').val('<?php echo e(trans("file.Add")); ?>');
+            // $('#action').val('<?php echo e(trans("file.Add")); ?>');
             $('#formModal').modal('show');
         });
 
 
         // $('#sample_form').on('submit',function () {
         // $.ajax({
-        //     url:'{{route('parent.load')}}',
+        //     url:'<?php echo e(route('parent.load')); ?>',
         //     dataType:"json",
         //     success:function(data) {
         //         console.log(data);
@@ -248,7 +229,7 @@
         //     let id = $(this).data('id');
         //     let status = $(this).data('status');
 
-        //     var target = "{{route('admin.category')}}/" + id +'/'+ status  ;
+        //     var target = "<?php echo e(route('admin.category')); ?>/" + id +'/'+ status  ;
 
         //     $.ajax({
         //         url:target,
@@ -272,7 +253,7 @@
                 console.log('ok');
 
                 $.ajax({
-                    url: "{{route('admin.category.store')}}",
+                    url: "<?php echo e(route('admin.category.store')); ?>",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -304,9 +285,9 @@
             });
 
 
-            // if ($('#action').val() === '{{trans('file.Edit')}}') {
+            // if ($('#action').val() === '<?php echo e(trans('file.Edit')); ?>') {
             //     $.ajax({
-            //         url: "{{route('category_list.update')}}",
+            //         url: "<?php echo e(route('category_list.update')); ?>",
             //         method: "POST",
             //         data: new FormData(this),
             //         contentType: false,
@@ -345,7 +326,7 @@
 
 
 
-            let target = "{{ route('admin.category') }}/" + id + '/edit';
+            let target = "<?php echo e(route('admin.category')); ?>/" + id + '/edit';
 
             $.ajax({
                 url: target,
@@ -361,9 +342,9 @@
 
                     $('#hidden_id').val(html.data.id);
 
-                    $('.modal-title').text('{{trans('file.Edit')}}');
-                    $('#action_button').val('{{trans('file.Edit')}}');
-                    $('#action').val('{{trans('file.Edit')}}');
+                    $('.modal-title').text('<?php echo e(trans('file.Edit')); ?>');
+                    $('#action_button').val('<?php echo e(trans('file.Edit')); ?>');
+                    $('#action').val('<?php echo e(trans('file.Edit')); ?>');
                     $('#formModal').modal('show');
                 }
             })
@@ -375,8 +356,8 @@
         $(document).on('click', '.delete', function () {
             delete_id = $(this).attr('id');
             $('#confirmModal').modal('show');
-            $('.modal-title').text('{{__('DELETE Record')}}');
-            $('#ok_button').text('{{trans('file.OK')}}');
+            $('.modal-title').text('<?php echo e(__('DELETE Record')); ?>');
+            $('#ok_button').text('<?php echo e(trans('file.OK')); ?>');
 
         });
 
@@ -394,9 +375,9 @@
             id = table.rows({selected: true}).ids().toArray();
 
             if (id.length > 0) {
-                if (confirm('{{__('Delete Selection',['key'=>__('Category Info')])}}')) {
+                if (confirm('<?php echo e(__('Delete Selection',['key'=>__('Category Info')])); ?>')) {
                     $.ajax({
-                        url: '{{url('/admin/category/massdelete')}}',
+                        url: '<?php echo e(url('/admin/category/massdelete')); ?>',
                         method: 'POST',
                         data: {
                             CategoryListIdArray: id
@@ -431,11 +412,11 @@
         });
 
         $('#ok_button').click(function () {
-            let target = "{{route('admin.category')}}/" + delete_id + '/delete';
+            let target = "<?php echo e(route('admin.category')); ?>/" + delete_id + '/delete';
             $.ajax({
                 url: target,
                 beforeSend: function () {
-                    $('#ok_button').text('{{trans('file.Deleting...')}}');
+                    $('#ok_button').text('<?php echo e(trans('file.Deleting...')); ?>');
                 },
                 success: function (data) {
                     if (data.success) {
@@ -461,7 +442,7 @@
 		console.log(categoryId);
 
 		$.ajax({
-			url: "{{route('admin.category.active')}}",
+			url: "<?php echo e(route('admin.category.active')); ?>",
 			type: "GET",
 			data: {id:categoryId},
 			success: function(data){
@@ -485,7 +466,7 @@
 		console.log(categoryId);
 
 		$.ajax({
-			url: "{{route('admin.category.inactive')}}",
+			url: "<?php echo e(route('admin.category.inactive')); ?>",
 			type: "GET",
 			data: {id:categoryId},
 			success: function(data){
@@ -504,83 +485,20 @@
 
 
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
 
 <tbody>
-    {{-- @foreach ($categories as $item)
-        <tr>
-            @if ($item->categoryTranslation->count()>0)
-                @foreach ($item->categoryTranslation as $key => $value)
-                    @if ($key<1)
-                        @if ($value->local==$local)
-                            <td>{{$value->category_name}}</td>
-                        @elseif($value->local=='en')
-                            <td>{{$value->category_name}}</td>
-                        @endif
-                    @endif
-                @endforeach
-                <td>
-                    @if($item->parentCategory==NULL)
-                        NULL
-                    @else
-                        @php
-                            $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local',$local)->first();
-                            if (empty($data)) {
-                                $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local','en')->first();
-                            }
-                        @endphp
-                        {{$data->category_name}}
-                    @endif
-                </td>
-                <td>@if($item->description_position==0) TOP @else BOTTOM @endif</td>
-                <td><img class='profile-photo md' src="{{$item->image}}"/> </td>
-                <td>{{$item->featured}}</td>
-                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                <td>
-                    <a href="{{route('admin.category.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                    <a href="{{route('admin.category.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                </td>
-            @else
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-        @endif
-        </tr> --}}
+    
 
 
-    {{-- <td>@if($item->parentCategory==NULL) NULL @else {{$item->parentCategory->slug}} @endif</td> --}}
+    
 
 
-        {{-- <tr>
-            @if ($item->brandTranslation->count()>0)
-                @foreach ($item->brandTranslation as $key => $value)
-                    @if ($key<1)
-                        @if ($value->local==$local)
-                            <td>{{$value->brand_name}}</td>
-                        @elseif($value->local=='en')
-                            <td>{{$value->brand_name}}</td>
-                        @endif
-                    @endif
-                @endforeach
-                <td>Logo</td>
-                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                <td>
-                    <a href="{{route('brand.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                    <a href="{{route('admin.brand.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                </td>
-            @else
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-            @endif
-        </tr> --}}
+        
 
 
-    {{-- @endforeach
-</tbody> --}}
+    
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/category/index.blade.php ENDPATH**/ ?>

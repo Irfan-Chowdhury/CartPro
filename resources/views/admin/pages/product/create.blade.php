@@ -8,11 +8,11 @@
     background-color: #E9E9E9;
     border-color: #FFFFFF;
 }
-    .list-group-item.active {
+    /* .list-group-item.active {
     z-index: 2;
     color: black;
     background-color: #FFFFFF;
-    border-color: #E9E9E9;
+    border-color: #E9E9E9; */
 }
 </style>
 
