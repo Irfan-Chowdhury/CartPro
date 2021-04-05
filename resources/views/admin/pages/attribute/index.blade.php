@@ -5,12 +5,12 @@
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">{{ $tr->translate('Attributes')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{ __('Attributes')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
 	    <a href="{{route('admin.attribute.create')}}" class="btn btn-info">
-	    	<i class="fa fa-plus"></i> {{$tr->translate('Create Attribute')}}
+	    	<i class="fa fa-plus"></i> {{__('Create Attribute')}}
         </a>
 
         {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
@@ -22,11 +22,11 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{$tr->translate('Name')}}</th>
-        		    <th scope="col">{{$tr->translate('Attribute Set')}}</th>
-        		     <th scope="col">{{$tr->translate('Filterable')}}</th>
-        		    <th scope="col">{{$tr->translate('Status')}}</th>
-        		   <th scope="col">{{$tr->translate('Action')}}</th>
+        		    <th scope="col">{{__('Name')}}</th>
+        		    <th scope="col">{{__('Attribute Set')}}</th>
+        		     <th scope="col">{{__('Filterable')}}</th>
+        		    <th scope="col">{{__('Status')}}</th>
+        		   <th scope="col">{{__('Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>

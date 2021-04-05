@@ -9,8 +9,10 @@
     </div>
 
     <div class="container">
-        <form action="<?php echo e(route('admin.flash_sale.store')); ?>" id="submitForm" method="POST">
+        <form action="<?php echo e(route('admin.flash_sale.update',$flashSale->id)); ?>" id="submitForm" method="POST">
+        
             <?php echo csrf_field(); ?>
+            <input type="hidden" name="flash_sale_id" value="<?php echo e($flashSale->id); ?>">
 
             <div class="card">
                 <div class="card-body">
@@ -32,16 +34,19 @@
 
                                         <div class="card-body">
                                             <div class="variants">
-                                                <div class="row">
+
+                                            <?php $__currentLoopData = $flashSale->flashSaleProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $flahSaleProduct): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="row mb-5">
                                                     <div class="col-md-1">
                                                         <h5><i class="fa fa-th" aria-hidden="true"></i></h5>
                                                     </div>
                                                     <div class="col-md-10">
                                                         <h5 for="inputEmail3">Flash Sale Product</h5>
                                                     </div>
-                                                    
+                                                    <div class="col-1">
+                                                        <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
+                                                    </div>
                                                     <br><br>
-
                                                     <div class="col-md-12">
                                                         <div class="form-row">
                                                             <label><b>Product Name <span class="text-danger">*</span></b></label>
@@ -57,9 +62,9 @@ unset($__errorArgs, $__bag); ?> selectpicker" data-live-search="true" data-live-
                                                                     <?php $__empty_1 = true; $__currentLoopData = $item->productTranslation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                                         <?php if($key<1): ?>
                                                                             <?php if($value->local==$local): ?>
-                                                                                <option value="<?php echo e($item->id); ?>"><?php echo e($value->product_name); ?></option>
+                                                                                <option value="<?php echo e($item->id); ?>" <?php if($item->id == $flahSaleProduct->product_id): ?> selected <?php endif; ?>><?php echo e($value->product_name); ?></option>
                                                                             <?php elseif($value->local=='en'): ?>
-                                                                                <option value="<?php echo e($item->id); ?>"><?php echo e($value->product_name); ?></option>
+                                                                                <option value="<?php echo e($item->id); ?>" <?php if($item->id == $flahSaleProduct->product_id): ?> selected <?php endif; ?>><?php echo e($value->product_name); ?></option>
                                                                             <?php endif; ?>
                                                                         <?php endif; ?>
                                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -82,7 +87,7 @@ unset($__errorArgs, $__bag); ?>
                                                         <div class="mt-2 form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="text-bold">End Date <span class="text-danger">*</span></label>
-                                                                <input type="date" required name="end_date[]" id="end_date" class="form-control <?php $__errorArgs = ['end_date'];
+                                                                <input type="date" required name="end_date[]" value="<?php echo e($flahSaleProduct->end_date); ?>" class="form-control <?php $__errorArgs = ['end_date'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -103,7 +108,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="text-bold">Price <span class="text-danger">*</span></label>
-                                                                <input type="text" required name="price[]" class="form-control <?php $__errorArgs = ['price'];
+                                                                <input type="text" required name="price[]" value="<?php echo e($flahSaleProduct->price); ?>" class="form-control <?php $__errorArgs = ['price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -124,7 +129,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="text-bold">Quantity <span class="text-danger">*</span></label>
-                                                                <input type="number" required min="0" name="qty[]" class="form-control <?php $__errorArgs = ['qty'];
+                                                                <input type="number" required min="0" name="qty[]" value="<?php echo e($flahSaleProduct->qty); ?>" class="form-control <?php $__errorArgs = ['qty'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -146,14 +151,14 @@ unset($__errorArgs, $__bag); ?>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                                
-                                                
+
                                             </div>
                                             <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add More</span>
                                             <br><br>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
+                                                <button type="submit" class="btn btn-success"><?php echo e(__('Update')); ?></button>
                                             </div>
                                         </div>
                                     </div>
@@ -163,34 +168,26 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="card">
                                         <h4 class="card-header"><b>Settings</b></h4>
                                         <div class="card-body">
-                                                    <div class="form-group">
-                                                        <label class="text-bold">Campaign Name <span class="text-danger">*</span></label>
-                                                        <input type="text" required name="campaign_name" class="form-control <?php $__errorArgs = ['campaign_name'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" placeholder="<?php echo e(__('Campaign Name')); ?>">
-                                                        <?php $__errorArgs = ['campaign_name'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                            <div class="text-danger"><?php echo e($message); ?></div>
-                                                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="text-bold">Status</span></label>
-                                                        <div class="form-group form-check">
-                                                            <input type="checkbox" class="form-check-input" name="is_active" value='1' id="isActive">
-                                                            <span><?php echo e(__('Active')); ?></span>
-                                                        </div>
-                                                    </div>
+                                            <div class="form-group">
+                                                <label class="text-bold">Campaign Name <span class="text-danger">*</span></label>
+
+                                                        
+                                                <?php if($flashSale->flashSaleTranslations!=null): ?>
+                                                    <input type="text" required name="campaign_name" class="form-control" value="<?php echo e($flashSale->flashSaleTranslations[0]->campaign_name); ?>">
+                                                    <input type="hidden" name="product_translation_id" value="<?php echo e($flashSale->flashSaleTranslations[0]->id); ?>">
+                                                <?php else: ?>
+                                                    <input type="text" required name="campaign_name" class="form-control" placeholder="Campaign Name">
+                                                <?php endif; ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="text-bold">Status</span></label>
+                                                <div class="form-group form-check">
+                                                    <input type="checkbox" class="form-check-input" name="is_active" value='1' <?php if($flashSale->is_active==1): ?> checked <?php endif; ?> id="isActive">
+                                                    <span><?php echo e(__('Active')); ?></span>
+                                                </div>
+                                            </div>
+
                                             <br><br>
                                             <div class="d-flex justify-content-start">
                                                 <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
@@ -349,44 +346,42 @@ unset($__errorArgs, $__bag); ?>'+
     })
 
 
-    $('#submitForm').on('submit', function (event) {
-            event.preventDefault();
-            console.log('ok');
-            $.ajax({
-                url: "<?php echo e(route('admin.flash_sale.store')); ?>",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
+    // $('#submitForm').on('submit', function (event) {
+    //     event.preventDefault();
+    //     console.log('ok');
+    //     $.ajax({
+    //         url: "",
+    //         method: "POST",
+    //         data: new FormData(this),
+    //         contentType: false,
+    //         cache: false,
+    //         processData: false,
+    //         dataType: "json",
+    //         success: function (data) {
+    //             console.log(data);
 
-                    var html = '';
-                    if (data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for (var count = 0; count < data.errors.length; count++) {
-                            html += '<p>' + data.errors[count] + '</p>';
-                        }
-                        html += '</div>';
-                    }
-                    if (data.error) {
-                        html = '<div class="alert alert-danger">' + data.error + '</div>';
-                    }
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#submitForm')[0].reset();
-                        $('select').selectpicker('refresh');
-                        $('.date').datepicker('update');
-                        $('#employee-table').DataTable().ajax.reload();
-                    }
-                    $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                }
-            });
-        });
+    //             var html = '';
+    //             if (data.errors) {
+    //                 html = '<div class="alert alert-danger">';
+    //                 for (var count = 0; count < data.errors.length; count++) {
+    //                     html += '<p>' + data.errors[count] + '</p>';
+    //                 }
+    //                 html += '</div>';
+    //             }
+    //             if (data.error) {
+    //                 html = '<div class="alert alert-danger">' + data.error + '</div>';
+    //             }
+    //             if (data.success) {
+    //                 html = '<div class="alert alert-success">' + data.success + '</div>';
+    //                 $('#submitForm')[0].reset();
+    //                 $('select').selectpicker('refresh');
+    //             }
+    //             $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+    //         }
+    //     });
+    // });
 </script>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/flash_sale/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/flash_sale/edit.blade.php ENDPATH**/ ?>

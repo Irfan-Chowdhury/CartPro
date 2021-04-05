@@ -47,3 +47,23 @@ https://laraveldaily.com/pivot-tables-and-many-to-many-relationships/
 2. URL in Attribute
 3. attribute_translations.attribute_set_id //testing purpose //(no need)
 4. attribute_value_translations.attribute_id - //wroking
+
+
+### ------- This Line is Correct ------ ####
+$flashSale = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($local){
+    $query->where('local','en')
+        ->Orwhere('local',$local);
+    }])
+->whereId($id)
+->first();
+
+<input type="text" required name="campaign_name" class="form-control @error('campaign_name') is-invalid @enderror"
+    @forelse($flashSale->flashSaleTranslations as $key => $item)
+        @if ($key<1)
+            @if ($item->local==$local) value="{{$item->campaign_name}}"
+            @elseif($item->local=='en') value="{{$item->campaign_name}}"
+            @endif
+        @endif
+    @empty
+        placeholder="{{__('Campaign Name')}}"
+    @endforelse >

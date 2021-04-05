@@ -96,10 +96,11 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     //brand
     Route::get('/brand','BrandController@index')->name('admin.brand');
     Route::post('/store','BrandController@store')->name('admin.brand.store');
-    Route::get('/brand/{id}','BrandController@brandEdit')->name('brand.edit');
+    Route::get('/brand/{id}','BrandController@brandEdit')->name('admin.brand.edit');
     Route::post('/update/{id}','BrandController@brandUpdate')->name('brand.update');
     Route::get('/brands/{id}','BrandController@delete')->name('admin.brand.delete');
-    Route::get('/brands/{id}/{status}','BrandController@status')->name('brand.status');
+    Route::get('/active','BrandController@active')->name('admin.brand.active');
+    Route::get('/inactive','BrandController@inactive')->name('admin.brand.inactive');
 
     //Attribute Set
     Route::group(['prefix' => 'attribute-sets'], function () {
@@ -111,7 +112,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/inactive','AttributeSetController@inactive')->name('admin.attribute_set.inactive');
     });
 
-    //Attributes    
+    //Attributes
     Route::group(['prefix' => 'attributes'], function () {
         Route::get('/','AttributeController@index')->name('admin.attribute.index');
         Route::get('/create','AttributeController@create')->name('admin.attribute.create');
@@ -150,8 +151,13 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/','FlashSaleController@index')->name('admin.flash_sale.index');
         Route::get('/create','FlashSaleController@create')->name('admin.flash_sale.create');
         Route::post('/store','FlashSaleController@store')->name('admin.flash_sale.store');
+        Route::get('/edit/{id}','FlashSaleController@edit')->name('admin.flash_sale.edit');
+        Route::post('/update/{id}','FlashSaleController@update')->name('admin.flash_sale.update');
+        // Route::post('/update','FlashSaleController@update')->name('admin.flash_sale.update');
+        Route::get('/active','FlashSaleController@active')->name('admin.flash_sale.active');
+        Route::get('/inactive','FlashSaleController@inactive')->name('admin.flash_sale.inactive');
     });
-    
+
 
 
     //--Menus--

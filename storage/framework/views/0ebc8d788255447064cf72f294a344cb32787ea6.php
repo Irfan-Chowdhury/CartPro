@@ -1,26 +1,27 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 <section>
-@php
+<?php
     // use Stichoza\GoogleTranslate\GoogleTranslate;
     // $local = Session::get('currentLocal');
     // $tr    = new GoogleTranslate($local);
-@endphp
+?>
 
     <div class="container-fluid"><span id="success_alert"></span></div>
     <div class="container-fluid mb-3">
 
-        {{-- <h4 class="font-weight-bold mt-3">{{$tr->translate('Brand')}}</h4> --}}
-        <h4 class="font-weight-bold mt-3">{{__('Brand')}}</h4>
+        
+        <h4 class="font-weight-bold mt-3"><?php echo e(__('Brand')); ?></h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
 	    <button type="button" class="btn btn-info" name="create_record" id="create_record">
-	    	<i class="fa fa-plus"></i> {{__('Add Brand')}}
+	    	<i class="fa fa-plus"></i> <?php echo e(__('Add Brand')); ?>
+
         </button>
 
         <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
+        	<i class="fa fa-minus-circle"></i> <?php echo e(__('Bulk delete')); ?>
+
         </button>
 
     </div>
@@ -29,10 +30,10 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-                    <th scope="col">{{__('Logo')}}</th>
-        		    <th scope="col">{{__('Brand Name')}}</th>
-        		    <th scope="col">{{__('Status')}}</th>
-        		    <th scope="col">{{__('Action')}}</th>
+                    <th scope="col"><?php echo e(__('Logo')); ?></th>
+        		    <th scope="col"><?php echo e(__('Brand Name')); ?></th>
+        		    <th scope="col"><?php echo e(__('Status')); ?></th>
+        		    <th scope="col"><?php echo e(__('Action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -40,7 +41,7 @@
 
 </section>
 
-@include('admin.pages.brand.create')
+<?php echo $__env->make('admin.pages.brand.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <script type="text/javascript">
 
@@ -82,7 +83,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('admin.brand') }}",
+                url: "<?php echo e(route('admin.brand')); ?>",
             },
             columns: [
                 {
@@ -118,12 +119,12 @@
 
             "order": [],
             'language': {
-                'lengthMenu': '_MENU_ {{__("records per page")}}',
-                "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                "search": '{{trans("file.Search")}}',
+                'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+                "info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+                "search": '<?php echo e(trans("file.Search")); ?>',
                 'paginate': {
-                    'previous': '{{trans("file.Previous")}}',
-                    'next': '{{trans("file.Next")}}'
+                    'previous': '<?php echo e(trans("file.Previous")); ?>',
+                    'next': '<?php echo e(trans("file.Next")); ?>'
                 }
             },
             'columnDefs': [
@@ -191,7 +192,7 @@
         // var goalType = $("#brandListTable").val();
 
         $.ajax({
-            url: "{{route('admin.brand.store')}}",
+            url: "<?php echo e(route('admin.brand.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -220,9 +221,9 @@
 
 
 	$('#create_record').click(function () {
-		$('modal-title').text('{{__('Add Account')}}');
-		$('#action_button').val('{{trans("file.Add")}}');
-		$('#action').val('{{trans("file.Add")}}');
+		$('modal-title').text('<?php echo e(__('Add Account')); ?>');
+		$('#action_button').val('<?php echo e(trans("file.Add")); ?>');
+		$('#action').val('<?php echo e(trans("file.Add")); ?>');
 		$('#formModal').modal('show');
 	});
 
@@ -230,7 +231,7 @@
     //         let id = $(this).data('id');
     //         let status = $(this).data('status');
 
-    //         var target = "{{route('admin.brand')}}/" + id +'/'+ status  ;
+    //         var target = "<?php echo e(route('admin.brand')); ?>/" + id +'/'+ status  ;
 
     //         $.ajax({
     //             url:target,
@@ -249,10 +250,10 @@
 	$('#sample_form').on('submit', function (event) {
 
             event.preventDefault();
-            if ($('#action').val() === '{{trans('file.Add')}}') {
+            if ($('#action').val() === '<?php echo e(trans('file.Add')); ?>') {
 
                 $.ajax({
-                    url: "{{route('admin.brand.store')}}",
+                    url: "<?php echo e(route('admin.brand.store')); ?>",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -280,7 +281,7 @@
                 })
             }
 
-            if ($('#action').val() === '{{trans('file.Edit')}}') {
+            if ($('#action').val() === '<?php echo e(trans('file.Edit')); ?>') {
 
 
                 $.ajax({
@@ -321,7 +322,7 @@
 
 
 
-        //     // let target = "{{ route('admin.brand') }}/" + id + '/edit';
+        //     // let target = "<?php echo e(route('admin.brand')); ?>/" + id + '/edit';
 
         //     $.ajax({
         //         url: target,
@@ -337,9 +338,9 @@
 
         //             $('#hidden_id').val(html.data.id);
 
-        //             $('.modal-title').text('{{trans('file.Edit')}}');
-        //             $('#action_button').val('{{trans('file.Edit')}}');
-        //             $('#action').val('{{trans('file.Edit')}}');
+        //             $('.modal-title').text('<?php echo e(trans('file.Edit')); ?>');
+        //             $('#action_button').val('<?php echo e(trans('file.Edit')); ?>');
+        //             $('#action').val('<?php echo e(trans('file.Edit')); ?>');
         //             $('#formModal').modal('show');
         //         }
         //     })
@@ -349,17 +350,17 @@
         $(document).on('click','.delete',function(){
         	delete_id = $(this).attr('id');
         	$('#confirmModal').modal('show');
-            $('.modal-title').text('{{__('DELETE Record')}}');
-            $('#ok_button').text('{{trans('file.OK')}}');
+            $('.modal-title').text('<?php echo e(__('DELETE Record')); ?>');
+            $('#ok_button').text('<?php echo e(trans('file.OK')); ?>');
         });
 
         $('#ok_button').on('click',function(){
 
-        	// let target = "{{route('admin.brand')}}/"+ delete_id + "/delete";
+        	// let target = "<?php echo e(route('admin.brand')); ?>/"+ delete_id + "/delete";
         	$.ajax({
         		url:target,
         		beforeSend: function () {
-                    $('#ok_button').text('{{trans('file.Deleting...')}}');
+                    $('#ok_button').text('<?php echo e(trans('file.Deleting...')); ?>');
                 },
                 success: function (data) {
                     if (data.success) {
@@ -379,7 +380,7 @@
         // $(document).on('click','.status',function(){
         // 	let id = $(this).data('id');
         // 	let status = $(this).data('status');
-        // 	let target = "{{route('admin.brand')}}/"+id+'/'+status;
+        // 	let target = "<?php echo e(route('admin.brand')); ?>/"+id+'/'+status;
         // 	$.ajax({
         // 		url:target,
         // 		dataType:'json',
@@ -409,7 +410,7 @@
 		console.log(id);
 
 		$.ajax({
-			url: "{{route('admin.brand.active')}}",
+			url: "<?php echo e(route('admin.brand.active')); ?>",
 			type: "GET",
 			data: {id:id},
 			success: function(data){
@@ -433,7 +434,7 @@
 		console.log(id);
 
 		$.ajax({
-			url: "{{route('admin.brand.inactive')}}",
+			url: "<?php echo e(route('admin.brand.inactive')); ?>",
 			type: "GET",
 			data: {id:id},
 			success: function(data){
@@ -450,4 +451,6 @@
 		});
 	});
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/brand/index.blade.php ENDPATH**/ ?>

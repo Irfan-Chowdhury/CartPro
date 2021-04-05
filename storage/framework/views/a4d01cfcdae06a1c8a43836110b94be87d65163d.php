@@ -4,12 +4,12 @@
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3"><?php echo e($tr->translate('Attributes')); ?></h4>
+        <h4 class="font-weight-bold mt-3"><?php echo e(__('Attributes')); ?></h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
 	    <a href="<?php echo e(route('admin.attribute.create')); ?>" class="btn btn-info">
-	    	<i class="fa fa-plus"></i> <?php echo e($tr->translate('Create Attribute')); ?>
+	    	<i class="fa fa-plus"></i> <?php echo e(__('Create Attribute')); ?>
 
         </a>
 
@@ -20,11 +20,11 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col"><?php echo e($tr->translate('Name')); ?></th>
-        		    <th scope="col"><?php echo e($tr->translate('Attribute Set')); ?></th>
-        		     <th scope="col"><?php echo e($tr->translate('Filterable')); ?></th>
-        		    <th scope="col"><?php echo e($tr->translate('Status')); ?></th>
-        		   <th scope="col"><?php echo e($tr->translate('Action')); ?></th>
+        		    <th scope="col"><?php echo e(__('Name')); ?></th>
+        		    <th scope="col"><?php echo e(__('Attribute Set')); ?></th>
+        		     <th scope="col"><?php echo e(__('Filterable')); ?></th>
+        		    <th scope="col"><?php echo e(__('Status')); ?></th>
+        		   <th scope="col"><?php echo e(__('Action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>

@@ -11,26 +11,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Str;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActiveInactiveTrait;
+use App\Traits\SlugTrait;
+use App\Traits\imageHandleTrait;
 
 class BrandController extends Controller
 {
+    use ActiveInactiveTrait, SlugTrait, imageHandleTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
     public function index()
     {
-        $language = Language::where('default',1)->first();
-        $local = $language->local;
+        $local = Session::get('currentLocal');
 
         $brands = Brand::with(['brandTranslation'=> function ($query) use ($local){
 						$query->where('local',$local)
                         ->orWhere('local','en')
-                        ->orderBy('id','DESC'); 
+                        ->orderBy('id','DESC');
 					}])->get();
-
-        //return $brands;
-        // return view('admin.pages.brand.index',compact('brands','local'));
 
        if (request()->ajax())
         {
@@ -38,14 +39,25 @@ class BrandController extends Controller
                 ->setRowId(function ($row){
                     return $row->id;
                 })
+                ->addColumn('brand_logo', function ($row)
+                {
+                    if ($row->brand_logo==null) {
+                        return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
+                    }
+                    elseif ($row->brand_logo!=null) {
+                        $url = url("public/".$row->brand_logo);
+                        return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                    }
+                })
                 ->addColumn('brand_name', function ($row) use ($local)
-                {   
+                {
                     if ($row->brandTranslation->count()>0){
                         foreach ($row->brandTranslation as $key => $value){
                             if ($key<1){
                                 if ($value->local==$local){
                                     return $value->brand_name;
-                                }elseif($value->local=='en'){
+                                }
+                                elseif($value->local=='en'){
                                     return $value->brand_name;
                                 }
                             }
@@ -54,30 +66,17 @@ class BrandController extends Controller
                         return "NULL";
                     }
                 })
-                ->addColumn('brand_logo', function ($row)
-                {
-                    if ($row->brand_logo) {
-                        $url = url($row->brand_logo);
-                        return '<img src="'. $url .'"  style="height:50px;width:50px"/>'; 
-                    }else { 
-                        return "None";
-                    }
-                })
                 ->addColumn('action', function ($row)
                 {
-                    // if ($row->brandTranslation->count()>0){
-                    //     $actionBtn = '<a href="'.route('brand.edit', $row->id) .'" class="edit btn btn-success btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                    //             &nbsp;
-                    //             <a href="'.route('admin.brand.delete', $row->id).'" class="delete_test btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
-                    //     return $actionBtn;
-                    // }else {
-                    //     return "NULL";
-                    // }
-                    $actionBtn = '<a href="'.route('brand.edit', $row->id) .'" class="edit btn btn-success btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                                &nbsp;
-                                <a href="'.route('admin.brand.delete', $row->id).'" class="delete_test btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
+                    $actionBtn = "";
+                    $actionBtn .= '<a href="'.route('admin.brand.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                                    &nbsp; ';
+                    if ($row->is_active==1) {
+                        $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                    }else {
+                        $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                    }
                     return $actionBtn;
-                    
                 })
                 ->rawColumns(['brand_logo','action'])
                 ->make(true);
@@ -85,40 +84,23 @@ class BrandController extends Controller
         return view('admin.pages.brand.index',compact('brands','local'));
     }
 
-    public function make_slug($string) {
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
-    }
-    
     public function store(Request $request)
     {
         // return response()->json($request->all());
 
-        // $validator = Validator::make($request->only('brand_name'),[ 
+        // $validator = Validator::make($request->only('brand_name'),[
         //     'brand_name' => 'required',
         // ]);
-
         // if ($validator->fails()){
         //     return response()->json(['errors' => $validator]);
         // }
 
-        
-        $brand = new Brand;
-        // $brand->slug = Str::slug($request->brand_name, '-');
-        $brand->slug = $this->make_slug($request->brand_name);
-        
-        //return response()->json($brand);
-        $image = $request->file('image');
+
+        $brand       = new Brand;
+        $brand->slug = $this->slug($request->brand_name);
+        $image       = $request->file('brand_logo');
         if ($image) {
-            $image_name = Str::random(8);
-            $ext = strtolower($image->getClientOriginalExtension());
-            $image_full_name = $image_name.'.'.$ext;
-            $upload_path = 'public/images/';
-            $image_url = $upload_path.$image_full_name;
-            $success = $image->move($upload_path,$image_full_name);
-            $brand->brand_logo = $image_url;
+            $brand->brand_logo = $this->imageStore($image, $directory='images/brands/');
         }
         if (empty($request->is_active)) {
             $brand->is_active = 0;
@@ -127,72 +109,41 @@ class BrandController extends Controller
         }
         $brand->save();
 
-        $language = Language::where('default',1)->first();
+        $local                        = Session::get('currentLocal');
         $brandTranslation             = new BrandTranslation();
         $brandTranslation->brand_id   = $brand->id;
-        $brandTranslation->local      = $language->local;
+        $brandTranslation->local      = $local;
         $brandTranslation->brand_name = $request->brand_name;
         $brandTranslation->save();
 
-
-        // return redirect()->back();
-        // return response()->json("OK");
-        return response()->json(['success' => "Successfully Done"]);
+        // return response()->json(['success' => "Successfully Done"]);
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $brand = Brand::where('id',$id)->first();
-        return Response()->json($brand);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function brandEdit($id)
     {
-        $language = Language::where('default',1)->first();
-        $brand = Brand::find($id);
-        $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local',$language->local)->first();
+        $local    = Session::get('currentLocal');
+        $brand    = Brand::find($id);
+        $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local',$local)->first();
 
-        // if (!isset($brandTranslation)) {
-        //     $brandTranslation = NULL;
-        // }
-
-        //return $brandTranslation->brand_id;
-
-        return view('admin.pages.brand.edit',compact('brand','brandTranslation','language'));
-
-
-
-        if (request()->ajax())
-        {
-            $data = Brand::findOrFail($id);
-
-            return response()->json(['data' => $data]);
-        }
-         // $brand = Brand::where('id',$id)->first();
-         // return view('admin.editBrand',compact('brand'));
+        return view('admin.pages.brand.edit',compact('brand','brandTranslation','local'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function brandUpdate(Request $request, $id)
     {
+        $brand   = Brand::find($id);
+        if (empty($request->is_active)) {
+            $brand->is_active = 0;
+        }else {
+            $brand->is_active = 1;
+        }
+        $brand_logo   = $request->file('brand_logo');
+        if ($brand_logo) {
+            $this->previousImageDelete($brand->brand_logo); //previous image will be deleted
+            $brand->brand_logo = $this->imageStore($brand_logo, $directory='images/brands/');
+        }
+        $brand->update();
+
         DB::table('brand_translations')
         ->updateOrInsert(
             [
@@ -227,25 +178,31 @@ class BrandController extends Controller
         // return response()->json(['success'=>'updated']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function delete($id)
     {
-
        Brand::whereId($id)->delete();
        return redirect()->back();
-
        return response()->json(['success' => __('Data is successfully deleted')]);
-
     }
-    public function status($id,$status)
-    {
-        Brand::where('id',$id)->update(['status'=>$status]);
-        return response()->json(['success' => _('updates')]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Active-Inactive
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Brand::find($request->id));
+        }
+    }
+
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Brand::find($request->id));
+        }
     }
 }
 
