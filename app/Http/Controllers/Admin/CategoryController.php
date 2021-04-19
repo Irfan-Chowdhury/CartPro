@@ -105,7 +105,9 @@ class CategoryController extends Controller
                         //     return "NULL &nbsp; NULL";
                         // }
                         $actionBtn = "";
-                        $actionBtn .= '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                        // $actionBtn .= '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                        //                 &nbsp; ';
+                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                                         &nbsp; ';
                         if ($row->is_active==1) {
                             $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
@@ -174,78 +176,42 @@ class CategoryController extends Controller
         $crandTranslation->save();
 
         return response()->json(['success' => __('Data Successfully Saved')]);
-
-
     }
 
-    public function show($id)
-    {
-        $Category = Category::where('id',$id)->first();
-        return Response()->json($Category);
-    }
-
-
-
-    public function categoryEdit($id)
-    {
-        if (request()->ajax())
-        {
-            $data = Category::findOrFail($id);
-
-            return response()->json(['data' => $data]);
-        }
-    }
-
-    public function edit($id)
+    public function edit(Request $request)
     {
         $local = Session::get('currentLocal');
 
-        $category = Category::find($id);
-        $categoryTranslation = CategoryTranslation::where('category_id',$id)->where('local',$local)->first();
+        $category = Category::find($request->category_id);
+        $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local',$local)->first();
+        
+        return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
 
         return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
     }
 
 
-
-    public function categoryUpdate(Request $request)
-    {
-        // $id = $request->hidden_id;
-        // $data = [];
-        // $data['category_name'] = htmlspecialchars($request->category_name);
-        // $data['description'] = htmlspecialchars($request->description);
-        // $data['parent'] = $request->parent;
-        // $data['description_position'] =$request->description_position;
-        // $image = $request->file('image');
-        // if ($image) {
-        //     $image_name = Str::random(8);
-        //     $ext = strtolower($image->getClientOriginalExtension());
-        //     $image_full_name = $image_name.'.'.$ext;
-        //     $upload_path = 'public/images/';
-        //     $image_url = $upload_path.$image_full_name;
-        //     $success = $image->move($upload_path,$image_full_name);
-        //     $data['image'] = $image_url;
-        // }
-
-        // $data['featured'] = $request->featured;
-        // if ($request->featured == null) {
-        //     $data['featured'] = 0;
-        // }
-        // else
-        // {
-        //     $data['featured'] = 1;
-        // }
-        // $data['status'] = 1;
-        // //return response()->json($data);
-        // Category::whereId($id)->update($data);
-
-        // return response()->json(['success' => __('updated')]);
-    }
-
-
     public function update(Request $request)
     {
+
+        $validator = Validator::make($request->only('category_name'),[
+            'category_name' => 'required|unique:category_translations,category_name,'.$request->category_translation_id,
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
         $local = Session::get('currentLocal');
+
+        $category = Category::find($request->category_id);
+        $category->parent_id   = $request->parent_id;
+        $category->description = $request->description;
+        $category->description_position = $request->description_position;
+        $category->featured    = $request->featured;
+        $category->is_active   = $request->is_active;
+        $category->update();
 
         DB::table('category_translations')
         ->updateOrInsert(
@@ -257,6 +223,8 @@ class CategoryController extends Controller
                 'category_name' => $request->category_name,
             ]
         );
+
+        return response()->json(['success' => 'Data Saved Successfully']);
 
         session()->flash('type','success');
         session()->flash('message','Successfully Updated');

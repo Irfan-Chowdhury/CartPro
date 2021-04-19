@@ -48,8 +48,7 @@ class PageController extends Controller
                             }else{
                                 $button .= '<button type="button"  name="delete" data-id="' . $data->id . '" data-status="0" class=" btn btn-danger btn-sm status"><i class="dripicons-thumbs-down"></i></button>';
                             }   
-                         
-                        
+            
 
                         return $button;
                     })

@@ -7,18 +7,15 @@
     $tr    = new GoogleTranslate($local);
 @endphp
 
-        <div class="container-fluid"><span id="success_alert"></span></div>
-
+        <div class="container-fluid"><span id="alert_message"></span></div>
 
         <div class="container-fluid mb-3">
-
-                <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record"><i
-                            class="fa fa-plus"></i> {{$tr->translate('Add Category')}}</button>
-
-
-                <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i
-                            class="fa fa-minus-circle"></i> {{$tr->translate('Bulk delete')}}</button>
-
+                <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record">
+                    <i class="fa fa-plus"></i> {{$tr->translate('Add Category')}}
+                </button>
+                <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
+                    <i class="fa fa-minus-circle"></i> {{$tr->translate('Bulk delete')}}
+                </button>
         </div>
 
         <div class="table-responsive">
@@ -35,6 +32,7 @@
             </table>
         </div>
     </section>
+
 
 
     {{-- <div id="confirmModal" class="modal fade" role="dialog">
@@ -58,6 +56,7 @@
     </div> --}}
 
     @include('admin.pages.category.create')
+    @include('admin.pages.category.edit_modal')
 
     <script type="text/javascript">
 
@@ -218,173 +217,118 @@
 
 
         $('#create_record').click(function () {
-
             $('.modal-title').text('{{__('Add Category')}}');
-            // $('#action_button').val('{{trans("file.Add")}}');
-            // $('#action').val('{{trans("file.Add")}}');
             $('#formModal').modal('show');
         });
-
-
-        // $('#sample_form').on('submit',function () {
-        // $.ajax({
-        //     url:'{{route('parent.load')}}',
-        //     dataType:"json",
-        //     success:function(data) {
-        //         console.log(data);
-        //         if (data.success) {
-        //             // return data;
-        //             $('.select_parent').html('');
-        //             data.data.forEach(function(val){
-        //                 console.log(val);
-        //                 $('.select_parent').append('<a class="d-block" data-id="'+val.id+'">'+val.category_name+'</a>');
-        //             });
-        //             }
-        //         }
-        //     });
-        // });
-
-        // $('#category_list-table').on('click','.status',function () {
-        //     let id = $(this).data('id');
-        //     let status = $(this).data('status');
-
-        //     var target = "{{route('admin.category')}}/" + id +'/'+ status  ;
-
-        //     $.ajax({
-        //         url:target,
-        //         dataType:"json",
-        //         success:function(data) {
-        //             let html = '';
-        //             if (data.success) {
-        //                 html = '<div class="alert alert-success">'+data.success + "</div>";
-        //                 $('#category_list-table').DataTable().ajax.reload();
-        //             }
-        //             $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-        //         }
-        //     })
-        // });
 
         //----------Insert Data----------------------
 
         $('#submitForm').on('submit', function (e) {
             e.preventDefault();
 
-                console.log('ok');
+            console.log('ok');
 
-                $.ajax({
-                    url: "{{route('admin.category.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
+            $.ajax({
+                url: "{{route('admin.category.store')}}",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    let html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (let count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
                         }
-                        if(data.success){
-                            $('#category_list-table').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $("#formModal").modal('hide');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
+                        html += '</div>';
                     }
-                });
+                    if(data.success){
+                        $('#category_list-table').DataTable().ajax.reload();
+                        $('#submitForm')[0].reset();
+                        $("#formModal").modal('hide');
+                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                        $('#alert_message').addClass('alert alert-success').html(data.success);
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
+                    }
+                }
             });
-
-
-            // if ($('#action').val() === '{{trans('file.Edit')}}') {
-            //     $.ajax({
-            //         url: "{{route('category_list.update')}}",
-            //         method: "POST",
-            //         data: new FormData(this),
-            //         contentType: false,
-            //         cache: false,
-            //         processData: false,
-            //         dataType: "json",
-            //         success: function (data) {
-            //             let html = '';
-            //             if (data.errors) {
-            //                 html = '<div class="alert alert-danger">';
-            //                 for (let count = 0; count < data.errors.length; count++) {
-            //                     html += '<p>' + data.errors[count] + '</p>';
-            //                 }
-            //                 html += '</div>';
-            //             }
-            //             if (data.success) {
-            //                 html = '<div class="alert alert-success">' + data.success + '</div>';
-            //                 setTimeout(function () {
-            //                     $('#formModal').modal('hide');
-            //                     $('#category_list-table').DataTable().ajax.reload();
-            //                     $('#sample_form')[0].reset();
-            //                 }, 2000);
-
-            //             }
-            //             $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-            //         }
-            //     });
-            // }
-
-
+        });
 
         $(document).on('click', '.edit', function () {
 
-            let id = $(this).attr('id');
-            $('#form_result').html('');
-
-
-
-            let target = "{{ route('admin.category') }}/" + id + '/edit';
+            var id = $(this).data("id");
+            $('#alert_message').html('');
 
             $.ajax({
-                url: target,
-                dataType: "json",
-                success: function (html) {
-
-                    $('#category_name').val(html.data.category_name);
-                    //$('#parent').val(html.data.parent);
-                    $('#description').val(html.data.description);
-                    //$('#description_position').val(html.data.bank_branch);
-
-
-
-                    $('#hidden_id').val(html.data.id);
-
-                    $('.modal-title').text('{{trans('file.Edit')}}');
-                    $('#action_button').val('{{trans('file.Edit')}}');
-                    $('#action').val('{{trans('file.Edit')}}');
-                    $('#formModal').modal('show');
+                url: "{{ route('admin.category.edit') }}",
+                type: "GET",
+                data: {category_id:id},
+                success: function (data) {
+                    $('#category_id').val(data.category.id);
+                    $('#category_translation_id').val(data.categoryTranslation.id);
+                    $('#category_name_edit').val(data.categoryTranslation.category_name);
+                    $('#description_edit').val(data.category.description);
+                    $('#parent_id_edit').selectpicker('val', data.category.parent_id);
+                    $('#description_position_edit').selectpicker('val', data.category.description_position);
+                    if (data.category.featured === 1) {
+                        $('#featured_edit').prop('checked', true);
+                    } else {
+                        $('#featured_edit').prop('checked', false);
+                    }
+                    if (data.category.is_active === 1) {
+                        $('#isActive_edit').prop('checked', true);
+                    } else {
+                        $('#isActive_edit').prop('checked', false);
+                    }
+                    $('#editModal').modal('show');
                 }
             })
         });
 
+        //----------Update Data----------------------
 
-        let delete_id;
+        $('#updateForm').on('submit', function (e) {
+            e.preventDefault();
 
-        $(document).on('click', '.delete', function () {
-            delete_id = $(this).attr('id');
-            $('#confirmModal').modal('show');
-            $('.modal-title').text('{{__('DELETE Record')}}');
-            $('#ok_button').text('{{trans('file.OK')}}');
-
+            $.ajax({
+                url: "{{route('admin.category.update')}}",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    let html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (let count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                        $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                    }
+                    else if(data.success){
+                        $('#category_list-table').DataTable().ajax.reload();
+                        $('#updateForm')[0].reset();
+                        $("#editModal").modal('hide');
+                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                        $('#alert_message').addClass('alert alert-success').html(data.success);
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
+                    }
+                }
+            });
         });
 
-        $(document).on('click', '.select_parent a', function () {
-            var id = $(this).data('id');
-
-            $('.parent_id').val(id);
-        })
 
 
         $(document).on('click', '#bulk_delete', function () {
@@ -468,10 +412,10 @@
 				console.log(data);
 				if(data.success){
                     $('#category_list-table').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                    $('#alert_message').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
+                        $('#alert_message').fadeOut("slow");
                     }, 3000);
                 }
 			}
@@ -492,10 +436,10 @@
 				console.log(data);
 				if(data.success){
                     $('#category_list-table').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                    $('#alert_message').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
+                        $('#alert_message').fadeOut("slow");
                     }, 3000);
                 }
 			}

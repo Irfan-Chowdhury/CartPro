@@ -1,5 +1,26 @@
-<?php 
+<?php
 return [
+    'Action' => 'Action',
+    'Add Coupon' => 'Add Coupon',
+    'Bulk Action' => 'Bulk Action',
+    'Categories' => 'Categories',
+    'Code' => 'Code',
+    'Coupon Name' => 'Coupon Name',
+    'Discount' => 'Discount',
+    'Free Shipping' => 'Free Shipping',
+    'Maximum Spend' => 'Maximum Spend',
+    'Minimum Spend' => 'Minimum Spend',
+    'Products' => 'Products',
+    'Status' => 'Status',
+    'Start Date' => 'Start Date',
+    'Usage Limit Per Coupon' => 'Usage Limit Per Coupon',
+    'Usage Limit Per Customer' => 'Usage Limit Per Customer',
+    'Value' => 'Value',
+
+
+
+
+
 	'dashboard' => 'Dashboard',
 	'language' => 'Language',
 	'revenue' => 'Revenue',

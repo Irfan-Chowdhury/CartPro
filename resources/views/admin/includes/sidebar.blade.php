@@ -4,9 +4,9 @@
       <!-- Sidebar Header    -->
       <!-- Sidebar Navigation Menus-->
       <div class="main-menu">
-        <ul id="side-main-menu" class="side-menu list-unstyled">                  
+        <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-          <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.product')}}</span></a>
+          <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cube"></i><span>{{__('file.product')}}</span></a>
             <ul id="product" class="collapse list-unstyled ">
               <li id="category-menu"><a href="{{route('admin.category')}}">{{__('file.category')}}</a></li>
               <li id="category-menu"><a href="{{route('admin.collection')}}">{{__('Collection')}}</a></li>
@@ -17,14 +17,14 @@
               <li id="brand-list-menu"><a href="{{route('admin.tag.index')}}">{{__('Tags')}}</a></li>
               <li id="brand-list-menu"><a href="{{route('admin.products.index')}}">{{__('Catalog')}}</a></li>
             </ul>
-          </li>  
-           
+          </li>
+
           <li><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('Flash Sales')}}</span></a></li>
-          <li><a href="{{route('admin.coupon')}}"><i class="dripicons-list"></i><span>{{__('Coupons')}}</span></a></li>
-          <li><a href="{{route('admin.page')}}"><i class="dripicons-list"></i><span>{{trans('Pages')}}</span></a></li>
-          <li><a href="{{route('admin.user')}}"><i class="fa fa-user-circle"></i><span>{{trans('Users')}}</span></a></li>            
-          <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li> 
-                    
+          <li><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('Coupons')}}</span></a></li>
+          <li><a href="{{route('admin.page')}}"><i class="fa fa-file-text"></i><span>{{trans('Pages')}}</span></a></li>
+          <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li>
+          <li><a href="{{route('admin.user')}}"><i class="fa fa-user-circle"></i><span>{{trans('Users')}}</span></a></li>
+
           {{-- <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li> --}}
 
           {{-- <li><a href="#menu" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a>
@@ -38,15 +38,15 @@
             <ul id="menu" class="collapse list-unstyled">
               <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('Store Front')}}</a></li>
             </ul>
-          </li> 
-          
+          </li>
+
           <li><a href="{{route('admin.slider')}}"><i class="fa fa-picture-o"></i><span>{{__('Slider')}}</span></a></li>
 
           <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{trans('file.Settings')}}</span></a>
             <ul id="setting" class="collapse list-unstyled">
               <li id="navigation-menu"><a href="{{route('admin.setting.language')}}">{{trans('file.Language')}}</a></li>
             </ul>
-          </li> 
+          </li>
 
         </ul>
       </div>

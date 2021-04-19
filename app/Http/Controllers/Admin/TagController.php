@@ -27,7 +27,7 @@ class TagController extends Controller
         $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
             ->orWhere('local','en')
-            ->orderBy('id','DESC'); 
+            ->orderBy('id','DESC');
         }])
         ->orderBy('is_active','DESC')
         ->orderBy('id','DESC')
@@ -40,7 +40,7 @@ class TagController extends Controller
                 return $row->id;
             })
             ->addColumn('tag_name', function ($row) use ($local)
-            {   
+            {
                 if ($row->tagTranslation->count()>0){
                     foreach ($row->tagTranslation as $key => $value){
                         if ($key<1){
@@ -65,7 +65,7 @@ class TagController extends Controller
                 }else {
                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                 }
-                            
+
                 return $actionBtn;
             })
             ->rawColumns(['action'])
@@ -80,7 +80,7 @@ class TagController extends Controller
     {
         // return response()->json($request->all());
 
-        $validator = Validator::make($request->only('tag_name'),[ 
+        $validator = Validator::make($request->only('tag_name'),[
             'tag_name'  => 'required|unique:tag_translations,tag_name',
         ]);
 
@@ -88,7 +88,7 @@ class TagController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        if ($request->ajax()) 
+        if ($request->ajax())
         {
             $tag = new Tag();
             $tag->slug  = $this->make_slug($request->tag_name);
@@ -106,7 +106,7 @@ class TagController extends Controller
             $tagTranslation->save();
 
             return response()->json(['success' => 'Data Saved Successfully']);
-        }        
+        }
     }
 
     public function make_slug($string) {
@@ -119,7 +119,6 @@ class TagController extends Controller
 
     public function edit(Request $request)
     {
-        //return response()->json($request->tag_id);
         $tag = Tag::find($request->tag_id);
         $tag_name = TagTranslation::where('tag_id',$request->tag_id)
                         ->where('local',Session::get('currentLocal'))
@@ -132,7 +131,7 @@ class TagController extends Controller
     {
         // return response()->json($request->all());
 
-        $validator = Validator::make($request->only('tag_name'),[ 
+        $validator = Validator::make($request->only('tag_name'),[
             'tag_name'  => 'required',
         ]);
         if ($validator->fails()){
@@ -152,7 +151,7 @@ class TagController extends Controller
             [   //condition
                 'tag_id'  => $request->tag_id,
                 'local'   => Session::get('currentLocal'),
-            ], 
+            ],
             [   //set value
                 'tag_name' => $request->tag_name,
             ]

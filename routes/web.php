@@ -75,16 +75,18 @@ Route::get('/admin/dashboard','AdminController@dashboard')->name('admin.dashboar
 Route::get('/admin/logout','AdminController@Logout')->name('admin.logout');
 
 
-Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
+Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     //--Category--
     Route::group(['prefix' => '/categories'], function () {
         Route::get('/','CategoryController@index')->name('admin.category');
         Route::post('/store','CategoryController@store')->name('admin.category.store');
-        Route::get('/{id}/edit','CategoryController@categoryEdit')->name('admin.category_edit'); //Remove Later
-        Route::get('/edit/{id}','CategoryController@edit')->name('admin.category.edit');
+        // Route::get('/{id}/edit','CategoryController@categoryEdit')->name('admin.category_edit'); //Remove Later
+        // Route::get('/edit/{id}','CategoryController@edit')->name('admin.category.edit');
+        Route::get('/edit','CategoryController@edit')->name('admin.category.edit');
         Route::post('updateCategory','CategoryController@categoryUpdate')->name('category_list.update'); //Remove Later
-        Route::post('update/{id}','CategoryController@update')->name('admin.category.update'); //Remove Later
+        // Route::post('update/{id}','CategoryController@update')->name('admin.category.update'); //Remove Later
+        Route::post('update','CategoryController@update')->name('admin.category.update');
         Route::get('/{id}/delete','CategoryController@destroy')->name('category_list.destroy'); //Remove Later
         Route::get('/delete/{id}','CategoryController@delete')->name('admin.category.delete');
         Route::post('/massdelete','CategoryController@delete_by_selection')->name('bulk_delete_categories');
@@ -147,6 +149,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/inactive','ProductController@inactive')->name('admin.products.inactive');
     });
 
+    //Flash Sale
     Route::group(['prefix' => 'flash-sales'], function () {
         Route::get('/','FlashSaleController@index')->name('admin.flash_sale.index');
         Route::get('/create','FlashSaleController@create')->name('admin.flash_sale.create');
@@ -157,6 +160,19 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/active','FlashSaleController@active')->name('admin.flash_sale.active');
         Route::get('/inactive','FlashSaleController@inactive')->name('admin.flash_sale.inactive');
     });
+
+    //Coupons
+    Route::group(['prefix' => 'coupons'], function () {
+        Route::get('/','CouponController@index')->name('admin.coupon.index');
+        Route::get('/create','CouponController@create')->name('admin.coupon.create');
+        Route::post('/store','CouponController@store')->name('admin.coupon.store');
+        Route::get('/edit/{id}','CouponController@edit')->name('admin.coupon.edit');
+        Route::post('/update','CouponController@update')->name('admin.coupon.update');
+        Route::get('/active','CouponController@active')->name('admin.coupon.active');
+        Route::get('/inactive','CouponController@inactive')->name('admin.coupon.inactive');
+    });
+
+
 
 
 
@@ -219,13 +235,6 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 });
 
 
-// //brand
-// Route::get('/admin/brands','BrandController@index')->name('admin.brand');
-// Route::post('/admin/insertBrand','BrandController@store')->name('brand_list.store');
-// Route::post('/admin/updateBrand','BrandController@update')->name('brand_list.update');
-// Route::get('/admin/brands/{id}/edit','BrandController@edit')->name('admin.brand_edit');
-// Route::get('/admin/brands/{id}/delete','BrandController@destroy')->name('admin.brand_delete');
-// Route::get('/admin/brands/{id}/{status}','BrandController@status')->name('brand.status');
 
 
 //brand
