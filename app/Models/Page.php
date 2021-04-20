@@ -3,17 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+
 class Page extends Model
 {
-     use Notifiable;
+    protected $fillable = ['slug','is_active'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'description', 'URL','meta_title','meta_description','og_title','og_image','og_descripton','status',
-    ];
+    public function pageTranslations()
+    {
+    	return $this->hasMany(PageTranslation::class,'page_id');
+    }
 }

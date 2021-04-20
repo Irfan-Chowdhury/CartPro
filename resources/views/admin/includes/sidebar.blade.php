@@ -10,7 +10,7 @@
             <ul id="product" class="collapse list-unstyled ">
               <li id="category-menu"><a href="{{route('admin.category')}}">{{__('file.category')}}</a></li>
               <li id="category-menu"><a href="{{route('admin.collection')}}">{{__('Collection')}}</a></li>
-              <li id="product-list-menu"><a href="{{route('admin.product')}}">{{__('file.product_list')}}</a></li>
+              {{-- <li id="product-list-menu"><a href="{{route('admin.product')}}">{{__('file.product_list')}}</a></li> --}}
               <li id="brand-list-menu"><a href="{{route('admin.brand')}}">{{__('brand')}}</a></li>
               <li id="brand-list-menu"><a href="{{route('admin.attribute_set.index')}}">{{__('Attribute Sets')}}</a></li>
               <li id="brand-list-menu"><a href="{{route('admin.attribute.index')}}">{{__('Attributes')}}</a></li>
@@ -21,7 +21,7 @@
 
           <li><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('Flash Sales')}}</span></a></li>
           <li><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('Coupons')}}</span></a></li>
-          <li><a href="{{route('admin.page')}}"><i class="fa fa-file-text"></i><span>{{trans('Pages')}}</span></a></li>
+          <li><a href="{{route('admin.page.index')}}"><i class="fa fa-file-text"></i><span>{{trans('Pages')}}</span></a></li>
           <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li>
           <li><a href="{{route('admin.user')}}"><i class="fa fa-user-circle"></i><span>{{trans('Users')}}</span></a></li>
 

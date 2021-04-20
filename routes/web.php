@@ -172,7 +172,16 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/inactive','CouponController@inactive')->name('admin.coupon.inactive');
     });
 
-
+    //Pages
+    Route::group(['prefix' => 'pages'], function () {
+        Route::get('/','PageController@index')->name('admin.page.index');
+        Route::get('/create','PageController@create')->name('admin.page.create');
+        Route::post('/store','PageController@store')->name('admin.page.store');
+        Route::get('/edit','PageController@edit')->name('admin.page.edit');
+        Route::post('/update','PageController@update')->name('admin.page.update');
+        Route::get('/active','PageController@active')->name('admin.page.active');
+        Route::get('/inactive','PageController@inactive')->name('admin.page.inactive');
+    });
 
 
 
@@ -237,7 +246,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
 
 
-//brand
+//Collection
 Route::get('/admin/collections','CollectionController@index')->name('admin.collection');
 Route::post('/admin/insertCollection','CollectionController@store')->name('collection_list.store');
 Route::post('/admin/updateCollection','CollectionController@update')->name('collection_list.update');
@@ -246,38 +255,38 @@ Route::get('/admin/collections/{id}/delete','CollectionController@destroy')->nam
 Route::get('/admin/collections/{id}/{status}','CollectionController@status')->name('collection.status');
 
 
-//product
-Route::get('/admin/product','ProductController@index')->name('admin.product');
-Route::get('/admin/product/create','ProductController@create')->name('admin.product.create');
-Route::post('/admin/insertProduct','ProductController@store')->name('products.store');
-Route::get('/admin/variant-images/{id}/{sku}/{size}/{color}/{price}/{qty}/{product}','ProductController@productVariantImages');
-Route::post('/admin/upload-variant-images/','ProductController@productVariantImagesUpload')->name('admin.variant.images');
-Route::get('/admin/product/edit/{id}','ProductController@edit')->name('admin.product_edit');
-Route::post('/admin/updateProduct','ProductController@update')->name('products.update');
-Route::post('/admin/product-images','ProductController@productImages')->name('admin.product.images');
-Route::get('/admin/product/{id}/delete','ProductController@destroy')->name('productlist.destroy');
-Route::get('/admin/product/{id}/{status}','ProductController@status')->name('product.status');
-Route::post('/admin/product/massdelete','ProductController@delete_by_selection');
+// //product
+// Route::get('/admin/product','ProductController@index')->name('admin.product');
+// Route::get('/admin/product/create','ProductController@create')->name('admin.product.create');
+// Route::post('/admin/insertProduct','ProductController@store')->name('products.store');
+// Route::get('/admin/variant-images/{id}/{sku}/{size}/{color}/{price}/{qty}/{product}','ProductController@productVariantImages');
+// Route::post('/admin/upload-variant-images/','ProductController@productVariantImagesUpload')->name('admin.variant.images');
+// Route::get('/admin/product/edit/{id}','ProductController@edit')->name('admin.product_edit');
+// Route::post('/admin/updateProduct','ProductController@update')->name('products.update');
+// Route::post('/admin/product-images','ProductController@productImages')->name('admin.product.images');
+// Route::get('/admin/product/{id}/delete','ProductController@destroy')->name('productlist.destroy');
+// Route::get('/admin/product/{id}/{status}','ProductController@status')->name('product.status');
+// Route::post('/admin/product/massdelete','ProductController@delete_by_selection');
 
 
 //coupon
-Route::get('/admin/coupon','CouponController@index')->name('admin.coupon');
-Route::post('/admin/insertCoupon','CouponController@store')->name('coupon.store');
-Route::post('/admin/updateCoupon','CouponController@update')->name('coupon_list.update');
-Route::get('/admin/coupon/{id}/edit','CouponController@edit')->name('admin.coupon_edit');
-Route::get('/admin/coupon/{id}/delete','CouponController@destroy')->name('couponlist.destroy');
-Route::get('/admin/coupon/{id}/{status}','CouponController@status')->name('coupon.status');
-Route::post('/admin/coupon/massdelete','CouponController@delete_by_selection');
+// Route::get('/admin/coupon','CouponController@index')->name('admin.coupon');
+// Route::post('/admin/insertCoupon','CouponController@store')->name('coupon.store');
+// Route::post('/admin/updateCoupon','CouponController@update')->name('coupon_list.update');
+// Route::get('/admin/coupon/{id}/edit','CouponController@edit')->name('admin.coupon_edit');
+// Route::get('/admin/coupon/{id}/delete','CouponController@destroy')->name('couponlist.destroy');
+// Route::get('/admin/coupon/{id}/{status}','CouponController@status')->name('coupon.status');
+// Route::post('/admin/coupon/massdelete','CouponController@delete_by_selection');
 
 
 //page
-Route::get('/admin/page','PageController@index')->name('admin.page');
-Route::post('/admin/insertPage','PageController@store')->name('pages.store');
-Route::post('/admin/updatePage','PageController@update')->name('page_list.update');
-Route::get('/admin/page/{id}/edit','PageController@edit')->name('admin.page_edit');
-Route::get('/admin/page/{id}/delete','PageController@destroy')->name('pagelist.destroy');
-Route::get('/admin/page/{id}/{status}','PageController@status')->name('page.status');
-Route::post('/admin/page/massdelete','PageController@delete_by_selection');
+Route::get('/admin_page','Backup\PageController@index')->name('admin.page');
+Route::post('/admin_insertPage','Backup\PageController@store')->name('pages.store');
+Route::post('/admin_updatePage','Backup\PageController@update')->name('page_list.update');
+Route::get('/admin_page/{id}/edit','Backup\PageController@edit')->name('admin.page_edit');
+Route::get('/admin_page/{id}/delete','Backup\PageController@destroy')->name('pagelist.destroy');
+Route::get('/admin_page/{id}/{status}','Backup\PageController@status')->name('page.status');
+Route::post('/admin_page/massdelete','Backup\PageController@delete_by_selection');
 
 //user
 Route::get('/admin/user','UserController@index')->name('admin.user');

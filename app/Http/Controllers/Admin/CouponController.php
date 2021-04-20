@@ -20,8 +20,6 @@ class CouponController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-    //public $locale = Session::get('currentLocal');
-
     public function __construct()
     {
         $this->middleware('auth:admin');
