@@ -1,58 +1,47 @@
-<?php $__env->startSection('admin_content'); ?>
+@extends('admin.main')
+@section('admin_content')
 <section>
-    <div class="container-fluid"><span id="general_result"></span></div>
-
-    <?php echo $__env->make('admin.includes.alert_message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
     <div class="container-fluid mb-3">
 
-		<div class="d-flex">
-			<div class="p-2">
-				<h2 class="font-weight-bold mt-3"><?php echo e(trans('file.Menus')); ?></h2>
-				<div id="alert_message" role="alert"></div>
-        		<br>
-			</div>
-			<div class="ml-auto p-2">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#"><?php echo e(trans('file.Dashboard')); ?></a></li>
-						<li class="breadcrumb-item active" aria-current="page"><?php echo e(__('Menu')); ?></li>
-					</ol>
-				</nav>
-			</div>
-		</div>
+        <h4 class="font-weight-bold mt-3">Items of {{$menu_name}}</h4>
+        <div id="alert_message" role="alert"></div>
+        <br>
 
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i> <?php echo e(trans('file.Add_Menu')); ?></button>
-        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk_Action')); ?></button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>{{__(' Add New Menu Item')}}</button>
+        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> {{ trans('file.Bulk_Action') }}</button>
     </div>
     <div class="table-responsive">
-    	<table id="data_table_list" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>
-        		    <th scope="col"><?php echo e(__('Menu Name')); ?></th>
-        		    <th scope="col"><?php echo e(__('Status')); ?></th>
-        		    <th scope="col"><?php echo e(trans('file.action')); ?></th>
+                    <th class="not-exported"></th>
+                    <th scope="col">{{__('Item Name')}}</th>
+                    {{-- <th scope="col">{{__('Type')}}</th>
+                    <th scope="col">{{__('Parent')}}</th> --}}
+                    <th scope="col">{{__('Status')}}</th>
+                    <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
-    	  	</thead>
+            </thead>
     	</table>
     </div>
 </section>
 
-<?php echo $__env->make('admin.pages.menu.create_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('admin.pages.menu.edit_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+@include('admin.pages.menu.menu_item.create_modal')
+@include('admin.pages.menu.menu_item.edit_modal')
+{{-- @include('admin.pages.menu.menu_item.confirmation-modal')
+@include('admin.pages.menu.menu_item.delete-checkbox-confirm-modal') --}}
 
 
 <script type="text/javascript">
 
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
 	$(document).ready(function () {
-        let table = $('#data_table_list').DataTable({
+        let table = $('#dataListTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -82,7 +71,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "<?php echo e(route('admin.menu')); ?>",
+                url: "",
             },
 
             columns: [
@@ -92,8 +81,8 @@
                     searchable: false
                 },
                 {
-                    data: 'menu_name',
-                    name: 'menu_name',
+                    data: 'menu_item_name',
+                    name: 'menu_item_name',
                 },
                 {
                     data: 'is_active',
@@ -116,12 +105,12 @@
 
             "order": [],
             'language': {
-                'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
-                "info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
-                "search": '<?php echo e(trans("file.Search")); ?>',
+                'lengthMenu': '_MENU_ {{__("records per page")}}',
+                "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
+                "search": '{{trans("file.Search")}}',
                 'paginate': {
-                    'previous': '<?php echo e(trans("file.Previous")); ?>',
-                    'next': '<?php echo e(trans("file.Next")); ?>'
+                    'previous': '{{trans("file.Previous")}}',
+                    'next': '{{trans("file.Next")}}'
                 }
             },
             'columnDefs': [
@@ -184,74 +173,12 @@
         new $.fn.dataTable.FixedHeader(table);
     });
 
+    //----------Insert Data----------------------
 
-	//----------Insert Data----------------------
-    $("#save-button").on("click",function(e){
+    $('#submitForm').on('submit', function (e) {
         e.preventDefault();
-
         $.ajax({
-            url: "<?php echo e(route('admin.menu.store')); ?>",
-            type: "POST",
-            data: $('#submitForm').serialize(),
-            success: function(data){
-                console.log(data);
-                if (data.errors) {
-                    $("#alertMessage").addClass('bg-danger text-center text-light p-1').html(data.errors) //Check in create modal
-                }
-                else if(data.success){
-                    $("#createModalForm").modal('hide');
-                    $('#data_table_list').DataTable().ajax.reload();
-                    $('#submitForm')[0].reset();
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                    // ("#alertMessage").removeClass('bg-danger text-center text-light p-1');
-                }
-            }
-        });
-    });
-
-    //---------- Edit -------------
-    $(document).on('click', '.edit', function () {
-        var rowId = $(this).data("id");
-        $('#success_alert').html('');
-
-        $.ajax({
-            url: "<?php echo e(route('admin.menu.edit')); ?>",
-            type: "GET",
-            data: {menu_id:rowId},
-            success: function (data) {
-
-                $('#menu_id').val(data.menu.id);
-                $('#menu_translation_id').val(data.menuTranslation.id);
-
-                if (data.menuTranslation.menu_name!=null) {
-                    $('#menu_name_edit').val(data.menuTranslation.menu_name);
-                }else{
-                    $('#menu_name_edit').empty();
-                }
-
-                if (data.menu.is_active == 1) {
-                        $('#is_active_edit').prop('checked', true);
-                } else {
-                    $('#is_active_edit').prop('checked', false);
-                }
-                $('#editModal').modal('show');
-            }
-        })
-    });
-
-
-    //---------- Update -------------
-    $("#updateForm").on("submit",function(e){
-        e.preventDefault();
-
-        // console.log('ok');
-
-        $.ajax({
-            url: "<?php echo e(route('admin.menu.update')); ?>",
+            url: "{{route('admin.menu.menu_item.store')}}",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -263,14 +190,111 @@
                 let html = '';
                 if (data.errors) {
                     html = '<div class="alert alert-danger">';
-                    for (var count = 0; count < data.errors.length; count++) {
+                    for (let count = 0; count < data.errors.length; count++) {
                         html += '<p>' + data.errors[count] + '</p>';
                     }
                     html += '</div>';
-                    $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                    $('#error_message').html(html);
+                    setTimeout(function() {
+                        $('#error_message').fadeOut("slow");
+                    }, 3000);
                 }
                 else if(data.success){
-                    $('#data_table_list').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
+                    $('#submitForm')[0].reset();
+                    $("#createModal").modal('hide');
+                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                    $('#alert_message').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#alert_message').fadeOut("slow");
+                    }, 3000);
+                }
+            }
+        });
+    });
+
+    //---------- Edit -------------
+    $(document).on('click', '.edit', function () {
+        var rowId = $(this).data("id");
+        $('#success_alert').html('');
+
+        $.ajax({
+            url: "{{route('admin.menu.menu_item.edit')}}",
+            type: "GET",
+            data: {menu_item_id:rowId},
+            success: function (data) {
+                console.log(data.menu_item.id);
+                $('#menu_item_id_edit').val(data.menu_item.id);
+                $('#menu_item_translation_id_edit').val(data.menu_item_translation_id);
+                $('#menu_item_name_edit').val(data.menu_item_name);
+                $('#type_edit').selectpicker('val',data.menu_item.type);
+
+                if (data.menu_item.type=='category') {
+                    $('#url_edit').addClass('d-none');
+                    $('#dependancyTypeForPageEdit').addClass('d-none');
+                    $('#changeLabelTextByTypeEdit').text('Category');
+                    $('#category_id_edit').selectpicker('val',data.menu_item.category_id);
+                }
+                else if(data.menu_item.type=='page'){
+                    $('#dependancyTypeForCategoryEdit').addClass('d-none');
+                    $('#url_edit').addClass('d-none');
+                    $('#changeLabelTextByTypeEdit').text('Page');
+                    $('#page_id_edit').selectpicker('val',data.menu_item.page_id);
+                }
+                else if(data.menu_item.type=='url'){
+                    $('#dependancyTypeForCategoryEdit').addClass('d-none');
+                    $('#dependancyTypeForPageEdit').addClass('d-none');
+                    $('#changeLabelTextByTypeEdit').text('URL');
+                    $('#url_edit').val(data.menu_item.url);
+                }
+
+                $('#icon_edit').val(data.menu_item.icon);
+                if (data.menu_item.is_fluid == 1) {
+                        $('#is_fluid_edit').prop('checked', true);
+                } else {
+                    $('#is_fluid_edit').prop('checked', false);
+                }
+                $('#target_edit').selectpicker('val',data.menu_item.target);
+                $('#parent_id_edit').selectpicker('val',data.menu_item.parent_id);
+                if (data.menu_item.is_active == 1) {
+                        $('#is_active_edit').prop('checked', true);
+                } else {
+                    $('#is_active_edit').prop('checked', false);
+                }
+                $('#editModal').modal('show');
+            }
+        })
+    });
+
+
+    //----------Update Data----------------------
+
+    $('#updateForm').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.menu.menu_item.update')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (let count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                    $('#error_message_edit').html(html);
+                    setTimeout(function() {
+                        $('#error_message_edit').fadeOut("slow");
+                    }, 3000);
+                }
+                else if(data.success){
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#updateForm')[0].reset();
                     $("#editModal").modal('hide');
                     $('#alert_message').fadeIn("slow"); //Check in top in this blade
@@ -289,13 +313,13 @@
         var id = $(this).data("id");
 
         $.ajax({
-            url: "<?php echo e(route('admin.menu.active')); ?>",
+            url: "{{route('admin.menu.menu_item.active')}}",
             type: "GET",
             data: {id:id},
             success: function(data){
                 console.log(data);
                 if(data.success){
-                    $('#data_table_list').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#alert_message').fadeIn("slow"); //Check in top in this blade
                     $('#alert_message').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -305,6 +329,7 @@
             }
         });
     });
+
 
     //---------- Inactive -------------
     $(document).on("click",".inactive",function(e){
@@ -312,13 +337,13 @@
         var id = $(this).data("id");
 
         $.ajax({
-            url: "<?php echo e(route('admin.menu.inactive')); ?>",
+            url: "{{route('admin.menu.menu_item.inactive')}}",
             type: "GET",
             data: {id:id},
             success: function(data){
                 console.log(data);
                 if(data.success){
-                    $('#data_table_list').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#alert_message').fadeIn("slow"); //Check in top in this blade
                     $('#alert_message').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -330,14 +355,74 @@
     });
 
 
+    //Field Change for Type
+    $('#type').change(function() {
+        var type = $('#type').val();
+
+        if (type=='category') {
+            $('#changeLabelTextByType').text('Category');
+        }
+        else if (type=='page') {
+            $('#changeLabelTextByType').text('Page');
+        }else{
+            $('#changeLabelTextByType').text('URL');
+        }
+
+        if (type){
+            $.get("{{route('admin.menu.menu_item.data-fetch-by-type')}}",{type:type}, function (data) {
+                console.log(data)
+               $('#dependancyType').empty().html(data);
+            });
+        }
+    });
+
+
+    //Field Change for Type Edit
+    $('#type_edit').change(function() {
+        let type_edit = $('#type_edit').val();
+        if (type_edit){
+            $.get("{{route('admin.menu.menu_item.data-fetch-by-type')}}",{type:type_edit}, function (data) {
+                if (type_edit=='category') {
+                    $('#dependancyTypeForCategoryEdit').addClass('d-none');
+                    $('#dependancyTypeForPageEdit').addClass('d-none');
+                    $('#url_edit').addClass('d-none');
+
+                    $('#changeLabelTextByTypeEdit').text('Category');
+                    $('#dependancyTypeEdit').empty().html(data);
+                }
+                else if (type_edit=='page') {
+                    $('#dependancyTypeForCategoryEdit').addClass('d-none');
+                    $('#dependancyTypeForPageEdit').addClass('d-none');
+                    $('#url_edit').addClass('d-none');
+
+                    $('#changeLabelTextByTypeEdit').text('Page');
+                    $('#dependancyTypeEdit').empty().html(data);
+                }else{
+                    $('#dependancyTypeForCategoryEdit').addClass('d-none');
+                    $('#dependancyTypeForPageEdit').addClass('d-none');
+                    $('#url_edit').addClass('d-none');
+
+                    $('#changeLabelTextByTypeEdit').text('URL');
+                    $('#dependancyTypeEdit').empty().html(data);
+                }
+            });
+        }
+    });
+
+
+    //Action For Close Edit
+    $(document).on('click', '#close_edit', function () {
+        $('#dependancyTypeForCategoryEdit').removeClass('d-none');
+        $('#dependancyTypeForPageEdit').removeClass('d-none');
+        $('#url_edit').removeClass('d-none');
+        $('#dependancyTypeEdit').empty();
+        $('#dataListTable').DataTable().ajax.reload();
+        $('#updateForm')[0].reset();
+        $("#editModal").modal('hide');
+    });
+
+    // $('#submitForm').on('submit', function (e) {});
+
 </script>
 
-<?php $__env->stopSection(); ?>
-
-
-
-
-
-
-
-<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/menu/index.blade.php ENDPATH**/ ?>
+@endsection

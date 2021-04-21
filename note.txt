@@ -67,3 +67,7 @@ $flashSale = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($
     @empty
         placeholder="{{__('Campaign Name')}}"
     @endforelse >
+
+
+    //Correction Locale
+    1. Dependency Category

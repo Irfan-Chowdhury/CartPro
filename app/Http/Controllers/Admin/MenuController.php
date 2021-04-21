@@ -80,8 +80,6 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        // return response()->json($request->all());
-
         if ($request->ajax()) {
 
             $validator = Validator::make($request->only('menu_name'),[
@@ -113,23 +111,19 @@ class MenuController extends Controller
     {
         $locale = Session::get('currentLocal');
         if ($request->ajax()) {
+
             $menu = Menu::find($request->menu_id);
-            $data = MenuTranslation::where('menu_id',$request->menu_id);
-            if ($data->where('locale',$locale)->exists()) {
-                $menuTranslation = $data->where('locale',$locale)->first();
-            }else {
-                $menuTranslation = $data->where('locale','en')->first();
+            $menuTranslation = MenuTranslation::where('menu_id',$request->menu_id)->where('locale',$locale)->first();
+
+            if (!$menuTranslation) {
+                $menuTranslation =  MenuTranslation::where('menu_id',$request->menu_id)->where('locale','en')->first();
             }
-
-
             return response()->json(['menu' => $menu, 'menuTranslation'=>$menuTranslation]);
         }
     }
 
     public function update(Request $request)
     {
-        //return response()->json($request->menu_id);
-
         $locale = Session::get('currentLocal');
 
         if ($request->ajax()) {
@@ -156,25 +150,6 @@ class MenuController extends Controller
 
     }
 
-    // public function delete($menuId)
-    // {
-    //     $menu = Menu::find($menuId);
-    //     $hasManyData = MenuItem::where('menu_id',$menuId)->get();
-
-    //     if (count($hasManyData)>0) {
-    //         foreach ($hasManyData as $item) {
-    //             $menu_item = MenuItem::find($item->id);
-    //             $menu_item->delete();
-    //         }
-    //     }
-    //     $menu->delete();
-
-    //     session()->flash('type','success');
-    //     session()->flash('message','Successfully Deleted');
-    //     return redirect()->back();
-    // }
-
-
     public function active(Request $request){
         if ($request->ajax()){
             return $this->activeData(Menu::find($request->id));
@@ -187,26 +162,6 @@ class MenuController extends Controller
         }
     }
 
-    // public function delete(Request $request)
-    // {
-    //     // return response()->json($request->menu_Id);
-
-    //     if ($request->ajax()) {
-    //         $menu = Menu::find($request->menu_Id);
-    //         $menu->delete();
-    //         $hasManyData = MenuItem::where('menu_id',$request->menu_Id)->get();
-
-    //         if (count($hasManyData)>0) {
-    //             foreach ($hasManyData as $item) {
-    //                 $menu_item = MenuItem::find($item->id);
-    //                 $menu_item->delete();
-    //             }
-    //         }
-
-
-    //         return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);
-    //     }
-    // }
 }
 
 

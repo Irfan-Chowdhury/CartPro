@@ -1,2 +1,0 @@
-<label for="inputEmail3" class="col-md-4 col-form-label"><b>URL &nbsp;<span class="text-danger">*</span></b></label>
-<input type="text" class="col-md-8 form-control" name="url" id="url" placeholder="Put URL"><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/includes/dependancy/dependancy_url.blade.php ENDPATH**/ ?>

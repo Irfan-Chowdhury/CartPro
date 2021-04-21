@@ -2,9 +2,6 @@
 @section('admin_content')
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
-
-    @include('admin.includes.alert_message')
-
     <div class="container-fluid mb-3">
 
 		<div class="d-flex">
@@ -224,6 +221,8 @@
             type: "GET",
             data: {menu_id:rowId},
             success: function (data) {
+
+                console.log(data)
 
                 $('#menu_id').val(data.menu.id);
                 $('#menu_translation_id').val(data.menuTranslation.id);

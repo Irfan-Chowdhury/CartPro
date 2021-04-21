@@ -194,7 +194,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::post('/update','MenuController@update')->name('admin.menu.update');
         Route::get('/active','MenuController@active')->name('admin.menu.active');
         Route::get('/inactive','MenuController@inactive')->name('admin.menu.inactive');
-        Route::get('/delete/{menuId}','MenuController@delete')->name('admin.menu.delete');
+        Route::get('/delete/{menuId}','MenuController@delete')->name('admin.menu.delete'); //Not deleted
 
 
         Route::group(['prefix' => 'navigation'], function () {
@@ -209,7 +209,11 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/{menuId}/items','MenuItemController@index')->name('admin.menu.menu_item');
         Route::get('/items/data-fetch-by-type','MenuItemController@dataFetchByType')->name('admin.menu.menu_item.data-fetch-by-type');
         Route::post('/items/store','MenuItemController@store')->name('admin.menu.menu_item.store');
-        Route::get('/items/delete/{id}','MenuItemController@delete')->name('admin.menu.menu_item.delete');
+        Route::get('/edit','MenuItemController@edit')->name('admin.menu.menu_item.edit');
+        Route::post('/update','MenuItemController@update')->name('admin.menu.menu_item.update');
+        Route::get('/active','MenuItemController@active')->name('admin.menu.menu_item.active');
+        Route::get('/inactive','MenuItemController@inactive')->name('admin.menu.menu_item.inactive');
+        Route::get('/items/delete/{id}','MenuItemController@delete')->name('admin.menu.menu_item.delete'); //Not Deleted
     });
 
     Route::group(['prefix' => 'storefront'], function () {

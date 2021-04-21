@@ -1,6 +1,16 @@
-<label class="col-md-4 col-form-label"><b>Page &nbsp;<span class="text-danger">*</span> </b></label>
-<select name="page_id" id="pageId" class="col-md-8 form-control">
+<select name="page_id" id="page_id" class="col-md-12 form-control">
+    <option value="">{{__('-- Select Page --')}}</option>
     @foreach ($pages as $item)
-        <option value="{{$item->id}}">{{$item->page_name}}</option>
+        @forelse ($item->pageTranslations as $key => $value)
+            @if ($key<1)
+                @if ($value->locale==$locale)
+                    <option value="{{$item->id}}">{{$value->page_name}}</option>
+                @elseif($value->locale=='en')
+                    <option value="{{$item->id}}">{{$value->page_name}}</option>
+                @endif
+            @endif
+        @empty
+            <option value="">{{__('NULL')}}</option>
+        @endforelse
     @endforeach
 </select>
