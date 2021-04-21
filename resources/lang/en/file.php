@@ -2,17 +2,23 @@
 return [
     'Action' => 'Action',
     'Add Coupon' => 'Add Coupon',
-    'Bulk Action' => 'Bulk Action',
+    'Add_Menu' => 'Add New Menu',
+    'Bulk_Action' => 'Bulk Action',
     'Categories' => 'Categories',
     'Code' => 'Code',
     'Coupon Name' => 'Coupon Name',
+    'Close' => 'Close',
+    'Dashboard' => 'Dashboard',
     'Discount' => 'Discount',
     'Free Shipping' => 'Free Shipping',
     'Maximum Spend' => 'Maximum Spend',
+    'Menus' => 'Menus',
     'Minimum Spend' => 'Minimum Spend',
     'Products' => 'Products',
     'Status' => 'Status',
     'Start Date' => 'Start Date',
+    'Update' => 'Update',
+    'Update_Menu' => 'Update Menu',
     'Usage Limit Per Coupon' => 'Usage Limit Per Coupon',
     'Usage Limit Per Customer' => 'Usage Limit Per Customer',
     'Value' => 'Value',
@@ -21,7 +27,7 @@ return [
 
 
 
-	'dashboard' => 'Dashboard',
+    'dashboard' => 'Dashboard',
 	'language' => 'Language',
 	'revenue' => 'Revenue',
 	'product' => 'Product',

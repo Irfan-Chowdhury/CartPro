@@ -34,9 +34,9 @@
                         <div class="form-group row" id="dependancyType">
                             <label class="col-md-4 col-form-label"><b>Category &nbsp;<span class="text-danger">*</span> </b></label>
                             <select name="category_id" id="categoryId" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                @foreach ($categories as $item)
+                                {{-- @foreach ($categories as $item)
                                     <option value="{{$item->id}}">{{$item->category_name}}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
 
@@ -60,7 +60,7 @@
                                 <option value="new_tab">New Tab</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>Parent</b></label>
                             <select name="parent_id" id="parentId" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Parent')}}'>

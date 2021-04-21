@@ -15,7 +15,7 @@
     	<table id="menu_item_table" class="table ">
     	    <thead>
         	   <tr>
-                    {{-- <th class="not-exported"></th>     --}}
+                    <th class="not-exported"></th>
                     {{-- <th scope="col">{{trans('ID')}}</th> --}}
                     <th scope="col">{{__('Item Name')}}</th>
                     <th scope="col">{{__('Type')}}</th>
@@ -27,6 +27,7 @@
             <tbody>
                 @foreach ($menu_items as $item)
                     <tr>
+                        <td></td>
                         <td>{{ $item->item_name }}</td>
                         <td>{{ $item->type }}</td>
                         <td> @if (isset($item->parentMenu->item_name)) {{$item->parentMenu->item_name}} @else NONE @endif </td>

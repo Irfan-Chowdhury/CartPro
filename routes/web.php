@@ -190,8 +190,12 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
         Route::get('/','MenuController@index')->name('admin.menu');
         Route::post('/store','MenuController@store')->name('admin.menu.store');
+        Route::get('/edit','MenuController@edit')->name('admin.menu.edit');
+        Route::post('/update','MenuController@update')->name('admin.menu.update');
+        Route::get('/active','MenuController@active')->name('admin.menu.active');
+        Route::get('/inactive','MenuController@inactive')->name('admin.menu.inactive');
         Route::get('/delete/{menuId}','MenuController@delete')->name('admin.menu.delete');
-        // Route::get('/delete','MenuController@delete')->name('admin.menu.delete');
+
 
         Route::group(['prefix' => 'navigation'], function () {
             Route::get('/index','NavigationController@index')->name('admin.menu.navigation');
@@ -210,7 +214,6 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
     Route::group(['prefix' => 'storefront'], function () {
         Route::get('/','StoreFrontController@index')->name('admin.storefront');
-
         Route::post('/general/store','StoreFrontController@generalStore')->name('admin.storefront.general.store');
         Route::post('/menu/store','StoreFrontController@menuStore')->name('admin.storefront.menu.store');
     });
