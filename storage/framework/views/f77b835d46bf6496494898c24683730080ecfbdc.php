@@ -1,44 +1,43 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
 		<div class="d-flex">
 			<div class="p-2">
-				<h2 class="font-weight-bold mt-3">{{trans('file.Menus')}}</h2>
+				<h2 class="font-weight-bold mt-3"><?php echo e(trans('file.Menus')); ?></h2>
 				<div id="alert_message" role="alert"></div>
         		<br>
 			</div>
 			<div class="ml-auto p-2">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">{{trans('file.Dashboard')}}</a></li>
-						<li class="breadcrumb-item active" aria-current="page">{{__('Menu')}}</li>
+						<li class="breadcrumb-item"><a href="#"><?php echo e(trans('file.Dashboard')); ?></a></li>
+						<li class="breadcrumb-item active" aria-current="page"><?php echo e(__('Menu')); ?></li>
 					</ol>
 				</nav>
 			</div>
 		</div>
 
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i> {{trans('file.Add_Menu')}}</button>
-        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> {{trans('file.Bulk_Action')}}</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i> <?php echo e(trans('file.Add_Menu')); ?></button>
+        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk_Action')); ?></button>
     </div>
     <div class="table-responsive">
     	<table id="data_table_list" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{__('Menu Name')}}</th>
-        		    <th scope="col">{{__('Status')}}</th>
-        		    <th scope="col">{{trans('file.action')}}</th>
+        		    <th scope="col"><?php echo e(__('Menu Name')); ?></th>
+        		    <th scope="col"><?php echo e(__('Status')); ?></th>
+        		    <th scope="col"><?php echo e(trans('file.action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
     </div>
 </section>
 
-@include('admin.pages.menu.create_modal')
-@include('admin.pages.menu.edit_modal')
+<?php echo $__env->make('admin.pages.menu.create_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('admin.pages.menu.edit_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <script type="text/javascript">
@@ -80,7 +79,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('admin.menu') }}",
+                url: "<?php echo e(route('admin.menu')); ?>",
             },
 
             columns: [
@@ -114,12 +113,12 @@
 
             "order": [],
             'language': {
-                'lengthMenu': '_MENU_ {{__("records per page")}}',
-                "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                "search": '{{trans("file.Search")}}',
+                'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+                "info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+                "search": '<?php echo e(trans("file.Search")); ?>',
                 'paginate': {
-                    'previous': '{{trans("file.Previous")}}',
-                    'next': '{{trans("file.Next")}}'
+                    'previous': '<?php echo e(trans("file.Previous")); ?>',
+                    'next': '<?php echo e(trans("file.Next")); ?>'
                 }
             },
             'columnDefs': [
@@ -188,7 +187,7 @@
         e.preventDefault();
 
         $.ajax({
-            url: "{{route('admin.menu.store')}}",
+            url: "<?php echo e(route('admin.menu.store')); ?>",
             type: "POST",
             data: $('#submitForm').serialize(),
             success: function(data){
@@ -217,7 +216,7 @@
         $('#success_alert').html('');
 
         $.ajax({
-            url: "{{route('admin.menu.edit')}}",
+            url: "<?php echo e(route('admin.menu.edit')); ?>",
             type: "GET",
             data: {menu_id:rowId},
             success: function (data) {
@@ -251,7 +250,7 @@
         // console.log('ok');
 
         $.ajax({
-            url: "{{route('admin.menu.update')}}",
+            url: "<?php echo e(route('admin.menu.update')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -289,7 +288,7 @@
         var id = $(this).data("id");
 
         $.ajax({
-            url: "{{route('admin.menu.active')}}",
+            url: "<?php echo e(route('admin.menu.active')); ?>",
             type: "GET",
             data: {id:id},
             success: function(data){
@@ -312,7 +311,7 @@
         var id = $(this).data("id");
 
         $.ajax({
-            url: "{{route('admin.menu.inactive')}}",
+            url: "<?php echo e(route('admin.menu.inactive')); ?>",
             type: "GET",
             data: {id:id},
             success: function(data){
@@ -332,5 +331,7 @@
 
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/menu/index.blade.php ENDPATH**/ ?>

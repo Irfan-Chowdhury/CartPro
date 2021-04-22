@@ -18,6 +18,7 @@ class SettingSeeder extends Seeder
         DB::table('settings')->delete();
 
         $settings = array(
+            //---- General ----
             array(
                 'id' => 1,
                 'key' => 'storefront_welcome_text',
@@ -52,6 +53,42 @@ class SettingSeeder extends Seeder
                 'id' => 7,
                 'key' => 'storefront_address',
                 'is_translatable' => 1,
+            ),
+            //---- Menus ----
+            array(
+                'id' => 8,
+                'key' => 'storefront_navbar_text',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 9,
+                'key' => 'storefront_primary_menu',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 10,
+                'key' => 'storefront_category_menu',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 11,
+                'key' => 'storefront_footer_menu_title_one',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 12,
+                'key' => 'storefront_footer_menu_one',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 13,
+                'key' => 'storefront_footer_menu_title_two',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 14,
+                'key' => 'storefront_footer_menu_two',
+                'is_translatable' => 0,
             ),
         );
 

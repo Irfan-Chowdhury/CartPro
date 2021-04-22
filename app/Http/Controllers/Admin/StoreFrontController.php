@@ -52,9 +52,18 @@ class StoreFrontController extends Controller
         ->where('is_active',1)
         ->get();
 
+        //change local
         $products = Product::with(['productTranslation'=> function ($query) use ($locale){
             $query->where('local',$locale)
                 ->orWhere('local','en')
+                ->orderBy('id','DESC');
+            }])
+            ->where('is_active',1)
+            ->get();
+
+        $menus = Menu::with(['menuTranslations'=> function ($query) use ($locale){
+            $query->where('locale',$locale)
+                ->orWhere('locale','en')
                 ->orderBy('id','DESC');
             }])
             ->where('is_active',1)
@@ -67,7 +76,7 @@ class StoreFrontController extends Controller
         // return $setting[0]->settingTranslations;
         //return $setting[1]->plain_value;
 
-        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products'));
+        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus'));
     }
 
     public function generalStore(Request $request)
@@ -95,21 +104,41 @@ class StoreFrontController extends Controller
 
     public function menuStore(Request $request)
     {
-        DB::table('storefront_menus')
-        ->updateOrInsert(
-            ['id' => 1], //condition
-            [
-                'navbar_text'           => htmlspecialchars($request->navbar_text),
-                'primary_menu_id'       => $request->primary_menu_id,
-                'category_menu_id'      => $request->category_menu_id,
-                'footer_menu_title_one' => htmlspecialchars($request->footer_menu_title_one),
-                'footer_menu_one_id'    => $request->footer_menu_one_id,
-                'footer_menu_title_two' => htmlspecialchars($request->footer_menu_title_two),
-                'footer_menu_two_id'    => $request->footer_menu_two_id,
-            ]
-        );
+        //return response()->json($request->all());
+        $locale = Session::get('currentLocal');
 
-        return redirect()->back();
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key === 'storefront_navbar_text' || $key ==='storefront_footer_menu_title_one' || $key ==='storefront_footer_menu_title_two') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+            }
+            //return response()->json($data);
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+
+        // DB::table('storefront_menus')
+        // ->updateOrInsert(
+        //     ['id' => 1], //condition
+        //     [
+        //         'navbar_text'           => htmlspecialchars($request->navbar_text),
+        //         'primary_menu_id'       => $request->primary_menu_id,
+        //         'category_menu_id'      => $request->category_menu_id,
+        //         'footer_menu_title_one' => htmlspecialchars($request->footer_menu_title_one),
+        //         'footer_menu_one_id'    => $request->footer_menu_one_id,
+        //         'footer_menu_title_two' => htmlspecialchars($request->footer_menu_title_two),
+        //         'footer_menu_two_id'    => $request->footer_menu_two_id,
+        //     ]
+        // );
+        // return redirect()->back();
     }
 
 
