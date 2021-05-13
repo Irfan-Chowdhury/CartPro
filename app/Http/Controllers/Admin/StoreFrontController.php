@@ -11,13 +11,21 @@ use App\Models\Setting;
 use App\Models\SettingTranslation;
 use App\Models\Slider;
 use App\Models\StorefrontGeneral;
+use App\Models\StorefrontImage;
 use App\Models\StorefrontMenu;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use App\Traits\imageHandleTrait;
+
+use function GuzzleHttp\json_decode;
 
 class StoreFrontController extends Controller
 {
+    use imageHandleTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -26,15 +34,7 @@ class StoreFrontController extends Controller
     public function index()
     {
         $locale = Session::get('currentLocal');
-        // $locale = 'bn';
         $colors = $this->color();
-
-        // $menus = Menu::where('is_active',1)->get();
-        // $storefrontMenu = StorefrontMenu::first();
-        // $slider = Slider::where('is_active',1)->get();
-        // $pages = Page::where('is_active',1)->get();
-        // $general_slider = StorefrontGeneral::first();
-
 
         $setting = Setting::with(['settingTranslations'=> function ($query) use ($locale){
             $query->where('locale',$locale)
@@ -69,14 +69,28 @@ class StoreFrontController extends Controller
             ->where('is_active',1)
             ->get();
 
-        // return $pages;
+        $tags = Tag::with(['tagTranslation'=> function ($query) use ($locale){
+            $query->where('local',$locale)
+                ->orWhere('local','en')
+                ->orderBy('id','DESC');
+        }])
+        ->where('is_active',1)
+        ->get();
+
+        $storefront_images = StorefrontImage::select('title','type','image')->get();
+        $total_storefront_images = count($storefront_images);
 
 
-        // $settingTranslation = SettingTranslation::where('locale',$locale)->orWhere('locale','en')->get();
-        // return $setting[0]->settingTranslations;
-        //return $setting[1]->plain_value;
+        $array_tags = Setting::where('key','storefront_footer_tag_id')->pluck('plain_value');
+        if ($array_tags[0] == NULL) {
+            $array_footer_tags = [];
+        }else {
+            $array_footer_tags = json_decode($array_tags[0]);
+        }
+        
 
-        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus'));
+        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
+                        'tags','total_storefront_images','array_footer_tags'));
     }
 
     public function generalStore(Request $request)
@@ -104,7 +118,6 @@ class StoreFrontController extends Controller
 
     public function menuStore(Request $request)
     {
-        //return response()->json($request->all());
         $locale = Session::get('currentLocal');
 
         if ($request->ajax()) {
@@ -120,26 +133,200 @@ class StoreFrontController extends Controller
                     Setting::where('key',$key)->update(['plain_value'=>$value]);
                 }
             }
-            //return response()->json($data);
 
             return response()->json(['success'=>'Data Saved Successfully']);
         }
-
-        // DB::table('storefront_menus')
-        // ->updateOrInsert(
-        //     ['id' => 1], //condition
-        //     [
-        //         'navbar_text'           => htmlspecialchars($request->navbar_text),
-        //         'primary_menu_id'       => $request->primary_menu_id,
-        //         'category_menu_id'      => $request->category_menu_id,
-        //         'footer_menu_title_one' => htmlspecialchars($request->footer_menu_title_one),
-        //         'footer_menu_one_id'    => $request->footer_menu_one_id,
-        //         'footer_menu_title_two' => htmlspecialchars($request->footer_menu_title_two),
-        //         'footer_menu_two_id'    => $request->footer_menu_two_id,
-        //     ]
-        // );
-        // return redirect()->back();
     }
+
+    public function socialLinkStore(Request $request)
+    {
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                Setting::where('key',$key)->update(['plain_value'=>$value]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function featureStore(Request $request)
+    {
+        $locale = Session::get('currentLocal');
+
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if (
+                    $key === 'storefront_feature_1_title' || $key ==='storefront_feature_1_subtitle' ||
+                    $key === 'storefront_feature_2_title' || $key ==='storefront_feature_2_subtitle' ||
+                    $key === 'storefront_feature_3_title' || $key ==='storefront_feature_3_subtitle' ||
+                    $key === 'storefront_feature_4_title' || $key ==='storefront_feature_4_subtitle' ||
+                    $key === 'storefront_feature_5_title' || $key ==='storefront_feature_5_subtitle'
+                    ) {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else if($key=='storefront_section_status'){
+                    continue;
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+            }
+
+            if (!empty($request->storefront_section_status)) {
+                Setting::where('key','storefront_section_status')->update(['plain_value'=>1]);
+            }else {
+                Setting::where('key','storefront_section_status')->update(['plain_value'=>0]);
+            }
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function logoStore(Request $request)
+    {
+
+        $validator = Validator::make($request->all(),[
+            'image_favicon_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'image_header_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'image_mail_logo'    => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/logo/';
+
+        if ($request->title_favicon_logo=="favicon_logo" && (!empty($request->image_favicon_logo))) {
+            StorefrontImage::updateOrCreate(
+                    [ 'title' => $request->title_favicon_logo, 'type' => 'logo'],
+                    [ 'image' => $this->imageStore($request->image_favicon_logo,$directory)]
+                );
+        }
+        if ($request->title_header_logo=="header_logo" && (!empty($request->image_header_logo))) {
+            StorefrontImage::updateOrCreate(
+                    [ 'title' => $request->title_header_logo, 'type' => 'logo'],
+                    [ 'image' => $this->imageStore($request->image_header_logo,$directory)]
+                );
+        }
+
+        if ($request->title_mail_logo=="mail_logo" && (!empty($request->image_mail_logo))) {
+            StorefrontImage::updateOrCreate(
+                    [ 'title' => $request->title_mail_logo, 'type' => 'logo'],
+                    [ 'image' => $this->imageStore($request->image_mail_logo,$directory)]
+                );
+        }
+        return response()->json(['success' => __('Data Saved successfully.')]);
+
+
+    }
+
+    public function footerStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_payment_method_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $locale = Session::get('currentLocal');
+        $directory  ='/images/storefront/payment_method/';
+
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key === 'storefront_copyright_text') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                elseif ($key === 'storefront_payment_method_image') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'accepted_payment_method_image', 'type' => 'payment_method'],
+                        [ 'image' => $this->imageStore($request->storefront_payment_method_image, $directory)]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>json_encode($value)]);
+                }
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function newletterStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_newsletter_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        if (request()->ajax()) {
+            $directory  ='/images/storefront/newsletter/';
+
+            if ((!empty($request->storefront_newsletter_image))) {
+                StorefrontImage::updateOrCreate(
+                        [ 'title' => 'newsletter_background_image', 'type' => 'newletter'],
+                        [ 'image' => $this->imageStore($request->storefront_newsletter_image, $directory)]
+                    );
+            }
+
+            return response()->json(['success' => __('Data Saved successfully.')]);
+        }
+    }
+
+
+    public function productPageStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_product_page_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/product_page/';
+
+        if ($request->ajax()) {
+            if ($request->storefront_product_page_image) {
+                StorefrontImage::updateOrCreate(
+                        [ 'title' => 'product_page_banner', 'type' => 'product_page'],
+                        [ 'image' => $this->imageStore($request->storefront_product_page_image, $directory)]
+                    );
+            }
+
+            if ($request->storefront_call_action_url) {
+                Setting::where('key','storefront_open_new_window')->update(['plain_value'=>$request->storefront_call_action_url]);
+            }
+
+            if (!empty($request->storefront_open_new_window)) {
+                Setting::where('key','storefront_open_new_window')->update(['plain_value'=>1]);
+            }else {
+                Setting::where('key','storefront_open_new_window')->update(['plain_value'=>0]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+
+
+
 
 
     protected function color()

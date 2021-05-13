@@ -4,7 +4,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-10">
-                <form id="generalSubmit" action="{{route('admin.storefront.general.store')}}">
+                <form id="generalSubmit">
                     @csrf
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Welcome Text</b></label>

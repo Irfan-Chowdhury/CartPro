@@ -28,9 +28,9 @@
                 <a class="list-group-item list-group-item-action" id="social-settings-social" data-toggle="list" href="#social_settings" role="tab" aria-controls="social">Social Links</a>
                 <a class="list-group-item list-group-item-action" id="feature-settings-feature" data-toggle="list" href="#feature" role="tab" aria-controls="settings">Features</a>
                 <a class="list-group-item list-group-item-action" id="logo-settings-logo" data-toggle="list" href="#logo" role="tab" aria-controls="profile">Logo</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Footer</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Newsletter</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Product Page</a>
+                <a class="list-group-item list-group-item-action" id="footer-settings-footer" data-toggle="list" href="#footer" role="tab" aria-controls="footer">Footer</a>
+                <a class="list-group-item list-group-item-action" id="newsletter-settings-newsletter" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">Newsletter</a>
+                <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Page</a>
               </div>
             </div>
             <div class="col-8">
@@ -71,13 +71,21 @@
                     </div>
 
 
+                    <!-- Footer -->
+                    <div class="tab-pane fade" aria-labelledby="footer-settings-footer" id="footer" >
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    </div>
 
-                    <div class="tab-pane fade" id="social_settings" role="tabpanel" aria-labelledby="list-settings-list">
-                        <div class="card">
-                            <div class="card-body">
-                                <p>Irure enim occaecat labore sit qui aliquip reprehenderit amet velit. Deserunt ullamco ex elit nostrud ut dolore nisi officia magna sit occaecat laboris sunt dolor. Nisi eu minim cillum occaecat aute est cupidatat aliqua labore aute occaecat ea aliquip sunt amet. Aute mollit dolor ut exercitation irure commodo non amet consectetur quis amet culpa. Quis ullamco nisi amet qui aute irure eu. Magna labore dolor quis ex labore id nostrud deserunt dolor eiusmod eu pariatur culpa mollit in irure.</p>
-                            </div>
-                        </div>
+
+                    <!-- Newslater -->
+                    <div class="tab-pane fade" aria-labelledby="newsletter-settings-newsletter" id="newsletter" >
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.newsletter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    </div>
+
+
+                    <!-- Product Page -->
+                    <div class="tab-pane fade" aria-labelledby="product_page-settings-product_page" id="product_page" >
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.product_page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
               </div>
@@ -282,10 +290,10 @@
             obj.readAsDataURL(data.files[0]);
         }
     }
-        
+
 </script>
 
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/storefront/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Running_File\cartpro\resources\views/admin/pages/storefront/index.blade.php ENDPATH**/ ?>

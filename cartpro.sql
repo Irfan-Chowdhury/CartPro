@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 30, 2021 at 07:34 PM
+-- Generation Time: May 07, 2021 at 06:35 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.16
 
@@ -301,12 +301,13 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `slug`, `parent_id`, `description`, `description_position`, `image`, `featured`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'electronics', NULL, 'This is Electronics', 1, NULL, 1, 0, '2021-02-21 22:59:48', '2021-03-25 12:57:10'),
+(2, 'electronics', NULL, 'This is Electronics', 1, NULL, 1, 1, '2021-02-21 22:59:48', '2021-03-25 12:57:10'),
 (3, 'clothes', NULL, 'This is Clothes', 0, NULL, 1, 1, '2021-02-21 23:39:24', '2021-03-20 04:01:53'),
 (9, 'Computer', 2, 'This is Computer', 1, NULL, 1, 1, '2021-02-22 02:07:32', '2021-02-22 02:07:32'),
-(10, 'laptop', 2, 'this is good', 1, NULL, 1, 1, NULL, '2021-03-25 12:53:20'),
+(10, 'laptop', 9, 'this is good', 1, NULL, 1, 1, NULL, '2021-04-18 02:46:53'),
 (11, 'মিস্টি', NULL, 'test', 1, NULL, 1, 0, '2021-02-22 04:43:25', '2021-03-25 12:54:10'),
-(12, 'men', 3, 'Men Collection', 1, NULL, 0, 0, '2021-03-20 03:51:04', '2021-03-25 12:57:05');
+(12, 'men', 3, 'Men Collection', 1, NULL, 0, 0, '2021-03-20 03:51:04', '2021-03-25 12:57:05'),
+(13, 'ফার্ণিচার', NULL, 'good', 1, NULL, 0, 1, '2021-04-18 23:43:13', '2021-04-18 23:43:13');
 
 -- --------------------------------------------------------
 
@@ -356,7 +357,12 @@ INSERT INTO `category_translations` (`id`, `category_id`, `local`, `category_nam
 (15, 3, 'bn', 'কাপড়', NULL, NULL),
 (16, 10, 'bn', 'ল্যাপটপ', NULL, NULL),
 (17, 9, 'bn', 'কম্পিউটার', NULL, NULL),
-(18, 12, 'en', 'Men', '2021-03-20 03:51:04', '2021-03-20 03:51:04');
+(18, 12, 'en', 'Men', '2021-03-20 03:51:04', '2021-03-20 03:51:04'),
+(19, 13, 'bn', 'ফার্ণিচার', '2021-04-18 23:43:13', '2021-04-18 23:43:13'),
+(20, 13, 'en', 'Furniture', NULL, NULL),
+(21, 13, 'hi', 'फर्नीचर', NULL, NULL),
+(22, 13, 'fr', 'un meuble', NULL, NULL),
+(23, 3, 'hi', 'फर्नीचर', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -391,15 +397,19 @@ INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `status`, `created_at`
 
 CREATE TABLE `coupons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `coupon_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` decimal(8,2) NOT NULL,
   `discount_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `discount_amount` int(11) NOT NULL,
-  `min_limit` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `usage_limit` int(11) DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `free_shipping` tinyint(4) NOT NULL,
+  `minimum_spend` decimal(8,2) DEFAULT NULL,
+  `maximum_spend` decimal(8,2) DEFAULT NULL,
+  `usage_limit_per_coupon` int(11) DEFAULT NULL,
+  `usage_limit_per_customer` int(11) DEFAULT NULL,
+  `used` int(11) NOT NULL,
+  `is_active` tinyint(4) NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -408,8 +418,68 @@ CREATE TABLE `coupons` (
 -- Dumping data for table `coupons`
 --
 
-INSERT INTO `coupons` (`id`, `coupon_name`, `coupon_code`, `discount_type`, `discount_amount`, `min_limit`, `start_date`, `end_date`, `usage_limit`, `status`, `created_at`, `updated_at`) VALUES
-(5, 'flat discount', '123456', '0', 111, 1000, '2020-11-11', '2020-11-30', 100, 0, '2020-11-03 03:22:02', '2020-11-03 05:46:11');
+INSERT INTO `coupons` (`id`, `slug`, `coupon_code`, `value`, `discount_type`, `free_shipping`, `minimum_spend`, `maximum_spend`, `usage_limit_per_coupon`, `usage_limit_per_customer`, `used`, `is_active`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(2, 'anniversary', 'HAPPY2020', '12.00', 'fixed', 0, '10.00', '20.00', NULL, NULL, 0, 1, '1970-01-01', '1970-01-01', '2021-04-18 16:40:23', '2021-04-19 06:11:37'),
+(8, 'dhama-offer', 'Offer2021', '20.00', 'percent', 0, '15.00', '25.00', 50, 30, 0, 1, '2021-04-19', '2021-04-24', '2021-04-19 05:39:08', '2021-04-19 13:42:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupon_categories`
+--
+
+CREATE TABLE `coupon_categories` (
+  `coupon_id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupon_categories`
+--
+
+INSERT INTO `coupon_categories` (`coupon_id`, `category_id`) VALUES
+(8, 13);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupon_products`
+--
+
+CREATE TABLE `coupon_products` (
+  `coupon_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupon_products`
+--
+
+INSERT INTO `coupon_products` (`coupon_id`, `product_id`) VALUES
+(8, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupon_translations`
+--
+
+CREATE TABLE `coupon_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `coupon_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coupon_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupon_translations`
+--
+
+INSERT INTO `coupon_translations` (`id`, `coupon_id`, `locale`, `coupon_name`, `created_at`, `updated_at`) VALUES
+(1, 2, 'en', 'Anniversary', '2021-04-18 16:40:23', '2021-04-18 16:40:23'),
+(7, 8, 'en', 'Dhamaka Offer', '2021-04-19 05:39:08', '2021-04-19 13:41:57');
 
 -- --------------------------------------------------------
 
@@ -597,8 +667,8 @@ INSERT INTO `languages` (`id`, `language_name`, `local`, `default`, `created_at`
 
 CREATE TABLE `menus` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -607,10 +677,31 @@ CREATE TABLE `menus` (
 -- Dumping data for table `menus`
 --
 
-INSERT INTO `menus` (`id`, `menu_name`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `menus` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'primary-menu', 1, '2021-04-20 15:27:47', '2021-04-20 17:52:32'),
+(3, 'category-menu', 1, '2021-04-20 16:05:21', '2021-04-20 17:43:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menus0`
+--
+
+CREATE TABLE `menus0` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `menu_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `menus0`
+--
+
+INSERT INTO `menus0` (`id`, `menu_name`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'Category Menu', 1, '2021-02-07 22:41:17', '2021-02-07 22:41:17'),
-(2, 'Primary Menu', 1, '2021-02-07 23:49:30', '2021-02-07 23:49:30'),
-(11, 'test', NULL, '2021-02-14 20:24:40', '2021-02-14 20:24:40');
+(2, 'Primary Menu', 1, '2021-02-07 23:49:30', '2021-02-07 23:49:30');
 
 -- --------------------------------------------------------
 
@@ -619,6 +710,37 @@ INSERT INTO `menus` (`id`, `menu_name`, `is_active`, `created_at`, `updated_at`)
 --
 
 CREATE TABLE `menu_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `menu_id` bigint(20) UNSIGNED NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `page_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `is_fluid` tinyint(4) NOT NULL DEFAULT '1',
+  `is_active` tinyint(4) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `menu_items`
+--
+
+INSERT INTO `menu_items` (`id`, `menu_id`, `type`, `category_id`, `page_id`, `url`, `icon`, `target`, `parent_id`, `is_fluid`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 1, 'url', NULL, NULL, '/brands/samsung/products', 'teest', 'new_tab', NULL, 1, 1, '2021-04-21 03:51:34', '2021-04-21 07:28:27'),
+(3, 1, 'category', 3, NULL, NULL, 'test', 'same_tab', 1, 1, 1, '2021-04-21 04:04:15', '2021-04-21 07:27:02'),
+(5, 1, 'page', NULL, 4, NULL, 'test page', 'new_tab', 3, 1, 1, '2021-04-21 13:15:34', '2021-04-21 15:07:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu_items0`
+--
+
+CREATE TABLE `menu_items0` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `menu_id` bigint(20) UNSIGNED DEFAULT NULL,
   `item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -636,15 +758,63 @@ CREATE TABLE `menu_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `menu_items`
+-- Dumping data for table `menu_items0`
 --
 
-INSERT INTO `menu_items` (`id`, `menu_id`, `item_name`, `type`, `category_id`, `page_id`, `url`, `icon`, `fluid_menu`, `target`, `parent_id`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `menu_items0` (`id`, `menu_id`, `item_name`, `type`, `category_id`, `page_id`, `url`, `icon`, `fluid_menu`, `target`, `parent_id`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 1, 'test-1', 'category', 1, NULL, NULL, NULL, NULL, 'same_tab', NULL, 1, '2021-02-07 23:39:26', '2021-02-07 23:39:26'),
 (2, 1, 'test-2', 'category', 1, NULL, NULL, NULL, NULL, 'new_tab', 1, 1, '2021-02-07 23:47:51', '2021-02-07 23:47:51'),
 (6, 2, 'Social Site', 'url', NULL, NULL, '#', NULL, NULL, 'same_tab', NULL, 1, '2021-02-09 04:24:02', '2021-02-09 04:24:02'),
 (7, 2, 'w3schools', 'url', NULL, NULL, 'https://www.w3schools.com/', NULL, NULL, 'new_tab', 6, 1, '2021-02-09 04:25:06', '2021-02-09 04:25:06'),
 (8, 2, 'Facebook', 'url', NULL, NULL, 'https://www.facebook.com/', NULL, NULL, 'new_tab', 6, 1, '2021-02-09 04:26:33', '2021-02-09 04:26:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu_item_translations`
+--
+
+CREATE TABLE `menu_item_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `menu_item_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `menu_item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `menu_item_translations`
+--
+
+INSERT INTO `menu_item_translations` (`id`, `menu_item_id`, `locale`, `menu_item_name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'en', 'Specials URL', '2021-04-21 03:51:35', '2021-04-21 03:51:35'),
+(3, 3, 'en', 'New Arrivals Category', '2021-04-21 04:04:15', '2021-04-21 04:04:15'),
+(5, 5, 'en', 'Test For Page', '2021-04-21 13:15:34', '2021-04-21 14:58:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu_translations`
+--
+
+CREATE TABLE `menu_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `menu_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `menu_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `menu_translations`
+--
+
+INSERT INTO `menu_translations` (`id`, `menu_id`, `locale`, `menu_name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'en', 'Primary Menu', '2021-04-20 15:27:47', '2021-04-20 15:27:47'),
+(3, 3, 'en', 'Category Menu', '2021-04-20 16:05:21', '2021-04-20 17:43:00'),
+(4, 1, 'bn', 'প্রাইমারী মেনু', '2021-04-20 17:52:32', '2021-04-20 17:52:32');
 
 -- --------------------------------------------------------
 
@@ -667,13 +837,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2020_10_20_093106_create_customers_table', 1),
-(7, '2020_10_20_093250_create_coupons_table', 2),
-(8, '2020_10_20_093315_create_pages_table', 2),
 (9, '2020_10_20_093433_create_wishlists_table', 2),
-(10, '2020_10_20_093537_create_products0_table', 2),
 (11, '2020_10_20_093627_create_searchterms_table', 2),
 (12, '2020_10_20_093705_create_guest_customers_table', 2),
-(14, '2020_11_18_050854_create_settings_table', 4),
 (15, '2016_06_01_000001_create_oauth_auth_codes_table', 5),
 (16, '2016_06_01_000002_create_oauth_access_tokens_table', 5),
 (17, '2016_06_01_000003_create_oauth_refresh_tokens_table', 5),
@@ -682,14 +848,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (20, '2020_11_19_092036_create_orders_table', 6),
 (21, '2020_11_19_092114_create_order_details_table', 7),
 (22, '2020_11_19_092150_create_shipping_table', 8),
-(23, '2020_12_13_160802_create_product_attributes0_table', 9),
 (24, '2020_12_17_192938_create_collections_table', 10),
 (25, '2021_01_02_103431_create_orders_table', 11),
 (26, '2021_01_02_104544_create_ordered_products_table', 11),
 (34, '2021_02_04_043043_create_navigations_table', 12),
 (36, '2021_02_06_062335_create_sliders_table', 13),
-(38, '2021_02_07_103825_create_menus_table', 14),
-(41, '2021_02_07_104132_create_menu_items_table', 15),
+(38, '2021_02_07_103825_create_menus0_table', 14),
+(41, '2021_02_07_104132_create_menu_items0_table', 15),
 (43, '2021_02_08_071833_create_storefront_menus_table', 16),
 (44, '2021_02_14_201446_create_storefront_generals_table', 17),
 (47, '2021_02_19_115914_create_languages_table', 18),
@@ -713,7 +878,19 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (119, '2021_03_17_054122_create_attribute_category_table', 24),
 (126, '2021_03_27_043501_create_flash_sales_table', 25),
 (127, '2021_03_27_044612_create_flash_sale_translations_table', 25),
-(128, '2021_03_27_051032_create_flash_sale_products_table', 25);
+(128, '2021_03_27_051032_create_flash_sale_products_table', 25),
+(133, '2021_04_18_200855_create_coupons_table', 26),
+(134, '2021_04_18_202428_create_coupon_translations_table', 26),
+(135, '2021_04_18_203035_create_coupon_products_table', 26),
+(136, '2021_04_18_203255_create_coupon_categories_table', 26),
+(137, '2021_04_19_214122_create_pages_table', 27),
+(138, '2021_04_19_214948_create_page_translations_table', 27),
+(139, '2021_04_20_101649_create_settings_table', 28),
+(141, '2021_04_20_102050_create_setting_translations_table', 29),
+(142, '2021_04_20_205105_create_menus_table', 30),
+(143, '2021_04_20_205527_create_menu_translations_table', 30),
+(144, '2021_04_21_061803_create_menu_items_table', 31),
+(145, '2021_04_21_061945_create_menu_item_translations_table', 31);
 
 -- --------------------------------------------------------
 
@@ -740,7 +917,6 @@ CREATE TABLE `navigations` (
 --
 
 INSERT INTO `navigations` (`id`, `navigation_name`, `type`, `category_id`, `page_id`, `url`, `target`, `parent_id`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'About Us', 'page', NULL, 1, NULL, 'same_tab', NULL, '1', '2021-02-05 10:06:08', '2021-02-05 10:06:08'),
 (4, 'Social Site', 'url', NULL, NULL, '#', 'new_tab', NULL, '1', '2021-02-05 10:53:32', '2021-02-05 10:53:32'),
 (5, 'Facebook', 'url', NULL, NULL, 'https://www.facebook.com/', 'new_tab', 4, '1', '2021-02-05 11:19:34', '2021-02-05 11:19:34'),
 (6, 'Youtube', 'url', NULL, NULL, 'https://www.youtube.com/', 'new_tab', 4, '1', '2021-02-05 12:23:28', '2021-02-05 12:23:28'),
@@ -822,15 +998,8 @@ INSERT INTO `orders` (`id`, `payment_id`, `user_id`, `customer_id`, `name`, `ema
 
 CREATE TABLE `pages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `page_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `URL` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `og_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `og_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `og_description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -839,9 +1008,41 @@ CREATE TABLE `pages` (
 -- Dumping data for table `pages`
 --
 
-INSERT INTO `pages` (`id`, `page_name`, `description`, `URL`, `meta_title`, `meta_description`, `og_title`, `og_image`, `og_description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'About Us', 'Using color to add meaning only provides a visual indication, which will not be conveyed to users of assistive technologies – such as screen readers. Ensure that information denoted by the color is either obvious from the content itself (e.g. the visible text), or is included through alternative means, such as additional text hidden with the .sr-only class.', 'https://www.scribd.com/book/338062085/The-Keeper-of-Lost-Things-A-Novel', 'about-us', 'test', 'test', 'public/images/ivLJRT2Q.jpg', 'test', 1, '2020-11-03 23:55:57', '2021-02-04 02:50:16'),
-(2, 'Amethyst Robinson', 'Asperiores aut omnis', 'Voluptatum quae dolo', 'Quaerat vero vel do', 'Id dolorum corporis', 'Iure nesciunt nemo', NULL, 'Nam nihil deserunt e', 1, '2021-02-05 09:17:30', '2021-02-05 09:17:30');
+INSERT INTO `pages` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
+(4, 'about-us', 1, '2021-04-19 16:24:42', '2021-04-20 01:36:43'),
+(5, 'faq', 0, '2021-04-19 16:50:44', '2021-04-19 16:54:07'),
+(6, 'privacy-&-policy', 1, '2021-04-20 12:02:11', '2021-04-20 12:02:11'),
+(7, 'terms-&-conditions', 1, '2021-04-20 12:02:43', '2021-04-20 12:02:43'),
+(8, 'return-policy', 1, '2021-04-20 12:03:28', '2021-04-20 12:03:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page_translations`
+--
+
+CREATE TABLE `page_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `page_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `page_translations`
+--
+
+INSERT INTO `page_translations` (`id`, `page_id`, `locale`, `page_name`, `body`, `created_at`, `updated_at`) VALUES
+(1, 4, 'en', 'About Us', '<p>Lorem Ispum</p>', '2021-04-19 16:24:42', '2021-04-20 01:37:00'),
+(2, 5, 'en', 'FAQ', '<p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before</p>', '2021-04-19 16:50:44', '2021-04-19 16:50:44'),
+(3, 6, 'en', 'Privacy & Policy', '<p>This is Testing Purpose</p>', '2021-04-20 12:02:11', '2021-04-20 12:02:11'),
+(4, 7, 'en', 'Terms & Conditions', '<p>Testing Purpose</p>', '2021-04-20 12:02:43', '2021-04-20 12:02:43'),
+(5, 8, 'en', 'Return Policy', '<p>Testing</p>', '2021-04-20 12:03:28', '2021-04-20 12:03:28'),
+(6, 4, 'bn', 'আমাদের সম্পর্কে', '<p>টেস্টিং</p>', '2021-04-20 12:04:16', '2021-04-20 12:04:16'),
+(7, 4, 'hi', 'हमारे बारे में', '<p>हमारे बारे मेंहमारे बारे मेंहमारे बारे मेंहमारे बारे मेंहमारे बारे में</p>', '2021-04-20 12:05:49', '2021-04-20 12:05:49');
 
 -- --------------------------------------------------------
 
@@ -1367,12 +1568,9 @@ CREATE TABLE `searchterms` (
 
 CREATE TABLE `settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `vat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_charge` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shopname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_translatable` tinyint(4) NOT NULL DEFAULT '0',
+  `plain_value` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1381,8 +1579,72 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `vat`, `shipping_charge`, `shopname`, `email`, `phone`, `address`, `created_at`, `updated_at`) VALUES
-(1, '3', '7', 'echovel', 'hshahadat36@gmail.com', '01676074486', 'gblock,halishahar', NULL, NULL);
+INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_at`, `updated_at`) VALUES
+(1, 'storefront_welcome_text', 1, NULL, NULL, NULL),
+(2, 'storefront_theme_color', 0, NULL, NULL, NULL),
+(3, 'storefront_mail_theme_color', 0, NULL, NULL, NULL),
+(4, 'storefront_slider', 0, NULL, NULL, NULL),
+(5, 'storefront_terms_and_condition_page', 0, NULL, NULL, NULL),
+(6, 'storefront_privacy_policy_page', 0, NULL, NULL, NULL),
+(7, 'storefront_address', 1, NULL, NULL, NULL),
+(8, 'storefront_navbar_text', 1, NULL, NULL, NULL),
+(9, 'storefront_primary_menu', 0, NULL, NULL, NULL),
+(10, 'storefront_category_menu', 0, NULL, NULL, NULL),
+(11, 'storefront_footer_menu_title_one', 1, NULL, NULL, NULL),
+(12, 'storefront_footer_menu_one', 0, NULL, NULL, NULL),
+(13, 'storefront_footer_menu_title_two', 1, NULL, NULL, NULL),
+(14, 'storefront_footer_menu_two', 0, NULL, NULL, NULL),
+(15, 'storefront_facebook_link', 0, NULL, NULL, NULL),
+(16, 'storefront_twitter_link', 0, NULL, NULL, NULL),
+(17, 'storefront_instagram_link', 0, NULL, NULL, NULL),
+(18, 'storefront_youtube_link', 0, NULL, NULL, NULL),
+(19, 'storefront_section_status', 0, '1', NULL, '2021-05-06 02:21:34'),
+(20, 'storefront_feature_1_title', 1, NULL, NULL, NULL),
+(21, 'storefront_feature_1_subtitle', 1, NULL, NULL, NULL),
+(22, 'storefront_feature_1_icon', 0, 'las la-headphones', NULL, '2021-05-06 02:23:47'),
+(23, 'storefront_feature_2_title', 1, NULL, NULL, NULL),
+(24, 'storefront_feature_2_subtitle', 1, NULL, NULL, NULL),
+(25, 'storefront_feature_2_icon', 0, 'las la-credit-card', NULL, '2021-05-06 02:23:47'),
+(26, 'storefront_feature_3_title', 1, NULL, NULL, NULL),
+(27, 'storefront_feature_3_subtitle', 1, NULL, NULL, NULL),
+(28, 'storefront_feature_3_icon', 0, 'las la-shield-alt', NULL, '2021-05-06 02:23:48'),
+(29, 'storefront_feature_4_title', 1, NULL, NULL, NULL),
+(30, 'storefront_feature_4_subtitle', 1, NULL, NULL, NULL),
+(31, 'storefront_feature_4_icon', 0, 'las la-calendar-minus', NULL, '2021-05-06 02:23:48'),
+(32, 'storefront_feature_5_title', 1, NULL, NULL, NULL),
+(33, 'storefront_feature_5_subtitle', 1, NULL, NULL, NULL),
+(34, 'storefront_feature_5_icon', 0, 'las la-calendar-minus', NULL, '2021-05-06 02:23:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_translations`
+--
+
+CREATE TABLE `setting_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `setting_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_translations`
+--
+
+INSERT INTO `setting_translations` (`id`, `setting_id`, `locale`, `value`, `created_at`, `updated_at`) VALUES
+(20, 20, 'en', '24/7 SUPPORT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(21, 21, 'en', 'Support every time', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(22, 23, 'en', 'ACCEPT PAYMENT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(23, 24, 'en', 'Visa, Paypal, Master', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(24, 26, 'en', 'SECURED PAYMENT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(25, 27, 'en', '100% secured', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
+(26, 29, 'en', '30 DAYS RETURN', '2021-05-06 01:52:22', '2021-05-06 01:52:22'),
+(27, 30, 'en', '30 days guarantee', '2021-05-06 01:52:22', '2021-05-06 01:52:22'),
+(28, 32, 'en', '30 DAYS RETURN', '2021-05-06 01:53:57', '2021-05-06 01:53:57'),
+(29, 33, 'en', '30 days guarantee', '2021-05-06 01:53:57', '2021-05-06 01:53:57');
 
 -- --------------------------------------------------------
 
@@ -1449,10 +1711,10 @@ INSERT INTO `sliders` (`id`, `slider_title`, `slider_subtitle`, `slider_slug`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `storefront_generals`
+-- Table structure for table `storefront_generals0`
 --
 
-CREATE TABLE `storefront_generals` (
+CREATE TABLE `storefront_generals0` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `welcome_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `theme_color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1466,19 +1728,19 @@ CREATE TABLE `storefront_generals` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `storefront_generals`
+-- Dumping data for table `storefront_generals0`
 --
 
-INSERT INTO `storefront_generals` (`id`, `welcome_text`, `theme_color`, `mail_theme_color`, `slider_id`, `terms_condition`, `privacy_policy_page`, `address`, `created_at`, `updated_at`) VALUES
+INSERT INTO `storefront_generals0` (`id`, `welcome_text`, `theme_color`, `mail_theme_color`, `slider_id`, `terms_condition`, `privacy_policy_page`, `address`, `created_at`, `updated_at`) VALUES
 (1, 'Welcome to Lion Coders', NULL, NULL, 2, 1, NULL, 'Muradpur, Chittagong', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `storefront_menus`
+-- Table structure for table `storefront_menus0`
 --
 
-CREATE TABLE `storefront_menus` (
+CREATE TABLE `storefront_menus0` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `navbar_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `primary_menu_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -1492,10 +1754,10 @@ CREATE TABLE `storefront_menus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `storefront_menus`
+-- Dumping data for table `storefront_menus0`
 --
 
-INSERT INTO `storefront_menus` (`id`, `navbar_text`, `primary_menu_id`, `category_menu_id`, `footer_menu_title_one`, `footer_menu_one_id`, `footer_menu_title_two`, `footer_menu_two_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `storefront_menus0` (`id`, `navbar_text`, `primary_menu_id`, `category_menu_id`, `footer_menu_title_one`, `footer_menu_one_id`, `footer_menu_title_two`, `footer_menu_two_id`, `created_at`, `updated_at`) VALUES
 (1, 'Test 2', 2, NULL, '', NULL, '', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -1519,7 +1781,7 @@ CREATE TABLE `tags` (
 INSERT INTO `tags` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'fashion', 1, '2021-03-18 09:20:43', '2021-03-25 13:20:48'),
 (2, 'new-arrivals', 1, '2021-03-18 09:20:57', '2021-03-18 09:20:57'),
-(3, 'trendy', 1, '2021-03-18 09:21:08', '2021-03-25 13:20:58');
+(3, 'trendy', 1, '2021-03-18 09:21:08', '2021-04-19 16:54:05');
 
 -- --------------------------------------------------------
 
@@ -1720,10 +1982,28 @@ ALTER TABLE `collections`
 -- Indexes for table `coupons`
 --
 ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `coupon_categories`
+--
+ALTER TABLE `coupon_categories`
+  ADD KEY `coupon_categories_coupon_id_foreign` (`coupon_id`),
+  ADD KEY `coupon_categories_category_id_foreign` (`category_id`);
+
+--
+-- Indexes for table `coupon_products`
+--
+ALTER TABLE `coupon_products`
+  ADD KEY `coupon_products_coupon_id_foreign` (`coupon_id`),
+  ADD KEY `coupon_products_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `coupon_translations`
+--
+ALTER TABLE `coupon_translations`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD UNIQUE KEY `coupon_code` (`coupon_code`),
-  ADD UNIQUE KEY `coupon_name` (`coupon_name`);
+  ADD KEY `coupon_translations_coupon_id_foreign` (`coupon_id`);
 
 --
 -- Indexes for table `customers`
@@ -1788,13 +2068,39 @@ ALTER TABLE `menus`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `menus0`
+--
+ALTER TABLE `menus0`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `menu_items`
 --
 ALTER TABLE `menu_items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `menu_items0`
+--
+ALTER TABLE `menu_items0`
   ADD PRIMARY KEY (`id`),
   ADD KEY `menu_items_menu_id_foreign` (`menu_id`),
   ADD KEY `menu_items_category_id_foreign` (`category_id`),
   ADD KEY `menu_items_page_id_foreign` (`page_id`);
+
+--
+-- Indexes for table `menu_item_translations`
+--
+ALTER TABLE `menu_item_translations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `menu_item_translations_menu_item_id_foreign` (`menu_item_id`);
+
+--
+-- Indexes for table `menu_translations`
+--
+ALTER TABLE `menu_translations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `menu_translations_menu_id_foreign` (`menu_id`);
 
 --
 -- Indexes for table `migrations`
@@ -1831,6 +2137,13 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `pages`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page_translations`
+--
+ALTER TABLE `page_translations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `page_translations_page_id_foreign` (`page_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -1891,6 +2204,13 @@ ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `setting_translations`
+--
+ALTER TABLE `setting_translations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `setting_translations_setting_id_foreign` (`setting_id`);
+
+--
 -- Indexes for table `shipping`
 --
 ALTER TABLE `shipping`
@@ -1905,15 +2225,15 @@ ALTER TABLE `sliders`
   ADD KEY `sliders_page_id_foreign` (`page_id`);
 
 --
--- Indexes for table `storefront_generals`
+-- Indexes for table `storefront_generals0`
 --
-ALTER TABLE `storefront_generals`
+ALTER TABLE `storefront_generals0`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `storefront_menus`
+-- Indexes for table `storefront_menus0`
 --
-ALTER TABLE `storefront_menus`
+ALTER TABLE `storefront_menus0`
   ADD PRIMARY KEY (`id`),
   ADD KEY `storefront_menus_primary_menu_id_foreign` (`primary_menu_id`),
   ADD KEY `storefront_menus_category_menu_id_foreign` (`category_menu_id`),
@@ -2009,13 +2329,13 @@ ALTER TABLE `brand_translations`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `category_translations`
 --
 ALTER TABLE `category_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `collections`
@@ -2027,7 +2347,13 @@ ALTER TABLE `collections`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `coupon_translations`
+--
+ALTER TABLE `coupon_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -2081,19 +2407,43 @@ ALTER TABLE `languages`
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `menus0`
+--
+ALTER TABLE `menus0`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `menu_items0`
+--
+ALTER TABLE `menu_items0`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `menu_item_translations`
+--
+ALTER TABLE `menu_item_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `menu_translations`
+--
+ALTER TABLE `menu_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
 
 --
 -- AUTO_INCREMENT for table `navigations`
@@ -2117,7 +2467,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `page_translations`
+--
+ALTER TABLE `page_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -2159,7 +2515,13 @@ ALTER TABLE `searchterms`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `setting_translations`
+--
+ALTER TABLE `setting_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `shipping`
@@ -2174,15 +2536,15 @@ ALTER TABLE `sliders`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `storefront_generals`
+-- AUTO_INCREMENT for table `storefront_generals0`
 --
-ALTER TABLE `storefront_generals`
+ALTER TABLE `storefront_generals0`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `storefront_menus`
+-- AUTO_INCREMENT for table `storefront_menus0`
 --
-ALTER TABLE `storefront_menus`
+ALTER TABLE `storefront_menus0`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -2283,6 +2645,26 @@ ALTER TABLE `category_translations`
   ADD CONSTRAINT `category_translations_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `coupon_categories`
+--
+ALTER TABLE `coupon_categories`
+  ADD CONSTRAINT `coupon_categories_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `coupon_categories_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `coupon_products`
+--
+ALTER TABLE `coupon_products`
+  ADD CONSTRAINT `coupon_products_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `coupon_products_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `coupon_translations`
+--
+ALTER TABLE `coupon_translations`
+  ADD CONSTRAINT `coupon_translations_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `customers`
 --
 ALTER TABLE `customers`
@@ -2302,12 +2684,24 @@ ALTER TABLE `flash_sale_translations`
   ADD CONSTRAINT `flash_sale_translations_flash_sale_id_foreign` FOREIGN KEY (`flash_sale_id`) REFERENCES `flash_sales` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `menu_items`
+-- Constraints for table `menu_items0`
 --
-ALTER TABLE `menu_items`
+ALTER TABLE `menu_items0`
   ADD CONSTRAINT `menu_items_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `test_cat` (`id`),
-  ADD CONSTRAINT `menu_items_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`),
+  ADD CONSTRAINT `menu_items_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus0` (`id`),
   ADD CONSTRAINT `menu_items_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`);
+
+--
+-- Constraints for table `menu_item_translations`
+--
+ALTER TABLE `menu_item_translations`
+  ADD CONSTRAINT `menu_item_translations_menu_item_id_foreign` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `menu_translations`
+--
+ALTER TABLE `menu_translations`
+  ADD CONSTRAINT `menu_translations_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `navigations`
@@ -2329,6 +2723,12 @@ ALTER TABLE `orders`
   ADD CONSTRAINT `orders_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`),
   ADD CONSTRAINT `orders_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
   ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `page_translations`
+--
+ALTER TABLE `page_translations`
+  ADD CONSTRAINT `page_translations_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `products`
@@ -2356,6 +2756,12 @@ ALTER TABLE `product_translations`
   ADD CONSTRAINT `product_translations_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `setting_translations`
+--
+ALTER TABLE `setting_translations`
+  ADD CONSTRAINT `setting_translations_setting_id_foreign` FOREIGN KEY (`setting_id`) REFERENCES `settings` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `sliders`
 --
 ALTER TABLE `sliders`
@@ -2363,13 +2769,13 @@ ALTER TABLE `sliders`
   ADD CONSTRAINT `sliders_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`);
 
 --
--- Constraints for table `storefront_menus`
+-- Constraints for table `storefront_menus0`
 --
-ALTER TABLE `storefront_menus`
-  ADD CONSTRAINT `storefront_menus_category_menu_id_foreign` FOREIGN KEY (`category_menu_id`) REFERENCES `menus` (`id`),
-  ADD CONSTRAINT `storefront_menus_footer_menu_one_id_foreign` FOREIGN KEY (`footer_menu_one_id`) REFERENCES `menus` (`id`),
-  ADD CONSTRAINT `storefront_menus_footer_menu_two_id_foreign` FOREIGN KEY (`footer_menu_two_id`) REFERENCES `menus` (`id`),
-  ADD CONSTRAINT `storefront_menus_primary_menu_id_foreign` FOREIGN KEY (`primary_menu_id`) REFERENCES `menus` (`id`);
+ALTER TABLE `storefront_menus0`
+  ADD CONSTRAINT `storefront_menus_category_menu_id_foreign` FOREIGN KEY (`category_menu_id`) REFERENCES `menus0` (`id`),
+  ADD CONSTRAINT `storefront_menus_footer_menu_one_id_foreign` FOREIGN KEY (`footer_menu_one_id`) REFERENCES `menus0` (`id`),
+  ADD CONSTRAINT `storefront_menus_footer_menu_two_id_foreign` FOREIGN KEY (`footer_menu_two_id`) REFERENCES `menus0` (`id`),
+  ADD CONSTRAINT `storefront_menus_primary_menu_id_foreign` FOREIGN KEY (`primary_menu_id`) REFERENCES `menus0` (`id`);
 
 --
 -- Constraints for table `tag_translations`

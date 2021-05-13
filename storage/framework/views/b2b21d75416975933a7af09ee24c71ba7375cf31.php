@@ -1,5 +1,4 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 
 <style>
     #accordion .fa{
@@ -115,56 +114,56 @@
                     <!-- general -->
                     <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
                     <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
-                        @include('admin.pages.storefront.general_setting.general')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.general', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- menus -->
                     <!-- setting[7-13] => DB_ROW_ID-[8-14]: -->
                     <div class="tab-pane fade" id="menus" role="tabpanel" aria-labelledby="menus-settings-menus">
-                        @include('admin.pages.storefront.general_setting.menu')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Social Link -->
                     <!-- setting[14-17] => DB_ROW_ID-[15-18]: -->
                     <div class="tab-pane fade" aria-labelledby="social-settings-social" id="social_settings" role="tabpanel">
-                        @include('admin.pages.storefront.general_setting.social')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.social', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Feature -->
                     <!-- setting[18-33] => DB_ROW_ID-[19-34]: -->
                     <div class="tab-pane fade" aria-labelledby="feature-settings-feature" id="feature" role="tabpanel">
-                        @include('admin.pages.storefront.general_setting.feature')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.feature', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Logo -->
                     <!-- DB_ROW_ID-[35-] => setting[34-] -->
                     <div class="tab-pane fade" aria-labelledby="logo-settings-logo" id="logo" role="tabpanel">
-                        @include('admin.pages.storefront.general_setting.logo')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.logo', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Footer -->
                     <!-- DB_ROW_ID-[35-37] => setting[34-36] -->
                     <div class="tab-pane fade" aria-labelledby="footer-settings-footer" id="footer" >
-                        @include('admin.pages.storefront.general_setting.footer')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Newslater -->
                     <!-- DB_ROW_ID-[38] => setting[37] -->
                     <div class="tab-pane fade" aria-labelledby="newsletter-settings-newsletter" id="newsletter" >
-                        @include('admin.pages.storefront.general_setting.newsletter')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.newsletter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
 
                     <!-- Product Page -->
                     <!-- DB_ROW_ID-[39-41] => setting[38-40] -->
                     <div class="tab-pane fade" aria-labelledby="product_page-settings-product_page" id="product_page" >
-                        @include('admin.pages.storefront.general_setting.product_page')
+                        <?php echo $__env->make('admin.pages.storefront.general_setting.product_page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
               </div>
@@ -181,7 +180,7 @@
     $('#generalSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.general.store')}}",
+            url: "<?php echo e(route('admin.storefront.general.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -218,7 +217,7 @@
     $('#menuSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.menu.store')}}",
+            url: "<?php echo e(route('admin.storefront.menu.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -255,7 +254,7 @@
     $('#socialLinkSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.social_link.store')}}",
+            url: "<?php echo e(route('admin.storefront.social_link.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -292,7 +291,7 @@
     $('#featureSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.feature.store')}}",
+            url: "<?php echo e(route('admin.storefront.feature.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -318,7 +317,7 @@
     $('#logoSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.logo.store')}}",
+            url: "<?php echo e(route('admin.storefront.logo.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -351,7 +350,7 @@
     $('#footerSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.footer.store')}}",
+            url: "<?php echo e(route('admin.storefront.footer.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -385,7 +384,7 @@
     $('#newsletterSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.newletter.store')}}",
+            url: "<?php echo e(route('admin.storefront.newletter.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -419,7 +418,7 @@
     $('#productPageSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
-            url: "{{route('admin.storefront.product_page.store')}}",
+            url: "<?php echo e(route('admin.storefront.product_page.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -465,4 +464,6 @@
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon\www\cartpro\resources\views/admin/pages/storefront/index.blade.php ENDPATH**/ ?>

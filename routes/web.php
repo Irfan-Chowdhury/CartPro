@@ -10,6 +10,12 @@ Route::get('/', function () {
     return view('general.layouts.master');
 });
 
+Route::get('/test', function () {
+    return view('test');
+});
+
+
+
 Route::get('collections/{slug}','frontend\ProductCategoryController@SubcategoryView');
 Route::get('products/{slug}/{sku}','frontend\ProductCategoryController@productdetailsview');
 
@@ -18,7 +24,6 @@ Route::get('/contact', 'frontend\FrontController@contact');
 Route::post('/send-email', 'frontend\FrontController@contactMail');
 Route::get('/faq', 'frontend\FrontController@faq');
 Route::get('/terms-and-conditions', 'frontend\FrontController@tnc');
-
 Route::get('/page/{slug}', 'frontend\FrontController@pageShowBySlug')->name('page.slug');
 
 
@@ -218,6 +223,12 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::get('/','StoreFrontController@index')->name('admin.storefront');
         Route::post('/general/store','StoreFrontController@generalStore')->name('admin.storefront.general.store');
         Route::post('/menu/store','StoreFrontController@menuStore')->name('admin.storefront.menu.store');
+        Route::post('/social_link/store','StoreFrontController@socialLinkStore')->name('admin.storefront.social_link.store');
+        Route::post('/feature/store','StoreFrontController@featureStore')->name('admin.storefront.feature.store');
+        Route::post('/logo/store','StoreFrontController@logoStore')->name('admin.storefront.logo.store');
+        Route::post('/footer/store','StoreFrontController@footerStore')->name('admin.storefront.footer.store');
+        Route::post('/newletter/store','StoreFrontController@newletterStore')->name('admin.storefront.newletter.store');
+        Route::post('/product_page/store','StoreFrontController@productPageStore')->name('admin.storefront.product_page.store');
     });
 
     // Route::get('/menus/{menuId}/items','MenuItemController@index')->name('admin.menu.menu_item');

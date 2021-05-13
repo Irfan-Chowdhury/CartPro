@@ -1,10 +1,18 @@
-Package--
+1.Pending Feature -
+    A. Storefront--> General --> Slider
+    B. Storefront--> Features --> Section Status
+    C. Storefront--> Logo --> (More Modify)
+    D. 
+
+
+
+2.Package--
 Google Translate- https://packagist.org/packages/stichoza/google-translate-php
 
-Category Name Issue in
+3.Category Name Issue in
 Pages & Menus
 
-Product-
+4.Product-
     General-
         Virtual -
     -selling_price (database)

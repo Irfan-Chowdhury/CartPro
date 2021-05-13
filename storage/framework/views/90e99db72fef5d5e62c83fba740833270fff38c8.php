@@ -121,4 +121,4 @@
 
     </div>
 </div>
-<?php /**PATH C:\laragon\www\cartpro\resources\views/admin/pages/storefront/general_setting/general.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\Running_File\cartpro\resources\views/admin/pages/storefront/general_setting/general.blade.php ENDPATH**/ ?>

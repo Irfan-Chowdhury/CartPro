@@ -217,7 +217,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
+        // return $request->base_image;
 
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations',
