@@ -59,7 +59,7 @@
             <div class="card mb-0">
                 <div class="card-header" id="generalSettings">
                     <div class="btn" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
-                        <h5 class="text-bold"><i class="fa fa-angle-right"></i> General Setting</h5>
+                        <h5 class="text-bold"><i class="fa fa-angle-right"></i> General Settings</h5>
                     </div>
                 </div>
                 <div id="collapse1" class="collapse show" aria-labelledby="generalSettings" data-parent="#accordion">
@@ -89,21 +89,20 @@
                 <div id="collapse2" class="collapse" aria-labelledby="homePageSections" data-parent="#accordion">
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">Slider Banners</a>
-                            <a class="list-group-item list-group-item-action" id="menus-settings-menus" data-toggle="list" href="#menus" role="tab" aria-controls="messages">Three Column Full Width Banners</a>
+                            <a class="list-group-item list-group-item-action" id="slider_banner_home_page_section" data-toggle="list" href="#slider_banner" role="tab" aria-controls="home">Slider Banners</a>
+                            <a class="list-group-item list-group-item-action" id="one_column_banner-home_page_section" data-toggle="list" href="#one_column_banner" role="tab" aria-controls="settings">One Column Banner</a>
+                            <a class="list-group-item list-group-item-action" id="two_column_banners-home_page_section" data-toggle="list" href="#two_column_banners" role="tab" aria-controls="newsletter">Two Column Banners</a>
+                            <a class="list-group-item list-group-item-action" id="three_column_banners-home_page_section" data-toggle="list" href="#three_column_banners" role="tab" aria-controls="settings">Three Column Banners</a>
+                            <a class="list-group-item list-group-item-action" id="three_column_full_width_banners-home_page_section" data-toggle="list" href="#three_column_full_width_banners" role="tab" aria-controls="messages">Three Column Full Width Banners</a>
                             <a class="list-group-item list-group-item-action" id="social-settings-social" data-toggle="list" href="#social_settings" role="tab" aria-controls="social">Featured Categories</a>
                             <a class="list-group-item list-group-item-action" id="feature-settings-feature" data-toggle="list" href="#feature" role="tab" aria-controls="settings">Product Tabs One</a>
+                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Tabs Two</a>
                             <a class="list-group-item list-group-item-action" id="logo-settings-logo" data-toggle="list" href="#logo" role="tab" aria-controls="profile">Top Brands</a>
                             <a class="list-group-item list-group-item-action" id="footer-settings-footer" data-toggle="list" href="#footer" role="tab" aria-controls="footer">Flash Sale and Verticle Products</a>
-                            <a class="list-group-item list-group-item-action" id="newsletter-settings-newsletter" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">Two Column Banners</a>
                             <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Grid</a>
-                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Three Column Banners</a>
-                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Tabs Two</a>
-                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">One Column Banners</a>
                         </div>
                     </div>
                 </div>
-
              </div>
         </div>
 
@@ -111,6 +110,8 @@
             </div>
             <div class="col-8">
               <div class="tab-content" id="nav-tabContent">
+
+                    <!----------------------------------- General Setting ------------------------------------------>
 
                     <!-- general -->
                     <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
@@ -149,24 +150,58 @@
 
                     <!-- Footer -->
                     <!-- DB_ROW_ID-[35-37] => setting[34-36] -->
-                    <div class="tab-pane fade" aria-labelledby="footer-settings-footer" id="footer" >
+                    <div class="tab-pane fade" aria-labelledby="footer-settings-footer" id="footer">
                         @include('admin.pages.storefront.general_setting.footer')
                     </div>
 
 
                     <!-- Newslater -->
                     <!-- DB_ROW_ID-[38] => setting[37] -->
-                    <div class="tab-pane fade" aria-labelledby="newsletter-settings-newsletter" id="newsletter" >
+                    <div class="tab-pane fade" aria-labelledby="newsletter-settings-newsletter" id="newsletter">
                         @include('admin.pages.storefront.general_setting.newsletter')
                     </div>
 
 
                     <!-- Product Page -->
                     <!-- DB_ROW_ID-[39-41] => setting[38-40] -->
-                    <div class="tab-pane fade" aria-labelledby="product_page-settings-product_page" id="product_page" >
+                    <div class="tab-pane fade" aria-labelledby="product_page-settings-product_page" id="product_page">
                         @include('admin.pages.storefront.general_setting.product_page')
                     </div>
 
+
+
+                    <!----------------------------------- Home Page Section ------------------------------------------>
+
+                    <!-- Slider Banner -->
+                    <!-- DB_ROW_ID-[42-47] => setting[41-46] -->
+                    <div class="tab-pane fade" aria-labelledby="slider_banner_home_page_section" id="slider_banner">
+                        @include('admin.pages.storefront.home_page_section.slider_banner')
+                    </div>
+                    
+                    <!-- One Column Banner -->
+                    <!-- DB_ROW_ID-[48-51] => setting[47-50] -->
+                    <div class="tab-pane fade" aria-labelledby="one_column_banner-home_page_section" id="one_column_banner">
+                        @include('admin.pages.storefront.home_page_section.one_column_banner')
+                    </div>
+
+                    <!-- Two Column Banner -->
+                    <!-- DB_ROW_ID-[52-58] => setting[51-57] -->
+                    <div class="tab-pane fade" aria-labelledby="two_column_banners-home_page_section" id="two_column_banners">
+                        @include('admin.pages.storefront.home_page_section.two_column_banners')
+                    </div>
+                    
+                    <!-- Three Column Banner -->
+                    <!-- DB_ROW_ID-[59-68] => setting[58-67] -->
+                    <div class="tab-pane fade" aria-labelledby="three_column_banners-home_page_section" id="three_column_banners">
+                        @include('admin.pages.storefront.home_page_section.three_column_banners')
+                    </div>
+
+
+                    <!-- Three Column Full Width Banner -->
+                    <!-- DB_ROW_ID-[59-68] => setting[58-67] -->
+                    <div class="tab-pane fade" aria-labelledby="three_column_full_width_banners-home_page_section" id="three_column_full_width_banners">
+                        @include('admin.pages.storefront.home_page_section.three_column_full_width_banners')
+                    </div>
               </div>
             </div>
           </div>
@@ -420,6 +455,176 @@
         e.preventDefault();
         $.ajax({
             url: "{{route('admin.storefront.product_page.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Slider Banner
+    $('#sliderBannerSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.slider_banners.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //One Coulunm Banner
+    $('#oneColumnBannerSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.one_column_banner.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Two Coulunm Banner
+    $('#twoColumnBannersSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.two_column_banners.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Three Coulunm Banner
+    $('#threeColumnBannersSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.three_column_banners.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Three Coulunm Full Width Banner
+    $('#threeColumnFullWidthBannersSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.three_column_full_width_banners.store')}}",
             method: "POST",
             data: new FormData(this),
             contentType: false,

@@ -213,7 +213,6 @@ class StoreFrontController extends Controller
                     [ 'image' => $this->imageStore($request->image_header_logo,$directory)]
                 );
         }
-
         if ($request->title_mail_logo=="mail_logo" && (!empty($request->image_mail_logo))) {
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_mail_logo, 'type' => 'logo'],
@@ -324,8 +323,257 @@ class StoreFrontController extends Controller
         }
     }
 
+    public function sliderBannersStore(Request $request)
+    {
+        //return response()->json([$request->all()]);
+
+        $validator = Validator::make($request->all(),[
+            'storefront_slider_banner_1_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_slider_banner_2_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/slider_banners/';
+
+        if ($request->ajax()) {
+
+            if (!empty($request->storefront_slider_banner_1_image)) {
+                StorefrontImage::updateOrCreate(
+                        [ 'title' => 'slider_banner_1', 'type' => 'slider_banner'],
+                        [ 'image' => $this->imageStore($request->storefront_slider_banner_1_image, $directory)]
+                    );
+            }
+            if (!empty($request->storefront_slider_banner_2_image)) {
+                StorefrontImage::updateOrCreate(
+                        [ 'title' => 'slider_banner_2', 'type' => 'slider_banner'],
+                        [ 'image' => $this->imageStore($request->storefront_slider_banner_2_image, $directory)]
+                    );
+            }
+
+            foreach ($request->all() as $key => $value) {
+                if ($key=='storefront_slider_banner_1_image' || $key=='storefront_slider_banner_2_image' ) {
+                    continue;
+                }
+                Setting::where('key', $key)->update(['plain_value' => $value]);
+            }
+
+            if (!$request->storefront_slider_banner_1_open_in_new_window) {
+                Setting::where('key', 'storefront_slider_banner_1_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if ((!$request->storefront_slider_banner_2_open_in_new_window)) {
+                Setting::where('key', 'storefront_slider_banner_2_open_in_new_window')->update(['plain_value' => 0]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function oneColumnBannerStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_one_column_banner_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/one_column_banner/';
+
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key=='storefront_one_column_banner_image') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'one_column_banner_image', 'type' => 'one_column_banner'],
+                        [ 'image' => $this->imageStore($request->storefront_one_column_banner_image, $directory)]
+                    );
+                }
+                else {
+                    Setting::where('key', $key)->update(['plain_value' => $value]);
+                }
+
+                if (!$request->storefront_one_column_banner_enabled) {
+                    Setting::where('key','storefront_one_column_banner_enabled')->update(['plain_value' => 0]);
+                }
+                if (!$request->storefront_one_column_banner_open_in_new_window) {
+                    Setting::where('key','storefront_one_column_banner_open_in_new_window')->update(['plain_value' => 0]);
+                }
+                
+            }
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function twoColumnBannersStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_two_column_banner_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_two_column_banner_image_2' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/two_column_banners/';
+
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key=='storefront_two_column_banner_image_1') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'two_column_banner_image_1', 'type' => 'two_column_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_two_column_banner_image_2') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'two_column_banner_image_2', 'type' => 'two_column_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                else {
+                    Setting::where('key', $key)->update(['plain_value' => $value]);
+                }                
+            }
+            
+            if (!$request->storefront_two_column_banner_enabled) {
+                Setting::where('key','storefront_two_column_banner_enabled')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_two_column_banners_1_open_in_new_window) {
+                Setting::where('key','storefront_two_column_banners_1_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_two_column_banners_2_open_in_new_window) {
+                Setting::where('key','storefront_two_column_banners_2_open_in_new_window')->update(['plain_value' => 0]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function threeColumnBannersStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_three_column_banners_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_three_column_banners_image_2' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_three_column_banners_image_3' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/three_column_banners/';
+
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key=='storefront_three_column_banners_image_1') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_banners_image_1', 'type' => 'three_column_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_three_column_banners_image_2') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_banners_image_2', 'type' => 'three_column_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_three_column_banners_image_3') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_banners_image_3', 'type' => 'three_column_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                else {
+                    Setting::where('key', $key)->update(['plain_value' => $value]);
+                }                
+            }
+
+            
+            if (!$request->storefront_three_column_banners_enabled) {
+                Setting::where('key','storefront_three_column_banners_enabled')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_banners_1_open_in_new_window) {
+                Setting::where('key','storefront_three_column_banners_1_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_banners_2_open_in_new_window) {
+                Setting::where('key','storefront_three_column_banners_2_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_banners_3_open_in_new_window) {
+                Setting::where('key','storefront_three_column_banners_3_open_in_new_window')->update(['plain_value' => 0]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function threeColumnFllWidthBannersStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'storefront_three_column_full_width_banners_background_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_three_column_full_width_banners_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_three_column_full_width_banners_image_2' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_three_column_full_width_banners_image_3' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $directory  ='/images/storefront/three_column_full_width_banners/';
 
 
+        if ($request->ajax()) {
+            foreach ($request->all() as $key => $value) {
+                if ($key=='storefront_three_column_full_width_banners_background_image') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_full_width_banners_background_image', 'type' => 'three_column_full_width_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_three_column_full_width_banners_image_1') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_full_width_banners_image_1', 'type' => 'three_column_full_width_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_three_column_full_width_banners_image_2') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_full_width_banners_image_2', 'type' => 'three_column_full_width_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                elseif ($key=='storefront_three_column_full_width_banners_image_3') {
+                    StorefrontImage::updateOrCreate(
+                        [ 'title' => 'three_column_full_width_banners_image_3', 'type' => 'three_column_full_width_banners'],
+                        [ 'image' => $this->imageStore($value, $directory)]
+                    );
+                }
+                else {
+                    Setting::where('key', $key)->update(['plain_value' => $value]);
+                }                
+            }
+
+            
+            if (!$request->storefront_three_column_full_width_banners_enabled) {
+                Setting::where('key','storefront_three_column_full_width_banners_enabled')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_full_width_banners_1_open_in_new_window) {
+                Setting::where('key','storefront_three_column_full_width_banners_1_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_full_width_banners_2_open_in_new_window) {
+                Setting::where('key','storefront_three_column_full_width_banners_2_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if (!$request->storefront_three_column_full_width_banners_3_open_in_new_window) {
+                Setting::where('key','storefront_three_column_full_width_banners_3_open_in_new_window')->update(['plain_value' => 0]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
 
 
 

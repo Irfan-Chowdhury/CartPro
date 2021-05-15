@@ -231,6 +231,201 @@ class SettingSeeder extends Seeder
                 'key' => 'storefront_open_new_window',
                 'is_translatable' => 0,
             ),
+            //----- Slider Banners ------
+            array(
+                'id' => 42,
+                'key' => 'storefront_slider_banner_1_image',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 43,
+                'key' => 'storefront_slider_banner_1_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 44,
+                'key' => 'storefront_slider_banner_1_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 45,
+                'key' => 'storefront_slider_banner_2_image',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 46,
+                'key' => 'storefront_slider_banner_2_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 47,
+                'key' => 'storefront_slider_banner_2_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            //----- One Column Banner ------
+            array(
+                'id' => 48,
+                'key' => 'storefront_one_column_banner_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 49,
+                'key' => 'storefront_one_column_banner_image',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 50,
+                'key' => 'storefront_one_column_banner_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 51,
+                'key' => 'storefront_one_column_banner_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            //----- Two Column Banner ------
+            array(
+                'id' => 52,
+                'key' => 'storefront_two_column_banner_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 53,
+                'key' => 'storefront_two_column_banner_image_1',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 54,
+                'key' => 'storefront_two_column_banners_1_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 55,
+                'key' => 'storefront_two_column_banners_1_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 56,
+                'key' => 'storefront_two_column_banner_image_2',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 57,
+                'key' => 'storefront_two_column_banners_2_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 58,
+                'key' => 'storefront_two_column_banners_2_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            //----- Three Column Banners ------
+            array(
+                'id' => 59,
+                'key' => 'storefront_three_column_banners_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 60,
+                'key' => 'storefront_three_column_banners_image_1',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 61,
+                'key' => 'storefront_three_column_banners_1_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 62,
+                'key' => 'storefront_three_column_banners_1_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 63,
+                'key' => 'storefront_three_column_banners_image_2',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 64,
+                'key' => 'storefront_three_column_banners_2_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 65,
+                'key' => 'storefront_three_column_banners_2_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 66,
+                'key' => 'storefront_three_column_banners_image_3',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 67,
+                'key' => 'storefront_three_column_banners_3_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 68,
+                'key' => 'storefront_three_column_banners_3_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            //----- Three Column Full Width Banners ------
+            array(
+                'id' => 69,
+                'key' => 'storefront_three_column_full_width_banners_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 70,
+                'key' => 'storefront_three_column_full_width_banners_background_image',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 71,
+                'key' => 'storefront_three_column_full_width_banners_image_1',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 72,
+                'key' => 'storefront_three_column_full_width_banners_1_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 73,
+                'key' => 'storefront_three_column_full_width_banners_1_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 74,
+                'key' => 'storefront_three_column_full_width_banners_image_2',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 75,
+                'key' => 'storefront_three_column_full_width_banners_2_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 76,
+                'key' => 'storefront_three_column_full_width_banners_2_open_in_new_window',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 77,
+                'key' => 'storefront_three_column_full_width_banners_image_3',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 78,
+                'key' => 'storefront_three_column_full_width_banners_3_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 79,
+                'key' => 'storefront_three_column_full_width_banners_3_open_in_new_window',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

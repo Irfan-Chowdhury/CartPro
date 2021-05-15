@@ -1,11 +1,11 @@
-@php
+<?php
 session_start();
 
     $total_qty = session()->has('total_qty') ? session()->get('total_qty') : 0;
     $subTotal = session()->has('subTotal') ? session()->get('subTotal') : 0;
 
     $subTotal = number_format($subTotal,2);
-@endphp
+?>
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -15,21 +15,21 @@ session_start();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Document Title -->
-    <title>@yield('title')</title>
-    <meta name="description" content="@yield('description')" />
+    <title><?php echo $__env->yieldContent('title'); ?></title>
+    <meta name="description" content="<?php echo $__env->yieldContent('description'); ?>" />
     <meta name="author" content="LionCoders" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{ asset('public/frontend/images/favicon.png') }}" />
+    <link rel="icon" type="image/png" href="<?php echo e(asset('public/frontend/images/favicon.png')); ?>" />
     <!-- google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
     <!-- Plugins CSS -->
-    <link href="{{ asset('public/frontend/css/plugins.css') }}" rel="stylesheet" />
-    <link href="{{ asset('public/frontend/css/bootstrap-select.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/plugins.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap-select.min.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css')); ?>" rel="stylesheet" />
     <!-- style CSS -->
-    <link href="{{ asset('public/frontend/css/style.css') }}" rel="stylesheet" />
-    <link href="{{ asset('public/frontend/css/payment-fonts.css') }}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/style.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
 </head>
 
 <body>
@@ -40,8 +40,8 @@ session_start();
                 <div class="d-flex justify-content-between align-baseline">
                     <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                     <div class="logo">
-                        <a href="{{url('/')}}">
-                            <img src="{{ asset('public/frontend/images/logo-black.png') }}" alt="Brand logo">
+                        <a href="<?php echo e(url('/')); ?>">
+                            <img src="<?php echo e(asset('public/frontend/images/logo-black.png')); ?>" alt="Brand logo">
                         </a>
                     </div>
                     <form class="header-search">
@@ -52,32 +52,32 @@ session_start();
                     </form>
                     <div class="fixed-menu"></div>
                     <ul class="offset-menu-wrapper">
-                        @guest
+                        <?php if(auth()->guard()->guest()): ?>
                         <li> 
-                            <a href="{{ url('login')}}">Login</a>
+                            <a href="<?php echo e(url('login')); ?>">Login</a>
                         </li>
-                        @endguest
-                        @if(auth()->user())
+                        <?php endif; ?>
+                        <?php if(auth()->user()): ?>
                         <li class="user-menu">
                             <i class="ti-user"></i>
                             <ul class="user-dropdown-menu">
-                                <li><a href="{{url('/dashboard')}}">My Account</a></li>
-                                <li><a href="{{url('/orders')}}">Order History</a></li>
-                                <!-- <li><a href="{{url('/wishlist')}}">Wishlist</a></li> -->
-                                <li><a href="{{url('/checkout')}}">Checkout</a></li>
+                                <li><a href="<?php echo e(url('/dashboard')); ?>">My Account</a></li>
+                                <li><a href="<?php echo e(url('/orders')); ?>">Order History</a></li>
+                                <!-- <li><a href="<?php echo e(url('/wishlist')); ?>">Wishlist</a></li> -->
+                                <li><a href="<?php echo e(url('/checkout')); ?>">Checkout</a></li>
                                 <li>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-link" type="submit"><i class="dripicons-exit"></i> {{trans('file.logout')}}</button>
+                                    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <button class="btn btn-link" type="submit"><i class="dripicons-exit"></i> <?php echo e(trans('file.logout')); ?></button>
                                     </form>
                                 </li>
                             </ul>
                         </li>
-                        @endif
+                        <?php endif; ?>
                         <li class="cart__menu">
                             <i class="ti-bag"></i>
-                            <span class="badge badge-light cart_qty">{{ $total_qty ?? 0}}</span>
-                            <span class="total">$ {{ $subTotal ?? 0.00}}</span>
+                            <span class="badge badge-light cart_qty"><?php echo e($total_qty ?? 0); ?></span>
+                            <span class="total">$ <?php echo e($subTotal ?? 0.00); ?></span>
                         </li>
                     </ul>
                 </div>
@@ -91,11 +91,11 @@ session_start();
                             <div id="main-menu" class="main-menu">
                                 <nav id="mobile-nav">
                                     <ul>
-                                        <li {{ (request()->is('/')) ? 'class=active' : '' }} {{ (request()->is('/')) ? 'class=active' : '' }}><a href="{{ url('/') }}">Home</a></li>
-                                        <li {{ (request()->is('/shirts')) ? 'class=active' : '' }}><a href="{{ url('/collections/shirts') }}">Shirts</a></li>
-                                        <li {{ (request()->is('/hoodies')) ? 'class=active' : '' }}><a href="{{ url('/collections/hoodies') }}">Hoodies</a></li>
-                                        <li {{ (request()->is('/contact')) ? 'class=active' : '' }}><a href="{{ url('contact') }}">Contact</a></li>                                        
-                                        @php
+                                        <li <?php echo e((request()->is('/')) ? 'class=active' : ''); ?> <?php echo e((request()->is('/')) ? 'class=active' : ''); ?>><a href="<?php echo e(url('/')); ?>">Home</a></li>
+                                        <li <?php echo e((request()->is('/shirts')) ? 'class=active' : ''); ?>><a href="<?php echo e(url('/collections/shirts')); ?>">Shirts</a></li>
+                                        <li <?php echo e((request()->is('/hoodies')) ? 'class=active' : ''); ?>><a href="<?php echo e(url('/collections/hoodies')); ?>">Hoodies</a></li>
+                                        <li <?php echo e((request()->is('/contact')) ? 'class=active' : ''); ?>><a href="<?php echo e(url('contact')); ?>">Contact</a></li>                                        
+                                        <?php
 
                                             // $data = \App\Navigation::with('childs','page')
                                             //         ->where('parent_id',NULL)
@@ -112,51 +112,16 @@ session_start();
                                             //         ->where('is_active',1)
                                             //         ->get();  
                                             // }
-                                        @endphp
+                                        ?>
 
                                         <!--Testing-->
 
-                                        {{-- @foreach ($data as $item)
-                                            @if ($item->type=='page')
-                                                <li><a href="{{ route('page.slug',$item->page->meta_title)}}" @if($item->target=='new_tab') target="_blank" @endif >{{$item->item_name}}</a></li>
-                                            @elseif ($item->type=='url')
-                                                <li>
-                                                    <a href="{{ $item->url }}" @if($item->target=='new_tab') target="_blank" @endif>{{$item->item_name}}</a>
-                                                </li>
-                                            @endif
-                                        @endforeach --}}
+                                        
 
 
                                         
                                         <!--Original-->
-                                        {{-- @if (isset($data))
-                                            @foreach ($data as $item)
-                                                @if ($item->childs->count()>0)
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{$item->item_name}}</a>
-                                                        <div class="dropdown-menu">
-                                                            @foreach ($item->childs as $subMenu)
-                                                                @if ($item->type=='category')
-                                                                    <li><a href="#" @if($subMenu->target=='new_tab') target="_blank" @endif >{{$subMenu->item_name}}</a></li>
-                                                                @elseif ($subMenu->type=='page')
-                                                                    <li><a href="{{ route('page.slug',$subMenu->page->meta_title)}}" @if($subMenu->target=='new_tab') target="_blank" @endif >{{$subMenu->item_name}}</a></li>
-                                                                @elseif($subMenu->type=='url')
-                                                                    <a class="dropdown-item" href="{{ $subMenu->url }}" @if($subMenu->target=='new_tab') target="_blank" @endif>{{$subMenu->item_name}}</a>
-                                                                @endif
-                                                            @endforeach
-                                                        </div>
-                                                    </li>
-                                                @else 
-                                                    @if ($item->type=='category')
-                                                        <li><a href="#" @if($item->target=='new_tab') target="_blank" @endif >{{$item->item_name}}</a></li>
-                                                    @elseif ($item->type=='page')
-                                                        <li><a href="{{ route('page.slug',$item->page->meta_title)}}" @if($item->target=='new_tab') target="_blank" @endif >{{$item->item_name}}</a></li>
-                                                    @elseif($item->type=='url')
-                                                        <li><a href="{{ $item->url }}" @if($item->target=='new_tab') target="_blank" @endif>{{$item->item_name}}</a></li>
-                                                    @endif
-                                                @endif
-                                            @endforeach
-                                        @endif --}}
+                                        
                                         <!--Original-->
 
 
@@ -164,23 +129,8 @@ session_start();
 
                                        
                                         <!--Testing-->
-                                        {{-- @elseif ($item->type=='url' && $item->parent_id!=NULL)
-                                                <li class="nav-item dropdown">
-                                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item" href="#">Separated link</a>
-                                                    </div>
-                                                </li> --}}
-                                        {{-- <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                                            <div class="dropdown-menu">
-                                              <a class="dropdown-item" href="#">Action</a>
-                                            </div>
-                                        </li> --}}
+                                        
+                                        
 
                                     </ul>
                                 </nav>
@@ -203,39 +153,39 @@ session_start();
             </div>
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
-                    @if(session('cart'))
-                        @foreach(session('cart') as $id => $cart_product)
-                        @php
+                    <?php if(session('cart')): ?>
+                        <?php $__currentLoopData = session('cart'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $cart_product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
                             $images = explode(',',$cart_product['image']);
-                        @endphp
-                        <div class="shp__single__product" id="cart-item-{{ $cart_product['sku'] }}">
+                        ?>
+                        <div class="shp__single__product" id="cart-item-<?php echo e($cart_product['sku']); ?>">
                             <div class="shp__pro__thumb">
-                                @if($cart_product['parent_sku'])
-                                <img src="{{ asset('public/images/products/') }}/{{$cart_product['parent_sku']}}/small/{{ $images[0] }}" alt="..."> 
-                                @else
-                                <img src="{{ asset('public/images/products/') }}/{{$cart_product['sku']}}/small/{{ $images[0] }}" alt="...">
-                                @endif
+                                <?php if($cart_product['parent_sku']): ?>
+                                <img src="<?php echo e(asset('public/images/products/')); ?>/<?php echo e($cart_product['parent_sku']); ?>/small/<?php echo e($images[0]); ?>" alt="..."> 
+                                <?php else: ?>
+                                <img src="<?php echo e(asset('public/images/products/')); ?>/<?php echo e($cart_product['sku']); ?>/small/<?php echo e($images[0]); ?>" alt="...">
+                                <?php endif; ?>
                             </div>
                             <div class="shp__pro__details">
-                                <h2>{{ $cart_product['name'] }} - {{ $cart_product['color'] }} - {{ $cart_product['size'] }}</h2>
-                                <span>{{ $cart_product['qty'] }}</span> x <span class="shp__price">$ {{ $cart_product['total_price'] / $cart_product['qty'] }}</span>
+                                <h2><?php echo e($cart_product['name']); ?> - <?php echo e($cart_product['color']); ?> - <?php echo e($cart_product['size']); ?></h2>
+                                <span><?php echo e($cart_product['qty']); ?></span> x <span class="shp__price">$ <?php echo e($cart_product['total_price'] / $cart_product['qty']); ?></span>
                             </div>
                             <div class="remove__btn">
-                                <a class="remove-from-cart" data-sku="{{ $cart_product['sku'] }}" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                                <a class="remove-from-cart" data-sku="<?php echo e($cart_product['sku']); ?>" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
                             </div>
                         </div>
-                        @endforeach
-                    @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                 </div>
                 
             </div>
             <div class="shopping__cart__footer">
                 <ul class="shoping__total">
                     <li class="subtotal">Subtotal:</li>
-                    <li class="total__price">$ {{ $subTotal ?? 0.00 }}</li>
+                    <li class="total__price">$ <?php echo e($subTotal ?? 0.00); ?></li>
                 </ul>
-                <a href="{{ url('cart/') }}" class="button style1">View Cart</a>
-                <a href="{{ url('checkout/') }}" class="button style2">Checkout</a>
+                <a href="<?php echo e(url('cart/')); ?>" class="button style1">View Cart</a>
+                <a href="<?php echo e(url('checkout/')); ?>" class="button style2">Checkout</a>
             </div>
         </div>
     </div>
@@ -247,7 +197,7 @@ session_start();
         <div class="message">
         </div>
     </div>
-    @yield('content')
+    <?php echo $__env->yieldContent('content'); ?>
     
     <!--Scroll to top starts-->
     <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
@@ -291,7 +241,7 @@ session_start();
                             </div>
                             <div class="item-options">
                                 <form id="" method="post" class="mar-bot-20">
-                                    @csrf
+                                    <?php echo csrf_field(); ?>
                                     <div class="input-qty">
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-left-minus">
@@ -327,13 +277,13 @@ session_start();
     </div>
     <!--Quick shop modal ends-->
     <!--Plugin js -->
-    <script src="{{ asset('public/frontend/js/plugin.js') }}"></script>
-    <script src="{{ asset('public/frontend/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('public/vendor/bootstrap/js/bootstrap-typeahead.js') }}"></script>
-    <script src="{{ asset('public/vendor/bootstrap/js/bloodhound.min.js') }}"></script>
-    <script src="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js') }}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/plugin.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/vendor/bootstrap/js/bootstrap-typeahead.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/vendor/bootstrap/js/bloodhound.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js')); ?>"></script>
     <!-- Main js -->
-    <script src="{{ asset('public/frontend/js/main.js') }}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/main.js')); ?>"></script>
 
     <script type="text/javascript">
         "use strict";
@@ -353,7 +303,7 @@ session_start();
 
                 remote: {
                     wildcard: '%QUERY',
-                    url: "{{url('/')}}/search/%QUERY",
+                    url: "<?php echo e(url('/')); ?>/search/%QUERY",
 
                 },
             });
@@ -381,7 +331,7 @@ session_start();
                     //   ].join('\n'),
                       suggestion: function(product) {
                         var image = product.image.split(',');
-                        return "<div class=\"search-result\"><a href=\"{{url('/products')}}/"+product.slug+"/"+product.sku+"\"><img src=\"{{url('/')}}/public/images/products/"+product.sku+"/small/"+image[0]+"\">&nbsp;"+product.product_name+"</a></div>";
+                        return "<div class=\"search-result\"><a href=\"<?php echo e(url('/products')); ?>/"+product.slug+"/"+product.sku+"\"><img src=\"<?php echo e(url('/')); ?>/public/images/products/"+product.sku+"/small/"+image[0]+"\">&nbsp;"+product.product_name+"</a></div>";
                     }
                 }   
             })
@@ -396,7 +346,7 @@ session_start();
 
         // sidebar cart show products in cart
         $(document).on('click', '.cart__menu', function() {
-            var route = "{{ route('cart') }}";
+            var route = "<?php echo e(route('cart')); ?>";
             $.ajax({
                 url: route,
                 type:"GET",
@@ -411,7 +361,7 @@ session_start();
                             } else {
                                 var sku = value.sku;
                             }
-                            var item =  '<div class="shp__single__product" id="cart-item-'+value.sku+'"><div class="shp__pro__thumb"><a href="#"><img src="{{asset('/')}}/public/images/products/'+sku+'/small/'+image[0]+'" alt="product images"></a></div><div class="shp__pro__details"><h2>'+value.name+'-'+value.color+'-'+value.size+'</h2><span>'+value.qty+'</span> x <span class="shp__price">'+(value.total_price/value.qty)+'</span></div><div class="remove__btn"><a class="remove-from-cart" data-sku="'+value.sku+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+                            var item =  '<div class="shp__single__product" id="cart-item-'+value.sku+'"><div class="shp__pro__thumb"><a href="#"><img src="<?php echo e(asset('/')); ?>/public/images/products/'+sku+'/small/'+image[0]+'" alt="product images"></a></div><div class="shp__pro__details"><h2>'+value.name+'-'+value.color+'-'+value.size+'</h2><span>'+value.qty+'</span> x <span class="shp__price">'+(value.total_price/value.qty)+'</span></div><div class="remove__btn"><a class="remove-from-cart" data-sku="'+value.sku+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
                             $('.shp__cart__wrap').append(item);
                         })
                         $('.shoping__total .total__price').html('$ '+response.subTotal);
@@ -429,7 +379,7 @@ session_start();
             e.preventDefault();
             var sku = $(this).data('sku');
 
-            var route = "{{ route('removeFromCart') }}";
+            var route = "<?php echo e(route('removeFromCart')); ?>";
 
             $(this).parent().parent().remove();
 
@@ -470,7 +420,7 @@ session_start();
             var qty = $(this).data('qty');
             var product_promotion_price = $(this).data('promotion-price');
             var product_details = $(this).data('details');
-            var product_image = "{{ asset('public/images/product/large') }}/"+$(this).data('image');
+            var product_image = "<?php echo e(asset('public/images/product/large')); ?>/"+$(this).data('image');
 
             $('#detailsModal img').attr('src', product_image);
             $('#detailsModal .product-id').val(product_id);
@@ -490,7 +440,7 @@ session_start();
 
             var qty = $(parent+" input[name=qty]").val();
 
-            var route = "{{ route('addToCart') }}";
+            var route = "<?php echo e(route('addToCart')); ?>";
 
             $.ajax({
                 url: route,
@@ -517,7 +467,7 @@ session_start();
         })
     </script>
 
-    @yield('script')
+    <?php echo $__env->yieldContent('script'); ?>
 </body>
 
-</html>
+</html><?php /**PATH D:\laragon\www\cartpro\resources\views/layouts/app.blade.php ENDPATH**/ ?>

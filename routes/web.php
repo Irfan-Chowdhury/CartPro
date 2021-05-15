@@ -229,6 +229,11 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
         Route::post('/footer/store','StoreFrontController@footerStore')->name('admin.storefront.footer.store');
         Route::post('/newletter/store','StoreFrontController@newletterStore')->name('admin.storefront.newletter.store');
         Route::post('/product_page/store','StoreFrontController@productPageStore')->name('admin.storefront.product_page.store');
+        Route::post('/slider_banners/store','StoreFrontController@sliderBannersStore')->name('admin.storefront.slider_banners.store');
+        Route::post('/one_column_banner/store','StoreFrontController@oneColumnBannerStore')->name('admin.storefront.one_column_banner.store');
+        Route::post('/two_column_banners/store','StoreFrontController@twoColumnBannersStore')->name('admin.storefront.two_column_banners.store');
+        Route::post('/three_column_banners/store','StoreFrontController@threeColumnBannersStore')->name('admin.storefront.three_column_banners.store');
+        Route::post('/three_column_full_width_banners/store','StoreFrontController@threeColumnFllWidthBannersStore')->name('admin.storefront.three_column_full_width_banners.store');
     });
 
     // Route::get('/menus/{menuId}/items','MenuItemController@index')->name('admin.menu.menu_item');
