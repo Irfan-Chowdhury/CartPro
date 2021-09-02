@@ -426,6 +426,247 @@ class SettingSeeder extends Seeder
                 'key' => 'storefront_three_column_full_width_banners_3_open_in_new_window',
                 'is_translatable' => 0,
             ),
+            //----- Top Brands ------
+            array(
+                'id' => 80,
+                'key' => 'storefront_top_brands_section_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 81,
+                'key' => 'storefront_top_brands',
+                'is_translatable' => 0,
+            ),
+            //----- Products Tab-1 ------
+            array(
+                'id' => 82,
+                'key' => 'storefront_product_tabs_1_section_enabled',
+                'is_translatable' => 0,
+            ),
+            //tab1
+            array(
+                'id' => 83,
+                'key' => 'storefront_product_tabs_1_section_tab_1_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 84,
+                'key' => 'storefront_product_tabs_1_section_tab_1_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 85,
+                'key' => 'storefront_product_tabs_1_section_tab_1_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 86,
+                'key' => 'storefront_product_tabs_1_section_tab_1_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 87,
+                'key' => 'storefront_product_tabs_1_section_tab_1_products_limit',
+                'is_translatable' => 0,
+            ),
+
+            //tab2
+            array(
+                'id' => 88,
+                'key' => 'storefront_product_tabs_1_section_tab_2_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 89,
+                'key' => 'storefront_product_tabs_1_section_tab_2_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 90,
+                'key' => 'storefront_product_tabs_1_section_tab_2_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 91,
+                'key' => 'storefront_product_tabs_1_section_tab_2_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 92,
+                'key' => 'storefront_product_tabs_1_section_tab_2_products_limit',
+                'is_translatable' => 0,
+            ),
+
+            //tab3
+            array(
+                'id' => 93,
+                'key' => 'storefront_product_tabs_1_section_tab_3_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 94,
+                'key' => 'storefront_product_tabs_1_section_tab_3_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 95,
+                'key' => 'storefront_product_tabs_1_section_tab_3_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 96,
+                'key' => 'storefront_product_tabs_1_section_tab_3_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 97,
+                'key' => 'storefront_product_tabs_1_section_tab_3_products_limit',
+                'is_translatable' => 0,
+            ),
+            //tab4
+            array(
+                'id' => 98,
+                'key' => 'storefront_product_tabs_1_section_tab_4_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 99,
+                'key' => 'storefront_product_tabs_1_section_tab_4_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 100,
+                'key' => 'storefront_product_tabs_1_section_tab_4_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 101,
+                'key' => 'storefront_product_tabs_1_section_tab_4_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 102,
+                'key' => 'storefront_product_tabs_1_section_tab_4_products_limit',
+                'is_translatable' => 0,
+            ),
+
+            //----- Products Tab-2 ------
+            array(
+                'id' => 103,
+                'key' => 'storefront_product_tabs_2_section_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 104,
+                'key' => 'storefront_product_tabs_2_section_title',
+                'is_translatable' => 1,
+            ),
+            //product_tabs_2_tab1
+            array(
+                'id' => 105,
+                'key' => 'storefront_product_tabs_2_section_tab_1_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 106,
+                'key' => 'storefront_product_tabs_2_section_tab_1_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 107,
+                'key' => 'storefront_product_tabs_2_section_tab_1_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 108,
+                'key' => 'storefront_product_tabs_2_section_tab_1_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 109,
+                'key' => 'storefront_product_tabs_2_section_tab_1_products_limit',
+                'is_translatable' => 0,
+            ),
+
+            //product_tabs_2_tab2
+            array(
+                'id' => 110,
+                'key' => 'storefront_product_tabs_2_section_tab_2_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 111,
+                'key' => 'storefront_product_tabs_2_section_tab_2_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 112,
+                'key' => 'storefront_product_tabs_2_section_tab_2_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 113,
+                'key' => 'storefront_product_tabs_2_section_tab_2_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 114,
+                'key' => 'storefront_product_tabs_2_section_tab_2_products_limit',
+                'is_translatable' => 0,
+            ),
+
+            //product_tabs_2_tab3
+            array(
+                'id' => 115,
+                'key' => 'storefront_product_tabs_2_section_tab_3_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 116,
+                'key' => 'storefront_product_tabs_2_section_tab_3_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 117,
+                'key' => 'storefront_product_tabs_2_section_tab_3_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 118,
+                'key' => 'storefront_product_tabs_2_section_tab_3_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 119,
+                'key' => 'storefront_product_tabs_2_section_tab_3_products_limit',
+                'is_translatable' => 0,
+            ),
+            //product_tabs_2_tab4
+            array(
+                'id' => 120,
+                'key' => 'storefront_product_tabs_2_section_tab_4_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 121,
+                'key' => 'storefront_product_tabs_2_section_tab_4_product_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 122,
+                'key' => 'storefront_product_tabs_2_section_tab_4_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 123,
+                'key' => 'storefront_product_tabs_2_section_tab_4_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 124,
+                'key' => 'storefront_product_tabs_2_section_tab_4_products_limit',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

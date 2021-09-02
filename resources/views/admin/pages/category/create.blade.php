@@ -46,7 +46,7 @@
 
                         <div class="form-group col-md-6  mb-3">
                             <label>{{__('Position')}} *</label>
-                            <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Position')}}' name="description_position" required="">
+                            <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Position')}}' name="description_position" required>
                                 <option value="1">{{__('Top')}}</option>
                                 <option value="0">{{__('Bottom')}}</option>
                             </select>

@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
+//Google Analytics
+use Spatie\Analytics\AnalyticsFacade as Analytics;
+use Spatie\Analytics\Period;
+
 class AdminController extends Controller
 {
         /**
@@ -15,7 +22,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        App::setLocale(Session::get('currentLocal'));
     }
     // public function __construct()
     // {
@@ -34,8 +41,20 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
-         return view('admin.home');
+        App::setLocale(Session::get('currentLocal'));
+
+        return view('admin.home');
     }
+
+
+    public function googleAnalytics()
+    {
+        $analytics = Analytics::fetchVisitorsAndPageViews(Period::days(1));
+        // $analytics = Analytics::fetchMostVisitedPages(Period::days(1));
+        dd($analytics);
+    }
+
+
     // public function ChangePassword()
     // {
     //     return view('admin.auth.passwordchange');
@@ -52,19 +71,19 @@ class AdminController extends Controller
     //                   $user=Admin::find(Auth::id());
     //                   $user->password=Hash::make($request->password);
     //                   $user->save();
-    //                   Auth::logout();  
+    //                   Auth::logout();
     //                   $notification=array(
     //                     'messege'=>'Password Changed Successfully ! Now Login with Your New Password',
     //                     'alert-type'=>'success'
     //                      );
-    //                    return Redirect()->route('admin.login')->with($notification); 
+    //                    return Redirect()->route('admin.login')->with($notification);
     //              }else{
     //                  $notification=array(
     //                     'messege'=>'New password and Confirm Password not matched!',
     //                     'alert-type'=>'error'
     //                      );
     //                    return Redirect()->back()->with($notification);
-    //              }     
+    //              }
     //   }else{
     //     $notification=array(
     //             'messege'=>'Old Password not matched!',

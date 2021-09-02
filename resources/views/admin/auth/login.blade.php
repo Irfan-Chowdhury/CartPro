@@ -1,6 +1,3 @@
-{{-- @extends('admin.main')
-
-@section('admin_content') --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,72 +12,128 @@
     <!-- Google fonts - Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="<?php echo asset('public/css/style.default.css') ?>" id="theme-stylesheet"
+    <link rel="stylesheet" href="{{asset('public/css/style.default.css')}}" id="theme-stylesheet"
           type="text/css">
     <!-- Custom stylesheet - for your changes-->
-    
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/favicon.ico">
 </head>
 <body>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header text-center"><h3>{{ __('Admin Login') }}</h3></div>
+<div class="page login-page">
+    <div class="container">
+        <div class="form-outer text-center d-flex align-items-center">
+            <div class="form-inner">
+                <div class="logo"><span>CartPro</span></div>
+                {{-- @include('shared.errors') --}}
+                {{-- @include('shared.flash_message') --}}
+                <form method="POST" action="{{ route('admin.login') }}" id="login-form">
+                    @csrf
+                    <div class="form-group-material">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('admin.login') }}">
-                    {{-- <form method="POST" action="{{ route('login') }}"> --}}
-                        @csrf
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
+                        <input id="username" type="text" class="input-material @error('username') is-invalid @enderror"
+                               name="username" value="{{ old('username') }}" required autofocus>
+                        <label for="username" class="label-material">{{ __('Username') }}</label>
 
-                            <div class="col-md-6">
-                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{-- {{ old('email') }} --}}" required autocomplete="username" autofocus>
-                                <strong class="text-danger">{{Session::get('failed')!=null?Session::get('failed'):''}}</strong>
-                                @error('username')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        @error('username')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                    <div class="form-group-material">
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        <input id="password" type="password"
+                               class="input-material @error('password') is-invalid @enderror" name="password" required
+                               autocomplete="current-password">
+                        <label for="password" class="label-material">{{ __('Password') }}</label>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
+                        @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
 
-                                {{-- @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif --}}
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="remember"
+                               id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="remember">{{ __('Remember Me') }}</label>
+                    </div>
+                    <br>
+                    <div class="form-group mb-0">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            {{ __('Login') }}
+                        </button>
+                    </div>
+                </form>
+                <!-- This three buttons for demo only-->
+                <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">LogIn as Admin</button>
+                <button type="submit" class="btn btn-info btn-sm default customer-btn">LogIn as Customer</button>
+                <br><br>
+                @if (Route::has('password.request'))
+                    <a class="forgot-pass" href="{{ route('password.request') }}">
+                        {{ __('Forgot Your Password?') }}
+                    </a>
+                @endif
+            </div>
+            {{-- @php
+                $general_settings = \App\GeneralSetting::latest()->first();
+            @endphp --}}
+            <div class="copyrights text-center">
+                <p>{{ __('Developed by')}} <a href="" class="external">LionCoders</a></p>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="{{asset('public/vendor/jquery/jquery-3.5.1.min.js')}}"></script>
+
+<script type="text/javascript">
+
+    (function($) {
+
+        "use strict";
+
+        $('.admin-btn').on('click', function () {
+            $("input[name='username']").focus().val('admin');
+            $("input[name='password']").focus().val('admin');
+        });
+
+        $('.customer-btn').on('click', function () {
+            $("input[name='username']").focus().val('customer');
+            $("input[name='password']").focus().val('customer');
+        });
+        // ------------------------------------------------------- //
+        // Material Inputs
+        // ------------------------------------------------------ //
+
+        let materialInputs = $('input.input-material');
+
+        // activate labels for prefilled values
+        materialInputs.filter(function () {
+            return $(this).val() !== "";
+        }).siblings('.label-material').addClass('active');
+
+        // move label on focus
+        materialInputs.on('focus', function () {
+            $(this).siblings('.label-material').addClass('active');
+        });
+
+        // remove/keep label on blur
+        materialInputs.on('blur', function () {
+            $(this).siblings('.label-material').removeClass('active');
+
+            if ($(this).val() !== '') {
+                $(this).siblings('.label-material').addClass('active');
+            } else {
+                $(this).siblings('.label-material').removeClass('active');
+            }
+        });
+    })(jQuery);
+</script>
+
 </body>
 </html>
-{{-- @endsection --}}
+

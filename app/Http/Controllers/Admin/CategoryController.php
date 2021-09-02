@@ -14,36 +14,35 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
+use Illuminate\Support\Facades\App;
 
 class CategoryController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
-
     public function index()
     {
-        $local = Session::get('currentLocal');
-        $currentActiveLocal = $local;
+        App::setLocale(Session::get('currentLocal'));
 
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($currentActiveLocal){
-                    $query->where('local',$currentActiveLocal)
-                    ->orWhere('local','en')
-                    ->orderBy('id','DESC');
-                },
-                'parentCategory'
-                ])
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','DESC')
-                ->get();
+        if (auth()->user()->can('category-view'))
+        {
+            $local = Session::get('currentLocal');
+            $currentActiveLocal = $local;
+
+            $categories = Category::with(['categoryTranslation'=> function ($query) use ($currentActiveLocal){
+                        $query->where('local',$currentActiveLocal)
+                        ->orWhere('local','en')
+                        ->orderBy('id','DESC');
+                    },
+                    'parentCategory'
+                    ])
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC')
+                    ->get();
 
 
-        //Check Later
-        if (request()->ajax())
+            //Check Later
+            if (request()->ajax())
             {
                 return datatables()->of($categories)
                     ->setRowId(function ($category)
@@ -86,7 +85,7 @@ class CategoryController extends Controller
                     {
                         if ($row->categoryTranslation->count()>0){
                             if($row->is_active==1){
-                                return '<span class="p-2 badge badge-success">Active</span>';
+                                return '<span class="p-2 badge badge-success"></span>';
                             }else{
                                 return '<span class="p-2 badge badge-danger">Inactive</span>';
                             }
@@ -96,25 +95,22 @@ class CategoryController extends Controller
                     })
                     ->addColumn('action', function ($row)
                     {
-                        // if ($row->categoryTranslation->count()>0){
-                        //     $actionBtn = '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-success btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                        //             &nbsp;
-                        //             <a href="'.route('admin.category.delete', $row->id).'" class="delete_test btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
-                        //     return $actionBtn;
-                        // }else {
-                        //     return "NULL &nbsp; NULL";
-                        // }
-                        $actionBtn = "";
                         // $actionBtn .= '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
                         //                 &nbsp; ';
-                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                                        &nbsp; ';
-                        if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
-                        }else {
-                            $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                        $actionBtn = "";
+                        if (auth()->user()->can('category-edit'))
+                        {
+                            $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                                            &nbsp; ';
                         }
-
+                        if (auth()->user()->can('category-action'))
+                        {
+                            if ($row->is_active==1) {
+                                $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            }else {
+                                $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                            }
+                        }
                         return $actionBtn;
 
                     })
@@ -122,60 +118,63 @@ class CategoryController extends Controller
                     ->make(true);
             }
             return view('admin.pages.category.index',compact('categories','currentActiveLocal'));
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function store(Request $request)
     {
-        // return response()->json($request->all());
-
-        $local = Session::get('currentLocal');
-
-        $validator = Validator::make($request->only('category_name'),[
-            'category_name' => 'required|unique:category_translations,category_name',
-        ]);
-
-        if ($validator->fails())
+        if (auth()->user()->can('category-store'))
         {
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
+            $local = Session::get('currentLocal');
 
-        $category = new Category;
-        $category->slug =  $this->slug($request->category_name);
-        $category->parent_id = $request->parent_id;
-        $category->description = htmlspecialchars($request->description);
-        $category->description_position = $request->description_position;
-        $image = $request->file('image');
-        if ($image) {
-            $image_name = Str::random(8);
-            $ext = strtolower($image->getClientOriginalExtension());
-            $image_full_name = $image_name.'.'.$ext;
-            $upload_path = 'public/images/';
-            $image_url = $upload_path.$image_full_name;
-            $success = $image->move($upload_path,$image_full_name);
-            $category->image = $image_url;
-        }
-        if ($request->featured == null) {
-            $category->featured = 0;
-        }
-        else
-        {
-            $category->featured = 1;
-        }
+            $validator = Validator::make($request->only('category_name'),[
+                'category_name' => 'required|unique:category_translations,category_name',
+            ]);
 
-        if (empty($request->is_active)) {
-            $category->is_active = 0;
-        }else {
-            $category->is_active = 1;
+            if ($validator->fails())
+            {
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
+            $category = new Category;
+            $category->slug =  $this->slug($request->category_name);
+            $category->parent_id = $request->parent_id;
+            $category->description = htmlspecialchars($request->description);
+            $category->description_position = $request->description_position;
+            $image = $request->file('image');
+            if ($image) {
+                $image_name = Str::random(8);
+                $ext = strtolower($image->getClientOriginalExtension());
+                $image_full_name = $image_name.'.'.$ext;
+                $upload_path = 'public/images/';
+                $image_url = $upload_path.$image_full_name;
+                $success = $image->move($upload_path,$image_full_name);
+                $category->image = $image_url;
+            }
+            if ($request->featured == null) {
+                $category->featured = 0;
+            }
+            else
+            {
+                $category->featured = 1;
+            }
+
+            if (empty($request->is_active)) {
+                $category->is_active = 0;
+            }else {
+                $category->is_active = 1;
+            }
+            $category->save();
+
+            $crandTranslation                = new CategoryTranslation();
+            $crandTranslation->category_id   = $category->id;
+            $crandTranslation->local         = $local;
+            $crandTranslation->category_name = $request->category_name;
+            $crandTranslation->save();
+
+            return response()->json(['success' => __('Data Successfully Saved')]);
         }
-        $category->save();
-
-        $crandTranslation                = new CategoryTranslation();
-        $crandTranslation->category_id   = $category->id;
-        $crandTranslation->local         = $local;
-        $crandTranslation->category_name = $request->category_name;
-        $crandTranslation->save();
-
-        return response()->json(['success' => __('Data Successfully Saved')]);
     }
 
     public function edit(Request $request)
@@ -184,7 +183,7 @@ class CategoryController extends Controller
 
         $category = Category::find($request->category_id);
         $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local',$local)->first();
-        
+
         return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
 
         return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
@@ -193,42 +192,44 @@ class CategoryController extends Controller
 
     public function update(Request $request)
     {
-
-        $validator = Validator::make($request->only('category_name'),[
-            'category_name' => 'required|unique:category_translations,category_name,'.$request->category_translation_id,
-        ]);
-
-        if ($validator->fails())
+        if (auth()->user()->can('category-edit'))
         {
-            return response()->json(['errors' => $validator->errors()->all()]);
+            $validator = Validator::make($request->only('category_name'),[
+                'category_name' => 'required|unique:category_translations,category_name,'.$request->category_translation_id,
+            ]);
+
+            if ($validator->fails())
+            {
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
+            $local = Session::get('currentLocal');
+
+            $category = Category::find($request->category_id);
+            $category->parent_id   = $request->parent_id;
+            $category->description = $request->description;
+            $category->description_position = $request->description_position;
+            $category->featured    = $request->featured;
+            $category->is_active   = $request->is_active;
+            $category->update();
+
+            DB::table('category_translations')
+            ->updateOrInsert(
+                [
+                    'category_id' => $request->category_id,
+                    'local'       =>  $local,
+                ], //condition
+                [
+                    'category_name' => $request->category_name,
+                ]
+            );
+
+            return response()->json(['success' => 'Data Saved Successfully']);
+
+            session()->flash('type','success');
+            session()->flash('message','Successfully Updated');
+            return redirect()->back();
         }
-
-        $local = Session::get('currentLocal');
-
-        $category = Category::find($request->category_id);
-        $category->parent_id   = $request->parent_id;
-        $category->description = $request->description;
-        $category->description_position = $request->description_position;
-        $category->featured    = $request->featured;
-        $category->is_active   = $request->is_active;
-        $category->update();
-
-        DB::table('category_translations')
-        ->updateOrInsert(
-            [
-                'category_id' => $request->category_id,
-                'local'       =>  $local,
-            ], //condition
-            [
-                'category_name' => $request->category_name,
-            ]
-        );
-
-        return response()->json(['success' => 'Data Saved Successfully']);
-
-        session()->flash('type','success');
-        session()->flash('message','Successfully Updated');
-        return redirect()->back();
     }
 
     public function delete($id)
@@ -243,15 +244,33 @@ class CategoryController extends Controller
     }
 
     public function active(Request $request){
-        if ($request->ajax()){
-            return $this->activeData(Category::find($request->id));
+        if (auth()->user()->can('category-action'))
+        {
+            if ($request->ajax()){
+                return $this->activeData(Category::find($request->id));
+            }
         }
     }
 
     public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->inactiveData(Category::find($request->id));
+        if (auth()->user()->can('category-action'))
+        {
+            if ($request->ajax()){
+                return $this->inactiveData(Category::find($request->id));
+            }
         }
+
+    }
+
+    public function bulkAction(Request $request)
+    {
+        if (auth()->user()->can('category-action'))
+        {
+            if ($request->ajax()) {
+                return $this->bulkActionData($request->action_type, Category::whereIn('id',$request->idsArray));
+            }
+        }
+
     }
 
     // function delete_by_selection(Request $request)

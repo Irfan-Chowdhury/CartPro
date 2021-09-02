@@ -25,11 +25,11 @@
                 <label class="form-check-label" for="exampleCheck1">{{__('Active')}}</label>
               </div>
             </div>
-            
+
             <div class="modal-footer d-flex justify-content-center">
                 <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">Update</button>
             </div>
-            
+
         </form>
       </div>
     </div>

@@ -19,7 +19,7 @@
         $(".collapse.show").each(function(){
         	$(this).prev(".card-header").find(".fa").addClass("fa-angle-down").removeClass("fa-angle-right");
         });
-        
+
         // Toggle right and down arrow icon on show hide of collapse element
         $(".collapse").on('show.bs.collapse', function(){
         	$(this).prev(".card-header").find(".fa").removeClass("fa-angle-right").addClass("fa-angle-down");
@@ -94,12 +94,11 @@
                             <a class="list-group-item list-group-item-action" id="two_column_banners-home_page_section" data-toggle="list" href="#two_column_banners" role="tab" aria-controls="newsletter">Two Column Banners</a>
                             <a class="list-group-item list-group-item-action" id="three_column_banners-home_page_section" data-toggle="list" href="#three_column_banners" role="tab" aria-controls="settings">Three Column Banners</a>
                             <a class="list-group-item list-group-item-action" id="three_column_full_width_banners-home_page_section" data-toggle="list" href="#three_column_full_width_banners" role="tab" aria-controls="messages">Three Column Full Width Banners</a>
-                            <a class="list-group-item list-group-item-action" id="social-settings-social" data-toggle="list" href="#social_settings" role="tab" aria-controls="social">Featured Categories</a>
-                            <a class="list-group-item list-group-item-action" id="feature-settings-feature" data-toggle="list" href="#feature" role="tab" aria-controls="settings">Product Tabs One</a>
-                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Tabs Two</a>
-                            <a class="list-group-item list-group-item-action" id="logo-settings-logo" data-toggle="list" href="#logo" role="tab" aria-controls="profile">Top Brands</a>
-                            <a class="list-group-item list-group-item-action" id="footer-settings-footer" data-toggle="list" href="#footer" role="tab" aria-controls="footer">Flash Sale and Verticle Products</a>
-                            <a class="list-group-item list-group-item-action" id="product_page-settings-product_page" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Grid</a>
+                            <a class="list-group-item list-group-item-action" id="featured_categories-home_page_section" data-toggle="list" href="#featured_categories" role="tab" aria-controls="social">Featured Categories</a>
+                            <a class="list-group-item list-group-item-action" id="top_brands-home_page_section" data-toggle="list" href="#top_brands" role="tab" aria-controls="profile">Top Brands</a>
+                            <a class="list-group-item list-group-item-action" id="product_tabs_one-home_page_section" data-toggle="list" href="#product_tabs_one" role="tab" aria-controls="settings">Product Tabs One</a>
+                            <a class="list-group-item list-group-item-action" id="product_tabs_two-home_page_section" data-toggle="list" href="#product_tabs_two" role="tab" aria-controls="settings">Product Tabs Two</a>
+                            {{-- <a class="list-group-item list-group-item-action" id="product_page-home_page_section" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Grid</a> --}} 
                         </div>
                     </div>
                 </div>
@@ -177,7 +176,7 @@
                     <div class="tab-pane fade" aria-labelledby="slider_banner_home_page_section" id="slider_banner">
                         @include('admin.pages.storefront.home_page_section.slider_banner')
                     </div>
-                    
+
                     <!-- One Column Banner -->
                     <!-- DB_ROW_ID-[48-51] => setting[47-50] -->
                     <div class="tab-pane fade" aria-labelledby="one_column_banner-home_page_section" id="one_column_banner">
@@ -189,7 +188,7 @@
                     <div class="tab-pane fade" aria-labelledby="two_column_banners-home_page_section" id="two_column_banners">
                         @include('admin.pages.storefront.home_page_section.two_column_banners')
                     </div>
-                    
+
                     <!-- Three Column Banner -->
                     <!-- DB_ROW_ID-[59-68] => setting[58-67] -->
                     <div class="tab-pane fade" aria-labelledby="three_column_banners-home_page_section" id="three_column_banners">
@@ -198,10 +197,38 @@
 
 
                     <!-- Three Column Full Width Banner -->
-                    <!-- DB_ROW_ID-[59-68] => setting[58-67] -->
+                    <!-- DB_ROW_ID-[69-79] => setting[68-78] -->
                     <div class="tab-pane fade" aria-labelledby="three_column_full_width_banners-home_page_section" id="three_column_full_width_banners">
                         @include('admin.pages.storefront.home_page_section.three_column_full_width_banners')
                     </div>
+
+
+                    <!-- Featured Categories -->
+                    <!-- DB_ROW_ID-[] => setting[] -->
+                    <div class="tab-pane fade" aria-labelledby="featured_categories-home_page_section" id="featured_categories">
+                        @include('admin.pages.storefront.home_page_section.featured_categories')
+                    </div>
+
+                     <!-- Top Brands -->
+                    <!-- DB_ROW_ID-[80-81] => setting[79-80] -->
+                    <div class="tab-pane fade" aria-labelledby="top_brands-home_page_section" id="top_brands">
+                        @include('admin.pages.storefront.home_page_section.top_brands')
+                    </div>
+
+
+                    <!-- Product Tabs One -->
+                    <!-- DB_ROW_ID-[82-102] => setting[81-101] -->
+                    <div class="tab-pane fade" aria-labelledby="product_tabs_one-home_page_section" id="product_tabs_one">
+                        @include('admin.pages.storefront.home_page_section.product_tabs_one')
+                    </div>
+
+
+                    <!-- Product Tabs Two -->
+                    <!-- DB_ROW_ID-[103-124] => setting[102-123] -->
+                    <div class="tab-pane fade" aria-labelledby="product_tabs_two-home_page_section" id="product_tabs_two">
+                        @include('admin.pages.storefront.home_page_section.product_tabs_two')
+                    </div>
+
               </div>
             </div>
           </div>
@@ -652,6 +679,111 @@
             }
         });
     });
+
+
+    //Top Brand
+    $('#topBrandsSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.top_brands.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Product Tabs One
+    $('#productTabsOneSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.product_tab_one.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+    //Product Tabs Two
+    $('#productTabsTwoSubmit').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.product_tab_two.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+
+
+
 
 
     //Image Show Before Upload End

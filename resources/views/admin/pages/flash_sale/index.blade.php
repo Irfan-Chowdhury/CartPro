@@ -9,13 +9,16 @@
         <div id="success_alert" role="alert"></div>
         <br>
 
-	    <a href="{{route('admin.flash_sale.create')}}" class="btn btn-info">
-	    	<i class="fa fa-plus"></i> {{__('Create Flash Sale')}}
-        </a>
-
-        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk Action')}}
-        </button>
+        @if (auth()->user()->can('flash_sale-store'))
+            <a href="{{route('admin.flash_sale.create')}}" class="btn btn-info">
+                <i class="fa fa-plus"></i> {{__('Create Flash Sale')}}
+            </a>
+        @endif
+        @if (auth()->user()->can('flash_sale-action'))
+            <button type="button" class="btn btn-danger" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> {{__('Bulk Action')}}
+            </button>
+        @endif
 
     </div>
     <div class="table-responsive">
@@ -31,6 +34,9 @@
     	</table>
     </div>
 </section>
+
+@include('admin.pages.flash_sale.confirm_modal')
+
 
 <script type="text/javascript">
 
@@ -221,8 +227,62 @@ $(document).ready(function () {
 		});
 	});
 
+    //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#table').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
 
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
 
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.flash_sale.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#table').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                console.log(idsArray);
+                $.ajax({
+                    url: "{{route('admin.flash_sale.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#table').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
+    });
 
 </script>
 

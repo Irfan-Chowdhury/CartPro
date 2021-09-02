@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Menu;
 use App\Models\Page;
 use App\Models\PageTranslation;
@@ -14,6 +15,7 @@ use App\Models\StorefrontGeneral;
 use App\Models\StorefrontImage;
 use App\Models\StorefrontMenu;
 use App\Models\Tag;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -26,10 +28,15 @@ class StoreFrontController extends Controller
 {
     use imageHandleTrait;
 
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    // public function __construct()
+    // {
+    //     $logged_user = auth()->user();
+
+    //     if ($logged_user->can('store_front'))
+    //     {
+    //         return abort('403', __('You are not authorized'));
+    //     }
+    // }
 
     public function index()
     {
@@ -42,8 +49,6 @@ class StoreFrontController extends Controller
             ->orderBy('id','DESC');
         }])->get();
 
-        // return $setting;
-
         $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
             $query->where('locale',$locale)
             ->orWhere('locale','en')
@@ -52,7 +57,6 @@ class StoreFrontController extends Controller
         ->where('is_active',1)
         ->get();
 
-        //change local
         $products = Product::with(['productTranslation'=> function ($query) use ($locale){
             $query->where('local',$locale)
                 ->orWhere('local','en')
@@ -80,6 +84,14 @@ class StoreFrontController extends Controller
         $storefront_images = StorefrontImage::select('title','type','image')->get();
         $total_storefront_images = count($storefront_images);
 
+        $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
+            $query->where('local',$locale)
+            ->orWhere('local','en')
+            ->orderBy('id','DESC');
+        }])
+        ->where('is_active',1)
+        ->get();
+
 
         $array_tags = Setting::where('key','storefront_footer_tag_id')->pluck('plain_value');
         if ($array_tags[0] == NULL) {
@@ -87,10 +99,26 @@ class StoreFrontController extends Controller
         }else {
             $array_footer_tags = json_decode($array_tags[0]);
         }
-        
+
+        $brands = Brand::with(['brandTranslation'=> function ($query) use ($locale){
+            $query->where('local',$locale)
+                ->orWhere('local','en')
+                ->orderBy('id','DESC');
+        }])
+        ->where('is_active',1)
+        ->get();
+
+        $array_brands = Setting::where('key','storefront_top_brands')->pluck('plain_value');
+        if ($array_brands[0] == NULL) {
+            $array_brands = [];
+        }else {
+            $array_brands = json_decode($array_brands[0]);
+        }
 
         return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
-                        'tags','total_storefront_images','array_footer_tags'));
+                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands'));
+
+
     }
 
     public function generalStore(Request $request)
@@ -401,7 +429,7 @@ class StoreFrontController extends Controller
                 if (!$request->storefront_one_column_banner_open_in_new_window) {
                     Setting::where('key','storefront_one_column_banner_open_in_new_window')->update(['plain_value' => 0]);
                 }
-                
+
             }
             return response()->json(['success'=>'Data Saved Successfully']);
         }
@@ -436,9 +464,9 @@ class StoreFrontController extends Controller
                 }
                 else {
                     Setting::where('key', $key)->update(['plain_value' => $value]);
-                }                
+                }
             }
-            
+
             if (!$request->storefront_two_column_banner_enabled) {
                 Setting::where('key','storefront_two_column_banner_enabled')->update(['plain_value' => 0]);
             }
@@ -489,10 +517,10 @@ class StoreFrontController extends Controller
                 }
                 else {
                     Setting::where('key', $key)->update(['plain_value' => $value]);
-                }                
+                }
             }
 
-            
+
             if (!$request->storefront_three_column_banners_enabled) {
                 Setting::where('key','storefront_three_column_banners_enabled')->update(['plain_value' => 0]);
             }
@@ -554,10 +582,10 @@ class StoreFrontController extends Controller
                 }
                 else {
                     Setting::where('key', $key)->update(['plain_value' => $value]);
-                }                
+                }
             }
 
-            
+
             if (!$request->storefront_three_column_full_width_banners_enabled) {
                 Setting::where('key','storefront_three_column_full_width_banners_enabled')->update(['plain_value' => 0]);
             }
@@ -571,6 +599,77 @@ class StoreFrontController extends Controller
                 Setting::where('key','storefront_three_column_full_width_banners_3_open_in_new_window')->update(['plain_value' => 0]);
             }
 
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function topBrandsStore(Request $request)
+    {
+        if ($request->ajax()) {
+            if($request->storefront_top_brands_section_enabled){
+                Setting::where('key','storefront_top_brands_section_enabled')->update(['plain_value'=>1]);
+            }else{
+                Setting::where('key','storefront_top_brands_section_enabled')->update(['plain_value'=>0]);
+            }
+
+            if($request->storefront_top_brands){
+                Setting::where('key','storefront_top_brands')->update(['plain_value'=>json_encode($request->storefront_top_brands)]);
+            }
+
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+    public function productTabsOneStore(Request $request)
+    {
+        if ($request->ajax()) {
+
+            //return response()->json($request->all());
+
+            if(empty($request->storefront_product_tabs_1_section_enabled)){
+                Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
+            }
+
+            $locale = Session::get('currentLocal');
+
+            foreach ($request->all() as $key => $value) {
+                if ($key == 'storefront_product_tabs_1_section_tab_1_title'|| $key =='storefront_product_tabs_1_section_tab_2_title' || $key =='storefront_product_tabs_1_section_tab_3_title' || $key=='storefront_product_tabs_1_section_tab_4_title') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+            }
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+
+    }
+
+    public function productTabsTwoStore(Request $request)
+    {
+        if ($request->ajax()) {
+            if(empty($request->storefront_product_tabs_2_section_enabled)){
+                Setting::where('key','storefront_product_tabs_2_section_enabled')->update(['plain_value'=>0]);
+            }
+
+            $locale = Session::get('currentLocal');
+
+            foreach ($request->all() as $key => $value) {
+                if ($key == 'storefront_product_tabs_2_section_title' || $key == 'storefront_product_tabs_2_section_tab_1_title'|| $key =='storefront_product_tabs_2_section_tab_2_title' || $key =='storefront_product_tabs_2_section_tab_3_title' || $key=='storefront_product_tabs_2_section_tab_4_title') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+            }
             return response()->json(['success'=>'Data Saved Successfully']);
         }
     }

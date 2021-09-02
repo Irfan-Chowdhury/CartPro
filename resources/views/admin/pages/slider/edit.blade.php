@@ -3,14 +3,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel"><b>Add New Slider</b></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <h5 class="modal-title" id="createModalLabel"><b>Edit Slider</b></h5>
+          <button type="button" class="close" id="closeEdit" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <div id="alertMessageEdit" role="alert"></div>
+
         <div class="modal-body">
-            {{-- <form method="POST" id="submitForm" action="{{route('admin.slider.store')}}" enctype="multipart/form-data"> --}}
-            <form method="POST" id="updatetForm" enctype="multipart/form-data">
+            <form method="POST" id="updatetForm" action="{{route('admin.slider.store')}}" enctype="multipart/form-data">
                 @csrf
 
                 <input type="hidden" name="slider_id" id="sliderId">
@@ -23,9 +24,9 @@
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>Title &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitleEdit" placeholder="Type Title">
                         </div>
-                        
+
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Subtitle &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Subtitle</b></label>
                             <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitleEdit" placeholder="Type Subtitle">
                         </div>
 
@@ -33,23 +34,45 @@
                             <label class="col-md-4 col-form-label"><b>Type &nbsp;<span class="text-danger">*</span></b></label>
                             <select name="type" id="typeEdit" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins">
                                 <option value="category">Category</option>
-                                <option value="page">Page</option>
                                 <option value="url">URL</option>
                             </select>
                         </div>
 
-                        <div class="form-group row" id="dependancyTypeEdit">
-                            <label class="col-md-4 col-form-label"> <b> <span id="text">Category</span> &nbsp;<span class="text-danger">*</span></b></label>
-                            <select name="category_id" id="categoryIdEdit" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                @foreach ($categories as $item)
-                                    <option value="{{$item->id}}">{{$item->category_name}}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label"><b><span id="changeLabelTextByTypeEdit">{{__('Category')}}</span> &nbsp;<span class="text-danger">*</span> </b></label>
+                            <!--Category-->
+                            <div id="dependancyTypeForCategoryEdit" class="col-md-8">
+                                <select name="category_id" id="category_id_edit" class="form-control col-md-12 selectpicker" title='{{__('-- Select Category --')}}' >
+                                    @foreach ($categories as $item)
+                                        @forelse ($item->categoryTranslation as $key => $value)
+                                            @if ($value->local==$locale)
+                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
+                                            @elseif($value->local=='en')
+                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
+                                            @endif
+                                        @empty
+                                            <option value="">{{__('NULL')}}</option>
+                                        @endforelse
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--URL-->
+                            <input type="text" name="url" id="url_edit" class="col-md-8 form-control">
+
+                            <!--For Change Field-->
+                            <div id="dependancyTypeEdit" class="col-md-8"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>Image &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="file" class="col-md-8 form-control" name="image" id="imageEdit">
+                            <div class="col-sm-8">
+                                <img id="item_image" height="100px" width="100px">
+                                {{-- <img id="item_image" src='{{asset("public/images/sliders/DX0dermiGd.png")}}'  height="100px" width="100px"> --}}
+                                <input type="file" name="slider_image" id="slider_image" class="form-control" onchange="showImage(this,'item_image')">
+                                {{-- @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))
+                                    <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
+                                @endif --}}
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -63,7 +86,7 @@
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>Status</b></label>
                             <div class="col-md-8 form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" id="is_activeEdit" value="1" id="defaultCheck1">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="isActiveEdit" value="1" id="defaultCheck1">
                                 <label class="form-check-label" for="defaultCheck1">Enable the slide</label>
                             </div>
                         </div>
@@ -72,7 +95,9 @@
                     <div class="col-md-2"></div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
             </form>
         </div>
         <div class="row mb-5">

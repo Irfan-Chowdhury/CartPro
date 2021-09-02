@@ -27,8 +27,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = RouteServiceProvider::HOME;
-    protected $redirectTo = '/admin/dashboard';
+    protected $redirectTo = RouteServiceProvider::HOME;
+    //protected $redirectTo = '/admin/dashboard';
 
     /**
      * Create a new controller instance.
@@ -43,7 +43,7 @@ class LoginController extends Controller
 
     public function showAdminLoginForm()
     {
-        return view('admin.auth.login');    
+        return view('admin.auth.login');
     }
 
     public function login(Request $request)
@@ -58,10 +58,10 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            if ((auth()->user()->role == 0)) 
+            if ((auth()->user()->role == 0))
             {
                 return redirect()->route('admin.dashboard');
-            }  
+            }
         }
 
         $this->incrementLoginAttempts($request);

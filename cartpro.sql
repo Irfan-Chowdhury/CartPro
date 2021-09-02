@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: May 07, 2021 at 06:35 AM
--- Server version: 5.7.24
--- PHP Version: 7.4.16
+-- Host: 127.0.0.1
+-- Generation Time: Jul 22, 2021 at 12:42 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -32,7 +33,7 @@ CREATE TABLE `attributes` (
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `attribute_set_id` bigint(20) UNSIGNED NOT NULL,
   `is_filterable` tinyint(4) DEFAULT NULL,
-  `is_active` tinyint(4) DEFAULT '0',
+  `is_active` tinyint(4) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -76,7 +77,7 @@ INSERT INTO `attribute_category` (`attribute_id`, `category_id`) VALUES
 
 CREATE TABLE `attribute_sets` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT '0',
+  `is_active` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -287,11 +288,11 @@ CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
-  `description_position` tinyint(4) DEFAULT '0',
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description_position` tinyint(4) DEFAULT 0,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `featured` int(11) DEFAULT '0',
-  `is_active` tinyint(4) DEFAULT '0',
+  `featured` int(11) DEFAULT 0,
+  `is_active` tinyint(4) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -326,7 +327,9 @@ CREATE TABLE `category_product` (
 
 INSERT INTO `category_product` (`category_id`, `product_id`) VALUES
 (2, 1),
-(3, 1);
+(3, 1),
+(2, 2),
+(3, 2);
 
 -- --------------------------------------------------------
 
@@ -375,7 +378,7 @@ CREATE TABLE `collections` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -388,6 +391,265 @@ INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `status`, `created_at`
 (1, 'New Arrivals', 'new-arrivals', NULL, 1, '2020-12-19 13:59:39', '2020-12-19 13:59:39'),
 (2, 'Shirts', 'shirts', NULL, 1, '2020-12-19 14:00:13', '2020-12-19 14:00:13'),
 (3, 'Hoodies', 'hoodies', NULL, 1, '2020-12-19 14:01:34', '2020-12-19 14:01:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `countries`
+--
+
+CREATE TABLE `countries` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `country_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`id`, `country_code`, `country_name`, `created_at`, `updated_at`) VALUES
+(1, 'US', 'United States', NULL, NULL),
+(2, 'CA', 'Canada', NULL, NULL),
+(3, 'AF', 'Afghanistan', NULL, NULL),
+(4, 'AL', 'Albania', NULL, NULL),
+(5, 'DZ', 'Algeria', NULL, NULL),
+(6, 'DS', 'American Samoa', NULL, NULL),
+(7, 'AD', 'Andorra', NULL, NULL),
+(8, 'AO', 'Angola', NULL, NULL),
+(9, 'AI', 'Anguilla', NULL, NULL),
+(10, 'AQ', 'Antarctica', NULL, NULL),
+(11, 'AG', 'Antigua and/or Barbuda', NULL, NULL),
+(12, 'AR', 'Argentina', NULL, NULL),
+(13, 'AM', 'Armenia', NULL, NULL),
+(14, 'AW', 'Aruba', NULL, NULL),
+(15, 'AU', 'Australia', NULL, NULL),
+(16, 'AT', 'Austria', NULL, NULL),
+(17, 'AZ', 'Azerbaijan', NULL, NULL),
+(18, 'BS', 'Bahamas', NULL, NULL),
+(19, 'BH', 'Bahrain', NULL, NULL),
+(20, 'BD', 'Bangladesh', NULL, NULL),
+(21, 'BB', 'Barbados', NULL, NULL),
+(22, 'BY', 'Belarus', NULL, NULL),
+(23, 'BE', 'Belgium', NULL, NULL),
+(24, 'BZ', 'Belize', NULL, NULL),
+(25, 'BJ', 'Benin', NULL, NULL),
+(26, 'BM', 'Bermuda', NULL, NULL),
+(27, 'BT', 'Bhutan', NULL, NULL),
+(28, 'BO', 'Bolivia', NULL, NULL),
+(29, 'BA', 'Bosnia and Herzegovina', NULL, NULL),
+(30, 'BW', 'Botswana', NULL, NULL),
+(31, 'BV', 'Bouvet Island', NULL, NULL),
+(32, 'BR', 'Brazil', NULL, NULL),
+(33, 'IO', 'British lndian Ocean Territory', NULL, NULL),
+(34, 'BN', 'Brunei Darussalam', NULL, NULL),
+(35, 'BG', 'Bulgaria', NULL, NULL),
+(36, 'BF', 'Burkina Faso', NULL, NULL),
+(37, 'BI', 'Burundi', NULL, NULL),
+(38, 'KH', 'Cambodia', NULL, NULL),
+(39, 'CM', 'Cameroon', NULL, NULL),
+(40, 'CV', 'Cape Verde', NULL, NULL),
+(41, 'KY', 'Cayman Islands', NULL, NULL),
+(42, 'CF', 'Central African Republic', NULL, NULL),
+(43, 'TD', 'Chad', NULL, NULL),
+(44, 'CL', 'Chile', NULL, NULL),
+(45, 'CN', 'China', NULL, NULL),
+(46, 'CX', 'Christmas Island', NULL, NULL),
+(47, 'CC', 'Cocos (Keeling) Islands', NULL, NULL),
+(48, 'CO', 'Colombia', NULL, NULL),
+(49, 'KM', 'Comoros', NULL, NULL),
+(50, 'CG', 'Congo', NULL, NULL),
+(51, 'CK', 'Cook Islands', NULL, NULL),
+(52, 'CR', 'Costa Rica', NULL, NULL),
+(53, 'HR', 'Croatia (Hrvatska)', NULL, NULL),
+(54, 'CU', 'Cuba', NULL, NULL),
+(55, 'CY', 'Cyprus', NULL, NULL),
+(56, 'CZ', 'Czech Republic', NULL, NULL),
+(57, 'DK', 'Denmark', NULL, NULL),
+(58, 'DJ', 'Djibouti', NULL, NULL),
+(59, 'DM', 'Dominica', NULL, NULL),
+(60, 'DO', 'Dominican Republic', NULL, NULL),
+(61, 'TP', 'East Timor', NULL, NULL),
+(62, 'EC', 'Ecudaor', NULL, NULL),
+(63, 'EG', 'Egypt', NULL, NULL),
+(64, 'SV', 'El Salvador', NULL, NULL),
+(65, 'GQ', 'Equatorial Guinea', NULL, NULL),
+(66, 'ER', 'Eritrea', NULL, NULL),
+(67, 'EE', 'Estonia', NULL, NULL),
+(68, 'ET', 'Ethiopia', NULL, NULL),
+(69, 'FK', 'Falkland Islands (Malvinas)', NULL, NULL),
+(70, 'FO', 'Faroe Islands', NULL, NULL),
+(71, 'FJ', 'Fiji', NULL, NULL),
+(72, 'FI', 'Finland', NULL, NULL),
+(73, 'FR', 'France', NULL, NULL),
+(74, 'FX', 'France, Metropolitan', NULL, NULL),
+(75, 'GF', 'French Guiana', NULL, NULL),
+(76, 'PF', 'French Polynesia', NULL, NULL),
+(77, 'TF', 'French Southern Territories', NULL, NULL),
+(78, 'GA', 'Gabon', NULL, NULL),
+(79, 'GM', 'Gambia', NULL, NULL),
+(80, 'GE', 'Georgia', NULL, NULL),
+(81, 'DE', 'Germany', NULL, NULL),
+(82, 'GH', 'Ghana', NULL, NULL),
+(83, 'GI', 'Gibraltar', NULL, NULL),
+(84, 'GR', 'Greece', NULL, NULL),
+(85, 'GL', 'Greenland', NULL, NULL),
+(86, 'GD', 'Grenada', NULL, NULL),
+(87, 'GP', 'Guadeloupe', NULL, NULL),
+(88, 'GU', 'Guam', NULL, NULL),
+(89, 'GT', 'Guatemala', NULL, NULL),
+(90, 'GN', 'Guinea', NULL, NULL),
+(91, 'GW', 'Guinea-Bissau', NULL, NULL),
+(92, 'GY', 'Guyana', NULL, NULL),
+(93, 'HT', 'Haiti', NULL, NULL),
+(94, 'HM', 'Heard and Mc Donald Islands', NULL, NULL),
+(95, 'HN', 'Honduras', NULL, NULL),
+(96, 'HK', 'Hong Kong', NULL, NULL),
+(97, 'HU', 'Hungary', NULL, NULL),
+(98, 'IS', 'Iceland', NULL, NULL),
+(99, 'IN', 'India', NULL, NULL),
+(100, 'ID', 'Indonesia', NULL, NULL),
+(101, 'IR', 'Iran (Islamic Republic of)', NULL, NULL),
+(102, 'IQ', 'Iraq', NULL, NULL),
+(103, 'IE', 'Ireland', NULL, NULL),
+(104, 'IL', 'Israel', NULL, NULL),
+(105, 'IT', 'Italy', NULL, NULL),
+(106, 'CI', 'Ivory Coast', NULL, NULL),
+(107, 'JM', 'Jamaica', NULL, NULL),
+(108, 'JP', 'Japan', NULL, NULL),
+(109, 'JO', 'Jordan', NULL, NULL),
+(110, 'KZ', 'Kazakhstan', NULL, NULL),
+(111, 'KE', 'Kenya', NULL, NULL),
+(112, 'KI', 'Kiribati', NULL, NULL),
+(113, 'KP', 'Korea, Democratic People\'s Republic of', NULL, NULL),
+(114, 'KR', 'Korea, Republic of', NULL, NULL),
+(115, 'KW', 'Kuwait', NULL, NULL),
+(116, 'KG', 'Kyrgyzstan', NULL, NULL),
+(117, 'LA', 'Lao People\'s Democratic Republic', NULL, NULL),
+(118, 'LV', 'Latvia', NULL, NULL),
+(119, 'LB', 'Lebanon', NULL, NULL),
+(120, 'LS', 'Lesotho', NULL, NULL),
+(121, 'LR', 'Liberia', NULL, NULL),
+(122, 'LY', 'Libyan Arab Jamahiriya', NULL, NULL),
+(123, 'LI', 'Liechtenstein', NULL, NULL),
+(124, 'LT', 'Lithuania', NULL, NULL),
+(125, 'LU', 'Luxembourg', NULL, NULL),
+(126, 'MO', 'Macau', NULL, NULL),
+(127, 'MK', 'Macedonia', NULL, NULL),
+(128, 'MG', 'Madagascar', NULL, NULL),
+(129, 'MW', 'Malawi', NULL, NULL),
+(130, 'MY', 'Malaysia', NULL, NULL),
+(131, 'MV', 'Maldives', NULL, NULL),
+(132, 'ML', 'Mali', NULL, NULL),
+(133, 'MT', 'Malta', NULL, NULL),
+(134, 'MH', 'Marshall Islands', NULL, NULL),
+(135, 'MQ', 'Martinique', NULL, NULL),
+(136, 'MR', 'Mauritania', NULL, NULL),
+(137, 'MU', 'Mauritius', NULL, NULL),
+(138, 'TY', 'Mayotte', NULL, NULL),
+(139, 'MX', 'Mexico', NULL, NULL),
+(140, 'FM', 'Micronesia, Federated States of', NULL, NULL),
+(141, 'MD', 'Moldova, Republic of', NULL, NULL),
+(142, 'MC', 'Monaco', NULL, NULL),
+(143, 'MN', 'Mongolia', NULL, NULL),
+(144, 'MS', 'Montserrat', NULL, NULL),
+(145, 'MA', 'Morocco', NULL, NULL),
+(146, 'MZ', 'Mozambique', NULL, NULL),
+(147, 'MM', 'Myanmar', NULL, NULL),
+(148, 'NA', 'Namibia', NULL, NULL),
+(149, 'NR', 'Nauru', NULL, NULL),
+(150, 'NP', 'Nepal', NULL, NULL),
+(151, 'NL', 'Netherlands', NULL, NULL),
+(152, 'AN', 'Netherlands Antilles', NULL, NULL),
+(153, 'NC', 'New Caledonia', NULL, NULL),
+(154, 'NZ', 'New Zealand', NULL, NULL),
+(155, 'NI', 'Nicaragua', NULL, NULL),
+(156, 'NE', 'Niger', NULL, NULL),
+(157, 'NG', 'Nigeria', NULL, NULL),
+(158, 'NU', 'Niue', NULL, NULL),
+(159, 'NF', 'Norfork Island', NULL, NULL),
+(160, 'MP', 'Northern Mariana Islands', NULL, NULL),
+(161, 'NO', 'Norway', NULL, NULL),
+(162, 'OM', 'Oman', NULL, NULL),
+(163, 'PK', 'Pakistan', NULL, NULL),
+(164, 'PW', 'Palau', NULL, NULL),
+(165, 'PA', 'Panama', NULL, NULL),
+(166, 'PG', 'Papua New Guinea', NULL, NULL),
+(167, 'PY', 'Paraguay', NULL, NULL),
+(168, 'PE', 'Peru', NULL, NULL),
+(169, 'PH', 'Philippines', NULL, NULL),
+(170, 'PN', 'Pitcairn', NULL, NULL),
+(171, 'PL', 'Poland', NULL, NULL),
+(172, 'PT', 'Portugal', NULL, NULL),
+(173, 'PR', 'Puerto Rico', NULL, NULL),
+(174, 'QA', 'Qatar', NULL, NULL),
+(175, 'RE', 'Reunion', NULL, NULL),
+(176, 'RO', 'Romania', NULL, NULL),
+(177, 'RU', 'Russian Federation', NULL, NULL),
+(178, 'RW', 'Rwanda', NULL, NULL),
+(179, 'KN', 'Saint Kitts and Nevis', NULL, NULL),
+(180, 'LC', 'Saint Lucia', NULL, NULL),
+(181, 'VC', 'Saint Vincent and the Grenadines', NULL, NULL),
+(182, 'WS', 'Samoa', NULL, NULL),
+(183, 'SM', 'San Marino', NULL, NULL),
+(184, 'ST', 'Sao Tome and Principe', NULL, NULL),
+(185, 'SA', 'Saudi Arabia', NULL, NULL),
+(186, 'SN', 'Senegal', NULL, NULL),
+(187, 'SC', 'Seychelles', NULL, NULL),
+(188, 'SL', 'Sierra Leone', NULL, NULL),
+(189, 'SG', 'Singapore', NULL, NULL),
+(190, 'SK', 'Slovakia', NULL, NULL),
+(191, 'SI', 'Slovenia', NULL, NULL),
+(192, 'SB', 'Solomon Islands', NULL, NULL),
+(193, 'SO', 'Somalia', NULL, NULL),
+(194, 'ZA', 'South Africa', NULL, NULL),
+(195, 'GS', 'South Georgia South Sandwich Islands', NULL, NULL),
+(196, 'ES', 'Spain', NULL, NULL),
+(197, 'LK', 'Sri Lanka', NULL, NULL),
+(198, 'SH', 'St. Helena', NULL, NULL),
+(199, 'PM', 'St. Pierre and Miquelon', NULL, NULL),
+(200, 'SD', 'Sudan', NULL, NULL),
+(201, 'SR', 'Suriname', NULL, NULL),
+(202, 'SJ', 'Svalbarn and Jan Mayen Islands', NULL, NULL),
+(203, 'SZ', 'Swaziland', NULL, NULL),
+(204, 'SE', 'Sweden', NULL, NULL),
+(205, 'CH', 'Switzerland', NULL, NULL),
+(206, 'SY', 'Syrian Arab Republic', NULL, NULL),
+(207, 'TW', 'Taiwan', NULL, NULL),
+(208, 'TJ', 'Tajikistan', NULL, NULL),
+(209, 'TZ', 'Tanzania, United Republic of', NULL, NULL),
+(210, 'TH', 'Thailand', NULL, NULL),
+(211, 'TG', 'Togo', NULL, NULL),
+(212, 'TK', 'Tokelau', NULL, NULL),
+(213, 'TO', 'Tonga', NULL, NULL),
+(214, 'TT', 'Trinidad and Tobago', NULL, NULL),
+(215, 'TN', 'Tunisia', NULL, NULL),
+(216, 'TR', 'Turkey', NULL, NULL),
+(217, 'TM', 'Turkmenistan', NULL, NULL),
+(218, 'TC', 'Turks and Caicos Islands', NULL, NULL),
+(219, 'TV', 'Tuvalu', NULL, NULL),
+(220, 'UG', 'Uganda', NULL, NULL),
+(221, 'UA', 'Ukraine', NULL, NULL),
+(222, 'AE', 'United Arab Emirates', NULL, NULL),
+(223, 'GB', 'United Kingdom', NULL, NULL),
+(224, 'UM', 'United States minor outlying islands', NULL, NULL),
+(225, 'UY', 'Uruguay', NULL, NULL),
+(226, 'UZ', 'Uzbekistan', NULL, NULL),
+(227, 'VU', 'Vanuatu', NULL, NULL),
+(228, 'VA', 'Vatican City State', NULL, NULL),
+(229, 'VE', 'Venezuela', NULL, NULL),
+(230, 'VN', 'Vietnam', NULL, NULL),
+(231, 'VG', 'Virigan Islands (British)', NULL, NULL),
+(232, 'VI', 'Virgin Islands (U.S.)', NULL, NULL),
+(233, 'WF', 'Wallis and Futuna Islands', NULL, NULL),
+(234, 'EH', 'Western Sahara', NULL, NULL),
+(235, 'YE', 'Yemen', NULL, NULL),
+(236, 'YU', 'Yugoslavia', NULL, NULL),
+(237, 'ZR', 'Zaire', NULL, NULL),
+(238, 'ZM', 'Zambia', NULL, NULL),
+(239, 'ZW', 'Zimbabwe', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -512,7 +774,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -524,7 +786,7 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `flash_sales` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT '0',
+  `is_active` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -553,7 +815,7 @@ CREATE TABLE `flash_sale_products` (
   `end_date` date NOT NULL,
   `price` decimal(8,2) NOT NULL,
   `qty` int(11) NOT NULL,
-  `position` tinyint(4) NOT NULL DEFAULT '0',
+  `position` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -627,7 +889,7 @@ CREATE TABLE `guest_customers` (
 CREATE TABLE `images` (
   `id` int(11) NOT NULL,
   `img_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `img_order` int(5) NOT NULL DEFAULT '0',
+  `img_order` int(5) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `status` enum('1','0') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1'
@@ -668,7 +930,7 @@ INSERT INTO `languages` (`id`, `language_name`, `local`, `default`, `created_at`
 CREATE TABLE `menus` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT '0',
+  `is_active` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -719,8 +981,8 @@ CREATE TABLE `menu_items` (
   `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `is_fluid` tinyint(4) NOT NULL DEFAULT '1',
-  `is_active` tinyint(4) NOT NULL DEFAULT '0',
+  `is_fluid` tinyint(4) NOT NULL DEFAULT 1,
+  `is_active` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -747,7 +1009,7 @@ CREATE TABLE `menu_items0` (
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci,
+  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fluid_menu` tinyint(4) DEFAULT NULL,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -890,7 +1152,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (142, '2021_04_20_205105_create_menus_table', 30),
 (143, '2021_04_20_205527_create_menu_translations_table', 30),
 (144, '2021_04_21_061803_create_menu_items_table', 31),
-(145, '2021_04_21_061945_create_menu_item_translations_table', 31);
+(145, '2021_04_21_061945_create_menu_item_translations_table', 31),
+(146, '2021_05_07_190540_create_storefront_images_table', 32),
+(147, '2021_07_07_054428_create_countries_table', 32),
+(153, '2021_07_19_143452_create_setting_generals_table', 33),
+(154, '2021_07_22_060151_create_setting_stores_table', 33);
 
 -- --------------------------------------------------------
 
@@ -904,7 +1170,7 @@ CREATE TABLE `navigations` (
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci,
+  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
   `is_active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
@@ -1091,7 +1357,7 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `brand_id`, `tax_class_id`, `slug`, `price`, `special_price`, `special_price_type`, `special_price_start`, `special_price_end`, `selling_price`, `sku`, `manage_stock`, `qty`, `in_stock`, `viewed`, `is_active`, `new_from`, `new_to`, `created_at`, `updated_at`) VALUES
 (1, 11, NULL, 'irfan-fanmis-men\'s-luxury-analog-quartz-gold-wrist-watches', '500.00', '400.00', 'Fixed', '2001-12-05', '2020-05-03', '400.00', 'KUPLNI', 1, 30, 1, NULL, 1, '2015-05-03 00:00:00', '2021-03-20 00:00:00', '2021-03-18 09:42:21', '2021-03-19 13:03:02'),
-(2, NULL, NULL, 'meolin-charm-creative-twisted-crystal-pendant-necklace-fashion-stylish', '15.00', NULL, 'Fixed', '1970-01-01', '1970-01-01', NULL, NULL, NULL, NULL, NULL, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-03-25 13:24:04'),
+(2, NULL, NULL, 'meolin-charm-creative-twisted-crystal-pendant-necklace-fashion-stylish', '15.00', NULL, 'Fixed', '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-07-19 13:26:02'),
 (3, NULL, NULL, 'probook-430-g8-notebook-pc', '1000.00', '700.00', NULL, '1970-01-01', '1970-01-01', '700.00', NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:45:56', '2021-03-25 13:23:59'),
 (4, NULL, NULL, 'वैश्य', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-20 01:11:04', '2021-03-27 09:44:47'),
 (5, NULL, NULL, 'test-2', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-27 09:47:53', '2021-03-27 09:49:31');
@@ -1105,22 +1371,22 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_class_id`, `slug`, `price`, `spec
 CREATE TABLE `products0` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` text COLLATE utf8mb4_unicode_ci,
+  `image` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `collection_id` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brand_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `short_description` text COLLATE utf8mb4_unicode_ci,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `short_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `qty` int(255) NOT NULL,
   `tags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` double NOT NULL,
   `old_price` double DEFAULT NULL,
-  `has_attribute` int(1) NOT NULL DEFAULT '0',
+  `has_attribute` int(1) NOT NULL DEFAULT 0,
   `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` text COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1528,7 +1794,7 @@ CREATE TABLE `product_translations` (
   `local` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` text COLLATE utf8mb4_unicode_ci,
+  `short_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1555,7 +1821,7 @@ INSERT INTO `product_translations` (`id`, `product_id`, `local`, `product_name`,
 CREATE TABLE `searchterms` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `search_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `count` int(11) NOT NULL DEFAULT '0',
+  `count` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1569,8 +1835,8 @@ CREATE TABLE `searchterms` (
 CREATE TABLE `settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_translatable` tinyint(4) NOT NULL DEFAULT '0',
-  `plain_value` text COLLATE utf8mb4_unicode_ci,
+  `is_translatable` tinyint(4) NOT NULL DEFAULT 0,
+  `plain_value` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1598,22 +1864,162 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (16, 'storefront_twitter_link', 0, NULL, NULL, NULL),
 (17, 'storefront_instagram_link', 0, NULL, NULL, NULL),
 (18, 'storefront_youtube_link', 0, NULL, NULL, NULL),
-(19, 'storefront_section_status', 0, '1', NULL, '2021-05-06 02:21:34'),
+(19, 'storefront_section_status', 0, NULL, NULL, NULL),
 (20, 'storefront_feature_1_title', 1, NULL, NULL, NULL),
 (21, 'storefront_feature_1_subtitle', 1, NULL, NULL, NULL),
-(22, 'storefront_feature_1_icon', 0, 'las la-headphones', NULL, '2021-05-06 02:23:47'),
+(22, 'storefront_feature_1_icon', 0, NULL, NULL, NULL),
 (23, 'storefront_feature_2_title', 1, NULL, NULL, NULL),
 (24, 'storefront_feature_2_subtitle', 1, NULL, NULL, NULL),
-(25, 'storefront_feature_2_icon', 0, 'las la-credit-card', NULL, '2021-05-06 02:23:47'),
+(25, 'storefront_feature_2_icon', 0, NULL, NULL, NULL),
 (26, 'storefront_feature_3_title', 1, NULL, NULL, NULL),
 (27, 'storefront_feature_3_subtitle', 1, NULL, NULL, NULL),
-(28, 'storefront_feature_3_icon', 0, 'las la-shield-alt', NULL, '2021-05-06 02:23:48'),
+(28, 'storefront_feature_3_icon', 0, NULL, NULL, NULL),
 (29, 'storefront_feature_4_title', 1, NULL, NULL, NULL),
 (30, 'storefront_feature_4_subtitle', 1, NULL, NULL, NULL),
-(31, 'storefront_feature_4_icon', 0, 'las la-calendar-minus', NULL, '2021-05-06 02:23:48'),
+(31, 'storefront_feature_4_icon', 0, NULL, NULL, NULL),
 (32, 'storefront_feature_5_title', 1, NULL, NULL, NULL),
 (33, 'storefront_feature_5_subtitle', 1, NULL, NULL, NULL),
-(34, 'storefront_feature_5_icon', 0, 'las la-calendar-minus', NULL, '2021-05-06 02:23:48');
+(34, 'storefront_feature_5_icon', 0, NULL, NULL, NULL),
+(35, 'storefront_footer_tag_id', 0, NULL, NULL, NULL),
+(36, 'storefront_copyright_text', 1, NULL, NULL, NULL),
+(37, 'storefront_payment_method_image', 0, NULL, NULL, NULL),
+(38, 'storefront_newsletter_image', 0, NULL, NULL, NULL),
+(39, 'storefront_product_page_image', 0, NULL, NULL, NULL),
+(40, 'storefront_call_action_url', 0, NULL, NULL, NULL),
+(41, 'storefront_open_new_window', 0, NULL, NULL, NULL),
+(42, 'storefront_slider_banner_1_image', 0, NULL, NULL, NULL),
+(43, 'storefront_slider_banner_1_call_to_action_url', 0, NULL, NULL, NULL),
+(44, 'storefront_slider_banner_1_open_in_new_window', 0, NULL, NULL, NULL),
+(45, 'storefront_slider_banner_2_image', 0, NULL, NULL, NULL),
+(46, 'storefront_slider_banner_2_call_to_action_url', 0, NULL, NULL, NULL),
+(47, 'storefront_slider_banner_2_open_in_new_window', 0, NULL, NULL, NULL),
+(48, 'storefront_one_column_banner_enabled', 0, NULL, NULL, NULL),
+(49, 'storefront_one_column_banner_image', 0, NULL, NULL, NULL),
+(50, 'storefront_one_column_banner_call_to_action_url', 0, NULL, NULL, NULL),
+(51, 'storefront_one_column_banner_open_in_new_window', 0, NULL, NULL, NULL),
+(52, 'storefront_two_column_banner_enabled', 0, NULL, NULL, NULL),
+(53, 'storefront_two_column_banner_image_1', 0, NULL, NULL, NULL),
+(54, 'storefront_two_column_banners_1_call_to_action_url', 0, NULL, NULL, NULL),
+(55, 'storefront_two_column_banners_1_open_in_new_window', 0, NULL, NULL, NULL),
+(56, 'storefront_two_column_banner_image_2', 0, NULL, NULL, NULL),
+(57, 'storefront_two_column_banners_2_call_to_action_url', 0, NULL, NULL, NULL),
+(58, 'storefront_two_column_banners_2_open_in_new_window', 0, NULL, NULL, NULL),
+(59, 'storefront_three_column_banners_enabled', 0, NULL, NULL, NULL),
+(60, 'storefront_three_column_banners_image_1', 0, NULL, NULL, NULL),
+(61, 'storefront_three_column_banners_1_call_to_action_url', 0, NULL, NULL, NULL),
+(62, 'storefront_three_column_banners_1_open_in_new_window', 0, NULL, NULL, NULL),
+(63, 'storefront_three_column_banners_image_2', 0, NULL, NULL, NULL),
+(64, 'storefront_three_column_banners_2_call_to_action_url', 0, NULL, NULL, NULL),
+(65, 'storefront_three_column_banners_2_open_in_new_window', 0, NULL, NULL, NULL),
+(66, 'storefront_three_column_banners_image_3', 0, NULL, NULL, NULL),
+(67, 'storefront_three_column_banners_3_call_to_action_url', 0, NULL, NULL, NULL),
+(68, 'storefront_three_column_banners_3_open_in_new_window', 0, NULL, NULL, NULL),
+(69, 'storefront_three_column_full_width_banners_enabled', 0, NULL, NULL, NULL),
+(70, 'storefront_three_column_full_width_banners_background_image', 0, NULL, NULL, NULL),
+(71, 'storefront_three_column_full_width_banners_image_1', 0, NULL, NULL, NULL),
+(72, 'storefront_three_column_full_width_banners_1_call_to_action_url', 0, NULL, NULL, NULL),
+(73, 'storefront_three_column_full_width_banners_1_open_in_new_window', 0, NULL, NULL, NULL),
+(74, 'storefront_three_column_full_width_banners_image_2', 0, NULL, NULL, NULL),
+(75, 'storefront_three_column_full_width_banners_2_call_to_action_url', 0, NULL, NULL, NULL),
+(76, 'storefront_three_column_full_width_banners_2_open_in_new_window', 0, NULL, NULL, NULL),
+(77, 'storefront_three_column_full_width_banners_image_3', 0, NULL, NULL, NULL),
+(78, 'storefront_three_column_full_width_banners_3_call_to_action_url', 0, NULL, NULL, NULL),
+(79, 'storefront_three_column_full_width_banners_3_open_in_new_window', 0, NULL, NULL, NULL),
+(80, 'storefront_top_brands_section_enabled', 0, NULL, NULL, NULL),
+(81, 'storefront_top_brands', 0, NULL, NULL, NULL),
+(82, 'storefront_product_tabs_1_section_enabled', 0, NULL, NULL, NULL),
+(83, 'storefront_product_tabs_1_section_tab_1_title', 1, NULL, NULL, NULL),
+(84, 'storefront_product_tabs_1_section_tab_1_product_type', 0, NULL, NULL, NULL),
+(85, 'storefront_product_tabs_1_section_tab_1_category_id', 0, NULL, NULL, NULL),
+(86, 'storefront_product_tabs_1_section_tab_1_products', 0, NULL, NULL, NULL),
+(87, 'storefront_product_tabs_1_section_tab_1_products_limit', 0, NULL, NULL, NULL),
+(88, 'storefront_product_tabs_1_section_tab_2_title', 1, NULL, NULL, NULL),
+(89, 'storefront_product_tabs_1_section_tab_2_product_type', 0, NULL, NULL, NULL),
+(90, 'storefront_product_tabs_1_section_tab_2_category_id', 0, NULL, NULL, NULL),
+(91, 'storefront_product_tabs_1_section_tab_2_products', 0, NULL, NULL, NULL),
+(92, 'storefront_product_tabs_1_section_tab_2_products_limit', 0, NULL, NULL, NULL),
+(93, 'storefront_product_tabs_1_section_tab_3_title', 1, NULL, NULL, NULL),
+(94, 'storefront_product_tabs_1_section_tab_3_product_type', 0, NULL, NULL, NULL),
+(95, 'storefront_product_tabs_1_section_tab_3_category_id', 0, NULL, NULL, NULL),
+(96, 'storefront_product_tabs_1_section_tab_3_products', 0, NULL, NULL, NULL),
+(97, 'storefront_product_tabs_1_section_tab_3_products_limit', 0, NULL, NULL, NULL),
+(98, 'storefront_product_tabs_1_section_tab_4_title', 1, NULL, NULL, NULL),
+(99, 'storefront_product_tabs_1_section_tab_4_product_type', 0, NULL, NULL, NULL),
+(100, 'storefront_product_tabs_1_section_tab_4_category_id', 0, NULL, NULL, NULL),
+(101, 'storefront_product_tabs_1_section_tab_4_products', 0, NULL, NULL, NULL),
+(102, 'storefront_product_tabs_1_section_tab_4_products_limit', 0, NULL, NULL, NULL),
+(103, 'storefront_product_tabs_2_section_enabled', 0, NULL, NULL, NULL),
+(104, 'storefront_product_tabs_2_section_title', 1, NULL, NULL, NULL),
+(105, 'storefront_product_tabs_2_section_tab_1_title', 1, NULL, NULL, NULL),
+(106, 'storefront_product_tabs_2_section_tab_1_product_type', 0, NULL, NULL, NULL),
+(107, 'storefront_product_tabs_2_section_tab_1_category_id', 0, NULL, NULL, NULL),
+(108, 'storefront_product_tabs_2_section_tab_1_products', 0, NULL, NULL, NULL),
+(109, 'storefront_product_tabs_2_section_tab_1_products_limit', 0, NULL, NULL, NULL),
+(110, 'storefront_product_tabs_2_section_tab_2_title', 1, NULL, NULL, NULL),
+(111, 'storefront_product_tabs_2_section_tab_2_product_type', 0, NULL, NULL, NULL),
+(112, 'storefront_product_tabs_2_section_tab_2_category_id', 0, NULL, NULL, NULL),
+(113, 'storefront_product_tabs_2_section_tab_2_products', 0, NULL, NULL, NULL),
+(114, 'storefront_product_tabs_2_section_tab_2_products_limit', 0, NULL, NULL, NULL),
+(115, 'storefront_product_tabs_2_section_tab_3_title', 1, NULL, NULL, NULL),
+(116, 'storefront_product_tabs_2_section_tab_3_product_type', 0, NULL, NULL, NULL),
+(117, 'storefront_product_tabs_2_section_tab_3_category_id', 0, NULL, NULL, NULL),
+(118, 'storefront_product_tabs_2_section_tab_3_products', 0, NULL, NULL, NULL),
+(119, 'storefront_product_tabs_2_section_tab_3_products_limit', 0, NULL, NULL, NULL),
+(120, 'storefront_product_tabs_2_section_tab_4_title', 1, NULL, NULL, NULL),
+(121, 'storefront_product_tabs_2_section_tab_4_product_type', 0, NULL, NULL, NULL),
+(122, 'storefront_product_tabs_2_section_tab_4_category_id', 0, NULL, NULL, NULL),
+(123, 'storefront_product_tabs_2_section_tab_4_products', 0, NULL, NULL, NULL),
+(124, 'storefront_product_tabs_2_section_tab_4_products_limit', 0, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_generals`
+--
+
+CREATE TABLE `setting_generals` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `supported_countries` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default_country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default_timezone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reviews_and_ratings` tinyint(4) DEFAULT NULL,
+  `auto_approve_reviews` tinyint(4) DEFAULT NULL,
+  `cookie_bar` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_stores`
+--
+
+CREATE TABLE `setting_stores` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `store_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `store_tagline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `store_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `store_address_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `store_zip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hide_store_phone` tinyint(4) DEFAULT NULL,
+  `hide_store_email` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_stores`
+--
+
+INSERT INTO `setting_stores` (`id`, `store_name`, `store_tagline`, `store_email`, `store_phone`, `store_address_1`, `store_address_2`, `store_city`, `store_country`, `store_state`, `store_zip`, `hide_store_phone`, `hide_store_email`, `created_at`, `updated_at`) VALUES
+(2, 'Basil Mathis', 'Aliqua Nihil ration', 'jovecahu@mailinator.com', '656548', '949 Cowley Parkway', 'Veniam harum saepe', 'Sint fuga Irure sun', 'Grenada', NULL, '654', 1, 1, '2021-07-22 01:08:16', '2021-07-22 01:15:35');
 
 -- --------------------------------------------------------
 
@@ -1625,26 +2031,10 @@ CREATE TABLE `setting_translations` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `setting_id` bigint(20) UNSIGNED NOT NULL,
   `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci,
+  `value` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `setting_translations`
---
-
-INSERT INTO `setting_translations` (`id`, `setting_id`, `locale`, `value`, `created_at`, `updated_at`) VALUES
-(20, 20, 'en', '24/7 SUPPORT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(21, 21, 'en', 'Support every time', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(22, 23, 'en', 'ACCEPT PAYMENT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(23, 24, 'en', 'Visa, Paypal, Master', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(24, 26, 'en', 'SECURED PAYMENT', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(25, 27, 'en', '100% secured', '2021-05-06 01:52:21', '2021-05-06 01:52:21'),
-(26, 29, 'en', '30 DAYS RETURN', '2021-05-06 01:52:22', '2021-05-06 01:52:22'),
-(27, 30, 'en', '30 days guarantee', '2021-05-06 01:52:22', '2021-05-06 01:52:22'),
-(28, 32, 'en', '30 DAYS RETURN', '2021-05-06 01:53:57', '2021-05-06 01:53:57'),
-(29, 33, 'en', '30 days guarantee', '2021-05-06 01:53:57', '2021-05-06 01:53:57');
 
 -- --------------------------------------------------------
 
@@ -1691,7 +2081,7 @@ CREATE TABLE `sliders` (
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci,
+  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1722,7 +2112,7 @@ CREATE TABLE `storefront_generals0` (
   `slider_id` bigint(20) UNSIGNED DEFAULT NULL,
   `terms_condition` bigint(20) UNSIGNED DEFAULT NULL,
   `privacy_policy_page` bigint(20) UNSIGNED DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci,
+  `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1733,6 +2123,21 @@ CREATE TABLE `storefront_generals0` (
 
 INSERT INTO `storefront_generals0` (`id`, `welcome_text`, `theme_color`, `mail_theme_color`, `slider_id`, `terms_condition`, `privacy_policy_page`, `address`, `created_at`, `updated_at`) VALUES
 (1, 'Welcome to Lion Coders', NULL, NULL, 2, 1, NULL, 'Muradpur, Chittagong', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `storefront_images`
+--
+
+CREATE TABLE `storefront_images` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1821,12 +2226,12 @@ CREATE TABLE `test_cat` (
   `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent` bigint(20) UNSIGNED DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
-  `description_position` tinyint(4) NOT NULL DEFAULT '0',
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description_position` tinyint(4) NOT NULL DEFAULT 0,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `featured` int(11) NOT NULL DEFAULT '0',
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  `is_active` int(1) NOT NULL DEFAULT '1',
+  `featured` int(11) NOT NULL DEFAULT 0,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `is_active` int(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1976,6 +2381,12 @@ ALTER TABLE `category_translations`
 -- Indexes for table `collections`
 --
 ALTER TABLE `collections`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `countries`
+--
+ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2204,6 +2615,18 @@ ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `setting_generals`
+--
+ALTER TABLE `setting_generals`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_stores`
+--
+ALTER TABLE `setting_stores`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting_translations`
 --
 ALTER TABLE `setting_translations`
@@ -2228,6 +2651,12 @@ ALTER TABLE `sliders`
 -- Indexes for table `storefront_generals0`
 --
 ALTER TABLE `storefront_generals0`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `storefront_images`
+--
+ALTER TABLE `storefront_images`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2344,6 +2773,12 @@ ALTER TABLE `collections`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `countries`
+--
+ALTER TABLE `countries`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
+
+--
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
@@ -2443,7 +2878,7 @@ ALTER TABLE `menu_translations`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `navigations`
@@ -2515,7 +2950,19 @@ ALTER TABLE `searchterms`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+
+--
+-- AUTO_INCREMENT for table `setting_generals`
+--
+ALTER TABLE `setting_generals`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `setting_stores`
+--
+ALTER TABLE `setting_stores`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `setting_translations`
@@ -2540,6 +2987,12 @@ ALTER TABLE `sliders`
 --
 ALTER TABLE `storefront_generals0`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `storefront_images`
+--
+ALTER TABLE `storefront_images`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `storefront_menus0`

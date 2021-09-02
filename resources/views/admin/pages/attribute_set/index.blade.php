@@ -6,25 +6,27 @@
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">Attribute Set</h4>
+        <h4 class="font-weight-bold mt-3">@lang('file.Attribute Set')</h4>
         <div id="success_alert" role="alert"></div>
         <br>
-            
-	    <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-	    	<i class="fa fa-plus"></i> {{__('Add Attribute Set')}}
-        </button>
-            
-        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button>
-            
+
+        @if (auth()->user()->can('attribute_set-store'))
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
+                <i class="fa fa-plus"></i> @lang('file.Add Attribute Set')
+            </button>
+        @endif
+        @if (auth()->user()->can('attribute_set-action'))
+            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> @lang('file.Bulk Action')
+            </button>
+        @endif
     </div>
     <div class="table-responsive">
     	<table id="AtttributeSetTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>    
-        		    <th scope="col">{{trans('Attribute Set Name')}}</th>
+        		    <th class="not-exported"></th>
+        		    <th scope="col">{{trans('file.Attribute Set Name')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
@@ -35,6 +37,8 @@
 </section>
 
 @include('admin.pages.attribute_set.create')
+@include('admin.includes.confirm_modal')
+
 
 <script type="text/javascript">
 
@@ -181,7 +185,7 @@ $("#submitForm").on("submit",function(e){
         var attributeSetName = $("#attributeSetName").val();
         var isActive         = $("#isActive").val();
 		console.log(attributeSetName);
-        
+
         $.ajax({
             url: "{{route('admin.attribute_set.store')}}",
             method: "POST",
@@ -226,7 +230,7 @@ $("#submitForm").on("submit",function(e){
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }              
+                }
 			}
 		});
 	});
@@ -251,10 +255,67 @@ $("#submitForm").on("submit",function(e){
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }              
+                }
 			}
 		});
 	});
+
+    //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#AtttributeSetTable').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
+
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
+
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.attribute_set.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#AtttributeSetTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                console.log(idsArray);
+                $.ajax({
+                    url: "{{route('admin.attribute_set.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#AtttributeSetTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
+    });
 
 </script>
 

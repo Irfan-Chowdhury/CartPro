@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
 //use validator;
@@ -30,36 +31,44 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'admin/home';
+    protected $redirectTo = 'admin/dashboard';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest:admin')->except('logout');
-    }
     public function showLoginForm()
     {
-        return view('admin.auth.login');    
+        return view('admin.auth.login');
     }
+
+
     public function login(Request $request)
     {
-        $validateData = $request->validate([
-            'username' => 'required|string',
-            'password' => 'required'
-        ]);
-        if (Auth::guard('admin')->attempt(['username'=> $request->username,'password'=>$request->password,'role'=>0])) {
+        $this->validateLogin($request);
 
-            Session::put('currentLocal', 'en');
-            return redirect()->intended(route('admin.dashboard'));
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
         }
-        return redirect()->back()->withInput($request->only('email','remember'))->with('failed','this credential does not match');
-    }
-    protected function guard()
-    {
-        return Auth::guard('admin');
+
+        if ($this->attemptLogin($request))
+        {
+            if (auth()->user()->user_type==1){
+                Session::put('currentLocal', 'en');
+                //App::setLocale('en');
+                return redirect()->intended(route('admin.dashboard'));
+                // return redirect()->intended(route('admin.dashboard','en'));
+            }
+            else {
+                return "OK";
+            }
+        }
+        else {
+            return redirect()->back()->withInput($request->only('username','remember'))->with('failed','this credential does not match');
+        }
     }
 }

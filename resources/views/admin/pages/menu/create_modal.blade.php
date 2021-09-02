@@ -9,7 +9,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <form method="POST" id="submitForm">
+            <form method="POST" id="submitForm" action="{{route('admin.menu.store')}}">
                 @csrf
 
                 <div class="row">
@@ -34,10 +34,10 @@
                     <div class="col-md-2"></div>
                 </div>
 
-                {{-- <button type="submit" class="btn btn-primary">Save</button> --}}
+                <button type="submit" id="save-button" class="btn btn-primary">Save</button>
             </form>
         </div>
-        <div class="row mb-5">
+        {{-- <div class="row mb-5">
             <div class="col-sm-2"></div>
             <div class="col-sm-6">
                 <div id="alertMessageBox">
@@ -49,7 +49,7 @@
                 <button type="button" class="btn btn-primary" id="save-button">Save</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
-        </div>
+        </div> --}}
 
       </div>
     </div>

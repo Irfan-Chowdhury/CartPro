@@ -11,17 +11,20 @@
     <div class="container-fluid mb-3">
 
         {{-- <h4 class="font-weight-bold mt-3">{{$tr->translate('Brand')}}</h4> --}}
-        <h4 class="font-weight-bold mt-3">{{__('Brand')}}</h4>
+        <h4 class="font-weight-bold mt-3">@lang('file.Brand')</h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
-	    <button type="button" class="btn btn-info" name="create_record" id="create_record">
-	    	<i class="fa fa-plus"></i> {{__('Add Brand')}}
-        </button>
-
-        <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button>
+        @if (auth()->user()->can('brand-store'))
+            <button type="button" class="btn btn-info" name="create_record" id="create_record">
+                <i class="fa fa-plus"></i> @lang('file.Add Brand')
+            </button>
+        @endif
+        @if (auth()->user()->can('brand-action'))
+            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> {{trans('file.Bulk_Action')}}
+            </button>
+        @endif
 
     </div>
     <div class="table-responsive">
@@ -29,10 +32,10 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-                    <th scope="col">{{__('Logo')}}</th>
-        		    <th scope="col">{{__('Brand Name')}}</th>
-        		    <th scope="col">{{__('Status')}}</th>
-        		    <th scope="col">{{__('Action')}}</th>
+                    <th scope="col">@lang('file.Logo')</th>
+        		    <th scope="col">@lang('file.Brand Name')</th>
+        		    <th scope="col">@lang('file.Status')</th>
+        		    <th scope="col">@lang('file.Action')</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -41,6 +44,7 @@
 </section>
 
 @include('admin.pages.brand.create')
+@include('admin.includes.confirm_modal')
 
 <script type="text/javascript">
 
@@ -52,7 +56,7 @@
             }
         });
 
-        let table_table = $('#brandListTable').DataTable({
+        let table = $('#brandListTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -182,7 +186,7 @@
                 },
             ],
         });
-        new $.fn.dataTable.FixedHeader(table_table);
+        new $.fn.dataTable.FixedHeader(table);
     });
 
     //----------Insert Data----------------------
@@ -314,92 +318,6 @@
             }
         });
 
-        // $(document).on('click', '.edit', function () {
-
-        //     let id = $(this).attr('id');
-        //     $('#form_result').html('');
-
-
-
-        //     // let target = "{{ route('admin.brand') }}/" + id + '/edit';
-
-        //     $.ajax({
-        //         url: target,
-        //         dataType: "json",
-        //         success: function (html) {
-
-        //             $('#brand_name').val(html.data.brand_name);
-        //             //$('#parent').val(html.data.parent);
-        //             // $('#description').val(html.data.description);
-        //             //$('#description_position').val(html.data.bank_branch);
-
-
-
-        //             $('#hidden_id').val(html.data.id);
-
-        //             $('.modal-title').text('{{trans('file.Edit')}}');
-        //             $('#action_button').val('{{trans('file.Edit')}}');
-        //             $('#action').val('{{trans('file.Edit')}}');
-        //             $('#formModal').modal('show');
-        //         }
-        //     })
-        // });
-
-        let delete_id;
-        $(document).on('click','.delete',function(){
-        	delete_id = $(this).attr('id');
-        	$('#confirmModal').modal('show');
-            $('.modal-title').text('{{__('DELETE Record')}}');
-            $('#ok_button').text('{{trans('file.OK')}}');
-        });
-
-        $('#ok_button').on('click',function(){
-
-        	// let target = "{{route('admin.brand')}}/"+ delete_id + "/delete";
-        	$.ajax({
-        		url:target,
-        		beforeSend: function () {
-                    $('#ok_button').text('{{trans('file.Deleting...')}}');
-                },
-                success: function (data) {
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                    }
-                    if (data.error) {
-                        html = '<div class="alert alert-danger">' + data.error + '</div>';
-                    }
-                    setTimeout(function () {
-                        $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                        $('#confirmModal').modal('hide');
-                        $('#brandListTable').DataTable().ajax.reload();
-                    }, 2000);
-                }
-        	})
-        });
-        // $(document).on('click','.status',function(){
-        // 	let id = $(this).data('id');
-        // 	let status = $(this).data('status');
-        // 	let target = "{{route('admin.brand')}}/"+id+'/'+status;
-        // 	$.ajax({
-        // 		url:target,
-        // 		dataType:'json',
-        // 		success:function(data) {
-        // 			if (data.success) {
-        // 				let html='';
-        // 				html = '<div>'+data.success+'</div>';
-        // 				$('#brandListTable').DataTable().ajax.reload();
-        // 			}
-
-        // 		}
-        // 	});
-
-        // });
-
-    $('#delete_test').submit(function(event){
-        if(!confirm('Are you sure to delete ?')){
-            event.preventDefault();
-        }
-    });
 
 
     //---------- Active -------------
@@ -449,5 +367,62 @@
 			}
 		});
 	});
+
+    //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#brandListTable').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
+
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
+
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.brand.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#brandListTable').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                console.log(idsArray);
+                $.ajax({
+                    url: "{{route('admin.brand.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#brandListTable').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
+    });
 </script>
 @endsection

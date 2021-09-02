@@ -82,7 +82,7 @@
                         <img src="{{asset('public/images/empty.jpg')}}" id="paymentMethodImage" height="100px" width="100px">
                     @endforelse
                     <br><br>
-                    <input type="file"   name="storefront_payment_method_image" class="form-control" onchange="showImage(this,'paymentMethodImage')">
+                    <input type="file" name="storefront_payment_method_image" class="form-control" onchange="showImage(this,'paymentMethodImage')">
                     <br><br>
 
 

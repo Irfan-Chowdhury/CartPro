@@ -11,15 +11,15 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth:admin');
     }
     public function index()
     {
-        
+
         //$Category = Category::all();
-        
+
         if (request()->ajax())
             {
                 // $category = Category::with('parentCategory')->get();
@@ -36,10 +36,10 @@ class PageController extends Controller
                     ->addColumn('action', function ($data)
                     {
                         $button = '';
-                       
+
                         $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm parent_load"><i class="dripicons-pencil"></i></button>';
                         $button .= '&nbsp;&nbsp;';
-                        
+
                          $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="dripicons-trash"></i></button>';
 
                          $button .= '&nbsp;&nbsp;';
@@ -47,8 +47,8 @@ class PageController extends Controller
                                 $button .= '<button type="button"  name="active" data-id="' . $data->id . '" data-status="1" class="btn btn-success btn-sm status"><i class="dripicons-thumbs-up"></i></button>';
                             }else{
                                 $button .= '<button type="button"  name="delete" data-id="' . $data->id . '" data-status="0" class=" btn btn-danger btn-sm status"><i class="dripicons-thumbs-down"></i></button>';
-                            }   
-            
+                            }
+
 
                         return $button;
                     })
@@ -59,10 +59,10 @@ class PageController extends Controller
             return view('admin.pages.allPage');
     }
 
-    
+
     public function store(Request $request)
     {
-        
+
         $Page = new Page;
         $Page->page_name = htmlspecialchars($request->page_name);
         $Page->description = htmlspecialchars($request->description);
@@ -82,12 +82,12 @@ class PageController extends Controller
         }
         $Page->og_description = htmlspecialchars($request->og_description);
         $Page->status = 1;
-        
+
         // return response()->json($Category);
         $Page->save();
         return response()->json(['success' => __('success')]);
-        
-        
+
+
     }
 
     public function edit($id)
@@ -98,10 +98,10 @@ class PageController extends Controller
 
             return response()->json(['data' => $data]);
         }
-        
+
     }
 
-   
+
     public function update(Request $request)
     {
         $id = $request->hidden_id;
@@ -129,7 +129,7 @@ class PageController extends Controller
         Page::whereId($id)->update($data);
 
         return response()->json(['success' => __('updated')]);
-        
+
     }
 
     public function destroy($id)
@@ -141,7 +141,7 @@ class PageController extends Controller
     }
     function delete_by_selection(Request $request)
     {
-        
+
         $page_id = $request['PageListIdArray'];
         $pages = Page::whereIn('id', $page_id);
         if ($pages->delete())
@@ -151,7 +151,7 @@ class PageController extends Controller
         {
             return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
         }
-        
+
     }
 
     public function status($id,$status)
@@ -169,5 +169,5 @@ class PageController extends Controller
 
         return response()->json(['success' => _('updates'),'data'=>$Page]);
     }
-   
+
 }

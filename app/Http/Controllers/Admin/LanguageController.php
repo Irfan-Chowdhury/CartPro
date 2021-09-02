@@ -5,60 +5,66 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class LanguageController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:admin');
+    // }
 
     public function index(Request $request)
     {
-        $languages = Language::orderBy('language_name','ASC')->get();
+        if (auth()->user()->can('locale-view'))
+        {
+            $languages = Language::orderBy('language_name','ASC')->get();
 
-        return view('admin.pages.setting.language.index',compact('languages'));
+            return view('admin.pages.setting.language.index',compact('languages'));
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->only('language_name','local'),[ 
-            'language_name' => 'required',
-            'local'         => 'required|unique:languages',
-        ]);
+        if (auth()->user()->can('locale-store'))
+        {
+            $validator = Validator::make($request->only('language_name','local'),[
+                'language_name' => 'required',
+                'local'         => 'required|unique:languages',
+            ]);
 
-        if ($validator->fails()){
+            if ($validator->fails()){
 
-            session()->flash('type','danger');
-            session()->flash('message','Something wrong');
-            
-            return redirect()->back()->withErrors($validator)->withInput();
+                session()->flash('type','danger');
+                session()->flash('message','Something wrong');
+
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $language = new Language();
+            $language->language_name = htmlspecialchars($request->language_name);
+            $language->local         = strtolower(htmlspecialchars(trim($request->local)));
+
+            if (empty($request->default)) {
+                $language->default   = 0;
+            }
+            else {
+
+                Language::where('default', '=', 1)->update(['default' => 0]);
+
+                $language->default       = $request->default;
+            }
+
+            $language->save();
+
+            session()->flash('type','success');
+            session()->flash('message','Successfully Saved');
+            return redirect()->back();
         }
-
-        $language = new Language();
-        $language->language_name = htmlspecialchars($request->language_name);
-        $language->local         = strtolower(htmlspecialchars(trim($request->local)));
-
-        if (empty($request->default)) {
-            $language->default   = 0;
-        }
-        else {
-
-            Language::where('default', '=', 1)->update(['default' => 0]);
-
-            $language->default       = $request->default;
-        }
-        
-        $language->save();
-
-        session()->flash('type','success');
-        session()->flash('message','Successfully Saved');
-        return redirect()->back();
-
-        // return $languages[$request->language_id]['language_name'];
     }
 
     public function delete($id)
@@ -74,7 +80,9 @@ class LanguageController extends Controller
     public function defaultChange($id)
     {
         $language = Language::find($id);
-        $currentLocal = Session::put('currentLocal', $language->local);
+
+        Session::put('currentLocal', $language->local);
+        App::setLocale($language->local);
 
         session()->flash('type','success');
         session()->flash('message','Language Changed Successfully');
@@ -84,7 +92,7 @@ class LanguageController extends Controller
 
 // public function store(Request $request)
     // {
-    //     $validator = Validator::make($request->only('language_name','local'),[ 
+    //     $validator = Validator::make($request->only('language_name','local'),[
     //         'language_name' => 'required',
     //         'local'         => 'required',
     //     ]);
@@ -108,7 +116,7 @@ class LanguageController extends Controller
 
     //         $language->default       = $request->default;
     //     }
-        
+
     //     $language->save();
 
     //     session()->flash('type','success');
@@ -119,7 +127,7 @@ class LanguageController extends Controller
     // }
 
 
-    
+
 
     // protected function language()
     // {

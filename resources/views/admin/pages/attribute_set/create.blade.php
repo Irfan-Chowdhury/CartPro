@@ -5,7 +5,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{__('Add Attribute Set')}}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">{{__('file.Add Attribute Set')}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -16,20 +16,20 @@
             <div class="modal-body">
 
               <div class="form-group">
-                <label>{{__('Attribute Set Name')}}</label>
+                <label>{{__('file.Attribute Set Name')}}</label>
                 <input type="text" name="attribute_set_name" id="attributeSetName" required class="form-control" placeholder="Attribute Set Name">
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="is_active" value="1" id="isActive">
-                <label class="form-check-label" for="exampleCheck1">{{__('Active')}}</label>
+                <label class="form-check-label" for="exampleCheck1">{{__('file.Active')}}</label>
               </div>
             </div>
-            
+
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">Submit</button>
+                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
             </div>
-            
+
         </form>
       </div>
     </div>

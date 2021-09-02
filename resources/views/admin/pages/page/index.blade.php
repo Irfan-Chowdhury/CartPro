@@ -9,13 +9,17 @@
         <div id="alert_message" role="alert"></div>
         <br>
 
-	    <button type="button" class="btn btn-info" name="createModal" data-toggle="modal" data-target="#createModal">
-	    	<i class="fa fa-plus"></i> {{__('Add Page')}}
-        </button>
+        @if (auth()->user()->can('page-store'))
+            <button type="button" class="btn btn-info" name="createModal" data-toggle="modal" data-target="#createModal">
+                <i class="fa fa-plus"></i> {{__('Add Page')}}
+            </button>
+        @endif
 
-        {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button> --}}
+        @if (auth()->user()->can('page-action'))
+            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
+            </button>
+        @endif
 
     </div>
     <div class="table-responsive">
@@ -35,6 +39,8 @@
 
 @include('admin.pages.page.create_modal')
 @include('admin.pages.page.edit_modal')
+@include('admin.includes.confirm_modal')
+
 
 
 <script type="text/javascript">
@@ -332,6 +338,62 @@
                 }
             }
         });
+    });
+
+    //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#dataListTable').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
+
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
+
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.page.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#dataListTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                $.ajax({
+                    url: "{{route('admin.page.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#dataListTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
     });
 
 

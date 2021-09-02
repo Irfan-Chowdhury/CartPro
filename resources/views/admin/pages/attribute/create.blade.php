@@ -5,7 +5,7 @@
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">Attributes Create</h4>
+        <h4 class="font-weight-bold mt-3">@lang('file.Attributes Create')</h4>
         <div id="success_alert" role="alert"></div>
         <br>
     </div>
@@ -20,8 +20,8 @@
                     <div class="row">
                         <div class="col-4">
                             <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">General</a>
-                                <a class="list-group-item list-group-item-action" id="attribute-values" data-toggle="list" href="#values" role="tab" aria-controls="settings">Values</a>
+                                <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.General')</a>
+                                <a class="list-group-item list-group-item-action" id="attribute-values" data-toggle="list" href="#values" role="tab" aria-controls="settings">@lang('file.Values')</a>
                             </div>
                         </div>
                         <div class="col-6">
@@ -29,15 +29,15 @@
 
                                 <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
                                     <div class="card">
-                                        <h4 class="card-header"><b>General</b></h4>
+                                        <h4 class="card-header"><b>@lang('file.General')</b></h4>
                                         <div class="card-body">
                                             <div class="row">
-                                                
+
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Attribute Set <span class="text-danger">*</span></b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('Attribute Set') <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
-                                                            <select name="attribute_set_id" id="attributeSetId" required class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute Set')}}'>
+                                                            <select name="attribute_set_id" id="attributeSetId" required class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Attribute Set')}}'>
                                                                 @foreach ($attributeSets as $item)
                                                                     @if ($item->attributeSetTranslation->count()>0)
                                                                         @foreach ($item->attributeSetTranslation as $key => $value)
@@ -61,7 +61,7 @@
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Attribute Name <span class="text-danger">*</span></b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Attribute Name') <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
                                                             <input type="text" required name="attribute_name" id="navbarText" class="form-control @error('attribute_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Attribute Name" >
                                                             @error('attribute_name')
@@ -71,7 +71,7 @@
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Categories')</b></label>
                                                         <div class="col-sm-8">
                                                             <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                                                 @foreach ($categories as $item)
@@ -94,7 +94,7 @@
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Filterable</b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Filterable')</b></label>
                                                         <div class="col-sm-8">
                                                             <div class="form-group form-check">
                                                                 <input type="checkbox" class="form-check-input" name="is_filterable" value="1" id="isActive">
@@ -117,7 +117,7 @@
                                             </div>
 
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -125,12 +125,12 @@
 
                                 <div class="tab-pane fade" id="values" role="tabpanel" aria-labelledby="attribute-values">
                                     <div class="card">
-                                        <h4 class="card-header"><b>Values</b></h4>
+                                        <h4 class="card-header"><b>@lang('file.Values')</b></h4>
                                         <div class="card-body">
                                             <div class="variants">
                                                 <div class="row">
                                                     <div class="col-6 form-group">
-                                                        <label>{{__('Value Name')}}</label>
+                                                        <label>{{__('file.Value Name')}}</label>
                                                         <input type="text" name="value_name[]" class="form-control" placeholder="{{__('Type Value Name')}}">
                                                     </div>
                                                     <div class="col-2">
@@ -139,10 +139,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add More</span>
+                                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('Add More')</span>
                                             <br><br>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
                                             </div>
                                         </div>
                                     </div>

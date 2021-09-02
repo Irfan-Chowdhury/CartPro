@@ -23,7 +23,9 @@
 			</div>
 		</div>
 
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('Add Language')}}</button>
+        @if (auth()->user()->can('locale-store'))
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('Add Language')}}</button>
+        @endif
         {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}</button> --}}
     </div>
     <div class="table-responsive">
@@ -46,7 +48,7 @@
 						<td>{{ $item->local }}</td>
 						<td>@if($item->local == Session::get('currentLocal')) <span class='p-2 badge badge-success'>Default</span> @else <span class='p-2 badge badge-dark'>None</span> @endif</td>
 						<td>
-							
+
 							{{-- <a href="#" class="btn btn-info"><i class="fa fa-cog" aria-hidden="true"></i></a> --}}
 							<a href="{{route('admin.setting.language.delete',$item->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure to delete ?')"><i class="dripicons-trash" aria-hidden="true"></i></a>
 						</td>

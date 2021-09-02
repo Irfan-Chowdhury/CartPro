@@ -59,7 +59,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                    
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Product Name')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
@@ -92,20 +92,20 @@
                                                                             @foreach ($item->brandTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}" 
+                                                                                        <option value="{{$item->id}}"
                                                                                             @if(isset($product->brand_id))
-                                                                                                @if($item->id==$product->brand_id) 
+                                                                                                @if($item->id==$product->brand_id)
                                                                                                     selected
-                                                                                                @endif 
+                                                                                                @endif
                                                                                             @endif>
                                                                                             {{$value->brand_name}}
                                                                                         </option>
                                                                                     @elseif($value->local=='en')
                                                                                         <option value="{{$item->id}}"
                                                                                             @if(isset($product->brand_id))
-                                                                                                @if($item->id==$product->brand_id) 
+                                                                                                @if($item->id==$product->brand_id)
                                                                                                     selected
-                                                                                                @endif 
+                                                                                                @endif
                                                                                             @endif>
                                                                                             {{$value->brand_name}}
                                                                                         </option>
@@ -115,7 +115,7 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -130,19 +130,19 @@
                                                                             @foreach ($item->categoryTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}" 
+                                                                                        <option value="{{$item->id}}"
                                                                                             @foreach($product->categories as $productCategory)
-                                                                                                @if($productCategory->id == $item->id) 
-                                                                                                    selected 
+                                                                                                @if($productCategory->id == $item->id)
+                                                                                                    selected
                                                                                                 @endif
                                                                                             @endforeach>
                                                                                             {{$value->category_name}}
                                                                                         </option>
                                                                                     @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}" 
+                                                                                        <option value="{{$item->id}}"
                                                                                             @foreach($product->categories as $productCategory)
-                                                                                                @if($productCategory->id == $item->id) 
-                                                                                                    selected 
+                                                                                                @if($productCategory->id == $item->id)
+                                                                                                    selected
                                                                                                 @endif
                                                                                             @endforeach>
                                                                                             {{$value->category_name}}
@@ -153,7 +153,7 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -190,19 +190,19 @@
                                                                             @foreach ($item->tagTranslation as $key => $value)
                                                                                 @if ($key<1)
                                                                                     @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}" 
+                                                                                        <option value="{{$item->id}}"
                                                                                             @foreach($product->tags as $producttag)
-                                                                                                @if($producttag->id == $item->id) 
-                                                                                                    selected 
+                                                                                                @if($producttag->id == $item->id)
+                                                                                                    selected
                                                                                                 @endif
                                                                                             @endforeach>
                                                                                             {{$value->tag_name}}
                                                                                         </option>
                                                                                     @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}" 
+                                                                                        <option value="{{$item->id}}"
                                                                                             @foreach($product->tags as $producttag)
-                                                                                                @if($producttag->id == $item->id) 
-                                                                                                    selected 
+                                                                                                @if($producttag->id == $item->id)
+                                                                                                    selected
                                                                                                 @endif
                                                                                             @endforeach>
                                                                                             {{$value->tag_name}}
@@ -213,11 +213,11 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         {{-- <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Virtual</b></label>
                                                             <div class="col-sm-8">
@@ -237,7 +237,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    
+
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
@@ -264,17 +264,17 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Price')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="price" id="price" class="form-control" id="inputEmail3" value="{{$product->price}}">
+                                                                <input type="text" name="price" id="price" class="form-control" id="inputEmail3" @if(env('FORMAT_NUMBER')) value="{{number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')}}" @endif>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price')}}</b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" value="{{$product->special_price}}">
+                                                                <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" @if(env('FORMAT_NUMBER')) value="{{number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')}}" @endif >
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Type')}}</b></label>
                                                             <div class="col-sm-8">
@@ -305,7 +305,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -331,7 +331,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Inventroy Management')}}</b></label>
                                                             <div class="col-sm-8">
@@ -351,7 +351,7 @@
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Stock Availibility')}}</b></label>
                                                             <div class="col-sm-8">
@@ -368,7 +368,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -388,27 +388,27 @@
                                                             <label>{{__('Size')}} *</label>
                                                             <input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}">
                                                         </div>
-                                                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Color')}} *</label>
                                                             <input type="text" name="variant_color[]"  required class="form-control" placeholder="{{__('Color')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('SKU')}} *</label>
                                                             <input type="text" name="variant_sku[]" required class="form-control" placeholder="{{__('SKU')}}">
                                                         </div>
-                                                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Quantity')}} *</label>
                                                             <input type="text" name="variant_qty[]"  required class="form-control" placeholder="{{__('Quantity')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Price')}}</label>
                                                             <input type="text" name="variant_price[]" required class="form-control" placeholder="{{__('Price')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -440,7 +440,7 @@
                                                                 <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror" onchange="showImage(this,'item_photo')">
                                                                 @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))
                                                                     <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
-                                                                @endif 
+                                                                @endif
                                                                 @error('base_image')
                                                                     <div class="text-danger">{{ $message }}</div>
                                                                 @enderror
@@ -468,7 +468,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -492,7 +492,7 @@
                                                                 <input type="text" name="meta_title" id="metaTitle" class="form-control" id="inputEmail3" placeholder="Type Meta Title" >
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Meta Description')}} </b></label>
                                                             <div class="col-sm-8">
@@ -502,7 +502,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
@@ -510,7 +510,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -543,7 +543,7 @@
                                                                     @else
                                                                         <option value="">{{__('NULL')}}</option>
                                                                     @endif
-                                                                @endforeach    
+                                                                @endforeach
                                                                 {{-- @foreach ($data[0][0]['attributeTranslation'] as $item)
                                                                     @if ($item->attributeTranslation->count()>0)
                                                                         @foreach ($item->attributeTranslation as $key => $value)
@@ -561,14 +561,14 @@
                                                                 @endforeach     --}}
                                                             </select>
                                                         </div>
-                                                    
+
                                                         <div class="col-6 form-group">
                                                             <label>{{__("Values")}}</label>
                                                             <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
-                                                                
+
                                                             </select>
                                                         </div>
-                    
+
                                                         <div class="col-1">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -582,7 +582,7 @@
                                                         <div class="col-5 form-group">
                                                             <label>{{__('Atrribute')}}</label>
                                                             <select name="attribute_id[]" id="attributeId2" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
-                                                                @foreach ($attributes as $item)                                                                        
+                                                                @foreach ($attributes as $item)
                                                                     @if ($item->attributeTranslation->count()>0)
                                                                         @foreach ($item->attributeTranslation as $key => $value)
                                                                             @if ($key<1)
@@ -592,21 +592,21 @@
                                                                                     <option value="{{$item->id}}">{{$value->attribute_name}}</option>
                                                                                 @endif
                                                                             @endif
-                                                                        @endforeach    
+                                                                        @endforeach
                                                                     @else
                                                                         <option value="">{{__('NULL')}}</option>
                                                                     @endif
-                                                                @endforeach    
+                                                                @endforeach
                                                             </select>
                                                         </div>
-                                                    
+
                                                         <div class="col-6 form-group">
                                                             <label>{{__("Values")}}</label>
                                                             <select name="attribute_value_id[]" id="attributeValueId2" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
-                                                                
+
                                                             </select>
                                                         </div>
-                    
+
                                                         <div class="col-1">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -633,7 +633,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Short Description')}} </b></label>
                                                             <div class="col-sm-8">
@@ -660,7 +660,7 @@
                                                                 <input type="text" name="new_to" id="newTo" value="{{date('Y-m-d',strtotime($product->new_to))}}" class="form-control datepicker">
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
@@ -668,7 +668,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -773,7 +773,7 @@
             $('.js-example-basic-multiple').select2();
         });
 
-        
+
         $('#manageStock').change(function() {
             var manageStock = $('#manageStock').val();
             if (manageStock==1) {
@@ -786,7 +786,7 @@
             }else{
                 $('#quantityField').empty();
             }
-            
+
         });
 
         $(document).on('click', '#addMore2', function(){
@@ -847,7 +847,7 @@
 
             var rand = Math.floor(Math.random() * 90000) + 10000;
             $('.variants').append(html);
-            
+
         })
 
         //---------/ test------
@@ -899,6 +899,7 @@
             });
         });
 
+        //Image Show Before Upload End
         function showImage(data, imgId){
             if(data.files && data.files[0]){
                 var obj = new FileReader();
@@ -910,7 +911,7 @@
                 obj.readAsDataURL(data.files[0]);
             }
         }
-        //Image Show Before Upload End
+
 
 </script>
 

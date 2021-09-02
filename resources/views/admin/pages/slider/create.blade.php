@@ -8,9 +8,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <div id="alertMessage" role="alert"></div>
+
         <div class="modal-body">
-            {{-- <form method="POST" id="submitForm" action="{{route('admin.slider.store')}}" enctype="multipart/form-data"> --}}
-            <form method="POST" id="submitForm" enctype="multipart/form-data">
+            <form method="POST" id="submitForm" enctype="multipart/form-data" action="{{route('admin.slider.store')}}">
                 @csrf
 
                 <div class="row">
@@ -21,9 +22,9 @@
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>Title &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitle" placeholder="Type Title">
                         </div>
-                        
+
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Subtitle &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Subtitle</b></label>
                             <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitle" placeholder="Type Subtitle">
                         </div>
 
@@ -31,23 +32,33 @@
                             <label class="col-md-4 col-form-label"><b>Type &nbsp;<span class="text-danger">*</span></b></label>
                             <select name="type" id="type" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins">
                                 <option value="category">Category</option>
-                                <option value="page">Page</option>
+                                {{-- <option value="page">Page</option> --}}
                                 <option value="url">URL</option>
                             </select>
                         </div>
 
-                        <div class="form-group row" id="dependancyType">
-                            <label class="col-md-4 col-form-label"><b>Category &nbsp;<span class="text-danger">*</span> </b></label>
-                            <select name="category_id" id="categoryId" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                @foreach ($categories as $item)
-                                    <option value="{{$item->id}}">{{$item->category_name}}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label"><b><span id="changeLabelTextByType">{{__('Category')}}</span> &nbsp;<span class="text-danger">*</span> </b></label>
+                            <div id="dependancyType" class="col-md-8">
+                                <select name="category_id" id="category_id" class="form-control col-md-12 selectpicker" title='{{__('-- Select Category --')}}'>
+                                    @foreach ($categories as $item)
+                                        @forelse ($item->categoryTranslation as $key => $value)
+                                            @if ($value->local==$locale)
+                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
+                                            @elseif($value->local=='en')
+                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
+                                            @endif
+                                        @empty
+                                            <option value="">{{__('NULL')}}</option>
+                                        @endforelse
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>Image &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="file" class="col-md-8 form-control" name="image" id="image">
+                            <input type="file" class="col-md-8 form-control" required name="slider_image" id="slider_image">
                         </div>
 
                         <div class="form-group row">
@@ -65,26 +76,14 @@
                                 <label class="form-check-label" for="defaultCheck1">Enable the slide</label>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-2"></div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-        </div>
-        <div class="row mb-5">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-6">
-                <div id="alertMessageBox">
-                    <div id="alertMessage" class="text-light"></div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-3">
-                {{-- <button type="button" class="btn btn-primary" id="save-button">Save</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>    --}}
-            </div>
+            </form>
         </div>
 
       </div>

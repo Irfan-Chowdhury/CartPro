@@ -19,6 +19,16 @@
     <link href="{{asset('public/general/css/payment-fonts.css')}}" rel="stylesheet" />
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZZBZQHXN8Q');
+    </script>
 </head>
 
 <body>

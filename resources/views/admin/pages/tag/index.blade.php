@@ -9,21 +9,25 @@
         <h4 class="font-weight-bold mt-3">{{__('Tags')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
-            
-	    <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-	    	<i class="fa fa-plus"></i> {{__('Add Tag')}}
-        </button>
-            
-        {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-        	<i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}
-        </button> --}}
-            
+
+        @if (auth()->user()->can('tag-store'))
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
+                <i class="fa fa-plus"></i> {{__('Add Tag')}}
+            </button>
+        @endif
+
+        @if (auth()->user()->can('tag-action'))
+            <button type="button" class="btn btn-danger" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
+            </button>
+        @endif
+
     </div>
     <div class="table-responsive">
     	<table id="dataTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>    
+        		    <th class="not-exported"></th>
         		    <th scope="col">{{trans('Tag Name')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
@@ -36,18 +40,19 @@
 
 @include('admin.pages.tag.form_modal')
 @include('admin.pages.tag.edit_form_modal')
+@include('admin.includes.confirm_modal')
 
 
 <script type="text/javascript">
 
     $(document).ready(function () {
-    
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    
+
         let table = $('#dataTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
@@ -58,12 +63,12 @@
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
                             );
-    
+
                             column
                                 .search(val ? '^' + val + '$' : '', true, false)
                                 .draw();
                         });
-    
+
                     column.data().unique().sort().each(function (d, j) {
                         select.append('<option value="' + d + '">' + d + '</option>');
                         $('select').selectpicker('refresh');
@@ -107,7 +112,7 @@
                     orderable: false,
                 }
             ],
-    
+
             "order": [],
             'language': {
                 'lengthMenu': '_MENU_ {{__("records per page")}}',
@@ -129,7 +134,7 @@
                         if (type === 'display') {
                             data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
                         }
-    
+
                         return data;
                     },
                     'checkboxes': {
@@ -190,7 +195,7 @@
         var tagName  = $("#tagName").val();
         var isActive = $("#isActive").val();
 		// console.log(tagName);
-        
+
         $.ajax({
             url: "{{route('admin.tag.store')}}",
             method: "POST",
@@ -251,7 +256,7 @@
     //---------- Update -------------
     $("#updateForm").on("submit",function(e){
         e.preventDefault();
-              
+
         $.ajax({
             url: "{{route('admin.tag.update')}}",
             method: "POST",
@@ -305,7 +310,7 @@
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }              
+                }
 			}
 		});
 	});
@@ -330,10 +335,67 @@
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
-                }              
+                }
 			}
 		});
 	});
+
+    //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#dataTable').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
+
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
+
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.tag.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#dataTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                console.log(idsArray);
+                $.ajax({
+                    url: "{{route('admin.tag.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#dataTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
+    });
 
 </script>
 

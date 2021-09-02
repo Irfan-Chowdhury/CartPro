@@ -6,34 +6,49 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\Slider;
+use App\Models\SliderTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Image;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Str;
+use App\Traits\SlugTrait;
+use App\Traits\imageHandleTrait;
+use Exception;
+use App\Traits\ActiveInactiveTrait;
 
 class SliderController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    use SlugTrait,imageHandleTrait, ActiveInactiveTrait;
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:admin');
+    // }
 
     public function index(Request $request)
     {
-        // $data = DB::table('sliders')
-        //     ->leftJoin('categories','categories.id','sliders.category_id')
-        //     ->leftJoin('pages','pages.id','sliders.page_id')
-        //     // ->select('')
-        //     // ->first();
-        //     ->get();
-        // return $data;
-        
+        $locale = Session::get('currentLocal');
 
-        $categories = Category::where('is_active',1)->select('id','category_name')->get();
-        $sliders    = Slider::all();
+        $sliders = Slider::with(['sliderTranslation'=> function ($query) use ($locale){
+            $query->where('locale',$locale)
+            ->orWhere('locale','en')
+            ->orderBy('id','DESC');
+        }])
+        ->orderBy('is_active','DESC')
+        ->orderBy('id','DESC')
+        ->get();
+
+        $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
+            $query->where('local',$locale)
+            ->orWhere('local','en')
+            ->orderBy('id','DESC');
+        }])
+        ->where('is_active',1)
+        ->get();
 
         if ($request->ajax())
         {
@@ -42,138 +57,214 @@ class SliderController extends Controller
             {
                 return $row->id;
             })
+            ->addColumn('slider_image', function ($row)
+            {
+                if ($row->slider_image==NULL) {
+                    return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
+                }else {
+                    $url = url("public/".$row->slider_image);
+                    return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                }
+            })
+            ->addColumn('slider_title', function ($row) use ($locale)
+            {
+                if ($row->sliderTranslation->isNotEmpty()){
+                    foreach ($row->sliderTranslation as $key => $value){
+                        if ($key<1){
+                            if ($value->locale==$locale){
+                                return $value->slider_title;
+                            }elseif($value->locale=='en'){
+                                return $value->slider_title;
+                            }
+                        }
+                    }
+                }else {
+                    return "NULL";
+                }
+            })
+            ->addColumn('slider_subtitle', function ($row) use ($locale)
+            {
+                if ($row->sliderTranslation->isNotEmpty()){
+                    foreach ($row->sliderTranslation as $key => $value){
+                        if ($key<1){
+                            if ($value->locale==$locale){
+                                return $value->slider_subtitle;
+                            }elseif($value->locale=='en'){
+                                return $value->slider_subtitle;
+                            }
+                        }
+                    }
+                }else {
+                    return "NULL";
+                }
+            })
+            ->addColumn('type', function ($row)
+            {
+                return ucfirst($row->type);
+            })
             ->addColumn('action', function($row){
-                $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-success btn-sm"><i class="dripicons-pencil"></i></a> 
-                            &nbsp;
-                            <a href="javascript:void(0)" name="delete" data-id="'.$row->id.'" class="delete btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>';
+                $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
+                              &nbsp;' ;
+                if ($row->is_active==1) {
+                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+                }else {
+                    $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
+                }
                 return $actionBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['slider_image','action'])
             ->make(true);
         }
 
-        return view('admin.pages.slider.index',compact('categories','sliders'));
+        return view('admin.pages.slider.index',compact('categories','sliders','locale'));
     }
 
-    public function dataFetchByType(Request $request)
-    {
-        if ($request->type=='category') {
-            $categories = Category::where('is_active',1)->select('id','category_name')->get();
-            return view('admin.includes.dependancy.dependancy_category',compact('categories'));
-        }
-        elseif ($request->type=='page') {
-            $pages = Page::where('status',1)->select('id','page_name')->get();
-            return view('admin.includes.dependancy.dependancy_page',compact('pages'));
-        }
-        elseif ($request->type=='url') {
-            return view('admin.includes.dependancy.dependancy_url');
-        }
-    }
+    // public function dataFetchByType(Request $request)
+    // {
+    //     if ($request->type=='category') {
+    //         $categories = Category::where('is_active',1)->select('id','category_name')->get();
+    //         return view('admin.includes.dependancy.dependancy_category',compact('categories'));
+    //     }
+    //     elseif ($request->type=='page') {
+    //         $pages = Page::where('status',1)->select('id','page_name')->get();
+    //         return view('admin.includes.dependancy.dependancy_page',compact('pages'));
+    //     }
+    //     elseif ($request->type=='url') {
+    //         return view('admin.includes.dependancy.dependancy_url');
+    //     }
+    // }
 
-    
+
     public function store(Request $request)
     {
+        $validator = Validator::make($request->only('slider_title','type','slider_image'),[
+            'slider_title'  => 'required|unique:slider_translations,slider_title',
+            'type'          => 'required',
+            'slider_image'  => 'required|image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
 
-        if ($request->ajax()) 
-        {
-            $validator = Validator::make($request->only('slider_title','slider_subtitle','type','image'),[ 
-                'slider_title'    => 'required',
-                'slider_subtitle' => 'required',
-                'type'            => 'required',
-                'image'           => 'required|image|max:10240|mimes:jpeg,png,jpg,gif',
-            ]);
-    
-            if ($validator->fails()){
-                return response()->json(['errors' => "<b>Please fill the required Option</b>"]);
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        if ($request->ajax()) {
+
+            $data = [];
+            $data['slider_slug']    = $this->slug($request->slider_title);
+            $data['type']           = $request->type;
+            $data['category_id']    = $request->category_id;
+            $data['url']            = $request->url;
+            $data['target']         = $request->target;
+            if ($request->slider_image) {
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
             }
-    
-            if ($request->image){
-                $file       = $request->file('image');
-                $directory  ='/images/sliders/';
-                $imageName  = time().'.'.$file->getClientOriginalExtension();
-                $imageUrl   = $directory.$imageName;
-                $upload_path= public_path().$imageUrl;
-                Image::make($file)->resize(1900,633)->save($upload_path);
-                // $image = '/public'.$imageUrl;
+            $data['type']           = $request->type;
+            $data['is_active']      = $request->is_active;
+
+            $sliderTranslation = [];
+            $sliderTranslation['locale']          = Session::get('currentLocal');
+            $sliderTranslation['slider_title']    = htmlspecialchars($request->slider_title);
+            $sliderTranslation['slider_subtitle'] = htmlspecialchars($request->slider_subtitle);
+
+
+            DB::beginTransaction();
+            try {
+                $slider =  Slider::create($data);
+                $sliderTranslation['slider_id']  = $slider->id;
+
+                SliderTranslation::create($sliderTranslation);
+                DB::commit();
             }
-    
-            $slider = new Slider();
-            $slider->slider_title    = htmlspecialchars($request->slider_title);
-            $slider->slider_subtitle = htmlspecialchars($request->slider_subtitle);
-            $slider->slider_slug     = Str::slug($request->slider_title);
-            $slider->type            = $request->type;
-            $slider->category_id     = $request->category_id;
-            $slider->page_id         = $request->page_id;
-            $slider->url             = $request->url;
-            $slider->image           = $imageUrl;
-            $slider->target          = $request->target;
-            $slider->is_active       = $request->is_active;
-            $slider->save();
-    
+            catch (Exception $e)
+            {
+                DB::rollback();
+
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
             return response()->json(['success' => '<p><b>Data Saved Successfully.</b></p>']);
         }
     }
 
     public function edit(Request $request)
     {
+        $locale = Session::get('currentLocal');
         $slider = Slider::find($request->slider_id);
+        $sliderTranslation = SliderTranslation::where('slider_id',$request->slider_id)->where('locale',$locale)->first();
 
-        // $slider = DB::table('sliders')
-        //     ->leftJoin('categories','categories.id','sliders.category_id')
-        //     ->leftJoin('pages','pages.id','sliders.page_id')
-        //     ->select('sliders.slider_title','sliders.slider_subtitle','sliders.type','sliders.category_id')
-        //     ->where('sliders.id','=',$request->slider_id)
-        //     ->first();
-        $page = Page::find($slider->page_id);
-
-        return response()->json(['slider' => $slider, 'page' => $page ]);
+        if (!isset($sliderTranslation)) {
+            $sliderTranslation = SliderTranslation::where('slider_id',$request->slider_id)->where('locale','en')->first();
+        }
+        return response()->json(['slider' => $slider, 'sliderTranslation'=>$sliderTranslation]);
     }
 
-    
+
     public function update(Request $request)
     {
-        if ($request->ajax()) 
-        {
-            $slider = Slider::find($request->slider_id);
+        $validator = Validator::make($request->only('slider_title','type','slider_image'),[
+            'slider_title'  => 'required',
+            'type'          => 'required',
+            'slider_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        ]);
 
-            if ($request->image){
-                if (File::exists(public_path().$slider->image)) {  
-                    File::delete(public_path().$slider->image);
-                }
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
 
-                $file       = $request->file('image');
-                $directory  ='/images/sliders/';
-                $imageName  = time().'.'.$file->getClientOriginalExtension();
-                $imageUrl   = $directory.$imageName;
-                $upload_path= public_path().$imageUrl;
-                Image::make($file)->resize(1900,633)->save($upload_path);
-                
-                $slider->image           = $imageUrl;
+        if ($request->ajax()) {
+
+            $data = [];
+            $data['slider_slug']    = $this->slug($request->slider_title);
+            $data['type']           = $request->type;
+            $data['category_id']    = $request->category_id;
+            $data['url']            = $request->url;
+            $data['target']         = $request->target;
+            if ($request->slider_image) {
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
             }
-            
-            $slider->slider_title    = $request->slider_title;
-            $slider->slider_subtitle = $request->slider_subtitle;
-            $slider->slider_slug     = Str::slug($request->slider_title);
-            $slider->type            = $request->type;
-            $slider->category_id     = $request->category_id;
-            $slider->page_id         = $request->page_id;
-            $slider->url             = $request->url;
-            $slider->target          = $request->target;
-            $slider->is_active       = $request->is_active;
-            $slider->update();
-        
+            $data['type']           = $request->type;
+            $data['is_active']      = $request->is_active;
+
+            $sliderTranslation = [];
+            $sliderTranslation['locale']          = Session::get('currentLocal');
+            $sliderTranslation['slider_title']    = htmlspecialchars($request->slider_title);
+            $sliderTranslation['slider_subtitle'] = htmlspecialchars($request->slider_subtitle);
+
+            DB::beginTransaction();
+            try {
+                $slider =  Slider::find($request->slider_id)->update($data);
+
+                SliderTranslation::UpdateOrCreate(
+                    [
+                        'slider_id'=>$request->slider_id,
+                        'locale' => Session::get('currentLocal')
+                    ],
+                    [
+                        'slider_title'   => $request->slider_title,
+                        'slider_subtitle'=> $request->slider_subtitle
+                    ],
+                );
+
+                DB::commit();
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
             return response()->json(['success' => '<p><b>Data Updated Successfully.</b></p>']);
         }
-        
     }
 
-    
+
     // public function delete($id)
     // {
     //     $slider = Slider::find($id);
 
     //     if (File::exists(public_path().$slider->image)) //delete previous image from storage
-    //     {  
+    //     {
     //         File::delete(public_path().$slider->image);
     //         $slider->delete();
 
@@ -184,12 +275,31 @@ class SliderController extends Controller
     //     }
     // }
 
+    public function active(Request $request){
+        if ($request->ajax()){
+            return $this->activeData(Slider::find($request->id));
+        }
+    }
+
+    public function inactive(Request $request){
+        if ($request->ajax()){
+            return $this->inactiveData(Slider::find($request->id));
+        }
+    }
+
+    public function bulkAction(Request $request)
+    {
+        if ($request->ajax()) {
+            return $this->bulkActionData($request->action_type, Slider::whereIn('id',$request->idsArray));
+        }
+    }
+
     public function delete(Request $request)
     {
         $slider = Slider::find($request->slider_id);
 
         if (File::exists(public_path().$slider->image)) //delete previous image from storage
-        {  
+        {
             File::delete(public_path().$slider->image);
             $slider->delete();
 

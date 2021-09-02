@@ -13,97 +13,118 @@ use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
+use Harimayco\Menu\Facades\Menu;
 
 class MenuItemController extends Controller
 {
     use ActiveInactiveTrait;
 
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:admin');
 
-        $this->locale = Session::get('currentLocal');
-    }
+    //     $this->locale = Session::get('currentLocal');
+    // }
+
+    // public function index($menuId)
+    // {
+    //     if (auth()->user()->can('menu_item-view'))
+    //     {
+    //         $locale = Session::get('currentLocal');
+
+    //         $menuTranslation = MenuTranslation::where('menu_id',$menuId);
+    //         if ($menuTranslation->where('locale',$locale)->exists()) {
+    //             $menu_name = $menuTranslation->where('locale',$locale)->first()->menu_name;
+    //         }else{
+    //             $menu_name = MenuTranslation::where('menu_id',$menuId)->where('locale','en')->first()->menu_name ?? '';
+    //         }
+
+    //         $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
+    //             $query->where('local',$locale)
+    //             ->orWhere('local','en')
+    //             ->orderBy('id','DESC');
+    //         }])
+    //         ->where('is_active',1)
+    //         ->get();
+
+    //         $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
+    //             $query->where('locale',$locale) //locale name correction
+    //             ->orWhere('locale','en')
+    //             ->orderBy('id','DESC');
+    //         }])
+    //         ->where('is_active',1)
+    //         ->get();
+
+    //         $menu_items = MenuItem::with(['menuItemTranslations'=> function ($query) use ($locale){
+    //                 $query->where('locale',$locale)
+    //                 ->orWhere('locale','en')
+    //                 ->orderBy('id','DESC');
+    //             }])
+    //             ->where('menu_id',$menuId)
+    //             ->orderBy('is_active','DESC')
+    //             ->orderBy('id','DESC')
+    //             ->get();
+
+    //         if (request()->ajax())
+    //         {
+    //             return DataTables::of($menu_items)
+    //             ->setRowId(function ($row)
+    //             {
+    //                 return $row->id;
+    //             })
+    //             // ->addColumn('parent', function ($row)
+    //             // {
+    //             //     return $row->parentMenu->navigation_name ?? 'NONE';
+    //             // })
+    //             ->addColumn('menu_item_name', function ($row) use($locale)
+    //             {
+    //                 if ($row->menuItemTranslations->isNotEmpty()){
+    //                     foreach ($row->menuItemTranslations as $key => $value){
+    //                         if ($key<1){
+    //                             if ($value->locale==$locale){
+    //                                 return $value->menu_item_name;
+    //                             }elseif($value->locale=='en'){
+    //                                 return $value->menu_item_name;
+    //                             }
+    //                         }
+    //                     }
+    //                 }else {
+    //                     return "NULL";
+    //                 }
+    //             })
+    //             ->addColumn('action', function($row){
+    //                 $actionBtn =  '';
+    //                 if (auth()->user()->can('menu_item-edit'))
+    //                 {
+    //                     $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
+    //                     &nbsp;' ;
+    //                 }
+    //                 if (auth()->user()->can('menu_item-action'))
+    //                 {
+    //                     if ($row->is_active==1) {
+    //                         $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+    //                     }else {
+    //                         $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
+    //                     }
+    //                 }
+    //                 return $actionBtn;
+    //             })
+    //             ->rawColumns(['action'])
+    //             ->make(true);
+    //         }
+
+    //         return view('admin.pages.menu.menu_item.index',compact('menuId','menu_name','categories','pages','locale','menu_items'));
+    //     }
+    //     return abort('403', __('You are not authorized'));
+    // }
 
     public function index($menuId)
     {
-        $locale = Session::get('currentLocal');
+        // $data = Menu::render($menuId);
+        // return $data;
 
-        $menuTranslation = MenuTranslation::where('menu_id',$menuId);
-        if ($menuTranslation->where('locale',$locale)->exists()) {
-            $menu_name = $menuTranslation->where('locale',$locale)->first()->menu_name;
-        }else{
-            $menu_name = MenuTranslation::where('menu_id',$menuId)->where('locale','en')->first()->menu_name ?? '';
-        }
+        return view('admin.pages.menu.menu_item.index',compact('menuId'));
 
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
-
-        $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
-            $query->where('locale',$locale) //locale name correction
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
-
-        $menu_items = MenuItem::with(['menuItemTranslations'=> function ($query) use ($locale){
-                $query->where('locale',$locale)
-                ->orWhere('locale','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('menu_id',$menuId)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
-
-        if (request()->ajax())
-        {
-            return DataTables::of($menu_items)
-            ->setRowId(function ($row)
-            {
-                return $row->id;
-            })
-            // ->addColumn('parent', function ($row)
-            // {
-            //     return $row->parentMenu->navigation_name ?? 'NONE';
-            // })
-            ->addColumn('menu_item_name', function ($row) use($locale)
-            {
-                if ($row->menuItemTranslations->isNotEmpty()){
-                    foreach ($row->menuItemTranslations as $key => $value){
-                        if ($key<1){
-                            if ($value->locale==$locale){
-                                return $value->menu_item_name;
-                            }elseif($value->locale=='en'){
-                                return $value->menu_item_name;
-                            }
-                        }
-                    }
-                }else {
-                    return "NULL";
-                }
-            })
-            ->addColumn('action', function($row){
-                $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
-                            &nbsp;' ;
-                if ($row->is_active==1) {
-                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
-                }else {
-                    $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
-                }
-                return $actionBtn;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-        }
-
-        return view('admin.pages.menu.menu_item.index',compact('menuId','menu_name','categories','pages','locale','menu_items'));
     }
 
     public function dataFetchByType(Request $request)
@@ -154,26 +175,29 @@ class MenuItemController extends Controller
 
             $locale = Session::get('currentLocal');
 
-            $menu_item = new MenuItem();
-            $menu_item->menu_id     = $request->menu_id;
-            $menu_item->type        = $request->type; //htmlsplashcaracter
-            $menu_item->category_id = $request->category_id;
-            $menu_item->page_id     = $request->page_id;
-            $menu_item->url         = $request->url;
-            $menu_item->icon        = $request->icon;
-            $menu_item->target      = $request->target;
-            $menu_item->parent_id   = $request->parent_id;
-            $menu_item->is_fluid    = $request->is_fluid ?? 0;
-            $menu_item->is_active   = $request->is_active ?? 0;
-            $menu_item->save();
+            if (auth()->user()->can('menu_item-store'))
+            {
+                $menu_item = new MenuItem();
+                $menu_item->menu_id     = $request->menu_id;
+                $menu_item->type        = $request->type; //htmlsplashcaracter
+                $menu_item->category_id = $request->category_id;
+                $menu_item->page_id     = $request->page_id;
+                $menu_item->url         = $request->url;
+                $menu_item->icon        = $request->icon;
+                $menu_item->target      = $request->target;
+                $menu_item->parent_id   = $request->parent_id;
+                $menu_item->is_fluid    = $request->is_fluid ?? 0;
+                $menu_item->is_active   = $request->is_active ?? 0;
+                $menu_item->save();
 
-            $menuItemTranslation  = new MenuItemTranslation();
-            $menuItemTranslation->menu_item_id = $menu_item->id;
-            $menuItemTranslation->locale  = $locale;
-            $menuItemTranslation->menu_item_name = $request->menu_item_name;
-            $menuItemTranslation->save();
+                $menuItemTranslation  = new MenuItemTranslation();
+                $menuItemTranslation->menu_item_id = $menu_item->id;
+                $menuItemTranslation->locale  = $locale;
+                $menuItemTranslation->menu_item_name = $request->menu_item_name;
+                $menuItemTranslation->save();
 
-            return response()->json(['success' => '<p><b>Data Saved Successfully.</b></p>']);
+                return response()->json(['success' => '<p><b>Data Saved Successfully.</b></p>']);
+            }
         }
     }
 
@@ -196,49 +220,51 @@ class MenuItemController extends Controller
 
     public function update(Request $request)
     {
-        // return response()->json($request->all());
-        if ($request->ajax()) {
+        if (auth()->user()->can('menu_item-edit'))
+        {
+            if ($request->ajax()) {
 
-            $validator = Validator::make($request->all(),[
-                'menu_item_name' => 'required|unique:menu_item_translations,menu_item_name,'.$request->menu_item_translation_id,
-            ]);
+                $validator = Validator::make($request->all(),[
+                    'menu_item_name' => 'required|unique:menu_item_translations,menu_item_name,'.$request->menu_item_translation_id,
+                ]);
 
-            if ($validator->fails()){
-                return response()->json(['errors' => $validator->errors()->all()]);
+                if ($validator->fails()){
+                    return response()->json(['errors' => $validator->errors()->all()]);
+                }
+
+                $locale = Session::get('currentLocal');
+
+                $menu_item = MenuItem::find($request->menu_item_id);
+                $menu_item->type        = $request->type;
+                $menu_item->icon        = $request->icon;
+                $menu_item->target      = $request->target;
+                $menu_item->parent_id   = $request->parent_id;
+                $menu_item->is_fluid    = $request->is_fluid ?? 0;
+                $menu_item->is_active   = $request->is_active ?? 0;
+
+                if ($request->type=='category') {
+                    $menu_item->category_id = $request->category_id;
+                    $menu_item->page_id = NULL;
+                    $menu_item->url = NULL;
+                }
+                else if ($request->type=='page') {
+                    $menu_item->page_id = $request->page_id;
+                    $menu_item->category_id = NULL;
+                    $menu_item->url = NULL;
+                }else{
+                    $menu_item->url         = $request->url;
+                    $menu_item->category_id = NULL;
+                    $menu_item->page_id = NULL;
+                }
+                $menu_item->save();
+
+                MenuItemTranslation::UpdateOrCreate(
+                    ['menu_item_id'=>$menu_item->id, 'locale' => $locale],
+                    ['menu_item_name'=>$request->menu_item_name],
+                );
+
+                return response()->json(['success' => '<p><b>Data Updated Successfully.</b></p>']);
             }
-
-            $locale = Session::get('currentLocal');
-
-            $menu_item = MenuItem::find($request->menu_item_id);
-            $menu_item->type        = $request->type;
-            $menu_item->icon        = $request->icon;
-            $menu_item->target      = $request->target;
-            $menu_item->parent_id   = $request->parent_id;
-            $menu_item->is_fluid    = $request->is_fluid ?? 0;
-            $menu_item->is_active   = $request->is_active ?? 0;
-
-            if ($request->type=='category') {
-                $menu_item->category_id = $request->category_id;
-                $menu_item->page_id = NULL;
-                $menu_item->url = NULL;
-            }
-            else if ($request->type=='page') {
-                $menu_item->page_id = $request->page_id;
-                $menu_item->category_id = NULL;
-                $menu_item->url = NULL;
-            }else{
-                $menu_item->url         = $request->url;
-                $menu_item->category_id = NULL;
-                $menu_item->page_id = NULL;
-            }
-            $menu_item->save();
-
-            MenuItemTranslation::UpdateOrCreate(
-                ['menu_item_id'=>$menu_item->id, 'locale' => $locale],
-                ['menu_item_name'=>$request->menu_item_name],
-            );
-
-            return response()->json(['success' => '<p><b>Data Updated Successfully.</b></p>']);
         }
     }
 
@@ -251,6 +277,13 @@ class MenuItemController extends Controller
     public function inactive(Request $request){
         if ($request->ajax()){
             return $this->inactiveData(MenuItem::find($request->id));
+        }
+    }
+
+    public function bulkAction(Request $request)
+    {
+        if ($request->ajax()) {
+            return $this->bulkActionData($request->action_type, MenuItem::whereIn('id',$request->idsArray));
         }
     }
 }

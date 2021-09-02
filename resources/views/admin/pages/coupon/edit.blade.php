@@ -64,7 +64,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('Value') }} <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-9">
-                                                            <input type="number" min="0" name="value" class="form-control" value="{{$coupon->value}}">
+                                                            <input type="number" min="0" name="value" class="form-control" @if(env('FORMAT_NUMBER')) value="{{number_format((float)$coupon->value, env('FORMAT_NUMBER'), '.', '')}}" @endif >
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -118,13 +118,13 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Minimum Spend') }}</b></label>
                                                         <div class="col-sm-9">
-                                                            <input type="number" min="0" name="minimum_spend" class="form-control" @if($coupon->minimum_spend) value="{{$coupon->minimum_spend}}" @endif placeholder="Type Minimum Spend" >
+                                                            <input type="number" min="0" name="minimum_spend" class="form-control" @if(env('FORMAT_NUMBER') && ($coupon->minimum_spend!=NULL)) value="{{number_format((float)$coupon->minimum_spend, env('FORMAT_NUMBER'), '.', '')}}" @endif placeholder="Type Minimum Spend" >
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Maximum Spend') }}</b></label>
                                                         <div class="col-sm-9">
-                                                            <input type="number" min="0" name="maximum_spend" class="form-control" @if($coupon->maximum_spend) value="{{$coupon->maximum_spend}}" @endif placeholder="Type Maximum Spend" >
+                                                            <input type="number" min="0" name="maximum_spend" class="form-control" @if(env('FORMAT_NUMBER') && ($coupon->maximum_spend!=NULL)) value="{{number_format((float)$coupon->maximum_spend, env('FORMAT_NUMBER'), '.', '')}}" @endif placeholder="Type Maximum Spend" >
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">

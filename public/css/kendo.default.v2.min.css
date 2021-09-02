@@ -11768,6 +11768,7 @@ fieldset legend {
 
 .k-treeview .k-in {
     border-radius: 0;
+    font-family: Roboto !important;
     margin: 0;
     padding: 4px 8px;
     border: 0 solid transparent;

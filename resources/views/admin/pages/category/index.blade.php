@@ -10,12 +10,17 @@
         <div class="container-fluid"><span id="alert_message"></span></div>
 
         <div class="container-fluid mb-3">
+            @if (auth()->user()->can('category-store'))
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record">
-                    <i class="fa fa-plus"></i> {{$tr->translate('Add Category')}}
+                    {{-- <i class="fa fa-plus"></i> {{trans('file.Add_Category')}} --}}
+                    <i class="fa fa-plus"></i> @lang('file.Add_Category')
                 </button>
-                <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete">
-                    <i class="fa fa-minus-circle"></i> {{$tr->translate('Bulk delete')}}
+            @endif
+            @if (auth()->user()->can('category-action'))
+                <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+                    <i class="fa fa-minus-circle"></i> @lang('file.Bulk_Action')
                 </button>
+            @endif
         </div>
 
         <div class="table-responsive">
@@ -23,40 +28,20 @@
                 <thead>
                     <tr>
                         <th class="not-exported"></th>
-                        <th scope="col">{{$tr->translate('Category Name')}}</th>
-                        <th scope="col">{{$tr->translate('Parent')}}</th>
-                        <th scope="col">{{$tr->translate('Status')}}</th>
-                        <th scope="col">{{$tr->translate('Action')}}</th>
+                        <th scope="col">{{__('Category Name')}}</th>
+                        <th scope="col">@lang('Parent')</th>
+                        <th scope="col">@lang('Status')</th>
+                        <th scope="col">@lang('Action')</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </section>
 
-
-
-    {{-- <div id="confirmModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">{{trans('file.Confirmation')}}</h2>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <h4 align="center" style="margin:0;">{{__('want to remove?')}}</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">{{trans('file.OK')}}'
-                    </button>
-                    <button type="button" class="close btn-default"
-                            data-dismiss="modal">{{trans('file.Cancel')}}</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     @include('admin.pages.category.create')
     @include('admin.pages.category.edit_modal')
+    @include('admin.includes.confirm_modal')
+
 
     <script type="text/javascript">
 
@@ -330,75 +315,7 @@
         });
 
 
-
-        $(document).on('click', '#bulk_delete', function () {
-
-            let id = [];
-            let table = $('#category_list-table').DataTable();
-            id = table.rows({selected: true}).ids().toArray();
-
-            if (id.length > 0) {
-                if (confirm('{{__('Delete Selection',['key'=>__('Category Info')])}}')) {
-                    $.ajax({
-                        url: '{{url('/admin/category/massdelete')}}',
-                        method: 'POST',
-                        data: {
-                            CategoryListIdArray: id
-                        },
-                        success: function (data) {
-                            if (data.success) {
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
-                            }
-                            if (data.error) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
-                            }
-                            table.ajax.reload();
-                            table.rows('.selected').deselect();
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
-                            }
-                            $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
-
-                        }
-
-                    });
-                }
-            } else {
-
-            }
-        });
-
-
-        $('.close').click(function () {
-            $('#sample_form')[0].reset();
-            $('#category_list-table').DataTable().ajax.reload();
-        });
-
-        $('#ok_button').click(function () {
-            let target = "{{route('admin.category')}}/" + delete_id + '/delete';
-            $.ajax({
-                url: target,
-                beforeSend: function () {
-                    $('#ok_button').text('{{trans('file.Deleting...')}}');
-                },
-                success: function (data) {
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                    }
-                    if (data.error) {
-                        html = '<div class="alert alert-danger">' + data.error + '</div>';
-                    }
-                    setTimeout(function () {
-                        $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                        $('#confirmModal').modal('hide');
-                        $('#category_list-table').DataTable().ajax.reload();
-                    }, 2000);
-                }
-            })
-        });
-
-
-        //---------- Active -------------
+    //---------- Active -------------
 	$(document).on("click",".active",function(e){
 		e.preventDefault();
 		var categoryId = $(this).data("id");
@@ -447,84 +364,63 @@
 	});
 
 
+        //Bulk Action
+    $("#bulk_action").on("click",function(){
+        var idsArray = [];
+        let table = $('#category_list-table').DataTable();
+        idsArray = table.rows({selected: true}).ids().toArray();
+
+        if(idsArray.length === 0){
+            alert("Please Select at least one checkbox.");
+        }else{
+            $('#bulkConfirmModal').modal('show');
+            let action_type;
+
+            $("#active").on("click",function(){
+                console.log(idsArray);
+                action_type = "active";
+                $.ajax({
+                    url: "{{route('admin.category.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#category_list-table').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+            $("#inactive").on("click",function(){
+                action_type = "inactive";
+                console.log(idsArray);
+                $.ajax({
+                    url: "{{route('admin.category.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#category_list-table').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        }
+    });
+
+
     </script>
 @endsection
-
-
-
-<tbody>
-    {{-- @foreach ($categories as $item)
-        <tr>
-            @if ($item->categoryTranslation->count()>0)
-                @foreach ($item->categoryTranslation as $key => $value)
-                    @if ($key<1)
-                        @if ($value->local==$local)
-                            <td>{{$value->category_name}}</td>
-                        @elseif($value->local=='en')
-                            <td>{{$value->category_name}}</td>
-                        @endif
-                    @endif
-                @endforeach
-                <td>
-                    @if($item->parentCategory==NULL)
-                        NULL
-                    @else
-                        @php
-                            $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local',$local)->first();
-                            if (empty($data)) {
-                                $data = \App\CategoryTranslation::where('category_id',$item->parentCategory->id)->where('local','en')->first();
-                            }
-                        @endphp
-                        {{$data->category_name}}
-                    @endif
-                </td>
-                <td>@if($item->description_position==0) TOP @else BOTTOM @endif</td>
-                <td><img class='profile-photo md' src="{{$item->image}}"/> </td>
-                <td>{{$item->featured}}</td>
-                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                <td>
-                    <a href="{{route('admin.category.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                    <a href="{{route('admin.category.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                </td>
-            @else
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-            <td>NULL</td>
-        @endif
-        </tr> --}}
-
-
-    {{-- <td>@if($item->parentCategory==NULL) NULL @else {{$item->parentCategory->slug}} @endif</td> --}}
-
-
-        {{-- <tr>
-            @if ($item->brandTranslation->count()>0)
-                @foreach ($item->brandTranslation as $key => $value)
-                    @if ($key<1)
-                        @if ($value->local==$local)
-                            <td>{{$value->brand_name}}</td>
-                        @elseif($value->local=='en')
-                            <td>{{$value->brand_name}}</td>
-                        @endif
-                    @endif
-                @endforeach
-                <td>Logo</td>
-                <td>@if($item->is_active==1) <span class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-dark'>Inactive</span> @endif</td>
-                <td>
-                    <a href="{{route('brand.edit',$item->id)}}" class="btn btn-info"><i class="dripicons-pencil"></i></a>
-                    <a href="{{route('admin.brand.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="dripicons-trash"></i></a>
-                </td>
-            @else
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-            @endif
-        </tr> --}}
-
-
-    {{-- @endforeach
-</tbody> --}}
