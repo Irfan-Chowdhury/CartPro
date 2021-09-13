@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\App;
+use App\Traits\imageHandleTrait;
 
 class CategoryController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait;
+    use ActiveInactiveTrait, SlugTrait, imageHandleTrait;
 
     public function index()
     {
@@ -48,6 +49,16 @@ class CategoryController extends Controller
                     ->setRowId(function ($category)
                     {
                         return $category->id;
+                    })
+                    ->addColumn('category_image', function ($row)
+                    {
+                        if ($row->image==null) {
+                            return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
+                        }
+                        else {
+                            $url = url("public/".$row->image);
+                            return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                        }
                     })
                     ->addColumn('category_name', function ($row) use ($local)
                     {
@@ -83,14 +94,10 @@ class CategoryController extends Controller
                     })
                     ->addColumn('is_active', function ($row)
                     {
-                        if ($row->categoryTranslation->count()>0){
-                            if($row->is_active==1){
-                                return '<span class="p-2 badge badge-success"></span>';
-                            }else{
-                                return '<span class="p-2 badge badge-danger">Inactive</span>';
-                            }
-                        }else {
-                            return "NULL";
+                        if($row->is_active==1){
+                            return '<span class="p-2 badge badge-success">Active</span>';
+                        }else{
+                            return '<span class="p-2 badge badge-danger">Inactive</span>';
                         }
                     })
                     ->addColumn('action', function ($row)
@@ -114,7 +121,7 @@ class CategoryController extends Controller
                         return $actionBtn;
 
                     })
-                    ->rawColumns(['is_active','action'])
+                    ->rawColumns(['is_active','action','category_image'])
                     ->make(true);
             }
             return view('admin.pages.category.index',compact('categories','currentActiveLocal'));
@@ -144,13 +151,7 @@ class CategoryController extends Controller
             $category->description_position = $request->description_position;
             $image = $request->file('image');
             if ($image) {
-                $image_name = Str::random(8);
-                $ext = strtolower($image->getClientOriginalExtension());
-                $image_full_name = $image_name.'.'.$ext;
-                $upload_path = 'public/images/';
-                $image_url = $upload_path.$image_full_name;
-                $success = $image->move($upload_path,$image_full_name);
-                $category->image = $image_url;
+                $category->image = $this->imageStore($image, $directory='images/categories/');
             }
             if ($request->featured == null) {
                 $category->featured = 0;
@@ -211,6 +212,11 @@ class CategoryController extends Controller
             $category->description_position = $request->description_position;
             $category->featured    = $request->featured;
             $category->is_active   = $request->is_active;
+
+            if ($request->image) {
+                $category->image = $this->imageStore($request->image, $directory='images/categories/');
+            }
+
             $category->update();
 
             DB::table('category_translations')

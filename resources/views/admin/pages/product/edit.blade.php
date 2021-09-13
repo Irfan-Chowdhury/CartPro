@@ -806,11 +806,11 @@
 
         $(document).on('click', '#addMore', function(){
 
-            html = ' <div class="row">'+
+            html = '<div class="row">'+
                         '<div class="col-5 form-group">'+
                             '<label>{{__("Atrribute")}}</label>'+
                             // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>'+
-                            '<select name="attribute_id[]" id="attributeId" class="form-control">'+
+                            '<select name="attribute_id[]" id="attributeId2" class="form-control">'+
                                 '<option value="">Please Select Attribute</option>'+
                                 '@foreach ($attributes as $item)'+
                                     '@if ($item->attributeTranslation->count()>0)'+
@@ -833,7 +833,7 @@
                         '<div class="col-6 form-group">'+
                             '<label>{{__("Values")}}</label>'+
                             // '<select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">'+
-                            '<select name="attribute_value_id[]" id="attributeValueId" class="form-control">'+
+                            '<select name="attribute_value_id[]" id="attributeValueId2" class="form-control">'+
                             '</select>'+
                         '</div>'+
 
@@ -863,12 +863,15 @@
                     console.log(data);
                     $('select').selectpicker("destroy");
                     $('#attributeValueId').html(data);
+                    // $('#attributeValueId2').html(data);
                     $('select').selectpicker();
                 }
             });
         });
 
         $('#attributeId2').change(function () {
+            console.log('ok');
+
             var attributeId = $('#attributeId2').val();
             // console.log(attributeId);
             $.ajax({

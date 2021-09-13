@@ -5,66 +5,44 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-//frontend routes
-// Route::get('/', 'frontend\FrontController@index');
 
-Route::get('/', function () {
-    return view('general.layouts.master');
+// Route::get('/', function () {
+//     return view('frontend.layouts.master');
+// });
+
+
+Route::get('clear_cache', function () {
+    \Artisan::call('optimize:clear');
+    dd("Caches cleared successfully!");
 });
 
-Route::get('/test', function () {
-    return view('test');
-});
 
+// Route::get('make_view', function () {
+// //     \Artisan::call('make:controller TestController',);
+//     \Artisan::call('make:view test',);
+//     dd("Created successfully!");
+// });
 
-Route::get('collections/{slug}','frontend\ProductCategoryController@SubcategoryView');
-Route::get('products/{slug}/{sku}','frontend\ProductCategoryController@productdetailsview');
-
-Route::get('/about', 'frontend\FrontController@about');
-Route::get('/contact', 'frontend\FrontController@contact');
-Route::post('/send-email', 'frontend\FrontController@contactMail');
-Route::get('/faq', 'frontend\FrontController@faq');
-Route::get('/terms-and-conditions', 'frontend\FrontController@tnc');
-Route::get('/page/{slug}', 'frontend\FrontController@pageShowBySlug')->name('page.slug');
-
-
-//search
-Route::get('search/{product}', 'frontend\FrontController@search')->name('live.search');
-Route::post('search-product/', 'frontend\FrontController@searchProduct')->name('products.search');
-
-//wishlists
-Route::get('addwishlist/{id}','frontend\wishlistController@AddWishlist');
-Route::get('wishlist','frontend\wishlistController@index')->name('wishlist');
-Route::get('delete/wishlist/{id}','frontend\wishlistController@delete');
-
-//cart
-Route::get('cart', 'frontend\CartController@index')->name('cart');
-Route::post('add-to-cart', 'frontend\CartController@addToCart')->name('addToCart');
-Route::post('update-cart', 'frontend\CartController@updateCart')->name('updateCart');
-Route::post('remove-from-cart', 'frontend\CartController@removeFromCart')->name('removeFromCart');
-
-//checkout route
-Route::get('checkout', 'frontend\CheckoutController@index')->name('checkout');
-Route::post('/place-order', 'frontend\OrderController@create')->name('order.create');
-// apply coupon
-Route::post('/apply-coupon', 'frontend\CheckoutController@applyCoupon')->name('applyCoupon');
-
-//payment
-// Route::get('payment/page/','frontend\CartController@PymentPage')->name('payment.step');
-// Route::post('user/payment/process/','frontend\PaymentController@payment')->name('payment.process');
-// Route::post('user/stripe/charge/','frontend\PaymentController@STripeCharge')->name('stripe.charge');
-
-Route::get('paypal/success/','frontend\PaymentController@paypalSuccess')->name('paypal.success');
 
 
 Auth::routes();
 
-Route::get('/home', 'frontend\CustomerController@index')->name('home');
-Route::get('/orders', 'frontend\CustomerController@orders');
-Route::get('/wishlist', 'frontend\CustomerController@wishlist');
-Route::get('/address', 'frontend\CustomerController@address');
-Route::post('/address/create', 'frontend\CustomerController@addressUpdate');
-Route::get('/account-details', 'frontend\CustomerController@accountDetails');
+/*
+|--------------------------------------------------------------------------
+| User Section
+|--------------------------------------------------------------------------
+*/
+
+// $locale = Session::get('currentLocal');
+// Route::group(['prefix' => '{locale}','namespace'=>'Frontend'], function () {
+//         Route::get('/','HomeController@index');
+// });
+
+Route::get('/','Frontend\HomeController@index');
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------

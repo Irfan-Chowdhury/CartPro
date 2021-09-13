@@ -27,10 +27,10 @@
 
                     <thead>
                     <tr>
-                        <th class="w-1/5 uppercase font-thin">{{ __('translation::translation.key') }}</th>
+                        <th class="w-1/5 uppercase">{{ __('translation::translation.key') }}</th>
 
-                        <th class="uppercase font-thin">{{ config('app.locale') }}</th>
-                        <th class="uppercase font-thin">{{ $language }}</th>
+                        <th class="w-2/5 uppercase">{{ config('app.locale') }}</th>
+                        <th class="w-2/5 uppercase">{{ $language }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,8 +46,7 @@
                                         <td>{{ $key }}</td>
                                         <td>{{ $value[config('app.locale')] }}</td>
                                         <td>
-                                            <span class="edit_pencil"><i class="fa fa-pencil" aria-hidden="true"></i> </span><br>
-                                            <textarea class="edit_textarea" cols="5" rows="5">{{ $value[$language] }}</textarea>
+                                            <textarea class="edit_textarea form-control">{{ $value[$language] }}</textarea>
                                             <button class="test_2 hidden" type="button" data-key="{{ $key }}" data-language="{{ $language }}" data-group="{{ $group }}" title="Update"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                             <span class="edit_ok hidden"><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>
                                         </td>
@@ -74,10 +73,6 @@
             "use strict";
 
             $(document).ready(function () {
-
-                // $(".edit_ok").hide();
-
-                console.log("ok-2");
 
                 var dataSrc = [];
 

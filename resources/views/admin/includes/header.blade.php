@@ -3,11 +3,11 @@
       <div class="container-fluid">
         <div class="navbar-holder d-flex align-items-center justify-content-between">
           <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars"> </i></a>
-          
-          
+
+
           <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-               
-            <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>             
+
+            <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>
             <li class="nav-item">
                   <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-bell"></i><span class="badge badge-danger"></span>
                   </a>
@@ -38,11 +38,11 @@
 
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                  {{-- {{ __(strtoupper($defaultLanguage->local)) }} --}}
-                  @if (Session::has('currentLocal'))
-                  {{ __(strtoupper(Session::get('currentLocal'))) }}
-                      {{-- {{Session::get('currentLocal')}} --}}
-                  @endif
+                    <i class="dripicons-web">
+                        @if (Session::has('currentLocal'))
+                            {{ __(strtoupper(Session::get('currentLocal'))) }}
+                        @endif
+                    </i>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -53,26 +53,26 @@
                     @endforeach
                 </div>
             </li>
-    
+
             <li class="nav-item">
               <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{Auth::user()->username}}</span> <i class="fa fa-angle-down"></i>
               </a>
               <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                  <li> 
+                  <li>
                     <a href=""><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
                   </li>
-                  
-                  <li> 
+
+                  <li>
                     <a href=""><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
                   </li>
-                  
+
                   <li>
                     <a href="{{ route('admin.logout') }}"><i class="dripicons-power"></i>
                         {{trans('file.logout')}}
                     </a>
                   </li>
               </ul>
-            </li> 
+            </li>
           </ul>
         </div>
       </div>

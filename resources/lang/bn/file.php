@@ -3,7 +3,7 @@
 return array (
   'Account' => 'একাউন্ট',
   'Account List' => 'Account List',
-  'Account No' => 'Account No',
+  'Account No' => 'Account No.',
   'Account Statement' => 'Account Statement',
   'Accounting' => 'Accounting',
   'Action' => 'একশন',
@@ -67,7 +67,7 @@ return array (
   'Attribute Set' => 'Attribute Set',
   'Attribute_Set' => 'এট্রিবিউট সেট',
   'Attributes' => 'এট্রিবিউটস',
-  'Attributes Edit' => 'Attributes Edit',
+  'Attributes Edit' => 'Attributes Editing',
   'Available' => 'Available',
   'Back' => 'Back',
   'Balance' => 'Balance',

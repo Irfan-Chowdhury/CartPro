@@ -22,12 +22,11 @@
       <tr>
       <th class="not-exported"></th>
       <th scope="col">{{__('Image')}}</th>
-      <th scope="col">{{__('First Name')}}</th>
-      <th scope="col">{{__('Last Name')}}</th>
+      <th scope="col">{{__('Full Name')}}</th>
       <th scope="col">{{__('Username')}}</th>
-      {{-- <th scope="col">{{__('Role')}}</th> --}}
+      <th scope="col">{{__('Role')}}</th>
       <th scope="col">{{__('Email')}}</th>
-      <th scope="col">{{__('Created')}}</th>
+      <th scope="col">{{__('Status')}}</th>
       <th scope="col">{{trans('file.action')}}</th>
     </tr>
   </thead>
@@ -86,37 +85,36 @@
                         name: 'image',
                     },
                     {
-                        data: 'first_name',
-                        name: 'first_name',
-                    },
-                    {
-                        data: 'last_name',
-                        name: 'last_name',
+                        data: 'full_name',
+                        name: 'full_name',
                     },
                     {
                         data: 'username',
                         name: 'username',
                     },
-                    // {
-                    //     data: 'roleName',
-                    //     name: 'roleName',
-                    // },
+                    {
+                        data: 'roleName',
+                        name: 'roleName',
+                    },
                     {
                         data: 'email',
                         name: 'email',
                     },
-                    // {
-                    //     data: 'last_login_at',
-                    //     name: 'last_login_at',
-                    // },
-                    // {
-                    //     data: 'last_login_ip',
-                    //     name: 'last_login_ip',
-                    // },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
+                        data: 'is_active',
+                        name: 'is_active',
+                        render:function (data) {
+                            if (data == 1) {
+                                return "<span class='p-2 badge badge-success'>Active</span>";
+                            }else{
+                                return "<span class='p-2 badge badge-danger'>Inactive</span>";
+                            }
+                        }
                     },
+                    // {
+                    //     data: 'created_at',
+                    //     name: 'created_at',
+                    // },
                     {
                         data: 'action',
                         name: 'action',
@@ -138,7 +136,7 @@
                 'columnDefs': [
                     {
                         "orderable": false,
-                        'targets': [0, 6],
+                        'targets': [0],
                     },
                     {
                         'render': function (data, type, row, meta) {

@@ -667,6 +667,44 @@ class SettingSeeder extends Seeder
                 'key' => 'storefront_product_tabs_2_section_tab_4_products_limit',
                 'is_translatable' => 0,
             ),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Added Later
+        |--------------------------------------------------------------------------
+        */
+
+            //-----Slider Banners
+            array(
+                'id' => 125,
+                'key' => 'storefront_slider_banner_1_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 126,
+                'key' => 'storefront_slider_banner_2_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 127,
+                'key' => 'storefront_slider_banner_3_image',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 128,
+                'key' => 'storefront_slider_banner_3_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 129,
+                'key' => 'storefront_slider_banner_3_call_to_action_url',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 130,
+                'key' => 'storefront_slider_banner_3_open_in_new_window',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

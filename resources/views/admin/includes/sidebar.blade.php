@@ -31,44 +31,46 @@
             </li>
           @endcan
 
-          <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('Sales')}}</span></a>
+          <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('file.Sales')}}</span></a>
             <ul id="sale" class="collapse list-unstyled">
-              <li id="sale-list-menu"><a href="#">{{__('Orders')}}</a></li>
-              <li id="sale-list-menu"><a href="#">{{__('Transactions')}}</a></li>
+              <li id="sale-list-menu"><a href="#">{{__('file.Orders')}}</a></li>
+              <li id="sale-list-menu"><a href="#">{{__('file.Transactions')}}</a></li>
             </ul>
           </li>
 
           @can('flash_sale')
-            <li><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('Flash Sales')}}</span></a></li>
+            <li><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('file.Flash Sales')}}</span></a></li>
           @endcan
 
           @can('coupon')
-            <li><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('Coupons')}}</span></a></li>
+            <li><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('file.Coupons')}}</span></a></li>
           @endcan
           @can('page')
-            <li><a href="{{route('admin.page.index')}}"><i class="fa fa-file-text"></i><span>{{trans('Pages')}}</span></a></li>
+            <li><a href="{{route('admin.page.index')}}"><i class="fa fa-file-text"></i><span>{{trans('file.Pages')}}</span></a></li>
           @endcan
           @can('menu')
-            <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('Menus')}}</span></a></li>
+            <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('file.Menus')}}</span></a></li>
           @endcan
 
           @can('users_and_roles')
-            <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-user-circle"></i><span>{{__('Users and Roles')}}</span></a>
+            <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-user-circle"></i><span>{{__('file.Users and Roles')}}</span></a>
                 <ul id="user" class="collapse list-unstyled">
                 @can('user')
-                    <li id="navigation-menu"><a href="{{route('admin.user')}}">{{__('Users')}}</a></li>
+                    <li id="navigation-menu"><a href="{{route('admin.user')}}">{{__('file.Users')}}</a></li>
                 @endcan
                 @can('role')
-                    <li id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('Roles')}}</a></li>
+                    <li id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('file.Roles')}}</a></li>
                 @endcan
                 </ul>
             </li>
           @endcan
 
+
+
             <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-globe"></i><span>{{__('Localization')}}</span></a>
                 <ul id="localization" class="collapse list-unstyled">
                     <li><a href="{{route('admin.tax.index')}}">{{__('Taxes')}}</a></li>
-                    <li><a href="{{route('languages.index')}}">{{__('Translations')}}</a></li>
+                    <li><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('Translations')}}</a></li>
                     <li><a href="{{route('admin.currency_rate.index')}}">{{__('Currency Rates')}}</a></li>
                 </ul>
             </li>
@@ -79,13 +81,14 @@
                     @can('store_front')
                         <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('Store Front')}}</a></li>
                     @endcan
+                    @can('slider')
+                        <li><a href="{{route('admin.slider')}}"><i class="fa fa-picture-o"></i><span>{{__('Slider')}}</span></a></li>
+                    @endcan
                 </ul>
             </li>
           @endcan
 
-          @can('slider')
-            <li><a href="{{route('admin.slider')}}"><i class="fa fa-picture-o"></i><span>{{__('Slider')}}</span></a></li>
-          @endcan
+
 
           @can('site-setting')
             <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{__('Site Settings')}}</span></a>

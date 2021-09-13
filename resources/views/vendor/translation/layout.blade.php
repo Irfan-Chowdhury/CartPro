@@ -98,9 +98,11 @@
             src="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
 
     <style>
-        label{
-                color: #000000;
-        }
+        label {color: #000000;}
+        svg {width:20px;}
+        #side-main-menu {display:inherit}
+        #side-main-menu li, .nav-menu li {padding-left:0;padding-right:0;}
+        .menu-btn {display:block};
     </style>
   </head>
 

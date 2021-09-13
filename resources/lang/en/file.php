@@ -2,7 +2,6 @@
 
 return array (
   'Account' => 'Account',
-  'Attributes Edit' => 'Attributes Edit',
   'Account List' => 'Account List',
   'Account No' => 'Account No',
   'Account Statement' => 'Account Statement',
@@ -72,6 +71,7 @@ return array (
   'Attribute_Set' => 'Attribute_Set',
   'Attributes' => 'Attributes',
   'Attributes Create' => 'Attributes Create',
+  'Attributes Edit' => 'Attributes Edit',
   'Available' => 'Available',
   'Back' => 'Back',
   'Balance' => 'Balance',
@@ -133,6 +133,7 @@ return array (
   'Coupon Discount' => 'Coupon Discount',
   'Coupon List' => 'Coupon List',
   'Coupon Name' => 'Coupon Name',
+  'Coupons' => 'Coupons',
   'Create' => 'Create',
   'Create Attribute' => 'Create Attribute',
   'Create Purchase' => 'Create Purchase',
@@ -206,6 +207,7 @@ return array (
   'Finalize' => 'Finalize',
   'Finalize Sale' => 'Finalize Sale',
   'Finalize Stock Count' => 'Finalize Stock Count',
+  'Flash Sales' => 'Flash Sales',
   'For Digital product sale_unit will be n/a' => 'For Digital product sale_unit will be n/a',
   'Forgot Password?' => 'Forgot Password?',
   'Free Shipping' => 'Free Shipping',
@@ -269,6 +271,7 @@ return array (
   'Mail Port' => 'Mail Port',
   'Mail Setting' => 'Mail Setting',
   'Mainul' => 'Mainul',
+  'Mango' => 'Mango',
   'Maximum Spend' => 'Maximum Spend',
   'Menus' => 'Menus',
   'Message' => 'Message',
@@ -312,10 +315,12 @@ return array (
   'Order Table' => 'Order Table',
   'Order Tax' => 'Order Tax',
   'Ordered' => 'Ordered',
+  'Orders' => 'Orders',
   'Own Records' => 'Own Records',
   'PDF' => 'PDF',
   'POS Setting' => 'POS Setting',
   'Packing' => 'Packing',
+  'Pages' => 'Pages',
   'Paid' => 'Paid',
   'Paid Amount' => 'Paid Amount',
   'Paid By' => 'Paid By',
@@ -399,6 +404,7 @@ return array (
   'Return Note' => 'Return Note',
   'Role' => 'Role',
   'Role Permission' => 'Role Permission',
+  'Roles' => 'Roles',
   'SMS Setting' => 'SMS Setting',
   'Sale' => 'Sale',
   'Sale Details' => 'Sale Details',
@@ -410,15 +416,16 @@ return array (
   'Sale Return' => 'Sale Return',
   'Sale Status' => 'Sale Status',
   'Sale Unit' => 'Sale Unit',
+  'Sales' => 'Sales',
   'Sample File' => 'Sample File',
   'Search' => 'Search',
   'Select Attribute Set' => 'Select Attribute Set',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' =>
+  'Select SMS gateway' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -484,36 +491,37 @@ return array (
   'Total Item' => 'Total Item',
   'Total Quantity' => 'Total Quantity',
   'Touchscreen keybord' => 'Touchscreen keybord',
+  'Transactions' => 'Transactions',
   'Transfer' => 'Transfer',
   'Transfer Details' => 'Transfer Details',
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
   'Type' => 'Type',
-  'Type Product Name or Code' =>
+  'Type Product Name or Code' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' =>
+  'Type date or purchase reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' =>
+  'Type date or sale reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or sale reference...',
       ),
@@ -566,6 +574,8 @@ return array (
   'User Profile' => 'User Profile',
   'User Report' => 'User Report',
   'UserName' => 'UserName',
+  'Users' => 'Users',
+  'Users and Roles' => 'Users and Roles',
   'VAT Number' => 'VAT Number',
   'Value' => 'Value',
   'Value Name' => 'Value Name',

@@ -28,6 +28,7 @@
                 <thead>
                     <tr>
                         <th class="not-exported"></th>
+                        <th scope="col">{{__('file.Image')}}</th>
                         <th scope="col">{{__('Category Name')}}</th>
                         <th scope="col">@lang('Parent')</th>
                         <th scope="col">@lang('Status')</th>
@@ -85,6 +86,10 @@
                         data: null,
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'category_image',
+                        name: 'category_image',
                     },
                     {
                         data: 'category_name',

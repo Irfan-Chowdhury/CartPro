@@ -10,12 +10,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
+//JoeDixon
+use JoeDixon\Translation\Drivers\Translation;
+use JoeDixon\Translation\Http\Requests\LanguageRequest;
+
 class LanguageController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
+    private $translation;
+
+    public function __construct(Translation $translation)
+    {
+        $this->translation = $translation;
+    }
 
     public function index(Request $request)
     {
@@ -60,6 +66,9 @@ class LanguageController extends Controller
             }
 
             $language->save();
+
+            //New
+            $this->translation->addLanguage($request->local, $request->language_name);
 
             session()->flash('type','success');
             session()->flash('message','Successfully Saved');

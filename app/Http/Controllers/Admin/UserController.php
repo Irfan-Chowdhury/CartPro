@@ -32,6 +32,7 @@ class UserController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
+
             if (request()->ajax())
             {
                 return datatables()->of($users)
@@ -50,27 +51,31 @@ class UserController extends Controller
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
                     })
-                    ->addColumn('last_login_at',function($data)
+                    ->addColumn('full_name',function($data)
                     {
-                        if ($data->last_login_at)
-                        {
-                            $new_date =  Carbon::parse($data->last_login_at);
-                            return $new_date->diffForHumans();
-                        }else{
-                            return '';
-                        }
+                        return $data->first_name.' '.$data->last_name;
+                    })
+                    // ->addColumn('last_login_at',function($data)
+                    // {
+                    //     if ($data->last_login_at)
+                    //     {
+                    //         $new_date =  Carbon::parse($data->last_login_at);
+                    //         return $new_date->diffForHumans();
+                    //     }else{
+                    //         return '';
+                    //     }
 
-                    })
-                    // ->addColumn('roleName', function($data){
-                    //     return $data->roleName->name;
                     // })
-                    ->addColumn('created_at',function($data)
-                    {
-                        if ($data->created_at) {
-                            $new_date = Carbon::parse($data->created_at);
-                            return $new_date->diffForHumans();
-                        }
+                    ->addColumn('roleName', function($data){
+                        return $data->roleName->name;
                     })
+                    // ->addColumn('created_at',function($data)
+                    // {
+                    //     if ($data->created_at) {
+                    //         $new_date = Carbon::parse($data->created_at);
+                    //         return $new_date->diffForHumans();
+                    //     }
+                    // })
                     ->addColumn('action', function ($row)
                     {
                         $button = '';

@@ -21,7 +21,7 @@ trait imageHandleTrait{
     {
         $img        = Str::random(10). '.' .$image->getClientOriginalExtension();
         $location = public_path($directory.$img);
-        Image::make($image)->resize(1900,633)->save($location);
+        Image::make($image)->resize(775,445)->save($location);
         $imageUrl = $directory.$img;
 
         return $imageUrl;

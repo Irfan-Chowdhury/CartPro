@@ -42,7 +42,6 @@ class User extends Authenticatable
 
     public function roleName()
     {
-    	// return $this->belongsTo(Role::class,'role_id','id');
-    	return $this->hasOne('Spatie\Permission\Models\Role','id','role_id');
+        return $this->belongsTo('Spatie\Permission\Models\Role','role','id');
     }
 }

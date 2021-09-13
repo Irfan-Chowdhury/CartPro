@@ -120,11 +120,11 @@
                     name: 'is_active',
                     render:function (data) {
                         if (data == 1) {
-                        return "<span class='p-2 badge badge-success'>Active</span>";
-                    }else{
-                        return "<span class='p-2 badge badge-danger'>Inactive</span>";
+                            return "<span class='p-2 badge badge-success'>Active</span>";
+                        }else{
+                            return "<span class='p-2 badge badge-danger'>Inactive</span>";
+                        }
                     }
-                }
                 },
                 {
                     data: 'action',

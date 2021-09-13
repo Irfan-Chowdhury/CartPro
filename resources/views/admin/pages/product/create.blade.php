@@ -59,7 +59,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                    
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Product Name')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
@@ -98,7 +98,7 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -122,7 +122,7 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -168,11 +168,11 @@
                                                                         @else
                                                                             <option value="">{{__('NULL')}}</option>
                                                                         @endif
-                                                                    @endforeach    
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         {{-- <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Virtual</b></label>
                                                             <div class="col-sm-8">
@@ -192,7 +192,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    
+
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
@@ -222,14 +222,14 @@
                                                                 <input type="text" name="price" id="price" class="form-control" id="inputEmail3" placeholder="Type Product Price" >
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price')}}</b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" placeholder="Type Special Price" >
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Type')}}</b></label>
                                                             <div class="col-sm-8">
@@ -260,7 +260,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -286,7 +286,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Inventroy Management')}}</b></label>
                                                             <div class="col-sm-8">
@@ -299,9 +299,9 @@
 
 
                                                         <div class="form-group row" id="quantityField">
-                                                            
+
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Stock Availibility')}}</b></label>
                                                             <div class="col-sm-8">
@@ -318,7 +318,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -338,27 +338,27 @@
                                                             <label>{{__('Size')}} *</label>
                                                             <input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}">
                                                         </div>
-                                                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Color')}} *</label>
                                                             <input type="text" name="variant_color[]"  required class="form-control" placeholder="{{__('Color')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('SKU')}} *</label>
                                                             <input type="text" name="variant_sku[]" required class="form-control" placeholder="{{__('SKU')}}">
                                                         </div>
-                                                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Quantity')}} *</label>
                                                             <input type="text" name="variant_qty[]"  required class="form-control" placeholder="{{__('Quantity')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2 form-group">
                                                             <label>{{__('Price')}}</label>
                                                             <input type="text" name="variant_price[]" required class="form-control" placeholder="{{__('Price')}}">
                                                         </div>
-                    
+
                                                         <div class="col-2">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -410,7 +410,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -434,7 +434,7 @@
                                                                 <input type="text" name="meta_title" id="metaTitle" class="form-control" id="inputEmail3" placeholder="Type Meta Title" >
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Meta Description')}} </b></label>
                                                             <div class="col-sm-8">
@@ -444,7 +444,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
@@ -452,7 +452,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +470,7 @@
                                                     <div class="row">
                                                         <div class="col-5 form-group">
                                                             <label>{{__('Atrribute')}}</label>
-                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
+                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'> --}}
                                                                 @foreach ($attributes as $item)
                                                                     @if ($item->attributeTranslation->count()>0)
                                                                         @foreach ($item->attributeTranslation as $key => $value)
@@ -485,32 +485,23 @@
                                                                     @else
                                                                         <option value="">{{__('NULL')}}</option>
                                                                     @endif
-                                                                @endforeach    
-                                                                {{-- @foreach ($data[0][0]['attributeTranslation'] as $item)
-                                                                    @if ($item->attributeTranslation->count()>0)
-                                                                        @foreach ($item->attributeTranslation as $key => $value)
-                                                                            @if ($key<1)
-                                                                                @if ($value->local==$local)
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @elseif($value->local=='en')
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endif
-                                                                @endforeach     --}}
+                                                                @endforeach
                                                             </select>
+{{--
+                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
+                                                                @foreach ($data_attribute as $item)
+                                                                    <option value="{{$item['id']}}">{{$item['attribute_name']}}</option>
+                                                                @endforeach
+                                                            </select> --}}
                                                         </div>
-                                                    
+
                                                         <div class="col-6 form-group">
                                                             <label>{{__("Values")}}</label>
                                                             <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
-                                                                
+
                                                             </select>
                                                         </div>
-                    
+
                                                         <div class="col-1">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -524,7 +515,7 @@
                                                         <div class="col-5 form-group">
                                                             <label>{{__('Atrribute')}}</label>
                                                             <select name="attribute_id[]" id="attributeId2" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
-                                                                @foreach ($attributes as $item)                                                                        
+                                                                @foreach ($attributes as $item)
                                                                     @if ($item->attributeTranslation->count()>0)
                                                                         @foreach ($item->attributeTranslation as $key => $value)
                                                                             @if ($key<1)
@@ -534,21 +525,21 @@
                                                                                     <option value="{{$item->id}}">{{$value->attribute_name}}</option>
                                                                                 @endif
                                                                             @endif
-                                                                        @endforeach    
+                                                                        @endforeach
                                                                     @else
                                                                         <option value="">{{__('NULL')}}</option>
                                                                     @endif
-                                                                @endforeach    
+                                                                @endforeach
                                                             </select>
                                                         </div>
-                                                    
+
                                                         <div class="col-6 form-group">
                                                             <label>{{__("Values")}}</label>
                                                             <select name="attribute_value_id[]" id="attributeValueId2" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
-                                                                
+
                                                             </select>
                                                         </div>
-                    
+
                                                         <div class="col-1">
                                                             <label>Delete</label><br>
                                                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
@@ -575,7 +566,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Short Description')}} </b></label>
                                                             <div class="col-sm-8">
@@ -599,7 +590,7 @@
                                                                 <input type="text" name="new_to" id="newTo" class="form-control datepicker">
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
@@ -607,7 +598,7 @@
                                                                 <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -712,7 +703,7 @@
             $('.js-example-basic-multiple').select2();
         });
 
-        
+
         $('#manageStock').change(function() {
             var manageStock = $('#manageStock').val();
             if (manageStock==1) {
@@ -725,7 +716,7 @@
             }else{
                 $('#quantityField').empty();
             }
-            
+
         });
 
         $(document).on('click', '#addMore2', function(){
@@ -739,11 +730,25 @@
             $(this).parent().parent().html('');
         })
 
+        //console.log('{{$local}}');
 
 
         //--------test-------
 
         $(document).on('click', '#addMore', function(){
+
+            //var test = '{{$local}}';
+
+            // html = <div class="row">+
+            //         '<div class="col-5 form-group">'+
+            //             '<label>{{__("Atrribute")}}</label>'+
+            //                 '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="{{__('Select Attribute')}}">'+
+            //                     '@foreach ($data_attribute as $item)'+
+            //                         '<option value="{{$item['id']}}">{{$item['attribute_name']}}</option>'+
+            //                     '@endforeach'+
+            //                 '</select>'+
+            //             '</div>'+
+            //         '</div>';
 
             html = ' <div class="row">'+
                         '<div class="col-5 form-group">'+
@@ -786,7 +791,7 @@
 
             var rand = Math.floor(Math.random() * 90000) + 10000;
             $('.variants').append(html);
-            
+
         })
 
         //---------/ test------

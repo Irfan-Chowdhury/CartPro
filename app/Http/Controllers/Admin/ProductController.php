@@ -179,7 +179,47 @@ class ProductController extends Controller
 
         // return $attributes;
 
-        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes'));
+        // $data_attribute = array(
+        //     array(
+        //         'id'=>2,
+        //         'locale'=>'en',
+        //         'attribute_name'=>'Size',
+        //     ),
+        //     array(
+        //         'id'=>3,
+        //         'locale'=>'en',
+        //         'attribute_name'=>'Color',
+        //     ),
+        //     array(
+        //         'id'=>4,
+        //         'locale'=>'en',
+        //         'attribute_name'=>'Ram',
+        //     )
+        // );
+
+        // return $data_attribute[0]['attribute_name'];
+
+        $data_attribute = [
+            [
+                'id'=>2,
+                'locale'=>'en',
+                'attribute_name'=>'Size',
+            ],
+            [
+                'id'=>3,
+                'locale'=>'en',
+                'attribute_name'=>'Color',
+            ],
+            [
+                'id'=>20,
+                'locale'=>'en',
+                'attribute_name'=>'Ram',
+            ]
+        ];
+
+        //return $data_attribute[0]['attribute_name'];
+
+        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data_attribute'));
 
 
 

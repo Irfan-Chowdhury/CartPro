@@ -78,7 +78,8 @@ class SliderController extends Controller
                             }
                         }
                     }
-                }else {
+                }
+                else {
                     return "NULL";
                 }
             })

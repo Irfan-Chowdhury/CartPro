@@ -353,7 +353,8 @@ class StoreFrontController extends Controller
 
     public function sliderBannersStore(Request $request)
     {
-        //return response()->json([$request->all()]);
+        // return response()->json([$request->storefront_slider_banner_1_tile]);
+        $locale = Session::get('currentLocal');
 
         $validator = Validator::make($request->all(),[
             'storefront_slider_banner_1_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
@@ -371,21 +372,46 @@ class StoreFrontController extends Controller
             if (!empty($request->storefront_slider_banner_1_image)) {
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'slider_banner_1', 'type' => 'slider_banner'],
-                        [ 'image' => $this->imageStore($request->storefront_slider_banner_1_image, $directory)]
+                        [
+                            'image' => $this->imageStore($request->storefront_slider_banner_1_image, $directory),
+                            'setting_id' => 42
+                        ]
                     );
             }
             if (!empty($request->storefront_slider_banner_2_image)) {
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'slider_banner_2', 'type' => 'slider_banner'],
-                        [ 'image' => $this->imageStore($request->storefront_slider_banner_2_image, $directory)]
+                        [
+                            'image' => $this->imageStore($request->storefront_slider_banner_2_image, $directory),
+                            'setting_id' => 45
+                        ]
+                    );
+            }
+            if (!empty($request->storefront_slider_banner_3_image)) {
+                StorefrontImage::updateOrCreate(
+                        [ 'title' => 'slider_banner_3', 'type' => 'slider_banner'],
+                        [
+                            'image' => $this->imageStore($request->storefront_slider_banner_3_image, $directory),
+                            'setting_id' => 127
+                        ]
                     );
             }
 
             foreach ($request->all() as $key => $value) {
-                if ($key=='storefront_slider_banner_1_image' || $key=='storefront_slider_banner_2_image' ) {
+                if ($key=='storefront_slider_banner_1_image' || $key=='storefront_slider_banner_2_image') {
                     continue;
                 }
-                Setting::where('key', $key)->update(['plain_value' => $value]);
+                // Setting::where('key', $key)->update(['plain_value' => $value]);
+                elseif ($key == 'storefront_slider_banner_1_title' || $key == 'storefront_slider_banner_2_title' || $key == 'storefront_slider_banner_3_title') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
             }
 
             if (!$request->storefront_slider_banner_1_open_in_new_window) {
@@ -393,6 +419,9 @@ class StoreFrontController extends Controller
             }
             if ((!$request->storefront_slider_banner_2_open_in_new_window)) {
                 Setting::where('key', 'storefront_slider_banner_2_open_in_new_window')->update(['plain_value' => 0]);
+            }
+            if ((!$request->storefront_slider_banner_3_open_in_new_window)) {
+                Setting::where('key', 'storefront_slider_banner_3_open_in_new_window')->update(['plain_value' => 0]);
             }
 
             return response()->json(['success'=>'Data Saved Successfully']);

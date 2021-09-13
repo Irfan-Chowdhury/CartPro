@@ -12,4 +12,9 @@ class Setting extends Model
     {
     	return $this->hasMany(SettingTranslation::class,'setting_id');
     }
+
+    public function storeFrontImage()
+    {
+    	return $this->hasOne(StorefrontImage::class,'setting_id');
+    }
 }

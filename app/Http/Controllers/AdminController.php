@@ -49,8 +49,7 @@ class AdminController extends Controller
 
     public function googleAnalytics()
     {
-        $analytics = Analytics::fetchVisitorsAndPageViews(Period::days(1));
-        // $analytics = Analytics::fetchMostVisitedPages(Period::days(1));
+        $analytics = Analytics::fetchMostVisitedPages(Period::days(1));
         dd($analytics);
     }
 

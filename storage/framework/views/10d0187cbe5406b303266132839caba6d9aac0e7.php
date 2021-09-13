@@ -1,9 +1,18 @@
+<?php
+//   $favicon_logo_path = 'public/images/empty.jpg';
+//   foreach ($storefront_images as $key => $item) {
+//       if ($item->title=='favicon_logo'){
+//           $favicon_logo_path = 'public'.$item->image;
+//       }
+//   }
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href=" " />
+    
     <title>CartPro Admin Panel</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
