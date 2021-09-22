@@ -215,8 +215,6 @@
         $('#submitForm').on('submit', function (e) {
             e.preventDefault();
 
-            console.log('ok');
-
             $.ajax({
                 url: "<?php echo e(route('admin.category.store')); ?>",
                 method: "POST",

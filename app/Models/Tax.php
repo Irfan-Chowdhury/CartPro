@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Tax extends Model
 {
@@ -14,8 +15,21 @@ class Tax extends Model
         'is_active',
     ];
 
+    // public function taxTranslation()
+    // {
+    // 	return $this->hasMany(TaxTranslation::class,'tax_id');
+    // }
+
     public function taxTranslation()
     {
-    	return $this->hasMany(TaxTranslation::class,'tax_id');
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(TaxTranslation::class,'tax_id')
+                ->where('locale',$locale);
+    }
+
+    public function taxTranslationDefaultEnglish()
+    {
+    	 return $this->hasOne(TaxTranslation::class,'tax_id')
+                        ->where('locale','en');
     }
 }

@@ -2,7 +2,7 @@
     A. Storefront--> General --> Slider
     B. Storefront--> Features --> Section Status
     C. Storefront--> Logo --> (More Modify)
-    D. 
+    D.
 
 
 
@@ -79,3 +79,12 @@ $flashSale = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($
 
     //Correction Locale
     1. Dependency Category
+
+
+
+//
+torefront--
+>feature
+--
+>
+ feature-5 remove

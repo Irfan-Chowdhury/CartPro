@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
+
 class Category extends Model
 {
      use Notifiable;
@@ -19,16 +21,39 @@ class Category extends Model
 
     public function categoryTranslation()
     {
-    	return $this->hasMany(CategoryTranslation::class,'category_id');
+    	 return $this->hasMany(CategoryTranslation::class,'category_id');
+    }
+
+    public function catTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(CategoryTranslation::class,'category_id')
+                ->where('local',$locale);
+    }
+
+    public function categoryTranslationDefaultEnglish()
+    {
+    	 return $this->hasOne(CategoryTranslation::class,'category_id')
+                        ->where('local','en');
     }
 
     public function products()
     {
     	return $this->hasMany(Product::class,'category_id');
     }
+
     public function parentCategory()
     {
         return $this->belongsTo(self::class,'parent_id');
+
+        // return $this->hasOne(CategoryTranslation::class,'category_id','parent_id');
+                        // ->where('local','en');
+        // return $this->belongsTo(CategoryTranslation::class,'parent_id')
+        // ->where('local','en');
+    }
+    public function child()
+    {
+        return $this->hasMany(self::class,'parent_id');
     }
 
     public function product()
@@ -36,5 +61,6 @@ class Category extends Model
         return $this->belongsTo('App\Models\Product');
     }
 
-    
+
+
 }

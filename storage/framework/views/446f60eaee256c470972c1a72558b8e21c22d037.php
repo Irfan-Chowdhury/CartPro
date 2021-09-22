@@ -1,50 +1,48 @@
 <?php $__env->startSection('admin_content'); ?>
-<section>
-<?php
-    // use Stichoza\GoogleTranslate\GoogleTranslate;
-    // $local = Session::get('currentLocal');
-    // $tr    = new GoogleTranslate($local);
-?>
 
-    <div class="container-fluid"><span id="success_alert"></span></div>
+
+<section>
+    <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        
-        <h4 class="font-weight-bold mt-3"><?php echo app('translator')->get('file.Brand'); ?></h4>
+        <h4 class="font-weight-bold mt-3"><?php echo e(__('Tags')); ?></h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
-        <?php if(auth()->user()->can('brand-store')): ?>
-            <button type="button" class="btn btn-info" name="create_record" id="create_record">
-                <i class="fa fa-plus"></i> <?php echo app('translator')->get('file.Add Brand'); ?>
+        <?php if(auth()->user()->can('tag-store')): ?>
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
+                <i class="fa fa-plus"></i> <?php echo e(__('Add Tag')); ?>
+
             </button>
         <?php endif; ?>
-        <?php if(auth()->user()->can('brand-action')): ?>
-            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
-                <i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk_Action')); ?>
+
+        <?php if(auth()->user()->can('tag-action')): ?>
+            <button type="button" class="btn btn-danger" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk Action')); ?>
 
             </button>
         <?php endif; ?>
 
     </div>
     <div class="table-responsive">
-    	<table id="brandListTable" class="table ">
+    	<table id="dataTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-                    <th scope="col"><?php echo app('translator')->get('file.Logo'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Brand Name'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Status'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Action'); ?></th>
+        		    <th scope="col"><?php echo e(trans('Tag Name')); ?></th>
+        		    <th scope="col"><?php echo e(trans('file.Status')); ?></th>
+        		    <th scope="col"><?php echo e(trans('file.action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
     </div>
-
 </section>
 
-<?php echo $__env->make('admin.pages.brand.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+<?php echo $__env->make('admin.pages.tag.form_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('admin.pages.tag.edit_form_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('admin.includes.confirm_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 
 <script type="text/javascript">
 
@@ -56,7 +54,7 @@
             }
         });
 
-        let table = $('#brandListTable').DataTable({
+        let table = $('#dataTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -86,7 +84,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "<?php echo e(route('admin.brand')); ?>",
+                url: "<?php echo e(route('admin.tag.index')); ?>",
             },
             columns: [
                 {
@@ -95,12 +93,8 @@
                     searchable: false
                 },
                 {
-                    data: 'brand_logo',
-                    name: 'brand_logo',
-                },
-                {
-                    data: 'brand_name',
-                    name: 'brand_name',
+                    data: 'tag_name',
+                    name: 'tag_name',
                 },
                 {
                     data: 'is_active',
@@ -189,23 +183,38 @@
         new $.fn.dataTable.FixedHeader(table);
     });
 
+    // $('#formModal').on('click', function () {
+    //     $('#modalTitle').text('<?php echo e(__('Add Tag')); ?>');
+    //     $('#submitButton').text('<?php echo e(__('Save')); ?>');
+    //     // $('#tagName').empty().val('');
+    //     $('#formModal').modal('show');
+    // });
+
     //----------Insert Data----------------------
     $("#submitForm").on("submit",function(e){
-        // e.preventDefault();
-        // var goalType = $("#brandListTable").val();
+        e.preventDefault();
+        var tagName  = $("#tagName").val();
+        var isActive = $("#isActive").val();
+		// console.log(tagName);
 
         $.ajax({
-            url: "<?php echo e(route('admin.brand.store')); ?>",
+            url: "<?php echo e(route('admin.tag.store')); ?>",
             method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
+            data: $('#submitForm').serialize(),
             success: function (data) {
                 console.log(data);
-                if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
+                let html = '';
+
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                    $('#error_message').html(html).slideDown(300).delay(5000).slideUp(300);
+                }
+                else if(data.success){
+                    $('#dataTable').DataTable().ajax.reload();
                     $('#submitForm')[0].reset();
                     $("#formModal").modal('hide');
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
@@ -219,84 +228,84 @@
     });
 
 
-	$('#create_record').click(function () {
-		$('modal-title').text('<?php echo e(__('Add Account')); ?>');
-		$('#action_button').val('<?php echo e(trans("file.Add")); ?>');
-		$('#action').val('<?php echo e(trans("file.Add")); ?>');
-		$('#formModal').modal('show');
-	});
+    //---------- Edit -------------
+    $(document).on('click', '.edit', function () {
+        var rowId = $(this).data("id");
+        $('#success_alert').html('');
+        // console.log(rowId);
 
-	// $('#brandListTable').on('click','.status',function () {
-    //         let id = $(this).data('id');
-    //         let status = $(this).data('status');
+        $.ajax({
+            url: "<?php echo e(route('admin.tag.edit')); ?>",
+            type: "GET",
+            data: {tag_id:rowId},
+            success: function (data) {
+                console.log(data.tag_name);
+                $('#tagIdEdit').val(data.tag.id);
+                $('#tagNameEdit').val(data.tag_name);
+                if (data.tag.is_active == 1) {
+                        $('#isActiveEdit').prop('checked', true);
+                } else {
+                    $('#isActiveEdit').prop('checked', false);
+                }
+                $('#EditFormModal').modal('show');
+            }
+        })
+        //$('#titleModalLabel').empty();
+    });
 
-    //         var target = "<?php echo e(route('admin.brand')); ?>/" + id +'/'+ status  ;
 
-    //         $.ajax({
-    //             url:target,
-    //             dataType:"json",
-    //             success:function(data) {
-    //                 let html = '';
-    //                 if (data.success) {
-    //                     html = '<div class="alert alert-success">'+data.success + "</div>";
-    //                     $('#category_list-table').DataTable().ajax.reload();
-    //                 }
-    //                 $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-    //             }
-    //         })
-    //     });
+    //---------- Update -------------
+    $("#updateForm").on("submit",function(e){
+        e.preventDefault();
 
-	$('#sample_form').on('submit', function (event) {
+        $.ajax({
+            url: "<?php echo e(route('admin.tag.update')); ?>",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
 
-            event.preventDefault();
-            if ($('#action').val() === '<?php echo e(trans('file.Add')); ?>') {
+                console.log(data);
+                // let html = '';
 
-                $.ajax({
-                    url: "<?php echo e(route('admin.brand.store')); ?>",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-
-                        // let html = '';
-                        // if (data.errors) {
-                        //     html = '<div class="alert alert-danger">';
-                        //     for (let count = 0; count < data.errors.length; count++) {
-                        //         html += '<p>' + data.errors[count] + '</p>';
-                        //     }
-                        //     html += '</div>';
-                        // }
-                        // if (data.success) {
-                        //     html = '<div class="alert alert-success">' + data.success + '</div>';
-                        //     $('#sample_form')[0].reset();
-                        //     $('#brandListTable').DataTable().ajax.reload();
-                        // }
-                        // $('#brandListTable').html(html).slideDown(300).delay(5000).slideUp(300);
-                    }
-                })
+                if (data.error) {
+                    html = '<div class="alert alert-danger">' + data.error + '</div>';
+                    $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                }
+                else if(data.success){
+                    $('#dataTable').DataTable().ajax.reload();
+                    $('#updateForm')[0].reset();
+                    $("#EditFormModal").modal('hide');
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }
             }
         });
+    });
 
 
 
     //---------- Active -------------
 	$(document).on("click",".active",function(e){
 		e.preventDefault();
-		var id = $(this).data("id");
-		console.log(id);
+		var rowId = $(this).data("id");
+		var element = this;
+		console.log(rowId);
 
 		$.ajax({
-			url: "<?php echo e(route('admin.brand.active')); ?>",
+			url: "<?php echo e(route('admin.tag.active')); ?>",
 			type: "GET",
-			data: {id:id},
+			data: {id:rowId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
+                    $('#dataTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -310,17 +319,18 @@
 	//---------- Inactive -------------
 	$(document).on("click",".inactive",function(e){
 		e.preventDefault();
-		var id = $(this).data("id");
-		console.log(id);
+		var rowId = $(this).data("id");
+		var element = this;
+		console.log(rowId);
 
 		$.ajax({
-			url: "<?php echo e(route('admin.brand.inactive')); ?>",
+			url: "<?php echo e(route('admin.tag.inactive')); ?>",
 			type: "GET",
-			data: {id:id},
+			data: {id:rowId},
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
+                    $('#dataTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -334,7 +344,7 @@
     //Bulk Action
     $("#bulk_action").on("click",function(){
         var idsArray = [];
-        let table = $('#brandListTable').DataTable();
+        let table = $('#dataTable').DataTable();
         idsArray = table.rows({selected: true}).ids().toArray();
 
         if(idsArray.length === 0){
@@ -347,18 +357,18 @@
                 console.log(idsArray);
                 action_type = "active";
                 $.ajax({
-                    url: "<?php echo e(route('admin.brand.bulk_action')); ?>",
+                    url: "<?php echo e(route('admin.tag.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#brandListTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#dataTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
+                                $('#alert_message').fadeOut("slow");
                             }, 3000);
                         }
                     }
@@ -368,18 +378,18 @@
                 action_type = "inactive";
                 console.log(idsArray);
                 $.ajax({
-                    url: "<?php echo e(route('admin.brand.bulk_action')); ?>",
+                    url: "<?php echo e(route('admin.tag.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#brandListTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#dataTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
+                                $('#alert_message').fadeOut("slow");
                             }, 3000);
                         }
                     }
@@ -387,7 +397,15 @@
             });
         }
     });
+
 </script>
+
+
+
+
+
+
+
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/brand/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/tag/index.blade.php ENDPATH**/ ?>

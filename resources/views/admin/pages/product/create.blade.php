@@ -128,10 +128,14 @@
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class (incomplete)</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                    {{-- @foreach ($categories as $item)
+                                                                    @forelse ($taxes as $tax)
+                                                                        <option value="{{$tax->id}}">{{$tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null}}</option>
+                                                                    @empty
+                                                                    @endforelse
+                                                                    {{-- @foreach ($taxes as $item)
                                                                         @if ($item->categoryTranslation->count()>0)
                                                                             @foreach ($item->categoryTranslation as $key => $value)
                                                                                 @if ($key<1)

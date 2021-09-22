@@ -159,24 +159,13 @@
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class (incomplete)</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                    {{-- @foreach ($categories as $item)
-                                                                        @if ($item->categoryTranslation->count()>0)
-                                                                            @foreach ($item->categoryTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach     --}}
+                                                                    @forelse ($taxes as $tax)
+                                                                        <option value="{{$tax->id}}" @if($tax->id == $product->tax_id) selected @endif>{{$tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null}}</option>
+                                                                    @empty
+                                                                    @endforelse
                                                                 </select>
                                                             </div>
                                                         </div>

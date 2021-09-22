@@ -232,19 +232,19 @@ class StoreFrontController extends Controller
         if ($request->title_favicon_logo=="favicon_logo" && (!empty($request->image_favicon_logo))) {
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_favicon_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_favicon_logo,$directory)]
+                    [ 'image' => $this->imageStore($request->image_favicon_logo,$directory,$type='store_front')]
                 );
         }
         if ($request->title_header_logo=="header_logo" && (!empty($request->image_header_logo))) {
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_header_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_header_logo,$directory)]
+                    [ 'image' => $this->imageStore($request->image_header_logo,$directory,$type='store_front')]
                 );
         }
         if ($request->title_mail_logo=="mail_logo" && (!empty($request->image_mail_logo))) {
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_mail_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_mail_logo,$directory)]
+                    [ 'image' => $this->imageStore($request->image_mail_logo,$directory,$type='store_front')]
                 );
         }
         return response()->json(['success' => __('Data Saved successfully.')]);
@@ -278,7 +278,7 @@ class StoreFrontController extends Controller
                 elseif ($key === 'storefront_payment_method_image') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'accepted_payment_method_image', 'type' => 'payment_method'],
-                        [ 'image' => $this->imageStore($request->storefront_payment_method_image, $directory)]
+                        [ 'image' => $this->imageStore($request->storefront_payment_method_image, $directory,$type='store_front')]
                     );
                 }
                 else{
@@ -307,7 +307,7 @@ class StoreFrontController extends Controller
             if ((!empty($request->storefront_newsletter_image))) {
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'newsletter_background_image', 'type' => 'newletter'],
-                        [ 'image' => $this->imageStore($request->storefront_newsletter_image, $directory)]
+                        [ 'image' => $this->imageStore($request->storefront_newsletter_image, $directory,$type='store_front')]
                     );
             }
 
@@ -333,7 +333,7 @@ class StoreFrontController extends Controller
             if ($request->storefront_product_page_image) {
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'product_page_banner', 'type' => 'product_page'],
-                        [ 'image' => $this->imageStore($request->storefront_product_page_image, $directory)]
+                        [ 'image' => $this->imageStore($request->storefront_product_page_image, $directory,$type='store_front')]
                     );
             }
 
@@ -373,7 +373,7 @@ class StoreFrontController extends Controller
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'slider_banner_1', 'type' => 'slider_banner'],
                         [
-                            'image' => $this->imageStore($request->storefront_slider_banner_1_image, $directory),
+                            'image' => $this->imageStore($request->storefront_slider_banner_1_image, $directory,$type='store_front'),
                             'setting_id' => 42
                         ]
                     );
@@ -382,7 +382,7 @@ class StoreFrontController extends Controller
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'slider_banner_2', 'type' => 'slider_banner'],
                         [
-                            'image' => $this->imageStore($request->storefront_slider_banner_2_image, $directory),
+                            'image' => $this->imageStore($request->storefront_slider_banner_2_image, $directory,$type='store_front'),
                             'setting_id' => 45
                         ]
                     );
@@ -391,7 +391,7 @@ class StoreFrontController extends Controller
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'slider_banner_3', 'type' => 'slider_banner'],
                         [
-                            'image' => $this->imageStore($request->storefront_slider_banner_3_image, $directory),
+                            'image' => $this->imageStore($request->storefront_slider_banner_3_image, $directory,$type='store_front'),
                             'setting_id' => 127
                         ]
                     );
@@ -445,7 +445,7 @@ class StoreFrontController extends Controller
                 if ($key=='storefront_one_column_banner_image') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'one_column_banner_image', 'type' => 'one_column_banner'],
-                        [ 'image' => $this->imageStore($request->storefront_one_column_banner_image, $directory)]
+                        [ 'image' => $this->imageStore($request->storefront_one_column_banner_image, $directory,$type='store_front')]
                     );
                 }
                 else {
@@ -482,13 +482,13 @@ class StoreFrontController extends Controller
                 if ($key=='storefront_two_column_banner_image_1') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'two_column_banner_image_1', 'type' => 'two_column_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_two_column_banner_image_2') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'two_column_banner_image_2', 'type' => 'two_column_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 else {
@@ -529,19 +529,19 @@ class StoreFrontController extends Controller
                 if ($key=='storefront_three_column_banners_image_1') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_banners_image_1', 'type' => 'three_column_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_three_column_banners_image_2') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_banners_image_2', 'type' => 'three_column_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_three_column_banners_image_3') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_banners_image_3', 'type' => 'three_column_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 else {
@@ -588,25 +588,25 @@ class StoreFrontController extends Controller
                 if ($key=='storefront_three_column_full_width_banners_background_image') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_full_width_banners_background_image', 'type' => 'three_column_full_width_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_three_column_full_width_banners_image_1') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_full_width_banners_image_1', 'type' => 'three_column_full_width_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_three_column_full_width_banners_image_2') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_full_width_banners_image_2', 'type' => 'three_column_full_width_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 elseif ($key=='storefront_three_column_full_width_banners_image_3') {
                     StorefrontImage::updateOrCreate(
                         [ 'title' => 'three_column_full_width_banners_image_3', 'type' => 'three_column_full_width_banners'],
-                        [ 'image' => $this->imageStore($value, $directory)]
+                        [ 'image' => $this->imageStore($value, $directory,$type='store_front')]
                     );
                 }
                 else {

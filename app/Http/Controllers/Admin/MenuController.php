@@ -24,8 +24,8 @@ class MenuController extends Controller
 
     public function index(Request $request)
     {
-        // if (auth()->user()->can('menu-view'))
-        // {
+        if (auth()->user()->can('menu-view'))
+        {
             $locale = Session::get('currentLocal');
 
             $menus = Menus::with(['menuTranslations'=> function ($query) use ($locale){
@@ -91,8 +91,8 @@ class MenuController extends Controller
             }
 
             return view('admin.pages.menu.index',compact('menus'));
-        // }
-        // return abort('403', __('You are not authorized'));
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function store(Request $request)

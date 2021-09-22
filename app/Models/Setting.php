@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Setting extends Model
 {
@@ -11,6 +12,19 @@ class Setting extends Model
     public function settingTranslations()
     {
     	return $this->hasMany(SettingTranslation::class,'setting_id');
+    }
+
+    public function settingTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(SettingTranslation::class,'setting_id')
+                ->where('locale',$locale);
+    }
+
+    public function settingTranslationDefaultEnglish()
+    {
+    	 return $this->hasOne(SettingTranslation::class,'setting_id')
+                        ->where('locale','en');
     }
 
     public function storeFrontImage()

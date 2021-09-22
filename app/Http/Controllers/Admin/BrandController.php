@@ -117,7 +117,7 @@ class BrandController extends Controller
             $brand->slug = $this->slug($request->brand_name);
             $image       = $request->file('brand_logo');
             if ($image) {
-                $brand->brand_logo = $this->imageStore($image, $directory='images/brands/');
+                $brand->brand_logo = $this->imageStore($image, $directory='images/brands/', $type='brand');
             }
             if (empty($request->is_active)) {
                 $brand->is_active = 0;
@@ -160,7 +160,7 @@ class BrandController extends Controller
             $brand_logo   = $request->file('brand_logo');
             if ($brand_logo) {
                 $this->previousImageDelete($brand->brand_logo); //previous image will be deleted
-                $brand->brand_logo = $this->imageStore($brand_logo, $directory='images/brands/');
+                $brand->brand_logo = $this->imageStore($brand_logo, $directory='images/brands/',$type='brand');
             }
             $brand->update();
 

@@ -39,13 +39,9 @@
                     </div>
                     <div class="header-top-middle d-none d-lg-flex d-xl-flex">
                         <span class="announcement">
-                            <?php $__empty_1 = true; $__currentLoopData = $setting[0]->settingTranslations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <?php if($item->locale==$locale): ?>
-                                    <?php echo e($item->value); ?> <?php break; ?>
-                                <?php elseif($item->locale=='en'): ?>
-                                    <?php echo e($item->value); ?> <?php break; ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <?php if($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish): ?>
+                                <?php echo e($settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL); ?>
+
                             <?php endif; ?>
                         </span>
                     </div>
@@ -88,24 +84,10 @@
                             <input class="" type="text" placeholder="Search products, categories, sku..." name="search">
                             <select name="category" class="selectpicker">
                                 <option value="" selected="">All Categories</option>
-
-
                                     <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                        <?php $__empty_2 = true; $__currentLoopData = $category->categoryTranslation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $catTranslation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
-                                            <?php if($key<1): ?>
-                                                <?php if($catTranslation->local==$locale): ?>
-                                                    <option value="<?php echo e($category->slug); ?>"><?php echo e($catTranslation->category_name); ?></option>
-                                                <?php elseif($catTranslation->local=='en'): ?>
-                                                    <option value="<?php echo e($category->slug); ?>"><?php echo e($catTranslation->category_name); ?></option>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
-                                        <?php endif; ?>
+                                        <option value="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <?php endif; ?>
-
-
-                                
                             </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                         </form>
@@ -152,6 +134,22 @@
                             <ul>
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Department</a>
                                     <ul class="dropdown">
+
+                                        <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                            <?php if($category->child->isNotEmpty()): ?>
+                                                <li class="has-dropdown"><a href="#"><i class=""></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
+                                                    <ul class="dropdown">
+                                                        <?php $__currentLoopData = $category->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <li><a href="<?php echo e($item->slug); ?>"><i class=""></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    </ul>
+                                                </li>
+                                            <?php else: ?>
+                                                <li><a href="<?php echo e($category->slug); ?>"><i class=""></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <?php endif; ?>
+
                                         <li class="has-dropdown"><a href="electronics"><i class="las la-bolt"></i> Electronics</a>
                                             <ul class="dropdown">
                                                 <li><a href="about.html">About us</a></li>
@@ -460,7 +458,7 @@
                 <div class="col-md-12">
                     <div class="section-title mb-3">
                         <div class="d-flex align-items-center">
-                            <a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a>
+                            <h3><a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a></h3>
                             <h3>Top categories</h3>
                         </div>
                         <!-- Add Pagination -->
@@ -591,1768 +589,1803 @@
         </div>
     </section>
 
+
     <!--Product area starts-->
-    <section class="product-tab-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <ul class="nav nav-tabs product-details-tab" id="lionTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#special" role="tab" aria-selected="true">Special Offers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="new-tab" data-bs-toggle="tab" href="#new" role="tab" aria-selected="false">New Arrivals</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="best-tab" data-bs-toggle="tab" href="#best" role="tab" aria-selected="false">Best Sellers</a>
-                        </li>
-                    </ul>
-                    <div class="product-navigation">
-                        <div class="product-button-next v1"><i class="ti-angle-right"></i></div>
-                        <div class="product-button-prev v1"><i class="ti-angle-left"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="tab-content mt-3" id="lionTabContent">
-                        <div class="tab-pane fade show active" id="special" role="tabpanel" aria-labelledby="all-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>-30%</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="price">$383</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="graphic-design-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>-30%</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="price">$383</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="best" role="tabpanel">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>-30%</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="price">$383</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <div class="product-item-img">
-                                                    <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item">
-                                                <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <span>Sold</span>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#">
-                                                        <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product-wrapper">
-                                            <div class="single-product-item v1">
-                                                <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
-                                                <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
-                                                <div class="product-promo-text style1">
-                                                    <p>Hot</p>
-                                                </div>
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a href="wishlist.html">
-                                                        <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-category" href="#">Electronics</a>
-                                                <a class="product-name" href="#">
-                                                    Samsung Curved Widescreen 4k Ultra HD TV
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="promo-price">$383</span>
-                                                            <span class="old-price">$499</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+    <?php if($settings[81]->plain_value==1): ?>
+        <section class="product-tab-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="nav nav-tabs product-details-tab" id="lionTab" role="tablist">
+
+                            <?php $i=0; ?>
+                            <?php $__currentLoopData = $settings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $setting): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($setting->key =='storefront_product_tabs_1_section_tab_1_title'|| $setting->key =='storefront_product_tabs_1_section_tab_2_title' || $setting->key =='storefront_product_tabs_1_section_tab_3_title' || $setting->key =='storefront_product_tabs_1_section_tab_4_title'): ?>
+                                    <li class="nav-item">
+                                        <a <?php if($i==0): ?> class="nav-link active" <?php else: ?> class="nav-link" <?php endif; ?> id="all-tab" data-bs-toggle="tab" href="#<?php echo e($setting->key); ?>" role="tab" aria-selected="true"><?php echo e($setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null); ?></a>
+                                    </li>
+                                    <?php $i++ ; ?>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#test_irfan" role="tab" aria-selected="true">Test Irfan</a>
+                            </li>
+                        </ul>
+                        <div class="product-navigation">
+                            <div class="product-button-next v1"><i class="ti-angle-right"></i></div>
+                            <div class="product-button-prev v1"><i class="ti-angle-left"></i></div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tab-content mt-3" id="lionTabContent">
+
+                            <div class="tab-pane fade show active" id="<?php echo e($product_tabs_one_titles[0] ?? null); ?>" role="tabpanel" aria-labelledby="all-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+
+                                        <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                            <div class="swiper-slide">
+                                                <div class="single-product-wrapper">
+                                                    <div class="single-product-item">
+                                                        
+                                                        <img src="<?php echo e(asset('public/'.$item->productBaseImage->image)); ?>" alt="...">
+                                                        <div class="product-promo-text style1">
+                                                            <span>Sold</span>
+                                                        </div>
+                                                        <div class="product-overlay">
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#<?php echo e($item->product->slug ?? null); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                            </a>
+                                                            <a href="wishlist.html">
+                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                            </a>
+                                                            <a href="compare.html">
+                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <a class="product-category" href="#"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
+                                                        <a class="product-name" href="#">
+                                                            <?php echo e($item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL); ?>
+
+                                                        </a>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="rating-summary">
+                                                                    <div class="rating-result" title="60%">
+                                                                        <ul class="product-rating">
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-price">
+                                                                    <?php if($item->product->special_price>0): ?>
+                                                                        <span class="promo-price">$ <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></span>
+                                                                        <span class="old-price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
+                                                                    <?php else: ?>
+                                                                        <span class="price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
+                                                                    <?php endif; ?>
+
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <?php endif; ?>
+
+
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>-30%</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV Irfan
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="price">$383</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="test_irfan" role="tabpanel" aria-labelledby="graphic-design-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>-30%</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="price">$383</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="best" role="tabpanel">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-item-img" src="<?php echo e(asset('public/frontend/images/products/apple-watch.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>-30%</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="price">$383</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/macpro.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/camera2.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <div class="product-item-img">
+                                                        <img src="<?php echo e(asset('public/frontend/images/products/webcam.png')); ?>" alt="...">
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/widetv.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/console.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/wireless-headphone.png')); ?>" alt="...">
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <img src="<?php echo e(asset('public/frontend/images/products/iPhone.png')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#">
+                                                            <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item v1">
+                                                    <img class="product-img" src="<?php echo e(asset('public/frontend/images/products/tablet.png')); ?>" alt="...">
+                                                    <img class="product-img-hover" src="<?php echo e(asset('public/frontend/images/products/product-10.jpg')); ?>" alt="...">
+                                                    <div class="product-promo-text style1">
+                                                        <p>Hot</p>
+                                                    </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">Electronics</a>
+                                                    <a class="product-name" href="#">
+                                                        Samsung Curved Widescreen 4k Ultra HD TV
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                <span class="promo-price">$383</span>
+                                                                <span class="old-price">$499</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-    <!--product area ends-->
+        </section>
+
+        <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <?php echo $__env->make('frontend.includes.quickshop', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+     <!--product area ends-->
+
     <section>
         <div class="container">
             <div class="row">
@@ -4137,36 +4170,14 @@
                 <div class="col-md-12">
                     <div class="brand-slider-wrapper swiper-container">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/1.png')); ?>" alt="...">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/2.png')); ?>" alt="...">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/3.png')); ?>" alt="...">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/4.png')); ?>" alt="...">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/5.png')); ?>" alt="...">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="brand-wrapper" href="#">
-                                    <img src="<?php echo e(asset('public/frontend/images/brands/6.png')); ?>" alt="...">
-                                </a>
-                            </div>
+                            <?php $__empty_1 = true; $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="swiper-slide">
+                                    <a class="brand-wrapper" href="#">
+                                        <img src="<?php echo e(asset('public/'.$brand->brand_logo)); ?>">
+                                    </a>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -4183,42 +4194,49 @@
     <div class="hero-promo-area v1">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-6 single-promo-item style2 text-center">
-                    <div class="promo-icon style2">
-                        <i class="ti-truck"></i>
+
+                <?php if($settings[18]->plain_value==1): ?>
+                    <!-- Feature 1 -->
+                    <div class="col-md-3 col-6 single-promo-item style2 text-center">
+                        <div class="promo-icon style2">
+                            <i class="<?php echo e($settings[21]->plain_value ?? null); ?>"></i>
+                        </div>
+                        <div class="promo-content style2">
+                            <h5><?php echo e($settings[19]->settingTranslation->value ?? $settings[19]->settingTranslationDefaultEnglish->value ?? NULL); ?></h5>
+                            <span><?php echo e($settings[20]->settingTranslation->value ?? $settings[19]->settingTranslationDefaultEnglish->value ?? NULL); ?></span>
+                        </div>
                     </div>
-                    <div class="promo-content style2">
-                        <h5>Free Shipping</h5>
-                        <span>Orders over $100</span>
+                    <!-- Feature 2 -->
+                    <div class="col-md-3 col-6 single-promo-item style2 text-center">
+                        <div class="promo-icon style2">
+                            <i class="<?php echo e($settings[24]->plain_value ?? null); ?>"></i>
+                        </div>
+                        <div class="promo-content style2">
+                            <h5><?php echo e($settings[22]->settingTranslation->value ?? $settings[22]->settingTranslationDefaultEnglish->value ?? NULL); ?></h5>
+                            <span><?php echo e($settings[23]->settingTranslation->value ?? $settings[23]->settingTranslationDefaultEnglish->value ?? NULL); ?></span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-6 single-promo-item style2 text-center">
-                    <div class="promo-icon style2">
-                        <i class="ti-loop"></i>
+                    <!-- Feature 3 -->
+                    <div class="col-md-3 col-6 single-promo-item style2 text-center">
+                        <div class="promo-icon style2">
+                            <i class="<?php echo e($settings[27]->plain_value ?? null); ?>"></i>
+                        </div>
+                        <div class="promo-content style2">
+                            <h5><?php echo e($settings[25]->settingTranslation->value ?? $settings[22]->settingTranslationDefaultEnglish->value ?? NULL); ?></h5>
+                            <span><?php echo e($settings[26]->settingTranslation->value ?? $settings[23]->settingTranslationDefaultEnglish->value ?? NULL); ?></span>
+                        </div>
                     </div>
-                    <div class="promo-content style2">
-                        <h5>Money returns</h5>
-                        <span>Within 30 days</span>
+                    <!-- Feature 4 -->
+                    <div class="col-md-3 col-6 single-promo-item style2 text-center">
+                        <div class="promo-icon style2">
+                            <i class="<?php echo e($settings[30]->plain_value ?? null); ?>"></i>
+                        </div>
+                        <div class="promo-content style2">
+                            <h5><?php echo e($settings[28]->settingTranslation->value ?? $settings[28]->settingTranslationDefaultEnglish->value ?? NULL); ?></h5>
+                            <span><?php echo e($settings[29]->settingTranslation->value ?? $settings[29]->settingTranslationDefaultEnglish->value ?? NULL); ?></span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-6 single-promo-item style2 text-center">
-                    <div class="promo-icon style2">
-                        <i class="ti-lock"></i>
-                    </div>
-                    <div class="promo-content style2">
-                        <h5>100% secure</h5>
-                        <span>Online Trading</span>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6 single-promo-item style2 text-center">
-                    <div class="promo-icon style2">
-                        <i class="ti-headphone-alt"></i>
-                    </div>
-                    <div class="promo-content style2">
-                        <h5>24/7 support</h5>
-                        <span>Dedicated Support</span>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -4341,6 +4359,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <!-- Cookie consent Ends-->
+
+
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="quickshop" tabindex="-1" role="dialog" aria-labelledby="quickshop" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -4461,6 +4481,8 @@
         </div>
     </div>
     <!--Quick shop modal ends-->
+
+
     <!-- Quick Shop Modal starts -->
     <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">

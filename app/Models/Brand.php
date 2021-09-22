@@ -4,19 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
 
 class Brand extends Model
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // protected $fillable = [
-    //     'brand_name', 'brand_logo', 'status',
-    // ];
     protected $fillable = [
         'slug', 'is_active',
     ];
@@ -26,9 +19,22 @@ class Brand extends Model
     	return $this->hasMany(Product::class,'brand_id');
     }
 
+    // public function brandTranslation()
+    // {
+    // 	return $this->hasMany(BrandTranslation::class,'brand_id');
+    // 	// return $this->hasOne(BrandTranslation::class,'brand_id');
+    // }
+
     public function brandTranslation()
     {
-    	return $this->hasMany(BrandTranslation::class,'brand_id');
-    	// return $this->hasOne(BrandTranslation::class,'brand_id');
+        $locale = Session::get('currentLocal');
+        return $this->hasOne(BrandTranslation::class,'brand_id')
+                    ->where('local',$locale);
+    }
+
+    public function brandTranslationEnglish()
+    {
+        return $this->hasOne(BrandTranslation::class,'brand_id')
+                    ->where('local','en');
     }
 }

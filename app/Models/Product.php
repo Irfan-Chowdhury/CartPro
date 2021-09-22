@@ -52,12 +52,16 @@ class Product extends Model
         return $this->hasMany(ProductImage::class,'product_id');
     }
 
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
     //For Product-Edit
     // public function brandTranslation()
     // {
     // 	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id');
     // }
-    
+
     // public function tags()
     // {
     //     return $this->belongsToMany(Tag::class)

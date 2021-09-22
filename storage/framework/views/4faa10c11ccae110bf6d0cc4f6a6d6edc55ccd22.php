@@ -1,62 +1,57 @@
 <?php $__env->startSection('admin_content'); ?>
-<section>
-<?php
-    // use Stichoza\GoogleTranslate\GoogleTranslate;
-    // $local = Session::get('currentLocal');
-    // $tr    = new GoogleTranslate($local);
-?>
 
-    <div class="container-fluid"><span id="success_alert"></span></div>
+<section>
+    <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        
-        <h4 class="font-weight-bold mt-3"><?php echo app('translator')->get('file.Brand'); ?></h4>
+        <h4 class="font-weight-bold mt-3"><?php echo e(__('Taxes')); ?></h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
-        <?php if(auth()->user()->can('brand-store')): ?>
-            <button type="button" class="btn btn-info" name="create_record" id="create_record">
-                <i class="fa fa-plus"></i> <?php echo app('translator')->get('file.Add Brand'); ?>
+        <?php if(auth()->user()->can('tag-store')): ?>
+            <button type="button" class="btn btn-info" name="createModalForm" data-toggle="modal" data-target="#createModalForm">
+                <i class="fa fa-plus"></i> <?php echo e(__('Add Tax')); ?>
+
             </button>
         <?php endif; ?>
-        <?php if(auth()->user()->can('brand-action')): ?>
-            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
-                <i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk_Action')); ?>
+
+        <?php if(auth()->user()->can('tag-action')): ?>
+            <button type="button" class="btn btn-danger" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> <?php echo e(trans('file.Bulk Action')); ?>
 
             </button>
         <?php endif; ?>
 
     </div>
     <div class="table-responsive">
-    	<table id="brandListTable" class="table ">
+    	<table id="dataTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-                    <th scope="col"><?php echo app('translator')->get('file.Logo'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Brand Name'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Status'); ?></th>
-        		    <th scope="col"><?php echo app('translator')->get('file.Action'); ?></th>
+        		    <th scope="col"><?php echo e(trans('Tax Name')); ?></th>
+        		    <th scope="col"><?php echo e(trans('Country')); ?></th>
+        		    <th scope="col"><?php echo e(trans('file.Status')); ?></th>
+        		    <th scope="col"><?php echo e(trans('file.action')); ?></th>
         	   </tr>
     	  	</thead>
     	</table>
     </div>
-
 </section>
 
-<?php echo $__env->make('admin.pages.brand.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('admin.pages.tax.create_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('admin.pages.tax.edit_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('admin.includes.confirm_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+
 <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
     $(document).ready(function () {
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        let table = $('#brandListTable').DataTable({
+        let table = $('#dataTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -86,8 +81,9 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "<?php echo e(route('admin.brand')); ?>",
+                url: "<?php echo e(route('admin.tax.index')); ?>",
             },
+
             columns: [
                 {
                     data: null,
@@ -95,18 +91,18 @@
                     searchable: false
                 },
                 {
-                    data: 'brand_logo',
-                    name: 'brand_logo',
+                    data: 'tax_name',
+                    name: 'tax_name',
                 },
                 {
-                    data: 'brand_name',
-                    name: 'brand_name',
+                    data: 'country',
+                    name: 'country',
                 },
                 {
                     data: 'is_active',
                     name: 'is_active',
-                    render:function (data) {
-                        if (data == 1) {
+                        render:function (data) {
+                            if (data == 1) {
                             return "<span class='p-2 badge badge-success'>Active</span>";
                         }else{
                             return "<span class='p-2 badge badge-danger'>Inactive</span>";
@@ -119,6 +115,7 @@
                     orderable: false,
                 }
             ],
+
 
             "order": [],
             'language': {
@@ -133,7 +130,6 @@
             'columnDefs': [
                 {
                     "orderable": false,
-                    // 'targets': [0, 3],
                     'targets': [0],
                 },
                 {
@@ -151,6 +147,8 @@
                     'targets': [0]
                 }
             ],
+
+
             'select': {style: 'multi', selector: 'td:first-child'},
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
             dom: '<"row"lfB>rtip',
@@ -189,13 +187,13 @@
         new $.fn.dataTable.FixedHeader(table);
     });
 
+
     //----------Insert Data----------------------
-    $("#submitForm").on("submit",function(e){
-        // e.preventDefault();
-        // var goalType = $("#brandListTable").val();
+    $('#submitForm').on('submit', function (e) {
+        e.preventDefault();
 
         $.ajax({
-            url: "<?php echo e(route('admin.brand.store')); ?>",
+            url: "<?php echo e(route('admin.tax.store')); ?>",
             method: "POST",
             data: new FormData(this),
             contentType: false,
@@ -203,11 +201,113 @@
             processData: false,
             dataType: "json",
             success: function (data) {
+                let html = '';
+
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (let count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                    $('#alertMessage').fadeIn("slow");
+                    $('#alertMessage').html(html);
+                    setTimeout(function() {
+                        $('#alertMessage').fadeOut("slow");
+                    }, 3000);
+                }
+
+                else if(data.success){
+                    $("#createModalForm").modal('hide');
+                    $('#dataTable').DataTable().ajax.reload();
+                    $('#submitForm')[0].reset();
+                    $('select').selectpicker('refresh');
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                    ("#success_alert").removeClass('bg-danger text-center text-light p-1');
+                }
+            }
+        });
+    });
+
+    // ------------ Edit ------------------
+    $(document).on("click",".edit",function(e){
+        e.preventDefault();
+        var taxId = $(this).data("id");
+
+        $.ajax({
+            url: "<?php echo e(route('admin.tax.edit')); ?>",
+            type: "GET",
+            data: {tax_id:taxId},
+            success: function(data){
+                console.log(data);
+
+                $('#tax_id').val(data.tax.id);
+                $('#tax_class').val(data.taxTranslation.tax_class);
+                $('#based_on').selectpicker('val',data.tax.based_on);
+                $('#tax_name').val(data.taxTranslation.tax_name);
+                $('#country').selectpicker('val',data.tax.country);
+                $('#state').val(data.taxTranslation.state);
+                $('#city').val(data.taxTranslation.city);
+                $('#zip').val(data.tax.zip);
+                $('#rate').val(data.tax.rate);
+                if (data.tax.is_active==1) {
+                    $('#is_active').attr('checked', true)
+                }else{
+                    $('#is_active').attr('checked', false)
+                }
+                $('#EditformModal').modal('show');
+            }
+        });
+    });
+
+    //----------Update Data----------------------
+    $("#updateForm").on("submit",function(e){
+        e.preventDefault();
+        var formData = new FormData(this); //For Image always use this method
+
+        $.ajax({
+            url: "<?php echo e(route('admin.tax.update')); ?>",
+            type: "POST",
+            data: formData,
+            contentType: false, //That means we send mulitpart/data
+            processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
+            success: function(data){
+                console.log(data);
+                if (data.errors) {
+                    $("#alertMessageEdit").addClass('bg-danger text-center text-light p-1').html(data.errors) //Check in create modal
+                }
+                else if(data.success){
+                    $("#EditformModal").modal('hide');
+                    $('#dataTable').DataTable().ajax.reload();
+                    $('#updatetForm')[0].reset();
+                    $('select').selectpicker('refresh');
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                    ("#alertMessageEdit").removeClass('bg-danger text-center text-light p-1');
+                }
+            }
+        });
+    });
+
+    //---------- Active -------------
+    $(document).on("click",".active",function(e){
+        e.preventDefault();
+        var id = $(this).data("id");
+
+        $.ajax({
+            url: "<?php echo e(route('admin.tax.active')); ?>",
+            type: "GET",
+            data: {id:id},
+            success: function(data){
                 console.log(data);
                 if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
-                    $('#submitForm')[0].reset();
-                    $("#formModal").modal('hide');
+                    $('#dataTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -219,122 +319,34 @@
     });
 
 
-	$('#create_record').click(function () {
-		$('modal-title').text('<?php echo e(__('Add Account')); ?>');
-		$('#action_button').val('<?php echo e(trans("file.Add")); ?>');
-		$('#action').val('<?php echo e(trans("file.Add")); ?>');
-		$('#formModal').modal('show');
-	});
+    //---------- Inactive -------------
+    $(document).on("click",".inactive",function(e){
+        e.preventDefault();
+        var id = $(this).data("id");
 
-	// $('#brandListTable').on('click','.status',function () {
-    //         let id = $(this).data('id');
-    //         let status = $(this).data('status');
-
-    //         var target = "<?php echo e(route('admin.brand')); ?>/" + id +'/'+ status  ;
-
-    //         $.ajax({
-    //             url:target,
-    //             dataType:"json",
-    //             success:function(data) {
-    //                 let html = '';
-    //                 if (data.success) {
-    //                     html = '<div class="alert alert-success">'+data.success + "</div>";
-    //                     $('#category_list-table').DataTable().ajax.reload();
-    //                 }
-    //                 $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-    //             }
-    //         })
-    //     });
-
-	$('#sample_form').on('submit', function (event) {
-
-            event.preventDefault();
-            if ($('#action').val() === '<?php echo e(trans('file.Add')); ?>') {
-
-                $.ajax({
-                    url: "<?php echo e(route('admin.brand.store')); ?>",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-
-                        // let html = '';
-                        // if (data.errors) {
-                        //     html = '<div class="alert alert-danger">';
-                        //     for (let count = 0; count < data.errors.length; count++) {
-                        //         html += '<p>' + data.errors[count] + '</p>';
-                        //     }
-                        //     html += '</div>';
-                        // }
-                        // if (data.success) {
-                        //     html = '<div class="alert alert-success">' + data.success + '</div>';
-                        //     $('#sample_form')[0].reset();
-                        //     $('#brandListTable').DataTable().ajax.reload();
-                        // }
-                        // $('#brandListTable').html(html).slideDown(300).delay(5000).slideUp(300);
-                    }
-                })
+        $.ajax({
+            url: "<?php echo e(route('admin.tax.inactive')); ?>",
+            type: "GET",
+            data: {id:id},
+            success: function(data){
+                console.log(data);
+                if(data.success){
+                    $('#dataTable').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }
             }
         });
+    });
 
-
-
-    //---------- Active -------------
-	$(document).on("click",".active",function(e){
-		e.preventDefault();
-		var id = $(this).data("id");
-		console.log(id);
-
-		$.ajax({
-			url: "<?php echo e(route('admin.brand.active')); ?>",
-			type: "GET",
-			data: {id:id},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
-
-	//---------- Inactive -------------
-	$(document).on("click",".inactive",function(e){
-		e.preventDefault();
-		var id = $(this).data("id");
-		console.log(id);
-
-		$.ajax({
-			url: "<?php echo e(route('admin.brand.inactive')); ?>",
-			type: "GET",
-			data: {id:id},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#brandListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
 
     //Bulk Action
     $("#bulk_action").on("click",function(){
         var idsArray = [];
-        let table = $('#brandListTable').DataTable();
+        let table = $('#dataTable').DataTable();
         idsArray = table.rows({selected: true}).ids().toArray();
 
         if(idsArray.length === 0){
@@ -347,14 +359,14 @@
                 console.log(idsArray);
                 action_type = "active";
                 $.ajax({
-                    url: "<?php echo e(route('admin.brand.bulk_action')); ?>",
+                    url: "<?php echo e(route('admin.tax.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#brandListTable').DataTable().ajax.reload();
+                            $('#dataTable').DataTable().ajax.reload();
                             $('#success_alert').fadeIn("slow"); //Check in top in this blade
                             $('#success_alert').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -368,14 +380,14 @@
                 action_type = "inactive";
                 console.log(idsArray);
                 $.ajax({
-                    url: "<?php echo e(route('admin.brand.bulk_action')); ?>",
+                    url: "<?php echo e(route('admin.tax.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#brandListTable').DataTable().ajax.reload();
+                            $('#dataTable').DataTable().ajax.reload();
                             $('#success_alert').fadeIn("slow"); //Check in top in this blade
                             $('#success_alert').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -388,6 +400,7 @@
         }
     });
 </script>
+
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/brand/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/tax/index.blade.php ENDPATH**/ ?>

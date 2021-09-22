@@ -22,14 +22,20 @@ class TaxController extends Controller
         $countries = Country::all();
         $locale = Session::get('currentLocal');
 
-        $taxes = Tax::with(['taxTranslation'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        }])
-        ->orderBy('is_active','DESC')
-        ->orderBy('id','DESC')
-        ->get();
+        // $taxes = Tax::with(['taxTranslation'=> function ($query) use ($locale){
+        //     $query->where('locale',$locale)
+        //     ->orWhere('locale','en')
+        //     ->orderBy('id','DESC');
+        // }])
+        // ->orderBy('is_active','DESC')
+        // ->orderBy('id','DESC')
+        // ->get();
+
+        $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','ASC')
+                ->get();
 
         if (request()->ajax())
         {
@@ -37,21 +43,9 @@ class TaxController extends Controller
             ->setRowId(function ($row){
                 return $row->id;
             })
-            ->addColumn('tax_name', function ($row) use ($locale)
+            ->addColumn('tax_name', function ($row)
             {
-                if ($row->taxTranslation->isNotEmpty()){
-                    foreach ($row->taxTranslation as $key => $value){
-                        if ($key<1){
-                            if ($value->locale==$locale){
-                                return $value->tax_name;
-                            }elseif($value->locale=='en'){
-                                return $value->tax_name;
-                            }
-                        }
-                    }
-                }else {
-                    return "NULL";
-                }
+                return $row->taxTranslation->tax_name ?? $row->taxTranslationDefaultEnglish->tax_name ?? null;
             })
             ->addColumn('action', function ($row)
             {

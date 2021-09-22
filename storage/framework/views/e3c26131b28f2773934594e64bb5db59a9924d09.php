@@ -148,9 +148,13 @@ unset($__errorArgs, $__bag); ?>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class (incomplete)</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
+                                                                    <?php $__empty_1 = true; $__currentLoopData = $taxes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tax): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                                        <option value="<?php echo e($tax->id); ?>"><?php echo e($tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                                    <?php endif; ?>
                                                                     
                                                                 </select>
                                                             </div>

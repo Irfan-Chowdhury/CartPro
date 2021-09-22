@@ -35,11 +35,14 @@ class CategoryController extends Controller
                         ->orWhere('local','en')
                         ->orderBy('id','DESC');
                     },
-                    'parentCategory'
+                    'parentCategory','child','catTranslation','categoryTranslationDefaultEnglish'
                     ])
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','DESC')
                     ->get();
+                    //->where('id',13)->first();
+
+            // return $categories->child[1]->child;
 
 
             //Check Later
@@ -60,37 +63,49 @@ class CategoryController extends Controller
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
                     })
-                    ->addColumn('category_name', function ($row) use ($local)
+                    ->addColumn('category_name', function ($row)
                     {
-                        if ($row->categoryTranslation->count()>0){
-                            foreach ($row->categoryTranslation as $key => $value){
-                                if ($key<1){
-                                    if ($value->local==$local){
-                                        return $value->category_name;
-                                    }elseif($value->local=='en'){
-                                        return $value->category_name;
-                                    }
-                                }
-                            }
-                        }else {
-                            return "NULL";
-                        }
+                        return $row->catTranslation->category_name ?? $row->categoryTranslationDefaultEnglish->category_name ?? 'NULL';
+
+                        // if ($row->categoryTranslation->count()>0){
+                        //     foreach ($row->categoryTranslation as $key => $value){
+                        //         if ($key<1){
+                        //             if ($value->local==$local){
+                        //                 return $value->category_name;
+                        //             }elseif($value->local=='en'){
+                        //                 return $value->category_name;
+                        //             }
+                        //         }
+                        //     }
+                        // }else {
+                        //     return "NULL";
+                        // }
                     })
                     ->addColumn('parent', function ($row) use ($local)
                     {
-                        if ($row->categoryTranslation->count()>0){
-                            if($row->parentCategory==NULL){
-                                return "NONE";
-                            }else{
-                                $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
-                                if (empty($data)) {
-                                    $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first();
-                                }
-                                return $data->category_name;
+                        if ($row->parentCategory!=NULL) {
+                            $categoryTranslation = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
+                            if ($categoryTranslation) {
+                                return $categoryTranslation->category_name;
+                            }else {
+                                return CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first()->category_name;
                             }
                         }else {
-                            return "NULL";
+                            return 'NONE';
                         }
+                        // if ($row->categoryTranslation->count()>0){
+                        //     if($row->parentCategory==NULL){
+                        //         return "NONE";
+                        //     }else{
+                        //         $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
+                        //         if (empty($data)) {
+                        //             $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first();
+                        //         }
+                        //         return $data->category_name;
+                        //     }
+                        // }else {
+                        //     return "NULL";
+                        // }
                     })
                     ->addColumn('is_active', function ($row)
                     {
@@ -151,7 +166,7 @@ class CategoryController extends Controller
             $category->description_position = $request->description_position;
             $image = $request->file('image');
             if ($image) {
-                $category->image = $this->imageStore($image, $directory='images/categories/');
+                $category->image = $this->imageStore($image, $directory='images/categories/',$type='category');
             }
             if ($request->featured == null) {
                 $category->featured = 0;
@@ -185,6 +200,9 @@ class CategoryController extends Controller
         $category = Category::find($request->category_id);
         $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local',$local)->first();
 
+        if (!isset($categoryTranslation)) {
+            $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local','en')->first();
+        }
         return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
 
         return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
@@ -214,7 +232,7 @@ class CategoryController extends Controller
             $category->is_active   = $request->is_active;
 
             if ($request->image) {
-                $category->image = $this->imageStore($request->image, $directory='images/categories/');
+                $category->image = $this->imageStore($request->image, $directory='images/categories/',$type='category');
             }
 
             $category->update();

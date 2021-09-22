@@ -204,10 +204,6 @@
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                // if (data.errors) {
-                //     $("#goalType").addClass('is-invalid');
-                //     $("#message").html(data.errors) //Check in create modal
-                // }
                 if(data.success){
                     $('#brandListTable').DataTable().ajax.reload();
                     $('#submitForm')[0].reset();
@@ -282,39 +278,6 @@
                         // $('#brandListTable').html(html).slideDown(300).delay(5000).slideUp(300);
                     }
                 })
-            }
-
-            if ($('#action').val() === '{{trans('file.Edit')}}') {
-
-
-                $.ajax({
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        if (data.success) {
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                            setTimeout(function () {
-                                $('#formModal').modal('hide');
-                                $('#brandListTable').DataTable().ajax.reload();
-                                $('#sample_form')[0].reset();
-                            }, 2000);
-
-                        }
-                        $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                    }
-                });
             }
         });
 

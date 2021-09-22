@@ -14,6 +14,7 @@ use App\Models\ProductTag;
 use App\Models\ProductTranslation;
 use App\Models\SettingGeneral;
 use App\Models\Tag;
+use App\Models\Tax;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -92,12 +93,10 @@ class ProductController extends Controller
                 })
                 ->addColumn('price', function ($row)
                 {
-                    if ($row->special_price) {
-                        // return  '<span>'.$row->special_price.'</span></br><span class="text-danger"><del>'.$row->price.'</del></span>';
+                    if ($row->special_price > 0) {
                         return  '<span>'.number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').'</span></br><span class="text-danger"><del>'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').'</del></span>';
                     }else {
-                        // return '$ '.$row->price;
-                        return '$ '.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '');
+                        return '$'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '');
                     }
 
 
@@ -177,27 +176,12 @@ class ProductController extends Controller
         ->where('is_active',1)
         ->get();
 
-        // return $attributes;
+        $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','ASC')
+                ->get();
 
-        // $data_attribute = array(
-        //     array(
-        //         'id'=>2,
-        //         'locale'=>'en',
-        //         'attribute_name'=>'Size',
-        //     ),
-        //     array(
-        //         'id'=>3,
-        //         'locale'=>'en',
-        //         'attribute_name'=>'Color',
-        //     ),
-        //     array(
-        //         'id'=>4,
-        //         'locale'=>'en',
-        //         'attribute_name'=>'Ram',
-        //     )
-        // );
-
-        // return $data_attribute[0]['attribute_name'];
 
         $data_attribute = [
             [
@@ -219,7 +203,7 @@ class ProductController extends Controller
 
         //return $data_attribute[0]['attribute_name'];
 
-        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data_attribute'));
+        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data_attribute','taxes'));
 
 
 
@@ -291,7 +275,7 @@ class ProductController extends Controller
         {
             $product                = new Product();
             $product->brand_id      = $request->brand_id;
-            $product->tax_class_id  = $request->tax_class_id;
+            $product->tax_id        = $request->tax_id;
             $product->slug          = $this->slug($request->product_name);
             $product->price         = number_format((float)$request->price, env('FORMAT_NUMBER'), '.', '');
 
@@ -331,7 +315,7 @@ class ProductController extends Controller
             if (!empty($request->base_image)){
                 $productImage = [];
                 $productImage['product_id'] = $product->id;
-                $productImage['image']      = $this->imageStore($request->base_image);
+                $productImage['image']      = $this->imageStore($request->base_image, $type='product');
                 $productImage['type']       = 'base';
                 ProductImage::insert($productImage);
             }
@@ -344,7 +328,7 @@ class ProductController extends Controller
                 foreach($additionalImagesArray as $key => $image){
                     $data = [];
                     $data['product_id'] = $product->id;
-                    $data['image'] =  $this->imageStore($image);
+                    $data['image'] =  $this->imageStore($image,$type='product');
                     $data['type']  = 'additional';
                     ProductImage::insert($data);
                 }
@@ -395,7 +379,6 @@ class ProductController extends Controller
             $query->where('local',$local)
                 ->orWhere('local','en')
                 ->orderBy('id','DESC');
-                // ->first();
         },'categories','tags',
         'baseImage'=> function ($query){
             $query->where('type','base')
@@ -441,9 +424,15 @@ class ProductController extends Controller
         ->where('is_active',1)
         ->get();
 
+        $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','ASC')
+                ->get();
+
         $format_number = $this->totalFormatNumber();
 
-        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number'));
+        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number','taxes'));
     }
 
 
@@ -479,7 +468,7 @@ class ProductController extends Controller
 
             $product                = Product::find($id);
             $product->brand_id      = $request->brand_id;
-            $product->tax_class_id  = $request->tax_class_id;
+            $product->tax_id        = $request->tax_id;
             $product->brand_id      = $request->brand_id;
             $product->slug          = $this->slug($request->product_name);
 
@@ -528,12 +517,12 @@ class ProductController extends Controller
                     if (File::exists(public_path().$productImage->image)) {
                         File::delete(public_path().$productImage->image);
                     }
-                    $productImage->image  = $this->imageStore($request->base_image);
+                    $productImage->image  = $this->imageStore($request->base_image,$type='product');
                     $productImage->update();
                 }else {
                     $productImage = new ProductImage();
                     $productImage->product_id = $id;
-                    $productImage->image = $this->imageStore($request->base_image);
+                    $productImage->image = $this->imageStore($request->base_image,$type='product');
                     $productImage->type  = 'base';
                     $productImage->save();
                 }
@@ -556,7 +545,7 @@ class ProductController extends Controller
                 foreach($additionalImagesArray as $key => $image){
                     $productImage = new ProductImage();
                     $productImage->product_id = $id;
-                    $productImage->image = $this->imageStore($image);
+                    $productImage->image = $this->imageStore($image,$type='product');
                     $productImage->type  = 'additional';
                     $productImage->save();
                 }
@@ -609,12 +598,17 @@ class ProductController extends Controller
         }
     }
 
-    protected function imageStore($image)
+    protected function imageStore($image, $type)
     {
         $directory  ='/images/products/';
-        $img   = Str::random(10). '.' .$image->getClientOriginalExtension();
+        // $img   = Str::random(10). '.' .$image->getClientOriginalExtension();
+        $img   = Str::random(10). '.' .'webp';
         $location = public_path($directory.$img);
-        Image::make($image)->resize(300,300)->save($location);
+        if ($type=='product') {
+            Image::make($image)->encode('webp', 60)->resize(720,660)->save($location);
+        }else {
+            Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
+        }
         $imageUrl = $directory.$img;
 
         return $imageUrl;
