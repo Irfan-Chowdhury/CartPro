@@ -148,13 +148,9 @@ class ProductController extends Controller
             ->orderBy('id','DESC');
         }])->get();
 
-        $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
+        $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
+                    ->where('is_active',1)
+                    ->get();
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -356,13 +352,9 @@ class ProductController extends Controller
             ->orderBy('id','DESC');
         }])->get();
 
-        $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
+        $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
+                        ->where('is_active',1)
+                        ->get();
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)

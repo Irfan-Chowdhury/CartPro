@@ -31,17 +31,11 @@ class AttributeController extends Controller
             App::setLocale($local);
             $tr    = new GoogleTranslate($local);
 
-            $attributes = Attribute::with(['attributeTranslation'=> function ($query) use ($local){
-                        $query->where('local',$local)
-                        ->orWhere('local','en')
-                        ->orderBy('id','DESC');
-                    },
-                    'attributeSetTranslation','attributeSetTranslationEnglish'])
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','DESC')
-                    ->get();
-
-           //return $attributes;
+            $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish',
+                                    'attributeSetTranslation','attributeSetTranslationEnglish')
+                                    ->orderBy('is_active','DESC')
+                                    ->orderBy('id','DESC')
+                                    ->get();
 
             if (request()->ajax())
             {
@@ -51,19 +45,7 @@ class AttributeController extends Controller
                     })
                     ->addColumn('attribute_name', function ($row) use ($local)
                     {
-                        if ($row->attributeTranslation->count()>0){
-                            foreach ($row->attributeTranslation as $key => $value){
-                                if ($key<1){
-                                    if ($value->local==$local){
-                                        return $value->attribute_name;
-                                    }elseif($value->local=='en'){
-                                        return $value->attribute_name;
-                                    }
-                                }
-                            }
-                        }else {
-                            return "NULL";
-                        }
+                        return $row->attributeTranslation->attribute_name ?? $row->attributeTranslationEnglish->attribute_name ?? null;
                     })
                     ->addColumn('attribute_set_name', function ($row) use ($local)
                     {
@@ -127,17 +109,6 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
-        // $attributeValueNameArray= $request->value_name;
-
-        // if(array_filter($attributeValueNameArray) != []){
-        //     // return "Array is empty | Not Execute";
-        //     return "Array is non- empty | Line Execute";
-        // }
-        // else {
-        //     // return "Array is non- empty | Line Execute";
-        //     return "Array is empty | Not Execute";
-        // }
-
         $validator = Validator::make($request->only('attribute_set_id','attribute_name'),[
             'attribute_set_id'=> 'required',
             'attribute_name'  => 'required|unique:attribute_translations',
@@ -249,8 +220,10 @@ class AttributeController extends Controller
 
         // $attribute                 = Attribute::find($id);
         $attribute                 = Attribute::with('categories')->where('id',$id)->first();
-        $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('local',Session::get('currentLocal'))->first();
-
+        $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('locale',Session::get('currentLocal'))->first();
+        if (!isset($attributeTranslation)) {
+            $attributeTranslation = AttributeTranslation::where('attribute_id',$id)->where('locale','en')->first();
+        }
 
         //-------- Value ---------
         $attributeValue = AttributeValue::where('attribute_id',$id)->pluck('id'); //show- attribute_values.id as [2,3,4,5]
@@ -317,7 +290,7 @@ class AttributeController extends Controller
             ->updateOrInsert(
                 [   //condition
                     'attribute_id'  => $id,
-                    'local'         => $local,
+                    'locale'         => $local,
                 ],
                 [   //set value
                     'attribute_name' => $request->attribute_name,

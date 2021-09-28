@@ -494,21 +494,10 @@
                                                         <div class="col-5 form-group">
                                                             <label>{{__('Atrribute')}}</label>
                                                             <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
-                                                                @foreach ($attributes as $item)
-                                                                    @if ($item->attributeTranslation->count()>0)
-                                                                        @foreach ($item->attributeTranslation as $key => $value)
-                                                                            @if ($key<1)
-                                                                                @if ($value->local==$local)
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @elseif($value->local=='en')
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endif
-                                                                @endforeach
+                                                                @forelse ($attributes as $item)
+                                                                    <option value="{{$item->id}}">{{$item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null}}</option>
+                                                                @empty
+                                                                @endforelse
                                                                 {{-- @foreach ($data[0][0]['attributeTranslation'] as $item)
                                                                     @if ($item->attributeTranslation->count()>0)
                                                                         @foreach ($item->attributeTranslation as $key => $value)
@@ -777,21 +766,10 @@
                             // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>'+
                             '<select name="attribute_id[]" id="attributeId2" class="form-control">'+
                                 '<option value="">Please Select Attribute</option>'+
-                                '@foreach ($attributes as $item)'+
-                                    '@if ($item->attributeTranslation->count()>0)'+
-                                        '@foreach ($item->attributeTranslation as $key => $value)'+
-                                            '@if ($key<1)'+
-                                                '@if ($value->local==$local)'+
-                                                    '<option value="{{$item->id}}">{{$value->attribute_name}}</option>'+
-                                                '@elseif($value->local=="en")'+
-                                                    '<option value="{{$item->id}}">{{$value->attribute_name}}</option>'+
-                                                '@endif'+
-                                            '@endif'+
-                                        '@endforeach'+
-                                    '@else'+
-                                        '<option value="">NULL</option>'+
-                                    '@endif'+
-                                '@endforeach'+
+                                    '@forelse ($attributes as $item)'+
+                                        '<option value="{{$item->id}}">{{$item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null}}</option>'+
+                                    '@empty'+
+                                    '@endforelse'+
                             '</select>'+
                         '</div>'+
 

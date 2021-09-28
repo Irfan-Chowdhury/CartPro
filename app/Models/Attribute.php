@@ -15,16 +15,26 @@ class Attribute extends Model
         'is_active'
     ];
 
-    public function attributeTranslation()
-    {
-    	return $this->hasMany(AttributeTranslation::class,'attribute_id');
-    }
-
-    // public function attributeSetTranslation()
+    // public function attributeTranslation()
     // {
-    // 	return $this->hasMany('App\Models\AttributeSetTranslation','attribute_set_id','attribute_set_id');
+    // 	return $this->hasMany(AttributeTranslation::class,'attribute_id');
     // }
 
+    //Attribute
+    public function attributeTranslation()
+    {
+        $locale = Session::get('currentLocal');
+        return $this->hasOne(AttributeTranslation::class,'attribute_id')
+                    ->where('locale',$locale);
+    }
+
+    public function attributeTranslationEnglish()
+    {
+        return $this->hasOne(AttributeTranslation::class,'attribute_id')
+                    ->where('locale','en');
+    }
+
+    //Attribute Set
     public function attributeSetTranslation()
     {
         $locale = Session::get('currentLocal');
