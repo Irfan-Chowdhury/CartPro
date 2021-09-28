@@ -23,11 +23,6 @@ class AttributeController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('attribute-view'))
@@ -41,11 +36,7 @@ class AttributeController extends Controller
                         ->orWhere('local','en')
                         ->orderBy('id','DESC');
                     },
-                    'attributeSetTranslation' => function ($query) use ($local){
-                        $query->where('local',$local)
-                        ->orWhere('local','en')
-                        ->orderBy('id','DESC');
-                    }])
+                    'attributeSetTranslation','attributeSetTranslationEnglish'])
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','DESC')
                     ->get();
@@ -76,19 +67,7 @@ class AttributeController extends Controller
                     })
                     ->addColumn('attribute_set_name', function ($row) use ($local)
                     {
-                        if ($row->attributeSetTranslation->count()>0){
-                            foreach ($row->attributeSetTranslation as $key => $value){
-                                if ($key<1){
-                                    if ($value->local==$local){
-                                        return $value->attribute_set_name;
-                                    }elseif($value->local=='en'){
-                                        return $value->attribute_set_name;
-                                    }
-                                }
-                            }
-                        }else {
-                            return "NULL";
-                        }
+                        return $row->attributeSetTranslation->attribute_set_name ?? $row->attributeSetTranslationEnglish->attribute_set_name ?? null;
                     })
                     ->addColumn('is_filterable', function ($row){
                         if ($row->is_filterable==1) {
@@ -128,11 +107,11 @@ class AttributeController extends Controller
         $local = Session::get('currentLocal');
         App::setLocale($local);
 
-        $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])->get();
+        $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish')
+                        ->where('is_active',1)
+                        ->orderBy('is_active','DESC')
+                        ->orderBy('id','DESC')
+                        ->get();
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
@@ -267,7 +246,7 @@ class AttributeController extends Controller
     {
         $local = Session::get('currentLocal');
         App::setLocale($local);
-        
+
         // $attribute                 = Attribute::find($id);
         $attribute                 = Attribute::with('categories')->where('id',$id)->first();
         $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('local',Session::get('currentLocal'))->first();
@@ -286,13 +265,11 @@ class AttributeController extends Controller
         //-------- Value ---------
 
 
-        //return $attribute->attributeValues->count();
-
-        $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])->get();
+        $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish')
+                                    ->where('is_active',1)
+                                    ->orderBy('is_active','DESC')
+                                    ->orderBy('id','DESC')
+                                    ->get();
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
             $query->where('local',$local)

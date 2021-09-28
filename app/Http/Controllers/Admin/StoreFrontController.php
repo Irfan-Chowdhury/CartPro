@@ -57,13 +57,9 @@ class StoreFrontController extends Controller
         ->where('is_active',1)
         ->get();
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $products = Product::with('productTranslation','productTranslationEnglish')
+                    ->where('is_active',1)
+                    ->get();
 
         $menus = Menu::with(['menuTranslations'=> function ($query) use ($locale){
             $query->where('locale',$locale)
@@ -100,11 +96,7 @@ class StoreFrontController extends Controller
             $array_footer_tags = json_decode($array_tags[0]);
         }
 
-        $brands = Brand::with(['brandTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-        }])
+        $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
         ->where('is_active',1)
         ->get();
 

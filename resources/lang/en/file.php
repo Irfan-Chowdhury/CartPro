@@ -65,7 +65,7 @@ return array (
   'Attach File' => 'Attach File',
   'Attendance' => 'Attendance',
   'Attribute Name' => 'Attribute Name',
-  'Attribute Set' => 'এট্রিবিউট সেট',
+  'Attribute Set' => 'Attribute Set',
   'Attribute Set Name' => 'Attribute Set Name',
   'Attribute-Set' => 'Attribute Set',
   'Attribute_Set' => 'Attribute_Set',
@@ -421,11 +421,11 @@ return array (
   'Search' => 'Search',
   'Select Attribute Set' => 'Select Attribute Set',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' => 
+  'Select SMS gateway' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -497,31 +497,31 @@ return array (
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
   'Type' => 'Type',
-  'Type Product Name or Code' => 
+  'Type Product Name or Code' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' => 
+  'Type date or purchase reference' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' => 
+  'Type date or sale reference' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type date or sale reference...',
       ),

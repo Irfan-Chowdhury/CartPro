@@ -129,7 +129,7 @@
       <div style="" id="content" class="animate-bottom">
         <div class="page">
         {{-- @include('flash-message') --}}
-        @include('admin.includes.alert_message')
+        {{-- @include('admin.includes.alert_message') --}}
         @yield('admin_content')
       </div>
     </div>

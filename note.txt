@@ -88,3 +88,30 @@ torefront--
 --
 >
  feature-5 remove
+{{-- @if ($item->brandTranslation->count()>0)
+        @foreach ($item->brandTranslation as $key => $value)
+            @if ($key<1)
+                @if ($value->local==$local)
+                    <option value="{{$item->id}}"
+                        @if(isset($product->brand_id))
+                            @if($item->id==$product->brand_id)
+                                selected
+                            @endif
+                        @endif>
+                        {{$value->brand_name}}
+                    </option>
+                @elseif($value->local=='en')
+                    <option value="{{$item->id}}"
+                        @if(isset($product->brand_id))
+                            @if($item->id==$product->brand_id)
+                                selected
+                            @endif
+                        @endif>
+                        {{$value->brand_name}}
+                    </option>
+                @endif
+            @endif
+        @endforeach
+    @else
+        <option value="">{{__('NULL')}}</option>
+    @endif --}}

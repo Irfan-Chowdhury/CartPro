@@ -15,11 +15,6 @@ class TagController extends Controller
 {
     use ActiveInactiveTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('tag-view'))

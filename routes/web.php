@@ -34,11 +34,26 @@ Auth::routes();
 */
 
 // $locale = Session::get('currentLocal');
-// Route::group(['prefix' => '{locale}','namespace'=>'Frontend'], function () {
-//         Route::get('/','HomeController@index');
+
+// Route::group(['prefix' => '{locale}/','namespace'=>'Frontend'], function ($locale) {
+// Route::group(['namespace'=>'Frontend'], function ($locale) {
+//         Route::get('{locale}/','HomeController@index');
+//         Route::get('/{product_slug}','HomeController@product_details')->name('cartpro.product');
 // });
 
-Route::get('/','Frontend\HomeController@index');
+
+// Route::get('/companies', ['as' => 'comp', function () {
+//     return 'test';
+//   }]);
+
+Route::get('/','Frontend\HomeController@index')->name('cartpro.home');
+Route::get('product/{product_slug}/{category_id}','Frontend\HomeController@product_details')->name('cartpro.product_details');
+
+Route::post('/cart/add', 'Frontend\HomeController@productAddToCart')->name('product.add_to_cart');
+
+
+
+
 
 
 
@@ -64,13 +79,13 @@ Route::post('/admin/login','Admin\LoginController@login')->name('admin.login');
 Route::get('/admin/dashboard','AdminController@dashboard')->name('admin.dashboard');
 Route::get('/admin/logout','AdminController@Logout')->name('admin.logout');
 
-
 Route::get('/admin/google_analytics','AdminController@googleAnalytics')->name('admin.googleAnalytics');
 
 
 
 // Route::group(['prefix' => '{locale}'], function () {
     Route::group(['prefix' => '/admin','namespace'=>'Admin'], function () {
+
 
         //--Category--
         Route::group(['prefix' => '/categories'], function () {
@@ -105,8 +120,10 @@ Route::get('/admin/google_analytics','AdminController@googleAnalytics')->name('a
         Route::group(['prefix' => 'attribute-sets'], function () {
             Route::get('/','AttributeSetController@index')->name('admin.attribute_set.index');
             Route::post('/store','AttributeSetController@store')->name('admin.attribute_set.store');
-            Route::get('/edit/{id}','AttributeSetController@edit')->name('admin.attribute_set.edit');
-            Route::post('/update/{id}','AttributeSetController@update')->name('admin.attribute_set.update');
+            // Route::get('/edit/{id}','AttributeSetController@edit')->name('admin.attribute_set.edit');
+            Route::get('/edit','AttributeSetController@edit')->name('admin.attribute_set.edit');
+            // Route::post('/update/{id}','AttributeSetController@update')->name('admin.attribute_set.update');
+            Route::post('/update','AttributeSetController@update')->name('admin.attribute_set.update');
             Route::get('/active','AttributeSetController@active')->name('admin.attribute_set.active');
             Route::get('/inactive','AttributeSetController@inactive')->name('admin.attribute_set.inactive');
             Route::get('/bulk_action','AttributeSetController@bulkAction')->name('admin.attribute_set.bulk_action');

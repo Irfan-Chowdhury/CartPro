@@ -34,21 +34,10 @@
                                                 <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Attribute Set <span class="text-danger">*</span></b></label>
                                                 <div class="col-sm-8">
                                                     <select name="attribute_set_id" id="attributeSetId" class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='@lang('file.Select Attribute Set')'>
-                                                        @foreach ($attributeSets as $item)
-                                                            @if ($item->attributeSetTranslation->count()>0)
-                                                                @foreach ($item->attributeSetTranslation as $key => $value)
-                                                                    @if ($key<1)
-                                                                        @if ($value->local==$local)
-                                                                            <option value="{{$item->id}}" @if($item->id==$attribute->attribute_set_id) selected @endif>{{$value->attribute_set_name}}</option>
-                                                                        @elseif($value->local=='en')
-                                                                            <option value="{{$item->id}}" @if($item->id==$attribute->attribute_set_id) selected @endif>{{$value->attribute_set_name}}</option>
-                                                                        @endif
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <option value="">{{__('NULL')}}</option>
-                                                            @endif
-                                                        @endforeach
+                                                        @forelse ($attributeSets as $item)
+                                                            <option value="{{$item->id}}" @if($item->id==$attribute->attribute_set_id) selected @endif>{{$item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null}}</option>
+                                                        @empty
+                                                        @endforelse
                                                     </select>
                                                     @error('attribute_set_id')
                                                         <div class="text-danger">{{ $message }}</div>

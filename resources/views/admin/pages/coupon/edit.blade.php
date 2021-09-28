@@ -131,32 +131,17 @@
                                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Products') }}</b></label>
                                                         <div class="col-sm-9">
                                                             <select name="product_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Product')}}'>
-                                                                @foreach ($products as $item)
-                                                                    @forelse ($item->productTranslation as $key => $value)
-                                                                        @if ($key<1)
-                                                                            @if ($value->local==$locale)
-                                                                                <option value="{{$item->id}}"
-                                                                                    @foreach($coupon->products as $couponProduct)
-                                                                                        @if($couponProduct->id == $item->id)
-                                                                                            selected
-                                                                                        @endif
-                                                                                    @endforeach>
-                                                                                    {{$value->product_name}}
-                                                                                </option>
-                                                                            @elseif($value->local=='en')
-                                                                                <option value="{{$item->id}}"
-                                                                                    @foreach($coupon->products as $couponProduct)
-                                                                                        @if($couponProduct->id == $item->id)
-                                                                                            selected
-                                                                                        @endif
-                                                                                    @endforeach>
-                                                                                    {{$value->product_name}}
-                                                                                </option>
+                                                                @forelse ($products as $item)
+                                                                    <option value="{{$item->id}}"
+                                                                        @foreach($coupon->products as $couponProduct)
+                                                                            @if($couponProduct->id == $item->id)
+                                                                                selected
                                                                             @endif
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
-                                                                @endforeach
+                                                                        @endforeach>
+                                                                        {{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}
+                                                                    </option>
+                                                                @empty
+                                                                @endforelse
                                                             </select>
                                                         </div>
                                                     </div>

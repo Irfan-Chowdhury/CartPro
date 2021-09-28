@@ -1,6 +1,19 @@
 (function($) {
     "use strict";
 
+
+    $('.color-change').click(function() {
+        var color = $(this).data('color');
+        $('body').css('--theme-color', color);
+    });
+
+    $('#color-input').on('change',function() {
+        var color = $(this).val();
+        $('body').css('--theme-color', color);
+    });
+
+
+
     $(window).on('resize', function() {
         var win = $(this); //this = window
         if (win.width() > 990) { history.go(0); } else if (win.width() < 990) { history.go(0); }
@@ -155,6 +168,22 @@
 
 
     $(document).ready(function() {
+
+        /*------------------------------------    
+             left sidebar menu 
+        --------------------------------------*/
+
+        $('.category__menu').on('click', function() {
+            $('.category__list').toggleClass('list__open');
+            if(!isMobile) {
+                $('.right-pane').toggleClass('w-100');
+            }
+        });
+
+        $(".shopping__cart__inner").mCustomScrollbar({
+            theme: "light",
+            scrollInertia: 200
+        });
 
         /*------------------------------------    
              Shopping Cart 

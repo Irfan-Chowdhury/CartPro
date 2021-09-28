@@ -20,10 +20,6 @@ class BrandController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait, imageHandleTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
     public function index()
     {
         if (auth()->user()->can('brand-view'))
@@ -33,11 +29,7 @@ class BrandController extends Controller
 
             $local = Session::get('currentLocal');
 
-            $brands = Brand::with(['brandTranslation'=> function ($query) use ($local){
-                            $query->where('local',$local)
-                            ->orWhere('local','en')
-                            ->orderBy('id','DESC');
-                        }])
+            $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
                         ->orderBy('is_active','DESC')
                         ->orderBy('id','DESC')
                         ->get();
@@ -60,20 +52,7 @@ class BrandController extends Controller
                     })
                     ->addColumn('brand_name', function ($row) use ($local)
                     {
-                        if ($row->brandTranslation->count()>0){
-                            foreach ($row->brandTranslation as $key => $value){
-                                if ($key<1){
-                                    if ($value->local==$local){
-                                        return $value->brand_name;
-                                    }
-                                    elseif($value->local=='en'){
-                                        return $value->brand_name;
-                                    }
-                                }
-                            }
-                        }else {
-                            return "NULL";
-                        }
+                        return $row->brandTranslation->brand_name ?? $row->brandTranslationEnglish->brand_name ?? null;
                     })
                     ->addColumn('action', function ($row)
                     {
@@ -102,15 +81,6 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-        // return response()->json($request->all());
-
-        // $validator = Validator::make($request->only('brand_name'),[
-        //     'brand_name' => 'required',
-        // ]);
-        // if ($validator->fails()){
-        //     return response()->json(['errors' => $validator]);
-        // }
-
         if (auth()->user()->can('brand-store'))
         {
             $brand       = new Brand;
@@ -140,9 +110,14 @@ class BrandController extends Controller
 
     public function brandEdit($id)
     {
+        App::setLocale(Session::get('currentLocal'));
+        
         $local    = Session::get('currentLocal');
         $brand    = Brand::find($id);
         $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local',$local)->first();
+        if (!isset($brandTranslation)) {
+            $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local','en')->first();
+        }
 
         return view('admin.pages.brand.edit',compact('brand','brandTranslation','local'));
     }
@@ -180,13 +155,6 @@ class BrandController extends Controller
             return redirect()->back();
         }
 
-    }
-
-    public function delete($id)
-    {
-       Brand::whereId($id)->delete();
-       return redirect()->back();
-       return response()->json(['success' => __('Data is successfully deleted')]);
     }
 
     /*

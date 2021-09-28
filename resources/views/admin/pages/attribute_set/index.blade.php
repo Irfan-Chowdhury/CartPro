@@ -3,7 +3,6 @@
 
 
 <section>
-    <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">@lang('file.Attribute Set')</h4>
@@ -36,7 +35,8 @@
 
 </section>
 
-@include('admin.pages.attribute_set.create')
+@include('admin.pages.attribute_set.create_modal')
+@include('admin.pages.attribute_set.edit_modal')
 @include('admin.includes.confirm_modal')
 
 
@@ -179,8 +179,8 @@ $(document).ready(function () {
 	new $.fn.dataTable.FixedHeader(table);
 });
 
-//----------Insert Data----------------------
-$("#submitForm").on("submit",function(e){
+    //----------Insert Data----------------------
+    $("#submitForm").on("submit",function(e){
         e.preventDefault();
         var attributeSetName = $("#attributeSetName").val();
         var isActive         = $("#isActive").val();
@@ -200,6 +200,65 @@ $("#submitForm").on("submit",function(e){
                     $('#AtttributeSetTable').DataTable().ajax.reload();
                     $('#submitForm')[0].reset();
                     $("#formModal").modal('hide');
+                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }
+            }
+        });
+    });
+
+
+    //---------- Show data by id-------------
+    $(document).on('click', '.edit', function () {
+        var rowId = $(this).data("id");
+        $('#success_alert').html('');
+
+        $.ajax({
+            url: "{{route('admin.attribute_set.edit')}}",
+            type: "GET",
+            data: {attribute_set_id:rowId},
+            success: function (data) {
+                $('#AttributeSetIdEdit').val(data.attributeSet.id);
+                $('#attributeSetNameEdit').val(data.attributeSetTranslation.attribute_set_name);
+                if (data.attributeSet.is_active == 1) {
+                        $('#isActiveEdit').prop('checked', true);
+                } else {
+                    $('#isActiveEdit').prop('checked', false);
+                }
+                $('#editFormModal').modal('show');
+            }
+        })
+    });
+
+
+    //---------- Update -------------
+    $("#updateForm").on("submit",function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: "{{route('admin.attribute_set.update')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+
+                console.log(data);
+                // let html = '';
+
+                if (data.error) {
+                    html = '<div class="alert alert-danger">' + data.error + '</div>';
+                    $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                }
+                else if(data.success){
+                    $('#AtttributeSetTable').DataTable().ajax.reload();
+                    $('#updateForm')[0].reset();
+                    $("#editFormModal").modal('hide');
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {

@@ -10,32 +10,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ActiveInactiveTrait;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 
 class AttributeSetController extends Controller
 {
     use ActiveInactiveTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('attribute_set-view'))
         {
-            $local = Session::get('currentLocal');
-            App::setLocale($local);
+            $locale = Session::get('currentLocal');
+            App::setLocale($locale);
 
 
-            $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
-                $query->where('local',$local)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
+            $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish')
+                            ->orderBy('is_active','DESC')
+                            ->orderBy('id','DESC')
+                            ->get();
 
             if (request()->ajax())
             {
@@ -43,28 +35,18 @@ class AttributeSetController extends Controller
                 ->setRowId(function ($row){
                     return $row->id;
                 })
-                ->addColumn('attribute_set_name', function ($row) use ($local)
+                ->addColumn('attribute_set_name', function ($row) use ($locale)
                 {
-                    if ($row->attributeSetTranslation->count()>0){
-                        foreach ($row->attributeSetTranslation as $key => $value){
-                            if ($key<1){
-                                if ($value->local==$local){
-                                    return $value->attribute_set_name;
-                                }elseif($value->local=='en'){
-                                    return $value->attribute_set_name;
-                                }
-                            }
-                        }
-                    }else {
-                        return "NULL";
-                    }
+                    return $row->attributeSetTranslation->attribute_set_name ?? $row->attributeSetTranslationEnglish->attribute_set_name ?? null;
                 })
                 ->addColumn('action', function ($row)
                 {
                     $actionBtn = "";
                     if (auth()->user()->can('attribute_set-edit'))
                     {
-                        $actionBtn .= '<a href="'.route('admin.attribute_set.edit', $row->id) .'" class="edit btn btn-info btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                        // $actionBtn .= '<a href="'.route('admin.attribute_set.edit', $row->id) .'" class="edit btn btn-info btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
+                        //         &nbsp; ';
+                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                                 &nbsp; ';
                     }
                     if (auth()->user()->can('attribute_set-action'))
@@ -77,7 +59,7 @@ class AttributeSetController extends Controller
                     }
                     return $actionBtn;
                 })
-                ->rawColumns(['brand_logo','action'])
+                ->rawColumns(['action'])
                 ->make(true);
             }
             return view('admin.pages.attribute_set.index');
@@ -112,41 +94,55 @@ class AttributeSetController extends Controller
 
     }
 
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $attributeSet = AttributeSet::find($id);
-        $attributeSetTranslation = AttributeSetTranslation::where('attribute_set_id',$id)->where('local',Session::get('currentLocal'))->first();
+        $attributeSet = AttributeSet::find($request->attribute_set_id);
+        $attributeSetTranslation = AttributeSetTranslation::where('attribute_set_id',$request->attribute_set_id)->where('locale',Session::get('currentLocal'))->first();
+        if (!isset($attributeSetTranslation)) {
+            $attributeSetTranslation = AttributeSetTranslation::where('attribute_set_id',$request->attribute_set_id)->where('locale','en')->first();
+        }
+
+        return response()->json(['attributeSet'=>$attributeSet, 'attributeSetTranslation'=>$attributeSetTranslation]);
 
         return view('admin.pages.attribute_set.edit',compact('attributeSet','attributeSetTranslation'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         if (auth()->user()->can('attribute_set-edit'))
         {
-            $attributeSet = AttributeSet::find($id);
-            if ($request->is_active==1) {
-                $attributeSet->is_active = 1;
-            }else {
-                $attributeSet->is_active = 0;
+            if ($request->ajax()) {
+
+                $validator = Validator::make($request->only('attribute_set_name'),[
+                    'attribute_set_name'  => 'required|unique:attribute_set_translations,attribute_set_name,'.$request->attribute_set_id,
+                ]);
+                if ($validator->fails()){
+                    return response()->json(['error' => 'Please fill up the required field.']);
+                }
+
+                $attributeSet = AttributeSet::find($request->attribute_set_id);
+                if ($request->is_active==1) {
+                    $attributeSet->is_active = 1;
+                }else {
+                    $attributeSet->is_active = 0;
+                }
+                $attributeSet->update();
+
+                DB::table('attribute_set_translations')
+                ->updateOrInsert(
+                    [   //condition
+                        'attribute_set_id'  => $request->attribute_set_id,
+                        'locale'             => Session::get('currentLocal'),
+                    ],
+                    [   //set value
+                        'attribute_set_name' => $request->attribute_set_name,
+                    ]
+                );
+
+                return response()->json(['success' => 'Data Updated Successfully']);
             }
-            $attributeSet->update();
-
-            DB::table('attribute_set_translations')
-            ->updateOrInsert(
-                [   //condition
-                    'attribute_set_id'  => $request->attribute_set_id,
-                    'local'             => Session::get('currentLocal'),
-                ],
-                [   //set value
-                    'attribute_set_name' => $request->attribute_set_name,
-                ]
-            );
-
-            session()->flash('type','success');
-            session()->flash('message','Successfully Updated');
-            return redirect()->back();
         }
+        return abort('403', __('You are not authorized'));
     }
 
 

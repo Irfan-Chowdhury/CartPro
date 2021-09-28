@@ -1,5 +1,6 @@
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="{{$item->product->slug ?? null}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->product->slug ?? null}}" aria-hidden="true">
+    {{-- <div class="modal fade quickshop" id="Irfan95" tabindex="-1" role="dialog" aria-labelledby="Irfan95" aria-hidden="true"> --}}
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -49,11 +50,19 @@
                                         </ul>
                                         <span>( 04 )</span>
                                     </div>
-                                    <div class="item-sku">SKU: LC123456789</div>
+                                    <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
                                 </div>
                                 <hr>
-                                <div class="item-price">$125.30</div>
-                                <hr>
+                                @if ($item->product->special_price>0)
+                                    <div class="item-price">$ {{$item->product->special_price ?? null}}</div>
+                                    <hr>
+                                    <div class="item-price"><del>$ {{$item->product->price ?? null}}</del></div>
+                                    <hr>
+                                @else
+                                    <div class="item-price">$ {{$item->product->price ?? null}}</div>
+                                    <hr>
+                                @endif
+
                                 <div class="item-short-description">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc condimentum eros idoni rutrum fermentum. Proin nec felis dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</p>
                                 </div>

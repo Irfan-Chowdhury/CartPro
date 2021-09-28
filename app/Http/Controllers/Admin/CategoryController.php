@@ -204,8 +204,6 @@ class CategoryController extends Controller
             $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local','en')->first();
         }
         return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
-
-        return view('admin.pages.category.edit',compact('category','categoryTranslation','local'));
     }
 
 

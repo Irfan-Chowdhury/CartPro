@@ -129,7 +129,7 @@
       <div style="" id="content" class="animate-bottom">
         <div class="page">
         
-        <?php echo $__env->make('admin.includes.alert_message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        
         <?php echo $__env->yieldContent('admin_content'); ?>
       </div>
     </div>

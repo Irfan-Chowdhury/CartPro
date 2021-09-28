@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Product extends Model
 {
@@ -27,14 +28,40 @@ class Product extends Model
     ];
 
 
+    // public function productTranslation()
+    // {
+    // 	return $this->hasMany(ProductTranslation::class,'product_id');
+    // }
+
     public function productTranslation()
     {
-    	return $this->hasMany(ProductTranslation::class,'product_id');
+    	$locale = Session::get('currentLocal');
+    	return $this->hasOne(ProductTranslation::class,'product_id')
+                ->where('local',$locale);
+    }
+
+    public function productTranslationEnglish()
+    {
+    	return $this->hasOne(ProductTranslation::class,'product_id')
+                        ->where('local','en');
     }
 
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function productCategoryTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(CategoryTranslation::class,'category_id')
+                ->where('local',$locale);
+    }
+
+    public function productCategoryTranslationEnglish()
+    {
+    	 return $this->hasOne(CategoryTranslation::class,'category_id')
+                        ->where('local','en');
     }
 
     public function tags()
@@ -56,6 +83,24 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+
+    public function brandTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
+                ->where('local',$locale);
+    }
+
+    public function brandTranslationEnglish()
+    {
+    	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
+                ->where('local','en');
+    }
+
+
+
+
+
     //For Product-Edit
     // public function brandTranslation()
     // {

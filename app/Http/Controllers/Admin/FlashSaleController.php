@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
+use Illuminate\Support\Facades\App;
 
 class FlashSaleController extends Controller
 {
@@ -29,6 +30,7 @@ class FlashSaleController extends Controller
         if (auth()->user()->can('flash_sale-view'))
         {
             $local = Session::get('currentLocal');
+            App::setLocale($local);
 
             $flashSales = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($local){
                 $query->where('local',$local)
@@ -92,12 +94,9 @@ class FlashSaleController extends Controller
     public function create()
     {
         $local = Session::get('currentLocal');
+        App::setLocale($local);
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
+        $products = Product::with('productTranslation','productTranslationEnglish')
             ->where('is_active',1)
             ->get();
 
@@ -182,14 +181,11 @@ class FlashSaleController extends Controller
     public function edit($id)
     {
         $local = Session::get('currentLocal');
+        App::setLocale($local);
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $products = Product::with('productTranslation','productTranslationEnglish')
+                    ->where('is_active',1)
+                    ->get();
 
         $flashSale = FlashSale::with(['flashSaleProducts','flashSaleTranslations'=> function ($query) use ($local){
                 $query->where('local',$local)
@@ -197,8 +193,6 @@ class FlashSaleController extends Controller
             }])
             ->whereId($id)
             ->first();
-        // $flashSale = FlashSale::with(['flashSaleProducts','flashSaleTranslations'])->whereId($id)->first();
-        // return $flashSale->flashSaleTranslations;
 
         return view('admin.pages.flash_sale.edit',compact('products','local','flashSale'));
     }

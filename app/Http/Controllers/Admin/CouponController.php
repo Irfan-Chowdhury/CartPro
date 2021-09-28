@@ -15,6 +15,7 @@ use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Exception;
+use Illuminate\Support\Facades\App;
 
 class CouponController extends Controller
 {
@@ -30,6 +31,8 @@ class CouponController extends Controller
         if (auth()->user()->can('coupon-view'))
         {
             $locale = Session::get('currentLocal');
+            App::setLocale($locale);
+
             $coupons = Coupon::with(['couponTranslations'=> function ($query) use ($locale){
                 $query->where('locale',$locale) //locale name correction
                 ->orWhere('locale','en')
@@ -99,14 +102,11 @@ class CouponController extends Controller
     public function create()
     {
         $locale = Session::get('currentLocal');
+        App::setLocale($locale);
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $products = Product::with(['productTranslation','productTranslationEnglish'])
+                            ->where('is_active',1)
+                            ->get();
 
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
@@ -200,14 +200,11 @@ class CouponController extends Controller
     public function edit($id)
     {
         $locale = Session::get('currentLocal');
+        App::setLocale($locale);
 
-        $products = Product::with(['productTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $products = Product::with(['productTranslation','productTranslationEnglish'])
+                            ->where('is_active',1)
+                            ->get();
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
                 $query->where('local',$locale)
@@ -223,6 +220,8 @@ class CouponController extends Controller
             },
             'products','categories'])
         ->find($id);
+
+        // return $coupon;
 
         return view('admin.pages.coupon.edit',compact('products','categories','locale','coupon'));
     }
@@ -314,7 +313,6 @@ class CouponController extends Controller
     public function bulkAction(Request $request)
     {
         if ($request->ajax()) {
-
             return $this->bulkActionData($request->action_type, Coupon::whereIn('id',$request->idsArray));
         }
     }

@@ -49,19 +49,10 @@
                                                         <div class="form-row">
                                                             <label><b>Product Name <span class="text-danger">*</span></b></label>
                                                             <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Product')}}'>
-                                                                @foreach ($products as $item)
-                                                                    @forelse ($item->productTranslation as $key => $value)
-                                                                        @if ($key<1)
-                                                                            @if ($value->local==$local)
-                                                                                <option value="{{$item->id}}">{{$value->product_name}}</option>
-                                                                            @elseif($value->local=='en')
-                                                                                <option value="{{$item->id}}">{{$value->product_name}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    @empty
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endforelse
-                                                                @endforeach
+                                                                @forelse ($products as $item)
+                                                                    <option value="{{$item->id}}">{{$item->productTranslation->product_name ??$item->productTranslationEnglish->product_name ?? null}}</option>
+                                                                @empty
+                                                                @endforelse
                                                             </select>
                                                             @error('product_id')
                                                                 <div class="text-danger">{{ $message }}</div>
@@ -94,67 +85,6 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- //Testing  --}}
-                                                {{-- <div class="mt-5 row">
-                                                    <div class="col-md-1">
-                                                        <h5><i class="fa fa-th" aria-hidden="true"></i></h5>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <h5 for="inputEmail3">Flash Sale Product</h5>
-                                                    </div>
-                                                    <div class="col-1">
-                                                        <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
-                                                    </div>
-                                                    <br><br>
-
-                                                    <div class="col-md-12">
-                                                        <div class="form-row">
-                                                            <label><b>Product Name <span class="text-danger">*</span></b></label>
-                                                            <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Brand')}}'>
-                                                                @foreach ($products as $item)
-                                                                    @forelse ($item->productTranslation as $key => $value)
-                                                                        @if ($key<1)
-                                                                            @if ($value->local==$local)
-                                                                                <option value="{{$item->id}}">{{$value->product_name}}</option>
-                                                                            @elseif($value->local=='en')
-                                                                                <option value="{{$item->id}}">{{$value->product_name}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    @empty
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endforelse
-                                                                @endforeach
-                                                            </select>
-                                                            @error('product_id')
-                                                                <div class="text-danger">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-
-                                                        <div class="mt-2 form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">End Date <span class="text-danger">*</span></label>
-                                                                <input type="date" required name="end_date[]" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="Date">
-                                                                @error('end_date')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">Price <span class="text-danger">*</span></label>
-                                                                <input type="text" required name="price[]" class="form-control @error('price') is-invalid @enderror" placeholder="Price">
-                                                                @error('price')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">Quantity <span class="text-danger">*</span></label>
-                                                                <input type="text" required name="qty[]" class="form-control @error('qty') is-invalid @enderror" placeholder="Quantity">
-                                                                @error('qty')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
                                             </div>
                                             <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add More</span>
                                             <br><br>
@@ -229,19 +159,10 @@
                     '<label><b>Product Name <span class="text-danger">*</span></b></label>'+
                     '<select name="product_id[]" required class="form-control">'+
                         '<option value="">Select Product</option>'+
-                        '@foreach ($products as $item)'+
-                            '@forelse ($item->productTranslation as $key => $value)'+
-                                '@if ($key<1)'+
-                                    '@if ($value->local==$local)'+
-                                        '<option value="{{$item->id}}">{{$value->product_name}}</option>'+
-                                    '@elseif($value->local=="en")'+
-                                       '<option value="{{$item->id}}">{{$value->product_name}}</option>'+
-                                    '@endif'+
-                                '@endif'+
+                            '@forelse ($products as $item)'+
+                                '<option value="{{$item->id}}">{{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}</option>'+
                             '@empty'+
-                                '<option value="">NULL</option>'+
                             '@endforelse'+
-                        '@endforeach'+
                     '</select>'+
                     '@error("product_id")'+
                         '<div class="text-danger">{{ $message }}</div>'+

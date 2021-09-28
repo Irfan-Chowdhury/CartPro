@@ -52,19 +52,10 @@
                                                         <div class="form-row">
                                                             <label><b>Product Name <span class="text-danger">*</span></b></label>
                                                             <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Product')}}'>
-                                                                @foreach ($products as $item)
-                                                                    @forelse ($item->productTranslation as $key => $value)
-                                                                        @if ($key<1)
-                                                                            @if ($value->local==$local)
-                                                                                <option value="{{$item->id}}" @if($item->id == $flahSaleProduct->product_id) selected @endif>{{$value->product_name}}</option>
-                                                                            @elseif($value->local=='en')
-                                                                                <option value="{{$item->id}}" @if($item->id == $flahSaleProduct->product_id) selected @endif>{{$value->product_name}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    @empty
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endforelse
-                                                                @endforeach
+                                                                @forelse ($products as $item)
+                                                                    <option value="{{$item->id}}" @if($item->id == $flahSaleProduct->product_id) selected @endif>{{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}</option>
+                                                                @empty
+                                                                @endforelse
                                                             </select>
                                                             @error('product_id')
                                                                 <div class="text-danger">{{ $message }}</div>
@@ -185,19 +176,10 @@
                     '<label><b>Product Name <span class="text-danger">*</span></b></label>'+
                     '<select name="product_id[]" required class="form-control">'+
                         '<option value="">Select Product</option>'+
-                        '@foreach ($products as $item)'+
-                            '@forelse ($item->productTranslation as $key => $value)'+
-                                '@if ($key<1)'+
-                                    '@if ($value->local==$local)'+
-                                        '<option value="{{$item->id}}">{{$value->product_name}}</option>'+
-                                    '@elseif($value->local=="en")'+
-                                       '<option value="{{$item->id}}">{{$value->product_name}}</option>'+
-                                    '@endif'+
-                                '@endif'+
+                            '@forelse ($products as $item)'+
+                                '<option value="{{$item->id}}" @if($item->id == $flahSaleProduct->product_id) selected @endif>{{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}</option>'+
                             '@empty'+
-                                '<option value="">NULL</option>'+
                             '@endforelse'+
-                        '@endforeach'+
                     '</select>'+
                     '@error("product_id")'+
                         '<div class="text-danger">{{ $message }}</div>'+

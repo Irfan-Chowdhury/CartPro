@@ -25,7 +25,18 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Top Brands')}}</b></label>
                         <div class="col-sm-8">
                             <select name="storefront_top_brands[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Tag')}}'>
-                                @foreach ($brands as $item)
+                               @forelse ($brands as $item)
+                                    <option value="{{$item->id}}"
+                                        @foreach($array_brands as $key2 => $value)
+                                        @if($array_brands[$key2] == $item->id)
+                                                selected
+                                            @endif
+                                        @endforeach > {{$item->brandTranslation->brand_name ?? $item->brandTranslationEnglish->brand_name ?? null}}
+                                    </option>
+                               @empty
+                               @endforelse
+
+                                {{-- @foreach ($brands as $item)
                                     @forelse ($item->brandTranslation as $key => $value)
                                         @if ($value->local==$locale)
                                                 <option value="{{$item->id}}"
@@ -50,7 +61,7 @@
                                         @endif
                                     @empty
                                     @endforelse
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                     </div>

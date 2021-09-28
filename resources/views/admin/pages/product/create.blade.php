@@ -73,6 +73,7 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Description')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
+                                                                {{-- <textarea name="description" id="description" class="form-control text-editor"></textarea> --}}
                                                                 <textarea name="description" id="description" class="form-control text-editor"></textarea>
                                                                 @error('description')
                                                                     <div class="text-danger">{{ $message }}</div>
@@ -84,21 +85,10 @@
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Brand</b></label>
                                                             <div class="col-sm-8">
                                                                 <select name="brand_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Brand')}}'>
-                                                                    @foreach ($brands as $item)
-                                                                        @if ($item->brandTranslation->count()>0)
-                                                                            @foreach ($item->brandTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->brand_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->brand_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach
+                                                                    @forelse ($brands as $item)
+                                                                        <option value="{{$item->id}}">{{$item->brandTranslation->brand_name ?? $item->brandTranslationEnglish->brand_name ?? null}}</option>
+                                                                    @empty
+                                                                    @endforelse
                                                                 </select>
                                                             </div>
                                                         </div>
