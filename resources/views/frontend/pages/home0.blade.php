@@ -1,6 +1,124 @@
 @extends('frontend.layouts.master')
 @section('frontend_content')
 
+<!-- Offset Wrapper starts-->
+<div class="offset__wrapper">
+    <div class="shopping__cart">
+        <div class="shopping__cart__header">
+            <span class="h6">My Cart</span>
+            <div class="offsetmenu__close__btn">
+                <i class="ion-ios-close-empty"></i>
+            </div>
+        </div>
+        <div class="shopping__cart__inner">
+            <div class="shp__cart__wrap">
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/promo/cart-1-300x350.jpg')}}')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">Samsung Curved Widescreen 4k Ultra HD TV</a></h2>
+                        <span>1</span> x <span class="shp__price">$105.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/promo/cart-1-300x350.jpg')}}')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">North Star Blazer</a></h2>
+                        <span>1</span> x <span class="shp__price">$105.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/promo/cart-1-300x350.jpg')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">North Star Blazer</a></h2>
+                        <span>1</span> x <span class="shp__price">$105.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/promo/cart-1-300x350.jpg')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">North Star Blazer</a></h2>
+                        <span>1</span> x <span class="shp__price">$105.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/promo/cart-1-300x350.jpg')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">North Star Blazer</a></h2>
+                        <span>1</span> x <span class="shp__price">$105.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+                <div class="shp__single__product">
+                    <div class="shp__pro__thumb">
+                        <a href="#">
+                            <img src="{{asset('public/frontend/images/products/redPhone-300x300.png')}}" alt="product images">
+                        </a>
+                    </div>
+                    <div class="shp__pro__details">
+                        <h2><a href="product-details.html">Thermoball Full zip jacket</a></h2>
+                        <span>1</span> x <span class="shp__price">$25.00</span>
+                    </div>
+                    <div class="remove__btn">
+                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- IF EMPTY CART -->
+            <!-- <div class="empty-cart">
+                <img src="{{asset('public/frontend/images/empty-cart.png')}}">
+                <h5>Your cart is empty</h5>
+            </div> -->
+            <!-- IF EMPTY CART -->
+        </div>
+        <div class="shopping__cart__footer">
+            <div class="shoping__total">
+                <span class="subtotal">Subtotal:</span>
+                <span class="total__price">$130.00</span>
+            </div>
+            <div class="shopping__btn">
+                <a class="button style3" href="shop-cart.html">View Cart</a>
+                <a class="button style1" href="shop-checkout.html">Checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Offset Wrapper ends -->
+<!-- Header Area  ends -->
+
 <!--Home Banner starts -->
 <div class="banner-area v3">
     <div class="container">
@@ -117,18 +235,17 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tab-content mt-3" id="lionTabContent">
-
                         <!-- Product_Tab_1-Section_1 -->
                         <div class="tab-pane fade show active" id="{{$product_tabs_one_titles[0] ?? null}}" role="tabpanel" aria-labelledby="all-tab">
                             <div class="product-slider-wrapper swiper-container">
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_1 as $item)
+
                                             <div class="swiper-slide">
-                                                <form action="{{route('product.add_to_cart')}}" method="post">
+                                                <form action="{{route('product.add_to_cart')}}"  method="post">
                                                     @csrf
                                                     <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                    <input type="hidden" name="category_id" value="{{$item->category_id}}">
                                                     <input type="hidden" name="qty" value="1">
 
                                                     <div class="single-product-wrapper">
@@ -193,6 +310,8 @@
                                                     </div>
                                                 </form>
                                             </div>
+
+
                                     @empty
                                     @endforelse
                                 </div>
@@ -205,71 +324,63 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_2 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}"  method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    @if (isset($item->productBaseImage->image))
+                                                        <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                    @else
+                                                        <img src="{{asset('public/images/empty.jpg')}}">
+                                                    @endif
 
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#Irfan95"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span> --}}
-                                                            </a>
-                                                            <a href="wishlist.html">
-                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a>
-                                                        </div>
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
                                                     </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#Irfan95"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span> --}}
                                                         </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                    <a class="product-name" href="#">
+                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
                                                                 </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @endif
+                                                            </div>
+                                                            <div class="product-price">
+                                                                @if ($item->product->special_price>0)
+                                                                    <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                    <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @else
+                                                                    <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @endif
 
-                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     @empty
                                     @endforelse
@@ -283,70 +394,62 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_3 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}"  method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    @if (isset($item->productBaseImage->image))
+                                                        <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                    @else
+                                                        <img src="{{asset('public/images/empty.jpg')}}">
+                                                    @endif
 
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            </a>
-                                                            <a href="wishlist.html">
-                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a>
-                                                        </div>
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
                                                     </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                         </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                    <a class="product-name" href="#">
+                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
                                                                 </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @endif
+                                                            </div>
+                                                            <div class="product-price">
+                                                                @if ($item->product->special_price>0)
+                                                                    <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                    <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @else
+                                                                    <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @endif
 
-                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     @empty
                                     @endforelse
@@ -360,70 +463,62 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_4 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    @if (isset($item->productBaseImage->image))
+                                                        <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                    @else
+                                                        <img src="{{asset('public/images/empty.jpg')}}">
+                                                    @endif
 
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            </a>
-                                                            <a href="wishlist.html">
-                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a>
-                                                        </div>
+                                                    <div class="product-promo-text style1">
+                                                        <span>Sold</span>
                                                     </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                         </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
+                                                        <a href="wishlist.html">
+                                                            <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                    <a class="product-name" href="#">
+                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                        <li><i class="ion-android-star-half"></i></li>
+                                                                    </ul>
                                                                 </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                    @endif
+                                                            </div>
+                                                            <div class="product-price">
+                                                                @if ($item->product->special_price>0)
+                                                                    <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                    <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @else
+                                                                    <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                @endif
 
-                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     @empty
                                     @endforelse
@@ -434,7 +529,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -442,6 +536,7 @@
         @include('frontend.includes.quickshop')
     @empty
     @endforelse
+
 
     @forelse ($product_tab_one_section_2 as $item)
         @include('frontend.includes.quickshop')

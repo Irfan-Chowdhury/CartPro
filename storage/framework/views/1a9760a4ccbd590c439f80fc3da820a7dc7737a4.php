@@ -8,19 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset('public/frontend/images/favicon.png')}}" />
+    <link rel="icon" type="image/png" href="<?php echo e(asset('public/frontend/images/favicon.png')); ?>" />
     <!-- google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
     <!-- Plugins CSS -->
-    <link href="{{asset('public/frontend/css/plugins.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/plugins.css')); ?>" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    <link href="{{asset('public/frontend/css/bootstrap-select.min.css')}}" rel="stylesheet" />
-    <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap-select.min.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap.min.css')); ?>" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('public/frontend/css/cartPro-style.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/cartPro-style.css')); ?>" rel="stylesheet" />
     <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
-    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap-colorpicker.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
 </head>
@@ -4511,17 +4511,17 @@
     </script>
     <!-- FACEBOOK CHAT PLUGIN ENDS -->
     <!--Plugin js -->
-    <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap-select.min.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/plugin.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap.bundle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap-select.min.js')); ?>"></script>
     <!-- Main js -->
-    <script src="{{asset('public/frontend/js/main.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/main.js')); ?>"></script>
     <script type="text/javascript">
     $(document).ready(function() {
         $('#newsletter-modal').modal('toggle');
     });
     </script>
-    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap-colorpicker.js')); ?>"></script>
     <script>
     $('.demo-btn').on('click', function(){
         $('#demo').toggleClass('open');
@@ -4533,4 +4533,4 @@
     </script>
 </body>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/frontend/layouts/master_new.blade.php ENDPATH**/ ?>

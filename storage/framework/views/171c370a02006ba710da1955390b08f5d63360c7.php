@@ -1,4 +1,4 @@
-@php
+<?php
     $languages = App\Models\Language::orderBy('language_name','ASC')->get();
     $currency_codes = App\Models\CurrencyRate::select('currency_code')->get();
     $storefront_images = App\Models\StorefrontImage::select('title','type','image')->get();
@@ -37,7 +37,7 @@
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
-@endphp
+?>
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -48,19 +48,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset('public/frontend/images/favicon.png')}}" />
+    <link rel="icon" type="image/png" href="<?php echo e(asset('public/frontend/images/favicon.png')); ?>" />
     <!-- google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
     <!-- Plugins CSS -->
-    <link href="{{asset('public/frontend/css/plugins.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/plugins.css')); ?>" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    <link href="{{asset('public/frontend/css/bootstrap-select.min.css')}}" rel="stylesheet" />
-    <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap-select.min.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap.min.css')); ?>" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('public/frontend/css/cartPro-style.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/cartPro-style.css')); ?>" rel="stylesheet" />
     <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
-    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
+    <link href="<?php echo e(asset('public/frontend/css/bootstrap-colorpicker.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
 </head>
@@ -98,25 +98,26 @@
                     <div class="header-top-middle d-none d-lg-flex d-xl-flex">
                         <span class="announcement">
                             <!--Welcome-->
-                            @if ($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish)
-                                {{$settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL}}
-                            @endif
+                            <?php if($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish): ?>
+                                <?php echo e($settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL); ?>
+
+                            <?php endif; ?>
                         </span>
                     </div>
                     <div class="header-top-right">
                         <ul>
                             <li class="has-dropdown"><a href="#">Language</a>
                                 <ul class="dropdown">
-                                    @foreach ($languages as $item)
-                                        <li><a href="{{$item->local}}">{{$item->language_name}}</a></li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><a href="<?php echo e($item->local); ?>"><?php echo e($item->language_name); ?></a></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </li>
                             <li class="has-dropdown"><a href="#">Currency</a>
                                 <ul class="dropdown">
-                                    @foreach ($currency_codes as $item)
-                                        <li><a href="#">{{$item->currency_code}}</a></li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $currency_codes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><a href="#"><?php echo e($item->currency_code); ?></a></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </li>
                             <li><a href="#">FAQ</a></li>
@@ -133,7 +134,7 @@
                         <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                         <div class="logo">
                             <a href="#">
-                                <img src="{{asset($header_logo_path)}}" alt="Brand logo" style="height:60px; width:280px">
+                                <img src="<?php echo e(asset($header_logo_path)); ?>" alt="Brand logo" style="height:60px; width:280px">
                             </a>
                         </div>
                     </div>
@@ -142,10 +143,10 @@
                             <input class="" type="text" placeholder="Search products, categories, sku..." name="search">
                             <select name="category" class="selectpicker">
                                 <option value="" selected="">All Categories</option>
-                                @forelse ($categories as $category)
-                                        <option value="{{$category->slug}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option>
-                                @empty
-                                @endforelse
+                                <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <option value="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <?php endif; ?>
                             </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                         </form>
@@ -165,13 +166,15 @@
                             </li>
                             <li class="cart__menu">
                                 <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
-                                <span class="badge badge-light">{{$cart_count}}</span>
+                                <span class="badge badge-light"><?php echo e($cart_count); ?></span>
                                 <span class="total">
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{$cart_total}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                    @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$cart_total}}
-                                    @endif
+                                    <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                        <?php echo e($cart_total); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                    <?php else: ?>
+                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($cart_total); ?>
+
+                                    <?php endif; ?>
                                 </span>
                             </li>
                         </ul>
@@ -187,20 +190,20 @@
                             <ul>
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Department</a>
                                     <ul class="dropdown">
-                                        @forelse ($categories as $category)
-                                            @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="#"><i class=""></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
+                                        <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                            <?php if($category->child->isNotEmpty()): ?>
+                                                <li class="has-dropdown"><a href="#"><i class=""></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
                                                     <ul class="dropdown">
-                                                        @foreach ($category->child as $item)
-                                                            <li><a href="{{$item->slug}}"><i class=""></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
-                                                        @endforeach
+                                                        <?php $__currentLoopData = $category->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <li><a href="<?php echo e($item->slug); ?>"><i class=""></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </ul>
                                                 </li>
-                                            @else
-                                                <li><a href="{{$category->slug}}"><i class=""></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
-                                            @endif
-                                        @empty
-                                        @endforelse
+                                            <?php else: ?>
+                                                <li><a href="<?php echo e($category->slug); ?>"><i class=""></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <?php endif; ?>
                                     </ul>
                                 </li>
                             </ul>
@@ -212,35 +215,35 @@
                                 <nav id="mobile-nav">
                                     <ul>
                                         <li class="active"><a href="index.html">Home</a></li>
-                                        @if ($menu!=NULL)
-                                            @forelse ($menu->items as $menu_item)
-                                                @if ($menu_item->child->isNotEmpty())
-                                                    <li class="has-dropdown"><a href="#">{{$menu_item->label}}</a>
+                                        <?php if($menu!=NULL): ?>
+                                            <?php $__empty_1 = true; $__currentLoopData = $menu->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu_item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                <?php if($menu_item->child->isNotEmpty()): ?>
+                                                    <li class="has-dropdown"><a href="#"><?php echo e($menu_item->label); ?></a>
                                                         <ul class="dropdown">
-                                                            @foreach($menu_item->child as $child)
-                                                                {{-- <li><a href="{{$child->link}}">{{$child->label}}</a></li> --}}
+                                                            <?php $__currentLoopData = $menu_item->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                
                                                                 <!--Extra-->
-                                                                @if ($child->child->isNotEmpty())
-                                                                    <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
+                                                                <?php if($child->child->isNotEmpty()): ?>
+                                                                    <li class="has-dropdown"><a href="<?php echo e($child->link); ?>"><?php echo e($child->label); ?></a>
                                                                         <ul class="dropdown">
-                                                                            @foreach($child->child as $sub_child)
-                                                                                <li><a href="{{$sub_child->link}}">{{$sub_child->label}}</a></li>
-                                                                            @endforeach
+                                                                            <?php $__currentLoopData = $child->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                <li><a href="<?php echo e($sub_child->link); ?>"><?php echo e($sub_child->label); ?></a></li>
+                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                         </ul>
                                                                     </li>
-                                                                @else
-                                                                    <li><a href="{{$child->link}}">{{$child->label}}</a></li>
-                                                                @endif
+                                                                <?php else: ?>
+                                                                    <li><a href="<?php echo e($child->link); ?>"><?php echo e($child->label); ?></a></li>
+                                                                <?php endif; ?>
                                                                 <!--Extra End-->
-                                                            @endforeach
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </ul>
                                                     </li>
-                                                @else
-                                                    <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li>
-                                                @endif
-                                            @empty
-                                            @endforelse
-                                        @endif
+                                                <?php else: ?>
+                                                    <li><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a></li>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </ul>
                                 </nav>
                             </div>
@@ -274,50 +277,51 @@
             </div>
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
-                        @forelse ($cart_contents as $item)
+                        <?php $__empty_1 = true; $__currentLoopData = $cart_contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="shp__single__product">
                                 <div class="shp__pro__thumb">
                                     <a href="#">
-                                        <img src="{{asset('public/'.$item->options->image ?? null)}}">
+                                        <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>">
                                     </a>
                                 </div>
                                 <div class="shp__pro__details">
-                                    <h2><a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">{{$item->name}}</a></h2>
-                                    <span>{{$item->qty}}</span> x <span class="shp__price">
-                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{$item->subtotal}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                        @else
-                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$item->subtotal}}
-                                        @endif
+                                    <h2><a href="<?php echo e(url('product/'.$item->options->product_slug.'/'. $item->options->category_id)); ?>"><?php echo e($item->name); ?></a></h2>
+                                    <span><?php echo e($item->qty); ?></span> x <span class="shp__price">
+                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                            <?php echo e($item->subtotal); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                        <?php else: ?>
+                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($item->subtotal); ?>
+
+                                        <?php endif; ?>
                                     </span>
                                 </div>
                                 <div class="remove__btn">
                                     <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
                                 </div>
                             </div>
-                        @empty
-                        @endforelse
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <?php endif; ?>
                 </div>
                 <!-- IF EMPTY CART -->
-                {{-- <div class="empty-cart">
-                    <img src="{{asset('public/frontend/images/empty-cart.png')}}">
-                    <h5>Your cart is empty</h5>
-                </div> --}}
+                
                 <!-- IF EMPTY CART -->
             </div>
             <div class="shopping__cart__footer">
                 <div class="shoping__total">
                     <span class="subtotal">Subtotal:</span>
                     <span class="total__price">
-                        @if(env('CURRENCY_FORMAT')=='suffix')
-                            {{$cart_total}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                        @else
-                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$cart_total}}
-                        @endif
+                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                            <?php echo e($cart_total); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                        <?php else: ?>
+                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($cart_total); ?>
+
+                        <?php endif; ?>
                     </span>
                 </div>
                 <div class="shopping__btn">
-                    <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
+                    <a class="button style3" href="<?php echo e(route('cart.view_details')); ?>">View Cart</a>
                     <a class="button style1" href="shop-checkout.html">Checkout</a>
                 </div>
             </div>
@@ -326,7 +330,7 @@
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
 
-    @yield('frontend_content')
+    <?php echo $__env->yieldContent('frontend_content'); ?>
 
     <div class="newsletter-section">
         <div class="container">
@@ -623,22 +627,22 @@
     }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    {{-- Sweetalert2 --}}
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- FACEBOOK CHAT PLUGIN ENDS -->
 
     <!--Plugin js -->
-    <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap-select.min.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/plugin.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap.bundle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap-select.min.js')); ?>"></script>
     <!-- Main js -->
-    <script src="{{asset('public/frontend/js/main.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/main.js')); ?>"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
             $('#newsletter-modal').modal('toggle');
-            @if(session()->has('type'))
+            <?php if(session()->has('type')): ?>
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -654,11 +658,11 @@
                     icon: 'success',
                     title: 'Successfully added on your cart'
                 })
-            @endif
+            <?php endif; ?>
         });
     </script>
 
-    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
+    <script src="<?php echo e(asset('public/frontend/js/bootstrap-colorpicker.js')); ?>"></script>
     <script>
     $('.demo-btn').on('click', function(){
         $('#demo').toggleClass('open');
@@ -669,7 +673,7 @@
     });
     </script>
 
-    {{-- @if (\Route::current()->getName() == 'cart.view_details')
+    <?php if(\Route::current()->getName() == 'cart.view_details'): ?>
         <script type="text/javascript">
             // $(document).ready(function() {
             $("#deleteCart").click(function(){
@@ -679,7 +683,8 @@
                 // console.log(data);
             });
         </script>
-    @endif --}}
+    <?php endif; ?>
 </body>
 
 </html>
+<?php /**PATH C:\xampp\htdocs\cartpro\resources\views/frontend/layouts/master.blade.php ENDPATH**/ ?>

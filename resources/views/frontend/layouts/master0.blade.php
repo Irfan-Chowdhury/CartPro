@@ -35,9 +35,8 @@
         }
     }
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
-    $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
-    $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
 @endphp
+
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -48,40 +47,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset('public/frontend/images/favicon.png')}}" />
+    <link rel="icon" type="image/png" href="{{asset($favicon_logo_path)}}" />
     <!-- google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
     <!-- Plugins CSS -->
     <link href="{{asset('public/frontend/css/plugins.css')}}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{asset('public/frontend/css/line-awesome.min.css')}}">
     <link href="{{asset('public/frontend/css/bootstrap-select.min.css')}}" rel="stylesheet" />
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- style CSS -->
     <link href="{{asset('public/frontend/css/cartPro-style.css')}}" rel="stylesheet" />
     <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
-    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
 </head>
 
 <body>
-    <div id="demo">
-        <h6>Colorways</h6>
-        <ul id="switcher">
-            <li class="color-change" data-color="#0071df" style="background-color:#0071df"></li>
-            <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
-            <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
-            <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
-            <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
-            <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
-            <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
-            <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
-        </ul>
-        <h6>Custom color</h6>
-        <input type="text" id="color-input" class="form-control" value="#0071df">
-        <div class="demo-btn"><i class="las la-cog"></i></div>
-    </div>
     <!--Header Area starts-->
     <header>
         <div id="header-top" class="header-top">
@@ -105,7 +87,7 @@
                     </div>
                     <div class="header-top-right">
                         <ul>
-                            <li class="has-dropdown"><a href="#">Language</a>
+                            <li class="has-dropdown"><a href="#">Languages</a>
                                 <ul class="dropdown">
                                     @foreach ($languages as $item)
                                         <li><a href="{{$item->local}}">{{$item->language_name}}</a></li>
@@ -133,7 +115,7 @@
                         <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                         <div class="logo">
                             <a href="#">
-                                <img src="{{asset($header_logo_path)}}" alt="Brand logo" style="height:60px; width:280px">
+                                <img src="{{asset($header_logo_path)}}" alt="Brand logo" style="height:60px; width:280px" >
                             </a>
                         </div>
                     </div>
@@ -142,10 +124,10 @@
                             <input class="" type="text" placeholder="Search products, categories, sku..." name="search">
                             <select name="category" class="selectpicker">
                                 <option value="" selected="">All Categories</option>
-                                @forelse ($categories as $category)
+                                    @forelse ($categories as $category)
                                         <option value="{{$category->slug}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option>
-                                @empty
-                                @endforelse
+                                    @empty
+                                    @endforelse
                             </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                         </form>
@@ -159,6 +141,17 @@
                             <li>
                                 <a href=""><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
                             </li>
+                            <!-- FOLLOWING CODE APPEARS ONCE USER IS LOGGED IN -->
+                            <!-- <li class="user-menu">
+                                <i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Account"></i>
+                                <ul class="user-dropdown-menu">
+                                    <li><a href="my-account.html">My Account</a></li>
+                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                    <li><a href="shop-checkout.html">Checkout</a></li>
+                                    <li><a href="shop-cart.html">Shopcart</a></li>
+                                    <li><a href="login.html">Logout</a></li>
+                                </ul>
+                            </li> -->
                             <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
                                 <i class="ion-android-favorite-outline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
                                 <span class="badge badge-light">2</span>
@@ -166,13 +159,7 @@
                             <li class="cart__menu">
                                 <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
                                 <span class="badge badge-light">{{$cart_count}}</span>
-                                <span class="total">
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{$cart_total}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                    @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$cart_total}}
-                                    @endif
-                                </span>
+                                <span class="total">$0.00</span>
                             </li>
                         </ul>
                     </div>
@@ -187,6 +174,7 @@
                             <ul>
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Department</a>
                                     <ul class="dropdown">
+
                                         @forelse ($categories as $category)
                                             @if ($category->child->isNotEmpty())
                                                 <li class="has-dropdown"><a href="#"><i class=""></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
@@ -201,6 +189,55 @@
                                             @endif
                                         @empty
                                         @endforelse
+
+                                        <li class="has-dropdown"><a href="electronics"><i class="las la-bolt"></i> Electronics</a>
+                                            <ul class="dropdown">
+                                                <li><a href="about.html">About us</a></li>
+                                                <li><a href="contact.html">Contact</a></li>
+                                                <li><a href="faq.html">FAQ</a></li>
+                                                <li><a href="404.html">404</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="has-dropdown"><a href="laptops"><i class="las la-laptop"></i> Laptops</a>
+                                            <ul class="megamenu dropdown">
+                                                <li class="mega-title"><a>Shop Pages</a>
+                                                    <ul>
+                                                        <li><a href="shop-left-sidebar-grid.html">shop left sidebar</a></li>
+                                                        <li><a href="shop-fullwidth.html">shop Full width</a></li>
+                                                        <li><a href="shop-two-column.html">shop Two column</a></li>
+                                                        <li><a href="shop-three-column.html">shop Three column</a></li>
+                                                        <li><a href="shop-instagram.html">shop instagram</a></li>
+                                                        <li><a href="shop-no-gutter.html">shop no gutter</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="mega-title"><a>Product Pages</a>
+                                                    <ul>
+                                                        <li><a href="product-details-v1.html">product Simple 01</a></li>
+                                                        <li><a href="product-details-v2.html">product Simple 02</a></li>
+                                                        <li><a href="product-details-v3.html">product Simple 03</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="mega-title"><a>Other pages</a>
+                                                    <ul>
+                                                        <li><a href="my-account.html">My Account</a></li>
+                                                        <li><a href="shop-checkout.html">checkout</a></li>
+                                                        <li><a href="shop-cart.html">Shopping cart</a></li>
+                                                        <li><a href="compare.html">compare</a></li>
+                                                        <li><a href="order-tracking.html">Order tracking</a></li>
+                                                        <li><a href="wishlist.html">wishlist</a></li>
+                                                        <li><a href="login.html">Login</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="mega-banner">
+                                                    <a href="shop-fullwidth.html"><img src="{{asset('public/frontend/images/others/menu-banner.jpg')}}')}}" alt="..."></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="mobiles"><i class="las la-mobile-alt"></i> Mobiles</a></li>
+                                        <li><a href="fashion"><i class="las la-tshirt"></i> Fashion</a></li>
+                                        <li><a href="watches"><i class="las la-clock"></i> Watches</a></li>
+                                        <li><a href="backpacks"><i class="las la-hiking"></i> Backpacks</a></li>
+                                        <li><a href="desktops"><i class="las la-laptop"></i> Desktops</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -212,6 +249,7 @@
                                 <nav id="mobile-nav">
                                     <ul>
                                         <li class="active"><a href="index.html">Home</a></li>
+
                                         @if ($menu!=NULL)
                                             @forelse ($menu->items as $menu_item)
                                                 @if ($menu_item->child->isNotEmpty())
@@ -241,6 +279,36 @@
                                             @empty
                                             @endforelse
                                         @endif
+
+
+
+                                        <li><a href="shop-left-sidebar.html">Shop</a></li>
+                                        <li class="has-dropdown"><a href="#">Pages</a>
+                                            <ul class="dropdown">
+                                                <li><a href="about.html">About us</a></li>
+                                                <li><a href="contact.html">Contact</a></li>
+                                                <li><a href="faq.html">FAQ</a></li>
+                                                <li><a href="404.html">404</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="has-dropdown"><a href="#">Blog</a>
+                                            <ul class="dropdown">
+                                                <li class="has-dropdown"><a href="#">BLog layout</a>
+                                                    <ul class="dropdown">
+                                                        <li><a href="blog-two-column.html">Blog two column</a></li>
+                                                        <li><a href="blog-three-column.html">Blog three column</a></li>
+                                                        <li><a href="blog-left-sidebar.html">Blog left sidebar</a></li>
+                                                        <li><a href="blog-without-sidebar.html">Blog without sidebar</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="has-dropdown"><a href="#">BLog Single</a>
+                                                    <ul class="dropdown">
+                                                        <li><a href="single-blog-left-sidebar.html">Single blog left sidebar</a></li>
+                                                        <li><a href="single-blog-without-sidebar.html">Single blog without sidebar</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>
@@ -261,73 +329,12 @@
         </div>
     </header>
 
-    <div class="body__overlay"></div>
-
-    <!-- Offset Wrapper starts-->
-    <div class="offset__wrapper">
-        <div class="shopping__cart">
-            <div class="shopping__cart__header">
-                <span class="h6">My Cart</span>
-                <div class="offsetmenu__close__btn">
-                    <i class="ion-ios-close-empty"></i>
-                </div>
-            </div>
-            <div class="shopping__cart__inner">
-                <div class="shp__cart__wrap">
-                        @forelse ($cart_contents as $item)
-                            <div class="shp__single__product">
-                                <div class="shp__pro__thumb">
-                                    <a href="#">
-                                        <img src="{{asset('public/'.$item->options->image ?? null)}}">
-                                    </a>
-                                </div>
-                                <div class="shp__pro__details">
-                                    <h2><a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">{{$item->name}}</a></h2>
-                                    <span>{{$item->qty}}</span> x <span class="shp__price">
-                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{$item->subtotal}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                        @else
-                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$item->subtotal}}
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="remove__btn">
-                                    <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
-                                </div>
-                            </div>
-                        @empty
-                        @endforelse
-                </div>
-                <!-- IF EMPTY CART -->
-                {{-- <div class="empty-cart">
-                    <img src="{{asset('public/frontend/images/empty-cart.png')}}">
-                    <h5>Your cart is empty</h5>
-                </div> --}}
-                <!-- IF EMPTY CART -->
-            </div>
-            <div class="shopping__cart__footer">
-                <div class="shoping__total">
-                    <span class="subtotal">Subtotal:</span>
-                    <span class="total__price">
-                        @if(env('CURRENCY_FORMAT')=='suffix')
-                            {{$cart_total}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                        @else
-                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$cart_total}}
-                        @endif
-                    </span>
-                </div>
-                <div class="shopping__btn">
-                    <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
-                    <a class="button style1" href="shop-checkout.html">Checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Offset Wrapper ends -->
-    <!-- Header Area  ends -->
-
     @yield('frontend_content')
 
+    <div class="body__overlay"></div>
+
+
+    <!--Hero Promo Area ends--->
     <div class="newsletter-section">
         <div class="container">
             <div class="row">
@@ -354,6 +361,7 @@
     <!--Scroll to top starts-->
     <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
     <!--Scroll to top ends-->
+
     <!-- Footer section Starts-->
     <div class="footer-wrapper pt-0">
         <div class="container">
@@ -361,7 +369,7 @@
             <div class="row">
                 <div class="col-lg-5 col-md-4">
                     <div class="footer-logo">
-                        <a href="#"><img src="images/logo-black.png" alt="..."></a>
+                        <a href="#"><img src="{{asset('public/frontend/images/logo-black.png')}}" alt="..."></a>
                     </div>
                     <div class="footer-text">
                         <h5 class="text-grey mb-0">Got Question? Call us:</h5>
@@ -446,6 +454,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <!-- Cookie consent Ends-->
+
+
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="quickshop" tabindex="-1" role="dialog" aria-labelledby="quickshop" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -459,30 +469,30 @@
                             <div class="slider-wrapper">
                                 <div class="slider-for-modal">
                                     <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch.png" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch.png')}}" alt="..." />
                                     </div>
                                     <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-2.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-2.jpg')}}" alt="..." />
                                     </div>
                                     <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-3.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-3.jpg')}}" alt="..." />
                                     </div>
                                     <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-4.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-4.jpg')}}" alt="..." />
                                     </div>
                                 </div>
                                 <div class="slider-nav-modal">
                                     <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch.png" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch.png')}}" alt="..." />
                                     </div>
                                     <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-2.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-2.jpg')}}" alt="..." />
                                     </div>
                                     <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-3.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-3.jpg')}}" alt="..." />
                                     </div>
                                     <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-4.jpg" alt="..." />
+                                        <img src="{{asset('public/frontend/images/products/apple-watch-4.jpg')}}" alt="..." />
                                     </div>
                                 </div>
                             </div>
@@ -566,10 +576,12 @@
         </div>
     </div>
     <!--Quick shop modal ends-->
+
+
     <!-- Quick Shop Modal starts -->
     <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content" style="background-image: url('images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
+            <div class="modal-content" style="background-image: url('images/newsletter/newsletter.jpg')}}');background-size: cover;background-position: bottom;">
                 <div class="modal-body">
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
@@ -622,64 +634,97 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-
-    {{-- Sweetalert2 --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- FACEBOOK CHAT PLUGIN ENDS -->
-
     <!--Plugin js -->
     <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
     <script src="{{asset('public/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('public/frontend/js/bootstrap-select.min.js')}}"></script>
+
+    {{-- Sweetalert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    @if (\Route::current()->getName() == 'cartpro.home')
+       @php $test = $product_tab_one_section_1[0]->category_id; @endphp
+       <h1>{{$test}} Hellow  World</h1>
+    @endif
+
+
+
+
     <!-- Main js -->
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
-
     <script type="text/javascript">
         $(document).ready(function() {
             $('#newsletter-modal').modal('toggle');
-            @if(session()->has('type'))
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Successfully added on your cart'
-                })
-            @endif
+
+                @if(session()->has('type'))
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Successfully added on your cart'
+                    })
+                @endif
         });
     </script>
 
-    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
-    <script>
-    $('.demo-btn').on('click', function(){
-        $('#demo').toggleClass('open');
-    });
-    $(function () {
-        $('#color-input').colorpicker({
-        });
-    });
+
+    <script type="text/javascript">
+        // @if (\Route::current()->getName() == 'cartpro.home')
+        //     @foreach ($product_tab_one_section_1 as $item)
+        //         @php $data = $item->product->slug @endphp
+        //         $("#".{{$data}}).on("submit",function(e){
+        //             e.preventDefault();
+        //             console.log('ok');
+        //         });
+        //     @endforeach
+        //     // @array.forEach(element => {
+
+        //     // });
+        // @endif
+
+        // $("#addToCart").on("submit",function(e){
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: "{{route('product.add_to_cart')}}",
+        //         method: "POST",
+        //         data: new FormData(this),
+        //         contentType: false,
+        //         cache: false,
+        //         processData: false,
+        //         dataType: "json",
+        //         success: function (data) {
+        //             const Toast = Swal.mixin({
+        //                 toast: true,
+        //                 position: 'top-end',
+        //                 showConfirmButton: false,
+        //                 timer: 3000,
+        //                 timerProgressBar: true,
+        //                 didOpen: (toast) => {
+        //                     toast.addEventListener('mouseenter', Swal.stopTimer)
+        //                     toast.addEventListener('mouseleave', Swal.resumeTimer)
+        //                 }
+        //             })
+        //             Toast.fire({
+        //                 icon: 'success',
+        //                 title: 'Successfully added on your cart'
+        //             })
+        //         }
+        //     });
+        // });
     </script>
 
-    {{-- @if (\Route::current()->getName() == 'cart.view_details')
-        <script type="text/javascript">
-            // $(document).ready(function() {
-            $("#deleteCart").click(function(){
-            // $("#deleteCart").on("click",function(e){
-                console.log('ok');
-                // var data = $("#deleteCart").val();
-                // console.log(data);
-            });
-        </script>
-    @endif --}}
+
 </body>
 
 </html>

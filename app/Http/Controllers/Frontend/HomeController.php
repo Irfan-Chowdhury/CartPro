@@ -25,10 +25,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Cart::destroy();
-        // $cart = Cart::count();
-        // return $cart;
-
         $locale = Session::get('currentLocal');
 
         // $languages = Language::orderBy('language_name','ASC')->get();
@@ -138,14 +134,6 @@ class HomeController extends Controller
                         ->orderBy('id','DESC')
                         ->get();
 
-
-        //Test
-        // $data = [];
-        // foreach ($product_tab_one_section_1 as $key => $value) {
-        //      $data[]=$key;
-        // }
-        // return $data;
-
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','categories',
                                                 'brands','product_tab_one_section_1','product_tab_one_section_2','product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles'));
     }
@@ -153,7 +141,15 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
-        // return $category_id;
+        return Cart::content();
+        // return Cart::destroy();
+
+        // // $data = [];
+        // foreach ($carts as $key => $value) {
+        //     $data = $value->options->image;
+        // }
+        // return $data;
+
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')
@@ -171,46 +167,6 @@ class HomeController extends Controller
 
         return view('frontend.pages.product_details',compact('product','category'));
     }
-
-
-    public function productAddToCart(Request $request)
-    {
-        $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
-                    'baseImage'=> function ($query){
-                        $query->where('type','base')
-                            ->first();
-                    },
-                    'additionalImage'=> function ($query){
-                        $query->where('type','additional')
-                            ->get();
-                    },
-                    ])
-                    ->find($request->product_id);
-
-        $data = [];
-        $data['id']     = $product->id;
-        $data['name']   = $product->productTranslation->product_name ?? $product->productTranslation->product_name ?? null;
-        $data['qty']    = $request->qty;
-
-        if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price){
-            $data['price']  = $product->special_price;
-        }else {
-            $data['price']  = $product->price;
-        }
-        $data['weight'] = 1;
-        $data['options']['image'] = $product->baseImage->image;
-        $data['options']['color'] = '';
-        $data['options']['size']  = '';
-        $data['options']['category_id']  = $request->category_id;
-        $data = Cart::add($data);
-
-        // return Cart::content();
-
-        session()->flash('type','success');
-        return redirect()->back();
-    }
-
-
 
     protected function getSliderBanner($settings)
     {

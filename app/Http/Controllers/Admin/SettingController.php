@@ -241,7 +241,6 @@ class SettingController extends Controller
             $data['currency_data_feed_key'] = $request->currency_data_feed_key;
             $data['auto_refresh']    = $request->auto_refresh;
 
-
             $setting_currency = SettingCurrency::latest()->first();
 
             if (empty($setting_currency)) {
@@ -260,7 +259,22 @@ class SettingController extends Controller
                 $currency_rate->save();
             }
 
-            return response()->json(['success' => __('Data Added successfully.')]);
+            //Default Currency
+            $path = '.env';
+            if ($request->default_currency) {
+                $searchArray = array('DEFAULT_CURRENCY_SYMBOL=' . env('DEFAULT_CURRENCY_SYMBOL'));
+                $replaceArray= array('DEFAULT_CURRENCY_SYMBOL=' . $request->default_currency);
+                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            }
+            //Currency Format
+            if ($request->currency_format) {
+                $searchArray = array('CURRENCY_FORMAT=' . env('CURRENCY_FORMAT'));
+                $replaceArray= array('CURRENCY_FORMAT=' . $request->currency_format);
+                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            }
+
+
+            return response()->json(['success' => __('Data added Successfully')]);
         }
     }
 

@@ -49,8 +49,12 @@ Auth::routes();
 Route::get('/','Frontend\HomeController@index')->name('cartpro.home');
 Route::get('product/{product_slug}/{category_id}','Frontend\HomeController@product_details')->name('cartpro.product_details');
 
-Route::post('/cart/add', 'Frontend\HomeController@productAddToCart')->name('product.add_to_cart');
-
+Route::group(['namespace'=>'Frontend'], function (){
+        Route::group(['prefix' => '/cart'], function () {
+            Route::post('/add', 'CartController@productAddToCart')->name('product.add_to_cart');
+            Route::get('/view-details', 'CartController@cartViewDetails')->name('cart.view_details');
+        });
+});
 
 
 
@@ -430,3 +434,5 @@ Route::get('/admin/deleteCustomer/{id}','CustomerController@destroy');
 // });
 
 Route::get('/admin/parent/load','CategoryController@parentLoad')->name('parent.load');
+
+

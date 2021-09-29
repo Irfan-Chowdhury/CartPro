@@ -498,21 +498,6 @@
                                                                     <option value="{{$item->id}}">{{$item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null}}</option>
                                                                 @empty
                                                                 @endforelse
-                                                                {{-- @foreach ($data[0][0]['attributeTranslation'] as $item)
-                                                                    @if ($item->attributeTranslation->count()>0)
-                                                                        @foreach ($item->attributeTranslation as $key => $value)
-                                                                            @if ($key<1)
-                                                                                @if ($value->local==$local)
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @elseif($value->local=='en')
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endif
-                                                                @endforeach     --}}
                                                             </select>
                                                         </div>
 
@@ -529,45 +514,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                 <!--/ Testing Purpose Double -->
-                                                {{-- <div class="variants">
-                                                    <div class="row">
-                                                        <div class="col-5 form-group">
-                                                            <label>{{__('Atrribute')}}</label>
-                                                            <select name="attribute_id[]" id="attributeId2" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
-                                                                @foreach ($attributes as $item)
-                                                                    @if ($item->attributeTranslation->count()>0)
-                                                                        @foreach ($item->attributeTranslation as $key => $value)
-                                                                            @if ($key<1)
-                                                                                @if ($value->local==$local)
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @elseif($value->local=='en')
-                                                                                    <option value="{{$item->id}}">{{$value->attribute_name}}</option>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-6 form-group">
-                                                            <label>{{__("Values")}}</label>
-                                                            <select name="attribute_value_id[]" id="attributeValueId2" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
-
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-1">
-                                                            <label>Delete</label><br>
-                                                            <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-                                                <!--/ Testing Purpose Double -->
 
                                                 <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add New Attribute</span>
                                                 <br><br>
