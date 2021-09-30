@@ -63,6 +63,30 @@
     <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
+    <style>
+        /* .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            border-left: 16px solid pink;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes  spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        } */
+    </style>
 </head>
 
 <body>
@@ -166,14 +190,13 @@
                             </li>
                             <li class="cart__menu">
                                 <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
-                                <span class="badge badge-light"><?php echo e($cart_count); ?></span>
+                                <span class="badge badge-light cart_count"><?php echo e($cart_count); ?></span>
                                 <span class="total">
                                     <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                        <?php echo e($cart_total); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                        <span class="cart_total"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                     <?php else: ?>
-                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($cart_total); ?>
-
+                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total"><?php echo e($cart_total); ?></span>
                                     <?php endif; ?>
                                 </span>
                             </li>
@@ -266,6 +289,8 @@
 
     <div class="body__overlay"></div>
 
+
+
     <!-- Offset Wrapper starts-->
     <div class="offset__wrapper">
         <div class="shopping__cart">
@@ -277,31 +302,35 @@
             </div>
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
-                        <?php $__empty_1 = true; $__currentLoopData = $cart_contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <div class="shp__single__product">
-                                <div class="shp__pro__thumb">
-                                    <a href="#">
-                                        <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>">
-                                    </a>
-                                </div>
-                                <div class="shp__pro__details">
-                                    <h2><a href="<?php echo e(url('product/'.$item->options->product_slug.'/'. $item->options->category_id)); ?>"><?php echo e($item->name); ?></a></h2>
-                                    <span><?php echo e($item->qty); ?></span> x <span class="shp__price">
-                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                            <?php echo e($item->subtotal); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
-                                        <?php else: ?>
-                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($item->subtotal); ?>
+                        <div class="test">
+                            <?php $__empty_1 = true; $__currentLoopData = $cart_contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="shp__single__product">
+                                    <div class="shp__pro__thumb">
+                                        <a href="#">
+                                            <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>">
+                                        </a>
+                                    </div>
+                                    <div class="shp__pro__details">
+                                        <h2><a href="<?php echo e(url('product/'.$item->options->product_slug.'/'. $item->options->category_id)); ?>"><?php echo e($item->name); ?></a></h2>
+                                        <span><?php echo e($item->qty); ?></span> x <span class="shp__price">
+                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                <?php echo e($item->price); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
-                                        <?php endif; ?>
-                                    </span>
+                                            <?php else: ?>
+                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($item->price); ?>
+
+                                            <?php endif; ?>
+                                        </span>
+                                    </div>
+                                    <div class="remove__btn">
+                                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                                    </div>
                                 </div>
-                                <div class="remove__btn">
-                                    <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
-                                </div>
-                            </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <?php endif; ?>
+                        </div>
+
                 </div>
                 <!-- IF EMPTY CART -->
                 
@@ -329,6 +358,8 @@
     </div>
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
+
+    
 
     <?php echo $__env->yieldContent('frontend_content'); ?>
 
@@ -442,13 +473,7 @@
     </div>
     <!-- Footer section Ends-->
     <!-- Cookie consent Starts-->
-    <div class="alert alert-primary alert-dismissible fade show cookie-alert" role="alert">
-        <div class="d-flex justify-content-center align-items-center">
-            <i class="ion-ios-information"></i>
-            <p> We use cookies to ensure you get the best experience on our website. <a href="#" class="alert-link">Accept</a></p>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    
     <!-- Cookie consent Ends-->
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="quickshop" tabindex="-1" role="dialog" aria-labelledby="quickshop" aria-hidden="true">
@@ -641,7 +666,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#newsletter-modal').modal('toggle');
+            // $('#newsletter-modal').modal('toggle');
             <?php if(session()->has('type')): ?>
                 const Toast = Swal.mixin({
                     toast: true,
@@ -663,28 +688,116 @@
     </script>
 
     <script src="<?php echo e(asset('public/frontend/js/bootstrap-colorpicker.js')); ?>"></script>
+
     <script>
-    $('.demo-btn').on('click', function(){
-        $('#demo').toggleClass('open');
-    });
-    $(function () {
-        $('#color-input').colorpicker({
+        $('.demo-btn').on('click', function(){
+            // $('#demo').toggleClass('open');
         });
-    });
+        $(function () {
+            $('#color-input').colorpicker({
+            });
+        });
+
+
+        $(".deleteCart").on('click',function(event){
+            event.preventDefault();
+            var rowId = $(this).data('id');
+
+            $.ajax({
+                url: "<?php echo e(route('cart.destroy')); ?>",
+                type: "GET",
+                data: {rowId:rowId},
+                success: function (data) {
+
+                    window.location.reload();
+
+
+                    // Original
+                    if (data=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Successfully deleted your cart'
+                        })
+                        location.reload();
+                    }
+                }
+            })
+        });
+
+        $(".addToCart").on("submit",function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "<?php echo e(route('product.add_to_cart')); ?>",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Successfully added on your cart'
+                        })
+
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+
+                        var html = '';
+                        var cart_content = data.cart_content;
+
+                        $.each( cart_content, function( key, value ) {
+                            // console.log(value.name);
+                            html += '<div class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                    '<img src="<?php echo e(asset("'+value.options.image+'")); ?>">'+ //issue
+                                    '</a></div><div class="shp__pro__details"><h2>'+
+                                    '<a href="#">'+value.name+'</a></h2>'+
+                                    '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
+                                    '</div><div class="remove__btn"><a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+                        });
+
+                        // html += '<div class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                        //     '<img src="<?php echo e(asset("public/images/products/qTdbo0QUjq.webp")); ?>">'+
+                        // '</a></div><div class="shp__pro__details"><h2>'+
+                        // '<a href="#">Vivo Y91</a></h2>'+
+                        // '<span>5</span> x <span class="shp__price"> $ 10.10'+
+                        // '</span></div><div class="remove__btn"><a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+
+
+                        $('.test').html(html);
+                    }
+                }
+            });
+        });
+
     </script>
 
-    <?php if(\Route::current()->getName() == 'cart.view_details'): ?>
-        <script type="text/javascript">
-            // $(document).ready(function() {
-            $("#deleteCart").click(function(){
-            // $("#deleteCart").on("click",function(e){
-                console.log('ok');
-                // var data = $("#deleteCart").val();
-                // console.log(data);
-            });
-        </script>
-    <?php endif; ?>
+    
 </body>
 
 </html>
+
 <?php /**PATH C:\xampp\htdocs\cartpro\resources\views/frontend/layouts/master.blade.php ENDPATH**/ ?>

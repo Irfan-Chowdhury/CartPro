@@ -44,7 +44,6 @@ class LanguageController extends Controller
             ]);
 
             if ($validator->fails()){
-
                 session()->flash('type','danger');
                 session()->flash('message','Something wrong');
 

@@ -124,7 +124,7 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_1 as $item)
                                             <div class="swiper-slide">
-                                                <form action="{{route('product.add_to_cart')}}" method="post">
+                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                     @csrf
                                                     <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                                     <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
@@ -205,7 +205,7 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_2 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}"  method="post">
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                 @csrf
                                                 <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                                 <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
@@ -283,7 +283,7 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_3 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}"  method="post">
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                 @csrf
                                                 <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                                 <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
@@ -360,7 +360,7 @@
                                 <div class="swiper-wrapper">
                                     @forelse ($product_tab_one_section_4 as $item)
                                         <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}" method="post">
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                 @csrf
                                                 <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                                 <input type="hidden" name="product_slug" value="{{$item->product->slug}}">

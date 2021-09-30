@@ -141,7 +141,7 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
-        return Cart::content();
+        // return Cart::content();
         // return Cart::destroy();
 
         // // $data = [];

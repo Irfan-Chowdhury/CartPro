@@ -122,7 +122,7 @@
                                 <div class="swiper-wrapper">
                                     <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <div class="swiper-slide">
-                                                <form action="<?php echo e(route('product.add_to_cart')); ?>" method="post">
+                                                <form action="<?php echo e(route('product.add_to_cart')); ?>" class="addToCart" method="post">
                                                     <?php echo csrf_field(); ?>
                                                     <input type="hidden" name="product_id" value="<?php echo e($item->product_id); ?>">
                                                     <input type="hidden" name="product_slug" value="<?php echo e($item->product->slug); ?>">
@@ -204,7 +204,7 @@
                                 <div class="swiper-wrapper">
                                     <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <div class="swiper-slide">
-                                            <form action="<?php echo e(route('product.add_to_cart')); ?>"  method="post">
+                                            <form action="<?php echo e(route('product.add_to_cart')); ?>" class="addToCart" method="post">
                                                 <?php echo csrf_field(); ?>
                                                 <input type="hidden" name="product_id" value="<?php echo e($item->product_id); ?>">
                                                 <input type="hidden" name="product_slug" value="<?php echo e($item->product->slug); ?>">
@@ -283,7 +283,7 @@
                                 <div class="swiper-wrapper">
                                     <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_3; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <div class="swiper-slide">
-                                            <form action="<?php echo e(route('product.add_to_cart')); ?>"  method="post">
+                                            <form action="<?php echo e(route('product.add_to_cart')); ?>" class="addToCart" method="post">
                                                 <?php echo csrf_field(); ?>
                                                 <input type="hidden" name="product_id" value="<?php echo e($item->product_id); ?>">
                                                 <input type="hidden" name="product_slug" value="<?php echo e($item->product->slug); ?>">
@@ -361,7 +361,7 @@
                                 <div class="swiper-wrapper">
                                     <?php $__empty_1 = true; $__currentLoopData = $product_tab_one_section_4; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <div class="swiper-slide">
-                                            <form action="<?php echo e(route('product.add_to_cart')); ?>" method="post">
+                                            <form action="<?php echo e(route('product.add_to_cart')); ?>" class="addToCart" method="post">
                                                 <?php echo csrf_field(); ?>
                                                 <input type="hidden" name="product_id" value="<?php echo e($item->product_id); ?>">
                                                 <input type="hidden" name="product_slug" value="<?php echo e($item->product->slug); ?>">
