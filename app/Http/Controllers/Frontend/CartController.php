@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
     public function productAddToCart(Request $request)
     {
+        // return $request->all();
+
         if ($request->ajax()) {
 
             $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
@@ -37,7 +41,6 @@ class CartController extends Controller
             }
             $data['weight'] = 1;
             $data['options']['image'] = $product->baseImage->image;
-            // $data['options']['image'] = 'public'.$product->baseImage->image;
             $data['options']['color'] = '';
             $data['options']['size']  = '';
             $data['options']['product_slug']  = $request->product_slug;
@@ -50,78 +53,34 @@ class CartController extends Controller
 
             return response()->json(['type'=>'success','cart_content'=>$cart_content, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total]);
         }
-        // session()->flash('type','success');
-        // return redirect()->back();
     }
 
     public function cartViewDetails()
     {
         $cart_content = Cart::content();
-        // $cart_content = Cart::destroy();
-        // return $cart_content;
-
-
         $cart_total = Cart::total();
         return view('frontend.pages.cart_details',compact('cart_content','cart_total'));
     }
 
-    public function cartDestroy(Request $request)
+    public function cartRomveById(Request $request)
     {
         if ($request->ajax()) {
             Cart::remove($request->rowId);
-            // $cart_content = Cart::content();
-
-            // $data = [];
-            // foreach ($cart_content as $key => $value) {
-            //     $data = '<tr>
-            //         <td class="cart-product">
-            //             <div class="item-details">
-            //                 <a class="deleteCart" data-id="'.$value->rowId.'"><i class="ti-close"></i></a>
-            //                 <img src="{{asset($image)}}" alt="...">
-            //                 <div class="">
-            //                     <a href="Test">
-            //                         <h3 class="h6">Irfan</h3>
-            //                     </a>
-            //                     <div class="input-qty">
-            //                         <span class="input-group-btn">
-            //                             <button type="button" class="quantity-left-minus">
-            //                                 <span class="ti-minus"></span>
-            //                             </button>
-            //                         </span>
-            //                         <input type="text" class="input-number" value="3">
-            //                         <span class="input-group-btn">
-            //                             <button type="button" class="quantity-right-plus">
-            //                                 <span class="ti-plus"></span>
-            //                             </button>
-            //                         </span>
-            //                     </div>
-            //                     X
-            //                     <span class="amount">
-            //                         $ 120
-            //                     </span>
-            //                 </div>
-            //             </div>
-            //             <div class="cart-amount-mobile">Total:
-            //                 <span class="amount">
-            //                     $90.00
-            //                 </span>
-            //             </div>
-            //         </td>
-            //         <td class="cart-product-subtotal">
-            //             <span class="amount">
-            //             $ 120
-            //             </span>
-            //         </td>
-            //     </tr>';
-            // }
-            // $image= 'public/frontend/images/products/apple-watch.png';
-
-            // return view('frontend.pages.test',compact('cart_content'));
-
-            return response()->json('success');
+            $cart_content = Cart::content();
+            $cart_count = Cart::count();
+            $cart_total = Cart::total();
+            return response()->json(['type'=>'success','cart_content'=>$cart_content, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total]);
         }
+    }
 
-
-
+    public function cartQuantityChange(Request $request)
+    {
+        if ($request->ajax()) {
+            Cart::update($request->rowId, ['qty'  => $request->qty]);
+            $cart_subtotal = Cart::get($request->rowId)->subtotal;
+            $cart_count = Cart::count();
+            $cart_total = Cart::total();
+            return response()->json(['type'=>'success','cart_subtotal'=>$cart_subtotal, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total,'cart_subtotal'=>$cart_subtotal]);
+        }
     }
 }

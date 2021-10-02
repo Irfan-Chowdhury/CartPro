@@ -19,29 +19,32 @@
                                 </tr>
                             </thead>
                             <tbody class="cartTable">
+
                                 <div id="content">
                                     @forelse ($cart_content as $item)
-                                        <tr>
+                                        <tr id="{{$item->rowId}}">
                                             <td class="cart-product">
                                                 <div class="item-details">
-                                                    <a class="deleteCart" data-id="{{$item->rowId}}"><i class="ti-close"></i></a>
+                                                    <a class="remove_cart_from_details" data-id="{{$item->rowId}}"><i class="ti-close"></i></a>
                                                     <img src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
                                                     <div class="">
                                                         <a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">
                                                             <h3 class="h6">{{$item->name}}</h3>
                                                         </a>
                                                         <div class="input-qty">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus">
-                                                                    <span class="ti-minus"></span>
-                                                                </button>
-                                                            </span>
-                                                            <input type="text" class="input-number" value="{{$item->qty}}">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus">
-                                                                    <span class="ti-plus"></span>
-                                                                </button>
-                                                            </span>
+                                                            <form class="quantity_change_submit" data-id="{{$item->rowId}}" method="get">
+                                                                <span class="input-group-btn">
+                                                                    <button type="submit" class="quantity-left-minus " data-id="{{$item->rowId}}">
+                                                                        <span class="ti-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="text" class="input-number {{$item->rowId}}" value="{{$item->qty}}">
+                                                                <span class="input-group-btn">
+                                                                    <button type="submit" class="quantity-right-plus quantity_change" data-id="{{$item->rowId}}">
+                                                                        <span class="ti-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </form>
                                                         </div>
                                                         X
                                                         <span class="amount">
@@ -53,18 +56,18 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="cart-amount-mobile">Total:
+                                                {{-- <div class="cart-amount-mobile">Total:
                                                     <span class="amount">
                                                         $90.00
                                                     </span>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                             <td class="cart-product-subtotal">
                                                 <span class="amount">
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                        {{$item->subtotal}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                        <span class="subtotal_{{$item->rowId}}">{{$item->subtotal}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                                     @else
-                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$item->subtotal}}
+                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="subtotal_{{$item->rowId}}">{{$item->subtotal}}</span>
                                                     @endif
                                                 </span>
                                             </td>
@@ -89,9 +92,9 @@
                             <div class="label">Subtotal</div>
                             <div class="price">
                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                    {{$cart_total}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                    <span class="cart_total">{{$cart_total}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                 @else
-                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{$cart_total}}
+                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="cart_total">{{$cart_total}}</span>
                                 @endif
                             </div>
                         </div>

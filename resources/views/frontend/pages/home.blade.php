@@ -51,8 +51,8 @@
             <div class="col-md-12">
                 <div class="section-title mb-3">
                     <div class="d-flex align-items-center">
-                        <h3><a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a></h3>
                         <h3>Top categories</h3>
+                        <a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a>
                     </div>
                     <!-- Add Pagination -->
                     <div class="category-navigation">
@@ -158,7 +158,7 @@
                                                             <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
 
                                                             <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                                {{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}
+                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
                                                             </a>
 
                                                             <div class="d-flex justify-content-between align-items-center">

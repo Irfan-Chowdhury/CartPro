@@ -53,7 +53,8 @@ Route::group(['namespace'=>'Frontend'], function (){
         Route::group(['prefix' => '/cart'], function () {
             Route::post('/add', 'CartController@productAddToCart')->name('product.add_to_cart');
             Route::get('/view-details', 'CartController@cartViewDetails')->name('cart.view_details');
-            Route::get('/destroy', 'CartController@cartDestroy')->name('cart.destroy');
+            Route::get('/remove', 'CartController@cartRomveById')->name('cart.remove');
+            Route::get('/quantity_change', 'CartController@cartQuantityChange')->name('cart.quantity_change');
         });
 });
 

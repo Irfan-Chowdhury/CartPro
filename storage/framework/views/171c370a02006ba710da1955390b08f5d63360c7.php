@@ -303,9 +303,9 @@
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
 
-                        <div class="test">
+                        <div class="cart_list">
                             <?php $__empty_1 = true; $__currentLoopData = $cart_contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <div class="shp__single__product">
+                                <div id="<?php echo e($item->rowId); ?>" class="shp__single__product">
                                     <div class="shp__pro__thumb">
                                         <a href="#">
                                             <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>">
@@ -324,7 +324,7 @@
                                         </span>
                                     </div>
                                     <div class="remove__btn">
-                                        <a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
+                                        <a href="#" class="remove_cart" data-id="<?php echo e($item->rowId); ?>" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
                                     </div>
                                 </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -341,11 +341,10 @@
                     <span class="subtotal">Subtotal:</span>
                     <span class="total__price">
                         <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                            <?php echo e($cart_total); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                            <span class="total_price"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                         <?php else: ?>
-                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($cart_total); ?>
-
+                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="total_price"><?php echo e($cart_total); ?></span>
                         <?php endif; ?>
                     </span>
                 </div>
@@ -699,42 +698,6 @@
         });
 
 
-        $(".deleteCart").on('click',function(event){
-            event.preventDefault();
-            var rowId = $(this).data('id');
-
-            $.ajax({
-                url: "<?php echo e(route('cart.destroy')); ?>",
-                type: "GET",
-                data: {rowId:rowId},
-                success: function (data) {
-
-                    window.location.reload();
-
-
-                    // Original
-                    if (data=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Successfully deleted your cart'
-                        })
-                        location.reload();
-                    }
-                }
-            })
-        });
-
         $(".addToCart").on("submit",function(e){
             e.preventDefault();
             $.ajax({
@@ -751,7 +714,7 @@
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
-                            timer: 3000,
+                            timer: 1000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
                                 toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -765,32 +728,148 @@
 
                         $('.cart_count').text(data.cart_count);
                         $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
 
                         var html = '';
                         var cart_content = data.cart_content;
-
                         $.each( cart_content, function( key, value ) {
-                            // console.log(value.name);
-                            html += '<div class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                    '<img src="<?php echo e(asset("'+value.options.image+'")); ?>">'+ //issue
+                            var image = 'public/'+value.options.image;
+                            html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                    '<img src="'+image+'">'+
                                     '</a></div><div class="shp__pro__details"><h2>'+
                                     '<a href="#">'+value.name+'</a></h2>'+
                                     '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
-                                    '</div><div class="remove__btn"><a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+                                    '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
                         });
-
-                        // html += '<div class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                        //     '<img src="<?php echo e(asset("public/images/products/qTdbo0QUjq.webp")); ?>">'+
-                        // '</a></div><div class="shp__pro__details"><h2>'+
-                        // '<a href="#">Vivo Y91</a></h2>'+
-                        // '<span>5</span> x <span class="shp__price"> $ 10.10'+
-                        // '</span></div><div class="remove__btn"><a href="#" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
-
-
-                        $('.test').html(html);
+                        $('.cart_list').html(html);
+                        // $('.cart_list').html(JSON.parse(html));
                     }
                 }
             });
+        });
+
+        $("#productAddToCartSingle").on("submit",function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "<?php echo e(route('product.add_to_cart')); ?>",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Successfully added on your cart'
+                        })
+
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
+
+                        var html = '';
+                        var cart_content = data.cart_content;
+                        $.each( cart_content, function( key, value ) {
+                            var image = 'public/'+value.options.image;
+                            html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                    '<img src="'+image+'">'+
+                                    '</a></div><div class="shp__pro__details"><h2>'+
+                                    '<a href="#">'+value.name+'</a></h2>'+
+                                    '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
+                                    '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+                        });
+                        $('.cart_list').html(html);
+                    }
+                }
+            });
+        });
+
+        $(document).on('click','.remove_cart',function(event) {
+            event.preventDefault();
+            var rowId = $(this).data('id');
+            var removeCartItemId = $(this).parent().parent().attr('id');
+
+            $.ajax({
+                url: "<?php echo e(route('cart.remove')); ?>",
+                type: "GET",
+                data: {rowId:rowId},
+                success: function (data) {
+                    if (data.type=='success') {
+                        // $('#'+removeCartItemId).remove();
+                        $('#'+rowId).remove();
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
+                    }
+                }
+            })
+        });
+
+        $(document).on('click','.remove_cart_from_details',function(event) {
+            event.preventDefault();
+            var rowId = $(this).data('id');
+            var removeCartItemFromDetails = $(this).closest('tr');
+            $.ajax({
+                url: "<?php echo e(route('cart.remove')); ?>",
+                type: "GET",
+                data: {rowId:rowId},
+                success: function (data) {
+                    if (data.type=='success') {
+                        removeCartItemFromDetails.remove();
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Successfully deleted from cart'
+                        })
+                    }
+                }
+            })
+        });
+
+        $('.quantity_change_submit').on("click",function(e){
+            e.preventDefault();
+            var rowId = $(this).data('id');
+            var input_number = $('.'+rowId).val();
+            $.ajax({
+                url: "<?php echo e(route('cart.quantity_change')); ?>",
+                type: "GET",
+                data: {rowId:rowId,qty:input_number},
+                success: function (data) {
+                    if (data.type=='success') {
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
+                        $('.subtotal_'+rowId).text(data.cart_subtotal);
+                    }
+                }
+            })
         });
 
     </script>

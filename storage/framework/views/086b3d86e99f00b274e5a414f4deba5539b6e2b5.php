@@ -38,7 +38,7 @@
                 <div class="col-md-6">
                     <div class="item-details">
                                 <a class="item-category" href="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
-                                <h3 class="item-name"><?php echo e($product->productTranslation->product_name ?? $product->productTranslationDefaultEnglish->product_name ?? NULL); ?></h3>
+                                <h3 class="item-name"><?php echo e($product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL); ?></h3>
                                 <div class="d-flex justify-content-between">
                                     <div class="item-brand">Brand: <a href=""><?php echo e($product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null); ?></a></div>
                                     <div class="item-review">
@@ -83,21 +83,26 @@
                                     </ul>
                                 </div>
                                 <div class="item-options">
-                                    <form class="mb-3">
+                                    <form class="mb-3" id="productAddToCartSingle" action="<?php echo e(route('product.add_to_cart')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
+                                        <input type="hidden" name="product_slug" value="<?php echo e($product->slug); ?>">
+                                        <input type="hidden" name="category_id" value="<?php echo e($category->id ?? null); ?>">
+
                                         <div class="input-qty">
                                             <span class="input-group-btn">
                                                 <button type="button" class="quantity-left-minus">
                                                     <span class="ti-minus"></span>
                                                 </button>
                                             </span>
-                                            <input type="number" class="input-number" value="1" min="1">
+                                            <input type="number" name="qty" class="input-number" value="<?php echo e($product_cart_qty ?? 1); ?>" min="1">
                                             <span class="input-group-btn">
                                                 <button type="button" class="quantity-right-plus">
                                                     <span class="ti-plus"></span>
                                                 </button>
                                             </span>
                                         </div>
-                                        <button class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
+                                        <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
                                     </form>
                                     <button class="button button-icon style4 sm"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
                                     <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button>

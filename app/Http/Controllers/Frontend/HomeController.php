@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Session;
 // use Cart;
 // use Gloudemans\Cart;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -47,15 +48,20 @@ class HomeController extends Controller
         // }
 
         //Appereance-->Storefront --> Setting
-        $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+        $settings = Cache::remember('settings', 120, function () {
+            return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+        });
+        // $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
 
 
-        $categories = Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-                ->where('parent_id',NULL)
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','DESC')
-                ->get();
+        $categories = Cache::remember('categories', 300, function () {
+            return Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
+            ->where('parent_id',NULL)
+            ->where('is_active',1)
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC')
+            ->get();
+        });
 
 
         // //Product_Tab_One
@@ -111,19 +117,20 @@ class HomeController extends Controller
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
         }
-
         //------Test --------
 
         //Slider
-        $sliders = Slider::with(['sliderTranslation'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->orderBy('is_active','DESC')
-        ->orderBy('id','DESC')
-        ->get();
+        $sliders = Cache::remember('sliders', 300, function () use ($locale) {
+            return Slider::with(['sliderTranslation'=> function ($query) use ($locale){
+                $query->where('locale',$locale)
+                ->orWhere('locale','en')
+                ->orderBy('id','DESC');
+            }])
+            ->where('is_active',1)
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC')
+            ->get();
+        });
 
         //Slider Banner
         $slider_banners = $this->getSliderBanner($settings);
@@ -142,6 +149,7 @@ class HomeController extends Controller
     public function product_details($product_slug, $category_id)
     {
         // return Cart::content();
+        // return Cart::get('51b99bc12b2fd4c93cb314590b9f7182')->subtotal;
         // return Cart::destroy();
 
         // // $data = [];
@@ -165,7 +173,14 @@ class HomeController extends Controller
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
-        return view('frontend.pages.product_details',compact('product','category'));
+        $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
+        if ($cart) {
+            $product_cart_qty = $cart->qty;
+        }else {
+            $product_cart_qty = null;
+        }
+        
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty'));
     }
 
     protected function getSliderBanner($settings)

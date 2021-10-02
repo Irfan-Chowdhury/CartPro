@@ -18,29 +18,32 @@
                                 </tr>
                             </thead>
                             <tbody class="cartTable">
+
                                 <div id="content">
                                     <?php $__empty_1 = true; $__currentLoopData = $cart_content; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                        <tr>
+                                        <tr id="<?php echo e($item->rowId); ?>">
                                             <td class="cart-product">
                                                 <div class="item-details">
-                                                    <a class="deleteCart" data-id="<?php echo e($item->rowId); ?>"><i class="ti-close"></i></a>
+                                                    <a class="remove_cart_from_details" data-id="<?php echo e($item->rowId); ?>"><i class="ti-close"></i></a>
                                                     <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>" alt="...">
                                                     <div class="">
                                                         <a href="<?php echo e(url('product/'.$item->options->product_slug.'/'. $item->options->category_id)); ?>">
                                                             <h3 class="h6"><?php echo e($item->name); ?></h3>
                                                         </a>
                                                         <div class="input-qty">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus">
-                                                                    <span class="ti-minus"></span>
-                                                                </button>
-                                                            </span>
-                                                            <input type="text" class="input-number" value="<?php echo e($item->qty); ?>">
-                                                            <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus">
-                                                                    <span class="ti-plus"></span>
-                                                                </button>
-                                                            </span>
+                                                            <form class="quantity_change_submit" data-id="<?php echo e($item->rowId); ?>" method="get">
+                                                                <span class="input-group-btn">
+                                                                    <button type="submit" class="quantity-left-minus " data-id="<?php echo e($item->rowId); ?>">
+                                                                        <span class="ti-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="text" class="input-number <?php echo e($item->rowId); ?>" value="<?php echo e($item->qty); ?>">
+                                                                <span class="input-group-btn">
+                                                                    <button type="submit" class="quantity-right-plus quantity_change" data-id="<?php echo e($item->rowId); ?>">
+                                                                        <span class="ti-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </form>
                                                         </div>
                                                         X
                                                         <span class="amount">
@@ -54,20 +57,15 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="cart-amount-mobile">Total:
-                                                    <span class="amount">
-                                                        $90.00
-                                                    </span>
-                                                </div>
+                                                
                                             </td>
                                             <td class="cart-product-subtotal">
                                                 <span class="amount">
                                                     <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                        <?php echo e($item->subtotal); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                                        <span class="subtotal_<?php echo e($item->rowId); ?>"><?php echo e($item->subtotal); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                                     <?php else: ?>
-                                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($item->subtotal); ?>
-
+                                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="subtotal_<?php echo e($item->rowId); ?>"><?php echo e($item->subtotal); ?></span>
                                                     <?php endif; ?>
                                                 </span>
                                             </td>
@@ -92,11 +90,10 @@
                             <div class="label">Subtotal</div>
                             <div class="price">
                                 <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                    <?php echo e($cart_total); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                    <span class="cart_total"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                 <?php else: ?>
-                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($cart_total); ?>
-
+                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total"><?php echo e($cart_total); ?></span>
                                 <?php endif; ?>
                             </div>
                         </div>
