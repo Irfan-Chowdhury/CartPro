@@ -48,6 +48,7 @@ Auth::routes();
 
 Route::get('/','Frontend\HomeController@index')->name('cartpro.home');
 Route::get('product/{product_slug}/{category_id}','Frontend\HomeController@product_details')->name('cartpro.product_details');
+Route::get('data_ajax_search','Frontend\HomeController@dataAjaxSearch')->name('cartpro.data_ajax_search');
 
 Route::group(['namespace'=>'Frontend'], function (){
         Route::group(['prefix' => '/cart'], function () {

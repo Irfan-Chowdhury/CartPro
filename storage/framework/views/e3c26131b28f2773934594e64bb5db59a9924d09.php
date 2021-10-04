@@ -1,5 +1,4 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 
 <style>
     .list-group-item {
@@ -20,7 +19,7 @@
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
 
-    @include('admin.includes.alert_message')
+    <?php echo $__env->make('admin.includes.alert_message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <div class="container-fluid mb-3">
         <h3 class="font-weight-bold mt-3">Create Product</h3>
@@ -28,8 +27,8 @@
     </div>
 
     <div class="container">
-        <form action="{{route('admin.products.store')}}" method="POST" enctype="multipart/form-data">
-            @csrf
+        <form action="<?php echo e(route('admin.products.store')); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
 
             <div class="card">
                 <div class="card-body">
@@ -37,15 +36,15 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="list-group" id="list-tab" role="tablist">
-                                    <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">{{__('General')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-price" data-toggle="list" href="#price" role="tab" aria-controls="settings">{{__('Price')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-inventory" data-toggle="list" href="#inventory" role="tab" aria-controls="inventory">{{__('Inventory')}}</a>
-                                    {{-- <a class="list-group-item list-group-item-action" id="product-variant" data-toggle="list" href="#variant" role="tab" aria-controls="inventory">{{__('Variants')}}</a> --}}
-                                    <a class="list-group-item list-group-item-action" id="product-images" data-toggle="list" href="#images" role="tab" aria-controls="images">{{__('Images')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-seo" data-toggle="list" href="#seo" role="tab" aria-controls="seo">{{__('SEO')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-attribute" data-toggle="list" href="#attribute" role="tab" aria-controls="attribute">{{__('Attributes')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="" data-toggle="list" href="" role="tab" aria-controls="seo">{{__('Options')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-additional" data-toggle="list" href="#additional" role="tab" aria-controls="additional">{{__('Additional')}}</a>
+                                    <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home"><?php echo e(__('General')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="product-price" data-toggle="list" href="#price" role="tab" aria-controls="settings"><?php echo e(__('Price')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="product-inventory" data-toggle="list" href="#inventory" role="tab" aria-controls="inventory"><?php echo e(__('Inventory')); ?></a>
+                                    
+                                    <a class="list-group-item list-group-item-action" id="product-images" data-toggle="list" href="#images" role="tab" aria-controls="images"><?php echo e(__('Images')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="product-seo" data-toggle="list" href="#seo" role="tab" aria-controls="seo"><?php echo e(__('SEO')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="product-attribute" data-toggle="list" href="#attribute" role="tab" aria-controls="attribute"><?php echo e(__('Attributes')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="" data-toggle="list" href="" role="tab" aria-controls="seo"><?php echo e(__('Options')); ?></a>
+                                    <a class="list-group-item list-group-item-action" id="product-additional" data-toggle="list" href="#additional" role="tab" aria-controls="additional"><?php echo e(__('Additional')); ?></a>
                                 </div>
                             </div>
                             <div class="col-8">
@@ -61,34 +60,55 @@
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Product Name')}} <span class="text-danger">*</span></b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b><?php echo e(__('Product Name')); ?> <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="product_name" id="productName" class="form-control @error('product_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Product Name" >
-                                                                @error('product_name')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <input type="text" name="product_name" id="productName" class="form-control <?php $__errorArgs = ['product_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="inputEmail3" placeholder="Type Product Name" >
+                                                                <?php $__errorArgs = ['product_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Description')}} <span class="text-danger">*</span></b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b><?php echo e(__('Description')); ?> <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                {{-- <textarea name="description" id="description" class="form-control text-editor"></textarea> --}}
+                                                                
                                                                 <textarea name="description" id="description" class="form-control text-editor"></textarea>
-                                                                @error('description')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Brand</b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="brand_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Brand')}}'>
-                                                                    @forelse ($brands as $item)
-                                                                        <option value="{{$item->id}}">{{$item->brandTranslation->brand_name ?? $item->brandTranslationEnglish->brand_name ?? null}}</option>
-                                                                    @empty
-                                                                    @endforelse
+                                                                <select name="brand_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Brand')); ?>'>
+                                                                    <?php $__empty_1 = true; $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->brandTranslation->brand_name ?? $item->brandTranslationEnglish->brand_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                                    <?php endif; ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -96,23 +116,23 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="category_id[]" id="categoryId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                {{-- <select name="category_id[]" id="categoryId" class="form-control js-example-basic-multiple" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'> --}}
-                                                                    @foreach ($categories as $item)
-                                                                        @if ($item->categoryTranslation->count()>0)
-                                                                            @foreach ($item->categoryTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach
+                                                                <select name="category_id[]" id="categoryId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
+                                                                
+                                                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php if($item->categoryTranslation->count()>0): ?>
+                                                                            <?php $__currentLoopData = $item->categoryTranslation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                <?php if($key<1): ?>
+                                                                                    <?php if($value->local==$local): ?>
+                                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($value->category_name); ?></option>
+                                                                                    <?php elseif($value->local=='en'): ?>
+                                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($value->category_name); ?></option>
+                                                                                    <?php endif; ?>
+                                                                                <?php endif; ?>
+                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php else: ?>
+                                                                            <option value=""><?php echo e(__('NULL')); ?></option>
+                                                                        <?php endif; ?>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -120,26 +140,12 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tax Class</b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                    @forelse ($taxes as $tax)
-                                                                        <option value="{{$tax->id}}">{{$tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null}}</option>
-                                                                    @empty
-                                                                    @endforelse
-                                                                    {{-- @foreach ($taxes as $item)
-                                                                        @if ($item->categoryTranslation->count()>0)
-                                                                            @foreach ($item->categoryTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach     --}}
+                                                                <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
+                                                                    <?php $__empty_1 = true; $__currentLoopData = $taxes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tax): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                                        <option value="<?php echo e($tax->id); ?>"><?php echo e($tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                                    <?php endif; ?>
+                                                                    
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -147,42 +153,34 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Tags</b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="tag_id[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                    @foreach ($tags as $item)
-                                                                        @if ($item->tagTranslation->count()>0)
-                                                                            @foreach ($item->tagTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->tag_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->tag_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach
+                                                                <select name="tag_id[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
+                                                                    <?php $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php if($item->tagTranslation->count()>0): ?>
+                                                                            <?php $__currentLoopData = $item->tagTranslation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                <?php if($key<1): ?>
+                                                                                    <?php if($value->local==$local): ?>
+                                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($value->tag_name); ?></option>
+                                                                                    <?php elseif($value->local=='en'): ?>
+                                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($value->tag_name); ?></option>
+                                                                                    <?php endif; ?>
+                                                                                <?php endif; ?>
+                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php else: ?>
+                                                                            <option value=""><?php echo e(__('NULL')); ?></option>
+                                                                        <?php endif; ?>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
 
-                                                        {{-- <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Virtual</b></label>
-                                                            <div class="col-sm-8">
-                                                                <div class="form-group form-check">
-                                                                    <input type="checkbox" class="form-check-input" name="virtual" value="1" id="isActive">
-                                                                    <span>{{__("The product won't be shipped")}}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
+                                                        
 
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
                                                             <div class="col-sm-8">
                                                                 <div class="form-group form-check">
                                                                     <input type="checkbox" class="form-check-input" name="is_active" value="1" id="isActive">
-                                                                    <span>{{__('Enable the product')}}</span>
+                                                                    <span><?php echo e(__('Enable the product')); ?></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -190,7 +188,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -211,38 +209,38 @@
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Price')}} <span class="text-danger">*</span></b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Price')); ?> <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="price" id="price" class="form-control" id="inputEmail3" placeholder="Type Product Price" >
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Special Price')); ?></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="special_price" id="specialPrice" class="form-control" id="inputEmail3" placeholder="Type Special Price" >
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Type')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Special Price Type')); ?></b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Price Type')}}'>
-                                                                    <option value="Fixed">{{__('Fixed')}}</option>
-                                                                    <option value="Parcent">{{__('Parcent')}}</option>
+                                                                <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Price Type')); ?>'>
+                                                                    <option value="Fixed"><?php echo e(__('Fixed')); ?></option>
+                                                                    <option value="Parcent"><?php echo e(__('Parcent')); ?></option>
                                                                 </select>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price Start')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Special Price Start')); ?></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="special_price_start" id="specialPriceStart" class="form-control datepicker">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Special Price End')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Special Price End')); ?></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="special_price_end" id="specialPriceEnd" class="form-control">
                                                             </div>
@@ -251,7 +249,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
 
@@ -265,28 +263,42 @@
                                     <!-- Inventory-->
                                     <div class="tab-pane fade show" aria-labelledby="product-inventory" id="inventory" role="tabpanel">
                                         <div class="card">
-                                            <h4 class="card-header"><b>{{__('Inventory')}}</b></h4>
+                                            <h4 class="card-header"><b><?php echo e(__('Inventory')); ?></b></h4>
                                             <hr>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('SKU')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('SKU')); ?> </b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" id="inputEmail3" placeholder="Type SKU" >
-                                                                @error('sku')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <input type="text" name="sku" id="sku" class="form-control <?php $__errorArgs = ['sku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="inputEmail3" placeholder="Type SKU" >
+                                                                <?php $__errorArgs = ['sku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Inventroy Management')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Inventroy Management')); ?></b></label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control selectpicker" name="manage_stock" id="manageStock" data-live-search="true" data-live-search-style="begins" title='{{__('Select Inventory')}}'>
-                                                                    <option value="0">{{__("Don't Track Inventory")}}</option>
-                                                                    <option value="1">{{__('Track Inventory')}}</option>
+                                                                <select class="form-control selectpicker" name="manage_stock" id="manageStock" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Inventory')); ?>'>
+                                                                    <option value="0"><?php echo e(__("Don't Track Inventory")); ?></option>
+                                                                    <option value="1"><?php echo e(__('Track Inventory')); ?></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -297,11 +309,11 @@
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Stock Availibility')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Stock Availibility')); ?></b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="in_stock" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Stock')}}'>
-                                                                    <option value="1">{{__("In Stock")}}</option>
-                                                                    <option value="0">{{__('Out Stock')}}</option>
+                                                                <select name="in_stock" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Stock')); ?>'>
+                                                                    <option value="1"><?php echo e(__("In Stock")); ?></option>
+                                                                    <option value="0"><?php echo e(__('Out Stock')); ?></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -309,7 +321,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
 
@@ -321,87 +333,70 @@
                                     <!--/ Inventory-->
 
                                     <!--Variants-->
-                                    {{-- <div class="tab-pane fade show " aria-labelledby="product-variant" id="variant" role="tabpanel">
-                                        <div class="card">
-                                            <h4 class="card-header"><b>Variants</b></h4>
-                                            <hr>
-                                            <div class="card-body">
-                                                <div class="variants">
-                                                    <div class="row">
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Size')}} *</label>
-                                                            <input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Color')}} *</label>
-                                                            <input type="text" name="variant_color[]"  required class="form-control" placeholder="{{__('Color')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('SKU')}} *</label>
-                                                            <input type="text" name="variant_sku[]" required class="form-control" placeholder="{{__('SKU')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Quantity')}} *</label>
-                                                            <input type="text" name="variant_qty[]"  required class="form-control" placeholder="{{__('Quantity')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Price')}}</label>
-                                                            <input type="text" name="variant_price[]" required class="form-control" placeholder="{{__('Price')}}">
-                                                        </div>
-
-                                                        <div class="col-2">
-                                                            <label>Delete</label><br>
-                                                            <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add More</span>
-                                                <br><br>
-                                                <div class="form-group row">
-                                                    <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
+                                    
                                     <!--Variants-->
 
                                     <!-- Images -->
                                     <div class="tab-pane fade show" aria-labelledby="product-images" id="images" role="tabpanel">
                                         <div class="card">
-                                            <h4 class="card-header"><b>{{__('Images')}}</b></h4>
+                                            <h4 class="card-header"><b><?php echo e(__('Images')); ?></b></h4>
                                             <hr>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Basic Image')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Basic Image')); ?> </b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror">
-                                                                @error('base_image')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <input type="file" name="base_image" id="baseImage" class="form-control <?php $__errorArgs = ['base_image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                                                                <?php $__errorArgs = ['base_image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Additional Images')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Additional Images')); ?> </b></label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="additional_images[]" multiple id="multipleImages" class="form-control @error('additional_images') is-invalid @enderror">
-                                                                @error('additional_images')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <input type="file" name="additional_images[]" multiple id="multipleImages" class="form-control <?php $__errorArgs = ['additional_images'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                                                                <?php $__errorArgs = ['additional_images'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
 
@@ -416,26 +411,33 @@
                                     <!-- SEO -->
                                     <div class="tab-pane fade show" aria-labelledby="product-seo" id="seo" role="tabpanel">
                                         <div class="card">
-                                            <h4 class="card-header"><b>{{__('SEO')}}</b></h4>
+                                            <h4 class="card-header"><b><?php echo e(__('SEO')); ?></b></h4>
                                             <hr>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Meta Title')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Meta Title')); ?> </b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="meta_title" id="metaTitle" class="form-control" id="inputEmail3" placeholder="Type Meta Title" >
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Meta Description')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b><?php echo e(__('Meta Description')); ?> </b></label>
                                                             <div class="col-sm-8">
                                                                 <textarea name="meta_description" id="meta_description" class="form-control" rows="5"></textarea>
-                                                                @error('meta_description')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <?php $__errorArgs = ['meta_description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
@@ -443,7 +445,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
 
@@ -463,21 +465,21 @@
                                                 <div class="variants">
                                                     <div class="row">
                                                         <div class="col-5 form-group">
-                                                            <label>{{__('Atrribute')}}</label>
-                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
-                                                                @forelse ($attributeSets as $item)
-                                                                    <option value="" disabled class="text-bold">{{$item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null}}</option>
-                                                                    @forelse ($item->attributes as $attribute)
-                                                                        <option value="{{$attribute->id}}">&nbsp;&nbsp;&nbsp;{{$attribute->attributeTranslation->attribute_name ?? $attribute->attributeTranslationEnglish->attribute_name ?? null}}</option>
-                                                                    @empty
-                                                                    @endforelse
-                                                                @empty
-                                                                @endforelse
+                                                            <label><?php echo e(__('Atrribute')); ?></label>
+                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>
+                                                                <?php $__empty_1 = true; $__currentLoopData = $attributeSets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                                    <option value="" disabled class="text-bold"><?php echo e($item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null); ?></option>
+                                                                    <?php $__empty_2 = true; $__currentLoopData = $item->attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attribute): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                                                                        <option value="<?php echo e($attribute->id); ?>">&nbsp;&nbsp;&nbsp;<?php echo e($attribute->attributeTranslation->attribute_name ?? $attribute->attributeTranslationEnglish->attribute_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                                <?php endif; ?>
                                                             </select>
                                                         </div>
 
                                                         <div class="col-6 form-group">
-                                                            <label>{{__("Values")}}</label>
+                                                            <label><?php echo e(__("Values")); ?></label>
                                                             <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
                                                             </select>
                                                         </div>
@@ -492,7 +494,7 @@
                                                 <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add New Attribute</span>
                                                 <br><br>
                                                 <div class="form-group row">
-                                                    <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                    <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -502,31 +504,38 @@
                                     <!-- Additional -->
                                     <div class="tab-pane fade show" aria-labelledby="product-additional" id="additional" role="tabpanel">
                                         <div class="card">
-                                            <h4 class="card-header"><b>{{__('Additional')}}</b></h4>
+                                            <h4 class="card-header"><b><?php echo e(__('Additional')); ?></b></h4>
                                             <hr>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Short Description')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b><?php echo e(__('Short Description')); ?> </b></label>
                                                             <div class="col-sm-8">
                                                                 <textarea name="short_description" id="short_description" class="form-control" rows="5"></textarea>
-                                                                @error('short_description')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
+                                                                <?php $__errorArgs = ['short_description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <div class="text-danger"><?php echo e($message); ?></div>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Product New From')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Product New From')); ?></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="new_from" id="newFrom" class="form-control datepicker">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Product New To')}}</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Product New To')); ?></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="new_to" id="newTo" class="form-control datepicker">
                                                             </div>
@@ -536,7 +545,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-4"></div>
                                                             <div class="col-sm-8">
-                                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
+                                                                <button type="submit" class="btn btn-success"><?php echo e(__('Submit')); ?></button>
                                                             </div>
                                                         </div>
 
@@ -648,7 +657,7 @@
         $('#manageStock').change(function() {
             var manageStock = $('#manageStock').val();
             if (manageStock==1) {
-                data = '<label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('Quantity')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                data = '<label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('Quantity')); ?> &nbsp;<span class="text-danger">*</span> </b></label>';
                 data += '<div class="col-sm-8">';
                 data += '<input type="number" min="0" name="qty" id="qty" class="form-control" id="inputEmail3" placeholder="Type Quantity">';
                 data += '</div>';
@@ -663,8 +672,8 @@
         // $(document).on('click', '#addMore2', function(){
         //     console.log('ok');
         //     var rand = Math.floor(Math.random() * 90000) + 10000;
-        //     // $('.variants').append('<div class="row"><div class="col-2 form-group"><label>{{__('Size')}} *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}"></div><div class="col-2 form-group"><label>{{__('Color')}} *</label><input type="text" name="variant_color[]" id="product_amount"  required class="form-control" placeholder="{{__('Color')}}"></div><div class="col-2 form-group"><label>{{__('SKU')}} *</label><input type="text" name="variant_sku[]" id="sku" required class="form-control" placeholder="{{__('SKU')}}"></div><div class="col-2 form-group"><label>{{__('Quantity')}} *</label><input type="text" name="variant_qty[]" id="product_amount"  required class="form-control" placeholder="{{__('Quantity')}}"></div><div class="col-2 form-group"><label>{{__('Price')}}</label><input type="text" name="variant_price[]" id="price" required class="form-control" placeholder="{{__('Price')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
-        //     $('.variants').append('<div class="row"><div class="col-2 form-group"><label>{{__('Size')}} *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+        //     // $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Color')); ?> *</label><input type="text" name="variant_color[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Color')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('SKU')); ?> *</label><input type="text" name="variant_sku[]" id="sku" required class="form-control" placeholder="<?php echo e(__('SKU')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Quantity')); ?> *</label><input type="text" name="variant_qty[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Quantity')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Price')); ?></label><input type="text" name="variant_price[]" id="price" required class="form-control" placeholder="<?php echo e(__('Price')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+        //     $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
         // })
 
         $(document).on('click', '.del-row', function(){
@@ -675,23 +684,23 @@
 
             html = ' <div class="row">'+
                         '<div class="col-5 form-group">'+
-                            '<label>{{__("Atrribute")}}</label>'+
-                            // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker attributeId" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>'+
+                            '<label><?php echo e(__("Atrribute")); ?></label>'+
+                            // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker attributeId" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>'+
                             '<select name="attribute_id[]" class="form-control attributeId">'+
                                 '<option value="">Please Select Attribute</option>'+
-                                    '@forelse ($attributeSets as $item)'+
-                                        '<option value="" disabled class="text-bold">{{$item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null}}</option>'+
-                                        '@forelse ($item->attributes as $attribute)'+
-                                            '<option value="{{$attribute->id}}">&nbsp;&nbsp;&nbsp;{{$attribute->attributeTranslation->attribute_name ?? $attribute->attributeTranslationEnglish->attribute_name ?? null}}</option>'+
-                                        '@empty'+
-                                        '@endforelse'+
-                                    '@empty'+
-                                    '@endforelse'+
+                                    '<?php $__empty_1 = true; $__currentLoopData = $attributeSets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>'+
+                                        '<option value="" disabled class="text-bold"><?php echo e($item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null); ?></option>'+
+                                        '<?php $__empty_2 = true; $__currentLoopData = $item->attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attribute): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>'+
+                                            '<option value="<?php echo e($attribute->id); ?>">&nbsp;&nbsp;&nbsp;<?php echo e($attribute->attributeTranslation->attribute_name ?? $attribute->attributeTranslationEnglish->attribute_name ?? null); ?></option>'+
+                                        '<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>'+
+                                        '<?php endif; ?>'+
+                                    '<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>'+
+                                    '<?php endif; ?>'+
                             '</select>'+
                         '</div>'+
 
                         '<div class="col-6 form-group">'+
-                            '<label>{{__("Values")}}</label>'+
+                            '<label><?php echo e(__("Values")); ?></label>'+
                             // '<select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">'+
                             '<select name="attribute_value_id[]" id="attributeValueId"  class="form-control attributeValueId">'+
                             '</select>'+
@@ -716,7 +725,7 @@
         //     var attributeId = $('#attributeId').val();
         //     // console.log(attributeId);
         //     $.ajax({
-        //         url: "{{route('admin.attribute.get_attribute_values')}}",
+        //         url: "<?php echo e(route('admin.attribute.get_attribute_values')); ?>",
         //         method: "GET",
         //         data: {attribute_id: attributeId},
         //         success: function (data) {
@@ -732,7 +741,7 @@
             var attributeId = $('#attributeId').val();
             console.log('ok');
             $.ajax({
-                url: "{{route('admin.attribute.get_attribute_values')}}",
+                url: "<?php echo e(route('admin.attribute.get_attribute_values')); ?>",
                 method: "GET",
                 data: {attribute_id: attributeId},
                 success: function (data) {
@@ -751,7 +760,7 @@
 
             $('.attributeValueId').addClass('attributeValueId_'+random_number).removeClass('attributeValueId');
             $.ajax({
-                url: "{{route('admin.attribute.get_attribute_values')}}",
+                url: "<?php echo e(route('admin.attribute.get_attribute_values')); ?>",
                 method: "GET",
                 data: {attribute_id: attributeId},
                 success: function (data) {
@@ -770,7 +779,7 @@
         //     var attributeId = $('#attributeId2').val();
         //     // console.log(attributeId);
         //     $.ajax({
-        //         url: "{{route('admin.attribute.get_attribute_values')}}",
+        //         url: "<?php echo e(route('admin.attribute.get_attribute_values')); ?>",
         //         method: "GET",
         //         data: {attribute_id: attributeId},
         //         success: function (data) {
@@ -790,4 +799,6 @@
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/product/create.blade.php ENDPATH**/ ?>

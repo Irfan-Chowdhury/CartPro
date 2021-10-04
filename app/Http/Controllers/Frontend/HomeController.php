@@ -11,6 +11,7 @@ use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
 use App\Models\Language;
 use App\Models\Product;
+use App\Models\ProductTranslation;
 use App\Models\Setting;
 use App\Models\Slider;
 use App\Models\StorefrontImage;
@@ -26,7 +27,30 @@ class HomeController extends Controller
 {
     public function index()
     {
+
         $locale = Session::get('currentLocal');
+
+        // $test = [];
+        // $data = ProductTranslation::with(['product:id,slug','product.baseImage'=> function($query){
+        //             return $query->where('type','base');
+        //         },'product.categoryProduct'])
+        //         ->where('product_name','LIKE', '%samsung%')
+        //         ->where('local',$locale)
+        //         ->select('product_id','product_name','local')
+        //         ->get();
+        // // return $data;
+
+        // foreach ($data as $value) {
+        //     if ($value->product->baseImage!=null) {
+        //         $test[]= 'public'.$value->product->baseImage->image;
+        //     }
+        // }
+        // return $test;
+        // return $data[0]->product->baseImage->image;
+
+
+
+
 
         // $languages = Language::orderBy('language_name','ASC')->get();
 
@@ -48,7 +72,7 @@ class HomeController extends Controller
         // }
 
         //Appereance-->Storefront --> Setting
-        $settings = Cache::remember('settings', 120, function () {
+        $settings = Cache::remember('settings', 300, function () {
             return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
         });
         // $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
@@ -71,12 +95,21 @@ class HomeController extends Controller
         $product_tab_one_section_3 = [];
         $product_tab_one_section_4 = [];
 
+
+        // $data = Menus::with('items')
+        //     ->where('is_active',1)
+        //     ->get();
+
+
         foreach ($settings as $key => $setting)
         {
             if ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_1 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
+
+                    $product_tab_one_section_1 = Cache::remember('category_product', 150, function () use ($setting) {
+                        return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                                        ->where('category_id',$setting->plain_value)->get();
+                    });
                     if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
                         $product_tab_one_section_1 = [];
                     }
@@ -86,41 +119,59 @@ class HomeController extends Controller
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_2 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
-                        if (empty($product_tab_one_section_2)){
-                            $product_tab_one_section_2 = [];
-                        }
+                    $product_tab_one_section_2 = Cache::remember('category_product', 150, function () use ($setting) {
+                        return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                                                ->where('category_id',$setting->plain_value)->get();
+                    });
+                    if (empty($product_tab_one_section_2)){
+                        $product_tab_one_section_2 = [];
+                    }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_3 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                    $product_tab_one_section_3 = Cache::remember('category_product', 150, function () use ($setting) {
+                        return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
                                                                 ->where('category_id',$setting->plain_value)->get();
-                        if (empty($product_tab_one_section_3)) {
-                            $product_tab_one_section_3 = [];
-                        }
+                    });
+                    if (empty($product_tab_one_section_3)) {
+                        $product_tab_one_section_3 = [];
+                    }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_4 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
+                    $product_tab_one_section_4 =  Cache::remember('category_product', 150, function () use ($setting) {
+                        return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                                                ->where('category_id',$setting->plain_value)->get();
+                    });
                     if (empty($product_tab_one_section_4)) {
                         $product_tab_one_section_4 = [];
                     }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
+
+            //test
+
+            // if ($setting->key=='storefront_footer_menu_two' && $setting->plain_value!=NULL) {
+            //     foreach ($data as $key => $value) {
+            //         if ($value->id==$setting->plain_value) {
+            //             $footer_menu_two = $data[$key];
+            //         }
+            //     }
+            // }
         }
-        //------Test --------
+
+        // return $footer_menu_two;
+
 
         //Slider
-        $sliders = Cache::remember('sliders', 300, function () use ($locale) {
+        $sliders = Cache::remember('sliders', 150, function () use ($locale) {
             return Slider::with(['sliderTranslation'=> function ($query) use ($locale){
                 $query->where('locale',$locale)
                 ->orWhere('locale','en')
@@ -136,10 +187,13 @@ class HomeController extends Controller
         $slider_banners = $this->getSliderBanner($settings);
 
 
-        $brands = Brand::where('is_active',1)
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','DESC')
-                        ->get();
+        $brands = Cache::remember('brands', 150, function () {
+            return Brand::where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC')
+                    ->get();
+        });
+
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','categories',
                                                 'brands','product_tab_one_section_1','product_tab_one_section_2','product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles'));
@@ -179,8 +233,42 @@ class HomeController extends Controller
         }else {
             $product_cart_qty = null;
         }
-        
+
         return view('frontend.pages.product_details',compact('product','category','product_cart_qty'));
+    }
+
+    public function dataAjaxSearch(Request $request)
+    {
+        if ($request->ajax()) {
+            $locale = Session::get('currentLocal');
+            // $products   = DB::table('products')
+            //             ->join('product_translations','product_translations.product_id','products.id')
+            //             ->innerjoin('product_images','product_images.product_id','products.id')
+            //             // ->where('product_translations.product_name','LIKE', "%samsung%")
+            //             ->where('product_translations.product_name','LIKE', "{$request->search_txt}%")
+            //             ->select('products.id AS product_id','products.slug','product_translations.product_name')
+            //             ->get();
+
+            $products = ProductTranslation::with(['product:id,slug','product.baseImage'=> function($query){
+                                return $query->where('type','base');
+                            },
+                            'product.categoryProduct'])
+                            ->where('product_name','LIKE', $request->search_txt.'%')
+                            ->where('local',$locale)
+                            ->select('product_id','product_name','local')
+                            ->get();
+
+            $html = '';
+            foreach ($products as $key => $item) {
+                if ($item->product->baseImage!=null) {
+                    $image_url = url("public".$item->product->baseImage->image);
+                    $html .= '<tr><td><a href="product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:35px;width:35px"/>&nbsp'.$item->product_name.'</a></td></tr>';
+                }else {
+                    $html .= '<tr><td><a href="product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'</a></td></tr>';
+                }
+            }
+            return response()->json($html);
+        }
     }
 
     protected function getSliderBanner($settings)

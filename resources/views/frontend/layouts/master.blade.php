@@ -1,7 +1,16 @@
 @php
-    $languages = App\Models\Language::orderBy('language_name','ASC')->get();
+
+
+    $languages = Illuminate\Support\Facades\Cache::remember('languages', 300, function () {
+        return App\Models\Language::orderBy('language_name','ASC')->get();
+    });
+
     $currency_codes = App\Models\CurrencyRate::select('currency_code')->get();
-    $storefront_images = App\Models\StorefrontImage::select('title','type','image')->get();
+
+    $storefront_images = Illuminate\Support\Facades\Cache::remember('storefront_images', 300, function () {
+        return  App\Models\StorefrontImage::select('title','type','image')->get();
+    });
+
     $empty_image = 'public/images/empty.jpg';
     $favicon_logo_path = $empty_image;
     $header_logo_path  = $empty_image;
@@ -14,26 +23,53 @@
         }
     }
     //Appereance-->Storefront --> Setting
-    $settings = App\Models\Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
-    $categories = App\Models\Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-            ->where('parent_id',NULL)
-            ->where('is_active',1)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
+    $settings = Illuminate\Support\Facades\Cache::remember('settings', 300, function () {
+        return App\Models\Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+    });
 
-    foreach ($settings as $key => $value) {
-        if ($value->key=='storefront_primary_menu' && $value->plain_value!=NULL) {
+    $categories = Illuminate\Support\Facades\Cache::remember('categories', 300, function () {
+        return App\Models\Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
+                    ->where('parent_id',NULL)
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC')
+                    ->get();
+    });
+
+
+    $menu = [];
+    $footer_menu_one = [];
+    $footer_menu_two = [];
+    foreach ($settings as $key => $item) {
+        if ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
             $menu = Harimayco\Menu\Models\Menus::with('items')
             ->where('is_active',1)
-            ->where('id',$value->plain_value)
+            ->where('id',$item->plain_value)
             ->first();
-            break;
         }
-        else {
-            $menu = [];
+
+        if ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
+            $footer_menu_one_title = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? null;
+        }
+        if ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
+            $footer_menu_one = Harimayco\Menu\Models\Menus::with('items')
+            ->where('is_active',1)
+            ->where('id',$item->plain_value)
+            ->first();
+        }
+
+        if ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
+            $footer_menu_title_two = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
+        }
+        if ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
+            $footer_menu_two = Harimayco\Menu\Models\Menus::with('items')
+            ->where('is_active',1)
+            ->where('id',$item->plain_value)
+            ->first();
         }
     }
+    // $footer_menu_one_title = 'Our Service';
+
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
@@ -163,7 +199,7 @@
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
                         <form class="header-search">
-                            <input class="" type="text" placeholder="Search products, categories, sku..." name="search">
+                            <input class="" type="text" id="searchText" placeholder="Search products, categories, sku..." name="search">
                             <select name="category" class="selectpicker">
                                 <option value="" selected="">All Categories</option>
                                 @forelse ($categories as $category)
@@ -200,6 +236,19 @@
                             </li>
                         </ul>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-7"></div>
+                    <div class="col-lg-6 d-none d-xl-flex middle-column justify-content-center" id="search_field">
+                        <div class="card">
+                            <div class="card-body">
+                                <table id="result">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-5"></div>
+
                 </div>
             </div>
         </div>
@@ -414,28 +463,29 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-6">
                             <div class="footer-widget style1">
-                                <h3>Find it fast</h3>
+                                <h3>{{$footer_menu_one_title}}</h3>
                                 <div class="d-flex justify-content-between">
                                     <ul class="footer-menu">
-                                        <li><a class="" href="">Waterproof Headphones</a></li>
-                                        <li><a class="" href="">Laptops & Computers</a></li>
-                                        <li><a class="" href="">Smart Phones & Tablets</a></li>
-                                        <li><a class="" href="">Video Games & Consoles</a></li>
-                                        <li><a class="" href="">TV & Audio</a></li>
-                                        <li><a class="" href="">Cameras & Photography</a></li>
-                                        <li><a class="" href="">Gadgets</a></li>
+                                        @if ($footer_menu_one)
+                                            @forelse($footer_menu_one->items as $value)
+                                                <li><a class="" href="">{{$value->label}}</a></li>
+                                            @empty
+                                            @endforelse
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-6">
                             <div class="footer-widget style1">
-                                <h3>Customer care</h3>
+                                <h3>{{$footer_menu_title_two}}</h3>
                                 <ul class="footer-menu">
-                                    <li><a class="" href="#">Help & Contact us</a></li>
-                                    <li><a class="" href="#">Returns & Refunds</a></li>
-                                    <li><a class="" href="#">Online Stores</a></li>
-                                    <li><a class="" href="#">Terms & Condition</a></li>
+                                    @if ($footer_menu_two)
+                                        @forelse($footer_menu_two->items as $value)
+                                            <li><a class="" href="">{{$value->label}}</a></li>
+                                        @empty
+                                        @endforelse
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -694,7 +744,7 @@
 
     <script>
         $('.demo-btn').on('click', function(){
-            // $('#demo').toggleClass('open');
+            $('#demo').toggleClass('open');
         });
         $(function () {
             $('#color-input').colorpicker({
@@ -804,7 +854,7 @@
         $(document).on('click','.remove_cart',function(event) {
             event.preventDefault();
             var rowId = $(this).data('id');
-            var removeCartItemId = $(this).parent().parent().attr('id');
+            // var removeCartItemId = $(this).parent().parent().attr('id');
 
             $.ajax({
                 url: "{{ route('cart.remove') }}",
@@ -875,6 +925,28 @@
                 }
             })
         });
+
+        $(document).ready(function(){
+            $('#searchText').keyup(function(){
+                var txt = $(this).val();
+                if (txt!='') {
+                    $.ajax({
+                        url: "{{ route('cartpro.data_ajax_search') }}",
+                        type: "GET",
+                        data: {search_txt:txt},
+                        success: function (data) {
+                            $('#search_field').removeClass('d-none');
+                            $('#result').html(data);
+                        }
+                    })
+                }
+                else{
+                    $('#search_field').addClass('d-none');
+                    $('#result').html('');
+                }
+
+            })
+        })
 
     </script>
 

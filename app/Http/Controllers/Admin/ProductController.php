@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\Product;
+use App\Models\ProductAttributeValue;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\ProductTag;
@@ -148,6 +149,16 @@ class ProductController extends Controller
             ->orderBy('id','DESC');
         }])->get();
 
+        $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish','attributes.attributeTranslation',
+                                    'attributes.attributeTranslationEnglish','attributes.attributeValues.attributeValueTranslation')
+                                    ->where('is_active',1)
+                                    ->orderBy('is_active','DESC')
+                                    ->orderBy('id','DESC')
+                                    ->get();
+
+        // return $attributeSets[1]->attributes[0]->attributeTranslation->attribute_name;
+
+        //No Need
         $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
                     ->where('is_active',1)
                     ->get();
@@ -158,26 +169,7 @@ class ProductController extends Controller
                 ->orderBy('id','ASC')
                 ->get();
 
-
-        $data_attribute = [
-            [
-                'id'=>2,
-                'locale'=>'en',
-                'attribute_name'=>'Size',
-            ],
-            [
-                'id'=>3,
-                'locale'=>'en',
-                'attribute_name'=>'Color',
-            ],
-            [
-                'id'=>20,
-                'locale'=>'en',
-                'attribute_name'=>'Ram',
-            ]
-        ];
-
-        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributes','data_attribute','taxes'));
+        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributeSets','attributes','taxes'));
     }
 
     /*
@@ -191,22 +183,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $validator = Validator::make($request->all(),[
-            'product_name'=> 'required|unique:product_translations',
-            'description' => 'required',
-            'price'       => 'required',
-            'sku'       => 'unique:products',
-            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            // 'multiple_images'=> 'nullable|unique:product_translations',
-        ]);
+        // $validator = Validator::make($request->all(),[
+        //     'product_name'=> 'required|unique:product_translations',
+        //     'description' => 'required',
+        //     'price'       => 'required',
+        //     'sku'       => 'unique:products',
+        //     'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        //     //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
+        //     // 'multiple_images'=> 'nullable|unique:product_translations',
+        // ]);
 
-        if ($validator->fails()){
-
-            session()->flash('type','danger');
-            session()->flash('message','Something Wrong');
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        // if ($validator->fails()){
+        //     session()->flash('type','danger');
+        //     session()->flash('message','Something Wrong');
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
         $local = Session::get('currentLocal');
 
         if (auth()->user()->can('product-store'))
@@ -246,9 +237,6 @@ class ProductController extends Controller
             $productTranslation->short_description  = $request->short_description;
             $productTranslation->save();
 
-            //----------------- Product Translation --------------
-
-
             //----------------- Base Image --------------
             if (!empty($request->base_image)){
                 $productImage = [];
@@ -257,8 +245,6 @@ class ProductController extends Controller
                 $productImage['type']       = 'base';
                 ProductImage::insert($productImage);
             }
-            //-----------------/ Base Image --------------
-
 
             //----------------- Multiple Image ---------------
             if (!empty($request->additional_images)) {
@@ -271,17 +257,12 @@ class ProductController extends Controller
                     ProductImage::insert($data);
                 }
             }
-            //-----------------/ Multiple Image --------------
-
-
-
 
             //----------------- Category-Product --------------
             if (!empty($request->category_id)) {
                 $categoryArrayIds = $request->category_id;
                 $product->categories()->sync($categoryArrayIds);
             }
-            //-----------------Category-Product----------------------
 
 
             //-----------------Product-Tag--------------
@@ -289,10 +270,17 @@ class ProductController extends Controller
                 $tagArrayIds = $request->tag_id;
                 $product->tags()->sync($tagArrayIds);
             }
-            //-----------------Product-Tag--------------
 
 
             //-----------------Product-Attribute--------------
+
+            if (!empty($request->attribute_id)) {
+                $attributeArrayIds =  $request->attribute_id;//Array
+                $attributeValueIds = $request->attribute_value_id; //Array
+                for ($i=0; $i <count($attributeArrayIds) ; $i++) {
+                    $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
+                }
+            }
 
             session()->flash('type','success');
             session()->flash('message','Data Saved Successfully.');

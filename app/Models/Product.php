@@ -84,6 +84,13 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    // public function attribute_values()
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class,'product_attribute_value')
+                    ->withPivot('attribute_value_id');
+    }
+
     public function brandTranslation()
     {
         $locale = Session::get('currentLocal');
@@ -96,6 +103,13 @@ class Product extends Model
     	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
                 ->where('local','en');
     }
+
+    public function categoryProduct()
+    {
+        return $this->hasMany(CategoryProduct::class);
+    }
+
+
 
 
 
