@@ -46,11 +46,16 @@ Auth::routes();
 //     return 'test';
 //   }]);
 
-Route::get('/','Frontend\HomeController@index')->name('cartpro.home');
-Route::get('product/{product_slug}/{category_id}','Frontend\HomeController@product_details')->name('cartpro.product_details');
-Route::get('data_ajax_search','Frontend\HomeController@dataAjaxSearch')->name('cartpro.data_ajax_search');
+
+Route::post('newslatter/store','Frontend\HomeController@newslatterStore')->name('cartpro.newslatter_store');
 
 Route::group(['namespace'=>'Frontend'], function (){
+
+        Route::get('/','HomeController@index')->name('cartpro.home');
+        Route::get('product/{product_slug}/{category_id}','HomeController@product_details')->name('cartpro.product_details');
+        Route::get('data_ajax_search','HomeController@dataAjaxSearch')->name('cartpro.data_ajax_search');
+
+        //Cart
         Route::group(['prefix' => '/cart'], function () {
             Route::post('/add', 'CartController@productAddToCart')->name('product.add_to_cart');
             Route::get('/view-details', 'CartController@cartViewDetails')->name('cart.view_details');

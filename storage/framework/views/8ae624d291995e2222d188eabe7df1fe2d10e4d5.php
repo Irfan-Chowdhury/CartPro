@@ -1,26 +1,25 @@
-@extends('admin.main')
-@section('admin_content')
+<?php $__env->startSection('admin_content'); ?>
 <section>
-@php
+<?php
     use Stichoza\GoogleTranslate\GoogleTranslate;
     $local = Session::get('currentLocal');
     $tr    = new GoogleTranslate($local);
-@endphp
+?>
 
         <div class="container-fluid"><span id="alert_message"></span></div>
 
         <div class="container-fluid mb-3">
-            @if (auth()->user()->can('category-store'))
+            <?php if(auth()->user()->can('category-store')): ?>
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record">
-                    {{-- <i class="fa fa-plus"></i> {{trans('file.Add_Category')}} --}}
-                    <i class="fa fa-plus"></i> @lang('file.Add_Category')
+                    
+                    <i class="fa fa-plus"></i> <?php echo app('translator')->get('file.Add_Category'); ?>
                 </button>
-            @endif
-            @if (auth()->user()->can('category-action'))
+            <?php endif; ?>
+            <?php if(auth()->user()->can('category-action')): ?>
                 <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
-                    <i class="fa fa-minus-circle"></i> @lang('file.Bulk_Action')
+                    <i class="fa fa-minus-circle"></i> <?php echo app('translator')->get('file.Bulk_Action'); ?>
                 </button>
-            @endif
+            <?php endif; ?>
         </div>
 
         <div class="table-responsive">
@@ -28,20 +27,20 @@
                 <thead>
                     <tr>
                         <th class="not-exported"></th>
-                        <th scope="col">{{__('file.Image')}}</th>
-                        <th scope="col">{{__('Category Name')}}</th>
-                        <th scope="col">@lang('Parent')</th>
-                        <th scope="col">@lang('Status')</th>
-                        <th scope="col">@lang('Action')</th>
+                        <th scope="col"><?php echo e(__('file.Image')); ?></th>
+                        <th scope="col"><?php echo e(__('Category Name')); ?></th>
+                        <th scope="col"><?php echo app('translator')->get('Parent'); ?></th>
+                        <th scope="col"><?php echo app('translator')->get('Status'); ?></th>
+                        <th scope="col"><?php echo app('translator')->get('Action'); ?></th>
                     </tr>
                 </thead>
             </table>
         </div>
     </section>
 
-    @include('admin.pages.category.create')
-    @include('admin.pages.category.edit_modal')
-    @include('admin.includes.confirm_modal')
+    <?php echo $__env->make('admin.pages.category.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('admin.pages.category.edit_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('admin.includes.confirm_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
     <script type="text/javascript">
@@ -78,7 +77,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.category') }}",
+                    url: "<?php echo e(route('admin.category')); ?>",
                 },
 
                 columns: [
@@ -119,7 +118,7 @@
                     //     data: 'image',
                     //     name: 'image',
                     //     render:function (data) {
-                    //      return "<img class='profile-photo md' src={{ URL::to('/') }}/" + data + "/>";
+                    //      return "<img class='profile-photo md' src=<?php echo e(URL::to('/')); ?>/" + data + "/>";
                     //    }
 
                     // },
@@ -137,12 +136,12 @@
 
                 "order": [],
                 'language': {
-                    'lengthMenu': '_MENU_ {{__("records per page")}}',
-                    "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                    "search": '{{trans("file.Search")}}',
+                    'lengthMenu': '_MENU_ <?php echo e(__("records per page")); ?>',
+                    "info": '<?php echo e(trans("file.Showing")); ?> _START_ - _END_ (_TOTAL_)',
+                    "search": '<?php echo e(trans("file.Search")); ?>',
                     'paginate': {
-                        'previous': '{{trans("file.Previous")}}',
-                        'next': '{{trans("file.Next")}}'
+                        'previous': '<?php echo e(trans("file.Previous")); ?>',
+                        'next': '<?php echo e(trans("file.Next")); ?>'
                     }
                 },
                 'columnDefs': [
@@ -207,7 +206,7 @@
 
 
         $('#create_record').click(function () {
-            $('.modal-title').text('{{__('Add Category')}}');
+            $('.modal-title').text('<?php echo e(__('Add Category')); ?>');
             $('#formModal').modal('show');
         });
 
@@ -217,7 +216,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: "{{route('admin.category.store')}}",
+                url: "<?php echo e(route('admin.category.store')); ?>",
                 method: "POST",
                 data: new FormData(this),
                 contentType: false,
@@ -254,7 +253,7 @@
             $('#alert_message').html('');
 
             $.ajax({
-                url: "{{ route('admin.category.edit') }}",
+                url: "<?php echo e(route('admin.category.edit')); ?>",
                 type: "GET",
                 data: {category_id:id},
                 success: function (data) {
@@ -287,7 +286,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: "{{route('admin.category.update')}}",
+                url: "<?php echo e(route('admin.category.update')); ?>",
                 method: "POST",
                 data: new FormData(this),
                 contentType: false,
@@ -327,7 +326,7 @@
 		console.log(categoryId);
 
 		$.ajax({
-			url: "{{route('admin.category.active')}}",
+			url: "<?php echo e(route('admin.category.active')); ?>",
 			type: "GET",
 			data: {id:categoryId},
 			success: function(data){
@@ -351,7 +350,7 @@
 		console.log(categoryId);
 
 		$.ajax({
-			url: "{{route('admin.category.inactive')}}",
+			url: "<?php echo e(route('admin.category.inactive')); ?>",
 			type: "GET",
 			data: {id:categoryId},
 			success: function(data){
@@ -385,7 +384,7 @@
                 console.log(idsArray);
                 action_type = "active";
                 $.ajax({
-                    url: "{{route('admin.category.bulk_action')}}",
+                    url: "<?php echo e(route('admin.category.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
@@ -406,7 +405,7 @@
                 action_type = "inactive";
                 console.log(idsArray);
                 $.ajax({
-                    url: "{{route('admin.category.bulk_action')}}",
+                    url: "<?php echo e(route('admin.category.bulk_action')); ?>",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
@@ -428,4 +427,6 @@
 
 
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cartpro\resources\views/admin/pages/category/index.blade.php ENDPATH**/ ?>

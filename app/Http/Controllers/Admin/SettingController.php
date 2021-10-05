@@ -377,6 +377,20 @@ class SettingController extends Controller
             }else {
                 SettingNewsletter::whereId($setting_newsletter->id)->update($data);
             }
+
+            //Default Currency
+            $path = '.env';
+            if ($request->mailchimp_api_key) {
+                $searchArray = array('MAILCHIMP_APIKEY=' . env('MAILCHIMP_APIKEY'));
+                $replaceArray= array('MAILCHIMP_APIKEY=' . $request->mailchimp_api_key);
+                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            }
+            if ($request->mailchimp_list_id) {
+                $searchArray = array('MAILCHIMP_LIST_ID=' . env('MAILCHIMP_LIST_ID'));
+                $replaceArray= array('MAILCHIMP_LIST_ID=' . $request->mailchimp_list_id);
+                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            }
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }

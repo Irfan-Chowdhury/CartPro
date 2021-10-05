@@ -73,6 +73,9 @@
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
+
+    //Newslatter
+    $setting_newslatter = App\Models\SettingNewsletter::first();
 ?>
 
 <!DOCTYPE html>
@@ -264,15 +267,15 @@
                                     <ul class="dropdown">
                                         <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <?php if($category->child->isNotEmpty()): ?>
-                                                <li class="has-dropdown"><a href="#"><i class=""></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
+                                                <li class="has-dropdown"><a href="#"><i class="<?php echo e($category->icon ?? null); ?>"></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
                                                     <ul class="dropdown">
                                                         <?php $__currentLoopData = $category->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <li><a href="<?php echo e($item->slug); ?>"><i class=""></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                            <li><a href="<?php echo e($item->slug); ?>"><i class="<?php echo e($item->icon ?? null); ?>"></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </ul>
                                                 </li>
                                             <?php else: ?>
-                                                <li><a href="<?php echo e($category->slug); ?>"><i class=""></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                <li><a href="<?php echo e($category->slug); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <?php endif; ?>
@@ -411,29 +414,33 @@
 
     <?php echo $__env->yieldContent('frontend_content'); ?>
 
-    <div class="newsletter-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7 col-md-6">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <i class="ion-ios-paperplane-outline me-3"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0">Subscribe to our Newsletter</h3>
-                            <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
+    <?php if($setting_newslatter->newsletter==1): ?>
+        <div class="newsletter-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 col-md-6">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <i class="ion-ios-paperplane-outline me-3"></i>
+                            </div>
+                            <div>
+                                <h3 class="mb-0">Subscribe to our Newsletter</h3>
+                                <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5 col-md-6">
-                    <form class="newsletter">
-                        <input class="" type="text" placeholder="Enter your email" name="newsletter">
-                        <button class="button style1 btn-search" type="submit">Subscribe</button>
-                    </form>
+                    <div class="col-lg-5 col-md-6">
+                        <form class="newsletter" id="newsLatterSubmitForm" action="<?php echo e(route('cartpro.newslatter_store')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
+                            <input class="" type="text" placeholder="Enter your email" name="email">
+                            <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
+
     <!--Scroll to top starts-->
     <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
     <!--Scroll to top ends-->
@@ -657,8 +664,8 @@
                             <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
                             <form class="newsletter mb-5">
-                                <input class="" type="text" placeholder="Enter your email" name="newsletter">
-                                <button class="button style1 btn-search" type="submit">Subscribe</button>
+                                <input class="" type="text" placeholder="Enter your email">
+                                <button type="submit" class="button style1 btn-search">Subscribe</button>
                             </form>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="disable-popup">
@@ -702,7 +709,9 @@
     </script>
 
     
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="<?php echo e(asset('public/frontend/js/sweetalert2@11.js')); ?>"></script>
+
 
     <!-- FACEBOOK CHAT PLUGIN ENDS -->
 
@@ -942,7 +951,49 @@
                 }
 
             })
-        })
+        });
+
+
+        $("#newsLatterSubmitForm").on("submit",function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "<?php echo e(route('cartpro.newslatter_store')); ?>",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.type=='error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                    else if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message,
+                        })
+
+                        $('#newsLatterSubmitForm')[0].reset();
+                    }
+                }
+            });
+        });
 
     </script>
 

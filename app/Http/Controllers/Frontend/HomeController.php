@@ -10,9 +10,11 @@ use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
 use App\Models\Language;
+use App\Models\Newsletter AS DBNewslatter;
 use App\Models\Product;
 use App\Models\ProductTranslation;
 use App\Models\Setting;
+use App\Models\SettingNewsletter;
 use App\Models\Slider;
 use App\Models\StorefrontImage;
 use Harimayco\Menu\Models\Menus;
@@ -22,34 +24,17 @@ use Illuminate\Support\Facades\Session;
 // use Gloudemans\Cart;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\Environment\Console;
+use Newsletter;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        // return SettingNewsletter::first();
 
         $locale = Session::get('currentLocal');
-
-        // $test = [];
-        // $data = ProductTranslation::with(['product:id,slug','product.baseImage'=> function($query){
-        //             return $query->where('type','base');
-        //         },'product.categoryProduct'])
-        //         ->where('product_name','LIKE', '%samsung%')
-        //         ->where('local',$locale)
-        //         ->select('product_id','product_name','local')
-        //         ->get();
-        // // return $data;
-
-        // foreach ($data as $value) {
-        //     if ($value->product->baseImage!=null) {
-        //         $test[]= 'public'.$value->product->baseImage->image;
-        //     }
-        // }
-        // return $test;
-        // return $data[0]->product->baseImage->image;
-
-
-
 
 
         // $languages = Language::orderBy('language_name','ASC')->get();
@@ -268,6 +253,33 @@ class HomeController extends Controller
                 }
             }
             return response()->json($html);
+        }
+    }
+
+    public function newslatterStore(Request $request)
+    {
+        if ($request->ajax()) {
+            // $validator = Validator::make($request->all(),[
+            //     'email' => 'required|email|unique:newslatters,email|max:55',
+            // ]);
+
+            // if ($validator->fails()){
+            //     return response()->json(['type'=>'error','errors' => $validator->errors()]);
+            // }
+
+            $newslatter  = new DBNewslatter();
+            $newslatter->email = $request->email;
+            $newslatter->save();
+
+            // Newsletter::delete($request->email);
+
+            if ( ! Newsletter::isSubscribed($request->email) )
+            {
+                Newsletter::subscribePending($request->email);
+                // return redirect('newsletter')->with('success', 'Thanks For Subscribe');
+                return response()->json(['type'=>'success','message'=>'Successfully Subscribed']);
+            }
+            return response()->json(['type'=>'error']);
         }
     }
 

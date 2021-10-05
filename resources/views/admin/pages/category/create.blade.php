@@ -57,6 +57,11 @@
                             <input type="file" class="form-control-file" name="image" id="exampleFormControlFile1">
                         </div>
 
+                        <div class="col-md-6 form-group mt-5">
+                            <label for="">{{__('Icon')}}</label>
+                            <input type="text" name="category_icon" id="cateogry_icon" class="form-control" placeholder="las la-table">
+                        </div>
+
                         <div>
                             <div class="col-md-3 form-group">
                                     <div class="form-check mt-5">

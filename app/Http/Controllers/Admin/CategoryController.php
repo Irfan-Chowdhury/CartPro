@@ -148,6 +148,7 @@ class CategoryController extends Controller
     {
         if (auth()->user()->can('category-store'))
         {
+
             $local = Session::get('currentLocal');
 
             $validator = Validator::make($request->only('category_name'),[
@@ -164,6 +165,7 @@ class CategoryController extends Controller
             $category->parent_id = $request->parent_id;
             $category->description = htmlspecialchars($request->description);
             $category->description_position = $request->description_position;
+            $category->icon = $request->category_icon;
             $image = $request->file('image');
             if ($image) {
                 $category->image = $this->imageStore($image, $directory='images/categories/',$type='category');
@@ -228,6 +230,7 @@ class CategoryController extends Controller
             $category->description_position = $request->description_position;
             $category->featured    = $request->featured;
             $category->is_active   = $request->is_active;
+            $category->icon   = $request->category_icon;
 
             if ($request->image) {
                 $category->image = $this->imageStore($request->image, $directory='images/categories/',$type='category');

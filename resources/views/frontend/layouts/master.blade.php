@@ -73,6 +73,9 @@
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
+
+    //Newslatter
+    $setting_newslatter = App\Models\SettingNewsletter::first();
 @endphp
 
 <!DOCTYPE html>
@@ -262,15 +265,15 @@
                                     <ul class="dropdown">
                                         @forelse ($categories as $category)
                                             @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="#"><i class=""></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
+                                                <li class="has-dropdown"><a href="#"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
                                                     <ul class="dropdown">
                                                         @foreach ($category->child as $item)
-                                                            <li><a href="{{$item->slug}}"><i class=""></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                            <li><a href="{{$item->slug}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
                                             @else
-                                                <li><a href="{{$category->slug}}"><i class=""></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                <li><a href="{{$category->slug}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -409,29 +412,33 @@
 
     @yield('frontend_content')
 
-    <div class="newsletter-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7 col-md-6">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <i class="ion-ios-paperplane-outline me-3"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0">Subscribe to our Newsletter</h3>
-                            <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
+    @if ($setting_newslatter->newsletter==1)
+        <div class="newsletter-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 col-md-6">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <i class="ion-ios-paperplane-outline me-3"></i>
+                            </div>
+                            <div>
+                                <h3 class="mb-0">Subscribe to our Newsletter</h3>
+                                <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5 col-md-6">
-                    <form class="newsletter">
-                        <input class="" type="text" placeholder="Enter your email" name="newsletter">
-                        <button class="button style1 btn-search" type="submit">Subscribe</button>
-                    </form>
+                    <div class="col-lg-5 col-md-6">
+                        <form class="newsletter" id="newsLatterSubmitForm" action="{{route('cartpro.newslatter_store')}}" method="POST">
+                            @csrf
+                            <input class="" type="text" placeholder="Enter your email" name="email">
+                            <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
     <!--Scroll to top starts-->
     <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
     <!--Scroll to top ends-->
@@ -661,8 +668,8 @@
                             <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
                             <form class="newsletter mb-5">
-                                <input class="" type="text" placeholder="Enter your email" name="newsletter">
-                                <button class="button style1 btn-search" type="submit">Subscribe</button>
+                                <input class="" type="text" placeholder="Enter your email">
+                                <button type="submit" class="button style1 btn-search">Subscribe</button>
                             </form>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="disable-popup">
@@ -706,7 +713,9 @@
     </script>
 
     {{-- Sweetalert2 --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script src="{{asset('public/frontend/js/sweetalert2@11.js')}}"></script>
+
 
     <!-- FACEBOOK CHAT PLUGIN ENDS -->
 
@@ -946,7 +955,49 @@
                 }
 
             })
-        })
+        });
+
+
+        $("#newsLatterSubmitForm").on("submit",function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "{{route('cartpro.newslatter_store')}}",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.type=='error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                    else if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message,
+                        })
+
+                        $('#newsLatterSubmitForm')[0].reset();
+                    }
+                }
+            });
+        });
 
     </script>
 

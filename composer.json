@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.4",
         "spatie/laravel-analytics": "^3.11",
+        "spatie/laravel-newsletter": "^4.10",
         "spatie/laravel-permission": "^4.2",
         "srmklive/paypal": "^3.0",
         "stichoza/google-translate-php": "^4.1",
