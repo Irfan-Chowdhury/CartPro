@@ -55,10 +55,36 @@
                                 </div>
                                 <hr>
                                 <?php if($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price): ?>
-                                    <div class="item-price">$ <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></div>
-                                    <div class="old-price"><del>$ <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?></del></div>
+                                    <div class="item-price">
+                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                            <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                        <?php else: ?>
+                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="old-price">
+                                        <del>
+                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                            <?php else: ?>
+                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                            <?php endif; ?>
+                                        </del>
+                                    </div>
                                 <?php else: ?>
-                                    <div class="item-price">$ <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?></div>
+                                    <div class="item-price">
+                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                        <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                        <?php else: ?>
+                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                        <?php endif; ?>
+                                    </div>
                                 <?php endif; ?>
                                 <hr>
                                 <div class="item-short-description">

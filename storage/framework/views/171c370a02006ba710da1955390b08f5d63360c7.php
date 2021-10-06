@@ -263,14 +263,14 @@
                     <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
                         <div class="category-list">
                             <ul>
-                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Department</a>
+                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Category</a>
                                     <ul class="dropdown">
                                         <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <?php if($category->child->isNotEmpty()): ?>
-                                                <li class="has-dropdown"><a href="#"><i class="<?php echo e($category->icon ?? null); ?>"></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
+                                                <li class="has-dropdown"><a href="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
                                                     <ul class="dropdown">
                                                         <?php $__currentLoopData = $category->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <li><a href="<?php echo e($item->slug); ?>"><i class="<?php echo e($item->icon ?? null); ?>"></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                            <li><a href="<?php echo e(route('cartpro.category_wise_products',$item->slug)); ?>"><i class="<?php echo e($item->icon ?? null); ?>"></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </ul>
                                                 </li>
@@ -341,8 +341,6 @@
 
     <div class="body__overlay"></div>
 
-
-
     <!-- Offset Wrapper starts-->
     <div class="offset__wrapper">
         <div class="shopping__cart">
@@ -410,7 +408,7 @@
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
 
-    
+    <div class="center loader"></div>
 
     <?php echo $__env->yieldContent('frontend_content'); ?>
 
@@ -743,6 +741,19 @@
                 })
             <?php endif; ?>
         });
+
+        //Category-Wise-Product
+        $('.view-list').on('click', function(){
+            $(this).addClass('active');
+            $('.product-grid').addClass('list-view');
+            $('.view-grid').removeClass('active');
+        });
+
+        $('.view-grid').on('click', function(){
+            $(this).addClass('active');
+            $('.product-grid').removeClass('list-view');
+            $('.view-list').removeClass('active');
+        });
     </script>
 
     <script src="<?php echo e(asset('public/frontend/js/bootstrap-colorpicker.js')); ?>"></script>
@@ -953,7 +964,6 @@
             })
         });
 
-
         $("#newsLatterSubmitForm").on("submit",function(e){
             e.preventDefault();
             $.ajax({
@@ -993,6 +1003,13 @@
                     }
                 }
             });
+        });
+
+        $(".limitCategoryProductShow").on('click',function(e){
+            e.preventDefault();
+            var data = $(this).data('id');
+            var category_slug = $('#categorySlug').val();
+            console.log(category_slug);
         });
 
     </script>

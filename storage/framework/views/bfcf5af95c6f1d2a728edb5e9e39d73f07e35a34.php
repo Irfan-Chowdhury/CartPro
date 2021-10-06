@@ -133,7 +133,6 @@
                                                         <div class="single-product-item">
                                                             <?php if(isset($item->productBaseImage->image)): ?>
                                                                 <img src="<?php echo e(asset('public/'.$item->productBaseImage->image)); ?>">
-                                                                <input type="hidden" name="product_id" value="<?php echo e($item->product_id); ?>">
                                                             <?php else: ?>
                                                                 <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                                             <?php endif; ?>
@@ -175,12 +174,35 @@
                                                                     </div>
                                                                     <div class="product-price">
                                                                         <?php if($item->product->special_price>0): ?>
-                                                                            <span class="promo-price">$ <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                            <span class="old-price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                        <?php else: ?>
-                                                                            <span class="price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                        <?php endif; ?>
+                                                                            <span class="promo-price">
+                                                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                    <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
+                                                                                <?php else: ?>
+                                                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                                <?php endif; ?>
+                                                                            </span>
+                                                                            <span class="old-price">
+                                                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                    <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                                <?php else: ?>
+                                                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                                <?php endif; ?>
+                                                                            </span>
+                                                                        <?php else: ?>
+                                                                            <span class="price">
+                                                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                    <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                                <?php else: ?>
+                                                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                                <?php endif; ?>
+                                                                            </span>
+                                                                        <?php endif; ?>
                                                                     </div>
                                                                 </div>
                                                                 <div>
@@ -255,12 +277,35 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     <?php if($item->product->special_price>0): ?>
-                                                                        <span class="promo-price">$ <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                        <span class="old-price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php else: ?>
-                                                                        <span class="price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php endif; ?>
+                                                                        <span class="promo-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php else: ?>
+                                                                        <span class="price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php endif; ?>
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -333,12 +378,35 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     <?php if($item->product->special_price>0): ?>
-                                                                        <span class="promo-price">$ <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                        <span class="old-price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php else: ?>
-                                                                        <span class="price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php endif; ?>
+                                                                        <span class="promo-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php else: ?>
+                                                                        <span class="price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php endif; ?>
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -411,12 +479,35 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     <?php if($item->product->special_price>0): ?>
-                                                                        <span class="promo-price">$ <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                        <span class="old-price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php else: ?>
-                                                                        <span class="price">$<?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?></span>
-                                                                    <?php endif; ?>
+                                                                        <span class="promo-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php else: ?>
+                                                                        <span class="price">
+                                                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                                                <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                                            <?php else: ?>
+                                                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                                    <?php endif; ?>
                                                                 </div>
                                                             </div>
                                                             <div>

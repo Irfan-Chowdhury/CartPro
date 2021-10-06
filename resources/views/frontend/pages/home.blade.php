@@ -135,7 +135,6 @@
                                                         <div class="single-product-item">
                                                             @if (isset($item->productBaseImage->image))
                                                                 <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                                             @else
                                                                 <img src="{{asset('public/images/empty.jpg')}}">
                                                             @endif
@@ -176,12 +175,29 @@
                                                                     </div>
                                                                     <div class="product-price">
                                                                         @if ($item->product->special_price>0)
-                                                                            <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                            <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                            <span class="promo-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                            <span class="old-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
                                                                         @else
-                                                                            <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                            <span class="price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
                                                                         @endif
-
                                                                     </div>
                                                                 </div>
                                                                 <div>
@@ -255,12 +271,29 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @endif
-
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -332,12 +365,29 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @endif
-
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -409,12 +459,29 @@
                                                                 </div>
                                                                 <div class="product-price">
                                                                     @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">$ {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        <span class="old-price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @else
-                                                                        <span class="price">${{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
                                                                     @endif
-
                                                                 </div>
                                                             </div>
                                                             <div>

@@ -104,6 +104,7 @@ class Product extends Model
                 ->where('local','en');
     }
 
+    //For Home Page
     public function categoryProduct()
     {
         return $this->hasMany(CategoryProduct::class);
@@ -111,6 +112,13 @@ class Product extends Model
 
 
 
+    //For Category Wise Product
+    // public function categoryProductTranslation()
+    // {
+    //     $locale = Session::get('currentLocal');
+    //     return $this->hasOne(ProductTranslation::class,'product_id','product_id')
+    //             ->where('local',$locale);
+    // }
 
 
 

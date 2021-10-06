@@ -56,11 +56,23 @@ class Category extends Model
         return $this->hasMany(self::class,'parent_id');
     }
 
-    public function product()
+
+    //For Category Wise Product
+    // public function product()
+    // {
+    //     return $this->belongsTo('App\Models\Product');
+    // }
+
+    public function categoryProduct()
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->hasMany(CategoryProduct::class);
     }
 
 
-
+    // public function categoryProductTranslation()
+    // {
+    //     $locale = Session::get('currentLocal');
+    //     return $this->hasOne(ProductTranslation::class,'product_id','product_id')
+    //             ->where('local',$locale);
+    // }
 }

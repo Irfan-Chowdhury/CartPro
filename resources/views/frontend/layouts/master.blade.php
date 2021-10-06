@@ -261,14 +261,14 @@
                     <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
                         <div class="category-list">
                             <ul>
-                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Department</a>
+                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Category</a>
                                     <ul class="dropdown">
                                         @forelse ($categories as $category)
                                             @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="#"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
+                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
                                                     <ul class="dropdown">
                                                         @foreach ($category->child as $item)
-                                                            <li><a href="{{$item->slug}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
@@ -339,8 +339,6 @@
 
     <div class="body__overlay"></div>
 
-
-
     <!-- Offset Wrapper starts-->
     <div class="offset__wrapper">
         <div class="shopping__cart">
@@ -408,7 +406,7 @@
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
 
-    {{-- <div class="center loader"></div> --}}
+    <div class="center loader"></div>
 
     @yield('frontend_content')
 
@@ -747,6 +745,19 @@
                 })
             @endif
         });
+
+        //Category-Wise-Product
+        $('.view-list').on('click', function(){
+            $(this).addClass('active');
+            $('.product-grid').addClass('list-view');
+            $('.view-grid').removeClass('active');
+        });
+
+        $('.view-grid').on('click', function(){
+            $(this).addClass('active');
+            $('.product-grid').removeClass('list-view');
+            $('.view-list').removeClass('active');
+        });
     </script>
 
     <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
@@ -957,7 +968,6 @@
             })
         });
 
-
         $("#newsLatterSubmitForm").on("submit",function(e){
             e.preventDefault();
             $.ajax({
@@ -997,6 +1007,13 @@
                     }
                 }
             });
+        });
+
+        $(".limitCategoryProductShow").on('click',function(e){
+            e.preventDefault();
+            var data = $(this).data('id');
+            var category_slug = $('#categorySlug').val();
+            console.log(category_slug);
         });
 
     </script>
