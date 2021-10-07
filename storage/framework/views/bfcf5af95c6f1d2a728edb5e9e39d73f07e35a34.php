@@ -152,8 +152,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
-                                                            <a class="product-category" href="#"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
-
+                                                            <a class="product-category" href="<?php echo e(route('cartpro.category_wise_products',$item->category->slug)); ?>"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
                                                             <a class="product-name" href="<?php echo e(url('product/'.$item->product->slug.'/'. $item->category_id)); ?>">
                                                                 <?php echo e($item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null); ?>
 
@@ -257,7 +256,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
+                                                        <a class="product-category" href="<?php echo e(route('cartpro.category_wise_products',$item->category->slug)); ?>"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
                                                         <a class="product-name" href="<?php echo e(url('product/'.$item->product->slug.'/'. $item->category_id)); ?>">
                                                             <?php echo e($item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL); ?>
 
@@ -358,7 +357,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
+                                                        <a class="product-category" href="<?php echo e(route('cartpro.category_wise_products',$item->category->slug)); ?>"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
                                                         <a class="product-name" href="<?php echo e(url('product/'.$item->product->slug.'/'. $item->category_id)); ?>">
                                                             <?php echo e($item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL); ?>
 
@@ -459,7 +458,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
+                                                        <a class="product-category" href="<?php echo e(route('cartpro.category_wise_products',$item->category->slug)); ?>"><?php echo e($item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL); ?></a>
                                                         <a class="product-name" href="<?php echo e(url('product/'.$item->product->slug.'/'. $item->category_id)); ?>">
                                                             <?php echo e($item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL); ?>
 
@@ -523,6 +522,8 @@
                                 </div>
                             </div>
                         </div>
+
+
 
                     </div>
                 </div>

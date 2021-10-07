@@ -1,6 +1,5 @@
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="<?php echo e($item->product->slug ?? null); ?>" tabindex="-1" role="dialog" aria-labelledby="<?php echo e($item->product->slug ?? null); ?>" aria-hidden="true">
-    
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-body">

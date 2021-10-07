@@ -78,7 +78,7 @@
                                 <?php else: ?>
                                     <div class="item-price">
                                         <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                        <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                            <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                         <?php else: ?>
                                             <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>

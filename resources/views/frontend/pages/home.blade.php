@@ -154,8 +154,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
-                                                            <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-
+                                                            <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
                                                             <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                 {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
                                                             </a>
@@ -252,7 +251,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
                                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                             {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                         </a>
@@ -346,7 +345,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
                                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                             {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                         </a>
@@ -440,7 +439,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
                                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                             {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                         </a>
@@ -497,6 +496,8 @@
                                 </div>
                             </div>
                         </div>
+
+
 
                     </div>
                 </div>

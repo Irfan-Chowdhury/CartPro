@@ -68,6 +68,12 @@ class Category extends Model
         return $this->hasMany(CategoryProduct::class);
     }
 
+    //Limited Product Show
+    // public function categoryProductLimit()
+    // {
+    //     return $this->hasMany(CategoryProduct::class);
+    // }
+
 
     // public function categoryProductTranslation()
     // {

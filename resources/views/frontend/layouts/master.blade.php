@@ -1009,11 +1009,19 @@
             });
         });
 
-        $(".limitCategoryProductShow").on('click',function(e){
-            e.preventDefault();
-            var data = $(this).data('id');
+        $(document).on('click','.limitCategoryProductShow',function(event) {
+            event.preventDefault();
+            var limit_data = $(this).data('id');
             var category_slug = $('#categorySlug').val();
-            console.log(category_slug);
+            $.ajax({
+                url: "{{ route('cartpro.limit_category_product_show') }}",
+                type: "GET",
+                data: {limit_data:limit_data, category_slug:category_slug},
+                success: function (data) {
+                    console.log(data);
+                    $('.categoryWiseProductField').html(data);
+                }
+            })
         });
 
     </script>

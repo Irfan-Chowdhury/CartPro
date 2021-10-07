@@ -56,7 +56,7 @@ Route::group(['namespace'=>'Frontend'], function (){
 
 
         Route::get('/category/{slug}','CategoryProductController@categoryWiseProducts')->name('cartpro.category_wise_products');
-
+        Route::get('limit_category_products_show','CategoryProductController@limitCategoryProductShow')->name('cartpro.limit_category_product_show');
 
         //Cart
         Route::group(['prefix' => '/cart'], function () {
