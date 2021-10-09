@@ -84,7 +84,6 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    // public function attribute_values()
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class,'product_attribute_value')
@@ -104,6 +103,11 @@ class Product extends Model
                 ->where('local','en');
     }
 
+    public function productAttributeValues()
+    {
+        return $this->hasMany(ProductAttributeValue::class);
+    }
+
     //For Home Page
     public function categoryProduct()
     {
@@ -112,22 +116,7 @@ class Product extends Model
 
 
 
-    //For Category Wise Product
-    // public function categoryProductTranslation()
-    // {
-    //     $locale = Session::get('currentLocal');
-    //     return $this->hasOne(ProductTranslation::class,'product_id','product_id')
-    //             ->where('local',$locale);
-    // }
 
-
-
-
-    //For Product-Edit
-    // public function brandTranslation()
-    // {
-    // 	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id');
-    // }
 
     // public function tags()
     // {

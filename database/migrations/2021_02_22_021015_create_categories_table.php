@@ -20,7 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->longText('description')->nullable();
             $table->tinyInteger('description_position')->default(0);
             $table->string('image')->nullable();
-            $table->integer('featured')->default(0);
+            $table->integer('top')->default(0);
             $table->tinyInteger('is_active')->default(0);
             $table->timestamps();
 

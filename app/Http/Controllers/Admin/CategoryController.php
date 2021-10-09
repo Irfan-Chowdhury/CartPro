@@ -40,9 +40,6 @@ class CategoryController extends Controller
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','DESC')
                     ->get();
-                    //->where('id',13)->first();
-
-            // return $categories->child[1]->child;
 
 
             //Check Later
@@ -93,19 +90,6 @@ class CategoryController extends Controller
                         }else {
                             return 'NONE';
                         }
-                        // if ($row->categoryTranslation->count()>0){
-                        //     if($row->parentCategory==NULL){
-                        //         return "NONE";
-                        //     }else{
-                        //         $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
-                        //         if (empty($data)) {
-                        //             $data = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first();
-                        //         }
-                        //         return $data->category_name;
-                        //     }
-                        // }else {
-                        //     return "NULL";
-                        // }
                     })
                     ->addColumn('is_active', function ($row)
                     {
@@ -170,12 +154,12 @@ class CategoryController extends Controller
             if ($image) {
                 $category->image = $this->imageStore($image, $directory='images/categories/',$type='category');
             }
-            if ($request->featured == null) {
-                $category->featured = 0;
+            if ($request->top == null) {
+                $category->top = 0;
             }
             else
             {
-                $category->featured = 1;
+                $category->top = 1;
             }
 
             if (empty($request->is_active)) {
@@ -228,7 +212,7 @@ class CategoryController extends Controller
             $category->parent_id   = $request->parent_id;
             $category->description = $request->description;
             $category->description_position = $request->description_position;
-            $category->featured    = $request->featured;
+            $category->top    = $request->top;
             $category->is_active   = $request->is_active;
             $category->icon   = $request->category_icon;
 

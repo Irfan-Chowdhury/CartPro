@@ -12,9 +12,12 @@ use App\Models\CurrencyRate;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
 use App\Models\Product;
+use App\Models\ProductAttributeValue;
 use App\Models\ProductTranslation;
 use App\Models\Setting;
+use App\Models\SettingGeneral;
 use App\Models\SettingNewsletter;
+use App\Models\SettingStore;
 use App\Models\Slider;
 use App\Models\StorefrontImage;
 use Harimayco\Menu\Models\Menus;
@@ -36,14 +39,14 @@ class HomeController extends Controller
         $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
 
 
-        $categories = Cache::remember('categories', 300, function () {
-            return Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-            ->where('parent_id',NULL)
+        $top_categories = Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
+            ->where('top',1)
             ->where('is_active',1)
             ->orderBy('is_active','DESC')
             ->orderBy('id','DESC')
             ->get();
-        });
+
+        // return $top_categories;
 
 
         // //Product_Tab_One
@@ -53,49 +56,57 @@ class HomeController extends Controller
         $product_tab_one_section_3 = [];
         $product_tab_one_section_4 = [];
 
-        //Test Start---------------
+        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                                            ->get();
 
         foreach ($settings as $key => $setting)
         {
             if ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_1 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
-                    if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
-                        $product_tab_one_section_1 = [];
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $product_tab_one_section_1[] =$category_products[$key2];
+                        }
                     }
+                    // $product_tab_one_section_1 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+                    //                                             ->where('category_id',$setting->plain_value)->get();
+                    // if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
+                    //     $product_tab_one_section_1 = [];
+                    // }
+
+
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_2 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
-                        if (empty($product_tab_one_section_2)){
-                            $product_tab_one_section_2 = [];
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $product_tab_one_section_2[] =$category_products[$key2];
                         }
+                    }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_3 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
-                        if (empty($product_tab_one_section_3)) {
-                            $product_tab_one_section_3 = [];
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $product_tab_one_section_3[] =$category_products[$key2];
                         }
+                    }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
             if ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
-                    $product_tab_one_section_4 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                                                                ->where('category_id',$setting->plain_value)->get();
-                    if (empty($product_tab_one_section_4)) {
-                        $product_tab_one_section_4 = [];
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $product_tab_one_section_4[] =$category_products[$key2];
+                        }
                     }
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
@@ -127,7 +138,7 @@ class HomeController extends Controller
         });
 
 
-        return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','categories',
+        return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
                                                 'brands','product_tab_one_section_1','product_tab_one_section_2','product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles'));
     }
 
@@ -152,10 +163,23 @@ class HomeController extends Controller
                     'additionalImage'=> function ($query){
                         $query->where('type','additional')
                             ->get();
-                    },
+                    },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                    'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
                     ])
                     ->where('slug',$product_slug)
                     ->first();
+
+        //$productAttributeValue = ProductAttributeValue::where('product_id',$product->id)->groupBy(2)->get();
+
+        // return $product->productAttributeValues;
+
+        $attribute = [];
+        foreach ($product->productAttributeValues as $value) {
+            $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
+        }
+
+        // $attribute_names = array_unique($attribute);
+        // return $attribute_names;
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
@@ -166,7 +190,7 @@ class HomeController extends Controller
             $product_cart_qty = null;
         }
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty'));
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute'));
     }
 
     public function dataAjaxSearch(Request $request)

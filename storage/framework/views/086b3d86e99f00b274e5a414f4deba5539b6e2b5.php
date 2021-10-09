@@ -99,15 +99,22 @@
                                         <li class="bg-amber"></li>
                                     </ul>
                                 </div>
-                                <div class="item-variant">
-                                    <span>Size:</span> <span class="semi-bold">M</span>
-                                    <ul class="product-variant size-opt p-0 mt-1">
-                                        <li><span>S</span></li>
-                                        <li class="selected"><span>M</span></li>
-                                        <li><span>L</span></li>
-                                        <li><span>XL</span></li>
-                                    </ul>
-                                </div>
+                                
+                                <?php $__empty_1 = true; $__currentLoopData = $attribute; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <div class="item-variant">
+                                        <span><?php echo e($item); ?>:</span>
+                                        <ul class="product-variant size-opt p-0 mt-1">
+                                            <?php $__empty_2 = true; $__currentLoopData = $product->productAttributeValues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                                                <?php if($value->attribute_id == $key): ?>
+                                                    <li><span><?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?></span></li>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <?php endif; ?>
+
                                 <div class="item-options">
                                     <form class="mb-3" id="productAddToCartSingle" action="<?php echo e(route('product.add_to_cart')); ?>" method="POST">
                                         <?php echo csrf_field(); ?>

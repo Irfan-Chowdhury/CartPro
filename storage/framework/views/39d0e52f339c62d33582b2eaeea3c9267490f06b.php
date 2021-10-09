@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('admin_content'); ?>
 
 <style>
@@ -512,29 +511,61 @@ unset($__errorArgs, $__bag); ?>
                                             <hr>
                                             <div class="card-body">
                                                 <div class="variants">
-                                                    <div class="row">
-                                                        <div class="col-5 form-group">
-                                                            <label><?php echo e(__('Atrribute')); ?></label>
-                                                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>
-                                                                <?php $__empty_1 = true; $__currentLoopData = $attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                                                    <option value="<?php echo e($item->id); ?>"><?php echo e($item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null); ?></option>
-                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                                                <?php endif; ?>
-                                                            </select>
-                                                        </div>
+                                                    <?php $__empty_1 = true; $__currentLoopData = $product->productAttributeValues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                        <div class="row">
+                                                            <div class="col-5 form-group">
+                                                                <label><?php echo e(__('Atrribute')); ?></label>
 
-                                                        <div class="col-6 form-group">
-                                                            <label><?php echo e(__("Values")); ?></label>
-                                                            <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">
+                                                                <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>
+                                                                    <?php $__empty_2 = true; $__currentLoopData = $attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                                                                        <option value="<?php echo e($item->id); ?>" <?php if($item->id==$value->attribute_id): ?> selected <?php endif; ?>><?php echo e($item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                                                                    <?php endif; ?>
+                                                                    
+                                                                </select>
+                                                            </div>
 
-                                                            </select>
-                                                        </div>
+                                                            <div class="col-6 form-group">
+                                                                <label><?php echo e(__("Values")); ?></label>
+                                                                <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
+                                                                    <?php $__currentLoopData = $attribute_values; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attributeValue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php if($attributeValue->attribute_id == $value->attribute_id): ?>
+                                                                            <option value="<?php echo e($attributeValue->id); ?>" <?php if($value->attribute_value_id==$attributeValue->id): ?> selected <?php endif; ?>><?php echo e($attributeValue->attrValueTranslation->value_name ?? $attributeValue->attrValueTranslationEnglish->value_name ?? null); ?></option>
+                                                                        <?php endif; ?>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                </select>
+                                                            </div>
 
-                                                        <div class="col-1">
-                                                            <label>Delete</label><br>
-                                                            <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
+                                                            <div class="col-1">
+                                                                <label>Delete</label><br>
+                                                                <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                        <div class="row">
+                                                            <div class="col-5 form-group">
+                                                                <label><?php echo e(__('Atrribute')); ?></label>
+                                                                <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>
+                                                                    <?php $__empty_1 = true; $__currentLoopData = $attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null); ?></option>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                                    <?php endif; ?>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-6 form-group">
+                                                                <label><?php echo e(__("Values")); ?></label>
+                                                                <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
+
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <label>Delete</label><br>
+                                                                <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
 
                                                 <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add New Attribute</span>
@@ -719,12 +750,12 @@ unset($__errorArgs, $__bag); ?>
 
         });
 
-        $(document).on('click', '#addMore2', function(){
-            console.log('ok');
-            var rand = Math.floor(Math.random() * 90000) + 10000;
-            // $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Color')); ?> *</label><input type="text" name="variant_color[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Color')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('SKU')); ?> *</label><input type="text" name="variant_sku[]" id="sku" required class="form-control" placeholder="<?php echo e(__('SKU')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Quantity')); ?> *</label><input type="text" name="variant_qty[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Quantity')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Price')); ?></label><input type="text" name="variant_price[]" id="price" required class="form-control" placeholder="<?php echo e(__('Price')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
-            $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
-        })
+        // $(document).on('click', '#addMore2', function(){
+        //     console.log('ok');
+        //     var rand = Math.floor(Math.random() * 90000) + 10000;
+        //     // $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Color')); ?> *</label><input type="text" name="variant_color[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Color')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('SKU')); ?> *</label><input type="text" name="variant_sku[]" id="sku" required class="form-control" placeholder="<?php echo e(__('SKU')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Quantity')); ?> *</label><input type="text" name="variant_qty[]" id="product_amount"  required class="form-control" placeholder="<?php echo e(__('Quantity')); ?>"></div><div class="col-2 form-group"><label><?php echo e(__('Price')); ?></label><input type="text" name="variant_price[]" id="price" required class="form-control" placeholder="<?php echo e(__('Price')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+        //     $('.variants').append('<div class="row"><div class="col-2 form-group"><label><?php echo e(__('Size')); ?> *</label><input type="text" name="variant_size[]" required class="form-control" placeholder="<?php echo e(__('XS, S, M ...')); ?>"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+        // })
 
         $(document).on('click', '.del-row', function(){
             $(this).parent().parent().html('');
@@ -736,14 +767,18 @@ unset($__errorArgs, $__bag); ?>
 
         $(document).on('click', '#addMore', function(){
 
-            html = '<div class="row">'+
+            html = ' <div class="row">'+
                         '<div class="col-5 form-group">'+
                             '<label><?php echo e(__("Atrribute")); ?></label>'+
-                            // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>'+
-                            '<select name="attribute_id[]" id="attributeId2" class="form-control">'+
+                            // '<select name="attribute_id[]" id="attributeId" class="form-control selectpicker attributeId" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Attribute')); ?>'>'+
+                            '<select name="attribute_id[]" class="form-control attributeId">'+
                                 '<option value="">Please Select Attribute</option>'+
-                                    '<?php $__empty_1 = true; $__currentLoopData = $attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>'+
-                                        '<option value="<?php echo e($item->id); ?>"><?php echo e($item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null); ?></option>'+
+                                    '<?php $__empty_1 = true; $__currentLoopData = $attributeSets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>'+
+                                        '<option value="" disabled class="text-bold"><?php echo e($item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null); ?></option>'+
+                                        '<?php $__empty_2 = true; $__currentLoopData = $item->attributes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attribute): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>'+
+                                            '<option value="<?php echo e($attribute->id); ?>">&nbsp;&nbsp;&nbsp;<?php echo e($attribute->attributeTranslation->attribute_name ?? $attribute->attributeTranslationEnglish->attribute_name ?? null); ?></option>'+
+                                        '<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>'+
+                                        '<?php endif; ?>'+
                                     '<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>'+
                                     '<?php endif; ?>'+
                             '</select>'+
@@ -752,7 +787,7 @@ unset($__errorArgs, $__bag); ?>
                         '<div class="col-6 form-group">'+
                             '<label><?php echo e(__("Values")); ?></label>'+
                             // '<select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title="Select Value">'+
-                            '<select name="attribute_value_id[]" id="attributeValueId2" class="form-control">'+
+                            '<select name="attribute_value_id[]" id="attributeValueId"  class="form-control attributeValueId">'+
                             '</select>'+
                         '</div>'+
 
@@ -762,7 +797,7 @@ unset($__errorArgs, $__bag); ?>
                         '</div>'+
                 '</div>';
 
-            console.log(html);
+            // console.log(html);
 
             var rand = Math.floor(Math.random() * 90000) + 10000;
             $('.variants').append(html);
@@ -788,28 +823,25 @@ unset($__errorArgs, $__bag); ?>
             });
         });
 
-        $('#attributeId2').change(function () {
-            console.log('ok');
+        $(document).on('change','.attributeId',function() {
+            // var attributeId = $('.attributeId').val();
+            var attributeId = $(this).val();
+            var random_number = Math.floor(Math.random() * 90000) + 10000;
 
-            var attributeId = $('#attributeId2').val();
-            // console.log(attributeId);
+            $('.attributeValueId').addClass('attributeValueId_'+random_number).removeClass('attributeValueId');
             $.ajax({
                 url: "<?php echo e(route('admin.attribute.get_attribute_values')); ?>",
                 method: "GET",
                 data: {attribute_id: attributeId},
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     $('select').selectpicker("destroy");
-                    $('#attributeValueId2').html(data);
+                    // $('#attributeValueId').html(data);
+                    $('.attributeValueId_'+random_number).html(data);
                     $('select').selectpicker();
                 }
             });
         });
-        // $('#attributeValueId').change(function () {
-        //     var attributeValueId = $('#attributeValueId').val();
-
-        //     console.log(attributeValueId);
-        // });
 
         //Image Show Before Upload Start
         $(document).ready(function(){

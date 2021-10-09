@@ -65,7 +65,7 @@
                 <div class="swiper-wrapper">
 
 
-                    @forelse ($categories as $item)
+                    @forelse ($top_categories as $item)
                         <div class="swiper-slide">
                             <a href="">
                                 <div class="category-container">

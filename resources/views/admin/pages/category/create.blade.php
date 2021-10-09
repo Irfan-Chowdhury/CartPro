@@ -44,13 +44,13 @@
                         </div>
 
 
-                        <div class="form-group col-md-6  mb-3">
+                        {{-- <div class="form-group col-md-6  mb-3">
                             <label>{{__('Position')}} *</label>
                             <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Position')}}' name="description_position" required>
                                 <option value="1">{{__('Top')}}</option>
                                 <option value="0">{{__('Bottom')}}</option>
                             </select>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-6 form-group mt-5">
                             <label for="exampleFormControlFile1">{{__('Insert Image')}}</label>
@@ -65,8 +65,8 @@
                         <div>
                             <div class="col-md-3 form-group">
                                     <div class="form-check mt-5">
-                                        <input type="checkbox" class="form-check-input " value='1' name="featured">
-                                        <label class="form-check-label"  for="exampleCheck1">{{__('Featured')}}</label>
+                                        <input type="checkbox" class="form-check-input " value='1' name="top">
+                                        <label class="form-check-label"  for="exampleCheck1">{{__('Top')}}</label>
                                     </div>
                             </div>
                             <div class="col-md-3 form-group">

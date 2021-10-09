@@ -36,47 +36,64 @@
                     ->get();
     });
 
+    $menus = Harimayco\Menu\Models\Menus::with('items')
+                    ->where('is_active',1)
+                    ->get();
+    $menu = null;
+    $footer_menu_one = null;
+    $footer_menu_two = null;
 
-    $menu = [];
-    $footer_menu_one = [];
-    $footer_menu_two = [];
     foreach ($settings as $key => $item) {
         if ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
-            $menu = Harimayco\Menu\Models\Menus::with('items')
-            ->where('is_active',1)
-            ->where('id',$item->plain_value)
-            ->first();
+            foreach ($menus as $key2 => $value) {
+                if ($value->id==$item->plain_value) {
+                    $menu = $menus[$key2];
+                }
+            }
+            // $menu = Harimayco\Menu\Models\Menus::with('items')
+            // ->where('is_active',1)
+            // ->where('id',$item->plain_value)
+            // ->first();
         }
 
         if ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
             $footer_menu_one_title = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? null;
         }
         if ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
-            $footer_menu_one = Harimayco\Menu\Models\Menus::with('items')
-            ->where('is_active',1)
-            ->where('id',$item->plain_value)
-            ->first();
+            foreach ($menus as $key2 => $value) {
+                if ($value->id==$item->plain_value) {
+                    $footer_menu_one = $menus[$key2];
+                }
+            }
         }
 
         if ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
             $footer_menu_title_two = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
         }
         if ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
-            $footer_menu_two = Harimayco\Menu\Models\Menus::with('items')
-            ->where('is_active',1)
-            ->where('id',$item->plain_value)
-            ->first();
+            foreach ($menus as $key2 => $value) {
+                if ($value->id==$item->plain_value) {
+                    $footer_menu_two = $menus[$key2];
+                }
+            }
+        }
+
+        if ($item->key=='storefront_address' && $item->plain_value==NULL) {
+            $storefront_address = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
         }
     }
-    // $footer_menu_one_title = 'Our Service';
-
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
 
     //Newslatter
     $setting_newslatter = App\Models\SettingNewsletter::first();
+
+    //Setting Store
+    $setting_store =  App\Models\SettingStore::first();
 @endphp
+
+
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -447,15 +464,16 @@
             <div class="row">
                 <div class="col-lg-5 col-md-4">
                     <div class="footer-logo">
-                        <a href="#"><img src="images/logo-black.png" alt="..."></a>
+                        <a href="#"><img src="{{$header_logo_path ?? null}}" style="height:60px; width:280px" alt="..."></a>
                     </div>
                     <div class="footer-text">
                         <h5 class="text-grey mb-0">Got Question? Call us:</h5>
-                        <h4>(+800) 1234 5678 90</h4>
+                        <h4>{{$setting_store->store_email ?? null}}</h4>
                     </div>
                     <div class="footer-text">
                         <h6 class="text-grey mb-0">Contact Info</h6>
-                        <p>CartPro, Tower 1, Business Park</p>
+                        <p><span><i class="las la-envelope"></i> &nbsp; {{$setting_store->store_email ?? null}}</span></p>
+                        <p><span><i class="las la-map-marker"></i> &nbsp; {{$storefront_address}}</span></p>
                     </div>
                     <ul class="footer-social mt-3 p-0">
                         <li><a href="#"><i class="ti-facebook"></i></a></li>

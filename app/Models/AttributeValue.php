@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class AttributeValue extends Model
 {
@@ -11,8 +12,23 @@ class AttributeValue extends Model
         'position'
     ];
 
-    public function attributeValueTranslation()
+    public function attributeValueTranslation() // Remove later
     {
     	return $this->hasMany(AttributeValueTranslation::class,'attribute_value_id');
+    }
+
+
+    // For Edit Product
+    public function attrValueTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasone(AttributeValueTranslation::class,'attribute_value_id')
+                    ->where('local',$locale);
+    }
+
+    public function attrValueTranslationEnglish()
+    {
+    	return $this->hasone(AttributeValueTranslation::class,'attribute_value_id')
+                    ->where('local','en');
     }
 }

@@ -266,10 +266,10 @@
                     $('#cateogry_icon_edit').val(data.category.icon);
                     $('#parent_id_edit').selectpicker('val', data.category.parent_id);
                     $('#description_position_edit').selectpicker('val', data.category.description_position);
-                    if (data.category.featured === 1) {
-                        $('#featured_edit').prop('checked', true);
+                    if (data.category.top === 1) {
+                        $('#top_edit').prop('checked', true);
                     } else {
-                        $('#featured_edit').prop('checked', false);
+                        $('#top_edit').prop('checked', false);
                     }
                     if (data.category.is_active === 1) {
                         $('#isActive_edit').prop('checked', true);

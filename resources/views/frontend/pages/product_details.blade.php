@@ -94,15 +94,30 @@
                                         <li class="bg-amber"></li>
                                     </ul>
                                 </div>
-                                <div class="item-variant">
+                                {{-- <div class="item-variant">
                                     <span>Size:</span> <span class="semi-bold">M</span>
                                     <ul class="product-variant size-opt p-0 mt-1">
                                         <li><span>S</span></li>
-                                        <li class="selected"><span>M</span></li>
+                                        <li><span>M</span></li>
                                         <li><span>L</span></li>
                                         <li><span>XL</span></li>
                                     </ul>
-                                </div>
+                                </div> --}}
+                                @forelse ($attribute as $key => $item)
+                                    <div class="item-variant">
+                                        <span>{{$item}}:</span>
+                                        <ul class="product-variant size-opt p-0 mt-1">
+                                            @forelse ($product->productAttributeValues as $value)
+                                                @if ($value->attribute_id == $key)
+                                                    <li><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </ul>
+                                    </div>
+                                @empty
+                                @endforelse
+
                                 <div class="item-options">
                                     <form class="mb-3" id="productAddToCartSingle" action="{{route('product.add_to_cart')}}" method="POST">
                                         @csrf

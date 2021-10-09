@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
+use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductCategory;
@@ -289,6 +290,8 @@ class ProductController extends Controller
         }
     }
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Product Edit
@@ -315,12 +318,21 @@ class ProductController extends Controller
                     'additionalImage'=> function ($query){
                         $query->where('type','additional')
                             ->get();
-                    },
+                    }
                     ])
                     ->where('id',$id)
                     ->first();
 
-        // return $product;
+        // return $product->productAttributeValues;
+
+        // $data = [];
+        // $test = $product->productAttributeValues;
+        // // return $test;
+        // foreach ($product->productAttributeValues as $item) {
+        //     $data[] = $item->attributeTranslation->attribute_name;
+        // }
+        // return  $data;
+
 
         $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
             ->where('is_active',1)
@@ -340,9 +352,25 @@ class ProductController extends Controller
             ->orderBy('id','DESC');
         }])->get();
 
-        $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
+        $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish','attributeValues')
                         ->where('is_active',1)
                         ->get();
+
+        $attribute_values = AttributeValue::with('attrValueTranslation','attrValueTranslationEnglish')->get();
+
+        $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish','attributes.attributeTranslation',
+                        'attributes.attributeTranslationEnglish','attributes.attributeValues.attributeValueTranslation')
+                        ->where('is_active',1)
+                        ->orderBy('is_active','DESC')
+                        ->orderBy('id','DESC')
+                        ->get();
+
+        // return $attribute_values[0]->attrValueTranslation->value_name;
+
+        // return $attributes[2]->attributeValues;
+        // foreach ($product->productAttributeValues as $value) {
+        //     $attribute_value_ids =
+        // }
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -352,7 +380,7 @@ class ProductController extends Controller
 
         $format_number = $this->totalFormatNumber();
 
-        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number','taxes'));
+        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number','taxes','attribute_values','attributeSets'));
     }
 
 
@@ -366,6 +394,8 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        // return $request->attribute_value_id;
+
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
@@ -482,6 +512,17 @@ class ProductController extends Controller
             if (!empty($request->tag_id)) {
                 $tagArrayIds = $request->tag_id;
                 $product->tags()->sync($tagArrayIds);
+            }
+
+            //-----------------Product-Attribute--------------
+
+            if (!empty($request->attribute_id)) {
+                ProductAttributeValue::where('product_id',$product->id)->delete();
+                $attributeArrayIds =  $request->attribute_id;//Array
+                $attributeValueIds = $request->attribute_value_id; //Array
+                for ($i=0; $i <count($attributeArrayIds) ; $i++) {
+                    $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
+                }
             }
 
             session()->flash('type','success');

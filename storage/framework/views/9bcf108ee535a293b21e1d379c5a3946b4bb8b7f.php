@@ -46,13 +46,7 @@
                         </div>
 
 
-                        <div class="form-group col-md-6  mb-3">
-                            <label><?php echo e(__('Position')); ?> *</label>
-                            <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Position')); ?>' name="description_position" id="description_position_edit" required="">
-                                <option value="1"><?php echo e(__('Top')); ?></option>
-                                <option value="0"><?php echo e(__('Bottom')); ?></option>
-                            </select>
-                        </div>
+                        
 
                         <div class="col-md-6 form-group mt-5">
                             <label for="exampleFormControlFile1"><?php echo e(__('Insert Image')); ?></label>
@@ -67,8 +61,8 @@
                         <div>
                             <div class="col-md-3 form-group">
                                     <div class="form-check mt-5">
-                                        <input type="checkbox" class="form-check-input " value='1' name="featured" id="featured_edit">
-                                        <label class="form-check-label"  for="exampleCheck1"><?php echo e(__('Featured')); ?></label>
+                                        <input type="checkbox" class="form-check-input " value='1' name="top" id="top_edit">
+                                        <label class="form-check-label"  for="exampleCheck1"><?php echo e(__('top')); ?></label>
                                     </div>
                             </div>
                             <div class="col-md-3 form-group">
