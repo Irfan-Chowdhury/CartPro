@@ -781,6 +781,8 @@
     <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
 
     <script>
+        let values = [];
+
         $('.demo-btn').on('click', function(){
             $('#demo').toggleClass('open');
         });
@@ -842,6 +844,7 @@
 
         $("#productAddToCartSingle").on("submit",function(e){
             e.preventDefault();
+            console.log(values);
             $.ajax({
                 url: "{{route('product.add_to_cart')}}",
                 method: "POST",
@@ -1041,6 +1044,46 @@
                 }
             })
         });
+
+        // $(this).addClass('selected');
+        $('.attribute_value').on("click",function(e){
+            e.preventDefault();
+            $(this).addClass('selected');
+
+            // var attribute_name = $(this).data('attribute_name');
+            // attribute_name_arr.push(attribute_name);
+            // var unique_attribute_name = attribute_name_arr.filter(function(itm, i, attribute_name_arr) {
+            //     return i == attribute_name_arr.indexOf(itm);
+            // });
+            // $.each(unique_attribute_name, function( key, value ) {
+            //     if (value == attribute_name) {
+            //         $(this).addClass('selected');
+            //     }
+            // });
+
+            var selectedVal = $(this).data('value_id');
+            values.push(selectedVal);
+            $('#value_ids').val(values);
+
+        });
+
+        //Shipping
+        $('.shippingCharge').on("click",function(e){
+            var cost = $(this).val();
+            console.log(cost);
+            $.ajax({
+                url: "{{ route('cart.shipping_charge') }}",
+                type: "GET",
+                data: {cost:cost},
+                success: function (data) {
+                    console.log(data)
+                    if (data.type=='success') {
+                        $('.total_with_shipping').text(data.total_with_shipping);
+                    }
+                }
+            })
+        });
+
 
     </script>
 

@@ -4,18 +4,27 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\SettingFlatRate;
+use App\Models\SettingFreeShipping;
+use App\Models\SettingLocalPickup;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use SebastianBergmann\Environment\Console;
 
 class CartController extends Controller
 {
     public function productAddToCart(Request $request)
     {
-        // return $request->all();
-
         if ($request->ajax()) {
+            // return Cart::content();
+            $attribute_name_arr = $request->attribute_name;
+            $value_ids = array();
+            $value_ids = explode(",",$request->value_ids);
+
+            // return $request->value_ids;
+
 
             $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                         'baseImage'=> function ($query){
@@ -41,8 +50,15 @@ class CartController extends Controller
             }
             $data['weight'] = 1;
             $data['options']['image'] = $product->baseImage->image;
-            $data['options']['color'] = '';
-            $data['options']['size']  = '';
+
+            if (!empty($attribute_name_arr) && !empty($request->value_ids)) {
+                foreach ($attribute_name_arr as $key => $value) {
+                    $data['options'][$value]= $value_ids[$key];
+                }
+            }
+
+            // $data['options']['color'] = '';
+            // $data['options']['size']  = '';
             $data['options']['product_slug']  = $request->product_slug;
             $data['options']['category_id']  = $request->category_id;
             $data = Cart::add($data);
@@ -51,15 +67,21 @@ class CartController extends Controller
             $cart_total = Cart::total();
             $cart_content = Cart::content();
 
+
             return response()->json(['type'=>'success','cart_content'=>$cart_content, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total]);
         }
     }
 
     public function cartViewDetails()
     {
+        $setting_free_shipping = SettingFreeShipping::latest()->first();
+        $setting_local_pickup = SettingLocalPickup::latest()->first();
+        $setting_flat_rate = SettingFlatRate::latest()->first();
+
+
         $cart_content = Cart::content();
         $cart_total = Cart::total();
-        return view('frontend.pages.cart_details',compact('cart_content','cart_total'));
+        return view('frontend.pages.cart_details',compact('cart_content','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate'));
     }
 
     public function cartRomveById(Request $request)
@@ -82,5 +104,24 @@ class CartController extends Controller
             $cart_total = Cart::total();
             return response()->json(['type'=>'success','cart_subtotal'=>$cart_subtotal, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total,'cart_subtotal'=>$cart_subtotal]);
         }
+    }
+
+    public function shippingCharge(Request $request)
+    {
+        if ($request->ajax()) {
+            $total = Cart::total();
+            $cart_total = implode(explode(',',$total)) + $request->cost;
+            $total_with_shipping = number_format($cart_total, 2);
+
+            return response()->json(['type'=>'success','total_with_shipping'=>$total_with_shipping]);
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        $cart_content = Cart::content();
+        $cart_total = Cart::total();
+
+        return view('frontend.pages.checkout',compact('cart_content','cart_total'));
     }
 }

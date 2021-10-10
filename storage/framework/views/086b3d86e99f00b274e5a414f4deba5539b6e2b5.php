@@ -36,36 +36,55 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="item-details">
-                                <a class="item-category" href="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
-                                <h3 class="item-name"><?php echo e($product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL); ?></h3>
-                                <div class="d-flex justify-content-between">
-                                    <div class="item-brand">Brand: <a href=""><?php echo e($product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null); ?></a></div>
-                                    <div class="item-review">
-                                        <ul class="p-0 m-0">
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-android-star-half"></i></li>
-                                        </ul>
-                                        <span>( 04 )</span>
-                                    </div>
-                                    <div class="item-sku">SKU: LC123456789</div>
-                                </div>
-                                <hr>
-                                <?php if($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price): ?>
-                                    <div class="item-price">
-                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                            <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                    <form class="mb-3" id="productAddToCartSingle" action="<?php echo e(route('product.add_to_cart')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
+                        <input type="hidden" name="product_slug" value="<?php echo e($product->slug); ?>">
+                        <input type="hidden" name="category_id" value="<?php echo e($category->id ?? null); ?>">
+                        
+                        <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
 
-                                        <?php else: ?>
-                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
-
-                                        <?php endif; ?>
+                        <div class="item-details">
+                                    <a class="item-category" href="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
+                                    <h3 class="item-name"><?php echo e($product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL); ?></h3>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="item-brand">Brand: <a href=""><?php echo e($product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null); ?></a></div>
+                                        <div class="item-review">
+                                            <ul class="p-0 m-0">
+                                                <li><i class="ion-ios-star"></i></li>
+                                                <li><i class="ion-ios-star"></i></li>
+                                                <li><i class="ion-ios-star"></i></li>
+                                                <li><i class="ion-ios-star"></i></li>
+                                                <li><i class="ion-android-star-half"></i></li>
+                                            </ul>
+                                            <span>( 04 )</span>
+                                        </div>
+                                        <div class="item-sku">SKU: LC123456789</div>
                                     </div>
-                                    <div class="old-price">
-                                        <del>
+                                    <hr>
+                                    <?php if($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price): ?>
+                                        <div class="item-price">
+                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                            <?php else: ?>
+                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="old-price">
+                                            <del>
+                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
+                                                    <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>
+
+                                                <?php endif; ?>
+                                            </del>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="item-price">
                                             <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
                                                 <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
@@ -73,83 +92,73 @@
                                                 <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>
 
                                             <?php endif; ?>
-                                        </del>
+                                        </div>
+                                    <?php endif; ?>
+                                    <hr>
+                                    <div class="item-short-description">
+                                        <p><?php echo e(strip_tags($product->productTranslation->short_description ?? $product->productTranslationDefaultEnglish->short_description ?? NULL)); ?></p>
                                     </div>
-                                <?php else: ?>
-                                    <div class="item-price">
-                                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                            <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                        <?php else: ?>
-                                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '')); ?>
-
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endif; ?>
-                                <hr>
-                                <div class="item-short-description">
-                                    <p><?php echo e(strip_tags($product->productTranslation->short_description ?? $product->productTranslationDefaultEnglish->short_description ?? NULL)); ?></p>
-                                </div>
-                                <hr>
-                                <div class="item-variant">
-                                    <span>Color:</span> <span class="semi-bold">Green</span>
-                                    <ul class="product-variant mt-1">
-                                        <li class="bg-green selected"></li>
-                                        <li class="bg-antique"></li>
-                                        <li class="bg-amber"></li>
-                                    </ul>
-                                </div>
-                                
-                                <?php $__empty_1 = true; $__currentLoopData = $attribute; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <hr>
                                     <div class="item-variant">
-                                        <span><?php echo e($item); ?>:</span>
-                                        <ul class="product-variant size-opt p-0 mt-1">
-                                            <?php $__empty_2 = true; $__currentLoopData = $product->productAttributeValues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
-                                                <?php if($value->attribute_id == $key): ?>
-                                                    <li><span><?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?></span></li>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
-                                            <?php endif; ?>
+                                        <span>Color:</span> <span class="semi-bold">Green</span>
+                                        <ul class="product-variant mt-1">
+                                            <li class="bg-green selected"></li>
+                                            <li class="bg-antique"></li>
+                                            <li class="bg-amber"></li>
                                         </ul>
                                     </div>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                <?php endif; ?>
-
-                                <div class="item-options">
-                                    <form class="mb-3" id="productAddToCartSingle" action="<?php echo e(route('product.add_to_cart')); ?>" method="POST">
-                                        <?php echo csrf_field(); ?>
-                                        <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
-                                        <input type="hidden" name="product_slug" value="<?php echo e($product->slug); ?>">
-                                        <input type="hidden" name="category_id" value="<?php echo e($category->id ?? null); ?>">
-
-                                        <div class="input-qty">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus">
-                                                    <span class="ti-minus"></span>
-                                                </button>
-                                            </span>
-                                            <input type="number" name="qty" class="input-number" value="<?php echo e($product_cart_qty ?? 1); ?>" min="1">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus">
-                                                    <span class="ti-plus"></span>
-                                                </button>
-                                            </span>
+                                    
+                                    <?php $__empty_1 = true; $__currentLoopData = $attribute; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <div class="item-variant">
+                                            <span><?php echo e($item); ?>:</span>
+                                            <input type="hidden" name="attribute_name[]" class="attribute_name" value="<?php echo e($item); ?>">
+                                            <ul class="product-variant size-opt p-0 mt-1">
+                                                <?php $__empty_2 = true; $__currentLoopData = $product->productAttributeValues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                                                    <?php if($value->attribute_id == $key): ?>
+                                                        <li class="attribute_value" data-attribute_name="<?php echo e($value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null); ?>" data-value_id="<?php echo e($value->attribute_value_id); ?>" data-value_name="<?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?>"><span><?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?></span></li>
+                                                        <input type="hidden" name="value_id[]" value="<?php echo e($value->attribute_value_id); ?>">
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                                                <?php endif; ?>
+                                            </ul>
                                         </div>
-                                        <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                                    </form>
-                                    <button class="button button-icon style4 sm"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
-                                    <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button>
-                                </div>
-                                <hr>
-                                <div class="item-share mt-3"><span>Share</span>
-                                    <ul class="footer-social d-inline pad-left-15">
-                                        <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                        <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                        <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                        <li><a href="#"><i class="ti-pinterest"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <?php endif; ?>
+
+                                    <div class="item-options">
+                                        
+                                            
+                                            
+
+                                            <div class="input-qty">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="quantity-left-minus">
+                                                        <span class="ti-minus"></span>
+                                                    </button>
+                                                </span>
+                                                <input type="number" name="qty" class="input-number" value="<?php echo e($product_cart_qty ?? 1); ?>" min="1">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="quantity-right-plus">
+                                                        <span class="ti-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
+                                        
+                                        <button class="button button-icon style4 sm"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
+                                        <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button>
+                                    </div>
+                                    <hr>
+                                    <div class="item-share mt-3"><span>Share</span>
+                                        <ul class="footer-social d-inline pad-left-15">
+                                            <li><a href="#"><i class="ti-facebook"></i></a></li>
+                                            <li><a href="#"><i class="ti-twitter"></i></a></li>
+                                            <li><a href="#"><i class="ti-instagram"></i></a></li>
+                                            <li><a href="#"><i class="ti-pinterest"></i></a></li>
+                                        </ul>
+                                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -64,6 +64,8 @@ Route::group(['namespace'=>'Frontend'], function (){
             Route::get('/view-details', 'CartController@cartViewDetails')->name('cart.view_details');
             Route::get('/remove', 'CartController@cartRomveById')->name('cart.remove');
             Route::get('/quantity_change', 'CartController@cartQuantityChange')->name('cart.quantity_change');
+            Route::get('/shipping_charge', 'CartController@shippingCharge')->name('cart.shipping_charge');
+            Route::post('/checkout', 'CartController@checkout')->name('cart.checkout');
         });
 
         Route::post('newslatter/store','HomeController@newslatterStore')->name('cartpro.newslatter_store');
@@ -102,9 +104,8 @@ Route::get('/admin/google_analytics','AdminController@googleAnalytics')->name('a
 
 
 // Route::group(['prefix' => '{locale}'], function () {
-    Route::group(['prefix' => '/admin','namespace'=>'Admin'], function () {
-
-
+Route::group(['prefix' => 'admin'], function () {
+    Route::group(['namespace'=>'Admin'], function () {
         //--Category--
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/','CategoryController@index')->name('admin.category');
@@ -366,71 +367,13 @@ Route::get('/admin/google_analytics','AdminController@googleAnalytics')->name('a
         });
 
         Route::get('languages','LocaleFileController@update')->name('languages.translations.update');
-
     });
+
+});
 // });
 
 
 
-
-//Collection
-Route::get('/admin/collections','CollectionController@index')->name('admin.collection');
-Route::post('/admin/insertCollection','CollectionController@store')->name('collection_list.store');
-Route::post('/admin/updateCollection','CollectionController@update')->name('collection_list.update');
-Route::get('/admin/collections/{id}/edit','CollectionController@edit')->name('admin.collection_edit');
-Route::get('/admin/collections/{id}/delete','CollectionController@destroy')->name('admin.collection_delete');
-Route::get('/admin/collections/{id}/{status}','CollectionController@status')->name('collection.status');
-
-
-// //product
-// Route::get('/admin/product','ProductController@index')->name('admin.product');
-// Route::get('/admin/product/create','ProductController@create')->name('admin.product.create');
-// Route::post('/admin/insertProduct','ProductController@store')->name('products.store');
-// Route::get('/admin/variant-images/{id}/{sku}/{size}/{color}/{price}/{qty}/{product}','ProductController@productVariantImages');
-// Route::post('/admin/upload-variant-images/','ProductController@productVariantImagesUpload')->name('admin.variant.images');
-// Route::get('/admin/product/edit/{id}','ProductController@edit')->name('admin.product_edit');
-// Route::post('/admin/updateProduct','ProductController@update')->name('products.update');
-// Route::post('/admin/product-images','ProductController@productImages')->name('admin.product.images');
-// Route::get('/admin/product/{id}/delete','ProductController@destroy')->name('productlist.destroy');
-// Route::get('/admin/product/{id}/{status}','ProductController@status')->name('product.status');
-// Route::post('/admin/product/massdelete','ProductController@delete_by_selection');
-
-
-//coupon
-// Route::get('/admin/coupon','CouponController@index')->name('admin.coupon');
-// Route::post('/admin/insertCoupon','CouponController@store')->name('coupon.store');
-// Route::post('/admin/updateCoupon','CouponController@update')->name('coupon_list.update');
-// Route::get('/admin/coupon/{id}/edit','CouponController@edit')->name('admin.coupon_edit');
-// Route::get('/admin/coupon/{id}/delete','CouponController@destroy')->name('couponlist.destroy');
-// Route::get('/admin/coupon/{id}/{status}','CouponController@status')->name('coupon.status');
-// Route::post('/admin/coupon/massdelete','CouponController@delete_by_selection');
-
-
-//page
-Route::get('/admin_page','Backup\PageController@index')->name('admin.page');
-Route::post('/admin_insertPage','Backup\PageController@store')->name('pages.store');
-Route::post('/admin_updatePage','Backup\PageController@update')->name('page_list.update');
-Route::get('/admin_page/{id}/edit','Backup\PageController@edit')->name('admin.page_edit');
-Route::get('/admin_page/{id}/delete','Backup\PageController@destroy')->name('pagelist.destroy');
-Route::get('/admin_page/{id}/{status}','Backup\PageController@status')->name('page.status');
-Route::post('/admin_page/massdelete','Backup\PageController@delete_by_selection');
-
-// //user
-// Route::get('/admin/user','UserController@index')->name('admin.user');
-// Route::post('/admin/insertUser','UserController@store')->name('user.store');
-// Route::post('/admin/updateUser','UserController@update')->name('user_list.update');
-// Route::get('/admin/user/{id}/edit','UserController@edit')->name('admin.user_edit');
-// Route::get('/admin/user/{id}/delete','UserController@destroy')->name('userlist.destroy');
-// Route::get('/admin/user/{id}/{status}','UserController@status')->name('user.status');
-// Route::post('/admin/user/massdelete','UserController@delete_by_selection');
-
-//customer
-Route::get('/admin/customer','CustomerController@index');
-Route::get('/admin/Customerform','CustomerController@create');
-Route::post('/admin/insertCustomer','CustomerController@store');
-Route::get('/admin/getSpecificCustomer/{id}','CustomerController@show');
-Route::get('/admin/editCustomer/{id}','CustomerController@edit');
-Route::get('/admin/deleteCustomer/{id}','CustomerController@destroy');
 
 
 
