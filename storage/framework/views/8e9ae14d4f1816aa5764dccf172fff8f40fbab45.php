@@ -106,77 +106,22 @@
                                 <div class="label">Subtotal</div>
                                 <div class="price">
                                     <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                        <span class="cart_total"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                        <span class="cartSubtotal"><?php echo e($cart_subtotal); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                     <?php else: ?>
-                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total"><?php echo e($cart_total); ?></span>
+                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cartSubtotal"><?php echo e($cart_subtotal); ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="shipping">
-                                <div class="label">Shiping</div>
-                                <?php if($setting_free_shipping->shipping_status==1): ?>
-                                    <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="<?php echo e($setting_free_shipping->minimum_amount ?? 0); ?>">
-                                        <label class="custom-control-label"><?php echo e($setting_free_shipping->label ?? null); ?>
-
-                                            <span class="price">
-                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                    <?php echo e(number_format((float)$setting_free_shipping->minimum_amount, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                                <?php else: ?>
-                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$setting_free_shipping->minimum_amount, env('FORMAT_NUMBER'), '.', '')); ?>
-
-                                                <?php endif; ?>
-                                            </span>
-                                        </label>
-                                    </div>
-                                <?php endif; ?>
-
-                                <?php if($setting_local_pickup->pickup_status==1): ?>
-                                    <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="<?php echo e($setting_local_pickup->cost ?? null); ?>">
-                                        <label class="custom-control-label"><?php echo e($setting_local_pickup->label ?? null); ?>
-
-                                            <span class="price">
-                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                    <?php echo e(number_format((float)$setting_local_pickup->cost, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                                <?php else: ?>
-                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$setting_local_pickup->cost, env('FORMAT_NUMBER'), '.', '')); ?>
-
-                                                <?php endif; ?>
-                                            </span>
-                                        </label>
-                                    </div>
-                                <?php endif; ?>
-
-                                <?php if($setting_flat_rate->flat_status==1): ?>
-                                    <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="<?php echo e($setting_flat_rate->cost ?? null); ?>">
-                                        <label class="custom-control-label"><?php echo e($setting_flat_rate->label ?? null); ?>
-
-                                            <span class="price">
-                                                <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                    <?php echo e(number_format((float)$setting_flat_rate->cost, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                                <?php else: ?>
-                                                    <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$setting_flat_rate->cost, env('FORMAT_NUMBER'), '.', '')); ?>
-
-                                                <?php endif; ?>
-                                            </span>
-                                        </label>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
+                            
                             <div class="total">
-                                <div class="label">Total</div>
+                                <div class="label"><?php echo e(__('file.Total')); ?></div>
                                 <div class="price">
                                     <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                        <span class="cart_total total_with_shipping"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
+                                        <span class="cart_total total_amount"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
 
                                     <?php else: ?>
-                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total total_with_shipping"><?php echo e($cart_total); ?></span>
+                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total total_amount"><?php echo e($cart_total); ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>

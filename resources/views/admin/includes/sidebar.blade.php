@@ -5,7 +5,7 @@
       <!-- Sidebar Navigation Menus-->
       <div class="main-menu">
         <ul id="side-main-menu" class="side-menu list-unstyled">
-          <li><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{ __('file.Dashboard') }}</span></a></li>
+          <li><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{__('file.Dashboard') }}</span></a></li>
           @can('product')
             <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cube"></i><span>{{__('file.Products')}}</span></a>
                 <ul id="product" class="collapse list-unstyled ">

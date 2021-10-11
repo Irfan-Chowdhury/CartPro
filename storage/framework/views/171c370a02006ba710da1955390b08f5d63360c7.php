@@ -83,6 +83,7 @@
         }
     }
     $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
+    $cart_subtotal = \Gloudemans\Shoppingcart\Facades\Cart::subtotal();
     $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
     $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
 
@@ -238,7 +239,7 @@
                                 <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
                             </li>
                             <li>
-                                <a href=""><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
+                                <a href="<?php echo e(route('customer_login_form')); ?>"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
                             </li>
                             <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
                                 <i class="ion-android-favorite-outline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
@@ -948,15 +949,25 @@
             e.preventDefault();
             var rowId = $(this).data('id');
             var input_number = $('.'+rowId).val();
+            var shipping_charge =$('.shippingCharge:checked').val();
+            if (!shipping_charge) {
+                shipping_charge = 0;
+            }
+            var coupon_value = $('#coupon_value').val();
+            if (!coupon_value) {
+                coupon_value = 0;
+            }
+            console.log(coupon_value);
             $.ajax({
                 url: "<?php echo e(route('cart.quantity_change')); ?>",
                 type: "GET",
-                data: {rowId:rowId,qty:input_number},
+                data: {rowId:rowId,qty:input_number,shipping_charge:shipping_charge,coupon_value:coupon_value},
                 success: function (data) {
                     if (data.type=='success') {
                         $('.cart_count').text(data.cart_count);
+                        $('.cartSubtotal').text(data.subtotal);
                         $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.cart_total);
+                        $('.total_price').text(data.total);
                         $('.subtotal_'+rowId).text(data.cart_subtotal);
                     }
                 }
@@ -1066,20 +1077,42 @@
         //Shipping
         $('.shippingCharge').on("click",function(e){
             var cost = $(this).val();
-            console.log(cost);
+            var coupon_value = $('#coupon_value').val();
+            if (!coupon_value) {
+                coupon_value = 0;
+            }
             $.ajax({
                 url: "<?php echo e(route('cart.shipping_charge')); ?>",
                 type: "GET",
-                data: {cost:cost},
+                data: {cost:cost,coupon_value:coupon_value},
                 success: function (data) {
                     console.log(data)
                     if (data.type=='success') {
-                        $('.total_with_shipping').text(data.total_with_shipping);
+                        $('.total_amount').text(data.total_with_shipping);
                     }
                 }
             })
         });
 
+        $('#applyCoupon').on("click",function(e){
+            e.preventDefault();
+            var coupon_code = $('#coupon_code').val();
+            var shipping_charge =$('.shippingCharge:checked').val();
+            console.log(shipping_charge);
+            $.ajax({
+                url: "<?php echo e(route('cart.apply_coupon')); ?>",
+                type: "GET",
+                data: {coupon_code:coupon_code,shipping_charge:shipping_charge},
+                success: function (data) {
+                    console.log(data)
+                    if (data.type=='success') {
+                        console.log('irfan')
+                        $('.total_amount').text(data.total_amount);
+                        $('#coupon_value').val(data.coupon_value);
+                    }
+                }
+            })
+        });
 
     </script>
 

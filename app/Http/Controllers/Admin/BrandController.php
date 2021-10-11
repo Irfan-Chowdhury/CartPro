@@ -24,8 +24,7 @@ class BrandController extends Controller
     {
         if (auth()->user()->can('brand-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
-
+            // App::setLocale(Session::get('currentLocal'));
 
             $local = Session::get('currentLocal');
 
@@ -110,8 +109,6 @@ class BrandController extends Controller
 
     public function brandEdit($id)
     {
-        App::setLocale(Session::get('currentLocal'));
-        
         $local    = Session::get('currentLocal');
         $brand    = Brand::find($id);
         $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local',$local)->first();

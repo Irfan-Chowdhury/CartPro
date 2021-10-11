@@ -5,6 +5,8 @@
 //           $favicon_logo_path = 'public'.$item->image;
 //       }
 //   }
+    Illuminate\Support\Facades\App::setLocale(Session::get('currentLocal'));
+
 @endphp
 
 <!DOCTYPE html>

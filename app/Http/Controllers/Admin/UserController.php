@@ -129,7 +129,7 @@ class UserController extends Controller
                 $user->phone      = htmlspecialchars($request->phone);
                 $user->email      = htmlspecialchars($request->email);
                 $user->password   = Hash::make($request->password);
-                $user->user_type  = 1;
+                $user->user_type  = 1; //Admin
                 $user->role    = $request->role;
                 $user->is_active = $request->is_active;
                 if($request->image) {

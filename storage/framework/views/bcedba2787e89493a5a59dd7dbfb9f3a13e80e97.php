@@ -4,7 +4,7 @@
         class="<?php if($errors->has($field)): ?> error <?php endif; ?>"
         name="<?php echo e($field); ?>"
         id="<?php echo e($field); ?>"
-        type="text"
+        type="hidden"
         placeholder="<?php echo e(isset($placeholder) ? $placeholder : ''); ?>"
         value="file"
         readonly

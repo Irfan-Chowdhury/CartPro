@@ -46,6 +46,11 @@ class LoginController extends Controller
         return view('admin.auth.login');
     }
 
+    public function showCustomerLoginForm()
+    {
+        return view('frontend.auth.login');
+    }
+
     public function login(Request $request)
     {
         $this->validateLogin($request);
@@ -58,9 +63,30 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            if ((auth()->user()->role == 0))
-            {
+            if ((auth()->user()->role == 0)){
                 return redirect()->route('admin.dashboard');
+            }
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    public function customerLogin(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            if ((auth()->user()->user_type == 0)){
+                return redirect()->route('cartpro.home');
             }
         }
 

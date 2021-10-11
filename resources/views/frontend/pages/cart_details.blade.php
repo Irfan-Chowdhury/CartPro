@@ -111,17 +111,17 @@
                                 <div class="label">Subtotal</div>
                                 <div class="price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        <span class="cart_total">{{$cart_total}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        <span class="cartSubtotal">{{$cart_subtotal}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                     @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="cart_total">{{$cart_total}}</span>
+                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="cartSubtotal">{{$cart_subtotal}}</span>
                                     @endif
                                 </div>
                             </div>
-                            <div class="shipping">
+                            {{-- <div class="shipping">
                                 <div class="label">Shiping</div>
                                 @if ($setting_free_shipping->shipping_status==1)
                                     <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="{{$setting_free_shipping->minimum_amount ?? 0}}">
+                                        <input type="radio" name="shipping" class="custom-control-input shippingCharge" value="{{$setting_free_shipping->minimum_amount ?? 0}}">
                                         <label class="custom-control-label">{{$setting_free_shipping->label ?? null}}
                                             <span class="price">
                                                 @if(env('CURRENCY_FORMAT')=='suffix')
@@ -136,7 +136,7 @@
 
                                 @if ($setting_local_pickup->pickup_status==1)
                                     <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="{{$setting_local_pickup->cost ?? null}}">
+                                        <input type="radio" name="shipping" class="custom-control-input shippingCharge" value="{{$setting_local_pickup->cost ?? null}}">
                                         <label class="custom-control-label">{{$setting_local_pickup->label ?? null}}
                                             <span class="price">
                                                 @if(env('CURRENCY_FORMAT')=='suffix')
@@ -151,7 +151,7 @@
 
                                 @if ($setting_flat_rate->flat_status==1)
                                     <div class="custom-control custom-radio mt-3">
-                                        <input type="radio" class="shippingCharge" name="shipping" class="custom-control-input" value="{{$setting_flat_rate->cost ?? null}}">
+                                        <input type="radio" name="shipping" class="custom-control-input shippingCharge" value="{{$setting_flat_rate->cost ?? null}}">
                                         <label class="custom-control-label">{{$setting_flat_rate->label ?? null}}
                                             <span class="price">
                                                 @if(env('CURRENCY_FORMAT')=='suffix')
@@ -163,14 +163,14 @@
                                         </label>
                                     </div>
                                 @endif
-                            </div>
+                            </div> --}}
                             <div class="total">
-                                <div class="label">Total</div>
+                                <div class="label">{{__('file.Total')}}</div>
                                 <div class="price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        <span class="cart_total total_with_shipping">{{$cart_total}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        <span class="cart_total total_amount">{{$cart_total}}</span> {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                     @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="cart_total total_with_shipping">{{$cart_total}}</span>
+                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} <span class="cart_total total_amount">{{$cart_total}}</span>
                                     @endif
                                 </div>
                             </div>

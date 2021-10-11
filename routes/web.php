@@ -42,13 +42,16 @@ Auth::routes();
 // });
 
 
-// Route::get('/companies', ['as' => 'comp', function () {
-//     return 'test';
-//   }]);
 
+
+Route::get('/login', 'Auth\LoginController@showCustomerLoginForm')->name('customer_login_form');
+Route::post('/customer/register', 'Frontend\RegisterController@customerRegister')->name('customer.register');
+Route::post('/customer/login', 'Auth\LoginController@customerLogin')->name('customer.login');
 
 
 Route::group(['namespace'=>'Frontend'], function (){
+
+        // Route::get('/register','RegisterController@login')->name('cartpro.login');
 
         Route::get('/','HomeController@index')->name('cartpro.home');
         Route::get('product/{product_slug}/{category_id}','HomeController@product_details')->name('cartpro.product_details');
@@ -66,6 +69,7 @@ Route::group(['namespace'=>'Frontend'], function (){
             Route::get('/quantity_change', 'CartController@cartQuantityChange')->name('cart.quantity_change');
             Route::get('/shipping_charge', 'CartController@shippingCharge')->name('cart.shipping_charge');
             Route::post('/checkout', 'CartController@checkout')->name('cart.checkout');
+            Route::get('/apply_coupon', 'CartController@applyCoupon')->name('cart.apply_coupon');
         });
 
         Route::post('newslatter/store','HomeController@newslatterStore')->name('cartpro.newslatter_store');

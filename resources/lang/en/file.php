@@ -262,6 +262,7 @@ return array (
   'Last 7 Days' => 'Last 7 Days',
   'Late' => 'Late',
   'List' => 'List',
+  'Log In' => 'Log In',
   'LogIn' => 'LogIn',
   'Logo' => 'Logo',
   'Loss' => 'Loss',
@@ -397,6 +398,7 @@ return array (
   'Recieved By' => 'Received By',
   'Reference No' => 'Reference No',
   'Register' => 'Register',
+  'Register Now' => 'Register Now',
   'Reports' => 'Reports',
   'Return' => 'Return',
   'Return Details' => 'Return Details',
@@ -421,11 +423,11 @@ return array (
   'Search' => 'Search',
   'Select Attribute Set' => 'Select Attribute Set',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' =>
+  'Select SMS gateway' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -497,31 +499,31 @@ return array (
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
   'Type' => 'Type',
-  'Type Product Name or Code' =>
+  'Type Product Name or Code' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' =>
+  'Type date or purchase reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' =>
+  'Type date or sale reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or sale reference...',
       ),
