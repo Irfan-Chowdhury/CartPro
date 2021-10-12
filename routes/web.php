@@ -41,6 +41,11 @@ Auth::routes();
 //         Route::get('/{product_slug}','HomeController@product_details')->name('cartpro.product');
 // });
 
+//Payment Start
+Route::get('/payment', function () {
+    return view('payment');
+});
+//Payment End
 
 
 

@@ -191,7 +191,6 @@ class ProductController extends Controller
         //     'sku'       => 'unique:products',
         //     'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
         //     //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
-        //     // 'multiple_images'=> 'nullable|unique:product_translations',
         // ]);
 
         // if ($validator->fails()){

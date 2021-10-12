@@ -416,7 +416,7 @@
                 </div>
                 <div class="shopping__btn">
                     <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
-                    <a class="button style1" href="shop-checkout.html">Checkout</a>
+                    <a class="button style1" href="">Checkout</a>
                 </div>
             </div>
         </div>
@@ -1131,6 +1131,7 @@
             });
         </script>
     @endif --}}
+    @stack('scripts')
 </body>
 
 </html>

@@ -418,7 +418,7 @@
                 </div>
                 <div class="shopping__btn">
                     <a class="button style3" href="<?php echo e(route('cart.view_details')); ?>">View Cart</a>
-                    <a class="button style1" href="shop-checkout.html">Checkout</a>
+                    <a class="button style1" href="">Checkout</a>
                 </div>
             </div>
         </div>
@@ -1117,6 +1117,7 @@
     </script>
 
     
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 
 </html>

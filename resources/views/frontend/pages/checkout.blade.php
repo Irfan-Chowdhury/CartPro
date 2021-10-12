@@ -277,7 +277,7 @@
                         <hr>
                         <div class="payment-options">
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer">
+                                <input type="radio" name="bank-transfer" value="card">
                                 <span class="sm-heading">Direct Bank Transfer</span>
                             </label>
                             <div class="alert alert-general no-border mar-bot-0">
@@ -286,17 +286,17 @@
                                 </div>
                             </div>
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer">
+                                <input type="radio" name="bank-transfer" value="paypal">
                                 <span class="sm-heading">Credit card</span>
-                                <span class="card-options"><img src="images/payment/payment-1.png" alt="..."></span>
-                                <span class="card-options pad-right-5"><img src="images/payment/payment-2.png" alt="..."></span>
-                                <span class="card-options pad-right-5"><img src="images/payment/payment-3.png" alt="..."></span>
+                                <span class="card-options"><img src="{{asset('public/frontend/images/payment/payment-1.png')}}" alt="..."></span>
+                                <span class="card-options pad-right-5"><img src="{{asset('public/frontend/images/payment/payment-2.png')}}" alt="..."></span>
+                                <span class="card-options pad-right-5"><img src="{{asset('public/frontend/images/payment/payment-3.png')}}" alt="..."></span>
 
                             </label>
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer">
+                                <input type="radio" name="bank-transfer" id="1">
                                 <span class="sm-heading">Paypal</span>
-                                <span class="card-options"><img src="images/others/paypal.jpg" alt="..."></span>
+                                <span class="card-options"><img src="{{asset('public/frontend/images/others/paypal.jpg')}}" alt="..."></span>
                             </label>
                             <div class="custom-control custom-checkbox text-center mt-5 mb-5">
                                 <input type="checkbox" class="custom-control-input" id="accept_terms">
@@ -305,12 +305,19 @@
                         </div>
                     </div>
                     <div class="checkout-actions mar-top-30">
-                        <button class="button lg style1 d-block text-center w-100">Place Order</button>
+                        <button class="button lg style1 d-block text-center w-100" id="orderBtn">Place Order</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-
 @endsection
+@push('scripts')
+<script>
+$(function(){
+    $('#orderBtn').on('click',function(){
+        alert($("input[name=bank-transfer]:checked").val());
+    });
+});
+</script>
+@endpush
