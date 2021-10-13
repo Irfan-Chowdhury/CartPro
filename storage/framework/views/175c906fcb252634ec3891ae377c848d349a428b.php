@@ -14,6 +14,15 @@
 </div>
 <!--Breadcrumb Area ends-->
 
+<div class="d-flex justify-content-center d-none">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div id="alert_message">
+
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+
 
 
     <!-- Content Wrapper -->
@@ -32,101 +41,102 @@
             <div class="row">
                 <div class="col-md-6 mar-top-30">
                     <h3 class="section-title">Billing Details</h3>
-                    <form class="row calculate-shipping">
-
+                    <form class="row calculate-shipping" action="<?php echo e(route('order.store')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="first-name" placeholder="First Name *">
+                            <input class="form-control" type="text" name="billing_first_name" placeholder="First Name *">
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="last-name" placeholder="Last Name *">
+                            <input class="form-control" type="text" name="billing_last_name" placeholder="Last Name *">
                         </div>
 
                         <div class="col-12">
                             <div class="form-group">
-                                <select class="form-control selectpicker">
-                                    <option>Country</option>
-                                    <option>Australia</option>
-                                    <option>Canada</option>
-                                    <option>Mexico</option>
+                                <select class="form-control selectpicker" name="billing_country" id="billing_country">
+                                    <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($country->country_name); ?>"><?php echo e($country->country_name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-12">
-                            <input class="form-control" type="text" name="street-address" placeholder="Street Address">
+                            <input class="form-control" type="text" name="billing_address_1" placeholder="Street Address">
                         </div>
                         <div class="col-12">
-                            <input class="form-control" type="text" name="street-address2" placeholder="Apartment, suite, unit etc. (optional)">
+                            <input class="form-control" type="text" name="billing_address_2" placeholder="Apartment, suite, unit etc. (optional)">
                         </div>
                         <div class="col-12">
-                            <input class="form-control" type="text" name="city-town" placeholder="City / Town">
+                            <input class="form-control" type="text" name="billing_city" placeholder="City / Town">
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="state" placeholder="State / County">
+                            <input class="form-control" type="text" name="billing_state" placeholder="State / County">
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="post-code" placeholder="Postcode / Zip">
+                            <input class="form-control" type="text" name="billing_zip_code" placeholder="Postcode / Zip">
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="email" placeholder="Email *">
+                            <input class="form-control" type="email" name="billing_email" placeholder="Email *">
                         </div>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" name="phone" placeholder="Phone *">
+                            <input class="form-control" type="text" name="billing_phone" placeholder="Phone *">
                         </div>
+
                         <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
-                            <input type="checkbox" class="custom-control-input" id="create_account">
+                            <input type="checkbox" class="custom-control-input" id="billing_create_account_check" value="1">
                             <label class="label custom-control-label" for="create_account">Create Account</label>
                         </div>
+
                         <div class="collapse" id="create_account_collapse">
+                            <input class="form-control mt-3" type="text" placeholder="Enter Username" name="username">
                             <input class="form-control mt-3" type="password" placeholder="Enter Password" name="password">
+                            <input class="form-control mt-3" type="password" placeholder="Enter Confirm Password" name="password_confirmation">
                         </div>
 
                         <div class="custom-control custom-checkbox mt-4 mb-3" data-bs-toggle="collapse" href="#shipping_address_collapse" role="button" aria-expanded="false" aria-controls="shipping_address_collapse">
-                            <input type="checkbox" class="custom-control-input" id="shipping_address">
+                            <input type="checkbox" class="custom-control-input" id="shipping_address_check" value="1">
                             <label class="label custom-control-label" for="shipping_address">Ship to a different address</label>
                         </div>
                         <div class="collapse" id="shipping_address_collapse">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="first-name" placeholder="First Name *">
+                                    <input class="form-control" type="text" name="shipping_first_name" placeholder="First Name *">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="last-name" placeholder="Last Name *">
+                                    <input class="form-control" type="text" name="shipping_last_name" placeholder="Last Name *">
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <select class="form-control selectpicker">
-                                            <option>Country</option>
-                                            <option>Australia</option>
-                                            <option>Canada</option>
-                                            <option>Mexico</option>
+                                        <select class="form-control selectpicker" name="shipping_country" id="shipping_country">
+                                            <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($country->country_name); ?>"><?php echo e($country->country_name); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <input class="form-control" type="text" name="street-address" placeholder="Street Address">
+                                    <input class="form-control" type="text" name="shipping_address_1" placeholder="Street Address">
                                 </div>
                                 <div class="col-12">
-                                    <input class="form-control" type="text" name="street-address2" placeholder="Apartment, suite, unit etc. (optional)">
+                                    <input class="form-control" type="text" name="shipping_address_2" placeholder="Apartment, suite, unit etc. (optional)">
                                 </div>
                                 <div class="col-12">
-                                    <input class="form-control" type="text" name="city-town" placeholder="City / Town">
+                                    <input class="form-control" type="text" name="shipping_city" placeholder="City / Town">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="state" placeholder="State / County">
+                                    <input class="form-control" type="text" name="shipping_state" placeholder="State / County">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="post-code" placeholder="Postcode / Zip">
+                                    <input class="form-control" type="text" name="shipping_zip_code" placeholder="Postcode / Zip">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="email" placeholder="Email *">
+                                    <input class="form-control" type="text" name="shipping_email" placeholder="Email *">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="phone" placeholder="Phone *">
+                                    <input class="form-control" type="text" name="shipping_phone" placeholder="Phone *">
                                 </div>
                             </div>
                         </div>
-
                     </form>
                 </div>
                 <div class="col-md-6 mar-top-30">
@@ -299,7 +309,7 @@
                                 </div>
                             </div>
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer" value="paypal">
+                                <input type="radio" name="bank-transfer" >
                                 <span class="sm-heading">Credit card</span>
                                 <span class="card-options"><img src="<?php echo e(asset('public/frontend/images/payment/payment-1.png')); ?>" alt="..."></span>
                                 <span class="card-options pad-right-5"><img src="<?php echo e(asset('public/frontend/images/payment/payment-2.png')); ?>" alt="..."></span>
@@ -307,7 +317,7 @@
 
                             </label>
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer" id="1">
+                                <input type="radio" name="bank-transfer" id='paypal' value="paypal">
                                 <span class="sm-heading">Paypal</span>
                                 <span class="card-options"><img src="<?php echo e(asset('public/frontend/images/others/paypal.jpg')); ?>" alt="..."></span>
                             </label>
@@ -317,19 +327,160 @@
                             </div>
                         </div>
                     </div>
+                    <div id="paypal-button-container"></div>
                     <div class="checkout-actions mar-top-30">
-                        <button class="button lg style1 d-block text-center w-100" id="orderBtn">Place Order</button>
+                        <button class="button lg style1 d-block text-center w-100" id="orderBtn">Click To Pay</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+
+
 <?php $__env->stopSection(); ?>
 <?php $__env->startPush('scripts'); ?>
+<script src="https://www.paypal.com/sdk/js?client-id=<?php echo e(env('PAYPAL_SANDBOX_CLIENT_ID')); ?>&currency=USD" data-namespace="paypal_sdk"></script>
+
 <script>
 $(function(){
-    $('#orderBtn').on('click',function(){
-        alert($("input[name=bank-transfer]:checked").val());
+    $('#orderBtn').on('click',function(event){
+
+        console.log('ok');
+
+        var billing_create_account_check = $("#billing_create_account_check:checked").val();
+        if (billing_create_account_check) {
+            var billing_first_name = $("input[name=billing_first_name]").val();
+            var billing_last_name = $("input[name=billing_last_name]").val();
+            var username = $("input[name=username]").val();
+            var billing_email = $("input[name=billing_email]").val();
+            var billing_phone = $("input[name=billing_phone]").val();
+            var password = $("input[name=password]").val();
+            var password_confirmation = $("input[name=password_confirmation]").val();
+            $.ajax({
+                url: "<?php echo e(route('customer.register')); ?>",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'JSON',
+                data: {
+                    billing_first_name:billing_first_name,
+                    billing_last_name:billing_last_name,
+                    username:username,
+                    billing_email:billing_email,
+                    billing_phone:billing_phone,
+                    password:password,
+                    password_confirmation:password_confirmation,
+                    billing_create_account_check:billing_create_account_check
+                },
+                success: function (data) {
+                    console.log(data);
+                    //let html = '';
+                    // if (data.errors) {
+                    //     for (var count = 0; count < data.errors.length; count++) {
+                    //         html += '<strong>' + data.errors[count] + '</strong> <br>';
+                    //     }
+                    //     $('#alert_message').html(html).;
+                    // }
+                    // if (data.type=='success') {
+                    //     console.log('irfan')
+                    //     $('.total_amount').text(data.total_amount);
+                    //     $('#coupon_value').val(data.coupon_value);
+                    // }
+                }
+            })
+        }
+        // alert(billing_create_account_check);
+
+
+
+        var paypal = $("input[name=paypal]:checked").val();
+        var paypal_test = $("#paypal:checked").val();
+        // if (paypal_test) {
+        //     paypal_sdk.Buttons({
+        //         createOrder: function(data, actions) {
+        //             // This function sets up the details of the transaction, including the amount and line item details.
+        //             return actions.order.create({
+        //                 purchase_units: [{
+        //                     amount: {
+        //                         value: '0.01'
+        //                     }
+        //                 }]
+        //             });
+        //         },
+        //         onApprove: function(data, actions) {
+        //             // This function captures the funds from the transaction.
+        //             return actions.order.capture().then(function(details) {
+        //                 // This function shows a transaction success message to your buyer.
+        //                 // alert('Transaction completed by ' + details.payer.name.given_name);
+
+        //                 var billing_first_name = $("input[name=billing_first_name]").val();
+        //                 var billing_last_name = $("input[name=billing_last_name]").val();
+        //                 var billing_country = $("#billing_country option:selected").text();
+        //                 var billing_address_1 = $("input[name=billing_address_1]").val();
+        //                 var billing_city = $("input[name=billing_city]").val();
+        //                 var billing_state = $("input[name=billing_state]").val();
+        //                 var billing_zip_code = $("input[name=billing_zip_code]").val();
+        //                 var billing_email = $("input[name=billing_email]").val();
+        //                 var billing_phone = $("input[name=billing_phone]").val();
+
+        //                 var shipping_address_check = $("#shipping_address_check_check:checked").val();
+        //                 if (!shipping_address_check) {
+        //                     shipping_address_check=0;
+        //                 }
+        //                 //Shipping
+        //                 var shipping_first_name = $("input[name=shipping_first_name]").val();
+        //                 var shipping_last_name = $("input[name=shipping_last_name]").val();
+        //                 var shipping_country = $("#shipping_country option:selected").text();
+        //                 var shipping_address_1 = $("input[name=shipping_address_1]").val();
+        //                 var shipping_city = $("input[name=shipping_city]").val();
+        //                 var shipping_state = $("input[name=shipping_state]").val();
+        //                 var shipping_zip_code = $("input[name=shipping_zip_code]").val();
+        //                 var shipping_email = $("input[name=shipping_email]").val();
+        //                 var shipping_phone = $("input[name=shipping_phone]").val();
+
+        //                 $.ajax({
+        //                     url: "<?php echo e(route('order.store')); ?>",
+        //                     type: "GET",
+        //                     data:{
+        //                         billing_first_name:billing_first_name,
+        //                         billing_last_name:billing_last_name,
+        //                         billing_country:billing_country,
+        //                         billing_address_1:billing_address_1,
+        //                         billing_city:billing_city,
+        //                         billing_state:billing_state,
+        //                         billing_zip_code:billing_zip_code,
+        //                         billing_email:billing_email,
+        //                         billing_phone:billing_phone,
+
+        //                         shipping_address_check:shipping_address_check,
+
+        //                         shipping_first_name:shipping_first_name,
+        //                         shipping_last_name:shipping_last_name,
+        //                         shipping_country:shipping_country,
+        //                         shipping_address_1:shipping_address_1,
+        //                         shipping_city:shipping_city,
+        //                         shipping_state:shipping_state,
+        //                         shipping_zip_code:shipping_zip_code,
+        //                         shipping_email:shipping_email,
+        //                         shipping_phone:shipping_phone,
+
+        //                         payment_method:'Paid By Paypal',
+        //                         total:1000,
+        //                         payment_id:details.id,
+        //                     },
+        //                     success: function (data) {
+        //                         console.log(data);
+        //                         // alert('Transaction completed by ' + details.payer.name.given_name);
+        //                         //window.location.href="<?php echo e(route('cartpro.home')); ?>",
+        //                     }
+        //                 })
+        //             });
+        //         }
+        //     }).render('#paypal-button-container');
+        //     $('#orderBtn').addClass('d-none');
+        // }
     });
 });
 </script>

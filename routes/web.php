@@ -79,6 +79,9 @@ Route::group(['namespace'=>'Frontend'], function (){
 
         Route::post('newslatter/store','HomeController@newslatterStore')->name('cartpro.newslatter_store');
 
+        Route::get('order-store','OrderController@orderStore')->name('order.store');
+
+
 });
 
 

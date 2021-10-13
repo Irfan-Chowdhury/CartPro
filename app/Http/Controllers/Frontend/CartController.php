@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\SettingFlatRate;
@@ -141,7 +142,9 @@ class CartController extends Controller
         $total_with_shipping = implode(explode(',',$total)) + $shipping_charge;
         $cart_total = number_format($total_with_shipping, 2);
 
-        return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','shipping_charge'));
+        $countries = Country::all();
+
+        return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','shipping_charge','countries'));
     }
 
     public function applyCoupon(Request $request)

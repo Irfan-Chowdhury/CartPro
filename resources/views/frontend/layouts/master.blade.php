@@ -118,6 +118,8 @@
     <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
     <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
     <style>
@@ -780,6 +782,7 @@
     </script>
 
     <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
+
 
     <script>
         let values = [];

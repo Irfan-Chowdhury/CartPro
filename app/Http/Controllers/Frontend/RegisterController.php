@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\imageHandleTrait;
+use SebastianBergmann\Environment\Console;
 
 class RegisterController extends Controller
 {
@@ -25,11 +26,15 @@ class RegisterController extends Controller
             'password'   => 'required|string|confirmed',
             'password_confirmation' => 'required',
             // 'gender'  => 'required',
-            'image'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'image'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
         if($validator->fails())
         {
+            if ($request->billing_create_account_check) {
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
             session()->flash('error','');
             return redirect()->back()->withErrors($validator)->withInput();
         }

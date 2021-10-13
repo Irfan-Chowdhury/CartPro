@@ -118,6 +118,8 @@
     <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
     <link href="<?php echo e(asset('public/frontend/css/bootstrap-colorpicker.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
     <!-- Document Title -->
     <title>CartPro - ecommerce HTML Template</title>
     <style>
@@ -776,6 +778,7 @@
     </script>
 
     <script src="<?php echo e(asset('public/frontend/js/bootstrap-colorpicker.js')); ?>"></script>
+
 
     <script>
         let values = [];
