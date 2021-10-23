@@ -31,7 +31,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_method')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->string('discount')->nullable();
-            $table->string('total')->nullable();
+            $table->decimal('total')->nullable();
             // $table->string('currency')->nullable();
             // $table->string('currency_rate')->nullable();
             $table->timestamps();

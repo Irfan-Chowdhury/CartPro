@@ -123,20 +123,10 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="paypal-payment_methods" data-toggle="list" href="#paypal" role="tab" aria-controls="paypal">Paypal</a>
-                        </div>
-                        <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="strip-payment_methods" data-toggle="list" href="#strip" role="tab" aria-controls="strip">Strip</a>
-                        </div>
-                        <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="paytm-payment_methods" data-toggle="list" href="#paytm" role="tab" aria-controls="paytm">Paytm</a>
-                        </div>
-                        <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="cash_on_delivery-payment_methods" data-toggle="list" href="#cash_on_delivery" role="tab" aria-controls="cash_on_delivery">Cash On Delivery</a>
-                        </div>
-                        <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="bank_transfer-payment_methods" data-toggle="list" href="#bank_transfer" role="tab" aria-controls="bank_transfer">Bank Transfer</a>
-                        </div>
-                        <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="check_money_order-payment_methods" data-toggle="list" href="#check_money_order" role="tab" aria-controls="check_money_order">Check Money / Order</a>
                         </div>
                     </div>

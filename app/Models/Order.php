@@ -25,4 +25,13 @@ class Order extends Model
         'currency',
         'currency_rate',
     ];
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+    public function shippingDetails()
+    {
+        return $this->hasOne(Shipping::class);
+    }
 }

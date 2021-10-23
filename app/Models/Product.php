@@ -71,7 +71,8 @@ class Product extends Model
 
     public function baseImage()
     {
-        return $this->hasOne(ProductImage::class,'product_id');
+        return $this->hasOne(ProductImage::class,'product_id')
+                    ->where('type','base');
     }
 
     public function additionalImage()

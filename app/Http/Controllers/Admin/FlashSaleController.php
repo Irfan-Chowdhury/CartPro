@@ -197,7 +197,6 @@ class FlashSaleController extends Controller
         return view('admin.pages.flash_sale.edit',compact('products','local','flashSale'));
     }
 
-    // public function update(Request $request)
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[

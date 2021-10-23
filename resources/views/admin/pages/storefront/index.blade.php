@@ -96,9 +96,10 @@
                             <a class="list-group-item list-group-item-action" id="three_column_full_width_banners-home_page_section" data-toggle="list" href="#three_column_full_width_banners" role="tab" aria-controls="messages">Three Column Full Width Banners</a>
                             <a class="list-group-item list-group-item-action" id="featured_categories-home_page_section" data-toggle="list" href="#featured_categories" role="tab" aria-controls="social">Featured Categories</a>
                             <a class="list-group-item list-group-item-action" id="top_brands-home_page_section" data-toggle="list" href="#top_brands" role="tab" aria-controls="profile">Top Brands</a>
+                            <a class="list-group-item list-group-item-action" id="flash_sale_and_vertical_products-home_page_section" data-toggle="list" href="#flash_sale_and_vertical_products" role="tab" aria-controls="profile">Flash Sale & Vertical Products</a>
                             <a class="list-group-item list-group-item-action" id="product_tabs_one-home_page_section" data-toggle="list" href="#product_tabs_one" role="tab" aria-controls="settings">Product Tabs One</a>
                             <a class="list-group-item list-group-item-action" id="product_tabs_two-home_page_section" data-toggle="list" href="#product_tabs_two" role="tab" aria-controls="settings">Product Tabs Two</a>
-                            {{-- <a class="list-group-item list-group-item-action" id="product_page-home_page_section" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Grid</a> --}} 
+                            {{-- <a class="list-group-item list-group-item-action" id="product_page-home_page_section" data-toggle="list" href="#product_page" role="tab" aria-controls="settings">Product Grid</a> --}}
                         </div>
                     </div>
                 </div>
@@ -114,7 +115,7 @@
 
                     <!-- general -->
                     <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
-                    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
+                    <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-settings-general">
                         @include('admin.pages.storefront.general_setting.general')
                     </div>
 
@@ -213,6 +214,11 @@
                     <!-- DB_ROW_ID-[80-81] => setting[79-80] -->
                     <div class="tab-pane fade" aria-labelledby="top_brands-home_page_section" id="top_brands">
                         @include('admin.pages.storefront.home_page_section.top_brands')
+                    </div>
+
+                    <!-- DB_ROW_ID-[] => setting[] -->
+                    <div class="tab-pane fade show active" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
+                        @include('admin.pages.storefront.home_page_section.flash_sale_and_vertical_products')
                     </div>
 
 
@@ -686,6 +692,38 @@
         e.preventDefault();
         $.ajax({
             url: "{{route('admin.storefront.top_brands.store')}}",
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                let html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
+                }
+                else if(data.success){
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                }
+                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                $('#alert_message').html(html);
+                setTimeout(function() {
+                    $('#alert_message').fadeOut("slow");
+                }, 3000);
+            }
+        });
+    });
+    //Top Brand
+    $('#flashSaleAndVerticalProducts').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{route('admin.storefront.flash_sale_and_vertical_products.store')}}",
             method: "POST",
             data: new FormData(this),
             contentType: false,

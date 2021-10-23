@@ -8,7 +8,7 @@
           <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
             <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                   <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-bell"></i><span class="badge badge-danger"></span>
                   </a>
                   <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default notifications" user="menu">
@@ -16,7 +16,7 @@
                         <a href="" class="btn btn-link">product exceeds alert quantity</a>
                       </li>
                   </ul>
-            </li>
+            </li> --}}
 
             @php
 
@@ -58,13 +58,13 @@
               <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{Auth::user()->username}}</span> <i class="fa fa-angle-down"></i>
               </a>
               <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                  <li>
+                  {{-- <li>
                     <a href=""><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
-                  </li>
+                  </li> --}}
 
-                  <li>
+                  {{-- <li>
                     <a href=""><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
-                  </li>
+                  </li> --}}
 
                   <li>
                     <a href="{{ route('admin.logout') }}"><i class="dripicons-power"></i>

@@ -33,8 +33,8 @@
 
           <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('file.Sales')}}</span></a>
             <ul id="sale" class="collapse list-unstyled">
-              <li id="sale-list-menu"><a href="#">{{__('file.Orders')}}</a></li>
-              <li id="sale-list-menu"><a href="#">{{__('file.Transactions')}}</a></li>
+              <li id="sale-list-menu"><a href="{{route('admin.order.index')}}">{{__('file.Orders')}}</a></li>
+              <li id="sale-list-menu"><a href="">{{__('file.Transactions')}}</a></li>
             </ul>
           </li>
 
@@ -81,9 +81,9 @@
                     @can('store_front')
                         <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('Store Front')}}</a></li>
                     @endcan
-                    @can('slider')
-                        <li><a href="{{route('admin.slider')}}"><i class="fa fa-picture-o"></i><span>{{__('Slider')}}</span></a></li>
-                    @endcan
+                    {{-- @can('slider') --}}
+                        <li><a href="{{route('admin.slider')}}"><span>{{__('Slider')}}</span></a></li>
+                    {{-- @endcan --}}
                 </ul>
             </li>
           @endcan

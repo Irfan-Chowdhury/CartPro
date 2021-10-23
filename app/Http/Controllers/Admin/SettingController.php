@@ -29,9 +29,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Empty_;
+use App\Traits\ENVFilePutContent;
 
 class SettingController extends Controller
 {
+    use ENVFilePutContent;
     // public function __construct()
     // {
     //     $this->middleware('auth:admin');
@@ -119,6 +121,9 @@ class SettingController extends Controller
         $setting_cash_on_delivery  = SettingCashOnDelivery::latest()->first();
         $setting_bank_transfer  = SettingBankTransfer::latest()->first();
         $setting_check_money_order  = SettingCheckMoneyOrder::latest()->first();
+
+
+        // return 'ok';
 
 
         return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','selected_countries','setting_store','selected_currencies',
@@ -379,17 +384,9 @@ class SettingController extends Controller
             }
 
             //Default Currency
-            $path = '.env';
-            if ($request->mailchimp_api_key) {
-                $searchArray = array('MAILCHIMP_APIKEY=' . env('MAILCHIMP_APIKEY'));
-                $replaceArray= array('MAILCHIMP_APIKEY=' . $request->mailchimp_api_key);
-                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            }
-            if ($request->mailchimp_list_id) {
-                $searchArray = array('MAILCHIMP_LIST_ID=' . env('MAILCHIMP_LIST_ID'));
-                $replaceArray= array('MAILCHIMP_LIST_ID=' . $request->mailchimp_list_id);
-                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            }
+            $this->dataWriteInENVFile('MAILCHIMP_APIKEY',$request->mailchimp_api_key);
+            $this->dataWriteInENVFile('MAILCHIMP_LIST_ID',$request->mailchimp_list_id);
+
 
             return response()->json(['success' => __('Data Added successfully.')]);
         }
@@ -582,6 +579,15 @@ class SettingController extends Controller
             $data['secret'] = $request->secret;
 
             $setting_paypal = SettingPaypal::latest()->first();
+
+            // $path = '.env';
+            // $searchArray = array('PAYPAL_SANDBOX_CLIENT_ID=' . env('PAYPAL_SANDBOX_CLIENT_ID'));
+            // $replaceArray= array('PAYPAL_SANDBOX_CLIENT_ID=' . $request->client_id);
+            // file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+
+            $this->dataWriteInENVFile('PAYPAL_SANDBOX_CLIENT_ID',$request->client_id);
+            $this->dataWriteInENVFile('PAYPAL_SANDBOX_CLIENT_SECRET',$request->secret);
+
 
             if (empty($setting_paypal)) {
                 SettingPaypal::create($data);

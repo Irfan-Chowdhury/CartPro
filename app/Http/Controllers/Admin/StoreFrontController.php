@@ -16,6 +16,7 @@ use App\Models\StorefrontImage;
 use App\Models\StorefrontMenu;
 use App\Models\Tag;
 use App\Models\Brand;
+use App\Models\FlashSale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -47,7 +48,7 @@ class StoreFrontController extends Controller
             $query->where('locale',$locale)
             ->orWhere('locale','en')
             ->orderBy('id','DESC');
-        }])->get();
+        },'settingTranslation','settingTranslationDefaultEnglish'])->get();
 
         $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
             $query->where('locale',$locale)
@@ -107,8 +108,10 @@ class StoreFrontController extends Controller
             $array_brands = json_decode($array_brands[0]);
         }
 
+        $flash_sales = FlashSale::with('flashSaleTranslation')->where('is_active',1)->get();
+
         return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
-                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands'));
+                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flash_sales'));
 
 
     }
@@ -681,6 +684,31 @@ class StoreFrontController extends Controller
 
             foreach ($request->all() as $key => $value) {
                 if ($key == 'storefront_product_tabs_2_section_title' || $key == 'storefront_product_tabs_2_section_tab_1_title'|| $key =='storefront_product_tabs_2_section_tab_2_title' || $key =='storefront_product_tabs_2_section_tab_3_title' || $key=='storefront_product_tabs_2_section_tab_4_title') {
+                    $setting = Setting::where('key',$key)->first();
+                    SettingTranslation::UpdateOrCreate(
+                        ['setting_id'=>$setting->id, 'locale' => $locale],
+                        ['value' => $value]
+                    );
+                }
+                else{
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+            }
+            return response()->json(['success'=>'Data Saved Successfully']);
+        }
+    }
+
+
+    public function flashSaleAndVerticalProductsStore(Request $request)
+    {
+        if ($request->ajax()) {
+            if(empty($request->storefront_flash_sale_and_vertical_products_section_enabled)){
+                Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
+            }
+
+            $locale = Session::get('currentLocal');
+            foreach ($request->all() as $key => $value) {
+                if ($key == 'storefront_flash_sale_title'|| $key =='storefront_vertical_product_1_title' || $key =='storefront_vertical_product_2_title' || $key=='storefront_vertical_product_3_title') {
                     $setting = Setting::where('key',$key)->first();
                     SettingTranslation::UpdateOrCreate(
                         ['setting_id'=>$setting->id, 'locale' => $locale],

@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
+use App\Models\FlashSale;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductTranslation;
@@ -46,18 +48,31 @@ class HomeController extends Controller
             ->orderBy('id','DESC')
             ->get();
 
-        // return $top_categories;
 
 
-        // //Product_Tab_One
+        //Product_Tab_One
         $product_tabs_one_titles = [];
         $product_tab_one_section_1 = [];
         $product_tab_one_section_2 = [];
         $product_tab_one_section_3 = [];
         $product_tab_one_section_4 = [];
 
+        //Flash Sale And Vertical
+        $storefront_flash_sale_title = null;
+        $active_campaign_flash_id = null;
+        $flash_sales = [];
+        $storefront_vertical_product_1_title = null;
+        $storefront_vertical_product_2_title = null;
+        $storefront_vertical_product_3_title = null;
+        $vertical_product_1 = [];
+        $vertical_product_2 = [];
+        $vertical_product_3 = [];
+
         $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
                                             ->get();
+                                            // return $category_products;
+
+
 
         foreach ($settings as $key => $setting)
         {
@@ -73,7 +88,6 @@ class HomeController extends Controller
                     // if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
                     //     $product_tab_one_section_1 = [];
                     // }
-
 
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
@@ -111,6 +125,51 @@ class HomeController extends Controller
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
+
+
+            //Flash sale and vertical product
+            if ($setting->key=='storefront_flash_sale_title') {
+                $storefront_flash_sale_title = $setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null;
+            }
+            if ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
+                $active_campaign_flash_id = $setting->plain_value;
+            }
+
+            if ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
+                if ($settings[$key-1]->plain_value=='category_products') {
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $vertical_product_1[] =$category_products[$key2];
+                        }
+                    }
+                }
+                $storefront_vertical_product_1_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+            }
+            if ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
+                if ($settings[$key-1]->plain_value=='category_products') {
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $vertical_product_2[] =$category_products[$key2];
+                        }
+                    }
+                }
+                $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+            }
+            if ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
+                if ($settings[$key-1]->plain_value=='category_products') {
+                    foreach ($category_products as $key2 => $value) {
+                        if ($value->category_id==$setting->plain_value) {
+                            $vertical_product_3[] =$category_products[$key2];
+                        }
+                    }
+                }
+                $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+            }
+        }
+
+
+        if ($active_campaign_flash_id) {
+            $flash_sales = FlashSale::with('flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage','flashSaleProducts.product.categoryProduct')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
 
         //Slider
@@ -137,24 +196,19 @@ class HomeController extends Controller
                     ->get();
         });
 
+        $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage')->select('product_id')->groupBy('product_id')->selectRaw('SUM(qty) AS qty_of_sold')->orderBy('qty_of_sold','DESC')->skip(0)->take(10)->get();
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
-                                                'brands','product_tab_one_section_1','product_tab_one_section_2','product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles'));
+                                                'brands','product_tab_one_section_1','product_tab_one_section_2',
+                                                'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
+                                                'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
+                                                'storefront_vertical_product_2_title','storefront_vertical_product_3_title',
+                                                'vertical_product_1','vertical_product_2','vertical_product_3','order_details'));
     }
 
 
     public function product_details($product_slug, $category_id)
     {
-        // return Cart::content();
-        // return Cart::get('51b99bc12b2fd4c93cb314590b9f7182')->subtotal;
-        // return Cart::destroy();
-
-        // // $data = [];
-        // foreach ($carts as $key => $value) {
-        //     $data = $value->options->image;
-        // }
-        // return $data;
-
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')

@@ -1,4 +1,4 @@
-<h4 class="mt-3 text-bold">{{__('Tab - 1')}}</h4><br>
+                    <h4 class="mt-3 text-bold">{{__('Tab - 1')}}</h4><br>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>Title</b></label>
                         <div class="col-sm-8">

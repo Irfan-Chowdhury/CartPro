@@ -82,6 +82,3 @@
     </div>
 </div>
 
-<script>
-
-</script>

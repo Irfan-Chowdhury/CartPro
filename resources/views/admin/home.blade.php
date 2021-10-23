@@ -11,7 +11,16 @@
                   <h1 class="card-title">Total Sales</h1>
                   <div class="d-flex">
                     <div class="p-2"><h2><i class="fa fa-money pull-left"></i></h2></div>
-                    <div class="ml-auto p-2"><h2>$1,242,134.70</h2></div>
+                    <div class="ml-auto p-2">
+                        <h2>
+                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                {{ number_format($orders->where('order_status','completed')->sum('total'), 2)}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                            @else
+                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($orders->where('order_status','completed')->sum('total'), 2)}}
+                            @endif
+
+                        </h2>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -22,7 +31,7 @@
                     <h1 class="card-title">Total Orders</h1>
                     <div class="d-flex">
                       <div class="p-2"><h2><i class="fa fa-cubes"></i></h2></div>
-                      <div class="ml-auto p-2"><h2>125</h2></div>
+                      <div class="ml-auto p-2"><h2>{{count($orders)}}</h2></div>
                     </div>
                   </div>
                 </div>
@@ -33,7 +42,7 @@
                     <h1 class="card-title">Total Products</h1>
                     <div class="d-flex">
                       <div class="p-2"><h2><i class="fa fa-cubes"></i></h2></div>
-                      <div class="ml-auto p-2"><h2>125</h2></div>
+                      <div class="ml-auto p-2"><h2>{{count($products)}}</h2></div>
                     </div>
                   </div>
                 </div>
@@ -41,10 +50,10 @@
             <div class="col-sm-6">
                 <div class="card">
                   <div class="card-body">
-                    <h1 class="card-title">Total Customers</h1>
+                    <h1 class="card-title">Total Register Customers</h1>
                     <div class="d-flex">
                       <div class="p-2"><h2><i class="fa fa-users pull-left"></i></h2></div>
-                      <div class="ml-auto p-2"><h2>162</h2></div>
+                      <div class="ml-auto p-2"><h2>{{count($customers)}}</h2></div>
                     </div>
                   </div>
                 </div>
@@ -63,24 +72,21 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th>123</th>
-                            <td>Mark</td>
-                            <td>Pending</td>
-                            <td>$13,000.00</td>
-                          </tr>
-                          <tr>
-                            <th>234</th>
-                            <td>Jacob</td>
-                            <td>Pending</td>
-                            <td>$15,000.00</td>
-                          </tr>
-                          <tr>
-                            <th>355</th>
-                            <td>Larry</td>
-                            <td>Pending</td>
-                            <td>$12,000.00</td>
-                          </tr>
+                            @forelse ($orders as $item)
+                                <tr>
+                                    <th>{{$item->id}}</th>
+                                    <td>{{$item->billing_first_name.' '.$item->billing_last_name}}</td>
+                                    <td>{{$item->order_status}}</td>
+                                    <td>
+                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                            {{ number_format($item->total,'2')}}  {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        @else
+                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($item->total,'2')}}
+                                        @endif
+                                    </td>
+                              </tr>
+                            @empty
+                            @endforelse
                         </tbody>
                       </table>
                   </div>

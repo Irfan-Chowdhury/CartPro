@@ -73,7 +73,6 @@
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('Description')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
-                                                                {{-- <textarea name="description" id="description" class="form-control text-editor"></textarea> --}}
                                                                 <textarea name="description" id="description" class="form-control text-editor"></textarea>
                                                                 @error('description')
                                                                     <div class="text-danger">{{ $message }}</div>
@@ -94,10 +93,9 @@
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories</b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Categories <span class="text-danger">*</span> </b></label>
                                                             <div class="col-sm-8">
-                                                                <select name="category_id[]" id="categoryId" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                {{-- <select name="category_id[]" id="categoryId" class="form-control js-example-basic-multiple" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'> --}}
+                                                                <select name="category_id[]" id="categoryId" class="form-control selectpicker @error('category_id') is-invalid @enderror" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                                                     @foreach ($categories as $item)
                                                                         @if ($item->categoryTranslation->count()>0)
                                                                             @foreach ($item->categoryTranslation as $key => $value)
@@ -114,6 +112,9 @@
                                                                         @endif
                                                                     @endforeach
                                                                 </select>
+                                                                @error('category_id')
+                                                                    <div class="text-danger">{{ $message }}</div>
+                                                                @enderror
                                                             </div>
                                                         </div>
 
@@ -125,21 +126,6 @@
                                                                         <option value="{{$tax->id}}">{{$tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null}}</option>
                                                                     @empty
                                                                     @endforelse
-                                                                    {{-- @foreach ($taxes as $item)
-                                                                        @if ($item->categoryTranslation->count()>0)
-                                                                            @foreach ($item->categoryTranslation as $key => $value)
-                                                                                @if ($key<1)
-                                                                                    @if ($value->local==$local)
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @elseif($value->local=='en')
-                                                                                        <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            <option value="">{{__('NULL')}}</option>
-                                                                        @endif
-                                                                    @endforeach     --}}
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -166,16 +152,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
-                                                        {{-- <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Virtual</b></label>
-                                                            <div class="col-sm-8">
-                                                                <div class="form-group form-check">
-                                                                    <input type="checkbox" class="form-check-input" name="virtual" value="1" id="isActive">
-                                                                    <span>{{__("The product won't be shipped")}}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
 
                                                         <div class="form-group row">
                                                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
@@ -272,7 +248,7 @@
                                                     <div class="col-md-12">
 
                                                         <div class="form-group row">
-                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('SKU')}} </b></label>
+                                                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('SKU')}} <span class="text-danger">*</span></b></label>
                                                             <div class="col-sm-8">
                                                                 <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" id="inputEmail3" placeholder="Type SKU" >
                                                                 @error('sku')
@@ -319,55 +295,6 @@
                                         </div>
                                     </div>
                                     <!--/ Inventory-->
-
-                                    <!--Variants-->
-                                    {{-- <div class="tab-pane fade show " aria-labelledby="product-variant" id="variant" role="tabpanel">
-                                        <div class="card">
-                                            <h4 class="card-header"><b>Variants</b></h4>
-                                            <hr>
-                                            <div class="card-body">
-                                                <div class="variants">
-                                                    <div class="row">
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Size')}} *</label>
-                                                            <input type="text" name="variant_size[]" required class="form-control" placeholder="{{__('XS, S, M ...')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Color')}} *</label>
-                                                            <input type="text" name="variant_color[]"  required class="form-control" placeholder="{{__('Color')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('SKU')}} *</label>
-                                                            <input type="text" name="variant_sku[]" required class="form-control" placeholder="{{__('SKU')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Quantity')}} *</label>
-                                                            <input type="text" name="variant_qty[]"  required class="form-control" placeholder="{{__('Quantity')}}">
-                                                        </div>
-
-                                                        <div class="col-2 form-group">
-                                                            <label>{{__('Price')}}</label>
-                                                            <input type="text" name="variant_price[]" required class="form-control" placeholder="{{__('Price')}}">
-                                                        </div>
-
-                                                        <div class="col-2">
-                                                            <label>Delete</label><br>
-                                                            <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> Add More</span>
-                                                <br><br>
-                                                <div class="form-group row">
-                                                    <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-                                    <!--Variants-->
 
                                     <!-- Images -->
                                     <div class="tab-pane fade show" aria-labelledby="product-images" id="images" role="tabpanel">

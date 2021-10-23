@@ -4,14 +4,13 @@
 <section>
     <div class="container-fluid"><span id="form_result"></span></div>
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">Flash Sale Create</h4>
+        <h4 class="font-weight-bold mt-3">Flash Sale Edit</h4>
         <div id="success_alert" role="alert"></div>
         <br>
     </div>
 
     <div class="container">
         <form action="{{route('admin.flash_sale.update',$flashSale->id)}}" id="submitForm" method="POST">
-        {{-- <form action="{{route('admin.flash_sale.update')}}" id="submitForm" method="POST"> --}}
             @csrf
             <input type="hidden" name="flash_sale_id" value="{{$flashSale->id}}">
 

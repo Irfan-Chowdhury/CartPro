@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,14 +39,17 @@ class AdminController extends Controller
      */
     public function index()
     {
-        // echo "string";
         return view('admin.home');
     }
     public function dashboard()
     {
         App::setLocale(Session::get('currentLocal'));
 
-        return view('admin.home');
+        $orders = Order::get();
+        $products = Product::where('is_active',1)->get();
+        $customers = Customer::all();
+
+        return view('admin.home',compact('orders','products','customers'));
     }
 
 

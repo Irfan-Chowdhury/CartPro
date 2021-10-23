@@ -25,7 +25,7 @@
         "spatie/laravel-permission": "^4.2",
         "srmklive/paypal": "^3.0",
         "stichoza/google-translate-php": "^4.1",
-        "stripe/stripe-php": "^7.64",
+        "stripe/stripe-php": "^7.100",
         "yajra/laravel-datatables": "^1.5",
         "yajra/laravel-datatables-oracle": "~9.0"
     },

@@ -705,6 +705,99 @@ class SettingSeeder extends Seeder
                 'key' => 'storefront_slider_banner_3_open_in_new_window',
                 'is_translatable' => 0,
             ),
+
+            //-----Flash Sale and Vertical Products ----
+            array(
+                'id' => 131,
+                'key' => 'storefront_flash_sale_and_vertical_products_section_enabled',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 132,
+                'key' => 'storefront_flash_sale_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 133,
+                'key' => 'storefront_flash_sale_active_campaign_flash_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 134,
+                'key' => 'storefront_vertical_product_1_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 135,
+                'key' => 'storefront_vertical_product_1_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 136,
+                'key' => 'storefront_vertical_product_1_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 137,
+                'key' => 'storefront_vertical_product_1_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 138,
+                'key' => 'storefront_vertical_product_1_products_limit',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 139,
+                'key' => 'storefront_vertical_product_2_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 140,
+                'key' => 'storefront_vertical_product_2_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 141,
+                'key' => 'storefront_vertical_product_2_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 142,
+                'key' => 'storefront_vertical_product_2_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 143,
+                'key' => 'storefront_vertical_product_2_products_limit',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 144,
+                'key' => 'storefront_vertical_product_3_title',
+                'is_translatable' => 1,
+            ),
+            array(
+                'id' => 145,
+                'key' => 'storefront_vertical_product_3_type',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 146,
+                'key' => 'storefront_vertical_product_3_category_id',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 147,
+                'key' => 'storefront_vertical_product_3_products',
+                'is_translatable' => 0,
+            ),
+            array(
+                'id' => 148,
+                'key' => 'storefront_vertical_product_3_products_limit',
+                'is_translatable' => 0,
+            ),
+
         );
 
         Setting::insert($settings);

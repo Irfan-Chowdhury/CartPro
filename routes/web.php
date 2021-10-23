@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\App;
@@ -56,8 +57,6 @@ Route::post('/customer/login', 'Auth\LoginController@customerLogin')->name('cust
 
 Route::group(['namespace'=>'Frontend'], function (){
 
-        // Route::get('/register','RegisterController@login')->name('cartpro.login');
-
         Route::get('/','HomeController@index')->name('cartpro.home');
         Route::get('product/{product_slug}/{category_id}','HomeController@product_details')->name('cartpro.product_details');
         Route::get('data_ajax_search','HomeController@dataAjaxSearch')->name('cartpro.data_ajax_search');
@@ -75,13 +74,24 @@ Route::group(['namespace'=>'Frontend'], function (){
             Route::get('/shipping_charge', 'CartController@shippingCharge')->name('cart.shipping_charge');
             Route::post('/checkout', 'CartController@checkout')->name('cart.checkout');
             Route::get('/apply_coupon', 'CartController@applyCoupon')->name('cart.apply_coupon');
+
+            Route::get('/country_wise_tax', 'CartController@countryWiseTax')->name('cart.country_wise_tax');
         });
+
+
 
         Route::post('newslatter/store','HomeController@newslatterStore')->name('cartpro.newslatter_store');
 
+        //payment -Paypal
         Route::get('order-store','OrderController@orderStore')->name('order.store');
 
+        //payment -Stripe
+        Route::post('/stripe/payment','OrderController@handlePost')->name('stripe.payment');
 
+        //Wishlist
+        Route::get('/wishlist','WishlistController@index')->name('wishlist.index');
+        Route::get('/wishlist/add','WishlistController@addToWishlist')->name('wishlist.add');
+        Route::get('/wishlist/remove','WishlistController@removeToWishlist')->name('wishlist.remove');
 });
 
 
@@ -196,6 +206,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/active','ProductController@active')->name('admin.products.active');
             Route::get('/inactive','ProductController@inactive')->name('admin.products.inactive');
             Route::get('/bulk_action','ProductController@bulkAction')->name('admin.products.bulk_action');
+        });
+
+        //Sales
+        Route::group(['prefix' => 'order'], function () {
+            Route::get('/','OrderController@index')->name('admin.order.index');
+            Route::get('/details/{id}','OrderController@orderDetails')->name('admin.order.details');
+            Route::get('/status','OrderController@orderStatus')->name('admin.order.status');
         });
 
         //Flash Sale
@@ -327,6 +344,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/three_column_banners/store','StoreFrontController@threeColumnBannersStore')->name('admin.storefront.three_column_banners.store');
             Route::post('/three_column_full_width_banners/store','StoreFrontController@threeColumnFllWidthBannersStore')->name('admin.storefront.three_column_full_width_banners.store');
             Route::post('/top_brands/store','StoreFrontController@topBrandsStore')->name('admin.storefront.top_brands.store');
+            Route::post('/flash_sale_and_vertical_products/store','StoreFrontController@flashSaleAndVerticalProductsStore')->name('admin.storefront.flash_sale_and_vertical_products.store');
+
             Route::post('/product_tab_one/store','StoreFrontController@productTabsOneStore')->name('admin.storefront.product_tab_one.store');
             Route::post('/product_tab_two/store','StoreFrontController@productTabsTwoStore')->name('admin.storefront.product_tab_two.store');
         });

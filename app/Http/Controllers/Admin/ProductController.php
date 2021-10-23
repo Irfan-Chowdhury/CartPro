@@ -183,21 +183,21 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'product_name'=> 'required|unique:product_translations',
+            'description' => 'required',
+            'price'       => 'required',
+            'sku'         => 'required|unique:products',
+            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'category_id'  => 'required',
+        ]);
 
-        // $validator = Validator::make($request->all(),[
-        //     'product_name'=> 'required|unique:product_translations',
-        //     'description' => 'required',
-        //     'price'       => 'required',
-        //     'sku'       => 'unique:products',
-        //     'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-        //     //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
-        // ]);
+        if ($validator->fails()){
+            session()->flash('type','danger');
+            session()->flash('message','Something Wrong');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        // if ($validator->fails()){
-        //     session()->flash('type','danger');
-        //     session()->flash('message','Something Wrong');
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // }
         $local = Session::get('currentLocal');
 
         if (auth()->user()->can('product-store'))
@@ -206,7 +206,8 @@ class ProductController extends Controller
             $product->brand_id      = $request->brand_id;
             $product->tax_id        = $request->tax_id;
             $product->slug          = $this->slug($request->product_name);
-            $product->price         = number_format((float)$request->price, env('FORMAT_NUMBER'), '.', '');
+            // $product->price         = number_format((float)$request->price, env('FORMAT_NUMBER'), '.', '');
+            $product->price         = $request->price;
 
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
             $product->special_price_type = $request->special_price_type;
@@ -274,7 +275,8 @@ class ProductController extends Controller
 
             //-----------------Product-Attribute--------------
 
-            if (!empty($request->attribute_id)) {
+            if ($request->attribute_id[0]) {
+                // ProductAttributeValue::where('product_id',$product->id)->delete();
                 $attributeArrayIds =  $request->attribute_id;//Array
                 $attributeValueIds = $request->attribute_value_id; //Array
                 for ($i=0; $i <count($attributeArrayIds) ; $i++) {
@@ -304,11 +306,6 @@ class ProductController extends Controller
         $local = Session::get('currentLocal');
         App::setLocale($local);
 
-        // $products = Product::with('baseImage','productTranslation','productTranslationEnglish')
-        // ->orderBy('is_active','DESC')
-        // ->orderBy('id','DESC')
-        // ->get();
-
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')
@@ -321,16 +318,6 @@ class ProductController extends Controller
                     ])
                     ->where('id',$id)
                     ->first();
-
-        // return $product->productAttributeValues;
-
-        // $data = [];
-        // $test = $product->productAttributeValues;
-        // // return $test;
-        // foreach ($product->productAttributeValues as $item) {
-        //     $data[] = $item->attributeTranslation->attribute_name;
-        // }
-        // return  $data;
 
 
         $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
@@ -364,12 +351,6 @@ class ProductController extends Controller
                         ->orderBy('id','DESC')
                         ->get();
 
-        // return $attribute_values[0]->attrValueTranslation->value_name;
-
-        // return $attributes[2]->attributeValues;
-        // foreach ($product->productAttributeValues as $value) {
-        //     $attribute_value_ids =
-        // }
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -393,15 +374,13 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // return $request->attribute_value_id;
-
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
             'price'       => 'required',
-            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            //'multiple_images'=> 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            'sku'=> 'nullable|unique:products,sku,'.$id,
+            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
+            'category_id'  => 'required',
+            'sku'=> 'required|unique:products,sku,'.$id,
         ]);
 
         if ($validator->fails()){
@@ -475,7 +454,6 @@ class ProductController extends Controller
                     $productImage->type  = 'base';
                     $productImage->save();
                 }
-
             }
 
 
@@ -513,9 +491,10 @@ class ProductController extends Controller
                 $product->tags()->sync($tagArrayIds);
             }
 
-            //-----------------Product-Attribute--------------
+            //-----------------Product-Attribute-------------
 
-            if (!empty($request->attribute_id)) {
+
+            if ($request->attribute_id[0]) {
                 ProductAttributeValue::where('product_id',$product->id)->delete();
                 $attributeArrayIds =  $request->attribute_id;//Array
                 $attributeValueIds = $request->attribute_value_id; //Array
@@ -523,7 +502,6 @@ class ProductController extends Controller
                     $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
                 }
             }
-
             session()->flash('type','success');
             session()->flash('message','Data Updated Successfully.');
 
@@ -566,7 +544,9 @@ class ProductController extends Controller
         $location = public_path($directory.$img);
         if ($type=='product') {
             Image::make($image)->encode('webp', 60)->resize(720,660)->save($location);
-        }else {
+            // Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
+        }
+        else {
             Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
         }
         $imageUrl = $directory.$img;

@@ -17,11 +17,6 @@ class PageController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('page-view'))
@@ -83,7 +78,6 @@ class PageController extends Controller
             return view('admin.pages.page.index');
         }
         return abort('403', __('You are not authorized'));
-
     }
 
     public function store(Request $request)
