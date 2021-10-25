@@ -138,7 +138,6 @@
     $('.orderStatus').on('click',function(){
         var order_status = $(this).val();
         var order_id = $('#order_id').val();
-
         $.ajax({
             url: "{{ route('admin.order.status') }}",
                 type: "GET",
@@ -153,7 +152,6 @@
                     }
                 }
         });
-        //
     });
 </script>
 

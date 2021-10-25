@@ -70,7 +70,17 @@ class PageController extends Controller
                                 $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
                             }
                         }
+
+                        // $domain_name = $_SERVER['SERVER_NAME'];
+                        // $page_url =  'https://'.$domain_name.'/page/'.$row->slug;
+                        // $actionBtn .= '<button type="button" class="copy_to_clipboard ml-2 btn btn-outline-dark btn-sm" data-url="'.$page_url.'">Copy To Clipboard</button>';
+
                         return $actionBtn;
+                    })
+                    ->addColumn('copy_url', function ($row)
+                    {
+                        $domain_name = $_SERVER['SERVER_NAME'];
+                        return 'https://'.$domain_name.'/page/'.$row->slug;
                     })
                     ->rawColumns(['action'])
                     ->make(true);

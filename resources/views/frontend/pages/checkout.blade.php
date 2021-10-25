@@ -578,7 +578,6 @@ $(function(){
 
     //----------- Stripe ----------
     $('#stripe').on('click',function(event){
-
         $('#payNowPaypal').hide();
         $('#paypal-button-container').hide();
         $('#stripeContent').show();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Page extends Model
 {
@@ -12,4 +13,12 @@ class Page extends Model
     {
     	return $this->hasMany(PageTranslation::class,'page_id');
     }
+
+    public function pageTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(PageTranslation::class,'page_id')
+                    ->where('locale',$locale);
+    }
+
 }

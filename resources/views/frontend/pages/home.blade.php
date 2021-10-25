@@ -1,6 +1,4 @@
 @extends('frontend.layouts.master')
-
-
 @section('frontend_content')
 
 <!--Home Banner starts -->
@@ -970,12 +968,11 @@
                                     </div>
                                 </div>
                                 <div class="product-details">
-                                    {{-- <a class="product-category" href="#">Electronics</a> --}}
                                     <a class="product-category" href="{{route('cartpro.category_wise_products',$item->product->categoryProduct[0]->category->slug)}}">
                                         {{$item->product->categoryProduct[0]->category->catTranslation->category_name ?? NULL}}
                                     </a>
                                     <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                        {{$item->product->productTranslation->product_name}}
+                                        {{$item->product->productTranslation->product_name ?? null}}
                                     </a>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>

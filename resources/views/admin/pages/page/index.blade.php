@@ -29,6 +29,7 @@
         		    <th class="not-exported"></th>
         		    <th scope="col">{{trans('Page Name')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
+        		    <th scope="col">{{__('URL Link')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
     	  	</thead>
@@ -105,6 +106,10 @@
                             return "<span class='p-2 badge badge-danger'>Inactive</span>";
                         }
                     }
+                },
+                {
+                    data: 'copy_url',
+                    name: 'copy_url',
                 },
                 {
                     data: 'action',
@@ -396,9 +401,6 @@
         }
     });
 
-
-
-
     //For Editor
     tinymce.init({
         selector: '.text-editor',
@@ -466,7 +468,11 @@
         branding: false
     });
 
-
+    // $(document).on('click', '.copy_to_clipboard', function () {
+    //     alert("Success");
+    //     document.execCommand("copy");
+    //     console.log('ok');
+    // });
 </script>
 
 @endsection

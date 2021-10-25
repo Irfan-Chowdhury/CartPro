@@ -60,7 +60,6 @@
                             <select name="category" class="selectpicker" onchange="location = this.value;">
                                 <option value="" selected="">All Categories</option>
                                 <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    
                                     <option value="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <?php endif; ?>
@@ -75,16 +74,36 @@
                             <li class="d-lg-none">
                                 <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
                             </li>
-                            <li>
-                                <a href="<?php echo e(route('customer_login_form')); ?>"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
-                            </li>
 
-                            <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
-                                <a href="<?php echo e(route('wishlist.index')); ?>">
-                                    <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
-                                </a>
-                                <span class="badge badge-light wishlist_count"><?php echo e($total_wishlist); ?></span>
-                            </li>
+                            <?php if(auth()->guard()->check()): ?>
+                                <li>
+                                    <a href="<?php echo e(route('user_account')); ?>"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Account"></i></a>
+                                </li>
+                            <?php else: ?>
+                                <li>
+                                    <a href="<?php echo e(route('customer_login_form')); ?>"><i class="las la-user-lock" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
+                                </li>
+                            <?php endif; ?>
+
+
+
+
+                            <?php if(auth()->guard()->check()): ?>
+                                <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
+                                    <a href="<?php echo e(route('wishlist.index')); ?>">
+                                        <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
+                                    </a>
+                                    <span class="badge badge-light wishlist_count"><?php echo e($total_wishlist); ?></span>
+                                </li>
+                            <?php else: ?>
+                                <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
+                                    <a href="#">
+                                        <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
+                                    </a>
+                                    <span class="badge badge-light">0</span>
+                                </li>
+                            <?php endif; ?>
+
 
                             <li class="cart__menu">
                                 <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
@@ -149,7 +168,7 @@
                                         <?php if($menu!=NULL): ?>
                                             <?php $__empty_1 = true; $__currentLoopData = $menu->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu_item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <?php if($menu_item->child->isNotEmpty()): ?>
-                                                    <li class="has-dropdown"><a href="#"><?php echo e($menu_item->label); ?></a>
+                                                    <li class="has-dropdown"><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a>
                                                         <ul class="dropdown">
                                                             <?php $__currentLoopData = $menu_item->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 

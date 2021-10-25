@@ -86,7 +86,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
             if ((auth()->user()->user_type == 0)){
-                return redirect()->route('cartpro.home');
+                return redirect()->route('user_account');
             }
         }
 

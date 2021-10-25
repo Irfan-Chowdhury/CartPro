@@ -12,10 +12,12 @@ use App\Models\CurrencyRate;
 use App\Models\FlashSale;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductTranslation;
+use App\Models\Review;
 use App\Models\Setting;
 use App\Models\SettingGeneral;
 use App\Models\SettingNewsletter;
@@ -28,6 +30,7 @@ use Illuminate\Support\Facades\Session;
 // use Cart;
 // use Gloudemans\Cart;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\Environment\Console;
@@ -223,10 +226,6 @@ class HomeController extends Controller
                     ->where('slug',$product_slug)
                     ->first();
 
-        //$productAttributeValue = ProductAttributeValue::where('product_id',$product->id)->groupBy(2)->get();
-
-        // return $product->productAttributeValues;
-
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
@@ -244,7 +243,30 @@ class HomeController extends Controller
             $product_cart_qty = null;
         }
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute'));
+        if (Auth::check()) {
+            $user_and_product_exists = DB::table('orders')
+            ->join('order_details','order_details.order_id','orders.id')
+            ->where('orders.user_id',Auth::user()->id)
+            ->where('order_details.product_id',$product->id)
+            ->exists();
+        }else {
+            $user_and_product_exists = null;
+        }
+
+        $reviews = DB::table('reviews')
+            ->join('users','users.id','reviews.user_id')
+            ->where('product_id',$product->id)
+            ->select('users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.created_at')
+            ->get();
+        if (empty($reviews)) {
+            $reviews =[];
+        }
+
+        // return $reviews;
+
+
+
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews'));
     }
 
     public function dataAjaxSearch(Request $request)
@@ -332,6 +354,18 @@ class HomeController extends Controller
         }
 
         return $slider_banners;
+    }
+
+    public function reviewStore(Request $request)
+    {
+        $review = new Review();
+        $review->user_id = Auth::user()->id;
+        $review->product_id = $request->product_id;
+        $review->comment = $request->comment;
+        $review->rating = $request->rating;
+        $review->save();
+
+        return redirect()->back();
     }
 }
 

@@ -115,7 +115,7 @@
 
                     <!-- general -->
                     <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
-                    <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-settings-general">
+                    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
                         @include('admin.pages.storefront.general_setting.general')
                     </div>
 
@@ -217,7 +217,7 @@
                     </div>
 
                     <!-- DB_ROW_ID-[] => setting[] -->
-                    <div class="tab-pane fade show active" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
+                    <div class="tab-pane fade" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
                         @include('admin.pages.storefront.home_page_section.flash_sale_and_vertical_products')
                     </div>
 

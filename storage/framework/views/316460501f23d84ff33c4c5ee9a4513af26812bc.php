@@ -572,7 +572,7 @@ $(function(){
 
                                     payment_method:'Paid By Paypal',
                                     coupon_value:coupon_value,
-                                    total:'0.02',
+                                    total:'total',
                                     payment_id:details.id,
                                 },
                                 success: function (data) {
@@ -591,7 +591,6 @@ $(function(){
 
     //----------- Stripe ----------
     $('#stripe').on('click',function(event){
-
         $('#payNowPaypal').hide();
         $('#paypal-button-container').hide();
         $('#stripeContent').show();

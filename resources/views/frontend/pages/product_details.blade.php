@@ -136,7 +136,6 @@
                                         </span>
                                     </div>
                                     <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                                    {{-- <button class="button button-icon style4 sm add_to_wishlist" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button> --}}
                                     <a>
                                         <button class="button button-icon style4 sm" id="addToWishList" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
                                         {{-- <span class="ti-heart add_to_wishlist" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span> --}}
@@ -175,7 +174,7 @@
                             <a class="nav-link" id="branding-tab_two" data-bs-toggle="tab" href="#shipping" role="tab" aria-selected="false">Shipping</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="graphic-design-tab" data-bs-toggle="tab" href="#comments" role="tab" aria-selected="false">Reviews <span class="text-grey"> (3)</span></a>
+                            <a class="nav-link" id="graphic-design-tab" data-bs-toggle="tab" href="#comments" role="tab" aria-selected="false">Reviews <span class="text-grey"> ({{count($reviews)}})</span></a>
                         </li>
                     </ul>
                 </div>
@@ -269,109 +268,107 @@
                 <div class="tab-pane fade" id="comments" role="tabpanel">
                     <div class="row">
                         <div class="col-md-6">
-                            <h3 class="h5">3 reviews for White Striped top</h3>
+                            <h3 class="h5"> {{count($reviews)}} reviews for White Striped top</h3>
                             <div class="item-reviews">
-                                <div class="row mar-tb-30">
-                                    <div class="col-md-2">
-                                        <div class="reviewer-img">
-                                            <img src="images/clients/client_1.jpg" alt="...">
+
+                                @foreach ($reviews as $item)
+                                    <div class="row mar-tb-30 mt-3">
+                                        <div class="col-md-2">
+                                            <div class="reviewer-img">
+                                                @if ($item->image==null)
+                                                    <img src="{{asset('public/images/user_default_image.jpg')}}">
+                                                @else
+                                                    <img src="{{asset('public/'.$item->image)}}">
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <ul class="product-rating">
+                                                @php
+                                                    for ($i=1; $i <=5 ; $i++){
+                                                        if ($i<=$item->rating){  @endphp
+                                                            <li><i class="ion-android-star"></i></li>
+                                                @php
+                                                        }else { @endphp
+                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                @php        }
+                                                    }
+                                                @endphp
+                                            </ul>
+                                            <h5 class="reviewer-text">{{$item->first_name.' '.$item->last_name}}- <span> {{date('d M, Y',strtotime($item->created_at))}}</span></h5>
+                                            <p>{{$item->comment}}</p>
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <ul class="product-rating">
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star-half"></i></li>
-                                        </ul>
-                                        <h5 class="reviewer-text">Jhon Conor- <span> Dec 25th,2018</span></h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae ipsum perspiciatis, impedit laboriosam commodi in excepturi porro aut tempore facilis.</p>
-                                    </div>
-                                </div>
-                                <div class="row mar-tb-30">
-                                    <div class="col-md-2">
-                                        <div class="reviewer-img">
-                                            <img src="images/clients/client_2.jpg" alt="...">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <ul class="product-rating">
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star-half"></i></li>
-                                        </ul>
-                                        <h5 class="reviewer-text">Jhon Conor- <span> Dec 25th,2018</span></h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae ipsum perspiciatis, impedit laboriosam commodi in excepturi porro aut tempore facilis.</p>
-                                    </div>
-                                </div>
-                                <div class="row mar-tb-30">
-                                    <div class="col-md-2">
-                                        <div class="reviewer-img">
-                                            <img src="images/clients/client_3.jpg" alt="...">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <ul class="product-rating">
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star"></i></li>
-                                            <li><i class="ion-android-star-half"></i></li>
-                                        </ul>
-                                        <h5 class="reviewer-text">Jhon Conor- <span> Dec 25th,2018</span></h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae ipsum perspiciatis, impedit laboriosam commodi in excepturi porro aut tempore facilis.</p>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="comment-respond">
                                 <h3 class="h5">Write your Review</h3>
                                 <span>Your email address will not be published. Required fields are marked with *</span>
 
-                                <form action="#" method="post" class="row contact-form mar-top-20">
+                                <form action="{{route('review.store')}}" method="post" class="row contact-form mar-top-20">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <input type="hidden" name="rating" id="rating" value="0">
+
                                     <div class="col-sm-12">
                                         <label >Your Rating</label>
                                         <ul class="product-rating">
-                                            <li><i class="ion-ios-star-outline"></i></li>
-                                            <li><i class="ion-ios-star-outline"></i></li>
-                                            <li><i class="ion-ios-star-outline"></i></li>
-                                            <li><i class="ion-ios-star-outline"></i></li>
-                                            <li><i class="ion-ios-star-outline"></i></li>
+                                            <li><i class="ion-ios-star-outline" id="star_1"></i></li>
+                                            <li><i class="ion-ios-star-outline" id="star_2"></i></li>
+                                            <li><i class="ion-ios-star-outline" id="star_3"></i></li>
+                                            <li><i class="ion-ios-star-outline" id="star_4"></i></li>
+                                            <li><i class="ion-ios-star-outline" id="star_5"></i></li>
                                         </ul>
                                     </div>
                                     <div class="col-sm-12 text-area">
-                                        <textarea id="comment" class="form-control" placeholder="Your Review....*" name="comment" required></textarea>
+                                        <textarea id="comment" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Your Review....*" name="comment" required></textarea>
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="author" class="form-control" placeholder="Name*" name="author" type="text" required>
+                                        <input id="author" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Name*" name="author" type="text" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="subject" class="form-control" placeholder="Email*" name="email" type="email" required>
+                                        <input id="subject" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Email*" name="email" type="email" required>
                                     </div>
 
-                                    <div class="col-sm-12 mar-top-20">
-                                        <button class="button style1" name="submit" type="submit" id="submit">Submit</button>
+                                    @if(!$user_and_product_exists)
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                            </symbol>
+                                        </svg>
+                                        <div class="m-3 alert alert-danger d-flex align-items-center" role="alert">
+                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                            <div>
+                                                {{__('file.Please login first and buy this product')}}
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-sm-12 mar-top-20 mt-3">
+                                        <button class="button style1" @if(!$user_and_product_exists) disabled title="Please login first" @endif  name="submit" type="submit" id="submit">Submit</button>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
             </div>
         </div>
     </section>
-    <div class="container text-center mar-top-20">
+    {{-- <div class="container text-center mar-top-20">
         <div class="item-categories"><span>Categories:</span> <a href="#">Men</a>, <a href="#">Jacket</a> ,<a href="#">Leather</a></div>
         <div class="item-tags"><span>Tags:</span> <a href="#">Men’s Clothing</a>, <a href="#">Clothing</a>, <a href="#">Fashion</a></div>
-    </div>
+    </div> --}}
     <!--content wrapper ends-->
     <!--Product area starts-->
-    <section class="product-tab-section">
+    {{-- <section class="product-tab-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
@@ -1037,7 +1034,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!--product area ends-->
 
     @endsection
@@ -1082,5 +1079,49 @@
                 }
             })
         });
+
+        $('#star_1').on('click',function(){
+            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#rating').val(1);
+
+            $('#star_2').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_3').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+        })
+        $('#star_2').on('click',function(){
+            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#rating').val(2);
+            $('#star_3').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+        })
+        $('#star_3').on('click',function(){
+            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#rating').val(3);
+            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+        })
+        $('#star_4').on('click',function(){
+            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_4').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#rating').val(4);
+            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
+        })
+        $('#star_5').on('click',function(){
+            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_4').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#star_5').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+            $('#rating').val(5);
+        })
     </script>
+
+
 @endpush

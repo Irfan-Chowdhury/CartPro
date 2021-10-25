@@ -137,7 +137,6 @@
     $('.orderStatus').on('click',function(){
         var order_status = $(this).val();
         var order_id = $('#order_id').val();
-
         $.ajax({
             url: "<?php echo e(route('admin.order.status')); ?>",
                 type: "GET",
@@ -147,12 +146,11 @@
                 },
                 success: function (data) {
                     console.log(data);
-                    // if (data.type=='success') {
-                    //     location.reload(true);
-                    // }
+                    if (data.type=='success') {
+                        location.reload(true);
+                    }
                 }
         });
-        //
     });
 </script>
 

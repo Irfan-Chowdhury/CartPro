@@ -12,12 +12,18 @@ class OrderDetail extends Model
         return $this->belongsTo(Product::class);
     }
 
-    // public function productTranslation()
-    // {
-    // 	$locale = Session::get('currentLocal');
-    // 	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
-    //             ->where('local',$locale);
-    // }
+    public function productTranslation()
+    {
+    	$locale = Session::get('currentLocal');
+    	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
+                ->where('local',$locale);
+    }
+
+    public function baseImage()
+    {
+        return $this->hasOne(ProductImage::class,'product_id','product_id')
+                    ->where('type','base');
+    }
 
     // public function productTranslationEnglish()
     // {

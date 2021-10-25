@@ -59,7 +59,6 @@
                             <select name="category" class="selectpicker" onchange="location = this.value;">
                                 <option value="" selected="">All Categories</option>
                                 @forelse ($categories as $category)
-                                    {{-- <option value="{{$category->slug}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option> --}}
                                     <option value="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option>
                                 @empty
                                 @endforelse
@@ -74,16 +73,36 @@
                             <li class="d-lg-none">
                                 <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
                             </li>
-                            <li>
-                                <a href="{{route('customer_login_form')}}"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
-                            </li>
 
-                            <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
-                                <a href="{{route('wishlist.index')}}">
-                                    <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
-                                </a>
-                                <span class="badge badge-light wishlist_count">{{$total_wishlist }}</span>
-                            </li>
+                            @auth
+                                <li>
+                                    <a href="{{route('user_account')}}"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Account"></i></a>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{route('customer_login_form')}}"><i class="las la-user-lock" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
+                                </li>
+                            @endauth
+
+
+
+
+                            @auth
+                                <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
+                                    <a href="{{route('wishlist.index')}}">
+                                        <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
+                                    </a>
+                                    <span class="badge badge-light wishlist_count">{{$total_wishlist }}</span>
+                                </li>
+                            @else
+                                <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
+                                    <a href="#">
+                                        <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
+                                    </a>
+                                    <span class="badge badge-light">0</span>
+                                </li>
+                            @endauth
+
 
                             <li class="cart__menu">
                                 <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
@@ -147,7 +166,7 @@
                                         @if ($menu!=NULL)
                                             @forelse ($menu->items as $menu_item)
                                                 @if ($menu_item->child->isNotEmpty())
-                                                    <li class="has-dropdown"><a href="#">{{$menu_item->label}}</a>
+                                                    <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
                                                         <ul class="dropdown">
                                                             @foreach($menu_item->child as $child)
                                                                 {{-- <li><a href="{{$child->link}}">{{$child->label}}</a></li> --}}

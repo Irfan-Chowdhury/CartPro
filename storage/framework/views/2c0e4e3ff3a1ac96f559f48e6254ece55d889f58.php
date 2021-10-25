@@ -1014,13 +1014,12 @@
                                     </div>
                                 </div>
                                 <div class="product-details">
-                                    
                                     <a class="product-category" href="<?php echo e(route('cartpro.category_wise_products',$item->product->categoryProduct[0]->category->slug)); ?>">
                                         <?php echo e($item->product->categoryProduct[0]->category->catTranslation->category_name ?? NULL); ?>
 
                                     </a>
                                     <a class="product-name" href="<?php echo e(url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)); ?>">
-                                        <?php echo e($item->product->productTranslation->product_name); ?>
+                                        <?php echo e($item->product->productTranslation->product_name ?? null); ?>
 
                                     </a>
                                     <div class="d-flex justify-content-between align-items-center">

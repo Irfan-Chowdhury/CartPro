@@ -99,7 +99,6 @@
     }
 ?>
 
-
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 
@@ -174,6 +173,7 @@
         <div class="demo-btn"><i class="las la-cog"></i></div>
     </div>
 
+
     <!--Header-->
     <?php echo $__env->make('frontend.includes.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
@@ -186,25 +186,25 @@
     <?php echo $__env->make('frontend.includes.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <script>
-    var chatbox = document.getElementById('fb-customer-chat');
-    chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
-    chatbox.setAttribute("attribution", "biz_inbox");
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
+        chatbox.setAttribute("attribution", "biz_inbox");
 
-    window.fbAsyncInit = function() {
-        FB.init({
-            xfbml: true,
-            version: 'v11.0'
-        });
-    };
+        window.fbAsyncInit = function() {
+            FB.init({
+                xfbml: true,
+                version: 'v11.0'
+            });
+        };
 
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     </script>
 
     

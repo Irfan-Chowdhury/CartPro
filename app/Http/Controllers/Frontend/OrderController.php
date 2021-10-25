@@ -10,6 +10,7 @@ use App\Models\Shipping;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Stripe;
@@ -17,7 +18,7 @@ use Stripe;
 
 class OrderController extends Controller
 {
-    public function orderStore(Request $request)
+    public function orderStore(Request $request) //Paypal
     {
         $validator1 = Validator::make($request->all(),[
             'billing_first_name' => 'required|string',
@@ -88,13 +89,20 @@ class OrderController extends Controller
             $order_detail->save();
         }
 
+        $order_details = OrderDetail::where('order_id',$order->id)->get();
+        foreach ($order_details as $row) {
+            DB::table('products')
+                ->where('id',$row->product_id)
+                ->update(['qty' => DB::raw('qty -'.$row->qty)]);
+        }
+
         Cart::destroy();
 
         return response()->json(['success' => 'Payment Successfully']);
     }
 
 
-    public function handlePost(Request $request)
+    public function handlePost(Request $request) //stripe
     {
         $order = new Order();
         $order->user_id = Auth::user()->id ?? null;
@@ -161,12 +169,14 @@ class OrderController extends Controller
                 "description" => "Making test payment."
         ]);
 
+        $order_details = OrderDetail::where('order_id',$order->id)->get();
+        foreach ($order_details as $row) {
+            DB::table('products')
+                ->where('id',$row->product_id)
+                ->update(['qty' => DB::raw('qty -'.$row->qty)]);
+        }
+
         Cart::destroy();
-
-        // Session::flash('success', 'Payment has been successfully processed.');
-        // return back();
-
         return response()->json(['success' => 'Payment Successfully']);
-
     }
 }

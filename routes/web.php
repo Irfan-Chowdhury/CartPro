@@ -78,8 +78,6 @@ Route::group(['namespace'=>'Frontend'], function (){
             Route::get('/country_wise_tax', 'CartController@countryWiseTax')->name('cart.country_wise_tax');
         });
 
-
-
         Route::post('newslatter/store','HomeController@newslatterStore')->name('cartpro.newslatter_store');
 
         //payment -Paypal
@@ -92,6 +90,17 @@ Route::group(['namespace'=>'Frontend'], function (){
         Route::get('/wishlist','WishlistController@index')->name('wishlist.index');
         Route::get('/wishlist/add','WishlistController@addToWishlist')->name('wishlist.add');
         Route::get('/wishlist/remove','WishlistController@removeToWishlist')->name('wishlist.remove');
+
+        Route::prefix('page')->group(function () {
+            Route::get('/{page_slug}','PageController@pageShow')->name('page.Show');
+        });
+
+        Route::prefix('user_account')->group(function () {
+            Route::get('/','UserAccountController@userAccount')->name('user_account');
+            Route::post('/logout','UserAccountController@userLogout')->name('user_logout');
+        });
+
+        Route::post('/review/store','HomeController@reviewStore')->name('review.store');
 });
 
 
