@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------
-    1. General Styles 
+    1. General Styles
 -------------------------------------------------------------*/
 :root {
   --theme-color: #0071df;
@@ -24,8 +24,8 @@
     width: 250px;
     height: 100%;
     left: -250px;
-    position: fixed; 
-    padding: 50px 30px; 
+    position: fixed;
+    padding: 50px 30px;
     background-color: #fff;
     transition: all 0.3s;
     z-index: 99;
@@ -176,7 +176,7 @@ section {
 .bg-amber{background-color:#ee884a}.bg-yellow{background-color:#eeae56}.bg-red{background-color:#ef1c25}.bg-white{background-color:#fff}.bg-black{background-color:#212222}.bg-antique{background-color:#ebe5c5}.bg-green{background-color:#7db53a}.bg-grey{background-color:#ddd!important}.bg-pink{background-color:#f8bbcd!important}.bg-green{background-color:#c7e0b8!important}
 
 /*-----------------------------------------------------------
-    2. Typography 
+    2. Typography
 -------------------------------------------------------------*/
 
 body {
@@ -787,7 +787,7 @@ a.underline:after {
 }
 
 /*---------------------------------
-           Shopping Cart 
+           Shopping Cart
 ---------------------------------*/
 /* ----body overlay------ */
 .body__overlay {
@@ -829,11 +829,13 @@ a.underline:after {
 }
 
 .cart__menu i,
+.wishlist__menu i,
 .panel_setting i {
     cursor: pointer;
 }
 
-li.cart__menu .badge {
+li.cart__menu .badge,
+li.wishlist__menu .badge {
     background-color: #fed700;
     border: none;
     color: #333;
@@ -857,7 +859,8 @@ li.cart__menu .total {
     padding: 5px 15px;
 }
 
-li.cart__menu {
+li.cart__menu,
+li.wishlist__menu {
     position: relative;
 }
 
@@ -2020,7 +2023,7 @@ li.cart__menu {
     height: 35px;
     color: #212222;
     text-align: center;
-    margin: 0 3px; 
+    margin: 0 3px;
     border-radius: 5px;
     line-height: 36px;
     font-size: 15px;
@@ -2307,7 +2310,7 @@ span.promo-price {
     border: 1px solid transparent;
     border-radius: 3px;
     padding: 15px 15px 0;
-} 
+}
 
 .list-view .single-product-wrapper {
     display: flex;
@@ -3220,7 +3223,7 @@ span.promo-price {
 }
 
 /*-------------------------------
-         Shop Item Details 
+         Shop Item Details
 --------------------------------*/
 
 /*Change the colour*/
@@ -3487,7 +3490,7 @@ input[type=number] {
 }
 
 /*-------------------------------
-         Cart Page 
+         Cart Page
 --------------------------------*/
 
 .table > :not(:last-child) > :last-child > * {
@@ -3613,7 +3616,7 @@ input[type=number] {
 
 
 /*-------------------------------
-         Wishlist 
+         Wishlist
 --------------------------------*/
 
 .wishlist-section tbody tr {
@@ -3880,7 +3883,7 @@ input[type=number] {
 }
 
 /* -----------------------------------
-      Shop Comapre                   
+      Shop Comapre
 ------------------------------------ */
 
 .compare-table tr th {
@@ -3913,7 +3916,7 @@ input[type=number] {
     font-size: 20px;
 }
 
-/* ------------------------------------    
+/* ------------------------------------
             About page
 --------------------------------------*/
 .about-text-area {
@@ -3960,7 +3963,7 @@ input[type=number] {
     background-repeat: no-repeat;
 }
 
-/* ------------------------------------    
+/* ------------------------------------
            Contact Page
 --------------------------------------*/
 .contact-section.v1 h3 {
@@ -3989,7 +3992,7 @@ input[type=number] {
     z-index: 0;
 }
 
-/* ------------------------------------    
+/* ------------------------------------
            404 Page
 --------------------------------------*/
 
@@ -4016,7 +4019,7 @@ input[type=number] {
     cursor: pointer;
 }
 
-/* ------------------------------------    
+/* ------------------------------------
             Countdown
 -------------------------------------*/
 .countdown-deals {
@@ -4045,7 +4048,7 @@ input[type=number] {
     margin-top: 10px;
 }
 
-/* ------------------------------------    
+/* ------------------------------------
           Scroll to top
 ---------------------------------------*/
 #scrolltotop {

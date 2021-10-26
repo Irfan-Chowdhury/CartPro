@@ -40,6 +40,8 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // return Cart::content();
+
         $locale = Session::get('currentLocal');
         $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
 
@@ -71,11 +73,12 @@ class HomeController extends Controller
         $vertical_product_2 = [];
         $vertical_product_3 = [];
 
-        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
+        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+                                                'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                                                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
                                             ->get();
-                                            // return $category_products;
 
-
+        // return $category_products;
 
         foreach ($settings as $key => $setting)
         {
@@ -172,7 +175,9 @@ class HomeController extends Controller
 
 
         if ($active_campaign_flash_id) {
-            $flash_sales = FlashSale::with('flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage','flashSaleProducts.product.categoryProduct')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+            $flash_sales = FlashSale::with('flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
+                                    'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
+                                    'flashSaleProducts.product.productAttributeValues')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
 
         //Slider
@@ -199,7 +204,15 @@ class HomeController extends Controller
                     ->get();
         });
 
-        $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage')->select('product_id')->groupBy('product_id')->selectRaw('SUM(qty) AS qty_of_sold')->orderBy('qty_of_sold','DESC')->skip(0)->take(10)->get();
+        $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
+                        ->select('product_id')
+                        ->groupBy('product_id')
+                        ->selectRaw('SUM(qty) AS qty_of_sold')
+                        ->orderBy('qty_of_sold','DESC')
+                        ->skip(0)
+                        ->take(10)
+                        ->get();
+        // return $order_details ;
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
                                                 'brands','product_tab_one_section_1','product_tab_one_section_2',
@@ -261,10 +274,6 @@ class HomeController extends Controller
         if (empty($reviews)) {
             $reviews =[];
         }
-
-        // return $reviews;
-
-
 
         return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews'));
     }

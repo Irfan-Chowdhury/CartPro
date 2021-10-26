@@ -347,33 +347,13 @@
         // });
 
         //Lists Slider
-        var swiper = new Swiper('.list-slider-wrapper-1', {
+        var swiper = new Swiper('.list-slider-wrapper', {
             slidesPerView: 1,
             loop: true,
             simulateTouch: true,
             navigation: {
-                nextEl: '.list-slider-1-arrow-prev',
-                prevEl: '.list-slider-1-arrow-next',
-            },
-        });
-
-        var swiper = new Swiper('.list-slider-wrapper-2', {
-            slidesPerView: 1,
-            loop: true,
-            simulateTouch: true,
-            navigation: {
-                nextEl: '.list-slider-2-arrow-prev',
-                prevEl: '.list-slider-2-arrow-next',
-            },
-        });
-
-        var swiper = new Swiper('.list-slider-wrapper-3', {
-            slidesPerView: 1,
-            loop: true,
-            simulateTouch: true,
-            navigation: {
-                nextEl: '.list-slider-3-arrow-prev',
-                prevEl: '.list-slider-3-arrow-next',
+                nextEl: '.list-button-next',
+                prevEl: '.list-button-prev',
             },
         });
 

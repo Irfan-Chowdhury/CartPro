@@ -90,6 +90,7 @@ class LanguageController extends Controller
         $language = Language::find($id);
 
         Session::put('currentLocal', $language->local);
+
         App::setLocale($language->local);
 
         session()->flash('type','success');

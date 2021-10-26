@@ -1,4 +1,18 @@
+<?php $__env->startSection('meta_info'); ?>
+    <meta product="og:site_name" content="CartPro">
+    <meta product="og:title" content="<?php echo e($product->productTranslation->product_name ?? null); ?>">
+    <meta product="og:description" content="<?php echo e($product->productTranslation->description ?? null); ?>">
+    <meta product="og:url" content="<?php echo e(url('product/'.$product->slug.'/'. $category->id)); ?>">
+    <meta product="og:type" content="Product">
+
+    <?php if($product->baseImage): ?>
+        <meta product="og:image" content="<?php echo e(asset('public/'.$product->baseImage->image)); ?>">
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('title',$product->productTranslation->product_name); ?>
+
+
 <?php $__env->startSection('frontend_content'); ?>
 
     <!--Product details section starts-->
@@ -117,7 +131,7 @@
                                         <?php $__empty_2 = true; $__currentLoopData = $product->productAttributeValues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
                                             <?php if($value->attribute_id == $key): ?>
                                                 <li class="attribute_value" data-attribute_name="<?php echo e($value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null); ?>" data-value_id="<?php echo e($value->attribute_value_id); ?>" data-value_name="<?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?>"><span><?php echo e($value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null); ?></span></li>
-                                                <input type="hidden" name="value_id[]" value="<?php echo e($value->attribute_value_id); ?>">
+                                                <input type="text" name="value_id[]" value="<?php echo e($value->attribute_value_id); ?>">
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
                                         <?php endif; ?>

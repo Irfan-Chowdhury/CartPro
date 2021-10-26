@@ -86,39 +86,134 @@
 </section>
 
 
-<!--Product area starts-->
-@if ($settings[81]->plain_value==1)
-    <section class="product-tab-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <ul class="nav nav-tabs product-details-tab" id="lionTab" role="tablist">
-                        @php $i=0; @endphp
-                        @foreach ($settings as $setting)
-                            @if ($setting->key =='storefront_product_tabs_1_section_tab_1_title'|| $setting->key =='storefront_product_tabs_1_section_tab_2_title' || $setting->key =='storefront_product_tabs_1_section_tab_3_title' || $setting->key =='storefront_product_tabs_1_section_tab_4_title')
-                                <li class="nav-item">
-                                    <a @if($i==0) class="nav-link active" @else class="nav-link" @endif id="all-tab" data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{{$setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null}}</a>
-                                </li>
-                                @php $i++ ; @endphp
-                            @endif
-                        @endforeach
-                    </ul>
-                    <div class="product-navigation">
-                        <div class="product-button-next v1"><i class="ti-angle-right"></i></div>
-                        <div class="product-button-prev v1"><i class="ti-angle-left"></i></div>
+    <!--Product area starts-->
+    @if ($settings[81]->plain_value==1)
+        <section class="product-tab-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="nav nav-tabs product-details-tab" id="lionTab" role="tablist">
+                            @php $i=0; @endphp
+                            @foreach ($settings as $setting)
+                                @if ($setting->key =='storefront_product_tabs_1_section_tab_1_title'|| $setting->key =='storefront_product_tabs_1_section_tab_2_title' || $setting->key =='storefront_product_tabs_1_section_tab_3_title' || $setting->key =='storefront_product_tabs_1_section_tab_4_title')
+                                    <li class="nav-item">
+                                        <a @if($i==0) class="nav-link active" @else class="nav-link" @endif id="all-tab" data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{{$setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null}}</a>
+                                    </li>
+                                    @php $i++ ; @endphp
+                                @endif
+                            @endforeach
+                        </ul>
+                        <div class="product-navigation">
+                            <div class="product-button-next v1"><i class="ti-angle-right"></i></div>
+                            <div class="product-button-prev v1"><i class="ti-angle-left"></i></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="tab-content mt-3" id="lionTabContent">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tab-content mt-3" id="lionTabContent">
 
-                        <!-- Product_Tab_1-Section_1 -->
-                        <div class="tab-pane fade show active" id="{{$product_tabs_one_titles[0] ?? null}}" role="tabpanel" aria-labelledby="all-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    @forelse ($product_tab_one_section_1 as $item)
+                            <!-- Product_Tab_1-Section_1 -->
+                            <div class="tab-pane fade show active" id="{{$product_tabs_one_titles[0] ?? null}}" role="tabpanel" aria-labelledby="all-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        @forelse ($product_tab_one_section_1 as $item)
+                                                <div class="swiper-slide">
+                                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                        <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                        <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                        <input type="hidden" name="qty" value="1">
+
+                                                        <div class="single-product-wrapper">
+                                                            <div class="single-product-item">
+                                                                @if (isset($item->productBaseImage->image))
+                                                                    <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                                @else
+                                                                    <img src="{{asset('public/images/empty.jpg')}}">
+                                                                @endif
+
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Sold</span>
+                                                                </div>
+                                                                <div class="product-overlay">
+                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                                    </a>
+                                                                    <a>
+                                                                        <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                                    </a>
+                                                                    {{-- <a href="compare.html">
+                                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                                    </a> --}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-details">
+                                                                <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                                <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                    {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                                </a>
+
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <div class="rating-summary">
+                                                                            <div class="rating-result" title="60%">
+                                                                                <ul class="product-rating">
+                                                                                    <li><i class="ion-android-star"></i></li>
+                                                                                    <li><i class="ion-android-star"></i></li>
+                                                                                    <li><i class="ion-android-star"></i></li>
+                                                                                    <li><i class="ion-android-star-half"></i></li>
+                                                                                    <li><i class="ion-android-star-half"></i></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-price">
+                                                                            @if ($item->product->special_price>0)
+                                                                                <span class="promo-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                    @else
+                                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                                <span class="old-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                    @else
+                                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @else
+                                                                                <span class="price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                    @else
+                                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product_Tab_1-Section_2 -->
+                            <div class="tab-pane fade" id="{{$product_tabs_one_titles[1] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        @forelse ($product_tab_one_section_2 as $item)
                                             <div class="swiper-slide">
                                                 <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                     @csrf
@@ -152,9 +247,8 @@
                                                         <div class="product-details">
                                                             <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
                                                             <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                             </a>
-
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <div>
                                                                     <div class="rating-summary">
@@ -203,575 +297,272 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product_Tab_1-Section_2 -->
-                        <div class="tab-pane fade" id="{{$product_tabs_one_titles[1] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    @forelse ($product_tab_one_section_2 as $item)
-                                        <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
-
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            </a>
-                                                            <a>
-                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            {{-- <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
-                                                        </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                        <span class="old-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @else
-                                                                        <span class="price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product_Tab_1-Section_3 -->
-                        <div class="tab-pane fade" id="{{$product_tabs_one_titles[2] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    @forelse ($product_tab_one_section_3 as $item)
-                                        <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
-
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            </a>
-                                                            <a>
-                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            {{-- <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
-                                                        </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                        <span class="old-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @else
-                                                                        <span class="price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product_Tab_1-Section_4 -->
-                        <div class="tab-pane fade" id="{{$product_tabs_one_titles[3] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
-                            <div class="product-slider-wrapper swiper-container">
-                                <div class="swiper-wrapper">
-                                    @forelse ($product_tab_one_section_4 as $item)
-                                        <div class="swiper-slide">
-                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                <input type="hidden" name="qty" value="1">
-
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if (isset($item->productBaseImage->image))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                        @else
-                                                            <img src="{{asset('public/images/empty.jpg')}}">
-                                                        @endif
-
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                            </a>
-                                                            <a>
-                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            {{-- <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                            </a> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-details">
-                                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
-                                                        </a>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->product->special_price>0)
-                                                                        <span class="promo-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                        <span class="old-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @else
-                                                                        <span class="price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                            @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    @forelse ($product_tab_one_section_1 as $item)
-        @include('frontend.includes.quickshop')
-    @empty
-    @endforelse
-
-    @forelse ($product_tab_one_section_2 as $item)
-        @include('frontend.includes.quickshop')
-    @empty
-    @endforelse
-
-    @forelse ($product_tab_one_section_3 as $item)
-        @include('frontend.includes.quickshop')
-    @empty
-    @endforelse
-
-    @forelse ($product_tab_one_section_4 as $item)
-        @include('frontend.includes.quickshop')
-    @empty
-    @endforelse
-@endif
-
-
- <!--Flash Sale And Vertical Products Start-->
-<section>
-    <div class="container">
-        <div class="row">
-
-            <div class="col-xl-4 col-md-12">
-                <div class="section-title mb-3">
-                    <h3>
-                        {{$storefront_flash_sale_title}}
-                    </h3>
-                </div>
-                <div class="deals-slider-wrapper swiper-container">
-                    <div class="swiper-wrapper">
-                        @forelse ($flash_sales->flashSaleProducts as $item)
-                            <div class="swiper-slide">
-                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{$item->product->id}}">
-                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                    <input type="hidden" name="category_id" value="{{$item->product->categoryProduct[0]->category_id}}">
-                                    <input type="hidden" name="qty" value="1">
-
-                                    <div class="single-product-wrapper deals">
-                                        <div class="single-product-item">
-
-                                            @if ($item->product->baseImage)
-                                                <img src="{{asset('public/'.$item->product->baseImage->image)}}" >
-                                            @else
-                                                <img src="{{asset('public/images/empty.jpg')}}">
-                                            @endif
-                                            <div class="product-overlay">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                </a>
-                                                <a>
-                                                    <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                </a>
-                                                {{-- <a href="compare.html">
-                                                    <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                </a> --}}
-                                            </div>
-                                        </div>
-                                        <div class="product-details">
-                                            <a class="product-name text-center" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                                {{$item->product->productTranslation->product_name ?? null}}
-                                            </a>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="rating-summary">
-                                                        <div class="rating-result" title="60%">
-                                                            <ul class="product-rating">
-                                                                <li><i class="ion-android-star"></i></li>
-                                                                <li><i class="ion-android-star"></i></li>
-                                                                <li><i class="ion-android-star"></i></li>
-                                                                <li><i class="ion-android-star-half"></i></li>
-                                                                <li><i class="ion-android-star-half"></i></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
-                                                            <span class="promo-price">
-                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                    {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                @else
-                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                @endif
-                                                            </span>
-                                                            <span class="old-price">
-                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                @else
-                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                @endif
-                                                            </span>
-                                                        @else
-                                                            <span class="promo-price">
-                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                @else
-                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                @endif
-                                                            </span>
-                                                        @endif
-
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="daily-deals-wrap">
-                                                <!-- countdown start -->
-                                                <div class="countdown-deals text-center" data-countdown="{{$item->end_date}}">
-                                                    <div class="cdown day">
-                                                        <span class="time-count">0</span>
-                                                        <p>Days</p>
-                                                    </div>
-                                                    <div class="cdown hour">
-                                                        <span class="time-count">0</span>
-                                                        <p>Hours</p>
-                                                    </div>
-                                                    <div class="cdown minutes">
-                                                        <span class="time-count">00</span>
-                                                        <p>mins</p>
-                                                    </div>
-                                                    <div class="cdown second">
-                                                        <span class="time-count">00</span>
-                                                        <p>secs</p>
-                                                    </div>
-                                                </div>
-                                                <!-- countdown end -->
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            @if ($item->product->manage_stock==1)
-                                                Available: {{$item->product->qty}}
-                                            @endif
-
-                                        </div>
+                                        @empty
+                                        @endforelse
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                        @empty
-                        @endforelse
-                    </div>
-                    <!-- Add Pagination -->
-                    <div class="deals-navigation">
-                        <div class="deals-button-next"><i class="ti-angle-right"></i></div>
-                        <div class="deals-button-prev"><i class="ti-angle-left"></i></div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-xl-8 col-md-12">
-                <div class="row">
+                            <!-- Product_Tab_1-Section_3 -->
+                            <div class="tab-pane fade" id="{{$product_tabs_one_titles[2] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        @forelse ($product_tab_one_section_3 as $item)
+                                            <div class="swiper-slide">
+                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                    <input type="hidden" name="qty" value="1">
 
-                    <div class="col-md-4">
-                        <div class="section-title mb-3">
-                            <h3>{{$storefront_vertical_product_1_title}}</h3>
-                            <!-- Add Pagination -->
-                            <div class="list-navigation">
-                                <div class="list-button-prev"><i class="ti-angle-left"></i></div>
-                                <div class="list-button-next"><i class="ti-angle-right"></i></div>
-                            </div>
-                        </div>
-                        <div class="list-slider-wrapper swiper-container">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    @forelse ($vertical_product_1 as $item)
-                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                            <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                            <input type="hidden" name="qty" value="1">
+                                                    <div class="single-product-wrapper">
+                                                        <div class="single-product-item">
+                                                            @if (isset($item->productBaseImage->image))
+                                                                <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                            @else
+                                                                <img src="{{asset('public/images/empty.jpg')}}">
+                                                            @endif
 
-                                            <div class="single-product-wrapper list">
-                                                <div class="single-product-item">
-                                                    @if (isset($item->productBaseImage->image))
-                                                        <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                    @else
-                                                        <img src="{{asset('public/images/empty.jpg')}}">
-                                                    @endif
-                                                </div>
-                                                <div class="product-details">
-                                                    <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
-                                                    </a>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            <div class="rating-summary">
-                                                                <div class="rating-result" title="60%">
-                                                                    <ul class="product-rating">
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star-half"></i></li>
-                                                                        <li><i class="ion-android-star-half"></i></li>
-                                                                    </ul>
+                                                            <div class="product-promo-text style1">
+                                                                <span>Sold</span>
+                                                            </div>
+                                                            <div class="product-overlay">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                                </a>
+                                                                <a>
+                                                                    <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                                </a>
+                                                                {{-- <a href="compare.html">
+                                                                    <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                                </a> --}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-details">
+                                                            <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                            <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                            </a>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <div class="rating-summary">
+                                                                        <div class="rating-result" title="60%">
+                                                                            <ul class="product-rating">
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-price">
+                                                                        @if ($item->product->special_price>0)
+                                                                            <span class="promo-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                            <span class="old-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
                                                                 </div>
                                                             </div>
-                                                            <div class="product-price">
-                                                                @if ($item->product->special_price>0)
-                                                                    <span class="promo-price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                    <span class="old-price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                @else
-                                                                    <span class="price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
-                                        </form>
-                                    @empty
-                                    @endif
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product_Tab_1-Section_4 -->
+                            <div class="tab-pane fade" id="{{$product_tabs_one_titles[3] ?? null}}" role="tabpanel" aria-labelledby="graphic-design-tab">
+                                <div class="product-slider-wrapper swiper-container">
+                                    <div class="swiper-wrapper">
+                                        @forelse ($product_tab_one_section_4 as $item)
+                                            <div class="swiper-slide">
+                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                    <input type="hidden" name="qty" value="1">
+
+                                                    <div class="single-product-wrapper">
+                                                        <div class="single-product-item">
+                                                            @if (isset($item->productBaseImage->image))
+                                                                <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                            @else
+                                                                <img src="{{asset('public/images/empty.jpg')}}">
+                                                            @endif
+
+                                                            <div class="product-promo-text style1">
+                                                                <span>Sold</span>
+                                                            </div>
+                                                            <div class="product-overlay">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                                </a>
+                                                                <a>
+                                                                    <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                                </a>
+                                                                {{-- <a href="compare.html">
+                                                                    <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                                </a> --}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-details">
+                                                            <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                            <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
+                                                            </a>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <div class="rating-summary">
+                                                                        <div class="rating-result" title="60%">
+                                                                            <ul class="product-rating">
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-price">
+                                                                        @if ($item->product->special_price>0)
+                                                                            <span class="promo-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                            <span class="old-price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="price">
+                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                    {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                @else
+                                                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @endif
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        @empty
+                                        @endforelse
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
-                        <div class="section-title mb-3">
-                            <h3><h3>{{$storefront_vertical_product_2_title}}</h3></h3>
-                            <!-- Add Pagination -->
-                            <div class="list-navigation">
-                                <div class="list-button-prev"><i class="ti-angle-left"></i></div>
-                                <div class="list-button-next"><i class="ti-angle-right"></i></div>
-                            </div>
-                        </div>
-                        <div class="list-slider-wrapper swiper-container">
-                            <div class="swiper-slide">
-                                @forelse ($vertical_product_2 as $item)
+            </div>
+        </section>
+
+        @forelse ($product_tab_one_section_1 as $item)
+            @include('frontend.includes.quickshop')
+        @empty
+        @endforelse
+
+        @forelse ($product_tab_one_section_2 as $item)
+            @include('frontend.includes.quickshop')
+        @empty
+        @endforelse
+
+        @forelse ($product_tab_one_section_3 as $item)
+            @include('frontend.includes.quickshop')
+        @empty
+        @endforelse
+
+        @forelse ($product_tab_one_section_4 as $item)
+            @include('frontend.includes.quickshop')
+        @empty
+        @endforelse
+    @endif
+
+
+    <!--Flash Sale And Vertical Products Start-->
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-xl-4 col-md-12">
+                    <div class="section-title mb-3">
+                        <h3>
+                            {{$storefront_flash_sale_title}}
+                        </h3>
+                    </div>
+                    <div class="deals-slider-wrapper swiper-container">
+                        <div class="swiper-wrapper">
+                            @forelse ($flash_sales->flashSaleProducts as $item)
+                                <div class="swiper-slide">
                                     <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                         @csrf
-                                        <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                        <input type="hidden" name="product_id" value="{{$item->product->id}}">
                                         <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                        <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                        <input type="hidden" name="category_id" value="{{$item->product->categoryProduct[0]->category_id}}">
                                         <input type="hidden" name="qty" value="1">
 
-                                        <div class="single-product-wrapper list">
+                                        <div class="single-product-wrapper deals">
                                             <div class="single-product-item">
-                                                @if (isset($item->productBaseImage->image))
-                                                    <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+
+                                                @if ($item->product->baseImage)
+                                                    <img src="{{asset('public/'.$item->product->baseImage->image)}}" >
                                                 @else
                                                     <img src="{{asset('public/images/empty.jpg')}}">
                                                 @endif
+                                                <div class="product-overlay">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                    </a>
+                                                    <a>
+                                                        <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                    </a>
+                                                    {{-- <a href="compare.html">
+                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                    </a> --}}
+                                                </div>
                                             </div>
                                             <div class="product-details">
-                                                <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                    {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                <a class="product-name text-center" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
+                                                    {{$item->product->productTranslation->product_name ?? null}}
                                                 </a>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>
@@ -787,7 +578,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="product-price">
-                                                            @if ($item->product->special_price>0)
+                                                            @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                 <span class="promo-price">
                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
                                                                         {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
@@ -803,7 +594,7 @@
                                                                     @endif
                                                                 </span>
                                                             @else
-                                                                <span class="price">
+                                                                <span class="promo-price">
                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
                                                                         {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                                                     @else
@@ -811,118 +602,329 @@
                                                                     @endif
                                                                 </span>
                                                             @endif
+
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                     </div>
                                                 </div>
+                                                <div class="daily-deals-wrap">
+                                                    <!-- countdown start -->
+                                                    <div class="countdown-deals text-center" data-countdown="{{$item->end_date}}">
+                                                        <div class="cdown day">
+                                                            <span class="time-count">0</span>
+                                                            <p>Days</p>
+                                                        </div>
+                                                        <div class="cdown hour">
+                                                            <span class="time-count">0</span>
+                                                            <p>Hours</p>
+                                                        </div>
+                                                        <div class="cdown minutes">
+                                                            <span class="time-count">00</span>
+                                                            <p>mins</p>
+                                                        </div>
+                                                        <div class="cdown second">
+                                                            <span class="time-count">00</span>
+                                                            <p>secs</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- countdown end -->
+                                                </div>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                @if ($item->product->manage_stock==1)
+                                                    Available: {{$item->product->qty}}
+                                                @endif
+
                                             </div>
                                         </div>
                                     </form>
-                                @empty
-                                @endif
-                            </div>
+                                </div>
+                            @empty
+                            @endforelse
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="deals-navigation">
+                            <div class="deals-button-next"><i class="ti-angle-right"></i></div>
+                            <div class="deals-button-prev"><i class="ti-angle-left"></i></div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
-                        <div class="section-title mb-3">
-                            <h3><h3>{{$storefront_vertical_product_3_title}}</h3></h3>
-                            <!-- Add Pagination -->
-                            <div class="list-navigation">
-                                <div class="list-button-prev"><i class="ti-angle-left"></i></div>
-                                <div class="list-button-next"><i class="ti-angle-right"></i></div>
+                <div class="col-xl-8 col-md-12">
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="section-title mb-3">
+                                <h3>{{$storefront_vertical_product_1_title}}</h3>
+                                <!-- Add Pagination -->
+                                <div class="list-navigation">
+                                    <div class="list-button-prev list-slider-1-arrow-prev"><i class="ti-angle-left"></i></div>
+                                    <div class="list-button-next list-slider-1-arrow-next"><i class="ti-angle-right"></i></div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="list-slider-wrapper swiper-container">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    @forelse ($vertical_product_3 as $item)
-                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                            <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                            <input type="hidden" name="qty" value="1">
+                            <div class="list-slider-wrapper-1 swiper-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        @forelse ($vertical_product_1 as $item)
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                <input type="hidden" name="qty" value="1">
 
-                                            <div class="single-product-wrapper list">
-                                                <div class="single-product-item">
-                                                    @if (isset($item->productBaseImage->image))
-                                                        <img src="{{asset('public/'.$item->productBaseImage->image)}}">
-                                                    @else
-                                                        <img src="{{asset('public/images/empty.jpg')}}">
-                                                    @endif
-                                                </div>
-                                                <div class="product-details">
-                                                    <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
-                                                    </a>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            <div class="rating-summary">
-                                                                <div class="rating-result" title="60%">
-                                                                    <ul class="product-rating">
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star"></i></li>
-                                                                        <li><i class="ion-android-star-half"></i></li>
-                                                                        <li><i class="ion-android-star-half"></i></li>
-                                                                    </ul>
+                                                <div class="single-product-wrapper list">
+                                                    <div class="single-product-item">
+                                                        @if (isset($item->productBaseImage->image))
+                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                        @else
+                                                            <img src="{{asset('public/images/empty.jpg')}}">
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                        </a>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="rating-summary">
+                                                                    <div class="rating-result" title="60%">
+                                                                        <ul class="product-rating">
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-price">
+                                                                    @if ($item->product->special_price>0)
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @endif
                                                                 </div>
                                                             </div>
-                                                            <div class="product-price">
-                                                                @if ($item->product->special_price>0)
-                                                                    <span class="promo-price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                    <span class="old-price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                @else
-                                                                    <span class="price">
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                        @else
-                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                        @endif
-                                                                    </span>
-                                                                @endif
+                                                            <div>
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                             </div>
-                                                        </div>
-                                                        <div>
-                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                    @empty
-                                    @endif
+                                            </form>
+                                        @empty
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="section-title mb-3">
+                                <h3>{{$storefront_vertical_product_2_title}}</h3>
+                                <!-- Add Pagination -->
+                                <div class="list-navigation">
+                                    <div class="list-button-prev list-slider-2-arrow-prev"><i class="ti-angle-left"></i></div>
+                                    <div class="list-button-next list-slider-2-arrow-next"><i class="ti-angle-right"></i></div>
+                                </div>
+                            </div>
+                            <div class="list-slider-wrapper-2 swiper-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        @forelse ($vertical_product_2 as $item)
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                <input type="hidden" name="qty" value="1">
+
+                                                <div class="single-product-wrapper list">
+                                                    <div class="single-product-item">
+                                                        @if (isset($item->productBaseImage->image))
+                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                        @else
+                                                            <img src="{{asset('public/images/empty.jpg')}}">
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                        </a>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="rating-summary">
+                                                                    <div class="rating-result" title="60%">
+                                                                        <ul class="product-rating">
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-price">
+                                                                    @if ($item->product->special_price>0)
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @empty
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="section-title mb-3">
+                                <h3><h3>{{$storefront_vertical_product_3_title}}</h3></h3>
+                                <!-- Add Pagination -->
+                                <div class="list-navigation">
+                                    <div class="list-button-prev list-slider-3-arrow-prev"><i class="ti-angle-left"></i></div>
+                                    <div class="list-button-next list-slider-3-arrow-next"><i class="ti-angle-right"></i></div>
+                                </div>
+                            </div>
+                            <div class="list-slider-wrapper-3 swiper-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        @forelse ($vertical_product_3 as $item)
+                                            <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                <input type="hidden" name="qty" value="1">
+
+                                                <div class="single-product-wrapper list">
+                                                    <div class="single-product-item">
+                                                        @if (isset($item->productBaseImage->image))
+                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                        @else
+                                                            <img src="{{asset('public/images/empty.jpg')}}">
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                        </a>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="rating-summary">
+                                                                    <div class="rating-result" title="60%">
+                                                                        <ul class="product-rating">
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-price">
+                                                                    @if ($item->product->special_price>0)
+                                                                        <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                            @else
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @empty
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-</section>
-@forelse ($flash_sales->flashSaleProducts as $item )
-    @include('frontend.includes.quickshop_flash_sale')
-@empty
-@endforelse
- <!--Flash Sale And Vertical Products End-->
+    </section>
+    @forelse ($flash_sales->flashSaleProducts as $item )
+        @include('frontend.includes.quickshop_flash_sale')
+    @empty
+    @endforelse
+    <!--Flash Sale And Vertical Products End-->
 
 
 <!--Product Trending Start-->
@@ -957,7 +959,7 @@
                                         <span>Sold</span>
                                     </div>
                                     <div class="product-overlay">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshop"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                         </a>
                                         <a>
                                             <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
@@ -1028,7 +1030,14 @@
         </div>
     </div>
 </section>
+@forelse ($order_details as $item )
+    @include('frontend.includes.quickshop_trending')
+@empty
+@endforelse
 <!--product Trending ends-->
+
+
+
 
 
 <!--Product area starts-->
@@ -1148,6 +1157,36 @@
                     $('.wishlist_count').text(data.wishlist_count);
                 }
             })
+        });
+
+        //for Product_Tab_1
+        $('.attribute_value_productTab1').on("click",function(e){
+            e.preventDefault();
+            $(this).addClass('selected');
+
+            var selectedVal = $(this).data('value_id');
+            values.push(selectedVal);
+            $('.value_ids_productTab1').val(values);
+        });
+
+        //for FlashSale
+        $('.attribute_value_flashSale').on("click",function(e){
+            e.preventDefault();
+            $(this).addClass('selected');
+
+            var selectedVal = $(this).data('value_id');
+            values.push(selectedVal);
+            $('.value_ids_flashSale').val(values);
+        });
+
+        //for Trending
+        $('.attribute_value_trending').on("click",function(e){
+            e.preventDefault();
+            $(this).addClass('selected');
+
+            var selectedVal = $(this).data('value_id');
+            values.push(selectedVal);
+            $('.value_ids_trending').val(values);
         });
     </script>
 @endpush

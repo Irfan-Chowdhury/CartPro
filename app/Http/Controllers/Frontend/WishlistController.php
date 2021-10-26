@@ -33,8 +33,9 @@ class WishlistController extends Controller
     public function addToWishlist(Request $request)
     {
         if ($request->ajax()) {
-            $wishlist = new Wishlist();
 
+            
+            $wishlist = new Wishlist();
             $user_id = Auth::user()->id;
 
             $unique_check = Wishlist::where('user_id',$user_id)

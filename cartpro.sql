@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 22, 2021 at 12:42 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.3
+-- Host: localhost:3306
+-- Generation Time: Oct 26, 2021 at 02:44 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -33,7 +32,7 @@ CREATE TABLE `attributes` (
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `attribute_set_id` bigint(20) UNSIGNED NOT NULL,
   `is_filterable` tinyint(4) DEFAULT NULL,
-  `is_active` tinyint(4) DEFAULT 0,
+  `is_active` tinyint(4) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -45,8 +44,8 @@ CREATE TABLE `attributes` (
 INSERT INTO `attributes` (`id`, `slug`, `attribute_set_id`, `is_filterable`, `is_active`, `created_at`, `updated_at`) VALUES
 (2, 'size', 5, 1, 1, '2021-03-16 11:50:23', '2021-03-24 11:16:50'),
 (3, 'color', 5, 0, 1, '2021-03-16 12:59:53', '2021-03-24 11:16:46'),
-(20, 'ram', 7, 1, 1, '2021-03-17 03:35:22', '2021-03-25 12:58:37'),
-(23, 'monitor', 7, 0, 1, '2021-03-17 03:40:07', '2021-03-25 13:11:53');
+(20, 'ram', 7, 1, 1, '2021-03-17 03:35:22', '2021-07-27 00:41:19'),
+(23, 'monitor', 7, 0, 1, '2021-03-17 03:40:07', '2021-07-27 00:41:19');
 
 -- --------------------------------------------------------
 
@@ -77,7 +76,7 @@ INSERT INTO `attribute_category` (`attribute_id`, `category_id`) VALUES
 
 CREATE TABLE `attribute_sets` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT 0,
+  `is_active` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -87,10 +86,10 @@ CREATE TABLE `attribute_sets` (
 --
 
 INSERT INTO `attribute_sets` (`id`, `is_active`, `created_at`, `updated_at`) VALUES
-(5, 1, '2021-03-15 08:45:29', '2021-03-25 13:17:11'),
-(6, 1, '2021-03-15 08:45:46', '2021-03-25 13:17:14'),
-(7, 1, '2021-03-15 08:46:27', '2021-03-25 13:17:09'),
-(8, 1, '2021-03-15 08:46:43', '2021-03-25 13:17:07');
+(5, 1, '2021-03-15 08:45:29', '2021-10-03 00:17:40'),
+(6, 1, '2021-03-15 08:45:46', '2021-10-03 00:18:16'),
+(7, 1, '2021-03-15 08:46:27', '2021-10-03 00:18:14'),
+(8, 1, '2021-03-15 08:46:43', '2021-10-03 00:18:11');
 
 -- --------------------------------------------------------
 
@@ -101,7 +100,7 @@ INSERT INTO `attribute_sets` (`id`, `is_active`, `created_at`, `updated_at`) VAL
 CREATE TABLE `attribute_set_translations` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `attribute_set_id` bigint(20) UNSIGNED NOT NULL,
-  `local` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `attribute_set_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -111,7 +110,7 @@ CREATE TABLE `attribute_set_translations` (
 -- Dumping data for table `attribute_set_translations`
 --
 
-INSERT INTO `attribute_set_translations` (`id`, `attribute_set_id`, `local`, `attribute_set_name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `attribute_set_translations` (`id`, `attribute_set_id`, `locale`, `attribute_set_name`, `created_at`, `updated_at`) VALUES
 (5, 5, 'en', 'Specification', '2021-03-15 08:45:29', '2021-03-15 08:45:29'),
 (6, 6, 'en', 'Camera', '2021-03-15 08:45:46', '2021-03-15 08:45:46'),
 (7, 7, 'en', 'Hardware', '2021-03-15 08:46:27', '2021-03-15 08:46:27'),
@@ -128,7 +127,7 @@ INSERT INTO `attribute_set_translations` (`id`, `attribute_set_id`, `local`, `at
 CREATE TABLE `attribute_translations` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `attribute_id` bigint(20) UNSIGNED NOT NULL,
-  `local` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `attribute_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -138,7 +137,7 @@ CREATE TABLE `attribute_translations` (
 -- Dumping data for table `attribute_translations`
 --
 
-INSERT INTO `attribute_translations` (`id`, `attribute_id`, `local`, `attribute_name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `attribute_translations` (`id`, `attribute_id`, `locale`, `attribute_name`, `created_at`, `updated_at`) VALUES
 (2, 2, 'en', 'Size', '2021-03-16 11:50:23', '2021-03-16 11:50:23'),
 (3, 2, 'bn', 'সাইজ', NULL, NULL),
 (4, 3, 'en', 'Color', '2021-03-16 12:59:53', '2021-03-16 12:59:53'),
@@ -172,7 +171,11 @@ INSERT INTO `attribute_values` (`id`, `attribute_id`, `position`, `created_at`, 
 (7, 2, NULL, '2021-03-16 15:43:13', '2021-03-16 15:43:13'),
 (21, 20, NULL, '2021-03-17 03:35:22', '2021-03-17 03:35:22'),
 (22, 20, NULL, '2021-03-17 03:35:23', '2021-03-17 03:35:23'),
-(23, 20, NULL, '2021-03-17 03:37:00', '2021-03-17 03:37:00');
+(23, 20, NULL, '2021-03-17 03:37:00', '2021-03-17 03:37:00'),
+(24, 23, NULL, '2021-09-28 08:08:26', '2021-09-28 08:08:26'),
+(25, 3, NULL, '2021-10-09 08:57:32', '2021-10-09 08:57:32'),
+(26, 3, NULL, '2021-10-09 08:57:32', '2021-10-09 08:57:32'),
+(27, 3, NULL, '2021-10-09 08:57:33', '2021-10-09 08:57:33');
 
 -- --------------------------------------------------------
 
@@ -210,7 +213,11 @@ INSERT INTO `attribute_value_translations` (`id`, `attribute_id`, `attribute_val
 (14, 2, 7, 'en', 'M', '2021-03-16 15:43:14', '2021-03-16 15:43:14'),
 (21, 20, 21, 'en', '2GB', '2021-03-17 03:35:23', '2021-03-17 03:35:23'),
 (22, 20, 22, 'en', '4GB', '2021-03-17 03:35:23', '2021-03-17 03:35:23'),
-(23, 20, 23, 'en', '6GB', '2021-03-17 03:37:00', '2021-03-17 03:37:00');
+(23, 20, 23, 'en', '6GB', '2021-03-17 03:37:00', '2021-03-17 03:37:00'),
+(24, 23, 24, 'en', 'xyz', '2021-09-28 08:08:26', '2021-09-28 08:08:26'),
+(25, 3, 25, 'en', 'Red', '2021-10-09 08:57:32', '2021-10-09 08:57:32'),
+(26, 3, 26, 'en', 'Green', '2021-10-09 08:57:32', '2021-10-09 08:57:32'),
+(27, 3, 27, 'en', 'Yellow', '2021-10-09 08:57:33', '2021-10-09 08:57:33');
 
 -- --------------------------------------------------------
 
@@ -232,17 +239,20 @@ CREATE TABLE `brands` (
 --
 
 INSERT INTO `brands` (`id`, `slug`, `brand_logo`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'samsung', NULL, 1, '2021-02-21 13:26:44', '2021-02-21 13:26:44'),
-(4, 'sony', NULL, 1, '2021-02-21 13:34:26', '2021-02-21 13:34:26'),
-(7, 'ফল', NULL, 1, '2021-02-22 00:53:39', '2021-02-22 00:53:39'),
-(8, 'লায়ন-কোডারস', NULL, 0, '2021-02-22 00:54:35', '2021-02-22 00:54:35'),
-(11, 'Panasonic', NULL, 1, '2021-03-01 23:51:20', '2021-03-01 23:51:20'),
-(14, 'Otobi', NULL, 1, '2021-03-02 02:00:46', '2021-03-02 02:00:46'),
-(16, 'ফল', NULL, 1, '2021-03-02 02:42:37', '2021-03-02 02:42:37'),
-(19, 'Natural', NULL, 1, '2021-03-02 02:47:06', '2021-03-02 02:47:06'),
-(20, 'gkkhkg', NULL, 1, '2021-03-02 03:44:49', '2021-03-02 03:44:49'),
-(21, 'hello', NULL, 1, '2021-03-02 03:45:09', '2021-03-02 03:45:09'),
-(22, 'pineapple', NULL, 1, '2021-03-02 03:51:16', '2021-03-02 03:51:16');
+(4, 'sony', 'images/brands/IY4HxpSvjL.png', 1, '2021-02-21 13:34:26', '2021-09-21 01:32:39'),
+(7, 'ফল', NULL, 0, '2021-02-22 00:53:39', '2021-09-21 01:26:27'),
+(8, 'লায়ন-কোডারস', 'images/brands/NXCIYRZBBs.png', 1, '2021-02-22 00:54:35', '2021-09-21 05:13:00'),
+(11, 'Panasonic', NULL, 0, '2021-03-01 23:51:20', '2021-09-21 01:26:22'),
+(14, 'Otobi', 'images/brands/d9itR3U0Qa.png', 1, '2021-03-02 02:00:46', '2021-09-21 01:34:53'),
+(16, 'ফল', 'images/brands/3FKKzS2ZR2.png', 1, '2021-03-02 02:42:37', '2021-09-21 01:34:15'),
+(19, 'Natural', 'images/brands/hjWoY7uWJW.png', 1, '2021-03-02 02:47:06', '2021-09-21 01:05:16'),
+(20, 'gkkhkg', 'images/brands/ycp2qDYst3.png', 1, '2021-03-02 03:44:49', '2021-09-21 01:30:44'),
+(21, 'hello', 'images/brands/QT4nnHkc8E.png', 1, '2021-03-02 03:45:09', '2021-09-21 01:30:11'),
+(22, 'pineapple', 'images/brands/32BaEMEItL.png', 1, '2021-03-02 03:51:16', '2021-09-21 01:33:24'),
+(23, 'samsung', 'images/brands/pKB1vdrpJX.webp', 1, '2021-09-22 03:57:09', '2021-09-22 03:57:09'),
+(25, 'sdsada', NULL, 0, '2021-10-10 05:32:33', '2021-10-10 05:32:33'),
+(26, 'sdsada', NULL, 0, '2021-10-10 05:32:33', '2021-10-10 05:32:33'),
+(27, 'irfan', NULL, 0, '2021-10-11 00:38:06', '2021-10-11 00:38:06');
 
 -- --------------------------------------------------------
 
@@ -264,19 +274,23 @@ CREATE TABLE `brand_translations` (
 --
 
 INSERT INTO `brand_translations` (`id`, `brand_id`, `local`, `brand_name`, `created_at`, `updated_at`) VALUES
-(2, 2, 'en', 'Samsung', '2021-02-21 13:26:44', '2021-02-21 13:26:44'),
-(5, 4, 'en', 'Sony', '2021-02-21 13:34:26', '2021-02-21 13:34:26'),
+(5, 4, 'en', 'Apple', '2021-02-21 13:34:26', '2021-02-21 13:34:26'),
 (6, 4, 'bn', 'সনি', NULL, NULL),
 (9, 7, 'bn', 'ফল', '2021-02-22 00:53:39', '2021-02-22 00:53:39'),
 (10, 8, 'bn', 'লায়ন কোডারস', '2021-02-22 00:54:35', '2021-02-22 00:54:35'),
 (13, 11, 'en', 'Panasonic', '2021-03-01 23:51:21', '2021-03-01 23:51:21'),
 (16, 14, 'en', 'Otobi', '2021-03-02 02:00:47', '2021-03-02 02:00:47'),
 (18, 16, 'en', 'ফল', '2021-03-02 02:42:38', '2021-03-02 02:42:38'),
-(21, 19, 'en', 'Natural', '2021-03-02 02:47:06', '2021-03-02 02:47:06'),
-(22, 20, 'en', 'gkkhkg', '2021-03-02 03:44:49', '2021-03-02 03:44:49'),
-(23, 21, 'en', 'hello', '2021-03-02 03:45:09', '2021-03-02 03:45:09'),
+(21, 19, 'en', 'Adidas', '2021-03-02 02:47:06', '2021-03-02 02:47:06'),
+(22, 20, 'en', 'Acer', '2021-03-02 03:44:49', '2021-03-02 03:44:49'),
+(23, 21, 'en', 'ASUS', '2021-03-02 03:45:09', '2021-03-02 03:45:09'),
 (24, 22, 'en', 'pineapple', '2021-03-02 03:51:16', '2021-03-02 03:51:16'),
-(25, 2, 'bn', 'Samsung', NULL, NULL);
+(26, 8, 'en', 'Sony', NULL, NULL),
+(27, 23, 'en', 'Samsung', '2021-09-22 03:57:10', '2021-09-22 03:57:10'),
+(29, 23, 'bn', 'স্যামসাং', NULL, NULL),
+(30, 26, 'en', 'sdsada', '2021-10-10 05:32:33', '2021-10-10 05:32:33'),
+(31, 25, 'en', 'sdsada', '2021-10-10 05:32:33', '2021-10-10 05:32:33'),
+(32, 27, 'en', 'irfan', '2021-10-11 00:38:06', '2021-10-11 00:38:06');
 
 -- --------------------------------------------------------
 
@@ -288,11 +302,12 @@ CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description_position` tinyint(4) DEFAULT 0,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `description_position` tinyint(4) DEFAULT '0',
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `featured` int(11) DEFAULT 0,
-  `is_active` tinyint(4) DEFAULT 0,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `top` int(11) DEFAULT '0',
+  `is_active` tinyint(4) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -301,14 +316,25 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `slug`, `parent_id`, `description`, `description_position`, `image`, `featured`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'electronics', NULL, 'This is Electronics', 1, NULL, 1, 1, '2021-02-21 22:59:48', '2021-03-25 12:57:10'),
-(3, 'clothes', NULL, 'This is Clothes', 0, NULL, 1, 1, '2021-02-21 23:39:24', '2021-03-20 04:01:53'),
-(9, 'Computer', 2, 'This is Computer', 1, NULL, 1, 1, '2021-02-22 02:07:32', '2021-02-22 02:07:32'),
-(10, 'laptop', 9, 'this is good', 1, NULL, 1, 1, NULL, '2021-04-18 02:46:53'),
-(11, 'মিস্টি', NULL, 'test', 1, NULL, 1, 0, '2021-02-22 04:43:25', '2021-03-25 12:54:10'),
-(12, 'men', 3, 'Men Collection', 1, NULL, 0, 0, '2021-03-20 03:51:04', '2021-03-25 12:57:05'),
-(13, 'ফার্ণিচার', NULL, 'good', 1, NULL, 0, 1, '2021-04-18 23:43:13', '2021-04-18 23:43:13');
+INSERT INTO `categories` (`id`, `slug`, `parent_id`, `description`, `description_position`, `image`, `icon`, `top`, `is_active`, `created_at`, `updated_at`) VALUES
+(2, 'electronics', NULL, 'This is Electronics', NULL, 'images/categories/syBEXDiaUy.webp', NULL, 1, 1, '2021-02-21 22:59:48', '2021-10-09 04:49:04'),
+(3, 'clothes', NULL, 'This is Clothes', NULL, NULL, 'las la-tshirt', NULL, 1, '2021-02-21 23:39:24', '2021-10-09 04:49:44'),
+(9, 'Computer', 2, 'This is Computer', 1, NULL, NULL, 1, 0, '2021-02-22 02:07:32', '2021-09-03 23:52:21'),
+(10, 'laptop', 9, 'this is good', 1, NULL, NULL, 1, 0, NULL, '2021-09-03 23:52:13'),
+(11, 'মিস্টি', NULL, 'test', 1, NULL, NULL, 1, 0, '2021-02-22 04:43:25', '2021-03-25 12:54:10'),
+(12, 'men', 3, 'Men Collection', 1, NULL, NULL, 0, 0, '2021-03-20 03:51:04', '2021-09-12 06:51:07'),
+(13, 'furniture', NULL, 'good', 1, NULL, 'las la-couch', NULL, 1, '2021-04-18 23:43:13', '2021-10-05 04:52:53'),
+(14, 'car', NULL, 'Beautiful Cars', NULL, 'images/categories/TQgwL8HG14.jpg', 'las la-car', NULL, 1, '2021-09-12 04:27:29', '2021-10-09 04:49:29'),
+(15, 'test-80', NULL, 'Test 80', NULL, 'images/categories/Keg2VkAQj2.png', NULL, NULL, 1, '2021-09-12 04:35:37', '2021-10-17 10:45:31'),
+(16, 'otobi', 13, 'Testing Purpose', NULL, 'images/categories/n3jcVsXfZA.webp', NULL, 1, 1, '2021-09-14 04:44:36', '2021-10-09 04:47:20'),
+(17, 'rfl', 13, 'Testing', NULL, 'images/categories/loEqpqXR8k.webp', NULL, 1, 1, '2021-09-14 04:46:12', '2021-10-09 04:46:20'),
+(18, 'chair', 17, 'Testing', NULL, 'images/categories/q0DsbTFuc0.webp', NULL, 1, 1, '2021-09-14 04:48:27', '2021-10-09 04:45:10'),
+(19, 'table', 17, 'Testing', NULL, 'images/categories/kZ5SxsKTp0.webp', 'las-la-table', 1, 1, '2021-09-14 04:49:03', '2021-10-09 04:44:14'),
+(20, 'mobile', 2, 'Mobile', 1, NULL, NULL, NULL, 1, '2021-09-21 04:23:50', '2021-09-22 05:10:17'),
+(21, 'android', 20, 'Android', 1, NULL, NULL, 0, 1, '2021-09-21 04:24:57', '2021-09-21 04:24:57'),
+(22, 'iphone', 20, 'iPhone', 1, NULL, NULL, 0, 1, '2021-09-21 04:25:31', '2021-09-21 04:25:31'),
+(23, 'test', NULL, 'testst', NULL, NULL, NULL, NULL, 1, '2021-10-05 03:46:33', '2021-10-17 10:45:03'),
+(24, 'test-55', NULL, 'testt', NULL, NULL, NULL, 1, 0, '2021-10-09 04:28:02', '2021-10-09 04:28:02');
 
 -- --------------------------------------------------------
 
@@ -326,10 +352,19 @@ CREATE TABLE `category_product` (
 --
 
 INSERT INTO `category_product` (`category_id`, `product_id`) VALUES
-(2, 1),
-(3, 1),
 (2, 2),
-(3, 2);
+(3, 2),
+(20, 6),
+(20, 7),
+(20, 8),
+(13, 1),
+(3, 4),
+(2, 8),
+(2, 5),
+(20, 5),
+(20, 28),
+(2, 3),
+(13, 29);
 
 -- --------------------------------------------------------
 
@@ -361,36 +396,26 @@ INSERT INTO `category_translations` (`id`, `category_id`, `local`, `category_nam
 (16, 10, 'bn', 'ল্যাপটপ', NULL, NULL),
 (17, 9, 'bn', 'কম্পিউটার', NULL, NULL),
 (18, 12, 'en', 'Men', '2021-03-20 03:51:04', '2021-03-20 03:51:04'),
-(19, 13, 'bn', 'ফার্ণিচার', '2021-04-18 23:43:13', '2021-04-18 23:43:13'),
 (20, 13, 'en', 'Furniture', NULL, NULL),
 (21, 13, 'hi', 'फर्नीचर', NULL, NULL),
 (22, 13, 'fr', 'un meuble', NULL, NULL),
-(23, 3, 'hi', 'फर्नीचर', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `collections`
---
-
-CREATE TABLE `collections` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `collections`
---
-
-INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'New Arrivals', 'new-arrivals', NULL, 1, '2020-12-19 13:59:39', '2020-12-19 13:59:39'),
-(2, 'Shirts', 'shirts', NULL, 1, '2020-12-19 14:00:13', '2020-12-19 14:00:13'),
-(3, 'Hoodies', 'hoodies', NULL, 1, '2020-12-19 14:01:34', '2020-12-19 14:01:34');
+(23, 3, 'hi', 'फर्नीचर', NULL, NULL),
+(24, 14, 'en', 'Car', '2021-09-12 04:27:30', '2021-09-12 04:27:30'),
+(25, 15, 'en', 'Toys', '2021-09-12 04:35:37', '2021-09-12 04:35:37'),
+(26, 16, 'en', 'Otobi', '2021-09-14 04:44:36', '2021-09-14 04:44:36'),
+(27, 17, 'en', 'RFL', '2021-09-14 04:46:12', '2021-09-14 04:46:12'),
+(28, 18, 'en', 'Chair', '2021-09-14 04:48:27', '2021-09-14 04:48:27'),
+(29, 19, 'en', 'Table', '2021-09-14 04:49:03', '2021-09-14 04:49:03'),
+(30, 13, 'bn', 'ফার্নিচার', NULL, NULL),
+(31, 16, 'bn', 'অটোবি', NULL, NULL),
+(32, 17, 'bn', 'আর এফ এল', NULL, NULL),
+(33, 14, 'bn', 'কার', NULL, NULL),
+(34, 20, 'en', 'Mobile', '2021-09-21 04:23:50', '2021-09-21 04:23:50'),
+(35, 21, 'en', 'Android', '2021-09-21 04:24:57', '2021-09-21 04:24:57'),
+(36, 22, 'en', 'iPhone', '2021-09-21 04:25:31', '2021-09-21 04:25:31'),
+(37, 20, 'bn', 'মোবাইল', NULL, NULL),
+(38, 23, 'en', 'Food', '2021-10-05 03:46:33', '2021-10-05 03:46:33'),
+(39, 24, 'en', 'test 55', '2021-10-09 04:28:02', '2021-10-09 04:28:02');
 
 -- --------------------------------------------------------
 
@@ -661,11 +686,11 @@ CREATE TABLE `coupons` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `coupon_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` decimal(8,2) NOT NULL,
+  `value` decimal(8,4) NOT NULL,
   `discount_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `free_shipping` tinyint(4) NOT NULL,
-  `minimum_spend` decimal(8,2) DEFAULT NULL,
-  `maximum_spend` decimal(8,2) DEFAULT NULL,
+  `minimum_spend` decimal(8,4) DEFAULT NULL,
+  `maximum_spend` decimal(8,4) DEFAULT NULL,
   `usage_limit_per_coupon` int(11) DEFAULT NULL,
   `usage_limit_per_customer` int(11) DEFAULT NULL,
   `used` int(11) NOT NULL,
@@ -681,8 +706,8 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `slug`, `coupon_code`, `value`, `discount_type`, `free_shipping`, `minimum_spend`, `maximum_spend`, `usage_limit_per_coupon`, `usage_limit_per_customer`, `used`, `is_active`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(2, 'anniversary', 'HAPPY2020', '12.00', 'fixed', 0, '10.00', '20.00', NULL, NULL, 0, 1, '1970-01-01', '1970-01-01', '2021-04-18 16:40:23', '2021-04-19 06:11:37'),
-(8, 'dhama-offer', 'Offer2021', '20.00', 'percent', 0, '15.00', '25.00', 50, 30, 0, 1, '2021-04-19', '2021-04-24', '2021-04-19 05:39:08', '2021-04-19 13:42:10');
+(2, 'anniversary', 'HAPPY2020', '12.0000', 'fixed', 0, '10.0000', '20.0000', NULL, NULL, 0, 0, '1970-01-01', '1970-01-01', '2021-04-18 16:40:23', '2021-07-27 00:00:29'),
+(8, 'dhama-offer', 'Offer2021', '20.0000', 'percent', 0, '15.0000', '25.0000', 50, 30, 0, 1, '2021-04-19', '2021-04-24', '2021-04-19 05:39:08', '2021-09-24 23:57:57');
 
 -- --------------------------------------------------------
 
@@ -718,7 +743,8 @@ CREATE TABLE `coupon_products` (
 --
 
 INSERT INTO `coupon_products` (`coupon_id`, `product_id`) VALUES
-(8, 2);
+(8, 6),
+(8, 8);
 
 -- --------------------------------------------------------
 
@@ -746,21 +772,84 @@ INSERT INTO `coupon_translations` (`id`, `coupon_id`, `locale`, `coupon_name`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `currencies`
+--
+
+CREATE TABLE `currencies` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `currency_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `currencies`
+--
+
+INSERT INTO `currencies` (`id`, `currency_name`, `currency_code`, `created_at`, `updated_at`) VALUES
+(1, 'United Arab Emirates Dirham', 'AED', NULL, NULL),
+(2, 'Afghan Afghani', 'AFN', NULL, NULL),
+(3, 'Albanian Lek', 'ALL', NULL, NULL),
+(4, 'Bangladesh Taka', 'BDT', NULL, NULL),
+(5, 'Indian Rupee', 'INR', NULL, NULL),
+(6, 'United States Dollar', 'USD', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `currency_rates`
+--
+
+CREATE TABLE `currency_rates` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `currency_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_rate` decimal(8,4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `currency_rates`
+--
+
+INSERT INTO `currency_rates` (`id`, `currency_name`, `currency_code`, `currency_rate`, `created_at`, `updated_at`) VALUES
+(107, 'Bangladesh Taka', 'BDT', NULL, '2021-09-29 03:14:13', '2021-09-29 03:14:13'),
+(108, 'Indian Rupee', 'INR', NULL, '2021-09-29 03:14:13', '2021-09-29 03:14:13'),
+(109, 'United States Dollar', 'USD', NULL, '2021-09-29 03:14:13', '2021-09-29 03:14:13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customers`
 --
 
 CREATE TABLE `customers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `phone` double NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_address` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `billing_address` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `customer_ip` int(11) NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `user_id`, `first_name`, `last_name`, `username`, `phone`, `email`, `image`, `password`, `user_type`, `created_at`, `updated_at`) VALUES
+(1, 21, 'Promi', 'Chy', 'promi98', '01777703433', 'promi00@gmail.com', 'images/customers/xs7Km7I4tG.webp', '$2y$10$0e6m6BmLQvDkut1xv.Ff7eaQYHhPD6wUpKdcI2AXZ.LhVhMUsbTFC', 0, '2021-10-11 09:01:44', '2021-10-11 09:01:44'),
+(3, 23, 'Abir', 'Shanto', 'Abir95', '01548741214', 'abir@gmail.com', NULL, '$2y$10$JXPxVB/3uHhFoaUDhRTj9uJ6/WN4E/jrsAKY9F/f/WAYJO4TxE2pK', 0, '2021-10-13 22:35:10', '2021-10-13 22:35:10'),
+(4, 24, 'Ruby', 'Khatun', 'ruby95', '45646454', 'ruby@gmail.com', NULL, '$2y$10$LZ5sDEmGl2H2RGRLMg0C0OyIEzRH9nOXrZzHTfbyE8dBrlgCo9Rse', 0, '2021-10-19 23:26:38', '2021-10-19 23:26:38'),
+(5, 25, 'fahamina', 'Chowdhury', 'fahamina95', '1567685454', 'fahamina@gmail.com', NULL, '$2y$10$2QARKVR48tF1Uwvtam2LS.nqKAs12OGonogfYg5VnsNJxc1jGTn.6', 0, '2021-10-20 01:20:22', '2021-10-20 01:20:22'),
+(6, 26, 'Maimul', 'islam', 'mainul95', '01521222515', 'mainul@gmail.com', NULL, '$2y$10$VJDRzwfnDfrmfbvSCUj/lOOE9V0KMzpC3vfGGAAkCSzcvKpjvD.g.', 0, '2021-10-20 12:54:13', '2021-10-20 12:54:13');
 
 -- --------------------------------------------------------
 
@@ -774,7 +863,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -786,7 +875,7 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `flash_sales` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT 0,
+  `is_active` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -796,11 +885,11 @@ CREATE TABLE `flash_sales` (
 --
 
 INSERT INTO `flash_sales` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'dhamaka-offer', 1, '2021-03-27 13:52:24', '2021-03-27 13:52:24'),
-(2, 'boom-offer', 1, '2021-03-27 14:13:55', '2021-03-27 14:13:55'),
-(3, 'awesome-offer', 0, '2021-03-27 14:20:24', '2021-03-27 14:20:24'),
-(4, 'winter-offer', 1, '2021-03-27 14:35:15', '2021-03-27 14:35:15'),
-(5, 'rainy-offer', 0, '2021-03-27 14:37:48', '2021-03-27 14:37:48');
+(1, 'dhamaka-offer', 1, '2021-03-27 13:52:24', '2021-07-26 21:54:22'),
+(2, 'boom-offer', 0, '2021-03-27 14:13:55', '2021-07-26 21:49:36'),
+(3, 'awesome-offer', 0, '2021-03-27 14:20:24', '2021-07-26 21:48:52'),
+(4, 'winter-offer', 1, '2021-03-27 14:35:15', '2021-07-26 21:54:22'),
+(5, 'rainy-offer', 1, '2021-03-27 14:37:48', '2021-07-26 21:54:22');
 
 -- --------------------------------------------------------
 
@@ -815,7 +904,7 @@ CREATE TABLE `flash_sale_products` (
   `end_date` date NOT NULL,
   `price` decimal(8,2) NOT NULL,
   `qty` int(11) NOT NULL,
-  `position` tinyint(4) NOT NULL DEFAULT 0,
+  `position` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -825,8 +914,8 @@ CREATE TABLE `flash_sale_products` (
 --
 
 INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `end_date`, `price`, `qty`, `position`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '2021-03-18', '78.00', 45, 0, '2021-03-27 13:52:24', '2021-03-27 13:52:24'),
-(2, 1, 3, '2021-03-31', '47.00', 22, 0, '2021-03-27 13:52:24', '2021-03-27 13:52:24'),
+(1, 1, 2, '2022-03-18', '78.00', 45, 0, '2021-03-27 13:52:24', '2021-03-27 13:52:24'),
+(2, 1, 3, '2022-12-28', '47.00', 22, 0, '2021-03-27 13:52:24', '2021-03-27 13:52:24'),
 (3, 2, 1, '2021-03-31', '65.00', 45, 0, '2021-03-27 14:13:55', '2021-03-27 14:13:55'),
 (4, 2, 2, '2021-03-30', '78.00', 63, 0, '2021-03-27 14:13:55', '2021-03-27 14:13:55'),
 (5, 3, 1, '2021-03-28', '65.00', 45, 0, '2021-03-27 14:20:24', '2021-03-27 14:20:24'),
@@ -834,8 +923,9 @@ INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `end_dat
 (7, 3, 3, '2021-03-30', '63.00', 79, 0, '2021-03-27 14:20:24', '2021-03-27 14:20:24'),
 (8, 4, 3, '2021-03-17', '65.00', 45, 0, '2021-03-27 14:35:15', '2021-03-27 14:35:15'),
 (9, 4, 1, '2021-03-17', '85.00', 63, 0, '2021-03-27 14:35:15', '2021-03-27 14:35:15'),
-(10, 5, 2, '2021-03-02', '78.00', 45, 0, '2021-03-27 14:37:48', '2021-03-27 14:37:48'),
-(11, 5, 4, '2021-03-24', '87.00', 85, 0, '2021-03-27 14:37:48', '2021-03-27 14:37:48');
+(11, 5, 4, '2021-03-24', '87.00', 85, 0, '2021-03-27 14:37:48', '2021-03-27 14:37:48'),
+(12, 5, 3, '2021-03-02', '78.00', 45, 0, NULL, NULL),
+(13, 1, 4, '2022-10-26', '50.00', 10, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -866,30 +956,13 @@ INSERT INTO `flash_sale_translations` (`id`, `flash_sale_id`, `local`, `campaign
 -- --------------------------------------------------------
 
 --
--- Table structure for table `guest_customers`
---
-
-CREATE TABLE `guest_customers` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` int(11) NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_address` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ip_adddress` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `images`
 --
 
 CREATE TABLE `images` (
   `id` int(11) NOT NULL,
   `img_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `img_order` int(5) NOT NULL DEFAULT 0,
+  `img_order` int(5) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `status` enum('1','0') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1'
@@ -917,9 +990,11 @@ CREATE TABLE `languages` (
 INSERT INTO `languages` (`id`, `language_name`, `local`, `default`, `created_at`, `updated_at`) VALUES
 (5, 'Hindi', 'hi', 0, '2021-02-19 10:07:25', '2021-02-22 04:43:52'),
 (10, 'English', 'en', 0, '2021-02-19 10:23:59', '2021-03-03 13:37:45'),
-(11, 'Bangla', 'bn', 1, '2021-02-19 10:24:49', '2021-03-03 13:37:46'),
+(11, 'Bangla', 'bn', 0, '2021-02-19 10:24:49', '2021-09-02 01:08:54'),
 (12, 'France', 'fr', 0, '2021-02-19 10:33:38', '2021-02-21 11:23:33'),
-(15, 'Chinese', 'cn', 0, '2021-02-21 11:23:18', '2021-02-22 00:21:51');
+(15, 'Chinese', 'cn', 0, '2021-02-21 11:23:18', '2021-02-22 00:21:51'),
+(17, 'Spanish', 'sn', 0, '2021-09-12 04:21:28', '2021-09-12 04:21:28'),
+(18, 'Arabic', 'ar', 0, '2021-10-10 06:02:48', '2021-10-10 06:02:48');
 
 -- --------------------------------------------------------
 
@@ -929,8 +1004,8 @@ INSERT INTO `languages` (`id`, `language_name`, `local`, `default`, `created_at`
 
 CREATE TABLE `menus` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) NOT NULL DEFAULT 0,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -940,30 +1015,9 @@ CREATE TABLE `menus` (
 --
 
 INSERT INTO `menus` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'primary-menu', 1, '2021-04-20 15:27:47', '2021-04-20 17:52:32'),
-(3, 'category-menu', 1, '2021-04-20 16:05:21', '2021-04-20 17:43:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `menus0`
---
-
-CREATE TABLE `menus0` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(4) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `menus0`
---
-
-INSERT INTO `menus0` (`id`, `menu_name`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Category Menu', 1, '2021-02-07 22:41:17', '2021-02-07 22:41:17'),
-(2, 'Primary Menu', 1, '2021-02-07 23:49:30', '2021-02-07 23:49:30');
+(3, 'primary-menu', 1, '2021-08-22 19:30:03', '2021-08-22 19:30:03'),
+(4, 'category-menu', 1, '2021-08-23 05:10:08', '2021-08-23 05:10:08'),
+(5, 'home-page-menu', 1, '2021-10-23 23:18:18', '2021-10-23 23:18:18');
 
 -- --------------------------------------------------------
 
@@ -973,16 +1027,14 @@ INSERT INTO `menus0` (`id`, `menu_name`, `is_active`, `created_at`, `updated_at`
 
 CREATE TABLE `menu_items` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `is_fluid` tinyint(4) NOT NULL DEFAULT 1,
-  `is_active` tinyint(4) NOT NULL DEFAULT 0,
+  `locale` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parent` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `menu` bigint(20) UNSIGNED NOT NULL,
+  `depth` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -991,68 +1043,22 @@ CREATE TABLE `menu_items` (
 -- Dumping data for table `menu_items`
 --
 
-INSERT INTO `menu_items` (`id`, `menu_id`, `type`, `category_id`, `page_id`, `url`, `icon`, `target`, `parent_id`, `is_fluid`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 'url', NULL, NULL, '/brands/samsung/products', 'teest', 'new_tab', NULL, 1, 1, '2021-04-21 03:51:34', '2021-04-21 07:28:27'),
-(3, 1, 'category', 3, NULL, NULL, 'test', 'same_tab', 1, 1, 1, '2021-04-21 04:04:15', '2021-04-21 07:27:02'),
-(5, 1, 'page', NULL, 4, NULL, 'test page', 'new_tab', 3, 1, 1, '2021-04-21 13:15:34', '2021-04-21 15:07:11');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `menu_items0`
---
-
-CREATE TABLE `menu_items0` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `fluid_menu` tinyint(4) DEFAULT NULL,
-  `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `is_active` tinyint(4) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `menu_items0`
---
-
-INSERT INTO `menu_items0` (`id`, `menu_id`, `item_name`, `type`, `category_id`, `page_id`, `url`, `icon`, `fluid_menu`, `target`, `parent_id`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 'test-1', 'category', 1, NULL, NULL, NULL, NULL, 'same_tab', NULL, 1, '2021-02-07 23:39:26', '2021-02-07 23:39:26'),
-(2, 1, 'test-2', 'category', 1, NULL, NULL, NULL, NULL, 'new_tab', 1, 1, '2021-02-07 23:47:51', '2021-02-07 23:47:51'),
-(6, 2, 'Social Site', 'url', NULL, NULL, '#', NULL, NULL, 'same_tab', NULL, 1, '2021-02-09 04:24:02', '2021-02-09 04:24:02'),
-(7, 2, 'w3schools', 'url', NULL, NULL, 'https://www.w3schools.com/', NULL, NULL, 'new_tab', 6, 1, '2021-02-09 04:25:06', '2021-02-09 04:25:06'),
-(8, 2, 'Facebook', 'url', NULL, NULL, 'https://www.facebook.com/', NULL, NULL, 'new_tab', 6, 1, '2021-02-09 04:26:33', '2021-02-09 04:26:33');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `menu_item_translations`
---
-
-CREATE TABLE `menu_item_translations` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_item_id` bigint(20) UNSIGNED NOT NULL,
-  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `menu_item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `menu_item_translations`
---
-
-INSERT INTO `menu_item_translations` (`id`, `menu_item_id`, `locale`, `menu_item_name`, `created_at`, `updated_at`) VALUES
-(1, 1, 'en', 'Specials URL', '2021-04-21 03:51:35', '2021-04-21 03:51:35'),
-(3, 3, 'en', 'New Arrivals Category', '2021-04-21 04:04:15', '2021-04-21 04:04:15'),
-(5, 5, 'en', 'Test For Page', '2021-04-21 13:15:34', '2021-04-21 14:58:38');
+INSERT INTO `menu_items` (`id`, `locale`, `label`, `link`, `parent`, `sort`, `class`, `menu`, `depth`, `created_at`, `updated_at`) VALUES
+(1, 'en', 'Tiktok', 'https://www.facebook.com/Test', 0, 0, NULL, 4, 0, '2021-08-23 05:15:10', '2021-09-13 05:19:11'),
+(2, 'en', 'Youtube', 'https://www.youtube.com/', 0, 0, NULL, 3, 0, '2021-08-23 06:12:19', '2021-09-13 06:15:12'),
+(3, 'en', 'Linked In', 'https://bd.linkedin.com/', 2, 1, NULL, 3, 1, '2021-08-23 06:15:06', '2021-09-13 06:15:12'),
+(4, 'en', 'Samsung', 'https://www.samsung.com/', 0, 1, NULL, 4, 0, '2021-08-23 06:17:39', '2021-09-02 00:51:21'),
+(5, 'en', 'Twitter', 'https://bd.linkedin.com/', 0, 2, NULL, 4, 0, '2021-08-23 06:22:38', '2021-08-28 00:32:43'),
+(6, 'en', 'Facebook', 'https://www.facebook.com/', 3, 2, NULL, 3, 2, '2021-08-23 15:57:45', '2021-09-13 06:15:12'),
+(7, 'en', 'Samsung', 'https://www.samsung.com/us/', 0, 3, NULL, 3, 0, '2021-09-13 06:13:24', '2021-09-13 07:04:13'),
+(8, 'en', 'Furniture', '#', 0, 4, NULL, 3, 0, '2021-09-13 06:15:30', '2021-09-13 07:04:13'),
+(9, 'en', 'Otobi', 'https://otobi.com/', 8, 5, NULL, 3, 1, '2021-09-13 06:16:17', '2021-09-13 07:04:13'),
+(10, 'en', 'RFL', 'https://www.rflbd.com/', 8, 6, NULL, 3, 1, '2021-09-13 06:16:32', '2021-09-13 07:04:13'),
+(11, 'en', 'Chair', 'http://lion-coders.com/', 10, 7, NULL, 3, 2, '2021-09-13 07:00:22', '2021-09-13 07:04:23'),
+(12, 'en', 'Panasonic', 'https://www.facebook.com/', 10, 8, NULL, 3, 2, '2021-09-13 07:05:05', '2021-09-13 07:05:11'),
+(13, NULL, 'About Us', 'https://fleetcart.envaysoft.com/en', 0, 0, NULL, 5, 0, '2021-10-24 00:03:12', '2021-10-24 00:34:37'),
+(14, NULL, 'Terms of Service', 'http://cartpro.test/page/terms-&-conditions', 0, 1, NULL, 5, 0, '2021-10-24 00:03:36', '2021-10-24 05:21:04'),
+(15, NULL, 'FAQ', 'http://cartpro.test/page/faq', 0, 2, NULL, 5, 0, '2021-10-24 00:03:54', '2021-10-24 22:03:02');
 
 -- --------------------------------------------------------
 
@@ -1061,22 +1067,23 @@ INSERT INTO `menu_item_translations` (`id`, `menu_item_id`, `locale`, `menu_item
 --
 
 CREATE TABLE `menu_translations` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `menu_id` bigint(20) UNSIGNED NOT NULL,
-  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `menu_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `menu_id` bigint(20) DEFAULT NULL,
+  `locale` varchar(255) NOT NULL,
+  `menu_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `menu_translations`
 --
 
 INSERT INTO `menu_translations` (`id`, `menu_id`, `locale`, `menu_name`, `created_at`, `updated_at`) VALUES
-(1, 1, 'en', 'Primary Menu', '2021-04-20 15:27:47', '2021-04-20 15:27:47'),
-(3, 3, 'en', 'Category Menu', '2021-04-20 16:05:21', '2021-04-20 17:43:00'),
-(4, 1, 'bn', 'প্রাইমারী মেনু', '2021-04-20 17:52:32', '2021-04-20 17:52:32');
+(2, 3, 'en', 'Primary Menu', '2021-08-22 19:30:03', '2021-08-23 16:37:27'),
+(3, 4, 'en', 'Category Menu', '2021-08-23 05:10:08', '2021-09-02 00:51:30'),
+(10, 3, 'bn', 'প্রাইমারী মেনু', '2021-08-23 17:37:07', '2021-08-23 17:39:31'),
+(11, 5, 'en', 'Home Page Menu', '2021-10-23 23:18:18', '2021-10-23 23:18:18');
 
 -- --------------------------------------------------------
 
@@ -1095,28 +1102,17 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
+(1, '2014_10_12_000000_create_users0_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2020_10_20_093106_create_customers_table', 1),
 (9, '2020_10_20_093433_create_wishlists_table', 2),
 (11, '2020_10_20_093627_create_searchterms_table', 2),
-(12, '2020_10_20_093705_create_guest_customers_table', 2),
 (15, '2016_06_01_000001_create_oauth_auth_codes_table', 5),
 (16, '2016_06_01_000002_create_oauth_access_tokens_table', 5),
 (17, '2016_06_01_000003_create_oauth_refresh_tokens_table', 5),
 (18, '2016_06_01_000004_create_oauth_clients_table', 5),
 (19, '2016_06_01_000005_create_oauth_personal_access_clients_table', 5),
-(20, '2020_11_19_092036_create_orders_table', 6),
-(21, '2020_11_19_092114_create_order_details_table', 7),
-(22, '2020_11_19_092150_create_shipping_table', 8),
-(24, '2020_12_17_192938_create_collections_table', 10),
-(25, '2021_01_02_103431_create_orders_table', 11),
-(26, '2021_01_02_104544_create_ordered_products_table', 11),
 (34, '2021_02_04_043043_create_navigations_table', 12),
-(36, '2021_02_06_062335_create_sliders_table', 13),
-(38, '2021_02_07_103825_create_menus0_table', 14),
-(41, '2021_02_07_104132_create_menu_items0_table', 15),
 (43, '2021_02_08_071833_create_storefront_menus_table', 16),
 (44, '2021_02_14_201446_create_storefront_generals_table', 17),
 (47, '2021_02_19_115914_create_languages_table', 18),
@@ -1149,14 +1145,85 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (138, '2021_04_19_214948_create_page_translations_table', 27),
 (139, '2021_04_20_101649_create_settings_table', 28),
 (141, '2021_04_20_102050_create_setting_translations_table', 29),
-(142, '2021_04_20_205105_create_menus_table', 30),
-(143, '2021_04_20_205527_create_menu_translations_table', 30),
-(144, '2021_04_21_061803_create_menu_items_table', 31),
-(145, '2021_04_21_061945_create_menu_item_translations_table', 31),
 (146, '2021_05_07_190540_create_storefront_images_table', 32),
 (147, '2021_07_07_054428_create_countries_table', 32),
 (153, '2021_07_19_143452_create_setting_generals_table', 33),
-(154, '2021_07_22_060151_create_setting_stores_table', 33);
+(154, '2021_07_22_060151_create_setting_stores_table', 33),
+(155, '2021_07_24_060323_create_setting_currencies_table', 34),
+(158, '2021_07_24_154925_create_setting_sms_table', 35),
+(162, '2021_07_25_042459_create_setting_mails_table', 36),
+(163, '2021_07_25_055222_create_setting_newsletters_table', 37),
+(164, '2021_07_25_063221_create_setting_custom_css_jsses_table', 38),
+(165, '2021_07_25_071506_create_setting_facebooks_table', 39),
+(166, '2021_07_25_074456_create_setting_googles_table', 40),
+(169, '2021_07_25_085352_create_setting_free_shippings_table', 41),
+(170, '2021_07_25_093723_create_setting_local_pickups_table', 42),
+(171, '2021_07_25_095024_create_setting_flat_rates_table', 43),
+(172, '2021_07_25_133626_create_setting_paypals_table', 44),
+(173, '2021_07_25_151050_create_setting_strips_table', 45),
+(174, '2021_07_25_153922_create_setting_paytms_table', 46),
+(175, '2021_07_25_164941_create_setting_cash_on_deliveries_table', 47),
+(176, '2021_07_25_170845_create_setting_bank_transfers_table', 48),
+(177, '2021_07_25_172653_create_setting_check_moneyxyz_xyzorders_table', 49),
+(178, '2021_07_31_025241_create_permission_tables', 50),
+(179, '2021_08_05_060912_create_slider_translations_table', 51),
+(180, '2021_02_06_062335_create_sliders0_table', 52),
+(181, '2021_08_05_060912_create_slider_translations0_table', 52),
+(187, '2021_08_05_121746_create_sliders_table', 53),
+(188, '2021_08_05_122939_create_slider_translations_table', 53),
+(189, '2014_10_12_000000_create_users_table', 54),
+(190, '2021_08_14_110145_create_taxes_table', 55),
+(191, '2021_08_14_110440_create_tax_translations_table', 55),
+(206, '2017_08_11_073824_create_menus_wp_table', 56),
+(207, '2017_08_11_074006_create_menu_items_wp_table', 57),
+(208, '2021_08_23_000802_create_menu_translations_wp_table', 58),
+(209, '2021_08_28_062405_create_currency_rates_table', 58),
+(210, '2021_08_28_081712_create_currencies_table', 59),
+(211, '2021_10_03_092326_create_product_attribute_value_table', 60),
+(212, '2021_10_05_040237_create_newsletters_table', 61),
+(213, '2020_10_20_093705_create_guest_customers_table', 62),
+(214, '2021_10_11_141748_create_customers_table', 63),
+(215, '2021_10_11_150921_create_orders_table', 64),
+(216, '2021_10_11_152037_create_shippings_table', 65),
+(217, '2021_07_25_172653_create_setting_check_money_orders_table', 66),
+(221, '2021_10_14_051152_create_order_details_table', 67),
+(222, '2021_10_25_124957_create_reviews_table', 68);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `model_has_permissions`
+--
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `model_has_roles`
+--
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(3, 'App\\User', 1),
+(1, 'App\\User', 6),
+(6, 'App\\User', 7),
+(6, 'App\\User', 8),
+(6, 'App\\User', 9),
+(4, 'App\\User', 10);
 
 -- --------------------------------------------------------
 
@@ -1170,7 +1237,7 @@ CREATE TABLE `navigations` (
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` text COLLATE utf8mb4_unicode_ci,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
   `is_active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
@@ -1194,32 +1261,35 @@ INSERT INTO `navigations` (`id`, `navigation_name`, `type`, `category_id`, `page
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ordered_products`
+-- Table structure for table `newsletters`
 --
 
-CREATE TABLE `ordered_products` (
+CREATE TABLE `newsletters` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `size` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `qty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `unit_price` double(8,2) NOT NULL,
-  `total_price` double(8,2) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `ordered_products`
+-- Dumping data for table `newsletters`
 --
 
-INSERT INTO `ordered_products` (`id`, `order_id`, `sku`, `name`, `size`, `color`, `qty`, `unit_price`, `total_price`, `created_at`, `updated_at`) VALUES
-(1, 1, 'AI-LS-Bright White-074B', 'Big Check Cotton Flanel L.Sleeve Shirt', 'S', 'White', '1', 11.99, 11.99, '2021-01-02 06:19:46', '2021-01-02 06:19:46'),
-(2, 1, 'AI-LS-Bright White-074A', 'Big Check Cotton Flanel L.Sleeve Shirt', 'M', 'White', '1', 11.99, 11.99, '2021-01-02 06:19:46', '2021-01-02 06:19:46'),
-(3, 2, 'AI-LS-Bright White-074B', 'Big Check Cotton Flanel L.Sleeve Shirt', 'S', 'White', '1', 11.99, 11.99, '2021-01-06 02:49:34', '2021-01-06 02:49:34'),
-(4, 2, 'AI-LS-Bright White-074A', 'Big Check Cotton Flanel L.Sleeve Shirt', 'M', 'White', '1', 11.99, 11.99, '2021-01-06 02:49:35', '2021-01-06 02:49:35');
+INSERT INTO `newsletters` (`id`, `email`, `created_at`, `updated_at`) VALUES
+(1, 'johncena@hotmail.com', '2021-10-04 22:45:01', '2021-10-04 22:45:01'),
+(2, 'irfanchowdhury80@gmail.com', '2021-10-04 22:47:36', '2021-10-04 22:47:36'),
+(3, 'samu@gmail.com', '2021-10-04 23:12:21', '2021-10-04 23:12:21'),
+(5, 'fahim95@gmail.com', '2021-10-04 23:14:04', '2021-10-04 23:14:04'),
+(6, 'samu98@gmail.com', '2021-10-04 23:15:53', '2021-10-04 23:15:53'),
+(7, 'irfanchowdhury434@gmail.com', '2021-10-04 23:17:28', '2021-10-04 23:17:28'),
+(8, 'shamim@gmail.com', '2021-10-04 23:19:16', '2021-10-04 23:19:16'),
+(9, 'admin@gmail.com', '2021-10-04 23:19:32', '2021-10-04 23:19:32'),
+(10, 'johncena65@hotmail.com', '2021-10-04 23:22:11', '2021-10-04 23:22:11'),
+(11, 'admin98@gmail.com', '2021-10-04 23:33:59', '2021-10-04 23:33:59'),
+(12, 'teast34@gmail.com', '2021-10-04 23:35:05', '2021-10-04 23:35:05'),
+(13, 'irfanchowdhury12@gmail.com', '2021-10-04 23:36:25', '2021-10-04 23:36:25'),
+(14, 'nasrinchowdhury198@gmal.com', '2021-10-05 01:35:43', '2021-10-05 01:35:43'),
+(15, 'zuhair2025@gmail.com', '2021-10-05 01:37:39', '2021-10-05 01:37:39');
 
 -- --------------------------------------------------------
 
@@ -1229,21 +1299,25 @@ INSERT INTO `ordered_products` (`id`, `order_id`, `sku`, `name`, `size`, `color`
 
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `payment_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ship_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ship_city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ship_state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ship_postal_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `item` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_qty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_price` double(8,2) NOT NULL,
+  `billing_first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_address_1` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_zip_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_cost` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `coupon_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `coupon_discount` double(8,2) DEFAULT NULL,
+  `payment_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` decimal(10,0) DEFAULT NULL,
+  `order_status` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1252,9 +1326,71 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `payment_id`, `user_id`, `customer_id`, `name`, `email`, `phone`, `ship_address`, `ship_city`, `ship_state`, `ship_postal_code`, `item`, `total_qty`, `total_price`, `coupon_id`, `coupon_discount`, `created_at`, `updated_at`) VALUES
-(1, '0HT747007J422173W', NULL, NULL, 'John Doe', 'sb-1xqau4236979@business.example.com', NULL, '1 Main St', 'San Jose', 'CA', '95131', '2', '2', 23.98, NULL, NULL, '2021-01-02 06:19:46', '2021-01-02 06:19:46'),
-(2, '13830408VG1150216', NULL, NULL, 'John Doe', 'sb-1xqau4236979@business.example.com', NULL, '1 Main St', 'San Jose', 'CA', '95131', '2', '2', 23.98, NULL, NULL, '2021-01-06 02:49:34', '2021-01-06 02:49:34');
+INSERT INTO `orders` (`id`, `user_id`, `billing_first_name`, `billing_last_name`, `billing_email`, `billing_phone`, `billing_country`, `billing_address_1`, `billing_address_2`, `billing_city`, `billing_state`, `billing_zip_code`, `shipping_method`, `shipping_cost`, `payment_method`, `coupon_id`, `payment_id`, `discount`, `total`, `order_status`, `created_at`, `updated_at`) VALUES
+(1, 21, 'Irfan', 'Chowdhury', 'irfanchowdhury', '01829498634', 'Bangladesh', 'Chitagong', NULL, 'Chitagong', 'Chitagong', 'Free', 'Paypal', '10', 'Paypal', NULL, NULL, NULL, '20', 'pending', '2021-10-13 00:36:00', '2021-10-13 00:36:00'),
+(2, 21, 'Irfan', 'Chowdhury', 'irfanchowdhury', '01829498634', 'Bangladesh', 'Chitagong', NULL, 'Chitagong', 'Chitagong', 'Free', 'Paypal', '10', 'Paypal', NULL, NULL, NULL, '20', 'completed', '2021-10-13 00:54:41', '2021-10-13 00:54:41'),
+(9, 21, 'First Name', 'Chowdhury', 'samu@gmail.com', '01829498634', 'Afghanistan', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4687', 'Paypal', '10', 'Paid By Paypal', NULL, '3X486290H1176245D', NULL, '1000', 'completed', '2021-10-13 05:14:20', '2021-10-13 05:14:20'),
+(10, 21, 'First Name', 'Chowdhury', 'samu@gmail.com', '01829498634', 'Afghanistan', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4687', 'Paypal', '10', 'Paid By Paypal', NULL, '60401147XJ116644V', NULL, '1000', 'completed', '2021-10-13 05:16:11', '2021-10-13 05:16:11'),
+(11, 21, 'Fahamina', 'Chy', 'test@gmail.com', '456874', 'Afghanistan', 'Hathazary', NULL, 'Chittagong', 'Chittagong', '46564', 'Paypal', '10', 'Paid By Paypal', NULL, '7CK5159532467043M', NULL, '1000', 'completed', '2021-10-13 05:34:01', '2021-10-13 05:34:01'),
+(12, 21, 'Abir', 'Shanto', 'abir@gmail.com', '01548741214', 'Canada', 'halishohor', NULL, 'Chittagong', 'Bangladesh', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '8YY35375KF236241W', NULL, '1000', 'completed', '2021-10-13 22:37:01', '2021-10-13 22:37:01'),
+(14, 21, 'Abdullah', 'khan', 'abdullah@gmail.com', '454867861', 'Algeria', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '2KV29378FE790734P', NULL, '1000', 'completed', '2021-10-14 00:55:46', '2021-10-14 00:55:46'),
+(15, 21, 'Abdullah', 'khan', 'abdullah@gmail.com', '454867861', 'Algeria', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '80L03583FP394253L', NULL, '1000', 'completed', '2021-10-14 00:58:31', '2021-10-14 00:58:31'),
+(16, 21, 'Raihan', 'Sharif', 'raihan@gmail.com', '154897164564', 'Canada', 'Aman Bazar', NULL, 'Aman Bazar', 'Bangladesh', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '8HN96594591745358', NULL, '1000', 'completed', '2021-10-14 01:02:32', '2021-10-14 01:02:32'),
+(17, 21, 'Raihan', 'Sharif', 'raihan@gmail.com', '154897164564', 'Canada', 'Aman Bazar', NULL, 'Aman Bazar', 'Bangladesh', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '8HN96594591745358', NULL, '1000', 'completed', '2021-10-14 01:03:01', '2021-10-14 01:03:01'),
+(24, NULL, 'Fahim', 'Khan', 'fahim@gmail.com', '124787', 'Afghanistan', 'Muradpur', NULL, 'Muradpur', 'Bangladesh', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '9CT05148SW746713K', NULL, '1000', 'completed', '2021-10-15 20:13:11', '2021-10-15 20:13:11'),
+(25, 1, 'Fahim', 'Khanna', 'khanna @gmail.com', '464321347', 'Afghanistan', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4330', 'Paypal', '10', 'Paid By Paypal', NULL, '3M798286JS1795254', NULL, '0', 'canceled', '2021-10-15 21:54:51', '2021-10-15 21:54:51'),
+(26, NULL, 'Pathan', 'Chowdhury', 'pathan@gmail.com', '16467774646', 'Canada', 'Muradpur', NULL, 'Muradpur', 'Bangladesh', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmX2ySBbimX2c4JtWJglTZM', NULL, '1000', 'completed', '2021-10-19 23:09:03', '2021-10-19 23:09:03'),
+(27, NULL, 'Ruby', 'Khatun', 'ruby@gmail.com', '45646454', 'Bangladesh', 'Modonhat', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmXd9SBbimX2c4JOsVdiD5h', NULL, '1000', 'completed', '2021-10-19 23:46:25', '2021-10-19 23:46:25'),
+(28, NULL, 'Ruby', 'Khatun', 'ruby@gmail.com', '45646454', 'Bangladesh', 'Modonhat', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmXe1SBbimX2c4JqEupeAc0', NULL, '0', 'canceled', '2021-10-19 23:47:19', '2021-10-19 23:47:19'),
+(29, NULL, 'Ruby', 'Khatun', 'ruby@gmail.com', '45646454', 'Bangladesh', 'Modonhat', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmYTWSBbimX2c4JX412G9Rd', NULL, '0', 'canceled', '2021-10-20 00:40:33', '2021-10-20 00:40:33'),
+(30, NULL, 'Ruby', 'Khatun', 'ruby@gmail.com', '45646454', 'Bangladesh', 'Modonhat', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmYTWSBbimX2c4JARHoYKfY', NULL, '0', 'canceled', '2021-10-20 00:40:33', '2021-10-20 00:40:33'),
+(31, NULL, 'fahamina', 'Chowdhury', 'fahamina@gmail.com', '1567685454', 'Canada', 'Muradpur', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmZ62SBbimX2c4J76rfr2EW', NULL, '1000', 'completed', '2021-10-20 01:20:20', '2021-10-20 01:20:20'),
+(32, 26, 'Maimul', 'islam', 'mainul@gmail.com', '01521222515', 'United States', 'Murapur', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmjvVSBbimX2c4JqAGrGhiw', NULL, '1000', 'completed', '2021-10-20 12:54:12', '2021-10-20 12:54:12'),
+(33, 26, 'Maimul', 'islam', 'mainul@gmail.com', '01521222515', 'United States', 'Murapur', NULL, 'Chittagong', 'Chittagong', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JmjxGSBbimX2c4JZYiXlEzQ', NULL, '1000', 'completed', '2021-10-20 12:56:00', '2021-10-20 12:56:00'),
+(34, 1, 'Arman', 'Ul Alam', 'arman@gmail.com', '123456789', 'Bangladesh', 'uttora', NULL, 'Dhaka', 'Dhaka', '4330', 'Free', '10', 'Stripe', NULL, 'tok_1JndqmSBbimX2c4JXvcEb9Tx', NULL, '29258', 'completed', '2021-10-23 00:37:08', '2021-10-23 04:52:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_details`
+--
+
+CREATE TABLE `order_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `brands` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `categories` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(8,2) DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
+  `weight` int(11) DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `options` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tax` decimal(8,2) DEFAULT NULL,
+  `discount` decimal(8,2) DEFAULT NULL,
+  `subtotal` decimal(8,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `brands`, `categories`, `tags`, `price`, `qty`, `weight`, `image`, `options`, `tax`, `discount`, `subtotal`, `created_at`, `updated_at`) VALUES
+(10, 24, 5, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/RkxnkpCNFT.webp', '{\"image\":\"\\/images\\/products\\/RkxnkpCNFT.webp\",\"product_slug\":\"samsung-a12\",\"category_id\":\"20\"}', '0.00', '0.00', '1000.00', '2021-10-15 20:13:11', '2021-10-15 20:13:11'),
+(11, 32, 4, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/qqPD97Ra8q.webp', '{\"image\":\"\\/images\\/products\\/qqPD97Ra8q.webp\",\"Size\":\"2\",\"Color\":\"25\",\"product_slug\":\"richman-shirt\",\"category_id\":\"3\"}', '0.00', '0.00', '1000.00', '2021-10-15 20:13:11', '2021-10-15 20:13:11'),
+(12, 25, 4, NULL, NULL, NULL, '0.02', 1, 1, '/images/products/qqPD97Ra8q.webp', '{\"image\":\"\\/images\\/products\\/qqPD97Ra8q.webp\",\"product_slug\":\"richman-shirt\",\"category_id\":\"3\"}', '0.00', '0.00', '0.02', '2021-10-15 21:54:51', '2021-10-15 21:54:51'),
+(13, 26, 5, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/RkxnkpCNFT.webp', '{\"image\":\"\\/images\\/products\\/RkxnkpCNFT.webp\",\"product_slug\":\"samsung-a12\",\"category_id\":\"20\"}', '0.00', NULL, '1000.00', '2021-10-19 23:09:03', '2021-10-19 23:09:03'),
+(14, 32, 6, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/RkxnkpCNFT.webp', '{\"image\":\"\\/images\\/products\\/RkxnkpCNFT.webp\",\"product_slug\":\"samsung-a12\",\"category_id\":\"20\"}', '0.00', NULL, '1000.00', '2021-10-19 23:46:25', '2021-10-19 23:46:25'),
+(15, 32, 5, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/RkxnkpCNFT.webp', '{\"image\":\"\\/images\\/products\\/RkxnkpCNFT.webp\",\"product_slug\":\"samsung-a12\",\"category_id\":\"20\"}', '0.00', NULL, '1000.00', '2021-10-20 01:20:20', '2021-10-20 01:20:20'),
+(16, 33, 5, NULL, NULL, NULL, '1000.00', 1, 1, '/images/products/RkxnkpCNFT.webp', '{\"image\":\"\\/images\\/products\\/RkxnkpCNFT.webp\",\"product_slug\":\"samsung-a12\",\"category_id\":\"20\"}', '0.00', NULL, '1000.00', '2021-10-20 12:56:00', '2021-10-20 12:56:00'),
+(17, 34, 1, NULL, NULL, NULL, '400.00', 5, 1, '/images/products/2HKGD5LOsx.webp', '{\"image\":\"\\/images\\/products\\/2HKGD5LOsx.webp\",\"product_slug\":\"bed\",\"category_id\":\"13\"}', '0.00', NULL, '2000.00', '2021-10-23 00:37:08', '2021-10-23 00:37:08'),
+(18, 34, 2, NULL, NULL, NULL, '15.00', 4, 1, '/images/products/GyohtUA8zd.webp', '{\"image\":\"\\/images\\/products\\/GyohtUA8zd.webp\",\"product_slug\":\"oppo-watch\",\"category_id\":\"2\"}', '0.00', NULL, '60.00', '2021-10-23 00:37:08', '2021-10-23 00:37:08'),
+(19, 34, 4, NULL, NULL, NULL, '500.00', 3, 1, '/images/products/qqPD97Ra8q.webp', '{\"image\":\"\\/images\\/products\\/qqPD97Ra8q.webp\",\"product_slug\":\"richman-shirt\",\"category_id\":\"3\"}', '0.00', NULL, '1500.00', '2021-10-23 00:37:08', '2021-10-23 00:37:08'),
+(20, 34, 6, NULL, NULL, NULL, '12499.00', 2, 1, '/images/products/a0VVxPrimK.webp', '{\"image\":\"\\/images\\/products\\/a0VVxPrimK.webp\",\"product_slug\":\"samsung-galaxy-m02s\",\"category_id\":\"20\"}', '0.00', NULL, '24998.00', '2021-10-23 00:37:08', '2021-10-23 00:37:08'),
+(21, 34, 3, NULL, NULL, NULL, '700.13', 1, 1, '/images/products/yJAK1MqJUj.webp', '{\"image\":\"\\/images\\/products\\/yJAK1MqJUj.webp\",\"product_slug\":\"probook-430-g8-notebook-pc\",\"category_id\":\"2\"}', '0.00', NULL, '700.13', '2021-10-23 00:37:08', '2021-10-23 00:37:08');
 
 -- --------------------------------------------------------
 
@@ -1276,10 +1412,10 @@ CREATE TABLE `pages` (
 
 INSERT INTO `pages` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
 (4, 'about-us', 1, '2021-04-19 16:24:42', '2021-04-20 01:36:43'),
-(5, 'faq', 0, '2021-04-19 16:50:44', '2021-04-19 16:54:07'),
+(5, 'faq', 1, '2021-04-19 16:50:44', '2021-07-27 02:48:40'),
 (6, 'privacy-&-policy', 1, '2021-04-20 12:02:11', '2021-04-20 12:02:11'),
-(7, 'terms-&-conditions', 1, '2021-04-20 12:02:43', '2021-04-20 12:02:43'),
-(8, 'return-policy', 1, '2021-04-20 12:03:28', '2021-04-20 12:03:28');
+(7, 'terms-&-conditions', 1, '2021-04-20 12:02:43', '2021-07-27 02:48:40'),
+(8, 'return-policy', 1, '2021-04-20 12:03:28', '2021-07-27 02:48:40');
 
 -- --------------------------------------------------------
 
@@ -1303,9 +1439,9 @@ CREATE TABLE `page_translations` (
 
 INSERT INTO `page_translations` (`id`, `page_id`, `locale`, `page_name`, `body`, `created_at`, `updated_at`) VALUES
 (1, 4, 'en', 'About Us', '<p>Lorem Ispum</p>', '2021-04-19 16:24:42', '2021-04-20 01:37:00'),
-(2, 5, 'en', 'FAQ', '<p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before</p>', '2021-04-19 16:50:44', '2021-04-19 16:50:44'),
+(2, 5, 'en', 'FAQ', '<section class=\"custom-page-wrap clearfix\">\n<div class=\"container\">\n<div class=\"custom-page-content clearfix\">\n<h1 style=\"text-align: center;\">Help &amp; FAQ</h1>\n<p>&nbsp;</p>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>What does LOREM mean?</h4>\n<p>&lsquo;Lorem ipsum dolor sit amet, consectetur adipisici elit&hellip;&rsquo; (complete text) is dummy text that is not meant to mean anything. It is used as a placeholder in magazine layouts, for example, in order to give an impression of the finished document. The text is intentionally unintelligible so that the viewer is not distracted by the content. The language is not real Latin and even the first word &lsquo;Lorem&rsquo; does not exist. It is said that the lorem ipsum text has been common among typesetters since the 16th century.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Why do we use it?</h4>\n<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Where does it come from?</h4>\n<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Where can I get some?</h4>\n<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Why do we use Lorem Ipsum?</h4>\n<p>Many times, readers will get distracted by readable text when looking at the layout of a page. Instead of using filler text that says &ldquo;Insert content here,&rdquo; Lorem Ipsum uses a normal distribution of letters, making it resemble standard English. This makes it easier for designers to focus on visual elements, as opposed to what the text on a page actually says. Lorem Ipsum is absolutely necessary in most design cases, too. Web design projects like landing pages, website redesigns and so on only look as intended when they\'re fully-fleshed out with content.</p>\n</div>\n</div>\n</section>', '2021-04-19 16:50:44', '2021-10-24 22:01:57'),
 (3, 6, 'en', 'Privacy & Policy', '<p>This is Testing Purpose</p>', '2021-04-20 12:02:11', '2021-04-20 12:02:11'),
-(4, 7, 'en', 'Terms & Conditions', '<p>Testing Purpose</p>', '2021-04-20 12:02:43', '2021-04-20 12:02:43'),
+(4, 7, 'en', 'Terms & Conditions', '<section class=\"custom-page-wrap clearfix\">\n<div class=\"container\">\n<div class=\"custom-page-content clearfix\">\n<h1 style=\"text-align: center;\">Terms of Service</h1>\n<p>&nbsp;</p>\n<p>This website is operated by a.season. Throughout the site, the terms &ldquo;we&rdquo;, &ldquo;us&rdquo; and &ldquo;our&rdquo; refer to a.season. a.season offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.</p>\n<p>&nbsp;</p>\n<p>By visiting our site and/ or purchasing something from us, you engage in our &ldquo;Service&rdquo; and agree to be bound by the following terms and conditions (&ldquo;Terms of Service&rdquo;, &ldquo;Terms&rdquo;), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Online Store Terms</h4>\n<p>By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence, or that you are the age of majority in your state or province of residence and you have given us your consent to allow any of your minor dependents to use this site.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>General Conditions</h4>\n<p>We reserve the right to refuse service to anyone for any reason at any time.<br />You understand that your content (not including credit card information), may be transferred unencrypted and involve (a) transmissions over various networks; and (b) changes to conform and adapt to technical requirements of connecting networks or devices. Credit card information is always encrypted during transfer over networks.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>License</h4>\n<p>You must not:</p>\n<p>&nbsp;</p>\n<ul>\n<li>Republish material from&nbsp;<span class=\"highlight preview_website_name\">Website Name</span></li>\n<li>Sell, rent or sub-license material from&nbsp;<span class=\"highlight preview_website_name\">Website Name</span></li>\n<li>Reproduce, duplicate or copy material from&nbsp;<span class=\"highlight preview_website_name\">Website Name</span></li>\n<li>Redistribute content from&nbsp;<span class=\"highlight preview_website_name\">Website Name</span></li>\n</ul>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<h4>Disclaimer</h4>\n<p>To the maximum extent permitted by applicable law, we exclude all representations:</p>\n<p>&nbsp;</p>\n<ul>\n<li>limit or exclude our or your liability for death or personal injury;</li>\n<li>limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>\n<li>limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>\n<li>exclude any of our or your liabilities that may not be excluded under applicable law.</li>\n</ul>\n<p>&nbsp;</p>\n<p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>\n</div>\n</div>\n</section>', '2021-04-20 12:02:43', '2021-10-24 00:01:50'),
 (5, 8, 'en', 'Return Policy', '<p>Testing</p>', '2021-04-20 12:03:28', '2021-04-20 12:03:28'),
 (6, 4, 'bn', 'আমাদের সম্পর্কে', '<p>টেস্টিং</p>', '2021-04-20 12:04:16', '2021-04-20 12:04:16'),
 (7, 4, 'hi', 'हमारे बारे में', '<p>हमारे बारे मेंहमारे बारे मेंहमारे बारे मेंहमारे बारे मेंहमारे बारे में</p>', '2021-04-20 12:05:49', '2021-04-20 12:05:49');
@@ -1325,20 +1461,122 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'product', 'web', NULL, NULL),
+(2, 'catalog', 'web', NULL, NULL),
+(3, 'product-view', 'web', NULL, NULL),
+(4, 'product-store', 'web', NULL, NULL),
+(5, 'product-edit', 'web', NULL, NULL),
+(6, 'product-action', 'web', NULL, NULL),
+(7, 'category', 'web', NULL, NULL),
+(8, 'category-view', 'web', NULL, NULL),
+(9, 'category-store', 'web', NULL, NULL),
+(10, 'category-edit', 'web', NULL, NULL),
+(11, 'category-action', 'web', NULL, NULL),
+(12, 'brand', 'web', NULL, NULL),
+(13, 'brand-view', 'web', NULL, NULL),
+(14, 'brand-store', 'web', NULL, NULL),
+(15, 'brand-edit', 'web', NULL, NULL),
+(16, 'brand-action', 'web', NULL, NULL),
+(17, 'attribute_set', 'web', NULL, NULL),
+(18, 'attribute_set-view', 'web', NULL, NULL),
+(19, 'attribute_set-store', 'web', NULL, NULL),
+(20, 'attribute_set-edit', 'web', NULL, NULL),
+(21, 'attribute_set-action', 'web', NULL, NULL),
+(22, 'attribute', 'web', NULL, NULL),
+(23, 'attribute-view', 'web', NULL, NULL),
+(24, 'attribute-store', 'web', NULL, NULL),
+(25, 'attribute-edit', 'web', NULL, NULL),
+(26, 'attribute-action', 'web', NULL, NULL),
+(27, 'tag', 'web', NULL, NULL),
+(28, 'tag-view', 'web', NULL, NULL),
+(29, 'tag-store', 'web', NULL, NULL),
+(30, 'tag-edit', 'web', NULL, NULL),
+(31, 'tag-action', 'web', NULL, NULL),
+(32, 'flash_sale', 'web', NULL, NULL),
+(33, 'flash_sale-view', 'web', NULL, NULL),
+(34, 'flash_sale-store', 'web', NULL, NULL),
+(35, 'flash_sale-edit', 'web', NULL, NULL),
+(36, 'flash_sale-action', 'web', NULL, NULL),
+(37, 'coupon', 'web', NULL, NULL),
+(38, 'coupon-view', 'web', NULL, NULL),
+(39, 'coupon-store', 'web', NULL, NULL),
+(40, 'coupon-edit', 'web', NULL, NULL),
+(41, 'coupon-action', 'web', NULL, NULL),
+(42, 'page', 'web', NULL, NULL),
+(43, 'page-view', 'web', NULL, NULL),
+(44, 'page-store', 'web', NULL, NULL),
+(45, 'page-edit', 'web', NULL, NULL),
+(46, 'page-action', 'web', NULL, NULL),
+(47, 'menu', 'web', NULL, NULL),
+(48, 'menu-view', 'web', NULL, NULL),
+(49, 'menu-store', 'web', NULL, NULL),
+(50, 'menu-edit', 'web', NULL, NULL),
+(51, 'menu-action', 'web', NULL, NULL),
+(52, 'menu_item', 'web', NULL, NULL),
+(53, 'menu_item-view', 'web', NULL, NULL),
+(54, 'menu_item-store', 'web', NULL, NULL),
+(55, 'menu_item-edit', 'web', NULL, NULL),
+(56, 'menu_item-action', 'web', NULL, NULL),
+(57, 'role', 'web', NULL, NULL),
+(58, 'role-view', 'web', NULL, NULL),
+(59, 'role-store', 'web', NULL, NULL),
+(60, 'role-edit', 'web', NULL, NULL),
+(61, 'role-action', 'web', NULL, NULL),
+(62, 'set_permission', 'web', NULL, NULL),
+(63, 'user', 'web', NULL, NULL),
+(64, 'user-view', 'web', NULL, NULL),
+(65, 'user-store', 'web', NULL, NULL),
+(66, 'user-edit', 'web', NULL, NULL),
+(67, 'user-action', 'web', NULL, NULL),
+(68, 'appearance', 'web', NULL, NULL),
+(69, 'store_front', 'web', NULL, NULL),
+(70, 'slider', 'web', NULL, NULL),
+(71, 'slider-view', 'web', NULL, NULL),
+(72, 'slider-store', 'web', NULL, NULL),
+(73, 'slider-edit', 'web', NULL, NULL),
+(74, 'slider-action', 'web', NULL, NULL),
+(75, 'site-setting', 'web', NULL, NULL),
+(76, 'setting', 'web', NULL, NULL),
+(77, 'locale', 'web', NULL, NULL),
+(78, 'locale-view', 'web', NULL, NULL),
+(79, 'locale-store', 'web', NULL, NULL),
+(80, 'locale-edit', 'web', NULL, NULL),
+(81, 'locale-action', 'web', NULL, NULL),
+(82, 'users_and_roles', 'web', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `brand_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `tax_class_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `tax_id` bigint(20) UNSIGNED DEFAULT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` decimal(8,2) NOT NULL,
-  `special_price` decimal(8,2) DEFAULT NULL,
+  `price` decimal(10,4) NOT NULL,
+  `special_price` decimal(10,4) DEFAULT NULL,
   `special_price_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `special_price_start` date DEFAULT NULL,
   `special_price_end` date DEFAULT NULL,
-  `selling_price` decimal(8,2) DEFAULT NULL,
+  `selling_price` decimal(10,4) DEFAULT NULL,
   `sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `manage_stock` tinyint(4) DEFAULT NULL,
   `qty` int(11) DEFAULT NULL,
@@ -1355,12 +1593,20 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `brand_id`, `tax_class_id`, `slug`, `price`, `special_price`, `special_price_type`, `special_price_start`, `special_price_end`, `selling_price`, `sku`, `manage_stock`, `qty`, `in_stock`, `viewed`, `is_active`, `new_from`, `new_to`, `created_at`, `updated_at`) VALUES
-(1, 11, NULL, 'irfan-fanmis-men\'s-luxury-analog-quartz-gold-wrist-watches', '500.00', '400.00', 'Fixed', '2001-12-05', '2020-05-03', '400.00', 'KUPLNI', 1, 30, 1, NULL, 1, '2015-05-03 00:00:00', '2021-03-20 00:00:00', '2021-03-18 09:42:21', '2021-03-19 13:03:02'),
-(2, NULL, NULL, 'meolin-charm-creative-twisted-crystal-pendant-necklace-fashion-stylish', '15.00', NULL, 'Fixed', '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-07-19 13:26:02'),
-(3, NULL, NULL, 'probook-430-g8-notebook-pc', '1000.00', '700.00', NULL, '1970-01-01', '1970-01-01', '700.00', NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:45:56', '2021-03-25 13:23:59'),
-(4, NULL, NULL, 'वैश्य', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-20 01:11:04', '2021-03-27 09:44:47'),
-(5, NULL, NULL, 'test-2', '1000.00', NULL, NULL, '1970-01-01', '1970-01-01', NULL, NULL, 0, NULL, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-27 09:47:53', '2021-03-27 09:49:31');
+INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_price`, `special_price_type`, `special_price_start`, `special_price_end`, `selling_price`, `sku`, `manage_stock`, `qty`, `in_stock`, `viewed`, `is_active`, `new_from`, `new_to`, `created_at`, `updated_at`) VALUES
+(1, 22, NULL, 'bed', '500.0000', '400.0000', 'Fixed', '2001-12-05', '2020-05-03', '400.0000', 'KUPLNI', 1, 20, 1, NULL, 0, '2015-05-03 00:00:00', '2021-03-20 00:00:00', '2021-03-18 09:42:21', '2021-09-23 03:12:59'),
+(2, NULL, NULL, 'oppo-watch', '15.0000', '0.0000', 'Fixed', '1970-01-01', '1970-01-01', '0.0000', 'Oppo123', 1, 12, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:32:52', '2021-10-22 10:47:52'),
+(3, NULL, NULL, 'probook-430-g8-notebook-pc', '9876.1300', '700.1300', NULL, '1970-01-01', '1970-01-01', '700.1300', 'Probook123', 1, 8, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-18 10:45:56', '2021-10-22 10:40:43'),
+(4, 14, NULL, 'richman-shirt', '500.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, 1, 7, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-20 01:11:04', '2021-10-16 08:01:34'),
+(5, NULL, NULL, 'samsung-a12', '1000.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, 1, 2, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-03-27 09:47:53', '2021-10-13 23:16:46'),
+(6, 23, NULL, 'samsung-galaxy-m02s', '12999.0000', '12499.0000', 'Fixed', '1970-01-01', '1970-01-01', '12499.0000', NULL, 0, 13, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-09-21 05:22:42', '2021-10-16 00:56:45'),
+(7, NULL, NULL, 'xiaomi-redmi-10', '1200.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, 0, 2, 0, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-09-21 05:40:30', '2021-09-21 05:41:19'),
+(8, 23, 3, 'vivo-y91', '1500.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, 0, 2, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-09-21 06:16:59', '2021-10-16 00:56:37'),
+(19, NULL, NULL, 'fsdsfsd', '12999.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, 0, 2, 0, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-10-03 06:43:32', '2021-10-09 08:16:10'),
+(24, NULL, NULL, 'dsfdsfw', '12999.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, NULL, 2, NULL, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-10-03 10:19:34', '2021-10-03 10:19:34'),
+(25, NULL, NULL, 'irfan', '12999.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', NULL, NULL, 2, NULL, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-10-03 18:39:05', '2021-10-03 18:39:05'),
+(28, NULL, NULL, 'dell-inspiron-3493---specs', '1000.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', 'Dell-100', 1, 10, 0, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-10-22 09:52:59', '2021-10-22 10:11:26'),
+(29, NULL, NULL, 'shofa', '500.0000', '0.0000', NULL, '1970-01-01', '1970-01-01', '0.0000', 'S-123', 1, 10, 1, NULL, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '2021-10-22 21:49:48', '2021-10-22 21:49:48');
 
 -- --------------------------------------------------------
 
@@ -1371,22 +1617,22 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_class_id`, `slug`, `price`, `spec
 CREATE TABLE `products0` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` text COLLATE utf8mb4_unicode_ci,
   `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `collection_id` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brand_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `short_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_description` text COLLATE utf8mb4_unicode_ci,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
   `qty` int(255) NOT NULL,
   `tags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` double NOT NULL,
   `old_price` double DEFAULT NULL,
-  `has_attribute` int(1) NOT NULL DEFAULT 0,
+  `has_attribute` int(1) NOT NULL DEFAULT '0',
   `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `meta_description` text COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1450,295 +1696,33 @@ INSERT INTO `products0` (`id`, `sku`, `image`, `product_name`, `slug`, `category
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_attributes0`
+-- Table structure for table `product_attribute_value`
 --
 
-CREATE TABLE `product_attributes0` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `size` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `qty` int(11) NOT NULL,
-  `price` double NOT NULL,
+CREATE TABLE `product_attribute_value` (
   `product_id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `attribute_id` bigint(20) UNSIGNED NOT NULL,
+  `attribute_value_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `product_attributes0`
+-- Dumping data for table `product_attribute_value`
 --
 
-INSERT INTO `product_attributes0` (`id`, `sku`, `image`, `size`, `color`, `qty`, `price`, `product_id`, `created_at`, `updated_at`) VALUES
-(1, 'AI-LS-Bright White-074B', NULL, 'S', 'White', 29, 11.99, 1, '2020-12-21 00:08:49', '2020-12-21 00:08:49'),
-(2, 'AI-LS-Bright White-074A', NULL, 'M', 'White', 55, 11.99, 1, '2020-12-21 00:08:49', '2021-01-06 03:05:42'),
-(3, 'AI-LS-Bright White-074C', NULL, 'L', 'White', 58, 11.99, 1, '2020-12-21 00:08:49', '2020-12-21 00:08:49'),
-(4, 'AI-LS-Bright White-074D', NULL, 'XL', 'White', 29, 11.99, 1, '2020-12-21 00:08:49', '2020-12-21 00:08:49'),
-(5, 'AI-LS-Bright White-074E', NULL, 'XXL', 'White', 24, 11.99, 1, '2020-12-21 00:08:49', '2020-12-21 00:08:49'),
-(6, 'AI-LS- Deep black-064B', NULL, 'S', 'Black', 35, 11.99, 2, '2020-12-21 00:17:22', '2020-12-21 00:17:22'),
-(7, 'AI-LS- Deep black-064A', NULL, 'M', 'Black', 71, 11.99, 2, '2020-12-21 00:17:22', '2020-12-21 00:17:22'),
-(8, 'AI-LS- Deep black-064C', NULL, 'L', 'Black', 71, 11.99, 2, '2020-12-21 00:17:22', '2020-12-21 00:17:22'),
-(9, 'AI-LS- Deep black-064D', NULL, 'XL', 'Black', 36, 11.99, 2, '2020-12-21 00:17:22', '2020-12-21 00:17:22'),
-(10, 'AI-LS- Deep black-064E', NULL, 'XXL', 'Black', 36, 11.99, 2, '2020-12-21 00:17:22', '2020-12-21 00:17:22'),
-(11, 'AI-LS- Lagulite-050B', NULL, 'S', 'Black', 57, 11.99, 3, '2020-12-21 00:43:20', '2020-12-21 00:43:20'),
-(12, 'AI-LS- Lagulite-050A', NULL, 'M', 'Black', 160, 11.99, 3, '2020-12-21 00:43:20', '2020-12-21 00:43:20'),
-(13, 'AI-LS- Lagulite-050C', NULL, 'L', 'Black', 145, 11.99, 3, '2020-12-21 00:43:20', '2020-12-21 00:43:20'),
-(14, 'AI-LS- Lagulite-050D', NULL, 'XL', 'Black', 61, 11.99, 3, '2020-12-21 00:43:20', '2020-12-21 00:43:20'),
-(15, 'AI-LS- Lagulite-050E', NULL, 'XXL', 'Black', 62, 11.99, 3, '2020-12-21 00:43:20', '2020-12-21 00:43:20'),
-(16, 'AI-LS- Navy-023B', NULL, 'S', 'Black', 15, 11.99, 4, '2020-12-21 00:51:50', '2020-12-21 00:51:50'),
-(17, 'AI-LS- Navy-023A', NULL, 'M', 'Black', 22, 11.99, 4, '2020-12-21 00:51:50', '2020-12-21 00:51:50'),
-(18, 'AI-LS- Navy-023C', NULL, 'L', 'Black', 27, 11.99, 4, '2020-12-21 00:51:50', '2020-12-21 00:51:50'),
-(19, 'AI-LS- Navy-023D', NULL, 'XL', 'Black', 13, 11.99, 4, '2020-12-21 00:51:50', '2020-12-21 00:51:50'),
-(20, 'AI-LS- Navy-023E', NULL, 'XXL', 'Black', 13, 11.99, 4, '2020-12-21 00:51:50', '2020-12-21 00:51:50'),
-(21, 'AI-LS- Red Dark-097B', NULL, 'S', 'Red', 91, 11.99, 5, '2020-12-21 00:55:37', '2020-12-21 00:55:37'),
-(22, 'AI-LS- Red Dark-097A', NULL, 'M', 'Red', 153, 11.99, 5, '2020-12-21 00:55:37', '2020-12-21 00:55:37'),
-(23, 'AI-LS- Red Dark-097C', NULL, 'L', 'Red', 161, 11.99, 5, '2020-12-21 00:55:37', '2020-12-21 00:55:37'),
-(24, 'AI-LS- Red Dark-097D', NULL, 'XL', 'Red', 91, 11.99, 5, '2020-12-21 00:55:37', '2020-12-21 00:55:37'),
-(25, 'AI-LS- Red Dark-097E', NULL, 'XXL', 'Red', 90, 11.99, 5, '2020-12-21 00:55:37', '2020-12-21 00:55:37'),
-(26, 'Ai-LS-Black Print-036B', NULL, 'S', 'Black', 65, 11.99, 6, '2020-12-21 01:05:19', '2020-12-21 01:05:19'),
-(27, 'Ai-LS-Black Print-036A', NULL, 'M', 'Black', 126, 11.99, 6, '2020-12-21 01:05:19', '2020-12-21 01:05:19'),
-(28, 'Ai-LS-Black Print-036C', NULL, 'L', 'Black', 117, 11.99, 6, '2020-12-21 01:05:19', '2020-12-21 01:05:19'),
-(29, 'Ai-LS-Black Print-036D', NULL, 'XL', 'Black', 53, 11.99, 6, '2020-12-21 01:05:19', '2020-12-21 01:05:19'),
-(30, 'Ai-LS-Black Print-036E', NULL, 'XXL', 'Black', 68, 11.99, 6, '2020-12-21 01:05:19', '2020-12-21 01:05:19'),
-(31, 'AI-LS-Blue Combo-002B', NULL, 'S', 'Blue', 0, 11.99, 7, '2020-12-21 01:58:43', '2021-01-07 01:48:02'),
-(32, 'AI-LS-Blue Combo-002A', NULL, 'M', 'Blue', 0, 11.99, 7, '2020-12-21 01:58:43', '2021-01-07 01:48:02'),
-(33, 'AI-LS-Blue Combo-002C', NULL, 'L', 'Blue', 0, 11.99, 7, '2020-12-21 01:58:43', '2021-01-07 01:48:02'),
-(34, 'AI-LS-Blue Combo-002D', NULL, 'XL', 'Blue', 0, 11.99, 7, '2020-12-21 01:58:43', '2021-01-07 01:48:02'),
-(35, 'AI-LS-Blue Combo-002E', NULL, 'XXL', 'Blue', 0, 11.99, 7, '2020-12-21 01:58:43', '2021-01-07 01:48:02'),
-(36, 'AI-LS-Blue-003B', NULL, 'S', 'Blue', 0, 11.99, 8, '2020-12-21 11:01:34', '2021-01-07 23:37:51'),
-(37, 'AI-LS-Blue-003A', NULL, 'M', 'Blue', 0, 11.99, 8, '2020-12-21 11:01:34', '2021-01-07 23:37:51'),
-(38, 'AI-LS-Blue-003C', NULL, 'L', 'Blue', 0, 11.99, 8, '2020-12-21 11:01:35', '2021-01-07 23:37:52'),
-(39, 'AI-LS-Blue-003D', NULL, 'XL', 'Blue', 0, 11.99, 8, '2020-12-21 11:01:35', '2021-01-07 23:37:52'),
-(40, 'AI-LS-Blue-003E', NULL, 'XXL', 'Blue', 0, 11.99, 8, '2020-12-21 11:01:35', '2021-01-07 23:37:52'),
-(41, 'AI-LS-Blue-005B', NULL, 'S', 'Blue', 0, 11.99, 9, '2020-12-21 11:04:33', '2021-01-07 23:40:15'),
-(42, 'AI-LS-Blue-005A', NULL, 'M', 'Blue', 0, 11.99, 9, '2020-12-21 11:04:33', '2021-01-07 23:40:15'),
-(43, 'AI-LS-Blue-005C', NULL, 'L', 'Blue', 0, 11.99, 9, '2020-12-21 11:04:33', '2021-01-07 23:40:15'),
-(44, 'AI-LS-Blue-005D', NULL, 'XL', 'Blue', 0, 11.99, 9, '2020-12-21 11:04:33', '2021-01-07 23:40:15'),
-(45, 'AI-LS-Blue-005E', NULL, 'XXL', 'Blue', 0, 11.99, 9, '2020-12-21 11:04:33', '2021-01-07 23:40:15'),
-(46, 'AI-LS-Blue-085B', NULL, 'S', 'Blue', 74, 11.99, 10, '2020-12-21 11:08:33', '2021-01-07 23:42:37'),
-(47, 'AI-LS-Blue-085A', NULL, 'M', 'Blue', 193, 11.99, 10, '2020-12-21 11:08:33', '2021-01-07 23:42:37'),
-(48, 'AI-LS-Blue-085C', NULL, 'L', 'Blue', 196, 11.99, 10, '2020-12-21 11:08:33', '2021-01-07 23:42:37'),
-(49, 'AI-LS-Blue-085D', NULL, 'XL', 'Blue', 73, 11.99, 10, '2020-12-21 11:08:33', '2021-01-07 23:42:37'),
-(50, 'AI-LS-Blue-085E', NULL, 'XXL', 'Blue', 74, 11.99, 10, '2020-12-21 11:08:33', '2021-01-07 23:42:37'),
-(51, 'AI-LS-Crisp Navy-012B', NULL, 'S', 'White', 43, 11.99, 12, '2020-12-21 11:18:45', '2020-12-21 11:18:45'),
-(52, 'AI-LS-Crisp Navy-012A', NULL, 'M', 'White', 100, 11.99, 12, '2020-12-21 11:18:45', '2020-12-21 11:18:45'),
-(53, 'AI-LS-Crisp Navy-012C', NULL, 'L', 'White', 75, 11.99, 12, '2020-12-21 11:18:45', '2020-12-21 11:18:45'),
-(54, 'AI-LS-Crisp Navy-012D', NULL, 'XL', 'White', 43, 11.99, 12, '2020-12-21 11:18:45', '2020-12-21 11:18:45'),
-(55, 'AI-LS-Crisp Navy-012E', NULL, 'XXL', 'White', 45, 11.99, 12, '2020-12-21 11:18:45', '2020-12-21 11:18:45'),
-(56, 'AI-LS-Crispy Navy-012B', NULL, 'S', 'White', 44, 11.99, 13, '2020-12-21 11:28:43', '2021-01-07 23:47:03'),
-(57, 'AI-LS-Crispy Navy-012A', NULL, 'M', 'White', 88, 11.99, 13, '2020-12-21 11:28:43', '2021-01-07 23:47:03'),
-(58, 'AI-LS-Crispy Navy-012C', NULL, 'L', 'White', 91, 11.99, 13, '2020-12-21 11:28:43', '2021-01-07 23:47:03'),
-(59, 'AI-LS-Crispy Navy-012D', NULL, 'XL', 'White', 44, 11.99, 13, '2020-12-21 11:28:43', '2021-01-07 23:47:03'),
-(60, 'AI-LS-Crispy Navy-012E', NULL, 'XXL', 'White', 46, 11.99, 13, '2020-12-21 11:28:43', '2021-01-07 23:47:04'),
-(61, 'AI-LS-Dark Scarlet-004B', NULL, 'S', 'Black', 0, 11.99, 14, '2020-12-21 11:32:13', '2021-01-07 23:49:13'),
-(62, 'AI-LS-Dark Scarlet-004A', NULL, 'M', 'Black', 0, 11.99, 14, '2020-12-21 11:32:13', '2021-01-07 23:49:13'),
-(63, 'AI-LS-Dark Scarlet-004C', NULL, 'L', 'Black', 0, 11.99, 14, '2020-12-21 11:32:13', '2021-01-07 23:49:13'),
-(64, 'AI-LS-Dark Scarlet-004D', NULL, 'XL', 'Black', 0, 11.99, 14, '2020-12-21 11:32:13', '2021-01-07 23:49:13'),
-(65, 'AI-LS-Dark Scarlet-004E', NULL, 'XXL', 'Black', 0, 11.99, 14, '2020-12-21 11:32:13', '2021-01-07 23:49:13'),
-(66, 'AI-LS-Dark Scarlet-033B', NULL, 'S', 'Black', 105, 11.99, 15, '2020-12-21 11:35:59', '2021-01-07 23:51:29'),
-(67, 'AI-LS-Dark Scarlet-033A', NULL, 'M', 'Black', 207, 11.99, 15, '2020-12-21 11:35:59', '2021-01-07 23:51:29'),
-(68, 'AI-LS-Dark Scarlet-033C', NULL, 'L', 'Black', 206, 11.99, 15, '2020-12-21 11:35:59', '2021-01-07 23:51:29'),
-(69, 'AI-LS-Dark Scarlet-033D', NULL, 'XL', 'Black', 103, 11.99, 15, '2020-12-21 11:35:59', '2021-01-07 23:51:29'),
-(70, 'AI-LS-Dark Scarlet-033E', NULL, 'XXL', 'Black', 105, 11.99, 15, '2020-12-21 11:35:59', '2021-01-07 23:51:29'),
-(71, 'AI-LS-Dark Scarlet-075B', NULL, 'S', 'Black', 16, 11.99, 16, '2020-12-21 11:39:59', '2021-01-07 23:53:43'),
-(72, 'AI-LS-Dark Scarlet-075A', NULL, 'M', 'Black', 30, 11.99, 16, '2020-12-21 11:39:59', '2021-01-07 23:53:43'),
-(73, 'AI-LS-Dark Scarlet-075C', NULL, 'L', 'Black', 31, 11.99, 16, '2020-12-21 11:39:59', '2021-01-07 23:53:43'),
-(74, 'AI-LS-Dark Scarlet-075D', NULL, 'XL', 'Black', 32, 11.99, 16, '2020-12-21 11:39:59', '2021-01-07 23:53:43'),
-(75, 'AI-LS-Deep Black-013B', NULL, 'S', 'Black', 36, 11.99, 17, '2020-12-21 11:44:32', '2021-01-07 23:55:19'),
-(76, 'AI-LS-Deep Black-013A', NULL, 'M', 'Black', 70, 11.99, 17, '2020-12-21 11:44:32', '2021-01-07 23:55:19'),
-(77, 'AI-LS-Deep Black-013C', NULL, 'L', 'Black', 72, 11.99, 17, '2020-12-21 11:44:32', '2021-01-07 23:55:19'),
-(78, 'AI-LS-Deep Black-013D', NULL, 'XL', 'Black', 35, 11.99, 17, '2020-12-21 11:44:32', '2021-01-07 23:55:19'),
-(79, 'AI-LS-Deep Black-013E', NULL, 'XXL', 'Black', 34, 11.99, 17, '2020-12-21 11:44:32', '2021-01-07 23:55:19'),
-(80, 'AI-LS-Deep Navy-010B', NULL, 'S', 'Black', 0, 11.99, 18, '2020-12-21 11:48:04', '2020-12-21 11:48:04'),
-(81, 'AI-LS-Deep Navy-010A', NULL, 'M', 'Black', 0, 11.99, 18, '2020-12-21 11:48:04', '2020-12-21 11:48:04'),
-(82, 'AI-LS-Deep Navy-010C', NULL, 'L', 'Black', 0, 11.99, 18, '2020-12-21 11:48:04', '2020-12-21 11:48:04'),
-(83, 'AI-LS-Deep Navy-010D', NULL, 'XL', 'Black', 0, 11.99, 18, '2020-12-21 11:48:04', '2020-12-21 11:48:04'),
-(84, 'AI-LS-Deep Navy-010E', NULL, 'XXL', 'Black', 0, 11.99, 18, '2020-12-21 11:48:04', '2020-12-21 11:48:04'),
-(85, 'AI-LS-FIRE-029B', NULL, 'S', 'Black', 23, 11.99, 19, '2020-12-21 11:52:48', '2021-01-08 00:00:53'),
-(86, 'AI-LS-FIRE-029A', NULL, 'M', 'Black', 47, 11.99, 19, '2020-12-21 11:52:48', '2021-01-08 00:00:53'),
-(87, 'AI-LS-FIRE-029C', NULL, 'L', 'Black', 70, 11.99, 19, '2020-12-21 11:52:48', '2021-01-08 00:00:53'),
-(88, 'AI-LS-FIRE-029D', NULL, 'XL', 'Black', 25, 11.99, 19, '2020-12-21 11:52:48', '2021-01-08 00:00:53'),
-(89, 'AI-LS-FIRE-029E', NULL, 'XXL', 'Black', 23, 11.99, 19, '2020-12-21 11:52:48', '2021-01-08 00:00:53'),
-(90, 'AI-LS-Mapu Syrup-054B', NULL, 'S', 'White', 77, 11.99, 20, '2020-12-21 22:52:43', '2021-01-08 00:04:06'),
-(91, 'AI-LS-Mapu Syrup-054A', NULL, 'M', 'White', 141, 11.99, 20, '2020-12-21 22:52:43', '2021-01-08 00:04:06'),
-(92, 'AI-LS-Mapu Syrup-054C', NULL, 'L', 'White', 144, 11.99, 20, '2020-12-21 22:52:43', '2021-01-08 00:04:06'),
-(93, 'AI-LS-Mapu Syrup-054D', NULL, 'XL', 'White', 84, 11.99, 20, '2020-12-21 22:52:43', '2021-01-08 00:04:06'),
-(94, 'AI-LS-Mapu Syrup-054E', NULL, 'XXL', 'White', 64, 11.99, 20, '2020-12-21 22:52:43', '2021-01-08 00:04:06'),
-(95, 'AI-LS-Navy Blue Solid-096B', NULL, 'S', 'Blue', 0, 11.99, 21, '2020-12-21 22:55:44', '2021-01-08 00:06:15'),
-(96, 'AI-LS-Navy Blue Solid-096A', NULL, 'M', 'Blue', 0, 11.99, 21, '2020-12-21 22:55:44', '2021-01-08 00:06:15'),
-(97, 'AI-LS-Navy Blue Solid-096C', NULL, 'L', 'Blue', 0, 11.99, 21, '2020-12-21 22:55:44', '2021-01-08 00:06:16'),
-(98, 'AI-LS-Navy Blue Solid-096D', NULL, 'XL', 'Blue', 0, 11.99, 21, '2020-12-21 22:55:44', '2021-01-08 00:06:16'),
-(99, 'AI-LS-Navy Blue Solid-096E', NULL, 'XXL', 'Blue', 0, 11.99, 21, '2020-12-21 22:55:45', '2021-01-08 00:06:16'),
-(100, 'AI-LS-Navy Blue-006B', NULL, 'S', 'Blue', 0, 11.99, 22, '2020-12-21 22:58:54', '2021-01-08 00:08:18'),
-(101, 'AI-LS-Navy Blue-006A', NULL, 'M', 'Blue', 0, 11.99, 22, '2020-12-21 22:58:54', '2021-01-08 00:08:18'),
-(102, 'AI-LS-Navy Blue-006C', NULL, 'L', 'Blue', 0, 11.99, 22, '2020-12-21 22:58:54', '2021-01-08 00:08:18'),
-(103, 'AI-LS-Navy Blue-006D', NULL, 'XL', 'Blue', 0, 11.99, 22, '2020-12-21 22:58:54', '2021-01-08 00:08:18'),
-(104, 'AI-LS-Navy Blue-006E', NULL, 'XXL', 'Blue', 0, 11.99, 22, '2020-12-21 22:58:54', '2021-01-08 00:08:18'),
-(105, 'AI-LS-New Port Navy-084B', NULL, 'S', 'Blue', 100, 11.99, 23, '2020-12-21 23:01:12', '2021-01-08 00:10:11'),
-(106, 'AI-LS-New Port Navy-084A', NULL, 'M', 'Blue', 177, 11.99, 23, '2020-12-21 23:01:12', '2021-01-08 00:10:11'),
-(107, 'AI-LS-New Port Navy-084C', NULL, 'L', 'Blue', 176, 11.99, 23, '2020-12-21 23:01:12', '2021-01-08 00:10:11'),
-(108, 'AI-LS-New Port Navy-084D', NULL, 'XL', 'Blue', 76, 11.99, 23, '2020-12-21 23:01:12', '2021-01-08 00:10:11'),
-(109, 'AI-LS-New Port Navy-084E', NULL, 'XXL', 'Blue', 77, 11.99, 23, '2020-12-21 23:01:12', '2021-01-08 00:10:11'),
-(110, 'AI-LS-Olive Green-098B', NULL, 'S', 'Green', 83, 11.99, 24, '2020-12-21 23:03:56', '2021-01-08 00:11:55'),
-(111, 'AI-LS-Olive Green-098A', NULL, 'M', 'Green', 145, 11.99, 24, '2020-12-21 23:03:56', '2021-01-08 00:11:55'),
-(112, 'AI-LS-Olive Green-098C', NULL, 'L', 'Green', 147, 11.99, 24, '2020-12-21 23:03:56', '2021-01-08 00:11:55'),
-(113, 'AI-LS-Olive Green-098D', NULL, 'XL', 'Green', 109, 11.99, 24, '2020-12-21 23:03:56', '2021-01-08 00:11:55'),
-(114, 'AI-LS-Olive Green-098E', NULL, 'XXL', 'Green', 83, 11.99, 24, '2020-12-21 23:03:56', '2021-01-08 00:11:55'),
-(115, 'AI-LS-Red-082B', NULL, 'S', 'Red', 165, 11.99, 25, '2020-12-21 23:06:25', '2021-01-09 00:30:08'),
-(116, 'AI-LS-Red-082A', NULL, 'M', 'Red', 331, 11.99, 25, '2020-12-21 23:06:25', '2021-01-09 00:30:08'),
-(117, 'AI-LS-Red-082C', NULL, 'L', 'Red', 331, 11.99, 25, '2020-12-21 23:06:25', '2021-01-09 00:30:08'),
-(118, 'AI-LS-Red-082D', NULL, 'XL', 'Red', 168, 11.99, 25, '2020-12-21 23:06:25', '2021-01-09 00:30:08'),
-(119, 'AI-LS-Red-082E', NULL, 'XXL', 'Red', 165, 11.99, 25, '2020-12-21 23:06:25', '2021-01-09 00:30:08'),
-(120, 'AI-LS-Scarlet Sun-028B', NULL, 'S', 'Red', 55, 11.99, 26, '2020-12-21 23:09:29', '2021-01-09 01:19:18'),
-(121, 'AI-LS-Scarlet Sun-028A', NULL, 'M', 'Red', 111, 11.99, 26, '2020-12-21 23:09:29', '2021-01-09 01:19:18'),
-(122, 'AI-LS-Scarlet Sun-028C', NULL, 'L', 'Red', 114, 11.99, 26, '2020-12-21 23:09:29', '2021-01-09 01:19:18'),
-(123, 'AI-LS-Scarlet Sun-028D', NULL, 'XL', 'Red', 50, 11.99, 26, '2020-12-21 23:09:29', '2021-01-09 01:19:18'),
-(124, 'AI-LS-Scarlet Sun-028E', NULL, 'XXL', 'Red', 55, 11.99, 26, '2020-12-21 23:09:29', '2021-01-09 01:19:18'),
-(125, 'AI-LS-Sky Blue-030B', NULL, 'S', 'Blue', 0, 11.99, 27, '2020-12-21 23:12:21', '2021-01-09 01:20:16'),
-(126, 'AI-LS-Sky Blue-030A', NULL, 'M', 'Blue', 0, 11.99, 27, '2020-12-21 23:12:21', '2021-01-09 01:20:16'),
-(127, 'AI-LS-Sky Blue-030C', NULL, 'L', 'Blue', 0, 11.99, 27, '2020-12-21 23:12:21', '2021-01-09 01:20:17'),
-(128, 'AI-LS-Sky Blue-030D', NULL, 'XL', 'Blue', 0, 11.99, 27, '2020-12-21 23:12:21', '2021-01-09 01:20:17'),
-(129, 'AI-LS-Sky Blue-030E', NULL, 'XXL', 'Blue', 0, 11.99, 27, '2020-12-21 23:12:21', '2021-01-09 01:20:18'),
-(130, 'AI-LS-White-093B', NULL, 'S', 'White', 52, 11.99, 28, '2020-12-21 23:18:45', '2021-01-09 01:22:30'),
-(131, 'AI-LS-White-093A', NULL, 'M', 'White', 103, 11.99, 28, '2020-12-21 23:18:45', '2021-01-09 01:22:30'),
-(132, 'AI-LS-White-093C', NULL, 'L', 'White', 104, 11.99, 28, '2020-12-21 23:18:45', '2021-01-09 01:22:30'),
-(133, 'AI-LS-White-093D', NULL, 'XL', 'White', 52, 11.99, 28, '2020-12-21 23:18:45', '2021-01-09 01:22:30'),
-(134, 'AI-LS-White-093E', NULL, 'XXL', 'White', 52, 11.99, 28, '2020-12-21 23:18:45', '2021-01-09 01:22:30'),
-(135, 'AI-SS- Blue Dot-009B', NULL, 'S', 'White', 56, 11.99, 29, '2020-12-21 23:34:02', '2021-01-09 01:24:49'),
-(136, 'AI-SS- Blue Dot-009A', NULL, 'M', 'White', 111, 11.99, 29, '2020-12-21 23:34:02', '2021-01-09 01:24:49'),
-(137, 'AI-SS- Blue Dot-009C', NULL, 'L', 'White', 107, 11.99, 29, '2020-12-21 23:34:02', '2021-01-09 01:24:50'),
-(138, 'AI-SS- Blue Dot-009D', NULL, 'XL', 'White', 55, 11.99, 29, '2020-12-21 23:34:02', '2021-01-09 01:24:50'),
-(139, 'AI-SS- Blue Dot-009E', NULL, 'XXL', 'White', 45, 11.99, 29, '2020-12-21 23:34:02', '2021-01-09 01:24:50'),
-(140, 'AI-SS-Basic Navy-001B', NULL, 'S', 'White', 321, 11.99, 30, '2020-12-21 23:38:43', '2021-01-09 01:26:38'),
-(141, 'AI-SS-Basic Navy-001A', NULL, 'M', 'White', 702, 11.99, 30, '2020-12-21 23:38:43', '2021-01-09 01:26:38'),
-(142, 'AI-SS-Basic Navy-001C', NULL, 'L', 'White', 646, 11.99, 30, '2020-12-21 23:38:43', '2021-01-09 01:26:38'),
-(143, 'AI-SS-Basic Navy-001D', NULL, 'XL', 'White', 379, 11.99, 30, '2020-12-21 23:38:43', '2021-01-09 01:26:38'),
-(144, 'AI-SS-Basic Navy-001E', NULL, 'XXL', 'White', 348, 11.99, 30, '2020-12-21 23:38:43', '2021-01-09 01:26:38'),
-(145, 'AI-SS-Basic Navy-031B', NULL, 'S', 'White', 172, 11.99, 31, '2020-12-21 23:45:22', '2021-01-09 01:31:15'),
-(146, 'AI-SS-Basic Navy-031A', NULL, 'M', 'White', 357, 11.99, 31, '2020-12-21 23:45:22', '2021-01-09 01:31:15'),
-(147, 'AI-SS-Basic Navy-031C', NULL, 'L', 'White', 357, 11.99, 31, '2020-12-21 23:45:22', '2021-01-09 01:31:15'),
-(148, 'AI-SS-Basic Navy-031D', NULL, 'XL', 'White', 167, 11.99, 31, '2020-12-21 23:45:22', '2021-01-09 01:31:15'),
-(149, 'AI-SS-Basic Navy-031E', NULL, 'XXL', 'White', 180, 11.99, 31, '2020-12-21 23:45:22', '2021-01-09 01:31:15'),
-(150, 'AI-SS-Black White Dot-044B', NULL, 'S', 'Black/White', 41, 11.99, 32, '2020-12-21 23:52:50', '2021-01-09 01:39:12'),
-(151, 'AI-SS-Black White Dot-044A', NULL, 'M', 'Black/White', 78, 11.99, 32, '2020-12-21 23:52:50', '2021-01-09 01:39:12'),
-(152, 'AI-SS-Black White Dot-044C', NULL, 'L', 'Black/White', 64, 11.99, 32, '2020-12-21 23:52:50', '2021-01-09 01:39:13'),
-(153, 'AI-SS-Black White Dot-044D', NULL, 'XL', 'Black/White', 46, 11.99, 32, '2020-12-21 23:52:50', '2021-01-09 01:39:13'),
-(154, 'AI-SS-Black White Dot-044E', NULL, 'XXL', 'Black/White', 47, 11.99, 32, '2020-12-21 23:52:50', '2021-01-09 01:39:13'),
-(155, 'AI-SS-BLUE-001B', NULL, 'S', 'Blue', 481, 11.99, 33, '2020-12-22 00:18:20', '2021-01-09 01:40:46'),
-(156, 'AI-SS-BLUE-001A', NULL, 'M', 'Blue', 955, 11.99, 33, '2020-12-22 00:18:20', '2021-01-09 01:40:46'),
-(157, 'AI-SS-BLUE-001C', NULL, 'L', 'Blue', 948, 11.99, 33, '2020-12-22 00:18:20', '2021-01-09 01:40:46'),
-(158, 'AI-SS-BLUE-001D', NULL, 'XL', 'Blue', 479, 11.99, 33, '2020-12-22 00:18:20', '2021-01-09 01:40:46'),
-(159, 'AI-SS-BLUE-001E', NULL, 'XXL', 'Blue', 470, 11.99, 33, '2020-12-22 00:18:20', '2021-01-09 01:40:46'),
-(160, 'AI-SS-Blue-052B', NULL, 'S', 'Blue', 14, 11.99, 34, '2020-12-22 00:27:45', '2020-12-22 00:27:45'),
-(161, 'AI-SS-Blue-052A', NULL, 'M', 'Blue', 30, 11.99, 34, '2020-12-22 00:27:45', '2020-12-22 00:27:45'),
-(162, 'AI-SS-Blue-052C', NULL, 'L', 'Blue', 32, 11.99, 34, '2020-12-22 00:27:45', '2020-12-22 00:27:45'),
-(163, 'AI-SS-Blue-052D', NULL, 'XL', 'Blue', 15, 11.99, 34, '2020-12-22 00:27:45', '2020-12-22 00:27:45'),
-(164, 'AI-SS-Blue-052E', NULL, 'XXL', 'Blue', 14, 11.99, 34, '2020-12-22 00:27:45', '2020-12-22 00:27:45'),
-(165, 'AI-SS-Green Combo-015B', NULL, 'S', 'Green', 30, 11.99, 35, '2020-12-22 00:46:22', '2020-12-22 00:46:22'),
-(166, 'AI-SS-Green Combo-015A', NULL, 'M', 'Green', 63, 11.99, 35, '2020-12-22 00:46:22', '2020-12-22 00:46:22'),
-(167, 'AI-SS-Green Combo-015C', NULL, 'L', 'Green', 61, 11.99, 35, '2020-12-22 00:46:22', '2020-12-22 00:46:22'),
-(168, 'AI-SS-Green Combo-015D', NULL, 'XL', 'Green', 38, 11.99, 35, '2020-12-22 00:46:22', '2020-12-22 00:46:22'),
-(169, 'AI-SS-Green Combo-015E', NULL, 'XXL', 'Green', 23, 11.99, 35, '2020-12-22 00:46:22', '2020-12-22 00:46:22'),
-(170, 'AI-SS-Grey Combo-018B', NULL, 'S', 'Grey', 0, 11.99, 36, '2020-12-22 23:32:51', '2020-12-22 23:32:51'),
-(171, 'AI-SS-Grey Combo-018A', NULL, 'M', 'Grey', 0, 11.99, 36, '2020-12-22 23:32:51', '2020-12-22 23:32:51'),
-(172, 'AI-SS-Grey Combo-018C', NULL, 'L', 'Grey', 0, 11.99, 36, '2020-12-22 23:32:51', '2020-12-22 23:32:51'),
-(173, 'AI-SS-Grey Combo-018D', NULL, 'XL', 'Grey', 0, 11.99, 36, '2020-12-22 23:32:51', '2020-12-22 23:32:51'),
-(174, 'AI-SS-Grey Combo-018E', NULL, 'XXL', 'Grey', 0, 11.99, 36, '2020-12-22 23:32:51', '2020-12-22 23:32:51'),
-(175, 'AI-SS-LIGHT BLUE-012B', NULL, 'S', 'BLUE', 0, 11.99, 37, '2020-12-22 23:35:44', '2020-12-22 23:35:44'),
-(176, 'AI-SS-LIGHT BLUE-012A', NULL, 'M', 'BLUE', 0, 11.99, 37, '2020-12-22 23:35:44', '2020-12-22 23:35:44'),
-(177, 'AI-SS-LIGHT BLUE-012C', NULL, 'L', 'BLUE', 0, 11.99, 37, '2020-12-22 23:35:44', '2020-12-22 23:35:44'),
-(178, 'AI-SS-LIGHT BLUE-012E', NULL, 'XXL', 'BLUE', 0, 11.99, 37, '2020-12-22 23:35:44', '2020-12-22 23:35:44'),
-(179, 'AI-SS-Red Check-051B', NULL, 'S', 'Red', 12, 11.99, 38, '2020-12-22 23:40:05', '2020-12-22 23:40:05'),
-(180, 'AI-SS-Red Check-051A', NULL, 'M', 'Red', 23, 11.99, 38, '2020-12-22 23:40:05', '2020-12-22 23:40:05'),
-(181, 'AI-SS-Red Check-051C', NULL, 'L', 'Red', 25, 11.99, 38, '2020-12-22 23:40:05', '2020-12-22 23:40:05'),
-(182, 'AI-SS-Red Check-051D', NULL, 'XL', 'Red', 13, 11.99, 38, '2020-12-22 23:40:05', '2020-12-22 23:40:05'),
-(183, 'AI-SS-Red Check-051E', NULL, 'XXL', 'Red', 13, 11.99, 38, '2020-12-22 23:40:05', '2020-12-22 23:40:05'),
-(184, 'AI-SS-Red Check-053B', NULL, 'S', 'Red', 49, 11.99, 39, '2020-12-22 23:42:54', '2020-12-22 23:42:54'),
-(185, 'AI-SS-Red Check-053A', NULL, 'M', 'Red', 105, 11.99, 39, '2020-12-22 23:42:54', '2020-12-22 23:42:54'),
-(186, 'AI-SS-Red Check-053C', NULL, 'L', 'Red', 104, 11.99, 39, '2020-12-22 23:42:54', '2020-12-22 23:42:54'),
-(187, 'AI-SS-Red Check-053D', NULL, 'XL', 'Red', 52, 11.99, 39, '2020-12-22 23:42:54', '2020-12-22 23:42:54'),
-(188, 'AI-SS-Red Check-053E', NULL, 'XXL', 'Red', 47, 11.99, 39, '2020-12-22 23:42:54', '2020-12-22 23:42:54'),
-(189, 'AI-SS-Red Multi-028B', NULL, 'S', 'Red', 78, 11.99, 40, '2020-12-22 23:46:17', '2020-12-22 23:46:17'),
-(190, 'AI-SS-Red Multi-028A', NULL, 'M', 'Red', 143, 11.99, 40, '2020-12-22 23:46:17', '2020-12-22 23:46:17'),
-(191, 'AI-SS-Red Multi-028C', NULL, 'L', 'Red', 154, 11.99, 40, '2020-12-22 23:46:17', '2020-12-22 23:46:17'),
-(192, 'AI-SS-Red Multi-02DS', NULL, 'XL', 'Red', 76, 11.99, 40, '2020-12-22 23:46:17', '2020-12-22 23:46:17'),
-(193, 'AI-SS-Red Multi-028E', NULL, 'XXL', 'Red', 77, 11.99, 40, '2020-12-22 23:46:17', '2020-12-22 23:46:17'),
-(194, 'AI-SS-RED-002B', NULL, 'S', 'Red', 339, 11.99, 41, '2020-12-22 23:49:49', '2020-12-22 23:49:49'),
-(195, 'AI-SS-RED-002A', NULL, 'M', 'Red', 681, 11.99, 41, '2020-12-22 23:49:49', '2020-12-22 23:49:49'),
-(196, 'AI-SS-RED-002C', NULL, 'L', 'Red', 690, 11.99, 41, '2020-12-22 23:49:49', '2020-12-22 23:49:49'),
-(197, 'AI-SS-RED-002D', NULL, 'XL', 'Red', 347, 11.99, 41, '2020-12-22 23:49:49', '2020-12-22 23:49:49'),
-(198, 'AI-SS-RED-002E', NULL, 'XXL', 'Red', 342, 11.99, 41, '2020-12-22 23:49:49', '2020-12-22 23:49:49'),
-(199, 'AI-SS-Red-045B', NULL, 'S', 'Red', 31, 11.99, 42, '2020-12-22 23:52:10', '2020-12-22 23:52:10'),
-(200, 'AI-SS-Red-045A', NULL, 'M', 'Red', 58, 11.99, 42, '2020-12-22 23:52:10', '2020-12-22 23:52:10'),
-(201, 'AI-SS-Red-045C', NULL, 'L', 'Red', 54, 11.99, 42, '2020-12-22 23:52:10', '2020-12-22 23:52:10'),
-(202, 'AI-SS-Red-045D', NULL, 'XL', 'Red', 32, 11.99, 42, '2020-12-22 23:52:10', '2020-12-22 23:52:10'),
-(203, 'AI-SS-Red-045E', NULL, 'XXL', 'Red', 30, 11.99, 42, '2020-12-22 23:52:10', '2020-12-22 23:52:10'),
-(204, 'AI-SS-Red-050B', NULL, 'S', 'Red', 229, 11.99, 43, '2020-12-22 23:56:25', '2020-12-22 23:56:25'),
-(205, 'AI-SS-Red-050A', NULL, 'M', 'Red', 455, 11.99, 43, '2020-12-22 23:56:25', '2020-12-22 23:56:25'),
-(206, 'AI-SS-Red-050C', NULL, 'L', 'Red', 460, 11.99, 43, '2020-12-22 23:56:25', '2020-12-22 23:56:25'),
-(207, 'AI-SS-Red-050D', NULL, 'XL', 'Red', 230, 11.99, 43, '2020-12-22 23:56:25', '2020-12-22 23:56:25'),
-(208, 'AI-SS-Red-050E', NULL, 'XXL', 'Red', 230, 11.99, 43, '2020-12-22 23:56:25', '2020-12-22 23:56:25'),
-(209, 'AI-SS-White Multi-029B', NULL, 'S', 'White', 39, 11.99, 44, '2020-12-23 00:05:21', '2020-12-23 00:05:21'),
-(210, 'AI-SS-White Multi-029A', NULL, 'M', 'White', 79, 11.99, 44, '2020-12-23 00:05:21', '2020-12-23 00:05:21'),
-(211, 'AI-SS-White Multi-029C', NULL, 'L', 'White', 80, 11.99, 44, '2020-12-23 00:05:21', '2020-12-23 00:05:21'),
-(212, 'AI-SS-White Multi-029D', NULL, 'XL', 'White', 40, 11.99, 44, '2020-12-23 00:05:21', '2020-12-23 00:05:21'),
-(213, 'AI-SS-White Multi-029E', NULL, 'XXL', 'White', 40, 11.99, 44, '2020-12-23 00:05:21', '2020-12-23 00:05:21'),
-(214, 'AI-SS-White Print-027B', NULL, 'S', 'White', 105, 11.99, 45, '2020-12-23 00:13:51', '2020-12-23 00:13:51'),
-(215, 'AI-SS-White Print-027A', NULL, 'M', 'White', 206, 11.99, 45, '2020-12-23 00:13:51', '2020-12-23 00:13:51'),
-(216, 'AI-SS-White Print-027C', NULL, 'L', 'White', 211, 11.99, 45, '2020-12-23 00:13:51', '2020-12-23 00:13:51'),
-(217, 'AI-SS-White Print-027D', NULL, 'XL', 'White', 105, 11.99, 45, '2020-12-23 00:13:51', '2020-12-23 00:13:51'),
-(218, 'AI-SS-White Print-027E', NULL, 'XXL', 'White', 98, 11.99, 45, '2020-12-23 00:13:51', '2020-12-23 00:13:51'),
-(219, 'AI-SS-White Stripe-054B', NULL, 'S', 'White', 184, 11.99, 46, '2020-12-23 00:16:49', '2020-12-23 00:16:49'),
-(220, 'AI-SS-White Stripe-054A', NULL, 'M', 'White', 357, 11.99, 46, '2020-12-23 00:16:49', '2020-12-23 00:16:49'),
-(221, 'AI-SS-White Stripe-054C', NULL, 'L', 'White', 368, 11.99, 46, '2020-12-23 00:16:49', '2020-12-23 00:16:49'),
-(222, 'AI-SS-White Stripe-054D', NULL, 'XL', 'White', 185, 11.99, 46, '2020-12-23 00:16:49', '2020-12-23 00:16:49'),
-(223, 'AI-SS-White Stripe-054E', NULL, 'XXL', 'White', 183, 11.99, 46, '2020-12-23 00:16:49', '2020-12-23 00:16:49'),
-(224, 'AI-SS-White-003B', NULL, 'S', 'White', 0, 11.99, 47, '2020-12-23 00:20:32', '2020-12-23 00:20:32'),
-(225, 'AI-SS-White-003A', NULL, 'M', 'White', 0, 11.99, 47, '2020-12-23 00:20:32', '2020-12-23 00:20:32'),
-(226, 'AI-SS-White-003C', NULL, 'L', 'White', 0, 11.99, 47, '2020-12-23 00:20:32', '2020-12-23 00:20:32'),
-(227, 'AI-SS-White-003D', NULL, 'XL', 'White', 0, 11.99, 47, '2020-12-23 00:20:32', '2020-12-23 00:20:32'),
-(228, 'AI-SS-White-003E', NULL, 'XXL', 'White', 0, 11.99, 47, '2020-12-23 00:20:32', '2020-12-23 00:20:32'),
-(229, 'AI-SS-WhiteNavy Dot-042B', NULL, 'S', 'White', 0, 11.99, 48, '2020-12-23 00:22:39', '2020-12-23 00:22:39'),
-(230, 'AI-SS-WhiteNavy Dot-042A', NULL, 'M', 'White', 0, 11.99, 48, '2020-12-23 00:22:39', '2020-12-23 00:22:39'),
-(231, 'AI-SS-WhiteNavy Dot-042C', NULL, 'L', 'White', 0, 11.99, 48, '2020-12-23 00:22:39', '2020-12-23 00:22:39'),
-(232, 'AI-SS-WhiteNavy Dot-042D', NULL, 'XL', 'White', 0, 11.99, 48, '2020-12-23 00:22:39', '2020-12-23 00:22:39'),
-(233, 'AI-SS-WhiteNavy Dot-042E', NULL, 'XXL', 'White', 0, 11.99, 48, '2020-12-23 00:22:39', '2020-12-23 00:22:39'),
-(234, 'AI-SS-YELLOW-004B', NULL, 'S', 'YELLOW', 142, 11.99, 49, '2020-12-23 00:25:33', '2020-12-23 00:25:33'),
-(235, 'AI-SS-YELLOW-004A', NULL, 'M', 'YELLOW', 295, 11.99, 49, '2020-12-23 00:25:33', '2020-12-23 00:25:33'),
-(236, 'AI-SS-YELLOW-004C', NULL, 'L', 'YELLOW', 295, 11.99, 49, '2020-12-23 00:25:33', '2020-12-23 00:25:33'),
-(237, 'AI-SS-YELLOW-004D', NULL, 'XL', 'YELLOW', 148, 11.99, 49, '2020-12-23 00:25:33', '2020-12-23 00:25:33'),
-(238, 'AI-SS-YELLOW-004E', NULL, 'XXL', 'YELLOW', 142, 11.99, 49, '2020-12-23 00:25:33', '2020-12-23 00:25:33'),
-(239, 'Al-LS- New Field-087B', NULL, 'S', 'YELLOW', 45, 11.99, 50, '2020-12-23 00:27:54', '2020-12-23 00:27:54'),
-(240, 'Al-LS- New Field-087A', NULL, 'M', 'YELLOW', 90, 11.99, 50, '2020-12-23 00:27:54', '2020-12-23 00:27:54'),
-(241, 'Al-LS- New Field-087C', NULL, 'L', 'YELLOW', 90, 11.99, 50, '2020-12-23 00:27:54', '2020-12-23 00:27:54'),
-(242, 'Al-LS- New Field-087D', NULL, 'XL', 'YELLOW', 44, 11.99, 50, '2020-12-23 00:27:54', '2020-12-23 00:27:54'),
-(243, 'Al-LS- New Field-087E', NULL, 'XXL', 'YELLOW', 44, 11.99, 50, '2020-12-23 00:27:54', '2020-12-23 00:27:54'),
-(244, 'MJK001P-P10-S', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'S', 'Navy/White/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 07:55:17'),
-(245, 'MJK001P-P10-M', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'M', 'Navy/White/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 07:56:26'),
-(246, 'MJK001P-P10-L', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'L', 'Navy/White/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 07:57:00'),
-(247, 'MJK001P-P10-XL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XL', 'Navy/White/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 07:57:24'),
-(248, 'MJK001P-P10-XXL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XXL', 'Navy/White/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 07:39:28'),
-(249, 'MJK001P-P5-S', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'S', 'Black/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:00:50'),
-(250, 'MJK001P-P5-M', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'M', 'Black/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:01:45'),
-(251, 'MJK001P-P5-L', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'L', 'Black/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:02:37'),
-(252, 'MJK001P-P5-XL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XL', 'Black/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:03:13'),
-(253, 'MJK001P-P5-XXL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XXL', 'Black/Grey', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:04:04'),
-(254, 'MJK001P-P7-S', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'S', 'Navy/Cream/Black', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:10:00'),
-(255, 'MJK001P-P7-M', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'M', 'Navy/Cream/Black', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:16:08'),
-(256, 'MJK001P-P7-L', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'L', 'Navy/Cream/Black', 5, 29.99, 51, '2021-01-18 01:50:18', '2021-01-18 08:16:34'),
-(257, 'MJK001P-P7-XL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XL', 'Navy/Cream/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:16:58'),
-(258, 'MJK001P-P7-XXL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XXL', 'Navy/Cream/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:17:29'),
-(259, 'MJK001P-P6-S', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'S', 'Grey/White/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:24:26'),
-(260, 'MJK001P-P6-M', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'M', 'Grey/White/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:26:14'),
-(261, 'MJK001P-P6-L', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'L', 'Grey/White/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:35:11'),
-(262, 'MJK001P-P6-XL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XL', 'Grey/White/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:35:36'),
-(263, 'MJK001P-P6-XXL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XXL', 'Grey/White/Black', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:38:39'),
-(264, 'MJK001P-P1-S', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'S', 'Black/Grey/Brown', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:46:36'),
-(265, 'MJK001P-P1-M', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'M', 'Black/Grey/Brown', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:49:52'),
-(266, 'MJK001P-P1-L', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'L', 'Black/Grey/Brown', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:50:13'),
-(267, 'MJK001P-P1-XL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XL', 'Black/Grey/Brown', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:50:35'),
-(268, 'MJK001P-P1-XXL', 'elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket0.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket1.jpg,elevani-mens-plaid-sherpa-lined-full-zip-detachable-hoodie-jacket2.jpg', 'XXL', 'Black/Grey/Brown', 5, 29.99, 51, '2021-01-18 01:50:19', '2021-01-18 08:50:58');
+INSERT INTO `product_attribute_value` (`product_id`, `attribute_id`, `attribute_value_id`) VALUES
+(24, 20, 21),
+(24, 23, 24),
+(24, 2, 2),
+(25, 20, 21),
+(25, 23, 24),
+(19, 2, 2),
+(19, 20, 21),
+(19, 20, 22),
+(6, 3, 25),
+(4, 2, 2),
+(4, 2, 3),
+(4, 2, 4),
+(4, 3, 25);
 
 -- --------------------------------------------------------
 
@@ -1760,9 +1744,25 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `image`, `type`, `created_at`, `updated_at`) VALUES
-(1, 1, '/images/products/1616180583.jpg', 'base', NULL, '2021-03-19 13:03:03'),
-(2, 3, '/images/products/1616223877.jpg', 'base', NULL, '2021-03-20 01:04:38'),
-(51, 4, '/images/products/IB9X1NgGl0.jpg', 'base', '2021-03-20 02:12:27', '2021-03-20 02:17:38');
+(1, 1, '/images/products/2HKGD5LOsx.webp', 'base', NULL, '2021-09-23 03:11:53'),
+(2, 3, '/images/products/yJAK1MqJUj.webp', 'base', NULL, '2021-10-22 00:06:15'),
+(51, 4, '/images/products/qqPD97Ra8q.webp', 'base', '2021-03-20 02:12:27', '2021-09-23 03:22:55'),
+(52, 6, '/images/products/a0VVxPrimK.webp', 'base', '2021-09-21 05:24:34', '2021-10-15 23:46:41'),
+(53, 7, '/images/products/1VcY7A5k1x.jpg', 'base', '2021-09-21 05:41:19', '2021-09-21 05:41:19'),
+(54, 8, '/images/products/qTdbo0QUjq.webp', 'base', NULL, '2021-09-22 02:44:56'),
+(55, 6, '/images/products/yVLYD6o4O7.webp', 'additional', '2021-09-22 03:25:33', '2021-09-22 03:25:33'),
+(56, 6, '/images/products/K8j74ySGak.webp', 'additional', '2021-09-22 03:25:33', '2021-09-22 03:25:33'),
+(57, 6, '/images/products/uNHnDwXJA6.webp', 'additional', '2021-09-22 03:25:33', '2021-09-22 03:25:33'),
+(58, 1, '/images/products/xbjTgC3yuC.webp', 'additional', '2021-09-23 03:13:00', '2021-09-23 03:13:00'),
+(59, 1, '/images/products/z7j2Hvdb3i.webp', 'additional', '2021-09-23 03:13:00', '2021-09-23 03:13:00'),
+(65, 3, '/images/products/YRwEKfQAfo.webp', 'additional', '2021-09-29 00:51:58', '2021-09-29 00:51:58'),
+(66, 5, '/images/products/RkxnkpCNFT.webp', 'base', '2021-10-13 23:15:59', '2021-10-13 23:16:46'),
+(67, 4, '/images/products/2gQenimtwh.webp', 'additional', '2021-10-15 22:45:48', '2021-10-15 22:45:48'),
+(68, 4, '/images/products/Vp2SqsUOTH.webp', 'additional', '2021-10-15 22:45:48', '2021-10-15 22:45:48'),
+(69, 4, '/images/products/Yj4g8sx8FR.webp', 'additional', '2021-10-15 22:45:49', '2021-10-15 22:45:49'),
+(70, 2, '/images/products/GyohtUA8zd.webp', 'base', '2021-10-22 07:41:18', '2021-10-22 07:48:21'),
+(71, 28, '/images/products/VGIVsmBWLY.webp', 'base', '2021-10-22 09:57:25', '2021-10-22 09:57:25'),
+(72, 29, '/images/products/8p18rx5inT.webp', 'base', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1780,7 +1780,9 @@ CREATE TABLE `product_tag` (
 --
 
 INSERT INTO `product_tag` (`product_id`, `tag_id`) VALUES
-(1, 2);
+(1, 2),
+(6, 1),
+(8, 1);
 
 -- --------------------------------------------------------
 
@@ -1794,7 +1796,7 @@ CREATE TABLE `product_translations` (
   `local` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_description` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1804,13 +1806,248 @@ CREATE TABLE `product_translations` (
 --
 
 INSERT INTO `product_translations` (`id`, `product_id`, `local`, `product_name`, `description`, `short_description`, `created_at`, `updated_at`) VALUES
-(1, 1, 'en', 'irfan  Fanmis Men\'s Luxury Analog Quartz Gold Wrist Watches', '<h1 id=\"title\" class=\"a-size-large a-spacing-none a-color-secondary\" style=\"text-align: center;\"><span id=\"productTitle\" class=\"a-size-large\">irfan&nbsp;Men\'s Luxury Analog Quartz Gold Wrist Watches</span></h1>\r\n<p>&nbsp;</p>\r\n<div id=\"dp_productDescription_container_div\" class=\"celwidget\" data-feature-name=\"productDescription\" data-cel-widget=\"dp_productDescription_container_div\">\r\n<div id=\"productDescription_feature_div\" class=\"a-row feature\" data-feature-name=\"productDescription\" data-template-name=\"productDescription\" data-cel-widget=\"productDescription_feature_div\">\r\n<div id=\"productDescription\" class=\"a-section a-spacing-small\">\r\n<h4>Product Description:</h4>\r\n<h4>Highlights:</h4>\r\n<p>Original Japanese Movement: provide precise and accurate time keeping<br />Stainless Steel Strap and Stainless Steel Case Cover<br />German High Hardness Mineral Glass, not easy to wear<br />30M Water Resistant - 3ATM: Daily Use Waterproof, Handwash<br />Calendar Date Window<br />Classic Business Casual Dress Watch Design. Combines quality, leading edge fashion, and value.<br /><br />Features:</p>\r\n<p><br />Stainless Steel case and Stainless Steel case back<br />German High Hardness Mineral Glass<br />Calendar Date Window<br />30M Waterproof<br />Stainless Steel Strap<br /><br />Specification:</p>\r\n<p><br />Dial Color: Black<br />Dial Case Diameter: 1.57 inch / 4.0 cm<br />Dial Case Thickness: 0.43 inch / 1.1 cm<br />Band Color: Gold<br />Band Width: 0.79 inch / 2 cm<br />Band Length: 8.7 inch / 22 cm.<br />Band Clasp Type: Fold Over Clasp<br />Watch Weight: 3.39 oz / 96 g<br /><br />**NOTE**:<br />If mist or droplets found inside watch surface, please contact manufacturer immediately.<br />Clean the strap by a soft cloth on regular bases is highly recommended.<br />Too much water contact will shorter watch life.<br /><br />What Is In The Package:<br />Watch x 1</p>\r\n</div>\r\n</div>\r\n</div>\r\n<div id=\"detailBullets\" class=\"celwidget\" data-feature-name=\"detailBullets\" data-cel-widget=\"detailBullets\">\r\n<div id=\"detailBulletsWrapper_feature_div\" class=\"a-section a-spacing-none feature\" data-feature-name=\"detailBullets\" data-template-name=\"detailBullets\" data-cel-widget=\"detailBulletsWrapper_feature_div\">\r\n<div id=\"detailBullets_feature_div\">\r\n<ul class=\"a-unordered-list a-nostyle a-vertical a-spacing-none\">\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Department:&nbsp;</span>Mens</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Manufacturer:&nbsp;</span>Fanmis</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Package Dimensions:&nbsp;</span>3.2 x 2.8 x 2.4 inches</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">ASIN:&nbsp;</span>B06XHJY5XZ</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">UNSPSC Code:&nbsp;</span>54110000</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Item model number:&nbsp;</span>4331787063</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Batteries:&nbsp;</span>1 LR44 batteries required.</span></li>\r\n</ul>\r\n</div>\r\n</div>\r\n</div>', 'PRECISE TIME irfan  KEEPING: Japanese Movement, provide precise and accurate time keeping. Japanese battery which can provide the watch strong power.', '2021-03-18 09:42:21', '2021-03-18 09:42:21'),
-(2, 2, 'en', 'Meolin Charm Creative Twisted Crystal Pendant Necklace Fashion Stylish', '<h1 id=\"title\" class=\"a-size-large a-spacing-none\" style=\"text-align: center;\"><span id=\"productTitle\" class=\"a-size-large\">Meolin Charm Creative Twisted Crystal Pendant&nbsp;</span></h1>\r\n<p>&nbsp;</p>\r\n<p><span class=\"a-size-large\"><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"../../../../../storage/media/w5SaCifIArdhnr8w6ZiEakZOArQ3oIjLIIWMnGip.jpeg\" alt=\"\" width=\"523\" height=\"522\" /></span></p>\r\n<p>&nbsp;</p>\r\n<h4><span class=\"a-size-large\">Details:<br /></span></h4>\r\n<ul class=\"a-unordered-list a-vertical a-spacing-none\">\r\n<li><span class=\"a-list-item\">Material: high-quality alloy, not easy to fade, not easy allergy, noble elegance, shining charming.</span></li>\r\n<li><span class=\"a-list-item\">Fits most people,you can adjust the length to a perfect fit with the extension chain.</span></li>\r\n<li><span class=\"a-list-item\">Unique design achievements unique to you, no matter what occasion,it will makes you attracting the attention of others.</span></li>\r\n<li><span class=\"a-list-item\">A Magnificent Gift for Your Mom, Sister, Friend, Teacher, Co-worker, Wife or Girlfriend for Christmas, Birthday, Anniversary, Graduation or Mother\'s Day.</span></li>\r\n<li><span class=\"a-list-item\">Note:Avoid contact with water,To keep item bright, clean item regularly and frequently with a soft cloth.</span></li>\r\n</ul>\r\n<h4 class=\"default\">&nbsp;</h4>\r\n<h4 class=\"default\">Product description:</h4>\r\n<div id=\"productDescription\" class=\"a-section a-spacing-small\">\r\n<p>Product Material: Silver</p>\r\n<p>Product size: Chain length: 44cm; Pendant length and width: 2.4*1cm</p>\r\n<p>Package: 1 pcs</p>\r\n<p>Features: Great jewelry gifts Suitable for her, lover, wife, couple, Birthday, Valentine&rsquo;s Day, Christmas&rsquo; Day, Mother&rsquo;s Day, wedding, party, anniversary, prom and casual days.</p>\r\n</div>', NULL, '2021-03-18 10:32:52', '2021-03-18 10:32:52'),
-(3, 3, 'en', 'PROBOOK 430 G8 NOTEBOOK PC', '<p>HP PROBOOK 430 G8 NOTEBOOK PCHP PROBOOK 430 G8 NOTEBOOK PCHP PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, '2021-03-18 10:45:56', '2021-03-18 10:45:56'),
-(6, 4, 'en', 'Testing-1', '<p>6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, '2021-03-20 01:11:04', '2021-03-20 01:11:04'),
-(7, 4, 'bn', 'টেস্টিং-১', '<p>6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, NULL, NULL),
+(1, 1, 'en', 'Bed', '<h1 id=\"title\" class=\"a-size-large a-spacing-none a-color-secondary\" style=\"text-align: center;\"><span id=\"productTitle\" class=\"a-size-large\">irfan&nbsp;Men\'s Luxury Analog Quartz Gold Wrist Watches</span></h1>\r\n<p>&nbsp;</p>\r\n<div id=\"dp_productDescription_container_div\" class=\"celwidget\" data-feature-name=\"productDescription\" data-cel-widget=\"dp_productDescription_container_div\">\r\n<div id=\"productDescription_feature_div\" class=\"a-row feature\" data-feature-name=\"productDescription\" data-template-name=\"productDescription\" data-cel-widget=\"productDescription_feature_div\">\r\n<div id=\"productDescription\" class=\"a-section a-spacing-small\">\r\n<h4>Product Description:</h4>\r\n<h4>Highlights:</h4>\r\n<p>Original Japanese Movement: provide precise and accurate time keeping<br />Stainless Steel Strap and Stainless Steel Case Cover<br />German High Hardness Mineral Glass, not easy to wear<br />30M Water Resistant - 3ATM: Daily Use Waterproof, Handwash<br />Calendar Date Window<br />Classic Business Casual Dress Watch Design. Combines quality, leading edge fashion, and value.<br /><br />Features:</p>\r\n<p><br />Stainless Steel case and Stainless Steel case back<br />German High Hardness Mineral Glass<br />Calendar Date Window<br />30M Waterproof<br />Stainless Steel Strap<br /><br />Specification:</p>\r\n<p><br />Dial Color: Black<br />Dial Case Diameter: 1.57 inch / 4.0 cm<br />Dial Case Thickness: 0.43 inch / 1.1 cm<br />Band Color: Gold<br />Band Width: 0.79 inch / 2 cm<br />Band Length: 8.7 inch / 22 cm.<br />Band Clasp Type: Fold Over Clasp<br />Watch Weight: 3.39 oz / 96 g<br /><br />**NOTE**:<br />If mist or droplets found inside watch surface, please contact manufacturer immediately.<br />Clean the strap by a soft cloth on regular bases is highly recommended.<br />Too much water contact will shorter watch life.<br /><br />What Is In The Package:<br />Watch x 1</p>\r\n</div>\r\n</div>\r\n</div>\r\n<div id=\"detailBullets\" class=\"celwidget\" data-feature-name=\"detailBullets\" data-cel-widget=\"detailBullets\">\r\n<div id=\"detailBulletsWrapper_feature_div\" class=\"a-section a-spacing-none feature\" data-feature-name=\"detailBullets\" data-template-name=\"detailBullets\" data-cel-widget=\"detailBulletsWrapper_feature_div\">\r\n<div id=\"detailBullets_feature_div\">\r\n<ul class=\"a-unordered-list a-nostyle a-vertical a-spacing-none\">\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Department:&nbsp;</span>Mens</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Manufacturer:&nbsp;</span>Fanmis</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Package Dimensions:&nbsp;</span>3.2 x 2.8 x 2.4 inches</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">ASIN:&nbsp;</span>B06XHJY5XZ</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">UNSPSC Code:&nbsp;</span>54110000</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Item model number:&nbsp;</span>4331787063</span></li>\r\n<li><span class=\"a-list-item\"><span class=\"a-text-bold\">Batteries:&nbsp;</span>1 LR44 batteries required.</span></li>\r\n</ul>\r\n</div>\r\n</div>\r\n</div>', 'PRECISE TIME irfan  KEEPING: Japanese Movement, provide precise and accurate time keeping. Japanese battery which can provide the watch strong power.', '2021-03-18 09:42:21', '2021-03-18 09:42:21'),
+(2, 2, 'en', 'Oppo Watch', '<h1 id=\"title\" class=\"a-size-large a-spacing-none\" style=\"text-align: center;\"><span id=\"productTitle\" class=\"a-size-large\">Meolin Charm Creative Twisted Crystal Pendant&nbsp;</span></h1>\r\n<p>&nbsp;</p>\r\n<p><span class=\"a-size-large\"><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"../../../storage/media/w5SaCifIArdhnr8w6ZiEakZOArQ3oIjLIIWMnGip.jpeg\" alt=\"\" width=\"523\" height=\"522\" /></span></p>\r\n<p>&nbsp;</p>\r\n<h4><span class=\"a-size-large\">Details:<br /></span></h4>\r\n<ul class=\"a-unordered-list a-vertical a-spacing-none\">\r\n<li><span class=\"a-list-item\">Material: high-quality alloy, not easy to fade, not easy allergy, noble elegance, shining charming.</span></li>\r\n<li><span class=\"a-list-item\">Fits most people,you can adjust the length to a perfect fit with the extension chain.</span></li>\r\n<li><span class=\"a-list-item\">Unique design achievements unique to you, no matter what occasion,it will makes you attracting the attention of others.</span></li>\r\n<li><span class=\"a-list-item\">A Magnificent Gift for Your Mom, Sister, Friend, Teacher, Co-worker, Wife or Girlfriend for Christmas, Birthday, Anniversary, Graduation or Mother\'s Day.</span></li>\r\n<li><span class=\"a-list-item\">Note:Avoid contact with water,To keep item bright, clean item regularly and frequently with a soft cloth.</span></li>\r\n</ul>\r\n<h4 class=\"default\">&nbsp;</h4>\r\n<h4 class=\"default\">Product description:</h4>\r\n<div id=\"productDescription\" class=\"a-section a-spacing-small\">\r\n<p>Product Material: Silver</p>\r\n<p>Product size: Chain length: 44cm; Pendant length and width: 2.4*1cm</p>\r\n<p>Package: 1 pcs</p>\r\n<p>Features: Great jewelry gifts Suitable for her, lover, wife, couple, Birthday, Valentine&rsquo;s Day, Christmas&rsquo; Day, Mother&rsquo;s Day, wedding, party, anniversary, prom and casual days.</p>\r\n</div>', NULL, '2021-03-18 10:32:52', '2021-03-18 10:32:52'),
+(3, 3, 'en', 'PROBOOK 430 G8 NOTEBOOK PC', '<p>HP PROBOOK 430 G8 NOTEBOOK PCHP PROBOOK 430 G8 NOTEBOOK PCHP PROBOOK 430 G8 NOTEBOOK PC</p>', 'This is a Awesome Laptop', '2021-03-18 10:45:56', '2021-03-18 10:45:56'),
+(6, 4, 'en', 'Richman Shirt', '<p>6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, '2021-03-20 01:11:04', '2021-03-20 01:11:04'),
+(7, 4, 'bn', 'রিচম্যান শার্ট', '<p>6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, NULL, NULL),
 (8, 4, 'hi', 'वैश्य', '<p>6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC6548PROBOOK 430 G8 NOTEBOOK PC</p>', NULL, NULL, NULL),
-(9, 5, 'fr', 'test 2', '<p>gggfdgg</p>', NULL, '2021-03-27 09:47:53', '2021-03-27 09:47:53');
+(9, 5, 'fr', 'test 2', '<p>gggfdgg</p>', NULL, '2021-03-27 09:47:53', '2021-03-27 09:47:53'),
+(10, 6, 'en', 'Samsung Galaxy M02s', '<h4>Details</h4>\r\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias reiciendis, ex necessitatibus eum esse odit maxime cupiditate dignissimos velit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias reiciendis, ex necessitatibus eum esse odit maxime cupiditate dignissimos velit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias reiciendis, ex necessitatibus eum esse odit maxime cupiditate dignissimos velit.</p>\r\n<p>dignissimos velit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias reiciendis, ex necessitatibus eum esse odit maxime cupiditate dignissimos velit.</p>\r\n<h4 class=\"mar-top-30\">Features</h4>\r\n<ul>\r\n<li>57% polyester, 43% PCM-infused polyester</li>\r\n<li>Hyperbreathable Stretch Knit</li>\r\n<li>Phase Change Materials</li>\r\n<li>3D collar design with sewn-in collar stays to prevent collar spread and splay</li>\r\n<li>Moisture Wicking</li>\r\n<li>Wrinkle Resistant</li>\r\n<li>Machine wash, tumble dry</li>\r\n</ul>', 'The Best Phone Ever Can Buy On Samsung Superb Battery Life Amazing Battery Decent Performance Camera,Gaming Not Recommended Best For Online Classes', '2021-09-21 05:22:42', '2021-09-21 05:22:42'),
+(11, 7, 'en', 'Xiaomi Redmi 10', '<p>Good Phone</p>', NULL, '2021-09-21 05:40:30', '2021-09-21 05:40:30'),
+(12, 8, 'en', 'Vivo Y91', '<p>Good Phone</p>', NULL, '2021-09-21 06:16:59', '2021-09-21 06:16:59'),
+(13, 6, 'bn', 'স্যামসাং গ্যালাক্সি-এম জিরো ২ এস', '<p>The Best Phone Ever Can Buy On Samsung Superb Battery Life Amazing Battery Decent Performance Camera,Gaming Not Recommended Best For Online Classes</p>', NULL, NULL, NULL),
+(14, 9, 'en', 'dfdfffs', '<p>fdfdffd</p>', NULL, '2021-10-03 03:56:06', '2021-10-03 03:56:06'),
+(15, 10, 'en', 'gg ggfdg', '<p>gdfggdg</p>', NULL, '2021-10-03 04:01:38', '2021-10-03 04:01:38'),
+(16, 11, 'en', 'gdgdgd', '<p>gfdggd</p>', NULL, '2021-10-03 04:04:50', '2021-10-03 04:04:50'),
+(17, 12, 'en', 'ggdgfd', '<p>fdgdfgf</p>', NULL, '2021-10-03 04:11:32', '2021-10-03 04:11:32'),
+(18, 13, 'en', 'fdggg', '<p>dfgdgd</p>', NULL, '2021-10-03 04:14:23', '2021-10-03 04:14:23'),
+(19, 14, 'en', 'jljjhh', '<p>nhkjkhkhkh</p>', NULL, '2021-10-03 04:18:34', '2021-10-03 04:18:34'),
+(20, 15, 'en', 'fsdff', '<p>fsfsf</p>', NULL, '2021-10-03 04:24:56', '2021-10-03 04:24:56'),
+(21, 16, 'en', 'fsdff', '<p>fsfsf</p>', NULL, '2021-10-03 04:25:18', '2021-10-03 04:25:18'),
+(22, 17, 'en', 'dggd', '<p>dfgdgdf</p>', NULL, '2021-10-03 04:25:41', '2021-10-03 04:25:41'),
+(23, 18, 'en', 'ttrer', '<p>terterter</p>', NULL, '2021-10-03 04:42:42', '2021-10-03 04:42:42'),
+(24, 19, 'en', 'fsdsfsd', '<p>sdffsdf</p>', NULL, '2021-10-03 06:43:32', '2021-10-03 06:43:32'),
+(25, 23, 'en', 'ttteretdfsdf', '<p>sffsdfsf</p>', NULL, '2021-10-03 10:18:21', '2021-10-03 10:18:21'),
+(26, 24, 'en', 'dsfdsfw', '<p>dsdfsdfew</p>', NULL, '2021-10-03 10:19:34', '2021-10-03 10:19:34'),
+(27, 25, 'en', 'Irfan', '<p>sdfsfssf</p>', NULL, '2021-10-03 18:39:05', '2021-10-03 18:39:05'),
+(28, 5, 'en', 'Samsung A12', '<p>test</p>', NULL, NULL, NULL),
+(31, 28, 'en', 'Dell Inspiron 3493 - Specs', '<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>Display</strong></div>\r\n<div class=\"col-md-8\">14.0&rdquo;, HD (1366 x 768), TN</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>HDD/SSD</strong></div>\r\n<div class=\"col-md-8\">1TB SSD + 1TB HDD</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>RAM</strong></div>\r\n<div class=\"col-md-8\">16GB DDR4, 2666 MHz</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>OS</strong></div>\r\n<div class=\"col-md-8\">Windows 10 Pro</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>Battery</strong></div>\r\n<div class=\"col-md-8\">42Wh, 3-cell</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>Dimensions</strong></div>\r\n<div class=\"col-md-8\">339 x 214.9 x 21 mm (13.35\" x 8.46\" x 0.83\")</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-table lp-row-table-inline\">\r\n<div class=\"row\">\r\n<div class=\"col-md-2\"><strong>Weight</strong></div>\r\n<div class=\"col-md-8\">1.79 kg (3.9 lbs)</div>\r\n</div>\r\n</div>\r\n<div class=\"lp-row-double-table\">\r\n<div class=\"row\">\r\n<div class=\"col-md-6\">\r\n<div class=\"lp-row-table-title\"><strong>Ports and connectivity</strong></div>\r\n<ul class=\"lp-ports-conect lp-icon-ul\">\r\n<li class=\"icon-usb-a\"><strong>1x USB Type-A</strong> <em>2.0</em></li>\r\n<li class=\"icon-usb-a\"><strong>2x USB Type-A</strong> <em>3.2 Gen 1 (5 Gbps)</em></li>\r\n<li class=\"icon-hdmi\"><strong>HDMI</strong> <em>1.4b</em></li>\r\n<li class=\"icon-card-reader\"><strong>Card Reader</strong> <em>SD, SDHC, SDXC</em></li>\r\n<li class=\"icon-lan\"><strong>Ethernet LAN</strong> <em>10, 100 Mbit/s</em></li>\r\n<li class=\"icon-wi-fi\"><strong>Wi-Fi</strong> <em>802.11ac</em></li>\r\n<li class=\"icon-bluetooth\"><strong>Bluetooth</strong> <em>5.0</em></li>\r\n<li class=\"icon-audio-jack\"><strong>Audio jack</strong> <em>3.5 mm combo</em></li>\r\n</ul>\r\n</div>\r\n</div>\r\n</div>', NULL, '2021-10-22 09:52:59', '2021-10-22 09:52:59'),
+(32, 29, 'en', 'Shofa', '<p>Shofa is Goog</p>', NULL, '2021-10-22 21:49:48', '2021-10-22 21:49:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rating` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `user_id`, `product_id`, `comment`, `rating`, `created_at`, `updated_at`) VALUES
+(1, 26, 6, 'This is a Good Product', '3', '2021-10-25 07:01:13', '2021-10-25 07:01:13'),
+(2, 1, 6, 'Awesome product', '5', '2021-10-25 07:08:01', '2021-10-25 07:08:01'),
+(3, 1, 6, 'I Love this product', '3', '2021-10-25 08:04:35', '2021-10-25 08:04:35');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'web', 1, '2021-07-31 02:31:32', '2021-07-31 05:22:44'),
+(3, 'Customer', 'web', 1, '2021-07-31 02:32:28', '2021-07-31 05:22:44'),
+(4, 'Manger', 'web', 1, '2021-07-31 03:29:35', '2021-08-11 23:16:53'),
+(5, 'Editor', 'web', 0, '2021-07-31 04:25:38', '2021-07-31 05:24:53'),
+(6, 'HR', 'web', 1, '2021-07-31 04:26:26', '2021-08-10 13:55:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role_has_permissions`
+--
+
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `role_has_permissions`
+--
+
+INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(1, 3),
+(2, 3),
+(3, 3),
+(4, 3),
+(5, 3),
+(6, 3),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 3),
+(11, 3),
+(12, 3),
+(13, 3),
+(14, 3),
+(15, 3),
+(16, 3),
+(17, 3),
+(18, 3),
+(19, 3),
+(20, 3),
+(21, 3),
+(22, 3),
+(23, 3),
+(24, 3),
+(25, 3),
+(26, 3),
+(27, 3),
+(28, 3),
+(29, 3),
+(30, 3),
+(31, 3),
+(32, 3),
+(33, 3),
+(34, 3),
+(35, 3),
+(36, 3),
+(37, 3),
+(38, 3),
+(39, 3),
+(40, 3),
+(41, 3),
+(42, 3),
+(43, 3),
+(44, 3),
+(45, 3),
+(46, 3),
+(47, 3),
+(48, 3),
+(49, 3),
+(50, 3),
+(51, 3),
+(52, 3),
+(53, 3),
+(54, 3),
+(55, 3),
+(56, 3),
+(57, 3),
+(58, 3),
+(59, 3),
+(60, 3),
+(61, 3),
+(62, 3),
+(63, 3),
+(64, 3),
+(65, 3),
+(66, 3),
+(67, 3),
+(68, 3),
+(69, 3),
+(75, 3),
+(76, 3),
+(77, 3),
+(78, 3),
+(79, 3),
+(80, 3),
+(81, 3),
+(82, 3),
+(1, 6),
+(2, 6),
+(3, 6),
+(4, 6),
+(5, 6),
+(6, 6),
+(7, 6),
+(8, 6),
+(10, 6),
+(12, 6),
+(13, 6),
+(14, 6),
+(15, 6),
+(16, 6),
+(17, 6),
+(18, 6),
+(19, 6),
+(20, 6),
+(21, 6),
+(22, 6),
+(23, 6),
+(24, 6),
+(25, 6),
+(26, 6),
+(27, 6),
+(28, 6),
+(29, 6),
+(30, 6),
+(31, 6),
+(32, 6),
+(33, 6),
+(34, 6),
+(35, 6),
+(36, 6),
+(37, 6),
+(38, 6),
+(39, 6),
+(40, 6),
+(41, 6),
+(42, 6),
+(43, 6),
+(44, 6),
+(45, 6),
+(46, 6),
+(47, 6),
+(48, 6),
+(49, 6),
+(50, 6),
+(51, 6),
+(52, 6),
+(53, 6),
+(54, 6),
+(55, 6),
+(56, 6),
+(57, 6),
+(58, 6),
+(59, 6),
+(60, 6),
+(61, 6),
+(62, 6),
+(63, 6),
+(64, 6),
+(65, 6),
+(66, 6),
+(67, 6),
+(75, 6),
+(77, 6),
+(78, 6),
+(82, 6);
 
 -- --------------------------------------------------------
 
@@ -1821,7 +2058,7 @@ INSERT INTO `product_translations` (`id`, `product_id`, `local`, `product_name`,
 CREATE TABLE `searchterms` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `search_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `count` int(11) NOT NULL DEFAULT 0,
+  `count` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1835,8 +2072,8 @@ CREATE TABLE `searchterms` (
 CREATE TABLE `settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_translatable` tinyint(4) NOT NULL DEFAULT 0,
-  `plain_value` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_translatable` tinyint(4) NOT NULL DEFAULT '0',
+  `plain_value` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1847,39 +2084,39 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_at`, `updated_at`) VALUES
 (1, 'storefront_welcome_text', 1, NULL, NULL, NULL),
-(2, 'storefront_theme_color', 0, NULL, NULL, NULL),
-(3, 'storefront_mail_theme_color', 0, NULL, NULL, NULL),
+(2, 'storefront_theme_color', 0, NULL, NULL, '2021-10-09 01:18:32'),
+(3, 'storefront_mail_theme_color', 0, NULL, NULL, '2021-10-09 01:18:32'),
 (4, 'storefront_slider', 0, NULL, NULL, NULL),
-(5, 'storefront_terms_and_condition_page', 0, NULL, NULL, NULL),
-(6, 'storefront_privacy_policy_page', 0, NULL, NULL, NULL),
+(5, 'storefront_terms_and_condition_page', 0, NULL, NULL, '2021-10-09 01:18:32'),
+(6, 'storefront_privacy_policy_page', 0, NULL, NULL, '2021-10-09 01:18:32'),
 (7, 'storefront_address', 1, NULL, NULL, NULL),
 (8, 'storefront_navbar_text', 1, NULL, NULL, NULL),
-(9, 'storefront_primary_menu', 0, NULL, NULL, NULL),
-(10, 'storefront_category_menu', 0, NULL, NULL, NULL),
+(9, 'storefront_primary_menu', 0, '5', NULL, '2021-10-24 00:04:13'),
+(10, 'storefront_category_menu', 0, NULL, NULL, '2021-10-24 00:04:13'),
 (11, 'storefront_footer_menu_title_one', 1, NULL, NULL, NULL),
-(12, 'storefront_footer_menu_one', 0, NULL, NULL, NULL),
+(12, 'storefront_footer_menu_one', 0, '3', NULL, '2021-10-24 00:04:13'),
 (13, 'storefront_footer_menu_title_two', 1, NULL, NULL, NULL),
-(14, 'storefront_footer_menu_two', 0, NULL, NULL, NULL),
+(14, 'storefront_footer_menu_two', 0, '4', NULL, '2021-10-24 00:04:14'),
 (15, 'storefront_facebook_link', 0, NULL, NULL, NULL),
 (16, 'storefront_twitter_link', 0, NULL, NULL, NULL),
 (17, 'storefront_instagram_link', 0, NULL, NULL, NULL),
 (18, 'storefront_youtube_link', 0, NULL, NULL, NULL),
-(19, 'storefront_section_status', 0, NULL, NULL, NULL),
+(19, 'storefront_section_status', 0, '1', NULL, '2021-09-21 03:25:23'),
 (20, 'storefront_feature_1_title', 1, NULL, NULL, NULL),
 (21, 'storefront_feature_1_subtitle', 1, NULL, NULL, NULL),
-(22, 'storefront_feature_1_icon', 0, NULL, NULL, NULL),
+(22, 'storefront_feature_1_icon', 0, 'ti-truck', NULL, '2021-09-21 03:25:22'),
 (23, 'storefront_feature_2_title', 1, NULL, NULL, NULL),
 (24, 'storefront_feature_2_subtitle', 1, NULL, NULL, NULL),
-(25, 'storefront_feature_2_icon', 0, NULL, NULL, NULL),
+(25, 'storefront_feature_2_icon', 0, 'ti-loop', NULL, '2021-09-21 03:25:22'),
 (26, 'storefront_feature_3_title', 1, NULL, NULL, NULL),
 (27, 'storefront_feature_3_subtitle', 1, NULL, NULL, NULL),
-(28, 'storefront_feature_3_icon', 0, NULL, NULL, NULL),
+(28, 'storefront_feature_3_icon', 0, 'ti-lock', NULL, '2021-09-21 03:25:22'),
 (29, 'storefront_feature_4_title', 1, NULL, NULL, NULL),
 (30, 'storefront_feature_4_subtitle', 1, NULL, NULL, NULL),
-(31, 'storefront_feature_4_icon', 0, NULL, NULL, NULL),
+(31, 'storefront_feature_4_icon', 0, 'ti-headphone-alt', NULL, '2021-09-21 03:25:23'),
 (32, 'storefront_feature_5_title', 1, NULL, NULL, NULL),
 (33, 'storefront_feature_5_subtitle', 1, NULL, NULL, NULL),
-(34, 'storefront_feature_5_icon', 0, NULL, NULL, NULL),
+(34, 'storefront_feature_5_icon', 0, NULL, NULL, '2021-09-21 03:25:23'),
 (35, 'storefront_footer_tag_id', 0, NULL, NULL, NULL),
 (36, 'storefront_copyright_text', 1, NULL, NULL, NULL),
 (37, 'storefront_payment_method_image', 0, NULL, NULL, NULL),
@@ -1888,11 +2125,11 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (40, 'storefront_call_action_url', 0, NULL, NULL, NULL),
 (41, 'storefront_open_new_window', 0, NULL, NULL, NULL),
 (42, 'storefront_slider_banner_1_image', 0, NULL, NULL, NULL),
-(43, 'storefront_slider_banner_1_call_to_action_url', 0, NULL, NULL, NULL),
-(44, 'storefront_slider_banner_1_open_in_new_window', 0, NULL, NULL, NULL),
+(43, 'storefront_slider_banner_1_call_to_action_url', 0, NULL, NULL, '2021-09-06 03:39:58'),
+(44, 'storefront_slider_banner_1_open_in_new_window', 0, '0', NULL, '2021-09-06 03:39:58'),
 (45, 'storefront_slider_banner_2_image', 0, NULL, NULL, NULL),
-(46, 'storefront_slider_banner_2_call_to_action_url', 0, NULL, NULL, NULL),
-(47, 'storefront_slider_banner_2_open_in_new_window', 0, NULL, NULL, NULL),
+(46, 'storefront_slider_banner_2_call_to_action_url', 0, NULL, NULL, '2021-09-06 03:39:58'),
+(47, 'storefront_slider_banner_2_open_in_new_window', 0, '0', NULL, '2021-09-06 03:39:58'),
 (48, 'storefront_one_column_banner_enabled', 0, NULL, NULL, NULL),
 (49, 'storefront_one_column_banner_image', 0, NULL, NULL, NULL),
 (50, 'storefront_one_column_banner_call_to_action_url', 0, NULL, NULL, NULL),
@@ -1925,27 +2162,27 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (77, 'storefront_three_column_full_width_banners_image_3', 0, NULL, NULL, NULL),
 (78, 'storefront_three_column_full_width_banners_3_call_to_action_url', 0, NULL, NULL, NULL),
 (79, 'storefront_three_column_full_width_banners_3_open_in_new_window', 0, NULL, NULL, NULL),
-(80, 'storefront_top_brands_section_enabled', 0, NULL, NULL, NULL),
-(81, 'storefront_top_brands', 0, NULL, NULL, NULL),
-(82, 'storefront_product_tabs_1_section_enabled', 0, NULL, NULL, NULL),
+(80, 'storefront_top_brands_section_enabled', 0, '0', NULL, '2021-09-22 22:48:02'),
+(81, 'storefront_top_brands', 0, '[\"4\",\"21\"]', NULL, '2021-09-22 22:47:50'),
+(82, 'storefront_product_tabs_1_section_enabled', 0, '1', NULL, '2021-09-23 03:21:42'),
 (83, 'storefront_product_tabs_1_section_tab_1_title', 1, NULL, NULL, NULL),
-(84, 'storefront_product_tabs_1_section_tab_1_product_type', 0, NULL, NULL, NULL),
-(85, 'storefront_product_tabs_1_section_tab_1_category_id', 0, NULL, NULL, NULL),
+(84, 'storefront_product_tabs_1_section_tab_1_product_type', 0, 'category_products', NULL, '2021-09-23 03:21:42'),
+(85, 'storefront_product_tabs_1_section_tab_1_category_id', 0, '20', NULL, '2021-09-23 03:21:42'),
 (86, 'storefront_product_tabs_1_section_tab_1_products', 0, NULL, NULL, NULL),
 (87, 'storefront_product_tabs_1_section_tab_1_products_limit', 0, NULL, NULL, NULL),
 (88, 'storefront_product_tabs_1_section_tab_2_title', 1, NULL, NULL, NULL),
-(89, 'storefront_product_tabs_1_section_tab_2_product_type', 0, NULL, NULL, NULL),
-(90, 'storefront_product_tabs_1_section_tab_2_category_id', 0, NULL, NULL, NULL),
+(89, 'storefront_product_tabs_1_section_tab_2_product_type', 0, 'category_products', NULL, '2021-09-23 03:21:42'),
+(90, 'storefront_product_tabs_1_section_tab_2_category_id', 0, '13', NULL, '2021-09-23 03:21:42'),
 (91, 'storefront_product_tabs_1_section_tab_2_products', 0, NULL, NULL, NULL),
 (92, 'storefront_product_tabs_1_section_tab_2_products_limit', 0, NULL, NULL, NULL),
 (93, 'storefront_product_tabs_1_section_tab_3_title', 1, NULL, NULL, NULL),
-(94, 'storefront_product_tabs_1_section_tab_3_product_type', 0, NULL, NULL, NULL),
-(95, 'storefront_product_tabs_1_section_tab_3_category_id', 0, NULL, NULL, NULL),
+(94, 'storefront_product_tabs_1_section_tab_3_product_type', 0, NULL, NULL, '2021-09-23 03:21:42'),
+(95, 'storefront_product_tabs_1_section_tab_3_category_id', 0, '14', NULL, '2021-09-23 03:21:42'),
 (96, 'storefront_product_tabs_1_section_tab_3_products', 0, NULL, NULL, NULL),
 (97, 'storefront_product_tabs_1_section_tab_3_products_limit', 0, NULL, NULL, NULL),
 (98, 'storefront_product_tabs_1_section_tab_4_title', 1, NULL, NULL, NULL),
-(99, 'storefront_product_tabs_1_section_tab_4_product_type', 0, NULL, NULL, NULL),
-(100, 'storefront_product_tabs_1_section_tab_4_category_id', 0, NULL, NULL, NULL),
+(99, 'storefront_product_tabs_1_section_tab_4_product_type', 0, 'category_products', NULL, '2021-09-23 03:21:42'),
+(100, 'storefront_product_tabs_1_section_tab_4_category_id', 0, '3', NULL, '2021-09-23 03:21:42'),
 (101, 'storefront_product_tabs_1_section_tab_4_products', 0, NULL, NULL, NULL),
 (102, 'storefront_product_tabs_1_section_tab_4_products_limit', 0, NULL, NULL, NULL),
 (103, 'storefront_product_tabs_2_section_enabled', 0, NULL, NULL, NULL),
@@ -1969,7 +2206,213 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (121, 'storefront_product_tabs_2_section_tab_4_product_type', 0, NULL, NULL, NULL),
 (122, 'storefront_product_tabs_2_section_tab_4_category_id', 0, NULL, NULL, NULL),
 (123, 'storefront_product_tabs_2_section_tab_4_products', 0, NULL, NULL, NULL),
-(124, 'storefront_product_tabs_2_section_tab_4_products_limit', 0, NULL, NULL, NULL);
+(124, 'storefront_product_tabs_2_section_tab_4_products_limit', 0, NULL, NULL, NULL),
+(125, 'storefront_slider_banner_1_title', 1, NULL, NULL, NULL),
+(126, 'storefront_slider_banner_2_title', 1, NULL, NULL, NULL),
+(127, 'storefront_slider_banner_3_image', 0, 'C:\\xampp\\tmp\\phpCD3C.tmp', NULL, '2021-09-06 03:39:58'),
+(128, 'storefront_slider_banner_3_title', 1, NULL, NULL, NULL),
+(129, 'storefront_slider_banner_3_call_to_action_url', 0, 'xyz.com', NULL, '2021-09-06 03:39:58'),
+(130, 'storefront_slider_banner_3_open_in_new_window', 0, '1', NULL, '2021-09-06 03:39:58'),
+(131, 'storefront_flash_sale_and_vertical_products_section_enabled', 0, '1', NULL, '2021-10-22 22:17:57'),
+(132, 'storefront_flash_sale_title', 1, NULL, NULL, NULL),
+(133, 'storefront_flash_sale_active_campaign_flash_id', 0, '1', NULL, '2021-10-22 22:17:57'),
+(134, 'storefront_vertical_product_1_title', 1, NULL, NULL, NULL),
+(135, 'storefront_vertical_product_1_type', 0, 'category_products', NULL, '2021-10-22 22:17:57'),
+(136, 'storefront_vertical_product_1_category_id', 0, '13', NULL, '2021-10-22 22:17:57'),
+(137, 'storefront_vertical_product_1_products', 0, NULL, NULL, NULL),
+(138, 'storefront_vertical_product_1_products_limit', 0, NULL, NULL, NULL),
+(139, 'storefront_vertical_product_2_title', 1, NULL, NULL, NULL),
+(140, 'storefront_vertical_product_2_type', 0, 'category_products', NULL, '2021-10-22 22:17:57'),
+(141, 'storefront_vertical_product_2_category_id', 0, '3', NULL, '2021-10-22 22:17:57'),
+(142, 'storefront_vertical_product_2_products', 0, NULL, NULL, NULL),
+(143, 'storefront_vertical_product_2_products_limit', 0, NULL, NULL, NULL),
+(144, 'storefront_vertical_product_3_title', 1, NULL, NULL, NULL),
+(145, 'storefront_vertical_product_3_type', 0, 'category_products', NULL, '2021-10-22 22:17:57'),
+(146, 'storefront_vertical_product_3_category_id', 0, '20', NULL, '2021-10-22 22:17:57'),
+(147, 'storefront_vertical_product_3_products', 0, NULL, NULL, NULL),
+(148, 'storefront_vertical_product_3_products_limit', 0, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_bank_transfers`
+--
+
+CREATE TABLE `setting_bank_transfers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `instruction` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_bank_transfers`
+--
+
+INSERT INTO `setting_bank_transfers` (`id`, `status`, `label`, `description`, `instruction`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test', 'test', 'test', '2021-07-25 11:19:58', '2021-07-25 11:19:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_cash_on_deliveries`
+--
+
+CREATE TABLE `setting_cash_on_deliveries` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_cash_on_deliveries`
+--
+
+INSERT INTO `setting_cash_on_deliveries` (`id`, `status`, `label`, `description`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test', 'test', '2021-07-25 10:59:16', '2021-07-25 10:59:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_check_money_orders`
+--
+
+CREATE TABLE `setting_check_money_orders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `instruction` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_check_money_orders`
+--
+
+INSERT INTO `setting_check_money_orders` (`id`, `status`, `label`, `description`, `instruction`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Test', 'test', 'test', '2021-10-13 22:54:35', '2021-10-13 22:54:35');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_currencies`
+--
+
+CREATE TABLE `setting_currencies` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `supported_currency` text COLLATE utf8mb4_unicode_ci,
+  `default_currency` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency_format` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exchange_rate_service` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fixer_access_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `forge_api_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_data_feed_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `auto_refresh` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_currencies`
+--
+
+INSERT INTO `setting_currencies` (`id`, `supported_currency`, `default_currency`, `currency_format`, `exchange_rate_service`, `fixer_access_key`, `forge_api_key`, `currency_data_feed_key`, `auto_refresh`, `created_at`, `updated_at`) VALUES
+(1, 'Bangladesh Taka,Indian Rupee,United States Dollar', '$', 'prefix', 'forge', NULL, '456', NULL, 1, '2021-07-24 01:20:00', '2021-09-29 03:14:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_custom_css_jsses`
+--
+
+CREATE TABLE `setting_custom_css_jsses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `header` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `footer` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_custom_css_jsses`
+--
+
+INSERT INTO `setting_custom_css_jsses` (`id`, `header`, `footer`, `created_at`, `updated_at`) VALUES
+(1, 'fsdfef', 'fsdfsd', '2021-07-25 00:39:51', '2021-07-25 00:39:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_facebooks`
+--
+
+CREATE TABLE `setting_facebooks` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `app_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `app_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_facebooks`
+--
+
+INSERT INTO `setting_facebooks` (`id`, `status`, `app_id`, `app_secret`, `created_at`, `updated_at`) VALUES
+(1, 1, 'fsdfsdf', 'wew4', '2021-07-25 01:22:27', '2021-07-25 01:55:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_flat_rates`
+--
+
+CREATE TABLE `setting_flat_rates` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `flat_status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cost` double NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_flat_rates`
+--
+
+INSERT INTO `setting_flat_rates` (`id`, `flat_status`, `label`, `cost`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Flat Rate', 25, '2021-07-25 03:57:26', '2021-10-10 04:35:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_free_shippings`
+--
+
+CREATE TABLE `setting_free_shippings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `shipping_status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `minimum_amount` double DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_free_shippings`
+--
+
+INSERT INTO `setting_free_shippings` (`id`, `shipping_status`, `label`, `minimum_amount`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Free Shipping', NULL, '2021-07-25 03:17:32', '2021-10-10 04:27:43');
 
 -- --------------------------------------------------------
 
@@ -1983,12 +2426,188 @@ CREATE TABLE `setting_generals` (
   `default_country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `default_timezone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customer_role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number_format_type` int(11) DEFAULT NULL,
   `reviews_and_ratings` tinyint(4) DEFAULT NULL,
   `auto_approve_reviews` tinyint(4) DEFAULT NULL,
   `cookie_bar` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_generals`
+--
+
+INSERT INTO `setting_generals` (`id`, `supported_countries`, `default_country`, `default_timezone`, `customer_role`, `number_format_type`, `reviews_and_ratings`, `auto_approve_reviews`, `cookie_bar`, `created_at`, `updated_at`) VALUES
+(1, 'Bangladesh,India', 'United States', 'Africa/Abidjan', 'admin', 2, 1, 1, 1, '2021-08-27 23:16:40', '2021-09-04 03:52:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_googles`
+--
+
+CREATE TABLE `setting_googles` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `client_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_googles`
+--
+
+INSERT INTO `setting_googles` (`id`, `status`, `client_id`, `client_secret`, `created_at`, `updated_at`) VALUES
+(1, 1, 'lkjljl', 'iuyiuyiy', '2021-07-25 02:09:31', '2021-07-25 02:09:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_local_pickups`
+--
+
+CREATE TABLE `setting_local_pickups` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `pickup_status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cost` double NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_local_pickups`
+--
+
+INSERT INTO `setting_local_pickups` (`id`, `pickup_status`, `label`, `cost`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Local Pickup', 20, '2021-07-25 03:46:56', '2021-10-10 04:28:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_mails`
+--
+
+CREATE TABLE `setting_mails` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `mail_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_host` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_port` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_encryption` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `welcome_email` tinyint(4) DEFAULT NULL,
+  `new_order_to_admin` tinyint(4) DEFAULT NULL,
+  `invoice_mail` tinyint(4) DEFAULT NULL,
+  `mail_order_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_newsletters`
+--
+
+CREATE TABLE `setting_newsletters` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `newsletter` tinyint(4) DEFAULT NULL,
+  `mailchimp_api_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mailchimp_list_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_newsletters`
+--
+
+INSERT INTO `setting_newsletters` (`id`, `newsletter`, `mailchimp_api_key`, `mailchimp_list_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '8dae1098d58294232c2d14372aefffd9-us5', '02775d787c', '2021-07-25 00:05:52', '2021-10-05 01:49:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_paypals`
+--
+
+CREATE TABLE `setting_paypals` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sandbox` tinyint(4) DEFAULT NULL,
+  `client_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_paypals`
+--
+
+INSERT INTO `setting_paypals` (`id`, `status`, `label`, `description`, `sandbox`, `client_id`, `secret`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Paypal', 'Test', 1, 'AU9xEUcAhAZ9uK_UNVseT4RAiOVABw38vUjPYDth_M9IGCQp4Ez_WJ8s1HtztNdx3Nt58NuaFKcWX98b', 'EEjSv_jGB0xYCRs3-8L9aEsAp56LeQOOSNNTaXR1LirZxq6Nmgn70tL5jInojNIoCp_JbW_jjoOMT1qG', '2021-07-25 08:57:49', '2021-10-16 01:34:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_paytms`
+--
+
+CREATE TABLE `setting_paytms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sandbox` tinyint(4) DEFAULT NULL,
+  `merchant_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `merchant_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_paytms`
+--
+
+INSERT INTO `setting_paytms` (`id`, `status`, `label`, `description`, `sandbox`, `merchant_id`, `merchant_key`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test', 'test', 1, 'test', 'test', '2021-07-25 09:55:50', '2021-07-25 09:55:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_sms`
+--
+
+CREATE TABLE `setting_sms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `sms_from` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sms_service` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `api_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `api_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `account_sid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `auth_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `welcome_sms` tinyint(4) DEFAULT NULL,
+  `new_order_sms_to_admin` tinyint(4) DEFAULT NULL,
+  `new_order_sms_to_customer` tinyint(4) DEFAULT NULL,
+  `sms_order_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_sms`
+--
+
+INSERT INTO `setting_sms` (`id`, `sms_from`, `sms_service`, `api_key`, `api_secret`, `account_sid`, `auth_token`, `welcome_sms`, `new_order_sms_to_admin`, `new_order_sms_to_customer`, `sms_order_status`, `created_at`, `updated_at`) VALUES
+(1, 'test', 'twilio', NULL, NULL, 'test4', 'test5', 1, 1, 1, 'completed', '2021-07-24 10:50:14', '2021-07-24 23:35:29');
 
 -- --------------------------------------------------------
 
@@ -2019,7 +2638,31 @@ CREATE TABLE `setting_stores` (
 --
 
 INSERT INTO `setting_stores` (`id`, `store_name`, `store_tagline`, `store_email`, `store_phone`, `store_address_1`, `store_address_2`, `store_city`, `store_country`, `store_state`, `store_zip`, `hide_store_phone`, `hide_store_email`, `created_at`, `updated_at`) VALUES
-(2, 'Basil Mathis', 'Aliqua Nihil ration', 'jovecahu@mailinator.com', '656548', '949 Cowley Parkway', 'Veniam harum saepe', 'Sint fuga Irure sun', 'Grenada', NULL, '654', 1, 1, '2021-07-22 01:08:16', '2021-07-22 01:15:35');
+(2, 'Basil Mathis', 'Aliqua Nihil ration', 'jovecahu@mailinator.com', '(+800) 1234 5678 90', '949 Cowley Parkway', 'Veniam harum saepe', 'Sint fuga Irure sun', 'Grenada', NULL, '654', 1, 1, '2021-07-22 01:08:16', '2021-10-09 01:39:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting_strips`
+--
+
+CREATE TABLE `setting_strips` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `publishable_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_strips`
+--
+
+INSERT INTO `setting_strips` (`id`, `status`, `label`, `description`, `publishable_key`, `secret_key`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test', 'test', '1', 'test', '2021-07-25 09:28:36', '2021-07-25 09:28:47');
 
 -- --------------------------------------------------------
 
@@ -2031,41 +2674,79 @@ CREATE TABLE `setting_translations` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `setting_id` bigint(20) UNSIGNED NOT NULL,
   `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting_translations`
+--
+
+INSERT INTO `setting_translations` (`id`, `setting_id`, `locale`, `value`, `created_at`, `updated_at`) VALUES
+(30, 1, 'en', 'Welcome to CartPro', '2021-09-04 23:50:08', '2021-09-21 02:34:08'),
+(31, 7, 'en', 'Dewanhat, Chittagong', '2021-09-04 23:50:09', '2021-10-09 01:18:33'),
+(32, 125, 'en', 'Test 1', '2021-09-05 23:04:39', '2021-09-05 23:33:54'),
+(33, 126, 'en', 'Test 2', '2021-09-06 03:03:01', '2021-09-06 03:03:01'),
+(34, 128, 'en', 'Test 3', '2021-09-06 03:39:58', '2021-09-06 03:39:58'),
+(35, 8, 'en', NULL, '2021-09-13 05:32:13', '2021-09-13 05:32:13'),
+(36, 11, 'en', 'Our Services', '2021-09-13 05:32:13', '2021-10-04 01:17:02'),
+(37, 13, 'en', 'Information', '2021-09-13 05:32:13', '2021-10-04 02:14:07'),
+(38, 1, 'bn', 'স্বাগতম কার্ট-প্রোতে', '2021-09-21 02:25:09', '2021-09-21 02:34:18'),
+(39, 7, 'bn', 'test', '2021-09-21 02:25:10', '2021-09-21 02:25:10'),
+(40, 20, 'bn', 'Free Shipping Irfan', '2021-09-21 02:38:31', '2021-09-21 02:55:12'),
+(41, 21, 'bn', 'Orders over $100', '2021-09-21 02:38:31', '2021-09-21 02:38:31'),
+(42, 23, 'bn', 'Money returns', '2021-09-21 02:38:31', '2021-09-21 03:10:40'),
+(43, 24, 'bn', 'Within 30 days', '2021-09-21 02:38:31', '2021-09-21 03:10:40'),
+(44, 26, 'bn', '100% secure', '2021-09-21 02:38:31', '2021-09-21 03:17:48'),
+(45, 27, 'bn', 'Online Trading', '2021-09-21 02:38:31', '2021-09-21 03:17:48'),
+(46, 29, 'bn', '24/7 support', '2021-09-21 02:38:31', '2021-09-21 03:25:22'),
+(47, 30, 'bn', 'Dedicated Support', '2021-09-21 02:38:31', '2021-09-21 03:25:23'),
+(48, 32, 'bn', NULL, '2021-09-21 02:38:32', '2021-09-21 03:25:23'),
+(49, 33, 'bn', NULL, '2021-09-21 02:38:32', '2021-09-21 03:25:23'),
+(50, 83, 'bn', 'Featured', '2021-09-21 03:59:12', '2021-09-21 03:59:12'),
+(51, 88, 'bn', NULL, '2021-09-21 03:59:12', '2021-09-21 03:59:12'),
+(52, 93, 'bn', NULL, '2021-09-21 03:59:12', '2021-09-21 03:59:12'),
+(53, 98, 'bn', NULL, '2021-09-21 03:59:12', '2021-09-21 03:59:12'),
+(54, 83, 'en', 'Featured', '2021-09-21 04:50:53', '2021-09-21 04:50:53'),
+(55, 88, 'en', 'Furniture', '2021-09-21 04:50:53', '2021-09-23 03:15:30'),
+(56, 93, 'en', NULL, '2021-09-21 04:50:54', '2021-09-23 03:15:01'),
+(57, 98, 'en', 'Shirt', '2021-09-21 04:50:54', '2021-09-23 03:21:42'),
+(58, 132, 'en', 'Best Deals', '2021-10-21 02:09:37', '2021-10-21 02:10:11'),
+(59, 134, 'en', 'Watches', '2021-10-21 03:46:08', '2021-10-21 03:51:36'),
+(60, 139, 'en', 'Shirts', '2021-10-21 03:46:08', '2021-10-22 22:09:58'),
+(61, 144, 'en', 'Mobile', '2021-10-21 04:19:23', '2021-10-22 22:17:57');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `shipping`
+-- Table structure for table `shippings`
 --
 
-CREATE TABLE `shipping` (
+CREATE TABLE `shippings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED NOT NULL,
-  `ship_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ship_phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ship_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ship_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ship_city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_address_1` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_zip_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `shipping`
+-- Dumping data for table `shippings`
 --
 
-INSERT INTO `shipping` (`id`, `order_id`, `ship_name`, `ship_phone`, `ship_email`, `ship_address`, `ship_city`, `created_at`, `updated_at`) VALUES
-(4, 12, 'shahadat hossain', '5197913995', 'sohidulislam@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(5, 13, 'shahadat hossain', '5197913995', 'hshahadat36@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(6, 15, 'shahadat hossain', '5197913995', 'sohidulislam@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(7, 14, 'shahadat hossain', '5197913995', 'sohidulislam@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(8, 16, 'shahadat hossain', '5197913995', 'sohidulislam@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(9, 17, 'shahadat hossain', '5197913995', 'sohidulislam@gmail.com', '2100 Cabana Road west', 'Windsor', NULL, NULL),
-(10, 18, 'test', '53465', 'tt@ttf.com', 'hcffhch', 'Chattogram', NULL, NULL);
+INSERT INTO `shippings` (`id`, `order_id`, `shipping_first_name`, `shipping_last_name`, `shipping_email`, `shipping_phone`, `shipping_country`, `shipping_address_1`, `shipping_address_2`, `shipping_city`, `shipping_state`, `shipping_zip_code`, `created_at`, `updated_at`) VALUES
+(1, 5, 'Promi', 'Chowdhury', 'promi00@gmail.com', '01521222515', 'Afghanistan', 'Hathazary', NULL, 'Chittagong', 'Chittagong', '4226', '2021-10-13 04:54:01', '2021-10-13 04:54:01'),
+(2, 33, 'Tarek', 'Hasan', 'mainul@gmail.com', '01521448', 'Canada', 'Dewanhat', NULL, 'Chittagong', 'Chittagong', '4330', '2021-10-20 12:56:00', '2021-10-20 12:56:00');
 
 -- --------------------------------------------------------
 
@@ -2075,14 +2756,11 @@ INSERT INTO `shipping` (`id`, `order_id`, `ship_name`, `ship_phone`, `ship_email
 
 CREATE TABLE `sliders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `slider_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slider_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slider_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `page_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` text COLLATE utf8mb4_unicode_ci,
+  `slider_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2093,10 +2771,37 @@ CREATE TABLE `sliders` (
 -- Dumping data for table `sliders`
 --
 
-INSERT INTO `sliders` (`id`, `slider_title`, `slider_subtitle`, `slider_slug`, `type`, `category_id`, `page_id`, `url`, `image`, `target`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Test', 'test', 'Test', 'category', 1, NULL, NULL, '/images/sliders/1612600436.jpg', 'same_tab', '1', '2021-02-06 02:33:58', '2021-02-06 02:33:58'),
-(2, 'slider-1', 'slider-1', 'slider-1', 'url', NULL, NULL, 'https://www.w3schools.com/', '/images/sliders/1612672894.jpg', 'new_tab', '1', '2021-02-06 22:41:35', '2021-02-06 22:41:35'),
-(3, 'slider-2', 'slider-2', 'slider-2', 'url', NULL, NULL, 'https://www.w3schools.com/', '/images/sliders/1612673166.jpg', 'new_tab', '1', '2021-02-06 22:46:07', '2021-02-06 22:46:07');
+INSERT INTO `sliders` (`id`, `slider_slug`, `type`, `category_id`, `url`, `slider_image`, `target`, `is_active`, `created_at`, `updated_at`) VALUES
+(6, 'sony-headphone', 'category', NULL, NULL, 'images/sliders/tAsUR2IwIy.png', 'same_tab', '1', '2021-08-05 08:12:42', '2021-09-05 03:21:51'),
+(7, 'redmi-ear-buds', 'url', NULL, 'https://www.facebook.com/', 'images/sliders/9OqFo6iksD.png', 'same_tab', '1', '2021-08-05 09:13:49', '2021-09-05 03:21:16'),
+(8, 'samsung-m02s', 'category', NULL, NULL, 'images/sliders/ILRjGBSHRx.jpg', NULL, NULL, '2021-08-05 09:31:18', '2021-09-05 02:45:02'),
+(9, 'apple-watch', 'category', NULL, NULL, 'images/sliders/tRQ335lto2.png', 'new_tab', '1', '2021-08-05 09:35:24', '2021-09-05 03:22:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slider_translations`
+--
+
+CREATE TABLE `slider_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `slider_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slider_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slider_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `slider_translations`
+--
+
+INSERT INTO `slider_translations` (`id`, `slider_id`, `locale`, `slider_title`, `slider_subtitle`, `created_at`, `updated_at`) VALUES
+(6, 6, 'en', 'Sony Headphone', 'Let the sound come alive!', '2021-08-05 08:12:42', '2021-08-05 14:47:41'),
+(7, 7, 'en', 'Redmi Ear-buds', 'Crystal clear sound', '2021-08-05 09:13:49', '2021-09-05 02:42:58'),
+(8, 8, 'en', 'Samsung M02s', 'This is a wounderful mobile', '2021-08-05 09:31:18', '2021-09-05 02:45:02'),
+(9, 9, 'en', 'Apple Watch', 'Fashion meets functionality', '2021-08-05 09:35:24', '2021-09-05 02:43:59');
 
 -- --------------------------------------------------------
 
@@ -2112,7 +2817,7 @@ CREATE TABLE `storefront_generals0` (
   `slider_id` bigint(20) UNSIGNED DEFAULT NULL,
   `terms_condition` bigint(20) UNSIGNED DEFAULT NULL,
   `privacy_policy_page` bigint(20) UNSIGNED DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2132,12 +2837,24 @@ INSERT INTO `storefront_generals0` (`id`, `welcome_text`, `theme_color`, `mail_t
 
 CREATE TABLE `storefront_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `setting_id` bigint(20) DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `storefront_images`
+--
+
+INSERT INTO `storefront_images` (`id`, `setting_id`, `title`, `type`, `image`, `created_at`, `updated_at`) VALUES
+(2, NULL, 'favicon_logo', 'logo', '/images/storefront/logo/lBAhytALIU.png', '2021-09-04 23:18:20', '2021-09-04 23:18:20'),
+(3, NULL, 'header_logo', 'logo', '/images/storefront/logo/wOmGKcjf8U.png', '2021-09-04 23:25:29', '2021-09-04 23:25:29'),
+(4, 42, 'slider_banner_1', 'slider_banner', '/images/storefront/slider_banners/He5eDxZxy7.png', '2021-09-05 23:04:39', '2021-09-05 23:04:39'),
+(7, 45, 'slider_banner_2', 'slider_banner', '/images/storefront/slider_banners/Py41g9nOaj.png', '2021-09-06 03:13:07', '2021-09-06 03:15:59'),
+(8, 127, 'slider_banner_3', 'slider_banner', '/images/storefront/slider_banners/4AkXEEtiCN.jpg', '2021-09-06 03:39:58', '2021-09-06 03:39:58');
 
 -- --------------------------------------------------------
 
@@ -2185,8 +2902,8 @@ CREATE TABLE `tags` (
 
 INSERT INTO `tags` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'fashion', 1, '2021-03-18 09:20:43', '2021-03-25 13:20:48'),
-(2, 'new-arrivals', 1, '2021-03-18 09:20:57', '2021-03-18 09:20:57'),
-(3, 'trendy', 1, '2021-03-18 09:21:08', '2021-04-19 16:54:05');
+(2, 'new-arrivals', 1, '2021-03-18 09:20:57', '2021-07-27 00:57:13'),
+(3, 'trendy', 0, '2021-03-18 09:21:08', '2021-07-27 01:00:41');
 
 -- --------------------------------------------------------
 
@@ -2218,31 +2935,53 @@ INSERT INTO `tag_translations` (`id`, `tag_id`, `local`, `tag_name`, `created_at
 -- --------------------------------------------------------
 
 --
--- Table structure for table `test_cat`
+-- Table structure for table `taxes`
 --
 
-CREATE TABLE `test_cat` (
+CREATE TABLE `taxes` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parent` bigint(20) UNSIGNED DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description_position` tinyint(4) NOT NULL DEFAULT 0,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `featured` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(4) NOT NULL DEFAULT 0,
-  `is_active` int(1) NOT NULL DEFAULT 1,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `zip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rate` double NOT NULL,
+  `based_on` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `test_cat`
+-- Dumping data for table `taxes`
 --
 
-INSERT INTO `test_cat` (`id`, `category_name`, `slug`, `parent`, `description`, `description_position`, `image`, `featured`, `status`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Men', 'men', NULL, 'Men\'s', 1, NULL, 1, 1, 1, '2020-12-16 03:32:04', '2020-12-16 03:32:04'),
-(2, 'Women', 'women', NULL, 'Women Test', 1, NULL, 1, 1, 1, '2021-02-05 09:51:58', '2021-02-05 09:51:58');
+INSERT INTO `taxes` (`id`, `country`, `zip`, `rate`, `based_on`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'United States', '4330', 100, 'shipping_address', '1', '2021-08-14 06:06:31', '2021-08-15 00:26:14'),
+(3, 'Bangladesh', '4330', 50, 'shipping_address', '1', '2021-08-14 22:28:53', '2021-08-15 00:26:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_translations`
+--
+
+CREATE TABLE `tax_translations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `tax_id` bigint(20) UNSIGNED NOT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tax_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tax_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tax_translations`
+--
+
+INSERT INTO `tax_translations` (`id`, `tax_id`, `locale`, `tax_class`, `tax_name`, `state`, `city`, `created_at`, `updated_at`) VALUES
+(1, 1, 'en', 'BD Dhaka Tax', 'BD Dhaka ', 'Chittagong', 'Chittagong', '2021-08-14 06:06:31', '2021-08-14 06:06:31'),
+(3, 3, 'en', 'Chittagong Tax', 'Chittagong', 'Chittagong', 'Chittagong', '2021-08-14 22:28:53', '2021-08-15 00:10:40');
 
 -- --------------------------------------------------------
 
@@ -2257,12 +2996,15 @@ CREATE TABLE `users` (
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` int(11) NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_type` tinyint(4) NOT NULL,
+  `role` int(11) DEFAULT NULL,
+  `role_id` bigint(20) DEFAULT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_login_at` timestamp NULL DEFAULT NULL,
   `last_login_ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2271,10 +3013,53 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `phone`, `email`, `password`, `role`, `image`, `remember_token`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'Tarik', 'Iqbal', '01924756759', 'hello@lion-coders.com', '$2y$10$hv5b3a/UUopDp/3oxD3gpO2rA4V0ogL3575fIdXDLSlvxt7TMn3Nu', 0, NULL, NULL, NULL, NULL, '2020-12-13 14:35:51', '2020-12-13 14:35:51'),
-(2, 'irfan', 'Irfan', 'Chowdhury', '01829498634', 'irfanchowdhury80@gmail.com', '$2y$10$Bpkr0QPBwpiw6Ax8sqvSy.5sZVa96Np7Dnhyz97WBw7cuT1w7pzOi', 1, NULL, NULL, NULL, NULL, '2021-01-31 02:33:22', '2021-01-31 02:33:22'),
-(3, 'arman', 'Arman', 'Alam', '01829498635', 'arman@gmail.com', '$2y$10$sFg.WpMhrzu6gQeVq4k5V.NSnJSE2J0pgW1DXFf/za5SCNFiwBoaa', 1, NULL, NULL, NULL, NULL, '2021-02-07 01:29:29', '2021-02-07 01:29:29');
+INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `phone`, `email`, `password`, `user_type`, `role`, `role_id`, `image`, `remember_token`, `last_login_at`, `last_login_ip`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'Tarik', 'Iqbal', '01924756759', 'hello@lion-coders.com', '$2y$10$hv5b3a/UUopDp/3oxD3gpO2rA4V0ogL3575fIdXDLSlvxt7TMn3Nu', 1, 4, 0, NULL, NULL, NULL, NULL, 1, '2020-12-13 14:35:51', '2021-08-10 13:57:00'),
+(2, 'irfan', 'Irfan', 'Chowdhury', '01829498634', 'irfanchowdhury80@gmail.com', '$2y$10$Bpkr0QPBwpiw6Ax8sqvSy.5sZVa96Np7Dnhyz97WBw7cuT1w7pzOi', 1, 1, 1, NULL, NULL, NULL, NULL, 1, '2021-01-31 02:33:22', '2021-08-10 11:53:08'),
+(3, 'arman', 'Arman', 'Alam', '01829498635', 'arman@gmail.com', '$2y$10$sFg.WpMhrzu6gQeVq4k5V.NSnJSE2J0pgW1DXFf/za5SCNFiwBoaa', 1, 1, 1, NULL, NULL, NULL, NULL, 1, '2021-02-07 01:29:29', '2021-09-04 21:55:37'),
+(4, 'irfan95', 'Irfan', 'Chowdhury Fahim', '384434q9`', 'irfanchowdhury@gmail.com', '$2y$10$f.m5JjQlDp2hRCF6cAvPreblmJq5ZsAqns1l3GBNgQQ/VGfwhaKdi', 1, 1, 0, NULL, NULL, NULL, NULL, 1, '2021-07-30 12:37:29', '2021-09-04 21:55:34'),
+(5, 'khan95', 'Mr', 'Khan', '+8801829498436', 'khan@gmail.com', '$2y$10$O1Ha6motjPgmZTq.ShZiFuWstDgbYqrHcC3HF6Ai0lT21ciMDmpTW', 1, 1, 1, NULL, NULL, NULL, NULL, 1, '2021-08-10 10:06:39', '2021-08-10 12:33:57'),
+(7, 'chowdhury95', 'Mr', 'Chowdhury', '+8801829498623', 'chowdhury95@gmail.com', '$2y$10$yF8Y304HCzTN3h4THweBMeL9/4GF4GKejnsv41n06WQTbwtr3lPKa', 1, 6, 6, 'images/users/AhTny4rwdZ.png', NULL, NULL, NULL, 1, '2021-08-10 11:22:10', '2021-08-11 22:46:28'),
+(8, 'rahman95', 'Abdur', 'Rahman', '1234533', 'rahman95@gmail.com', '$2y$10$SF6gpA9qdcBhKn3BbmXX0.Xbh68oAQXaTS5isA0SmH4qSyMNYilpC', 1, 6, 6, 'images/users/GGVwvI20bI.png', NULL, NULL, NULL, 1, '2021-08-11 23:07:00', '2021-08-11 23:15:03'),
+(9, 'nishat95', 'Shoeb', 'Nishat', '1234554551', 'nishat@gmail.com', '$2y$10$puodf2zCepy8fv0FT9X2muPM6dYOSV6LHaipjipD7oIPRvq/4R6Gi', 1, 6, 6, NULL, NULL, NULL, NULL, 1, '2021-08-11 23:19:34', '2021-08-12 00:41:22'),
+(10, 'fahim95', 'Fahim', 'Chowdhury', '5653637', 'fahim95@gmail.com', '$2y$10$4ah1n/ENsHwcqtZnTGwXfOW/Li20hvGlui6gMWbHQm3.88eFoM2iy', 1, 4, NULL, NULL, NULL, NULL, NULL, 1, '2021-08-14 04:48:14', '2021-09-04 21:30:22'),
+(16, 'fahim00', 'Fahim', 'Chowdhury', '1234567891', 'fahim@gmail.com', '$2y$10$1r6EcJTXmbBIgnmydt/xw.30RPB3XMks4LamcEYoD4Kwuin54hFc.', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-10-11 03:57:54', '2021-10-11 03:57:54'),
+(21, 'promi98', 'Promi', 'Chy', '01777703433', 'promi00@gmail.com', '$2y$10$0e6m6BmLQvDkut1xv.Ff7eaQYHhPD6wUpKdcI2AXZ.LhVhMUsbTFC', 0, NULL, NULL, 'images/customers/xs7Km7I4tG.webp', NULL, NULL, NULL, NULL, '2021-10-11 09:01:44', '2021-10-11 09:01:44'),
+(23, 'Abir95', 'Abir', 'Shanto', '01548741214', 'abir@gmail.com', '$2y$10$JXPxVB/3uHhFoaUDhRTj9uJ6/WN4E/jrsAKY9F/f/WAYJO4TxE2pK', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-10-13 22:35:10', '2021-10-13 22:35:10'),
+(24, 'ruby95', 'Ruby', 'Khatun', '45646454', 'ruby@gmail.com', '$2y$10$LZ5sDEmGl2H2RGRLMg0C0OyIEzRH9nOXrZzHTfbyE8dBrlgCo9Rse', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-10-19 23:26:38', '2021-10-19 23:26:38'),
+(25, 'fahamina95', 'fahamina', 'Chowdhury', '1567685454', 'fahamina@gmail.com', '$2y$10$2QARKVR48tF1Uwvtam2LS.nqKAs12OGonogfYg5VnsNJxc1jGTn.6', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-10-20 01:20:21', '2021-10-20 01:20:21'),
+(26, 'mainul95', 'Mainul', 'Islam', '01521222515', 'mainul@gmail.com', '$2y$10$VJDRzwfnDfrmfbvSCUj/lOOE9V0KMzpC3vfGGAAkCSzcvKpjvD.g.', 0, NULL, NULL, '', NULL, NULL, NULL, NULL, '2021-10-20 12:54:13', '2021-10-20 12:54:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users1`
+--
+
+CREATE TABLE `users1` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` double NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_login_at` datetime DEFAULT NULL,
+  `last_login_ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users1`
+--
+
+INSERT INTO `users1` (`id`, `first_name`, `last_name`, `username`, `phone`, `email`, `password`, `role_id`, `image`, `remember_token`, `last_login_at`, `last_login_ip`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Mr', 'Admin', 'admin', 1924756759, 'hello@lion-coders.com', '$2y$10$hv5b3a/UUopDp/3oxD3gpO2rA4V0ogL3575fIdXDLSlvxt7TMn3Nu', 1, NULL, NULL, '2021-08-13 21:24:47', NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2286,6 +3071,7 @@ CREATE TABLE `wishlists` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2378,12 +3164,6 @@ ALTER TABLE `category_translations`
   ADD KEY `category_translations_category_id_foreign` (`category_id`);
 
 --
--- Indexes for table `collections`
---
-ALTER TABLE `collections`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `countries`
 --
 ALTER TABLE `countries`
@@ -2417,10 +3197,24 @@ ALTER TABLE `coupon_translations`
   ADD KEY `coupon_translations_coupon_id_foreign` (`coupon_id`);
 
 --
+-- Indexes for table `currencies`
+--
+ALTER TABLE `currencies`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `currency_rates`
+--
+ALTER TABLE `currency_rates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `customers_username_unique` (`username`),
+  ADD UNIQUE KEY `customers_email_unique` (`email`),
   ADD KEY `customers_user_id_foreign` (`user_id`);
 
 --
@@ -2451,14 +3245,6 @@ ALTER TABLE `flash_sale_translations`
   ADD KEY `flash_sale_translations_flash_sale_id_foreign` (`flash_sale_id`);
 
 --
--- Indexes for table `guest_customers`
---
-ALTER TABLE `guest_customers`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `guest_customers_phone_unique` (`phone`),
-  ADD UNIQUE KEY `guest_customers_email_unique` (`email`);
-
---
 -- Indexes for table `images`
 --
 ALTER TABLE `images`
@@ -2479,45 +3265,37 @@ ALTER TABLE `menus`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `menus0`
---
-ALTER TABLE `menus0`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `menu_items0`
---
-ALTER TABLE `menu_items0`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `menu_items_menu_id_foreign` (`menu_id`),
-  ADD KEY `menu_items_category_id_foreign` (`category_id`),
-  ADD KEY `menu_items_page_id_foreign` (`page_id`);
-
---
--- Indexes for table `menu_item_translations`
---
-ALTER TABLE `menu_item_translations`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `menu_item_translations_menu_item_id_foreign` (`menu_item_id`);
+  ADD KEY `menu_items_menu_foreign` (`menu`);
 
 --
 -- Indexes for table `menu_translations`
 --
 ALTER TABLE `menu_translations`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `menu_translations_menu_id_foreign` (`menu_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Indexes for table `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
 
 --
 -- Indexes for table `navigations`
@@ -2528,11 +3306,11 @@ ALTER TABLE `navigations`
   ADD KEY `navigations_page_id_foreign` (`page_id`);
 
 --
--- Indexes for table `ordered_products`
+-- Indexes for table `newsletters`
 --
-ALTER TABLE `ordered_products`
+ALTER TABLE `newsletters`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `ordered_products_order_id_foreign` (`order_id`);
+  ADD UNIQUE KEY `newsletters_email_unique` (`email`);
 
 --
 -- Indexes for table `orders`
@@ -2540,8 +3318,14 @@ ALTER TABLE `ordered_products`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `orders_user_id_foreign` (`user_id`),
-  ADD KEY `orders_customer_id_foreign` (`customer_id`),
   ADD KEY `orders_coupon_id_foreign` (`coupon_id`);
+
+--
+-- Indexes for table `order_details`
+--
+ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_details_order_id_foreign` (`order_id`);
 
 --
 -- Indexes for table `pages`
@@ -2563,6 +3347,13 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -2576,10 +3367,11 @@ ALTER TABLE `products0`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_attributes0`
+-- Indexes for table `product_attribute_value`
 --
-ALTER TABLE `product_attributes0`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `product_attribute_value`
+  ADD KEY `product_attribute_value_product_id_foreign` (`product_id`),
+  ADD KEY `product_attribute_value_attribute_id_foreign` (`attribute_id`);
 
 --
 -- Indexes for table `product_images`
@@ -2603,6 +3395,27 @@ ALTER TABLE `product_translations`
   ADD KEY `product_translations_product_id_foreign` (`product_id`);
 
 --
+-- Indexes for table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reviews_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Indexes for table `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`role_id`),
+  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
+
+--
 -- Indexes for table `searchterms`
 --
 ALTER TABLE `searchterms`
@@ -2615,15 +3428,111 @@ ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `setting_bank_transfers`
+--
+ALTER TABLE `setting_bank_transfers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_cash_on_deliveries`
+--
+ALTER TABLE `setting_cash_on_deliveries`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_check_money_orders`
+--
+ALTER TABLE `setting_check_money_orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_currencies`
+--
+ALTER TABLE `setting_currencies`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_custom_css_jsses`
+--
+ALTER TABLE `setting_custom_css_jsses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_facebooks`
+--
+ALTER TABLE `setting_facebooks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_flat_rates`
+--
+ALTER TABLE `setting_flat_rates`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_free_shippings`
+--
+ALTER TABLE `setting_free_shippings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting_generals`
 --
 ALTER TABLE `setting_generals`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `setting_googles`
+--
+ALTER TABLE `setting_googles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_local_pickups`
+--
+ALTER TABLE `setting_local_pickups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_mails`
+--
+ALTER TABLE `setting_mails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_newsletters`
+--
+ALTER TABLE `setting_newsletters`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_paypals`
+--
+ALTER TABLE `setting_paypals`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_paytms`
+--
+ALTER TABLE `setting_paytms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_sms`
+--
+ALTER TABLE `setting_sms`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting_stores`
 --
 ALTER TABLE `setting_stores`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `setting_strips`
+--
+ALTER TABLE `setting_strips`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2634,9 +3543,9 @@ ALTER TABLE `setting_translations`
   ADD KEY `setting_translations_setting_id_foreign` (`setting_id`);
 
 --
--- Indexes for table `shipping`
+-- Indexes for table `shippings`
 --
-ALTER TABLE `shipping`
+ALTER TABLE `shippings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2644,8 +3553,14 @@ ALTER TABLE `shipping`
 --
 ALTER TABLE `sliders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `sliders_category_id_foreign` (`category_id`),
-  ADD KEY `sliders_page_id_foreign` (`page_id`);
+  ADD KEY `sliders_category_id_foreign` (`category_id`);
+
+--
+-- Indexes for table `slider_translations`
+--
+ALTER TABLE `slider_translations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `slider_translations_slider_id_foreign` (`slider_id`);
 
 --
 -- Indexes for table `storefront_generals0`
@@ -2683,11 +3598,17 @@ ALTER TABLE `tag_translations`
   ADD KEY `tag_translations_tag_id_foreign` (`tag_id`);
 
 --
--- Indexes for table `test_cat`
+-- Indexes for table `taxes`
 --
-ALTER TABLE `test_cat`
+ALTER TABLE `taxes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tax_translations`
+--
+ALTER TABLE `tax_translations`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `categories_parent_foreign` (`parent`);
+  ADD KEY `tax_translations_tax_id_foreign` (`tax_id`);
 
 --
 -- Indexes for table `users`
@@ -2695,6 +3616,15 @@ ALTER TABLE `test_cat`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
+-- Indexes for table `users1`
+--
+ALTER TABLE `users1`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_username_unique` (`username`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_role_id_foreign` (`role_id`);
 
 --
 -- Indexes for table `wishlists`
@@ -2734,49 +3664,43 @@ ALTER TABLE `attribute_translations`
 -- AUTO_INCREMENT for table `attribute_values`
 --
 ALTER TABLE `attribute_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `attribute_value_translations`
 --
 ALTER TABLE `attribute_value_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `brand_translations`
 --
 ALTER TABLE `brand_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `category_translations`
 --
 ALTER TABLE `category_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `collections`
---
-ALTER TABLE `collections`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -2791,10 +3715,22 @@ ALTER TABLE `coupon_translations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `currencies`
+--
+ALTER TABLE `currencies`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `currency_rates`
+--
+ALTER TABLE `currency_rates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2812,19 +3748,13 @@ ALTER TABLE `flash_sales`
 -- AUTO_INCREMENT for table `flash_sale_products`
 --
 ALTER TABLE `flash_sale_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `flash_sale_translations`
 --
 ALTER TABLE `flash_sale_translations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `guest_customers`
---
-ALTER TABLE `guest_customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `images`
@@ -2836,49 +3766,31 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `menus0`
---
-ALTER TABLE `menus0`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `menu_items0`
---
-ALTER TABLE `menu_items0`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `menu_item_translations`
---
-ALTER TABLE `menu_item_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `menu_translations`
 --
 ALTER TABLE `menu_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
 -- AUTO_INCREMENT for table `navigations`
@@ -2887,16 +3799,22 @@ ALTER TABLE `navigations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `ordered_products`
+-- AUTO_INCREMENT for table `newsletters`
 --
-ALTER TABLE `ordered_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `newsletters`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `order_details`
+--
+ALTER TABLE `order_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -2911,10 +3829,16 @@ ALTER TABLE `page_translations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `products0`
@@ -2923,22 +3847,28 @@ ALTER TABLE `products0`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT for table `product_attributes0`
---
-ALTER TABLE `product_attributes0`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
-
---
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `product_translations`
 --
 ALTER TABLE `product_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `searchterms`
@@ -2950,13 +3880,103 @@ ALTER TABLE `searchterms`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+
+--
+-- AUTO_INCREMENT for table `setting_bank_transfers`
+--
+ALTER TABLE `setting_bank_transfers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_cash_on_deliveries`
+--
+ALTER TABLE `setting_cash_on_deliveries`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_check_money_orders`
+--
+ALTER TABLE `setting_check_money_orders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_currencies`
+--
+ALTER TABLE `setting_currencies`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_custom_css_jsses`
+--
+ALTER TABLE `setting_custom_css_jsses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_facebooks`
+--
+ALTER TABLE `setting_facebooks`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_flat_rates`
+--
+ALTER TABLE `setting_flat_rates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_free_shippings`
+--
+ALTER TABLE `setting_free_shippings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `setting_generals`
 --
 ALTER TABLE `setting_generals`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_googles`
+--
+ALTER TABLE `setting_googles`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_local_pickups`
+--
+ALTER TABLE `setting_local_pickups`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_mails`
+--
+ALTER TABLE `setting_mails`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `setting_newsletters`
+--
+ALTER TABLE `setting_newsletters`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_paypals`
+--
+ALTER TABLE `setting_paypals`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_paytms`
+--
+ALTER TABLE `setting_paytms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setting_sms`
+--
+ALTER TABLE `setting_sms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `setting_stores`
@@ -2965,22 +3985,34 @@ ALTER TABLE `setting_stores`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `setting_strips`
+--
+ALTER TABLE `setting_strips`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `setting_translations`
 --
 ALTER TABLE `setting_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
--- AUTO_INCREMENT for table `shipping`
+-- AUTO_INCREMENT for table `shippings`
 --
-ALTER TABLE `shipping`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `shippings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `slider_translations`
+--
+ALTER TABLE `slider_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `storefront_generals0`
@@ -2992,7 +4024,7 @@ ALTER TABLE `storefront_generals0`
 -- AUTO_INCREMENT for table `storefront_images`
 --
 ALTER TABLE `storefront_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `storefront_menus0`
@@ -3013,22 +4045,34 @@ ALTER TABLE `tag_translations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `test_cat`
+-- AUTO_INCREMENT for table `taxes`
 --
-ALTER TABLE `test_cat`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `taxes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tax_translations`
+--
+ALTER TABLE `tax_translations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `users1`
+--
+ALTER TABLE `users1`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
@@ -3137,110 +4181,36 @@ ALTER TABLE `flash_sale_translations`
   ADD CONSTRAINT `flash_sale_translations_flash_sale_id_foreign` FOREIGN KEY (`flash_sale_id`) REFERENCES `flash_sales` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `menu_items0`
+-- Constraints for table `menu_items`
 --
-ALTER TABLE `menu_items0`
-  ADD CONSTRAINT `menu_items_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `test_cat` (`id`),
-  ADD CONSTRAINT `menu_items_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus0` (`id`),
-  ADD CONSTRAINT `menu_items_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`);
-
---
--- Constraints for table `menu_item_translations`
---
-ALTER TABLE `menu_item_translations`
-  ADD CONSTRAINT `menu_item_translations_menu_item_id_foreign` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `menu_translations`
---
-ALTER TABLE `menu_translations`
-  ADD CONSTRAINT `menu_translations_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `navigations`
---
-ALTER TABLE `navigations`
-  ADD CONSTRAINT `navigations_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `test_cat` (`id`),
-  ADD CONSTRAINT `navigations_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`);
-
---
--- Constraints for table `ordered_products`
---
-ALTER TABLE `ordered_products`
-  ADD CONSTRAINT `ordered_products_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+ALTER TABLE `menu_items`
+  ADD CONSTRAINT `menu_items_menu_foreign` FOREIGN KEY (`menu`) REFERENCES `menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`),
-  ADD CONSTRAINT `orders_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `orders_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `page_translations`
+-- Constraints for table `order_details`
 --
-ALTER TABLE `page_translations`
-  ADD CONSTRAINT `page_translations_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE;
+ALTER TABLE `order_details`
+  ADD CONSTRAINT `order_details_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `products`
+-- Constraints for table `product_attribute_value`
 --
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`);
+ALTER TABLE `product_attribute_value`
+  ADD CONSTRAINT `product_attribute_value_attribute_id_foreign` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `product_attribute_value_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `product_images`
+-- Constraints for table `reviews`
 --
-ALTER TABLE `product_images`
-  ADD CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_tag`
---
-ALTER TABLE `product_tag`
-  ADD CONSTRAINT `product_tag_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `product_tag_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_translations`
---
-ALTER TABLE `product_translations`
-  ADD CONSTRAINT `product_translations_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `setting_translations`
---
-ALTER TABLE `setting_translations`
-  ADD CONSTRAINT `setting_translations_setting_id_foreign` FOREIGN KEY (`setting_id`) REFERENCES `settings` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `sliders`
---
-ALTER TABLE `sliders`
-  ADD CONSTRAINT `sliders_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `test_cat` (`id`),
-  ADD CONSTRAINT `sliders_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`);
-
---
--- Constraints for table `storefront_menus0`
---
-ALTER TABLE `storefront_menus0`
-  ADD CONSTRAINT `storefront_menus_category_menu_id_foreign` FOREIGN KEY (`category_menu_id`) REFERENCES `menus0` (`id`),
-  ADD CONSTRAINT `storefront_menus_footer_menu_one_id_foreign` FOREIGN KEY (`footer_menu_one_id`) REFERENCES `menus0` (`id`),
-  ADD CONSTRAINT `storefront_menus_footer_menu_two_id_foreign` FOREIGN KEY (`footer_menu_two_id`) REFERENCES `menus0` (`id`),
-  ADD CONSTRAINT `storefront_menus_primary_menu_id_foreign` FOREIGN KEY (`primary_menu_id`) REFERENCES `menus0` (`id`);
-
---
--- Constraints for table `tag_translations`
---
-ALTER TABLE `tag_translations`
-  ADD CONSTRAINT `tag_translations_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `test_cat`
---
-ALTER TABLE `test_cat`
-  ADD CONSTRAINT `categories_parent_foreign` FOREIGN KEY (`parent`) REFERENCES `test_cat` (`id`);
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

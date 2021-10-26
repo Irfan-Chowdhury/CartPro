@@ -74,6 +74,10 @@ class CategoryProduct extends Model
     }
 
 
+    public function productAttributeValues()
+    {
+        return $this->hasMany(ProductAttributeValue::class,'product_id','product_id');
+    }
 
     // public function brandTranslation()
     // {

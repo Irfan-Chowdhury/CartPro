@@ -1,5 +1,20 @@
 @extends('frontend.layouts.master')
+
+@section('meta_info')
+    <meta product="og:site_name" content="CartPro">
+    <meta product="og:title" content="{{$product->productTranslation->product_name ?? null}}">
+    <meta product="og:description" content="{{$product->productTranslation->description ?? null}}">
+    <meta product="og:url" content="{{url('product/'.$product->slug.'/'. $category->id)}}">
+    <meta product="og:type" content="Product">
+
+    @if ($product->baseImage)
+        <meta product="og:image" content="{{asset('public/'.$product->baseImage->image)}}">
+    @endif
+@endsection
+
 @section('title',$product->productTranslation->product_name)
+
+
 @section('frontend_content')
 
     <!--Product details section starts-->
@@ -112,7 +127,7 @@
                                         @forelse ($product->productAttributeValues as $value)
                                             @if ($value->attribute_id == $key)
                                                 <li class="attribute_value" data-attribute_name="{{$value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null }}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}"><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
-                                                <input type="hidden" name="value_id[]" value="{{$value->attribute_value_id}}">
+                                                <input type="text" name="value_id[]" value="{{$value->attribute_value_id}}">
                                             @endif
                                         @empty
                                         @endforelse

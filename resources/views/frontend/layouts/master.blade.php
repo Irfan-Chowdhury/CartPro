@@ -123,6 +123,8 @@
     <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @yield('meta_info')
+
     <!-- Document Title -->
     {{-- <title>CartPro - ecommerce HTML Template</title> --}}
     <title>@yield('title','CartPro')</title>
@@ -276,7 +278,6 @@
 
         $(".addToCart").on("submit",function(e){
             e.preventDefault();
-            // console.log('ok');
 
             $.ajax({
                 url: "{{route('product.add_to_cart')}}",
@@ -287,6 +288,7 @@
                 processData: false,
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     if (data.type=='success') {
                         const Toast = Swal.mixin({
                             toast: true,

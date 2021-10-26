@@ -123,6 +123,8 @@
     <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
+    <?php echo $__env->yieldContent('meta_info'); ?>
+
     <!-- Document Title -->
     
     <title><?php echo $__env->yieldContent('title','CartPro'); ?></title>
@@ -276,7 +278,6 @@
 
         $(".addToCart").on("submit",function(e){
             e.preventDefault();
-            // console.log('ok');
 
             $.ajax({
                 url: "<?php echo e(route('product.add_to_cart')); ?>",
@@ -287,6 +288,7 @@
                 processData: false,
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     if (data.type=='success') {
                         const Toast = Swal.mixin({
                             toast: true,

@@ -89,7 +89,7 @@
 
 
                             <?php if(auth()->guard()->check()): ?>
-                                <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
+                                <li class="wishlist__menu d-none d-lg-inline-block d-xl-inline-block">
                                     <a href="<?php echo e(route('wishlist.index')); ?>">
                                         <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
                                     </a>
