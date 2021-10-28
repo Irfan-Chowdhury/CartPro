@@ -27,6 +27,9 @@
                 @can('catalog')
                     <li id="brand-list-menu"><a href="{{route('admin.products.index')}}">{{__('file.Catalog')}}</a></li>
                 @endcan
+
+                <li id="brand-list-menu"><a href="{{route('admin.review.index')}}">{{__('file.Reviews')}}</a></li>
+
                 </ul>
             </li>
           @endcan
@@ -84,6 +87,7 @@
                     {{-- @can('slider') --}}
                         <li><a href="{{route('admin.slider')}}"><span>{{__('Slider')}}</span></a></li>
                     {{-- @endcan --}}
+                    <li><a href="{{route('admin.color.index')}}"><span>{{__('Color')}}</span></a></li>
                 </ul>
             </li>
           @endcan

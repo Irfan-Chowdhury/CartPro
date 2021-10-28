@@ -70,78 +70,79 @@
         //Vertical Product 1
         $('#storefrontVerticalProduct_1_Type').change(function() {
             console.log('ok');
-        var storefrontVerticalProduct_1_Type = $('#storefrontVerticalProduct_1_Type').val();
-        if (storefrontVerticalProduct_1_Type=='category_products') {
-            $('#verticalCategoryFeild_1').show();
-            $('#verticalProductTabsField_1').empty();
-        }
-        else if (storefrontVerticalProduct_1_Type=='custom_products') {
-            $('#verticalCategoryFeild_1').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="storefront_vertical_product_1_products" class="form-control" placeholder="Type Product">';
-            data += '</div>';
-            $('#verticalProductTabsField_1').html(data);
-        }
-        else if (storefrontVerticalProduct_1_Type=='latest_products' || storefrontVerticalProduct_1_Type=='recently_viewed_products') {
-            $('#verticalCategoryFeild_1').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="number" min="0" name="storefront_vertical_product_1_products_limit" class="form-control" placeholder="Type Limit">';
-            data += '</div>';
-            $('#verticalProductTabsField_1').html(data);
-        }
-
+            var storefrontVerticalProduct_1_Type = $('#storefrontVerticalProduct_1_Type').val();
+            if (storefrontVerticalProduct_1_Type=='category_products') {
+                $('#verticalCategoryFeild_1').show();
+                $('#verticalProductTabsField_1').empty();
+            }
+            else if (storefrontVerticalProduct_1_Type=='custom_products') {
+                $('#verticalCategoryFeild_1').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="text" name="storefront_vertical_product_1_products" class="form-control" placeholder="Type Product">';
+                data += '</div>';
+                $('#verticalProductTabsField_1').html(data);
+            }
+            else if (storefrontVerticalProduct_1_Type=='latest_products' || storefrontVerticalProduct_1_Type=='recently_viewed_products') {
+                $('#verticalCategoryFeild_1').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="number" min="0" name="storefront_vertical_product_1_products_limit" class="form-control" placeholder="Type Limit">';
+                data += '</div>';
+                $('#verticalProductTabsField_1').html(data);
+            }
+        });
 
         //Vertical Product 2
         $('#storefrontVerticalProduct_2_Type').change(function() {
             console.log('ok');
-        var storefrontVerticalProduct_2_Type = $('#storefrontVerticalProduct_2_Type').val();
-        if (storefrontVerticalProduct_2_Type=='category_products') {
-            $('#verticalCategoryFeild_2').show();
-            $('#verticalProductTabsField_2').empty();
-        }
-        else if (storefrontVerticalProduct_2_Type=='custom_products') {
-            $('#verticalCategoryFeild_2').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="storefront_vertical_product_2_products" class="form-control" placeholder="Type Product">';
-            data += '</div>';
-            $('#verticalProductTabsField_2').html(data);
-        }
-        else if (storefrontVerticalProduct_2_Type=='latest_products' || storefrontVerticalProduct_2_Type=='recently_viewed_products') {
-            $('#verticalCategoryFeild_2').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="number" min="0" name="storefront_vertical_product_2_products_limit" class="form-control" placeholder="Type Limit">';
-            data += '</div>';
-            $('#verticalProductTabsField_2').html(data);
-        }
+            var storefrontVerticalProduct_2_Type = $('#storefrontVerticalProduct_2_Type').val();
+            if (storefrontVerticalProduct_2_Type=='category_products') {
+                $('#verticalCategoryFeild_2').show();
+                $('#verticalProductTabsField_2').empty();
+            }
+            else if (storefrontVerticalProduct_2_Type=='custom_products') {
+                $('#verticalCategoryFeild_2').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="text" name="storefront_vertical_product_2_products" class="form-control" placeholder="Type Product">';
+                data += '</div>';
+                $('#verticalProductTabsField_2').html(data);
+            }
+            else if (storefrontVerticalProduct_2_Type=='latest_products' || storefrontVerticalProduct_2_Type=='recently_viewed_products') {
+                $('#verticalCategoryFeild_2').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="number" min="0" name="storefront_vertical_product_2_products_limit" class="form-control" placeholder="Type Limit">';
+                data += '</div>';
+                $('#verticalProductTabsField_2').html(data);
+            }
+        });
 
         //Vertical Product 3
         $('#storefrontVerticalProduct_3_Type').change(function() {
             console.log('ok');
-        var storefrontVerticalProduct_3_Type = $('#storefrontVerticalProduct_3_Type').val();
-        if (storefrontVerticalProduct_3_Type=='category_products') {
-            $('#verticalCategoryFeild_3').show();
-            $('#verticalProductTabsField_3').empty();
-        }
-        else if (storefrontVerticalProduct_3_Type=='custom_products') {
-            $('#verticalCategoryFeild_3').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="storefront_vertical_product_3_products" class="form-control" placeholder="Type Product">';
-            data += '</div>';
-            $('#verticalProductTabsField_3').html(data);
-        }
-        else if (storefrontVerticalProduct_3_Type=='latest_products' || storefrontVerticalProduct_3_Type=='recently_viewed_products') {
-            $('#verticalCategoryFeild_3').hide();
-            data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="number" min="0" name="storefront_vertical_product_3_products_limit" class="form-control" placeholder="Type Limit">';
-            data += '</div>';
-            $('#verticalProductTabsField_3').html(data);
-        }
-    });
+            var storefrontVerticalProduct_3_Type = $('#storefrontVerticalProduct_3_Type').val();
+            if (storefrontVerticalProduct_3_Type=='category_products') {
+                $('#verticalCategoryFeild_3').show();
+                $('#verticalProductTabsField_3').empty();
+            }
+            else if (storefrontVerticalProduct_3_Type=='custom_products') {
+                $('#verticalCategoryFeild_3').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="text" name="storefront_vertical_product_3_products" class="form-control" placeholder="Type Product">';
+                data += '</div>';
+                $('#verticalProductTabsField_3').html(data);
+            }
+            else if (storefrontVerticalProduct_3_Type=='latest_products' || storefrontVerticalProduct_3_Type=='recently_viewed_products') {
+                $('#verticalCategoryFeild_3').hide();
+                data = '<label class="col-sm-4 col-form-label"><b> <?php echo e(__('Products Limit')); ?></b></label>';
+                data += '<div class="col-sm-8">';
+                data += '<input type="number" min="0" name="storefront_vertical_product_3_products_limit" class="form-control" placeholder="Type Limit">';
+                data += '</div>';
+                $('#verticalProductTabsField_3').html(data);
+            }
+        });
 </script>
 <?php /**PATH D:\laragon\www\cartpro\resources\views/admin/pages/storefront/home_page_section/flash_sale_and_vertical_products.blade.php ENDPATH**/ ?>

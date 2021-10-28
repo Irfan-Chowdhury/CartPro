@@ -22,26 +22,11 @@
                     <th scope="col">{{__('Title')}}</th>
                     <th scope="col">{{__('Subtitle')}}</th>
                     <th scope="col">{{__('Type')}}</th>
+                    <th scope="col">{{__('Text Alignment')}}</th>
                     <th scope="col">{{__('Status')}}</th>
                     <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
             </thead>
-            {{-- <tbody>
-                @foreach ($sliders as $item)
-                    <tr>
-                        <td><img src="{{asset('public'.$item->image)}}" style="width: 100px; width:100px"></td>
-                        <td>{{$item->slider_title}}</td>
-                        <td>{{$item->slider_subtitle}}</td>
-                        <td>{{$item->type}}</td>
-                        <td>@if($item->is_active ==s 1) <pan class='p-2 badge badge-success'>Active</span> @else <span class='p-2 badge badge-danger'>Deactive</span> @endif</td>
-                        <td>
-                            <a href="#" class="btn btn-warning">Edit</a>
-                            <a href="{{route('admin.slider.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody> --}}
-
     	</table>
     </div>
 </section>
@@ -114,6 +99,10 @@
                 {
                     data: 'type',
                     name: 'type',
+                },
+                {
+                    data: 'text_alignment',
+                    name: 'text_alignment',
                 },
                 {
                     data: 'is_active',
@@ -297,6 +286,7 @@
                 $('#sliderTitleEdit').val(data.sliderTranslation.slider_title);
                 $('#sliderSubtitleEdit').val(data.sliderTranslation.slider_subtitle);
                 $('#typeEdit').selectpicker('val',data.slider.type);
+                $('#textAlignment').selectpicker('val',data.slider.text_alignment);
 
                 if (data.slider.type=='category') {
                     $('#url_edit').addClass('d-none');

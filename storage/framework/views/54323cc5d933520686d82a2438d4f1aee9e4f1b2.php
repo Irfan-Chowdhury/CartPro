@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col-md-10">
                 <form id="generalSubmit">
+
                     <?php echo csrf_field(); ?>
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Welcome Text</b></label>
@@ -26,11 +27,19 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Theme Color</b></label>
                         <div class="col-sm-8">
-                            <select name="storefront_theme_color" id="storefront_theme_color" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Color')); ?>'>
+                            <select name="storefront_theme_color" id="storefrontThemeColor" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Color')); ?>'>
                                 <?php $__currentLoopData = $colors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($colors[$key]['color_name']); ?>" <?php echo e($colors[$key]['color_name'] == $setting[1]->plain_value ? 'selected="selected"' : ''); ?>><?php echo e($colors[$key]['color_name']); ?></option>
+                                    <option value="<?php echo e($colors[$key]['color_code']); ?>"
+                                        <?php if(($setting[1]->plain_value != NULL) && ($colors[$key]['color_code'] == $setting[1]->plain_value)): ?>
+                                            selected
+                                        <?php endif; ?>>
+                                        <?php echo e($colors[$key]['color_name']); ?>
+
+                                    </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
+
+                            
                         </div>
                     </div>
 
@@ -47,15 +56,17 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Slider</b> <span class="text-danger"><i>(Incomplete)</i></span></label>
-                        <div class="col-sm-8">
-                            <select name="slider_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Slider')); ?>'>
-                                
-                            </select>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Slider Format</b> <span class="text-danger"></span></label>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" <?php if($setting[148]->plain_value=='full_width'): ?> checked <?php endif; ?> id="slider_format" value="full_width">
+                            <label class="form-check-label"><?php echo e(__('file.Full Width')); ?></label>
+                        </div>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" <?php if($setting[148]->plain_value=='half_width'): ?> checked <?php endif; ?> id="slider_format" value="half_width">
+                            <label class="form-check-label"><?php echo e(__('file.Half Width')); ?></label>
                         </div>
                     </div>
 
-                    <!-- setting[4] => DB_ROW_ID-5: storefront_terms_and_condition_page -->
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Terms & Condition</b></label>
                         <div class="col-sm-8">

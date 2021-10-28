@@ -70,6 +70,14 @@
                         </div>
 
                         <div class="form-group row">
+                            <label class="col-md-4 col-form-label"><b>Text Alignment</b></label>
+                            <select name="text_alignment" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Target')}}'>
+                                <option value="left">Left</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>Status</b></label>
                             <div class="col-md-8 form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" id="defaultCheck1">

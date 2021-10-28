@@ -220,6 +220,7 @@ class ProductController extends Controller
             $product->in_stock      = $request->in_stock;
             $product->new_from      = date("Y-m-d",strtotime($request->new_from));
             $product->new_to        = date("Y-m-d",strtotime($request->new_to));
+            $product->avg_rating    = 0;
 
             if ($request->is_active==1) {
                 $product->is_active = 1;

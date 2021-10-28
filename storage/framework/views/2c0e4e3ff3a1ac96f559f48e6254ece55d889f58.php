@@ -5,39 +5,80 @@
     <div class="container">
         <div class="single-banner-item style2">
             <div class="row">
-                <div class="col-md-8">
-                    <div class="banner-slider">
-                        <!-- Item -->
-                        <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php if($item->sliderTranslation->isNotEmpty()): ?>
-                                <div class="item">
-                                    <div class="img-fill" style="background-image: url(<?php echo e(url('public/'.$item->slider_image)); ?>); background-size: cover; background-position: center;">
-                                        <div class="info">
-                                            <div>
-                                                <h3><?php echo e($item->sliderTranslation[0]->slider_title); ?></h3>
-                                                <h5><?php echo e($item->sliderTranslation[0]->slider_subtitle); ?></h5>
-                                                <a class="button style1 md" href="">Read More</a>
+
+                <?php if($store_front_slider_format == 'full_width'): ?>
+                    <div class="col-md-12">
+                        <div class="banner-slider">
+                            <!-- Item -->
+                            <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($item->sliderTranslation->isNotEmpty()): ?>
+                                    <div class="item">
+                                        <div class="img-fill" style="background-image: url(<?php echo e(url('public/'.$item->slider_image)); ?>); background-size: cover; background-position: center;">
+                                            <div class="<?php if($item->text_alignment=='right'): ?> info right <?php else: ?> info <?php endif; ?>" >
+                                                <div>
+                                                    <h3><?php echo e($item->sliderTranslation[0]->slider_title); ?></h3>
+                                                    <h5><?php echo e($item->sliderTranslation[0]->slider_subtitle); ?></h5>
+                                                    <a class="button style1 md" href="">Read More</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <?php $__currentLoopData = $slider_banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="slider-banner col-sm-4">
+                                    <div>
+                                        <img src="<?php echo e(asset('public/'.$slider_banners[$key]['image'])); ?>" alt="...">
+                                    </div>
+                                    <div>
+                                        <h4><?php echo e($slider_banners[$key]['title']); ?></h4>
+                                        <a href="<?php echo e($slider_banners[$key]['action_url']); ?>" class="link-hov style1">Shop Now</a>
+                                    </div>
                                 </div>
-                            <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="col-md-8">
+                        <div class="banner-slider">
+                            <!-- Item -->
+                            <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($item->sliderTranslation->isNotEmpty()): ?>
+                                    <div class="item">
+                                        <div class="img-fill" style="background-image: url(<?php echo e(url('public/'.$item->slider_image)); ?>); background-size: cover; background-position: center;">
+                                            <div class="<?php if($item->text_alignment=='right'): ?> info right <?php else: ?> info <?php endif; ?>" >
+                                                <div>
+                                                    <h3><?php echo e($item->sliderTranslation[0]->slider_title); ?></h3>
+                                                    <h5><?php echo e($item->sliderTranslation[0]->slider_subtitle); ?></h5>
+                                                    <a class="button style1 md" href="">Read More</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <?php $__currentLoopData = $slider_banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="slider-banner ">
+                                <div>
+                                    <img src="<?php echo e(asset('public/'.$slider_banners[$key]['image'])); ?>" alt="...">
+                                </div>
+                                <div>
+                                    <h4><?php echo e($slider_banners[$key]['title']); ?></h4>
+                                    <a href="<?php echo e($slider_banners[$key]['action_url']); ?>" class="link-hov style1">Shop Now</a>
+                                </div>
+                            </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <?php $__currentLoopData = $slider_banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="slider-banner">
-                            <div>
-                                <img src="<?php echo e(asset('public/'.$slider_banners[$key]['image'])); ?>" alt="...">
-                            </div>
-                            <div>
-                                <h4><?php echo e($slider_banners[$key]['title']); ?></h4>
-                                <a href="<?php echo e($slider_banners[$key]['action_url']); ?>" class="link-hov style1">Shop Now</a>
-                            </div>
-                        </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -144,7 +185,6 @@
                                                                     <a>
                                                                         <span class="ti-heart add_to_wishlist" data-product_id="<?php echo e($item->product_id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->category_id ?? null); ?>" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                                     </a>
-                                                                    
                                                                 </div>
                                                             </div>
                                                             <div class="product-details">
@@ -159,11 +199,16 @@
                                                                         <div class="rating-summary">
                                                                             <div class="rating-result" title="60%">
                                                                                 <ul class="product-rating">
-                                                                                    <li><i class="ion-android-star"></i></li>
-                                                                                    <li><i class="ion-android-star"></i></li>
-                                                                                    <li><i class="ion-android-star"></i></li>
-                                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                                    <li><i class="ion-android-star-half"></i></li>
+                                                                                    <?php
+                                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                                            if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                                <li><i class="ion-android-star"></i></li>
+                                                                                    <?php
+                                                                                            }else { ?>
+                                                                                                <li><i class="ion-android-star-outline"></i></li>
+                                                                                    <?php        }
+                                                                                        }
+                                                                                    ?>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -244,7 +289,6 @@
                                                                 <a>
                                                                     <span class="ti-heart add_to_wishlist" data-product_id="<?php echo e($item->product_id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->category_id ?? null); ?>" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                                 </a>
-                                                                
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
@@ -258,11 +302,16 @@
                                                                     <div class="rating-summary">
                                                                         <div class="rating-result" title="60%">
                                                                             <ul class="product-rating">
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                                <?php
+                                                                                    for ($i=1; $i <=5 ; $i++){
+                                                                                        if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                            <li><i class="ion-android-star"></i></li>
+                                                                                <?php
+                                                                                        }else { ?>
+                                                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                                                <?php        }
+                                                                                    }
+                                                                                ?>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -343,7 +392,6 @@
                                                                 <a>
                                                                     <span class="ti-heart add_to_wishlist" data-product_id="<?php echo e($item->product_id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->category_id ?? null); ?>" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                                 </a>
-                                                                
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
@@ -357,11 +405,16 @@
                                                                     <div class="rating-summary">
                                                                         <div class="rating-result" title="60%">
                                                                             <ul class="product-rating">
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                                <?php
+                                                                                    for ($i=1; $i <=5 ; $i++){
+                                                                                        if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                            <li><i class="ion-android-star"></i></li>
+                                                                                <?php
+                                                                                        }else { ?>
+                                                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                                                <?php        }
+                                                                                    }
+                                                                                ?>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -442,7 +495,6 @@
                                                                 <a>
                                                                     <span class="ti-heart add_to_wishlist" data-product_id="<?php echo e($item->product_id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->category_id ?? null); ?>" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                                 </a>
-                                                                
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
@@ -456,11 +508,16 @@
                                                                     <div class="rating-summary">
                                                                         <div class="rating-result" title="60%">
                                                                             <ul class="product-rating">
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
-                                                                                <li><i class="ion-android-star-half"></i></li>
+                                                                                <?php
+                                                                                    for ($i=1; $i <=5 ; $i++){
+                                                                                        if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                            <li><i class="ion-android-star"></i></li>
+                                                                                <?php
+                                                                                        }else { ?>
+                                                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                                                <?php        }
+                                                                                    }
+                                                                                ?>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -589,11 +646,16 @@
                                                         <div class="rating-summary">
                                                             <div class="rating-result" title="60%">
                                                                 <ul class="product-rating">
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
-                                                                    <li><i class="ion-android-star-half"></i></li>
+                                                                    <?php
+                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                            if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                <li><i class="ion-android-star"></i></li>
+                                                                    <?php
+                                                                            }else { ?>
+                                                                                <li><i class="ion-android-star-outline"></i></li>
+                                                                    <?php        }
+                                                                        }
+                                                                    ?>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -721,11 +783,16 @@
                                                                 <div class="rating-summary">
                                                                     <div class="rating-result" title="60%">
                                                                         <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <?php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                        <li><i class="ion-android-star"></i></li>
+                                                                            <?php
+                                                                                    }else { ?>
+                                                                                        <li><i class="ion-android-star-outline"></i></li>
+                                                                            <?php        }
+                                                                                }
+                                                                            ?>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -1012,7 +1079,6 @@
                                         <a>
                                             <span class="ti-heart add_to_wishlist" data-product_id="<?php echo e($item->product_id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->product->categoryProduct[0]->category_id ?? null); ?>" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                         </a>
-                                        
                                     </div>
                                 </div>
                                 <div class="product-details">
@@ -1029,11 +1095,16 @@
                                             <div class="rating-summary">
                                                 <div class="rating-result" title="60%">
                                                     <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
+                                                        <?php
+                                                            for ($i=1; $i <=5 ; $i++){
+                                                                if ($i<= round($item->product->avg_rating)){  ?>
+                                                                    <li><i class="ion-android-star"></i></li>
+                                                        <?php
+                                                                }else { ?>
+                                                                    <li><i class="ion-android-star-outline"></i></li>
+                                                        <?php        }
+                                                            }
+                                                        ?>
                                                     </ul>
                                                 </div>
                                             </div>

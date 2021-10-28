@@ -27,6 +27,9 @@
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('catalog')): ?>
                     <li id="brand-list-menu"><a href="<?php echo e(route('admin.products.index')); ?>"><?php echo e(__('file.Catalog')); ?></a></li>
                 <?php endif; ?>
+
+                <li id="brand-list-menu"><a href="<?php echo e(route('admin.review.index')); ?>"><?php echo e(__('file.Reviews')); ?></a></li>
+
                 </ul>
             </li>
           <?php endif; ?>
@@ -84,6 +87,7 @@
                     
                         <li><a href="<?php echo e(route('admin.slider')); ?>"><span><?php echo e(__('Slider')); ?></span></a></li>
                     
+                    <li><a href="<?php echo e(route('admin.color.index')); ?>"><span><?php echo e(__('Color')); ?></span></a></li>
                 </ul>
             </li>
           <?php endif; ?>

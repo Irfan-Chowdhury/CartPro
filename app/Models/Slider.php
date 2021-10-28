@@ -14,6 +14,7 @@ class Slider extends Model
         'slider_image',
         'target',
         'is_active',
+        'text_alignment'
     ];
 
     public function sliderTranslation()

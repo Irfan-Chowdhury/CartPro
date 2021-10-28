@@ -97,6 +97,7 @@
     if(!Session::get('currentLocal')){
         Session::put('currentLocal', 'en');
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -154,8 +155,13 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         } */
+        :root {
+            --theme-color: <?php echo e($storefront_theme_color ?? "#0071df"); ?>;
+        }
     </style>
 </head>
+
+
 
 <body>
     <div id="demo">

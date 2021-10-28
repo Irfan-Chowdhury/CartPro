@@ -25,6 +25,7 @@ class Product extends Model
         'is_active',
         'new_from',
         'new_to',
+        'avg_rating'
     ];
 
 

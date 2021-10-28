@@ -275,11 +275,16 @@
                                                                 <div class="rating-summary">
                                                                     <div class="rating-result" title="60%">
                                                                         <ul class="product-rating">
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
-                                                                            <li><i class="ion-android-star-half"></i></li>
+                                                                            <?php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  ?>
+                                                                                        <li><i class="ion-android-star"></i></li>
+                                                                            <?php
+                                                                                    }else { ?>
+                                                                                        <li><i class="ion-android-star-outline"></i></li>
+                                                                            <?php        }
+                                                                                }
+                                                                            ?>
                                                                         </ul>
                                                                     </div>
                                                                 </div>

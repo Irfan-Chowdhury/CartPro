@@ -55,6 +55,12 @@ class HomeController extends Controller
 
 
 
+        //Storefront Theme Color
+        $storefront_theme_color = "#0071df";
+
+        //Store Front Slider Format
+        $store_front_slider_format = 'full_width';
+
         //Product_Tab_One
         $product_tabs_one_titles = [];
         $product_tab_one_section_1 = [];
@@ -78,10 +84,55 @@ class HomeController extends Controller
                                                 'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
                                             ->get();
 
-        // return $category_products;
+        //Slider
+        $sliders = Cache::remember('sliders', 150, function () use ($locale) {
+            return Slider::with(['sliderTranslation'=> function ($query) use ($locale){
+                $query->where('locale',$locale)
+                ->orWhere('locale','en')
+                ->orderBy('id','DESC');
+            }])
+            ->where('is_active',1)
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC')
+            ->get();
+        });
+
+        //Slider Banner
+        $slider_banners = $this->getSliderBanner($settings);
+        // $slider_banners = [];
+        // $i = 0;
+        // $slider_banner_loop = 'start';
 
         foreach ($settings as $key => $setting)
         {
+            //Theme Color
+            if ($setting->key=='storefront_theme_color' && $setting->plain_value!=NULL) {
+                $storefront_theme_color = $setting->plain_value;
+            }
+
+            if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
+                $store_front_slider_format = $setting->plain_value;
+            }
+
+            //Slider_Banner Start
+                // if ($setting->key=='storefront_slider_banner_'.($i+1).'_image') {
+                //     if ($setting->storeFrontImage) {
+                //         $slider_banners[$i]['image'] = $setting->storeFrontImage->image;
+                //     }
+                // }
+                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_title') {
+                //     $slider_banners[$i]['title'] = $setting->settingTranslations[0]->value;
+                // }
+                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_call_to_action_url') {
+                //     $slider_banners[$i]['action_url'] = $setting->plain_value;
+                // }
+                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_open_in_new_window') {
+                //     $slider_banners[$i]['new_window'] = $setting->plain_value;
+                // }
+            //Slider_Banner End
+
+
+            //----- Category-Product Start -----
             if ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
@@ -89,12 +140,6 @@ class HomeController extends Controller
                             $product_tab_one_section_1[] =$category_products[$key2];
                         }
                     }
-                    // $product_tab_one_section_1 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-                    //                                             ->where('category_id',$setting->plain_value)->get();
-                    // if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
-                    //     $product_tab_one_section_1 = [];
-                    // }
-
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
@@ -180,22 +225,6 @@ class HomeController extends Controller
                                     'flashSaleProducts.product.productAttributeValues')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
 
-        //Slider
-        $sliders = Cache::remember('sliders', 150, function () use ($locale) {
-            return Slider::with(['sliderTranslation'=> function ($query) use ($locale){
-                $query->where('locale',$locale)
-                ->orWhere('locale','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
-        });
-
-        //Slider Banner
-        $slider_banners = $this->getSliderBanner($settings);
-
 
         $brands = Cache::remember('brands', 150, function () {
             return Brand::where('is_active',1)
@@ -215,7 +244,7 @@ class HomeController extends Controller
         // return $order_details ;
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
-                                                'brands','product_tab_one_section_1','product_tab_one_section_2',
+                                                'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
                                                 'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
                                                 'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
                                                 'storefront_vertical_product_2_title','storefront_vertical_product_3_title',
@@ -239,6 +268,8 @@ class HomeController extends Controller
                     ->where('slug',$product_slug)
                     ->first();
 
+        // return $product->avg_rating;
+
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
@@ -256,6 +287,7 @@ class HomeController extends Controller
             $product_cart_qty = null;
         }
 
+        //Review Part
         if (Auth::check()) {
             $user_and_product_exists = DB::table('orders')
             ->join('order_details','order_details.order_id','orders.id')
@@ -269,7 +301,7 @@ class HomeController extends Controller
         $reviews = DB::table('reviews')
             ->join('users','users.id','reviews.user_id')
             ->where('product_id',$product->id)
-            ->select('users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.created_at')
+            ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.created_at')
             ->get();
         if (empty($reviews)) {
             $reviews =[];
@@ -372,7 +404,20 @@ class HomeController extends Controller
         $review->product_id = $request->product_id;
         $review->comment = $request->comment;
         $review->rating = $request->rating;
+        $review->status = 'pending';
         $review->save();
+
+
+        $product_review = Review::where('product_id',$request->product_id)
+                        ->where('status','approved')
+                        ->select(DB::raw('count(*) as product_count, sum(rating) as product_rating'))
+                        ->first();
+        $product_avg_rating = $product_review->product_rating / $product_review->product_count;
+        $product_avg_rating = number_format((float)$product_avg_rating, 2, '.', '');
+
+        $product = Product::find($request->product_id);
+        $product->avg_rating = $product_avg_rating;
+        $product->update();
 
         return redirect()->back();
     }

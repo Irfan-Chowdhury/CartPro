@@ -103,6 +103,10 @@ class SliderController extends Controller
             {
                 return ucfirst($row->type);
             })
+            ->addColumn('text_alignment', function ($row)
+            {
+                return ucfirst($row->text_alignment);
+            })
             ->addColumn('action', function($row){
                 $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
                               &nbsp;' ;
@@ -160,6 +164,7 @@ class SliderController extends Controller
                 $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
             }
             $data['type']           = $request->type;
+            $data['text_alignment'] = $request->text_alignment;
             $data['is_active']      = $request->is_active;
 
             $sliderTranslation = [];
@@ -224,6 +229,7 @@ class SliderController extends Controller
                 $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
             }
             $data['type']           = $request->type;
+            $data['text_alignment']      = $request->text_alignment;
             $data['is_active']      = $request->is_active;
 
             $sliderTranslation = [];

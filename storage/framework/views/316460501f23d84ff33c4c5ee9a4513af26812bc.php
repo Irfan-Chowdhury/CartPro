@@ -85,10 +85,13 @@
                             <input class="form-control" type="text" name="billing_phone" placeholder="Phone *">
                         </div>
 
-                        <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
-                            <input type="checkbox" class="custom-control-input" id="billing_create_account_check" value="1">
-                            <label class="label custom-control-label" for="create_account">Create Account</label>
-                        </div>
+                        <?php if(!Auth::check()): ?>
+                            <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
+                                <input type="checkbox" class="custom-control-input" id="billing_create_account_check" value="1">
+                                <label class="label custom-control-label" for="create_account">Create Account</label>
+                            </div>
+                        <?php endif; ?>
+
 
                         <div class="collapse" id="create_account_collapse">
                             <input class="form-control mt-3" type="text" placeholder="Enter Username" name="username">

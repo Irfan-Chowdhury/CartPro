@@ -57,6 +57,8 @@
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="<?php echo e(asset('public/css/style.default.css')); ?>" id="theme-stylesheet" type="text/css">
 
+    <!-- Color Picker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
 
 
     <script type="text/javascript" src="<?php echo e(asset('public/vendor/jquery/jquery-3.5.1.min.js')); ?>"></script>
@@ -98,6 +100,8 @@
     <script type="text/javascript" src="<?php echo e(asset('public/vendor/datatable/datatable.responsive.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(asset('public/vendor/select2/dist/js/select2.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(asset('public/vendor/datatable/datatable.responsive.boostrap.min.js')); ?>"></script>
+
+
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
@@ -145,6 +149,7 @@
         </div>
     </footer>
 
+    <!-- Color Picker JS -->
 
     <?php echo $__env->yieldContent('scripts'); ?>
 

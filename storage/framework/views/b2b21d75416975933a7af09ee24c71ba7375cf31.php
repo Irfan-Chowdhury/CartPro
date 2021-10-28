@@ -114,7 +114,7 @@
 
                     <!-- general -->
                     <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
-                    <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-settings-general">
+                    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
                         <?php echo $__env->make('admin.pages.storefront.general_setting.general', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
@@ -216,7 +216,7 @@
                     </div>
 
                     <!-- DB_ROW_ID-[] => setting[] -->
-                    <div class="tab-pane fade show active" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
+                    <div class="tab-pane fade" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
                         <?php echo $__env->make('admin.pages.storefront.home_page_section.flash_sale_and_vertical_products', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
@@ -245,6 +245,25 @@
     //----------Insert Data----------------------
 
     //General
+
+    // $('#customColorTheme').empty();
+    // $('#customColorTheme').hide();
+    // $('#storefrontThemeColor').change(function(){
+    //     var storefront_theme_color = $('#storefrontThemeColor').val();
+
+    //     if (storefront_theme_color=='custom_color') {
+    //         $('#storefrontThemeColor').removeAttr('name');
+    //         $('#customColorTheme').show();
+    //         var customColorTheme = $('#customColorTheme').val();
+    //         $('#storefrontThemeColor').selectpicker('val',customColorTheme);
+    //         console.log(customColorTheme);
+    //     }else{
+    //         $('#customColorTheme').hide();
+    //         $('#customColorTheme').empty();
+    //     }
+    // });
+
+
     $('#generalSubmit').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -820,9 +839,6 @@
     });
 
 
-
-
-
     //Image Show Before Upload End
     function showImage(data, logo){
         if(data.files && data.files[0]){
@@ -837,8 +853,13 @@
     }
 
 </script>
-
-
 <?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+<script>
+    $('.colorpicker').colorpicker();
+</script>
+<?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('admin.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon\www\cartpro\resources\views/admin/pages/storefront/index.blade.php ENDPATH**/ ?>

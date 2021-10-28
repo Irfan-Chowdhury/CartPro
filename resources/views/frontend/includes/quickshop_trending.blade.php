@@ -43,11 +43,16 @@
                                         {{-- <div class="item-brand">Brand: <a href="">{{$item->product->brand->brandTranslation->brand_name ?? $item->product->brand->brandTranslationDefaultEnglish->brand_name ?? null}}</a></div> --}}
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-android-star-half"></i></li>
+                                                @php
+                                                    for ($i=1; $i <=5 ; $i++){
+                                                        if ($i<= round($item->product->avg_rating)){  @endphp
+                                                            <li><i class="ion-android-star"></i></li>
+                                                @php
+                                                        }else { @endphp
+                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                @php        }
+                                                    }
+                                                @endphp
                                             </ul>
                                             <span>( 04 )</span>
                                         </div>

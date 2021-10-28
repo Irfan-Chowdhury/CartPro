@@ -29,7 +29,7 @@
 
     $categories = Illuminate\Support\Facades\Cache::remember('categories', 300, function () {
         return App\Models\Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-                    // ->where('parent_id',NULL)
+                    ->where('parent_id',NULL)
                     ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','DESC')
@@ -92,12 +92,13 @@
 
     //Setting Store
     $setting_store =  App\Models\SettingStore::first();
+    $total_wishlist =  App\Models\Wishlist::count();
 
     if(!Session::get('currentLocal')){
         Session::put('currentLocal', 'en');
     }
-?>
 
+?>
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -122,6 +123,8 @@
     <link href="<?php echo e(asset('public/frontend/css/bootstrap-colorpicker.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
+    <?php echo $__env->yieldContent('meta_info'); ?>
 
     <!-- Document Title -->
     
@@ -152,8 +155,13 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         } */
+        :root {
+            --theme-color: <?php echo e($storefront_theme_color ?? "#0071df"); ?>;
+        }
     </style>
 </head>
+
+
 
 <body>
     <div id="demo">
@@ -172,567 +180,39 @@
         <input type="text" id="color-input" class="form-control" value="#0071df">
         <div class="demo-btn"><i class="las la-cog"></i></div>
     </div>
-    <!--Header Area starts-->
-    <header>
-        <div id="header-top" class="header-top">
-            <div class="container">
-                <div class="d-lg-flex d-xl-flex justify-content-between">
-                    <div class="header-top-left d-none d-lg-flex d-xl-flex">
-                        <ul class="header-top-social menu">
-                            <li><a href="#"><i class="ti-facebook"></i></a></li>
-                            <li><a href="#"><i class="ti-instagram"></i></a></li>
-                            <li><a href="#"><i class="ti-twitter"></i></a></li>
-                            <li><a href="#"><i class="ti-youtube"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="header-top-middle d-none d-lg-flex d-xl-flex">
-                        <span class="announcement">
-                            <!--Welcome-->
-                            <?php if($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish): ?>
-                                <?php echo e($settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL); ?>
 
-                            <?php endif; ?>
-                        </span>
-                    </div>
-                    <div class="header-top-right">
-                        <ul>
-                            <li class="has-dropdown"><a href="#">Language</a>
-                                <ul class="dropdown">
-                                    <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <li><a href="<?php echo e($item->local); ?>"><?php echo e($item->language_name); ?></a></li>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </ul>
-                            </li>
-                            <li class="has-dropdown"><a href="#">Currency</a>
-                                <ul class="dropdown">
-                                    <?php $__currentLoopData = $currency_codes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <li><a href="#"><?php echo e($item->currency_code); ?></a></li>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </ul>
-                            </li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="header-middle" class="header-middle">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-7">
-                        <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
-                        <div class="logo">
-                            <a href="#">
-                                <img src="<?php echo e(asset($header_logo_path)); ?>" alt="Brand logo" style="height:60px; width:280px">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
-                        <form class="header-search">
-                            <input class="" type="text" id="searchText" placeholder="Search products, categories, sku..." name="search">
-                            <select name="category" class="selectpicker">
-                                <option value="" selected="">All Categories</option>
-                                <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    <option value="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                <?php endif; ?>
-                            </select>
-                            <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
-                        </form>
-                        <div class="fixed-menu"></div>
-                    </div>
-                    <div class="col-lg-3 col-5">
-                        <ul class="offset-menu-wrapper">
-                            <li class="d-lg-none">
-                                <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
-                            </li>
-                            <li>
-                                <a href="<?php echo e(route('customer_login_form')); ?>"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
-                            </li>
 
-                            <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
-                                <a href="<?php echo e(route('wishlist.index')); ?>">
-                                    <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
-                                </a>
-                                <span class="badge badge-light">2</span>
-                            </li>
-
-                            <li class="cart__menu">
-                                <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
-                                <span class="badge badge-light cart_count"><?php echo e($cart_count); ?></span>
-                                <span class="total">
-                                    <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                        <span class="cart_total"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                    <?php else: ?>
-                                        <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="cart_total"><?php echo e($cart_total); ?></span>
-                                    <?php endif; ?>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Search Field-->
-                <div class="row" id="search_field">
-                    
-                    <div class="col-12 d-xl-flex middle-column justify-content-center" >
-                        <table id="result">
-                        </table>
-                    </div>
-                    
-
-                </div>
-            </div>
-        </div>
-        <div class="header-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
-                        <div class="category-list">
-                            <ul>
-                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Category</a>
-                                    <ul class="dropdown">
-                                        <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                            <?php if($category->child->isNotEmpty()): ?>
-                                                <li class="has-dropdown"><a href="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i> <?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
-                                                    <ul class="dropdown">
-                                                        <?php $__currentLoopData = $category->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <li><a href="<?php echo e(route('cartpro.category_wise_products',$item->slug)); ?>"><i class="<?php echo e($item->icon ?? null); ?>"></i><?php echo e($item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                    </ul>
-                                                </li>
-                                            <?php else: ?>
-                                                <li><a href="<?php echo e($category->slug); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
-                                            <?php endif; ?>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                        <?php endif; ?>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-xl-9 col-md-8">
-                        <div class="main-header-inner">
-                            <div id="main-menu" class="main-menu">
-                                <nav id="mobile-nav">
-                                    <ul>
-                                        <li class="active"><a href="<?php echo e(route('cartpro.home')); ?>">Home</a></li>
-                                        <?php if($menu!=NULL): ?>
-                                            <?php $__empty_1 = true; $__currentLoopData = $menu->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu_item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                                <?php if($menu_item->child->isNotEmpty()): ?>
-                                                    <li class="has-dropdown"><a href="#"><?php echo e($menu_item->label); ?></a>
-                                                        <ul class="dropdown">
-                                                            <?php $__currentLoopData = $menu_item->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                
-                                                                <!--Extra-->
-                                                                <?php if($child->child->isNotEmpty()): ?>
-                                                                    <li class="has-dropdown"><a href="<?php echo e($child->link); ?>"><?php echo e($child->label); ?></a>
-                                                                        <ul class="dropdown">
-                                                                            <?php $__currentLoopData = $child->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                                <li><a href="<?php echo e($sub_child->link); ?>"><?php echo e($sub_child->label); ?></a></li>
-                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                                        </ul>
-                                                                    </li>
-                                                                <?php else: ?>
-                                                                    <li><a href="<?php echo e($child->link); ?>"><?php echo e($child->label); ?></a></li>
-                                                                <?php endif; ?>
-                                                                <!--Extra End-->
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </ul>
-                                                    </li>
-                                                <?php else: ?>
-                                                    <li><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a></li>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-mobile collapse" id="mobile-search">
-            <div class="container">
-                <div id="header-search" class="d-lg-none">
-                    <form class="header-search" class="d-lg-none">
-                        <input class="" type="text" placeholder="Search products, categories, sku..." name="search" autofocus>
-                        <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="body__overlay"></div>
-
-    <!-- Offset Wrapper starts-->
-    <div class="offset__wrapper">
-        <div class="shopping__cart">
-            <div class="shopping__cart__header">
-                <span class="h6">My Cart</span>
-                <div class="offsetmenu__close__btn">
-                    <i class="ion-ios-close-empty"></i>
-                </div>
-            </div>
-            <div class="shopping__cart__inner">
-                <div class="shp__cart__wrap">
-
-                        <div class="cart_list">
-                            <?php $__empty_1 = true; $__currentLoopData = $cart_contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <div id="<?php echo e($item->rowId); ?>" class="shp__single__product">
-                                    <div class="shp__pro__thumb">
-                                        <a href="#">
-                                            <img src="<?php echo e(asset('public/'.$item->options->image ?? null)); ?>">
-                                        </a>
-                                    </div>
-                                    <div class="shp__pro__details">
-                                        <h2><a href="<?php echo e(url('product/'.$item->options->product_slug.'/'. $item->options->category_id)); ?>"><?php echo e($item->name); ?></a></h2>
-                                        <span><?php echo e($item->qty); ?></span> x <span class="shp__price">
-                                            <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                <?php echo e($item->price); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                                            <?php else: ?>
-                                                <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e($item->price); ?>
-
-                                            <?php endif; ?>
-                                        </span>
-                                    </div>
-                                    <div class="remove__btn">
-                                        <a href="#" class="remove_cart" data-id="<?php echo e($item->rowId); ?>" title="Remove this item"><i class="ion-ios-close-empty"></i></a>
-                                    </div>
-                                </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <?php endif; ?>
-                        </div>
-
-                </div>
-                <!-- IF EMPTY CART -->
-                
-                <!-- IF EMPTY CART -->
-            </div>
-            <div class="shopping__cart__footer">
-                <div class="shoping__total">
-                    <span class="subtotal">Subtotal:</span>
-                    <span class="total__price">
-                        <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                            <span class="total_price"><?php echo e($cart_total); ?></span> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?>
-
-                        <?php else: ?>
-                            <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <span class="total_price"><?php echo e($cart_total); ?></span>
-                        <?php endif; ?>
-                    </span>
-                </div>
-                <div class="shopping__btn">
-                    <a class="button style3" href="<?php echo e(route('cart.view_details')); ?>">View Cart</a>
-                    <a class="button style1" href="">Checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Offset Wrapper ends -->
-    <!-- Header Area  ends -->
+    <!--Header-->
+    <?php echo $__env->make('frontend.includes.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <div class="center loader"></div>
 
     <?php echo $__env->yieldContent('frontend_content'); ?>
 
-    <?php if($setting_newslatter->newsletter==1): ?>
-        <div class="newsletter-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7 col-md-6">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <i class="ion-ios-paperplane-outline me-3"></i>
-                            </div>
-                            <div>
-                                <h3 class="mb-0">Subscribe to our Newsletter</h3>
-                                <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-md-6">
-                        <form class="newsletter" id="newsLatterSubmitForm" action="<?php echo e(route('cartpro.newslatter_store')); ?>" method="POST">
-                            <?php echo csrf_field(); ?>
-                            <input class="" type="text" placeholder="Enter your email" name="email">
-                            <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
 
-    <!--Scroll to top starts-->
-    <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
-    <!--Scroll to top ends-->
-    <!-- Footer section Starts-->
-    <div class="footer-wrapper pt-0">
-        <div class="container">
-            <hr class="mt-0">
-            <div class="row">
-                <div class="col-lg-5 col-md-4">
-                    <div class="footer-logo">
-                        <a href="#"><img src="<?php echo e($header_logo_path ?? null); ?>" style="height:60px; width:280px" alt="..."></a>
-                    </div>
-                    <div class="footer-text">
-                        <h5 class="text-grey mb-0">Got Question? Call us:</h5>
-                        <h4><?php echo e($setting_store->store_email ?? null); ?></h4>
-                    </div>
-                    <div class="footer-text">
-                        <h6 class="text-grey mb-0">Contact Info</h6>
-                        <p><span><i class="las la-envelope"></i> &nbsp; <?php echo e($setting_store->store_email ?? null); ?></span></p>
-                        <p><span><i class="las la-map-marker"></i> &nbsp; <?php echo e($storefront_address); ?></span></p>
-                    </div>
-                    <ul class="footer-social mt-3 p-0">
-                        <li><a href="#"><i class="ti-facebook"></i></a></li>
-                        <li><a href="#"><i class="ti-twitter"></i></a></li>
-                        <li><a href="#"><i class="ti-instagram"></i></a></li>
-                        <li><a href="#"><i class="ti-pinterest"></i></a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-7 col-md-8">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-6">
-                            <div class="footer-widget style1">
-                                <h3><?php echo e($footer_menu_one_title); ?></h3>
-                                <div class="d-flex justify-content-between">
-                                    <ul class="footer-menu">
-                                        <?php if($footer_menu_one): ?>
-                                            <?php $__empty_1 = true; $__currentLoopData = $footer_menu_one->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                                <li><a class="" href=""><?php echo e($value->label); ?></a></li>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <div class="footer-widget style1">
-                                <h3><?php echo e($footer_menu_title_two); ?></h3>
-                                <ul class="footer-menu">
-                                    <?php if($footer_menu_two): ?>
-                                        <?php $__empty_1 = true; $__currentLoopData = $footer_menu_two->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                            <li><a class="" href=""><?php echo e($value->label); ?></a></li>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <div class="footer-widget style1">
-                                <h3>Company</h3>
-                                <ul class="footer-menu">
-                                    <li><a class="" href="about.html">About us</a></li>
-                                    <li><a class="" href="contact.html">Contact</a></li>
-                                    <li><a class="" href="#">Career</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row footer-bottom">
-                <div class="col-md-6">
-                    <p>&copy; 2020. All rights reserved</p>
-                </div>
-                <div class="col-md-6">
-                    <div class="footer-payment-options">
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Stripe"><i class="pw pw-stripe"></i></span>
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Paypal"><i class="pw pw-paypal"></i></span>
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Visa"><i class="pw pw-visa"></i></span>
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Mastercard"><i class="pw pw-mastercard"></i></span>
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Amex"><i class="pw pw-american-express"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer section Ends-->
-    <!-- Cookie consent Starts-->
-    
-    <!-- Cookie consent Ends-->
-    <!-- Quick Shop Modal starts -->
-    <div class="modal fade quickshop" id="quickshop" tabindex="-1" role="dialog" aria-labelledby="quickshop" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
-                    </button>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="slider-wrapper">
-                                <div class="slider-for-modal">
-                                    <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch.png" alt="..." />
-                                    </div>
-                                    <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-2.jpg" alt="..." />
-                                    </div>
-                                    <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-3.jpg" alt="..." />
-                                    </div>
-                                    <div class="slider-for__item ex1">
-                                        <img src="images/products/apple-watch-4.jpg" alt="..." />
-                                    </div>
-                                </div>
-                                <div class="slider-nav-modal">
-                                    <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch.png" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-2.jpg" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-3.jpg" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="images/products/apple-watch-4.jpg" alt="..." />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="item-details">
-                                <a class="item-category" href="">Electronics</a>
-                                <h3 class="item-name">Samsung Curved Widescreen 4k Ultra HD TV</h3>
-                                <div class="d-flex justify-content-between">
-                                    <div class="item-brand">Brand: <a href="">Samsung</a></div>
-                                    <div class="item-review">
-                                        <ul class="p-0 m-0">
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-ios-star"></i></li>
-                                            <li><i class="ion-android-star-half"></i></li>
-                                        </ul>
-                                        <span>( 04 )</span>
-                                    </div>
-                                    <div class="item-sku">SKU: LC123456789</div>
-                                </div>
-                                <hr>
-                                <div class="item-price">$125.30</div>
-                                <hr>
-                                <div class="item-short-description">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc condimentum eros idoni rutrum fermentum. Proin nec felis dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</p>
-                                </div>
-                                <hr>
-                                <div class="item-variant">
-                                    <span>Color:</span> <span class="semi-bold">Green</span>
-                                    <ul class="product-variant mt-1">
-                                        <li class="bg-green selected"></li>
-                                        <li class="bg-antique"></li>
-                                        <li class="bg-amber"></li>
-                                    </ul>
-                                </div>
-                                <div class="item-variant">
-                                    <span>Size:</span> <span class="semi-bold">M</span>
-                                    <ul class="product-variant size-opt p-0 mt-1">
-                                        <li><span>S</span></li>
-                                        <li class="selected"><span>M</span></li>
-                                        <li><span>L</span></li>
-                                        <li><span>XL</span></li>
-                                    </ul>
-                                </div>
-                                <div class="item-options">
-                                    <form class="mb-3">
-                                        <div class="input-qty">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus">
-                                                    <span class="ti-minus"></span>
-                                                </button>
-                                            </span>
-                                            <input type="number" class="input-number" value="1" min="1">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus">
-                                                    <span class="ti-plus"></span>
-                                                </button>
-                                            </span>
-                                        </div>
-                                        <button class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                                    </form>
-                                    <button class="button button-icon style4 sm"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
-                                    <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button>
-                                </div>
-                                <hr>
-                                <div class="item-share mt-3"><span>Share</span>
-                                    <ul class="footer-social d-inline pad-left-15">
-                                        <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                        <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                        <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                        <li><a href="#"><i class="ti-pinterest"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Quick shop modal ends-->
-    <!-- Quick Shop Modal starts -->
-    <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content" style="background-image: url('images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
-                <div class="modal-body">
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
-                    </button>
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
-                            <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
-                            <form class="newsletter mb-5">
-                                <input class="" type="text" placeholder="Enter your email">
-                                <button type="submit" class="button style1 btn-search">Subscribe</button>
-                            </form>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="disable-popup">
-                                <label class="form-check-label" for="disable-popup">
-                                    Got it! Don't show this popup again.
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Quick shop modal ends-->
-    <!-- FACEBOOK CHAT PLUGIN STARTS -->
-    <!-- Messenger Chat plugin Code -->
-    <div id="fb-root"></div>
-    <!-- Your Chat plugin code -->
-    <div id="fb-customer-chat" class="fb-customerchat">
-    </div>
+    <!--Footer-->
+    <?php echo $__env->make('frontend.includes.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
     <script>
-    var chatbox = document.getElementById('fb-customer-chat');
-    chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
-    chatbox.setAttribute("attribution", "biz_inbox");
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
+        chatbox.setAttribute("attribution", "biz_inbox");
 
-    window.fbAsyncInit = function() {
-        FB.init({
-            xfbml: true,
-            version: 'v11.0'
-        });
-    };
+        window.fbAsyncInit = function() {
+            FB.init({
+                xfbml: true,
+                version: 'v11.0'
+            });
+        };
 
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     </script>
 
     
@@ -804,7 +284,6 @@
 
         $(".addToCart").on("submit",function(e){
             e.preventDefault();
-            // console.log('ok');
 
             $.ajax({
                 url: "<?php echo e(route('product.add_to_cart')); ?>",
@@ -815,6 +294,7 @@
                 processData: false,
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     if (data.type=='success') {
                         const Toast = Swal.mixin({
                             toast: true,

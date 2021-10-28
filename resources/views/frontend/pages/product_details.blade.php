@@ -77,13 +77,18 @@
                                 <div class="item-brand">Brand: <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
                                 <div class="item-review">
                                     <ul class="p-0 m-0">
-                                        <li><i class="ion-ios-star"></i></li>
-                                        <li><i class="ion-ios-star"></i></li>
-                                        <li><i class="ion-ios-star"></i></li>
-                                        <li><i class="ion-ios-star"></i></li>
-                                        <li><i class="ion-android-star-half"></i></li>
+                                        @php
+                                            for ($i=1; $i <=5 ; $i++){
+                                                if ($i<= round($product->avg_rating)){  @endphp
+                                                    <li><i class="ion-android-star"></i></li>
+                                        @php
+                                                }else { @endphp
+                                                    <li><i class="ion-android-star-outline"></i></li>
+                                        @php        }
+                                            }
+                                        @endphp
                                     </ul>
-                                    <span>( 04 )</span>
+                                    <span>( {{round($product->avg_rating)}} )</span>
                                 </div>
                                 <div class="item-sku">SKU: LC123456789</div>
                             </div>
@@ -127,7 +132,7 @@
                                         @forelse ($product->productAttributeValues as $value)
                                             @if ($value->attribute_id == $key)
                                                 <li class="attribute_value" data-attribute_name="{{$value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null }}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}"><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
-                                                <input type="text" name="value_id[]" value="{{$value->attribute_value_id}}">
+                                                <input type="hidden" name="value_id[]" value="{{$value->attribute_value_id}}">
                                             @endif
                                         @empty
                                         @endforelse
@@ -361,10 +366,45 @@
                                                 {{__('file.Please login first and buy this product')}}
                                             </div>
                                         </div>
+                                    @else
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                            </symbol>
+                                        </svg>
+                                        <div class="m-3 alert alert-danger d-flex align-items-center" role="alert">
+                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg> --}}
+
+                                        @foreach ($reviews as $item)
+                                            @if ($item->userId==Auth::user()->id)
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                    </symbol>
+                                                </svg>
+                                                <div class="m-3 alert alert-danger d-flex align-items-center" role="alert">
+                                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                                    <div>
+                                                        {{__('file.You can review one time')}}
+                                                    </div>
+                                                </div>
+                                                @break
+                                            @endif
+                                        @endforeach
                                     @endif
 
                                     <div class="col-sm-12 mar-top-20 mt-3">
-                                        <button class="button style1" @if(!$user_and_product_exists) disabled title="Please login first" @endif  name="submit" type="submit" id="submit">Submit</button>
+                                        <button class="button style1" @if(!$user_and_product_exists)
+                                                                        disabled title="Please login first"
+                                                                      @else
+                                                                        @foreach ($reviews as $item)
+                                                                            @if ($item->userId==Auth::user()->id)
+                                                                                disabled title="Disabled"
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                      @endif
+                                                name="submit" type="submit" id="submit">Submit</button>
                                     </div>
 
                                 </form>
@@ -1137,6 +1177,4 @@
             $('#rating').val(5);
         })
     </script>
-
-
 @endpush

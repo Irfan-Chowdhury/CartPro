@@ -217,6 +217,12 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/bulk_action','ProductController@bulkAction')->name('admin.products.bulk_action');
         });
 
+        Route::prefix('review')->group(function () {
+            Route::get('/','ReviewController@index')->name('admin.review.index');
+            Route::get('/edit','ReviewController@edit')->name('admin.review.edit');
+            Route::post('/update','ReviewController@update')->name('admin.review.update');
+        });
+
         //Sales
         Route::group(['prefix' => 'order'], function () {
             Route::get('/','OrderController@index')->name('admin.order.index');
@@ -337,6 +343,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         });
 
+        //Store Front
         Route::group(['prefix' => 'storefront'], function () {
             Route::get('/','StoreFrontController@index')->name('admin.storefront');
             Route::post('/general/store','StoreFrontController@generalStore')->name('admin.storefront.general.store');
@@ -364,7 +371,7 @@ Route::group(['prefix' => 'admin'], function () {
         // Route::post('/menus/items/store','MenuItemController@store')->name('admin.menu.menu_item.store');
 
 
-        //--Menus--
+        //--SLider--
         Route::group(['prefix' => 'slider'], function () {
             Route::get('/','SliderController@index')->name('admin.slider');
             Route::get('/data-fetch-by-type','SliderController@dataFetchByType')->name('admin.slider.data-fetch-by-type');
@@ -375,6 +382,17 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/inactive','SliderController@inactive')->name('admin.slider.inactive');
             Route::get('test/bulk_action','SliderController@bulkAction')->name('admin.slider.bulk_action');
         });
+
+        //Color
+        Route::prefix('color')->group(function () {
+            Route::get('/','ColorController@index')->name('admin.color.index');
+            Route::post('/store','ColorController@store')->name('admin.color.store');
+            Route::get('/edit','ColorController@edit')->name('admin.color.edit');
+            Route::post('/update','ColorController@update')->name('admin.color.update');
+            Route::get('/delete','ColorController@delete')->name('admin.color.delete');
+        });
+
+
 
         Route::group(['prefix' => 'setting'], function () {
 

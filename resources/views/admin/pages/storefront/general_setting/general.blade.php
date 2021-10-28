@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col-md-10">
                 <form id="generalSubmit">
+
                     @csrf
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Welcome Text</b></label>
@@ -26,9 +27,20 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Theme Color</b></label>
                         <div class="col-sm-8">
-                            <select name="storefront_theme_color" id="storefront_theme_color" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Color')}}'>
+                            <select name="storefront_theme_color" id="storefrontThemeColor" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Color')}}'>
                                 @foreach ($colors as $key => $item)
-                                    <option value="{{$colors[$key]['color_name']}}" {{ $colors[$key]['color_name'] == $setting[1]->plain_value ? 'selected="selected"' : '' }}>{{$colors[$key]['color_name']}}</option>
+                                    {{-- <option value="{{$colors[$key]['color_code']}}"
+                                        @if(($setting[1]->plain_value != NULL) && ($colors[$key]['color_code'] == $setting[1]->plain_value))
+                                            selected
+                                        @endif>
+                                        {{$colors[$key]['color_name']}}
+                                    </option> --}}
+                                    <option value="{{$item->color_code}}"
+                                        @if(($setting[1]->plain_value != NULL) && ($item->color_code == $setting[1]->plain_value))
+                                            selected
+                                        @endif>
+                                        {{$item->color_name}}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -40,24 +52,29 @@
                         <div class="col-sm-8">
                             <select name="storefront_mail_theme_color" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Color')}}'>
                                 @foreach ($colors as $key => $item)
-                                    <option value="{{$colors[$key]['color_name']}}" {{ $colors[$key]['color_name'] == $setting[2]->plain_value ? 'selected="selected"' : '' }}>{{$colors[$key]['color_name']}}</option>
+                                    <option value="{{$item->color_code}}"
+                                        @if(($setting[1]->plain_value != NULL) && ($item->color_code == $setting[2]->plain_value))
+                                            selected
+                                        @endif>
+                                        {{$item->color_name}}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Slider</b> <span class="text-danger"><i>(Incomplete)</i></span></label>
-                        <div class="col-sm-8">
-                            <select name="slider_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Slider')}}'>
-                                {{-- @foreach ($slider as $item)
-                                    <option value="{{$item->id}}" {{ $item->id == $general_slider->slider_id ? 'selected="selected"' : '' }}>{{$item->slider_title}}</option>
-                                @endforeach --}}
-                            </select>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Slider Format</b> <span class="text-danger"></span></label>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting[148]->plain_value=='full_width') checked @endif id="slider_format" value="full_width">
+                            <label class="form-check-label">{{__('file.Full Width')}}</label>
+                        </div>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting[148]->plain_value=='half_width') checked @endif id="slider_format" value="half_width">
+                            <label class="form-check-label">{{__('file.Half Width')}}</label>
                         </div>
                     </div>
 
-                    <!-- setting[4] => DB_ROW_ID-5: storefront_terms_and_condition_page -->
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Terms & Condition</b></label>
                         <div class="col-sm-8">

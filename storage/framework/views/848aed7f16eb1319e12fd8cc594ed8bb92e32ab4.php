@@ -38,11 +38,16 @@
                                         <div class="item-brand">Brand: <a href=""><?php echo e($item->product->brand->brandTranslation->brand_name ?? $item->product->brand->brandTranslationDefaultEnglish->brand_name ?? null); ?></a></div>
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-android-star-half"></i></li>
+                                                <?php
+                                                    for ($i=1; $i <=5 ; $i++){
+                                                        if ($i<= round($item->product->avg_rating)){  ?>
+                                                            <li><i class="ion-android-star"></i></li>
+                                                <?php
+                                                        }else { ?>
+                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                <?php        }
+                                                    }
+                                                ?>
                                             </ul>
                                             <span>( 04 )</span>
                                         </div>
@@ -125,7 +130,7 @@
                                             <button class="button button-icon style4 sm add_to_wishlist" data-product_id="<?php echo e($item->product->id); ?>" data-product_slug="<?php echo e($item->product->slug); ?>" data-category_id="<?php echo e($item->product->categoryProduct[0]->category_id ?? null); ?>" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
                                         </a>
                                     </div>
-                                    
+
                                     <hr>
                                     <div class="item-share mt-3"><span>Share</span>
                                         <ul class="footer-social d-inline pad-left-15">

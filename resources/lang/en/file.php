@@ -17,6 +17,7 @@ return array (
   'Add Attribute Set' => 'Add Attribute Set',
   'Add Biller' => 'Add Biller',
   'Add Brand' => 'Add Brand',
+  'Add Color' => 'Add Color',
   'Add Coupon' => 'Add Coupon',
   'Add Customer' => 'Add Customer',
   'Add Customer Group' => 'Add Customer Group',
@@ -65,6 +66,7 @@ return array (
   'Already have an account' => 'Already have an account',
   'Amount' => 'Amount',
   'Approve' => 'Approve',
+  'Approved' => 'Approved',
   'Attach Document' => 'Attach Document',
   'Attach File' => 'Attach File',
   'Attendance' => 'Attendance',
@@ -123,8 +125,11 @@ return array (
   'Clear' => 'Clear',
   'Close' => 'Close',
   'Code' => 'Code',
+  'Color Code' => 'Color Code',
+  'Color Name' => 'Color Name',
   'Column visibility' => 'Column visibility',
   'Combo Products' => 'Combo Products',
+  'Comment' => 'Comment',
   'Company Name' => 'Company Name',
   'Completed' => 'Completed',
   'Confirm Password' => 'Confirm Password',
@@ -193,6 +198,8 @@ return array (
   'Due' => 'Due',
   'Due Report' => 'Due Report',
   'Edit Attribute Set' => 'Edit Attribute Set',
+  'Edit Color' => 'Edit Color',
+  'Edit Review' => 'Edit Review',
   'Email' => 'Email',
   'Employee' => 'Employee',
   'Empty Database' => 'Empty Database',
@@ -227,6 +234,7 @@ return array (
   'From Account' => 'From Account',
   'From Warehouse' => 'From Warehouse',
   'Full' => 'Full',
+  'Full Width' => 'Full Width',
   'Gateway' => 'Gateway',
   'General' => 'General',
   'General Setting' => 'General Setting',
@@ -237,6 +245,7 @@ return array (
   'Go To' => 'Go To',
   'Group Permission' => 'Group Permission',
   'HRM Setting' => 'HRM Setting',
+  'Half Width' => 'Half Width',
   'Help' => 'Help',
   'Holiday' => 'Holiday',
   'Holiday Approve' => 'Holiday Approve',
@@ -415,6 +424,7 @@ return array (
   'Quotation List' => 'Quotation List',
   'Quotation Status' => 'Quotation Status',
   'Rate' => 'Rate',
+  'Rating' => 'Rating',
   'Recent Transaction' => 'Recent Transaction',
   'Recharge' => 'Recharge',
   'Recieved' => 'Received',
@@ -428,6 +438,8 @@ return array (
   'Return Details' => 'Return Details',
   'Return List' => 'Return List',
   'Return Note' => 'Return Note',
+  'Reviewer Name' => 'Reviewer Name',
+  'Reviews' => 'Reviews',
   'Role' => 'Role',
   'Role Permission' => 'Role Permission',
   'Roles' => 'Roles',
@@ -448,11 +460,11 @@ return array (
   'Section Status' => 'Section Status',
   'Select Attribute Set' => 'Select Attribute Set',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' =>
+  'Select SMS gateway' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -528,31 +540,31 @@ return array (
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
   'Type' => 'Type',
-  'Type Product Name or Code' =>
+  'Type Product Name or Code' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' =>
+  'Type date or purchase reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' =>
+  'Type date or sale reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or sale reference...',
       ),
@@ -623,6 +635,8 @@ return array (
   'Warehouse Report' => 'Warehouse Report',
   'Warehouse Stock Chart' => 'Warehouse Stock Chart',
   'Warehouse quantity of product variants' => 'Warehouse quantity of product variants',
+  'You can comment one time' => 'You can comment one time',
+  'You can review one time' => 'You can review one time',
   'You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.' => 'You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.',
   'You just need to update the Counted column in the initial file' => 'You just need to update the Counted column in the initial file',
   'Your Cart' => 'Your Cart',

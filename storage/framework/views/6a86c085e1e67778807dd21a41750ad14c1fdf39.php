@@ -36,11 +36,16 @@
                                         
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-android-star-half"></i></li>
+                                                <?php
+                                                    for ($i=1; $i <=5 ; $i++){
+                                                        if ($i<= round($item->product->avg_rating)){  ?>
+                                                            <li><i class="ion-android-star"></i></li>
+                                                <?php
+                                                        }else { ?>
+                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                <?php        }
+                                                    }
+                                                ?>
                                             </ul>
                                             <span>( 04 )</span>
                                         </div>

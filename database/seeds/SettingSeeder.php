@@ -798,6 +798,12 @@ class SettingSeeder extends Seeder
                 'is_translatable' => 0,
             ),
 
+            //Slider Format
+            array(
+                'id' => 149,
+                'key' => 'store_front_slider_format',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

@@ -16,6 +16,7 @@ use App\Models\StorefrontImage;
 use App\Models\StorefrontMenu;
 use App\Models\Tag;
 use App\Models\Brand;
+use App\Models\Color;
 use App\Models\FlashSale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,20 +30,12 @@ class StoreFrontController extends Controller
 {
     use imageHandleTrait;
 
-    // public function __construct()
-    // {
-    //     $logged_user = auth()->user();
-
-    //     if ($logged_user->can('store_front'))
-    //     {
-    //         return abort('403', __('You are not authorized'));
-    //     }
-    // }
-
     public function index()
     {
         $locale = Session::get('currentLocal');
-        $colors = $this->color();
+        // $colors = $this->color();
+        $colors = Color::all();
+        // return $colors;
 
         $setting = Setting::with(['settingTranslations'=> function ($query) use ($locale){
             $query->where('locale',$locale)
@@ -110,9 +103,10 @@ class StoreFrontController extends Controller
 
         $flash_sales = FlashSale::with('flashSaleTranslation')->where('is_active',1)->get();
 
+
+
         return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
                         'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flash_sales'));
-
 
     }
 
@@ -724,31 +718,41 @@ class StoreFrontController extends Controller
     }
 
 
-
     protected function color()
     {
         $colors = array(
-            [
-                'color_name' => 'Blue'
-            ],
-            [
-                'color_name' => 'Black'
-            ],
-            [
-                'color_name' => 'Red'
-            ],
-            [
-                'color_name' => 'Yellow'
-            ],
-            [
-                'color_name' => 'Green'
-            ],
-            [
-                'color_name' => 'Orange'
-            ],
-            [
-                'color_name' => 'Pink'
-            ],
+            array(
+                'color_name' => 'Blue',
+                'color_code' => '#0071df',
+            ),
+            array(
+                'color_name' => 'Black',
+                'color_code' => '#000000',
+            ),
+            array(
+                'color_name' => 'Red',
+                'color_code' => '#FF0000',
+            ),
+            array(
+                'color_name' => 'Yellow',
+                'color_code' => '#FFFF00',
+            ),
+            array(
+                'color_name' => 'Green',
+                'color_code' => '#00FF00',
+            ),
+            array(
+                'color_name' => 'Orange',
+                'color_code' => '#FFA500',
+            ),
+            array(
+                'color_name' => 'Pink',
+                'color_code' => '#FFC0CB',
+            ),
+            array(
+                'color_name' => 'Custom Color',
+                'color_code' => 'custom_color',
+            ),
         );
 
         return $colors;
