@@ -432,6 +432,8 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::post('/bank_transfer/store','SettingController@bankTransferStoreOrUpdate')->name('admin.setting.bank_transfer.store_or_update');
             Route::post('/check_money_order/store','SettingController@cehckMoneyOrderStoreOrUpdate')->name('admin.setting.check_money_order.store_or_update');
 
+            Route::get('/empty_database', 'SettingController@emptyDatabase')->name('empty_database');
+
             Route::group(['prefix' => 'language'], function () {
                 Route::get('/','LanguageController@index')->name('admin.setting.language');
                 Route::post('/store','LanguageController@store')->name('admin.setting.language.store');

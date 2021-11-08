@@ -11,7 +11,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="status" class="form-check-input" {{$setting_facebook->status=="1" ? 'checked':''}}>
+                                <input type="checkbox" value="1" name="status" class="form-check-input" @if($setting_facebook) {{$setting_facebook->status=="1" ? 'checked':''}} @endif>
                                 <label class="p-0 form-check-label" for="exampleCheck1">Enable Facebook Login</label>
                             </div>
                         </div>

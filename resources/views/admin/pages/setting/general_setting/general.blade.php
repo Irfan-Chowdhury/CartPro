@@ -64,19 +64,19 @@
                     <div class="form-group row">
                         <label class="col-sm-5 col-form-label ml-2"><b>Number Format Type</b> <br><i>(Ex: 1.00, 1.000, 1.0000)</i> </label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="number_format_type"  id="number_format_type" value="2" @if($setting_general->number_format_type!=NULL && $setting_general->number_format_type=="2") checked @endif>
+                            <input class="form-check-input" type="radio" name="number_format_type"  id="number_format_type" value="2" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="2") checked @endif>
                             <label class="form-check-label" for="number_format_type">
                                 2
                             </label>
                         </div>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="3" @if($setting_general->number_format_type!=NULL && $setting_general->number_format_type=="3") checked @endif>
+                            <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="3" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="3") checked @endif>
                             <label class="form-check-label" for="exampleRadios1">
                                 3
                             </label>
                         </div>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="4" @if($setting_general->number_format_type!=NULL && $setting_general->number_format_type=="4") checked @endif>
+                            <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="4" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="4") checked @endif>
                             <label class="form-check-label" for="exampleRadios1">
                                 4
                             </label>

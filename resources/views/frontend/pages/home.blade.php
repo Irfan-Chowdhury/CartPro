@@ -602,127 +602,129 @@
                     </div>
                     <div class="deals-slider-wrapper swiper-container">
                         <div class="swiper-wrapper">
-                            @forelse ($flash_sales->flashSaleProducts as $item)
-                                <div class="swiper-slide">
-                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{$item->product->id}}">
-                                        <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                        <input type="hidden" name="category_id" value="{{$item->product->categoryProduct[0]->category_id}}">
-                                        <input type="hidden" name="qty" value="1">
+                            @if ($flash_sales)
+                                @forelse ($flash_sales->flashSaleProducts as $item)
+                                    <div class="swiper-slide">
+                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{$item->product->id}}">
+                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                            <input type="hidden" name="category_id" value="{{$item->product->categoryProduct[0]->category_id}}">
+                                            <input type="hidden" name="qty" value="1">
 
-                                        <div class="single-product-wrapper deals">
-                                            <div class="single-product-item">
+                                            <div class="single-product-wrapper deals">
+                                                <div class="single-product-item">
 
-                                                @if ($item->product->baseImage)
-                                                    <img src="{{asset('public/'.$item->product->baseImage->image)}}" >
-                                                @else
-                                                    <img src="{{asset('public/images/empty.jpg')}}">
-                                                @endif
-                                                <div class="product-overlay">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                    </a>
-                                                    <a>
-                                                        <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                    </a>
-                                                    {{-- <a href="compare.html">
-                                                        <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
-                                                    </a> --}}
+                                                    @if ($item->product->baseImage)
+                                                        <img src="{{asset('public/'.$item->product->baseImage->image)}}" >
+                                                    @else
+                                                        <img src="{{asset('public/images/empty.jpg')}}">
+                                                    @endif
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                        </a>
+                                                        <a>
+                                                            <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                        </a>
+                                                        {{-- <a href="compare.html">
+                                                            <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                        </a> --}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="product-details">
-                                                <a class="product-name text-center" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                                    {{$item->product->productTranslation->product_name ?? null}}
-                                                </a>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="rating-summary">
-                                                            <div class="rating-result" title="60%">
-                                                                <ul class="product-rating">
-                                                                    @php
-                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                <li><i class="ion-android-star"></i></li>
-                                                                    @php
-                                                                            }else { @endphp
-                                                                                <li><i class="ion-android-star-outline"></i></li>
-                                                                    @php        }
-                                                                        }
-                                                                    @endphp
-                                                                </ul>
+                                                <div class="product-details">
+                                                    <a class="product-name text-center" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
+                                                        {{$item->product->productTranslation->product_name ?? null}}
+                                                    </a>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        @php
+                                                                            for ($i=1; $i <=5 ; $i++){
+                                                                                if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                    <li><i class="ion-android-star"></i></li>
+                                                                        @php
+                                                                                }else { @endphp
+                                                                                    <li><i class="ion-android-star-outline"></i></li>
+                                                                        @php        }
+                                                                            }
+                                                                        @endphp
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                                                    <span class="promo-price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                        @else
+                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                    <span class="old-price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                        @else
+                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                @else
+                                                                    <span class="promo-price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                        @else
+                                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                @endif
+
                                                             </div>
                                                         </div>
-                                                        <div class="product-price">
-                                                            @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
-                                                                <span class="promo-price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                    @else
-                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
-                                                                <span class="old-price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                    @else
-                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
+                                                        <div>
+                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                             @else
-                                                                <span class="promo-price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                                                    @else
-                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                             @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="daily-deals-wrap">
+                                                        <!-- countdown start -->
+                                                        <div class="countdown-deals text-center" data-countdown="{{$item->end_date}}">
+                                                            <div class="cdown day">
+                                                                <span class="time-count">0</span>
+                                                                <p>Days</p>
+                                                            </div>
+                                                            <div class="cdown hour">
+                                                                <span class="time-count">0</span>
+                                                                <p>Hours</p>
+                                                            </div>
+                                                            <div class="cdown minutes">
+                                                                <span class="time-count">00</span>
+                                                                <p>mins</p>
+                                                            </div>
+                                                            <div class="cdown second">
+                                                                <span class="time-count">00</span>
+                                                                <p>secs</p>
+                                                            </div>
+                                                        </div>
+                                                        <!-- countdown end -->
+                                                    </div>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    @if ($item->product->manage_stock==1)
+                                                        Available: {{$item->product->qty}}
+                                                    @endif
 
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        @if (($item->product->qty==0) || ($item->product->in_stock==0))
-                                                            <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                        @else
-                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                        @endif
-                                                    </div>
                                                 </div>
-                                                <div class="daily-deals-wrap">
-                                                    <!-- countdown start -->
-                                                    <div class="countdown-deals text-center" data-countdown="{{$item->end_date}}">
-                                                        <div class="cdown day">
-                                                            <span class="time-count">0</span>
-                                                            <p>Days</p>
-                                                        </div>
-                                                        <div class="cdown hour">
-                                                            <span class="time-count">0</span>
-                                                            <p>Hours</p>
-                                                        </div>
-                                                        <div class="cdown minutes">
-                                                            <span class="time-count">00</span>
-                                                            <p>mins</p>
-                                                        </div>
-                                                        <div class="cdown second">
-                                                            <span class="time-count">00</span>
-                                                            <p>secs</p>
-                                                        </div>
-                                                    </div>
-                                                    <!-- countdown end -->
-                                                </div>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                @if ($item->product->manage_stock==1)
-                                                    Available: {{$item->product->qty}}
-                                                @endif
-
                                             </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            @empty
-                            @endforelse
+                                        </form>
+                                    </div>
+                                @empty
+                                @endforelse
+                            @endif
                         </div>
                         <!-- Add Pagination -->
                         <div class="deals-navigation">
@@ -1019,10 +1021,12 @@
             </div>
         </div>
     </section>
-    @forelse ($flash_sales->flashSaleProducts as $item )
-        @include('frontend.includes.quickshop_flash_sale')
-    @empty
-    @endforelse
+    @if ($flash_sales)
+        @forelse ($flash_sales->flashSaleProducts as $item )
+            @include('frontend.includes.quickshop_flash_sale')
+        @empty
+        @endforelse
+    @endif
     <!--Flash Sale And Vertical Products End-->
 
 

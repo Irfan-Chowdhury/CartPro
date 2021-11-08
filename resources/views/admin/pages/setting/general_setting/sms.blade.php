@@ -19,8 +19,8 @@
                         <div class="col-sm-8">
                             <select name="sms_service" id="smsService" class="form-control">
                                 <option value="">-- Select Service --</option>
-                                <option value="vonage" {{$setting_sms->sms_service=="vonage" ? 'selected':''}}>Vonage</option>
-                                <option value="twilio" {{$setting_sms->sms_service=="twilio" ? 'selected':''}}>Twilio</option>
+                                <option value="vonage" @if($setting_sms) {{$setting_sms->sms_service=="vonage" ? 'selected':''}} @endif>Vonage</option>
+                                <option value="twilio" @if($setting_sms) {{$setting_sms->sms_service=="twilio" ? 'selected':''}}  @endif>Twilio</option>
                             </select>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
 
                     <!--For Vonage-->
                     <div class="form-group row" id="vonageApiKeyField">
-                        @if($setting_sms->sms_service=="vonage")
+                        @if($setting_sms && $setting_sms->sms_service=="vonage")
                             <label class="col-sm-4 col-form-label"><b>API Key <span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="api_key" value="{{$setting_sms->api_key}}">
@@ -36,7 +36,7 @@
                         @endif
                     </div>
                     <div class="form-group row" id="vonageApiSecretField">
-                        @if($setting_sms->sms_service=="vonage")
+                        @if($setting_sms && $setting_sms->sms_service=="vonage")
                             <label class="col-sm-4 col-form-label"><b>API Secret <span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="api_secret" value="{{$setting_sms->api_secret}}">
@@ -46,7 +46,7 @@
 
                     <!--For Twilio-->
                     <div class="form-group row" id="twilioAccountSidField">
-                        @if($setting_sms->sms_service=="twilio")
+                        @if($setting_sms && $setting_sms->sms_service=="twilio")
                             <label class="col-sm-4 col-form-label"><b>Account SID <span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="account_sid" value="{{$setting_sms->account_sid}}">
@@ -54,7 +54,7 @@
                         @endif
                     </div>
                     <div class="form-group row" id="twilioAuthTokenField">
-                        @if($setting_sms->sms_service=="twilio")
+                        @if($setting_sms && $setting_sms->sms_service=="twilio")
                             <label class="col-sm-4 col-form-label"><b>Auth Token<span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="auth_token" value="{{$setting_sms->auth_token}}">
@@ -71,7 +71,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Welcome SMS</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="welcome_sms" class="form-check-input" {{$setting_sms->welcome_sms=="1" ? 'checked':''}}>
+                                <input type="checkbox" value="1" name="welcome_sms" class="form-check-input" @if($setting_sms) {{$setting_sms->welcome_sms=="1" ? 'checked':''}} @endif>
                                 <label class="p-0 form-check-label">Send welcome SMS after registration</label>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>New Order Admin SMS</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="new_order_sms_to_admin" class="form-check-input" {{$setting_sms->new_order_sms_to_admin=="1" ? 'checked':''}}>
+                                <input type="checkbox" value="1" name="new_order_sms_to_admin" class="form-check-input" @if($setting_sms) {{$setting_sms->new_order_sms_to_admin=="1" ? 'checked':''}} @endif>
                                 <label class="p-0 form-check-label" for="exampleCheck1">Send new order notification to the admin</label>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>New Order SMS to Customer</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="new_order_sms_to_customer" class="form-check-input" {{$setting_sms->new_order_sms_to_customer=="1" ? 'checked':''}}>
+                                <input type="checkbox" value="1" name="new_order_sms_to_customer" class="form-check-input" @if($setting_sms) {{$setting_sms->new_order_sms_to_customer=="1" ? 'checked':''}} @endif>
                                 <label class="p-0 form-check-label" for="exampleCheck1">Send new order notification to the customer</label>
                             </div>
                         </div>
@@ -106,12 +106,12 @@
                         <div class="col-sm-8">
                             <select name="sms_order_status" class="form-control">
                                 <option value="">-- Select Status --</option>
-                                <option value="canceled" {{$setting_sms->sms_order_status=="canceled" ? 'selected':''}}>{{ucfirst("canceled")}}</option>
-                                <option value="completed" {{$setting_sms->sms_order_status=="completed" ? 'selected':''}}>{{ucfirst("completed")}}</option>
-                                <option value="on_hold" {{$setting_sms->sms_order_status=="on_hold" ? 'selected':''}}>{{ucfirst("on hold")}}</option>
-                                <option value="pending" {{$setting_sms->sms_order_status=="pending" ? 'selected':''}}>{{ucfirst("pending payment")}}</option>
-                                <option value="processing" {{$setting_sms->sms_order_status=="processing" ? 'selected':''}}>{{ucfirst("processing payment")}}</option>
-                                <option value="refunded" {{$setting_sms->sms_order_status=="refunded" ? 'selected':''}}>{{ucfirst("refunded")}}</option>
+                                <option value="canceled" @if($setting_sms) {{$setting_sms->sms_order_status=="canceled" ? 'selected':''}} @endif>{{ucfirst("canceled")}}</option>
+                                <option value="completed" @if($setting_sms) {{$setting_sms->sms_order_status=="completed" ? 'selected':''}} @endif>{{ucfirst("completed")}}</option>
+                                <option value="on_hold" @if($setting_sms) {{$setting_sms->sms_order_status=="on_hold" ? 'selected':''}} @endif>{{ucfirst("on hold")}}</option>
+                                <option value="pending" @if($setting_sms) {{$setting_sms->sms_order_status=="pending" ? 'selected':''}} @endif>{{ucfirst("pending payment")}}</option>
+                                <option value="processing" @if($setting_sms) {{$setting_sms->sms_order_status=="processing" ? 'selected':''}} @endif>{{ucfirst("processing payment")}}</option>
+                                <option value="refunded" @if($setting_sms) {{$setting_sms->sms_order_status=="refunded" ? 'selected':''}} @endif>{{ucfirst("refunded")}}</option>
                             </select>
                         </div>
                     </div>

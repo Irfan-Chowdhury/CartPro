@@ -32,7 +32,7 @@
                         <div class="col-sm-8">
                             <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='{{__('Select Currency')}}'>
                                 @foreach ($currencies as $currency)
-                                    <option value="{{$currency->currency_code}}" {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}}>{{$currency->currency_code}}</option>
+                                    <option value="{{$currency->currency_code}}" @if($setting_currency) {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}} @endif>{{$currency->currency_code}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -47,11 +47,11 @@
                         <label class="col-sm-4 col-form-label"><b>Currency Format <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="prefix" name="currency_format" {{$setting_currency->currency_format=="prefix" ? 'checked':''}}>
+                                <input class="form-check-input" type="radio" value="prefix" name="currency_format" @if($setting_currency) {{$setting_currency->currency_format=="prefix" ? 'checked':''}} @endif>
                                 <label class="form-check-label">Prefix</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="suffix" name="currency_format" {{$setting_currency->currency_format=="suffix" ? 'checked':''}}>
+                                <input class="form-check-input" type="radio" value="suffix" name="currency_format" @if($setting_currency) {{$setting_currency->currency_format=="suffix" ? 'checked':''}} @endif>
                                 <label class="form-check-label">Suffix</label>
                             </div>
                         </div>
@@ -61,9 +61,9 @@
                         <div class="col-sm-8">
                             <select name="exchange_rate_service" id="exchangeRateService" class="form-control">
                                 <option value="">Select Service</option>
-                                <option value="fixer" {{$setting_currency->exchange_rate_service=="fixer" ? 'selected':''}}>Fixer</option>
-                                <option value="forge" {{$setting_currency->exchange_rate_service=="forge" ? 'selected':''}}>Forge</option>
-                                <option value="currency_data_feed" {{$setting_currency->exchange_rate_service=="currency_data_feed" ? 'selected':''}}>Currency Data Feed</option>
+                                <option value="fixer" @if($setting_currency) {{$setting_currency->exchange_rate_service=="fixer" ? 'selected':''}} @endif>Fixer</option>
+                                <option value="forge" @if($setting_currency) {{$setting_currency->exchange_rate_service=="forge" ? 'selected':''}} @endif>Forge</option>
+                                <option value="currency_data_feed" @if($setting_currency) {{$setting_currency->exchange_rate_service=="currency_data_feed" ? 'selected':''}} @endif>Currency Data Feed</option>
                             </select>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Auto Refresh</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="auto_refresh" {{$setting_currency->auto_refresh=="1" ? 'checked':''}} class="form-check-input">
+                                <input type="checkbox" value="1" name="auto_refresh" @if($setting_currency) {{$setting_currency->auto_refresh=="1" ? 'checked':''}} @endif class="form-check-input">
                                 <label class="p-0 form-check-label" for="exampleCheck1">Enable auto-refreshing currency rates</label>
                             </div>
                         </div>

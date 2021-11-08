@@ -1,4 +1,4 @@
-@if ($setting_newslatter->newsletter==1)
+@if ($setting_newslatter && $setting_newslatter->newsletter==1)
 <div class="newsletter-section">
     <div class="container">
         <div class="row">

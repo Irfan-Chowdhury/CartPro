@@ -58,9 +58,7 @@
               <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{Auth::user()->username}}</span> <i class="fa fa-angle-down"></i>
               </a>
               <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                  {{-- <li>
-                    <a href=""><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
-                  </li> --}}
+
 
                   {{-- <li>
                     <a href=""><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
@@ -71,6 +69,9 @@
                         {{trans('file.logout')}}
                     </a>
                   </li>
+                  <li>
+                    <a href="{{route('empty_database')}}"><i class="dripicons-stack"></i> {{trans('file.Empty Database')}}</a>
+                  </li>
               </ul>
             </li>
           </ul>
@@ -78,3 +79,16 @@
       </div>
     </nav>
   </header>
+
+  {{-- @push('scripts')
+    <script type="text/javascript">
+        $('#empty_database').on('click', function () {
+            if (confirm('{{__('Delete Selection',['key'=>__('Empty Database')])}}')) {
+                let url = '{{route('empty_database')}}';
+                document.location.href = url;
+            } else {
+
+            }
+        });
+    </script>
+  @endpush --}}

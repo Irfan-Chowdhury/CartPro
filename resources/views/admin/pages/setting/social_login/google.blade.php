@@ -11,7 +11,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" value="1" name="status" {{$setting_google->status=="1" ? 'checked':''}} class="form-check-input">
+                                <input type="checkbox" value="1" name="status" @if($setting_google) {{$setting_google->status=="1" ? 'checked':''}} @endif class="form-check-input">
                                 <label class="p-0 form-check-label" for="exampleCheck1">Enable Google Login</label>
                             </div>
                         </div>
