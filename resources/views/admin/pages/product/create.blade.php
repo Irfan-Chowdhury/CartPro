@@ -44,7 +44,7 @@
                                     <a class="list-group-item list-group-item-action" id="product-images" data-toggle="list" href="#images" role="tab" aria-controls="images">{{__('Images')}}</a>
                                     <a class="list-group-item list-group-item-action" id="product-seo" data-toggle="list" href="#seo" role="tab" aria-controls="seo">{{__('SEO')}}</a>
                                     <a class="list-group-item list-group-item-action" id="product-attribute" data-toggle="list" href="#attribute" role="tab" aria-controls="attribute">{{__('Attributes')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="" data-toggle="list" href="" role="tab" aria-controls="seo">{{__('Options')}}</a>
+                                    {{-- <a class="list-group-item list-group-item-action" id="" data-toggle="list" href="" role="tab" aria-controls="seo">{{__('Options')}}</a> --}}
                                     <a class="list-group-item list-group-item-action" id="product-additional" data-toggle="list" href="#additional" role="tab" aria-controls="additional">{{__('Additional')}}</a>
                                 </div>
                             </div>

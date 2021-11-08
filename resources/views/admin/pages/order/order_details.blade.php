@@ -47,12 +47,12 @@
                         <td>{{$order->payment_method}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('file.Currency')}} (pending)</th>
-                        <td>{{__('file.INR')}}</td>
+                        <th>{{__('file.Currency')}}</th>
+                        <td>{{env('DEFAULT_CURRENCY_CODE')}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('file.Currency Rate')}} (pending)</th>
-                        <td>454.2</td>
+                        <th>{{__('file.Currency Rate')}}</th>
+                        <td>{{number_format((float)$currency_rate, env('FORMAT_NUMBER'), '.', '')}} </td>
                     </tr>
                 </table>
             </div>

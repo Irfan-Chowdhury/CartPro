@@ -30,17 +30,45 @@ use Illuminate\Support\Facades\Session;
 // use Cart;
 // use Gloudemans\Cart;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use SebastianBergmann\Environment\Console;
 use Newsletter;
 
+
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        // if(!Session::get('currentLocal')){
+        //     Session::put('currentLocal', 'en');
+        //     $locale = 'en';
+        // }else {
+        //     $locale = Session::get('currentLocal');
+        // }
+        // App::setLocale($locale);
+    }
+
     public function index()
     {
-        // return Cart::content();
+
+        if(!Session::get('currentLocal')){
+            Session::put('currentLocal', 'en');
+            $locale = 'en';
+        }else {
+            $locale = Session::get('currentLocal');
+        }
+        App::setLocale($locale);
+
+
+        // $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
+        // return $languages[$locale]->language_name;
+
+
+        Session::put('disable_newslatter',1);
 
         $locale = Session::get('currentLocal');
         $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
@@ -113,23 +141,6 @@ class HomeController extends Controller
             if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
                 $store_front_slider_format = $setting->plain_value;
             }
-
-            //Slider_Banner Start
-                // if ($setting->key=='storefront_slider_banner_'.($i+1).'_image') {
-                //     if ($setting->storeFrontImage) {
-                //         $slider_banners[$i]['image'] = $setting->storeFrontImage->image;
-                //     }
-                // }
-                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_title') {
-                //     $slider_banners[$i]['title'] = $setting->settingTranslations[0]->value;
-                // }
-                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_call_to_action_url') {
-                //     $slider_banners[$i]['action_url'] = $setting->plain_value;
-                // }
-                // elseif ($setting->key=='storefront_slider_banner_'.($i+1).'_open_in_new_window') {
-                //     $slider_banners[$i]['new_window'] = $setting->plain_value;
-                // }
-            //Slider_Banner End
 
 
             //----- Category-Product Start -----
@@ -241,7 +252,6 @@ class HomeController extends Controller
                         ->skip(0)
                         ->take(10)
                         ->get();
-        // return $order_details ;
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
                                                 'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
@@ -254,6 +264,8 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
+        // return Cart::content();
+
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')
@@ -355,6 +367,10 @@ class HomeController extends Controller
             //     return response()->json(['type'=>'error','errors' => $validator->errors()]);
             // }
 
+            if ($request->disable_newslatter==1) {
+                Session::put('disable_newslatter',1);
+            }
+
             $newslatter  = new DBNewslatter();
             $newslatter->email = $request->email;
             $newslatter->save();
@@ -364,7 +380,6 @@ class HomeController extends Controller
             if ( ! Newsletter::isSubscribed($request->email) )
             {
                 Newsletter::subscribePending($request->email);
-                // return redirect('newsletter')->with('success', 'Thanks For Subscribe');
                 return response()->json(['type'=>'success','message'=>'Successfully Subscribed']);
             }
             return response()->json(['type'=>'error']);
@@ -419,6 +434,16 @@ class HomeController extends Controller
         $product->avg_rating = $product_avg_rating;
         $product->update();
 
+        return redirect()->back();
+    }
+
+    public function defaultLanguageChange($id)
+    {
+        $language = Language::find($id);
+
+        Session::put('currentLocal', $language->local);
+
+        App::setLocale($language->local);
         return redirect()->back();
     }
 }

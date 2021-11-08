@@ -23,7 +23,7 @@
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($item->id); ?>" <?php echo e($setting[145]->plain_value == $item->id ? 'selected="selected"' : ''); ?>><?php echo e($item->catTranslation->category_name); ?></option>
+                    <option value="<?php echo e($item->id); ?>" <?php echo e($setting[145]->plain_value == $item->id ? 'selected="selected"' : ''); ?>><?php echo e($item->catTranslation->category_name ?? null); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
@@ -34,7 +34,7 @@
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='<?php echo e(__('Select Category')); ?>'>
                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($item->id); ?>" <?php echo e($setting[145]->plain_value == $item->id ? 'selected="selected"' : ''); ?>><?php echo e($item->catTranslation->category_name); ?></option>
+                    <option value="<?php echo e($item->id); ?>" <?php echo e($setting[145]->plain_value == $item->id ? 'selected="selected"' : ''); ?>><?php echo e($item->catTranslation->category_name ?? null); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>

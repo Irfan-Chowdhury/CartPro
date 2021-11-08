@@ -12,6 +12,7 @@ use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Exception;
+use Illuminate\Support\Facades\App;
 
 class PageController extends Controller
 {
@@ -22,6 +23,7 @@ class PageController extends Controller
         if (auth()->user()->can('page-view'))
         {
             $locale = Session::get('currentLocal');
+            App::setLocale(Session::get('currentLocal'));
 
             $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
                 $query->where('locale',$locale) //locale name correction
@@ -79,8 +81,8 @@ class PageController extends Controller
                     })
                     ->addColumn('copy_url', function ($row)
                     {
-                        $domain_name = $_SERVER['SERVER_NAME'];
-                        return 'https://'.$domain_name.'/page/'.$row->slug;
+                        // $domain_name = $_SERVER['SERVER_NAME'];
+                        return $row->slug;
                     })
                     ->rawColumns(['action'])
                     ->make(true);

@@ -1,6 +1,7 @@
 <?php
 
 return array (
+  'About Us' => 'About Us',
   'Account' => 'Account',
   'Account Information' => 'Account Information',
   'Account List' => 'Account List',
@@ -175,6 +176,7 @@ return array (
   'Default Biller' => 'Default Biller',
   'Default CheckIn' => 'Default CheckIn',
   'Default CheckOut' => 'Default CheckOut',
+  'Default Currency Code' => 'Default Currency Code',
   'Default Customer' => 'Default Customer',
   'Default Warehouse' => 'Default Warehouse',
   'Delivered' => 'Delivered',
@@ -199,6 +201,7 @@ return array (
   'Due Report' => 'Due Report',
   'Edit Attribute Set' => 'Edit Attribute Set',
   'Edit Color' => 'Edit Color',
+  'Edit Profile' => 'Edit Profile',
   'Edit Review' => 'Edit Review',
   'Email' => 'Email',
   'Employee' => 'Employee',
@@ -214,6 +217,7 @@ return array (
   'Expense Category' => 'Expense Category',
   'Expense List' => 'Expense List',
   'Expired Date' => 'Expired Date',
+  'FAQ' => 'FAQ',
   'Featured' => 'Featured',
   'Featured product will be displayed in POS' => 'Featured product will be displayed in POS',
   'File Link' => 'File Link',
@@ -224,6 +228,7 @@ return array (
   'Finalize' => 'Finalize',
   'Finalize Sale' => 'Finalize Sale',
   'Finalize Stock Count' => 'Finalize Stock Count',
+  'First Name' => 'First Name',
   'Flash Sale' => 'Flash Sale',
   'Flash Sale & Vertical Products' => 'Flash Sale & Vertical Products',
   'Flash Sales' => 'Flash Sales',
@@ -249,6 +254,7 @@ return array (
   'Help' => 'Help',
   'Holiday' => 'Holiday',
   'Holiday Approve' => 'Holiday Approve',
+  'Home' => 'Home',
   'Image' => 'Image',
   'Image name must be same as product name' => 'Image name must be same as product name',
   'Import Biller' => 'Import Biller',
@@ -282,6 +288,7 @@ return array (
   'Items Ordered' => 'Items Ordered',
   'Language' => 'Language',
   'Last 7 Days' => 'Last 7 Days',
+  'Last Name' => 'Last Name',
   'Late' => 'Late',
   'Line Total' => 'Line Total',
   'List' => 'List',
@@ -357,6 +364,7 @@ return array (
   'Parent Category' => 'Parent Category',
   'Partial' => 'Partial',
   'Password' => 'Password',
+  'Password Confirmation' => 'Password Confirmation',
   'Pay Now' => 'Pay Now',
   'Payable Amount' => 'Payable Amount',
   'Paying Amount' => 'Paying Amount',
@@ -375,6 +383,7 @@ return array (
   'People' => 'People',
   'Percentage' => 'Percentage',
   'Permissions' => 'Permissions',
+  'Phone' => 'Phone',
   'Phone Number' => 'Phone Number',
   'Please login first and buy this product' => 'Please login first and buy this product',
   'Postal Code' => 'Postal Code',
@@ -460,11 +469,11 @@ return array (
   'Section Status' => 'Section Status',
   'Select Attribute Set' => 'Select Attribute Set',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' => 
+  'Select SMS gateway' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -477,6 +486,7 @@ return array (
   'Shipping Address' => 'Shipping Address',
   'Shipping Cost' => 'Shipping Cost',
   'Shipping Method' => 'Shipping Method',
+  'Shop By Category' => 'Shop By Category',
   'Show Order' => 'Show Order',
   'Showing' => 'Showing',
   'Signature' => 'Signature',
@@ -512,10 +522,13 @@ return array (
   'Suzan' => 'Suzan',
   'Tags' => 'Tags',
   'Tax' => 'Tax',
+  'Filter Report'=>'Filter Report',
+  'This Year'=>'This Year',
   'Tax Method' => 'Tax Method',
   'Tax Name' => 'Tax Name',
   'Tax Number' => 'Tax Number',
   'Tax Rate' => 'Tax Rate',
+  'Term of Service' => 'Term of Service',
   'Thank you for shopping with us. Please come again' => 'Thank you for shopping with us. Please come again',
   'The correct column order is' => 'The correct column order is',
   'The field labels marked with * are required input fields' => 'The field labels marked with * are required input fields',
@@ -530,41 +543,45 @@ return array (
   'To Warehouse' => 'To Warehouse',
   'To display Image it must be stored in' => 'To display Image it must be stored in',
   'Today' => 'Today',
+  'Today Order' => 'Today Order',
+  'Top Categories' => 'Top Categories',
   'Total' => 'Total',
   'Total Item' => 'Total Item',
   'Total Quantity' => 'Total Quantity',
   'Touchscreen keybord' => 'Touchscreen keybord',
+  'Transaction Id' => 'Transaction Id',
   'Transactions' => 'Transactions',
   'Transfer' => 'Transfer',
   'Transfer Details' => 'Transfer Details',
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
+  'Trending' => 'Trending',
   'Type' => 'Type',
-  'Type Product Name or Code' => 
+  'Type Product Name or Code' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' => 
+  'Type date or purchase reference' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' => 
+  'Type date or sale reference' =>
   array (
-    '' => 
+    '' =>
     array (
-      '' => 
+      '' =>
       array (
         '' => 'Type date or sale reference...',
       ),
@@ -674,8 +691,11 @@ return array (
   'settings' => 'Settings',
   'status' => 'Status',
   'submit' => 'Submit',
+  'test' => 'test',
   'top' => 'Top',
   'update' => 'Update',
   'welcome' => 'Welcome',
   'yearly report' => 'Yearly Report',
+  'Color'=>'Color',
+  'Slider'=>'Slider',
 );

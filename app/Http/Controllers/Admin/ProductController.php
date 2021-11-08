@@ -48,16 +48,6 @@ class ProductController extends Controller
             $local = Session::get('currentLocal');
             App::setLocale($local);
 
-
-            // $products = Product::with(['baseImage','productTranslation'=> function ($query) use ($local){
-            //     $query->where('local',$local)
-            //     ->orWhere('local','en')
-            //     ->orderBy('id','DESC');
-            // }])
-            // ->orderBy('is_active','DESC')
-            // ->orderBy('id','DESC')
-            // ->get();
-
             $products = Product::with('baseImage','productTranslation','productTranslationEnglish')
                         ->orderBy('is_active','DESC')
                         ->orderBy('id','DESC')
@@ -203,7 +193,9 @@ class ProductController extends Controller
         if (auth()->user()->can('product-store'))
         {
             $product                = new Product();
-            $product->brand_id      = $request->brand_id;
+            if ($request->brand_id) {
+                $product->brand_id      = $request->brand_id;
+            }
             $product->tax_id        = $request->tax_id;
             $product->slug          = $this->slug($request->product_name);
             // $product->price         = number_format((float)$request->price, env('FORMAT_NUMBER'), '.', '');
@@ -382,6 +374,7 @@ class ProductController extends Controller
             'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             'category_id'  => 'required',
             'sku'=> 'required|unique:products,sku,'.$id,
+            'brand_id' => 'nullable',
         ]);
 
         if ($validator->fails()){
@@ -396,11 +389,11 @@ class ProductController extends Controller
             $local = Session::get('currentLocal');
 
             $product                = Product::find($id);
-            $product->brand_id      = $request->brand_id;
+            if ($request->brand_id) {
+                $product->brand_id      = $request->brand_id;
+            }
             $product->tax_id        = $request->tax_id;
-            $product->brand_id      = $request->brand_id;
-            $product->slug          = $this->slug($request->product_name);
-
+            // $product->slug          = $this->slug($request->product_name);
             $product->price         = $this->formatNumber($request->price); //1st option
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', ''); //2nd option
 
@@ -544,7 +537,7 @@ class ProductController extends Controller
         $img   = Str::random(10). '.' .'webp';
         $location = public_path($directory.$img);
         if ($type=='product') {
-            Image::make($image)->encode('webp', 60)->resize(720,660)->save($location);
+            Image::make($image)->encode('webp', 60)->fit(720,660)->save($location);
             // Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
         }
         else {

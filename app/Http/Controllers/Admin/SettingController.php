@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Model\Currency;
+use App\Models\Currency;
 use App\Models\Country;
 use App\Models\CurrencyRate;
 use App\Models\SettingBankTransfer;
@@ -71,9 +71,7 @@ class SettingController extends Controller
         $currencies = Currency::all();
 
         $setting_currency = SettingCurrency::latest()->first();
-        // if (empty($setting_currency)) {
-        //     $setting_currency = [];
-        // }
+
         if (!empty($setting_currency)) {
             $selected_currencies = array();
             $selected_currencies= explode(",",$setting_currency->supported_currency);
@@ -214,8 +212,9 @@ class SettingController extends Controller
     public function currencyStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
-            $validator = Validator::make($request->only('default_currency','currency_format'),[
-                'default_currency' => 'required',
+            $validator = Validator::make($request->only('default_currency','currency_format','default_currency_code'),[
+                'default_currency' => 'required', //Symbol
+                'default_currency_code' => 'required',
                 'currency_format'=> 'required',
             ]);
 
@@ -238,6 +237,7 @@ class SettingController extends Controller
 
             $data = [];
             $data['supported_currency'] = implode(",", $request->supported_currencies);
+            $data['default_currency_code']    = $request->default_currency_code;
             $data['default_currency']    = $request->default_currency;
             $data['currency_format'] = $request->currency_format;
             $data['exchange_rate_service'] = $request->exchange_rate_service;
@@ -265,18 +265,22 @@ class SettingController extends Controller
             }
 
             //Default Currency
-            $path = '.env';
-            if ($request->default_currency) {
-                $searchArray = array('DEFAULT_CURRENCY_SYMBOL=' . env('DEFAULT_CURRENCY_SYMBOL'));
-                $replaceArray= array('DEFAULT_CURRENCY_SYMBOL=' . $request->default_currency);
-                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            }
-            //Currency Format
-            if ($request->currency_format) {
-                $searchArray = array('CURRENCY_FORMAT=' . env('CURRENCY_FORMAT'));
-                $replaceArray= array('CURRENCY_FORMAT=' . $request->currency_format);
-                file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            }
+            $this->dataWriteInENVFile('DEFAULT_CURRENCY_CODE',$request->default_currency_code);
+            $this->dataWriteInENVFile('DEFAULT_CURRENCY_SYMBOL',$request->default_currency);
+            $this->dataWriteInENVFile('CURRENCY_FORMAT',$request->currency_format);
+
+            // $path = '.env';
+            // if ($request->default_currency) {
+            //     $searchArray = array('DEFAULT_CURRENCY_SYMBOL=' . env('DEFAULT_CURRENCY_SYMBOL'));
+            //     $replaceArray= array('DEFAULT_CURRENCY_SYMBOL=' . $request->default_currency);
+            //     file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            // }
+            // //Currency Format
+            // if ($request->currency_format) {
+            //     $searchArray = array('CURRENCY_FORMAT=' . env('CURRENCY_FORMAT'));
+            //     $replaceArray= array('CURRENCY_FORMAT=' . $request->currency_format);
+            //     file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+            // }
 
 
             return response()->json(['success' => __('Data added Successfully')]);

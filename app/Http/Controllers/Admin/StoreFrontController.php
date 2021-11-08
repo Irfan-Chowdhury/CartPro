@@ -225,9 +225,17 @@ class StoreFrontController extends Controller
                 );
         }
         if ($request->title_header_logo=="header_logo" && (!empty($request->image_header_logo))) {
+
+            $storefront_image = StorefrontImage::where('title',$request->title_header_logo)->where('type','logo')->first();
+
+            if ($storefront_image) {
+                $this->previousImageDelete($storefront_image->image);
+            }
+
+
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_header_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_header_logo,$directory,$type='store_front')]
+                    [ 'image' => $this->imageStore($request->image_header_logo,$directory,$type='header_logo')]
                 );
         }
         if ($request->title_mail_logo=="mail_logo" && (!empty($request->image_mail_logo))) {
@@ -748,10 +756,6 @@ class StoreFrontController extends Controller
             array(
                 'color_name' => 'Pink',
                 'color_code' => '#FFC0CB',
-            ),
-            array(
-                'color_name' => 'Custom Color',
-                'color_code' => 'custom_color',
             ),
         );
 

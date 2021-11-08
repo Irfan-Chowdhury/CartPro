@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -17,6 +19,7 @@ class PermissionController extends Controller
 
     public function rolePermission($id)
     {
+        App::setLocale(Session::get('currentLocal'));
 
         // $role = Role::create(['name' => 'editor']);
         // $permission = Permission::create(['name' => 'edit articles']);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CurrencyRate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class CurrencyRateController extends Controller
 {
@@ -12,6 +14,8 @@ class CurrencyRateController extends Controller
     {
         if (request()->ajax())
         {
+            App::setLocale(Session::get('currentLocal'));
+
             $currency_rates = CurrencyRate::all();
 
             return datatables()->of($currency_rates)

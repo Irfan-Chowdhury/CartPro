@@ -51,11 +51,15 @@ Route::get('/payment', function () {
 
 
 Route::get('/login', 'Auth\LoginController@showCustomerLoginForm')->name('customer_login_form');
-Route::post('/customer/register', 'Frontend\RegisterController@customerRegister')->name('customer.register');
-Route::post('/customer/login', 'Auth\LoginController@customerLogin')->name('customer.login');
+Route::post('/customer/register', 'Frontend\RegisterController@customerRegister')->name('customer.register')->middleware('XssSanitization');
+Route::post('/customer/login', 'Auth\LoginController@customerLogin')->name('customer.login')->middleware('XssSanitization');
 
 
+// Route::group(['namespace'=>'Frontend','middleware'=>'XssSanitization'], function (){
 Route::group(['namespace'=>'Frontend'], function (){
+
+
+        Route::get('/default_lanuage_change/{id}','HomeController@defaultLanguageChange')->name('cartpro.default_language_change');
 
         Route::get('/','HomeController@index')->name('cartpro.home');
         Route::get('product/{product_slug}/{category_id}','HomeController@product_details')->name('cartpro.product_details');
@@ -64,6 +68,9 @@ Route::group(['namespace'=>'Frontend'], function (){
 
         Route::get('/category/{slug}','CategoryProductController@categoryWiseProducts')->name('cartpro.category_wise_products');
         Route::get('limit_category_products_show','CategoryProductController@limitCategoryProductShow')->name('cartpro.limit_category_product_show');
+        // Route::get('/category/{slug}/{condition}','CategoryProductController@categoryWiseConditionProducts')->name('cartpro.category_wise_products.condition');
+        Route::get('/category_sortby_condition','CategoryProductController@categoryWiseConditionProducts')->name('cartpro.category_wise_products_condition');
+        Route::get('/category_price_range/','CategoryProductController@categoryWisePriceRangeProducts')->name('cartpro.category.price_range');
 
         //Cart
         Route::group(['prefix' => '/cart'], function () {
@@ -82,9 +89,10 @@ Route::group(['namespace'=>'Frontend'], function (){
 
         //payment -Paypal
         Route::get('order-store','OrderController@orderStore')->name('order.store');
-
         //payment -Stripe
         Route::post('/stripe/payment','OrderController@handlePost')->name('stripe.payment');
+        //Cash On Delivery
+        Route::post('/order/cash_on_delivery','OrderController@cashOnDeliveryStore')->name('order.cash_on_delivery');
 
         //Wishlist
         Route::get('/wishlist','WishlistController@index')->name('wishlist.index');
@@ -95,11 +103,11 @@ Route::group(['namespace'=>'Frontend'], function (){
             Route::get('/{page_slug}','PageController@pageShow')->name('page.Show');
         });
 
-        Route::prefix('user_account')->group(function () {
-            Route::get('/','UserAccountController@userAccount')->name('user_account');
+        Route::group(['prefix' => '/user_account','middleware'=>'customer_check'], function () {
+            Route::get('/','UserAccountController@userAccount')->name('user_account')->middleware('customer_check');
+            Route::post('/update','UserAccountController@userProfileUpdate')->name('user_profile_update');
             Route::post('/logout','UserAccountController@userLogout')->name('user_logout');
         });
-
         Route::post('/review/store','HomeController@reviewStore')->name('review.store');
 });
 
@@ -125,27 +133,23 @@ Route::get('/admin', 'Auth\LoginController@showAdminLoginForm')->name('admin');
 Route::get('/admin/home','AdminController@index');
 Route::get('/admin/register','Admin\RegisterController@showRegisterForm')->name('admin.register');
 Route::post('/admin/createuser','Admin\RegisterController@create')->name('create.user');
-Route::post('/admin/login','Admin\LoginController@login')->name('admin.login');
-
-Route::get('/admin/dashboard','AdminController@dashboard')->name('admin.dashboard');
+Route::post('/admin/login','Admin\LoginController@login')->name('admin.login')->middleware('XssSanitization');
+Route::get('/admin/dashboard','AdminController@dashboard')->name('admin.dashboard')->middleware('admin_check');
+Route::get('admin/dashboard/chart','AdminController@chart')->name('admin.dashboard.chart');
 Route::get('/admin/logout','AdminController@Logout')->name('admin.logout');
-
 Route::get('/admin/google_analytics','AdminController@googleAnalytics')->name('admin.googleAnalytics');
 
 
 
-// Route::group(['prefix' => '{locale}'], function () {
-Route::group(['prefix' => 'admin'], function () {
+// Route::group(['prefix' => 'admin','middleware'=>['admin_check','XssSanitization']], function () {
+Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
     Route::group(['namespace'=>'Admin'], function () {
         //--Category--
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/','CategoryController@index')->name('admin.category');
             Route::post('/store','CategoryController@store')->name('admin.category.store');
-            // Route::get('/{id}/edit','CategoryController@categoryEdit')->name('admin.category_edit'); //Remove Later
-            // Route::get('/edit/{id}','CategoryController@edit')->name('admin.category.edit');
             Route::get('/edit','CategoryController@edit')->name('admin.category.edit');
             Route::post('updateCategory','CategoryController@categoryUpdate')->name('category_list.update'); //Remove Later
-            // Route::post('update/{id}','CategoryController@update')->name('admin.category.update'); //Remove Later
             Route::post('update','CategoryController@update')->name('admin.category.update');
             Route::get('/{id}/delete','CategoryController@destroy')->name('category_list.destroy'); //Remove Later
             Route::get('/delete/{id}','CategoryController@delete')->name('admin.category.delete');
@@ -170,9 +174,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'attribute-sets'], function () {
             Route::get('/','AttributeSetController@index')->name('admin.attribute_set.index');
             Route::post('/store','AttributeSetController@store')->name('admin.attribute_set.store');
-            // Route::get('/edit/{id}','AttributeSetController@edit')->name('admin.attribute_set.edit');
             Route::get('/edit','AttributeSetController@edit')->name('admin.attribute_set.edit');
-            // Route::post('/update/{id}','AttributeSetController@update')->name('admin.attribute_set.update');
             Route::post('/update','AttributeSetController@update')->name('admin.attribute_set.update');
             Route::get('/active','AttributeSetController@active')->name('admin.attribute_set.active');
             Route::get('/inactive','AttributeSetController@inactive')->name('admin.attribute_set.inactive');
@@ -230,6 +232,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/status','OrderController@orderStatus')->name('admin.order.status');
         });
 
+       Route::get('/transaction','OrderController@transactionIndex')->name('admin.transaction.index');
+
         //Flash Sale
         Route::group(['prefix' => 'flash-sales'], function () {
             Route::get('/','FlashSaleController@index')->name('admin.flash_sale.index');
@@ -237,7 +241,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/store','FlashSaleController@store')->name('admin.flash_sale.store');
             Route::get('/edit/{id}','FlashSaleController@edit')->name('admin.flash_sale.edit');
             Route::post('/update/{id}','FlashSaleController@update')->name('admin.flash_sale.update');
-            // Route::post('/update','FlashSaleController@update')->name('admin.flash_sale.update');
             Route::get('/active','FlashSaleController@active')->name('admin.flash_sale.active');
             Route::get('/inactive','FlashSaleController@inactive')->name('admin.flash_sale.inactive');
             Route::get('/bulk_action','FlashSaleController@bulkAction')->name('admin.flash_sale.bulk_action');
@@ -366,11 +369,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/product_tab_two/store','StoreFrontController@productTabsTwoStore')->name('admin.storefront.product_tab_two.store');
         });
 
-        // Route::get('/menus/{menuId}/items','MenuItemController@index')->name('admin.menu.menu_item');
-        // Route::get('/menus/items/data-fetch-by-type','MenuItemController@dataFetchByType')->name('admin.menu.menu_item.data-fetch-by-type');
-        // Route::post('/menus/items/store','MenuItemController@store')->name('admin.menu.menu_item.store');
-
-
         //--SLider--
         Route::group(['prefix' => 'slider'], function () {
             Route::get('/','SliderController@index')->name('admin.slider');
@@ -392,6 +390,24 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/delete','ColorController@delete')->name('admin.color.delete');
         });
 
+        //---- temporaray ---
+         //Report
+         Route::get('reports/coupon','ReportController@reportCoupon')->name('admin.reports.coupon');
+         Route::get('reports/customer_orders','ReportController@reportcustomerOrders')->name('admin.reports.customer_orders');
+         Route::get('reports/product_stock_report','ReportController@productStockReport')->name('admin.reports.product_stock_report');
+         Route::get('reports/product_view_report','ReportController@productViewReport')->name('admin.reports.product_view_report');
+         Route::get('reports/sales_report','ReportController@salesReportReport')->name('admin.reports.sales_report');
+         Route::get('reports/search_report','ReportController@searchReport')->name('admin.reports.search_report');
+         Route::get('reports/shipping_report','ReportController@shippingReport')->name('admin.reports.shipping_report');
+         Route::get('reports/tax_report','ReportController@taxReport')->name('admin.reports.tax_report');
+         Route::get('reports/product_purchase_report','ReportController@productPurchaseReport')->name('admin.reports.product_purchase_report');
+
+
+         Route::get('report/today','ReportController@todayReport')->name('report.today');
+         Route::get('report/this_week','ReportController@thisWeekReport')->name('report.this_week');
+         Route::get('report/this_month','ReportController@thisYearReport')->name('report.this_year');
+         Route::get('report/filter_report','ReportController@filterReport')->name('report.filter_report');
+        //---- temporaray ---
 
 
         Route::group(['prefix' => 'setting'], function () {
@@ -429,25 +445,3 @@ Route::group(['prefix' => 'admin'], function () {
 
 });
 // });
-
-
-
-
-
-
-
-// Route::group(['namespace'=>'JoeDixon'], function () {
-//     Route::get('/languages/{language}/translations','LanguageTranslationController@index')->name('languages.translations.index');
-//     Route::post('languages/{language}','LanguageTranslationController@update')->name('languages.translations.update');
-
-//     // $router->post(config('translation.ui_ur').'/{language}', 'LanguageTranslationController@update')
-//     // ->name('languages.translations.update');
-
-//     // Route::get('/languages/{language}/translations', function () {
-//     //     return "OK";
-//     // });
-// });
-
-Route::get('/admin/parent/load','CategoryController@parentLoad')->name('parent.load');
-
-

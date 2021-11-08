@@ -1,0 +1,131 @@
+@extends('admin.main')
+@section('admin_content')
+
+
+<section>
+
+    <div class="container-fluid mb-3 ml-3">
+        <h2 class="font-weight-bold mt-3">Reports</h2>
+        <br>
+    </div>
+
+    {{-- <div class="d-flex justify-content-between"> --}}
+
+        <h4 class="mb-3 ml-4"> Shipping Report </h4>
+        <div class="table-responsive ml-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <table id="datatable1" class="table">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p">Shipping Method</th>
+                                <th class="wd-15p">Orders</th>
+                                <th class="wd-15p">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Flat Rate</td>
+                                <td>54</td>
+                                <td>$1,350.00</td>
+                            </tr>
+                            <tr>
+                                <td>Free Shipping</td>
+                                <td>818</td>
+                                <td>$00.00</td>
+                            </tr>
+                            <tr>
+                                <td>Local Pickup</td>
+                                <td>50</td>
+                                <td>$1,000.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Filter</h4>
+                            <form action="{{route('admin.reports.shipping_report')}}" method="get">
+
+                                <div class="form-group mt-4">
+                                    <h5 class="mt-2 card-subtitle mb-2 text-muted">Report Type</h5>
+                                    <select name="report_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" onchange="location = this.value;">
+                                        <option value="{{route('admin.reports.shipping_report')}}">Shpping Report</option>
+                                        <option value="{{route('admin.reports.coupon')}}">Coupon Report</option>
+                                        <option value="{{route('admin.reports.customer_orders')}}">Customer Order Report</option>
+                                        <option value="{{route('admin.reports.product_stock_report')}}">Product Stock report</option>
+                                        <option value="{{route('admin.reports.product_view_report')}}">Product View Report</option>
+                                        <option value="{{route('admin.reports.sales_report')}}">Sales Report</option>
+                                        <option value="{{route('admin.reports.search_report')}}">Search Report</option>
+                                        <option value="{{route('admin.reports.tax_report')}}">Tax Report</option>
+                                        <option value="{{route('admin.reports.product_purchase_report')}}">Product Purchase Report</option>
+
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <label for="exampleInputEmail1">Start Date</label>
+                                    <input type="date" class="form-control datepicker" id="exampleInputEmail1" aria-describedby="emailHelp"  name="start_date">
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <label for="exampleInputEmail1">End Date</label>
+                                    <input type="date" class="form-control datepicker" id="exampleInputEmail1" aria-describedby="emailHelp"  name="end_date">
+                                </div>
+
+
+                                <div class="form-group mt-4">
+                                    <h5 class="mt-4 card-subtitle mb-2 text-muted">Shipping Method</h5>
+                                    <select name="report_type" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option value="free_shipping">Free Shipping</option>
+                                        <option value="local_pickup">Local Pickup</option>
+                                        <option value="flat_rate">Flat Rate</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="mt-4 btn btn-success">Filter</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{-- </div> --}}
+
+    {{-- <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+        </div>
+    </div> --}}
+
+
+</section>
+
+<script>
+    $(function(){
+      'use strict';
+
+      $('#datatable1').DataTable({
+        responsive: true,
+        language: {
+          searchPlaceholder: 'Search...',
+          sSearch: '',
+          lengthMenu: '_MENU_ items/page',
+        }
+      });
+
+      $('#datatable2').DataTable({
+        bLengthChange: false,
+        searching: false,
+        responsive: true
+      });
+
+      // Select2
+      $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+    });
+  </script>
+@endsection

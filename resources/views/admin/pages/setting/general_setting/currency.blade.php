@@ -28,6 +28,16 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>{{__('file.Default Currency Code')}}<span class="text-danger">*</span></b></label>
+                        <div class="col-sm-8">
+                            <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='{{__('Select Currency')}}'>
+                                @foreach ($currencies as $currency)
+                                    <option value="{{$currency->currency_code}}" {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}}>{{$currency->currency_code}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>Default Currency Symbol <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" name="default_currency" @isset($setting_currency->default_currency) value="{{$setting_currency->default_currency}}" @endisset>

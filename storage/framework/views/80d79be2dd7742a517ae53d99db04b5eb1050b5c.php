@@ -3,12 +3,16 @@
     <section class="faq-section">
         <div class="container">
             <div class="col-12">
-                
             </div>
             <div class="row">
-                <?php echo $page->pageTranslation->body; ?>
+                <?php if($page->pageTranslation): ?>
+                    <?php echo $page->pageTranslation->body; ?>
 
-                
+                <?php else: ?>
+                    
+                <?php endif; ?>
+
+
             </div>
         </div>
     </section>

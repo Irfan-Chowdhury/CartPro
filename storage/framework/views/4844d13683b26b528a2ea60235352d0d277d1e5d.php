@@ -23,11 +23,7 @@
 
                     <?php echo $__env->make('translation::forms.text', ['field' => 'value', 'label' => __('translation::translation.value_label'), 'placeholder' => __('translation::translation.value_placeholder')], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-                    <div class="input-group">
-
-                        <button v-on:click="toggleAdvancedOptions" class="text-blue"><?php echo e(__('translation::translation.advanced_options')); ?></button>
-
-                    </div>
+                    
 
                     <div v-show="showAdvancedOptions">
 

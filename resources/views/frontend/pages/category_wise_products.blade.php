@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col">
                     <ul>
-                        <li><a href="home.html">Home</a></li>
+                        <li><a href="#">Home</a></li>
                         <li class="active">Shop</li>
                     </ul>
                 </div>
@@ -29,41 +29,23 @@
                             <!-- category-sub-menu start -->
                             <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
                                 <ul>
-                                    <li class="has-sub"><a href="# ">Shirts</a> <span class="count">(7)</span>
-                                        <ul>
-                                            <li><a href="#">Calvin Klein <span class="count">(7)</span></a></li>
-                                            <li><a href="#">H&M <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Nautica <span class="count">(7)</span></a></li>
-                                            <li><a href="#"> Bosch <span class="count">(7)</span></a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="has-sub"><a href="#">Jeans</a> <span class="count">(5)</span>
-                                        <ul>
-                                            <li><a href="#">Levi's <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Diesel <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Calvin Klein <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Armani <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Nostrum <span class="count">(7)</span></a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="has-sub"><a href="#">Watch</a> <span class="count">(8)</span>
-                                        <ul>
-                                            <li><a href="#">Titan <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Omega SA <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Breguet <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Seiko <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Rolex <span class="count">(7)</span></a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="has-sub"><a href="#">Shoes</a> <span class="count">(3)</span>
-                                        <ul>
-                                            <li><a href="#">Reebok <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Jordan <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Vans <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Converse <span class="count">(7)</span></a></li>
-                                            <li><a href="#">Puma <span class="count">(7)</span></a></li>
-                                        </ul>
-                                    </li>
+                                    {{-- @if ($category->child) --}}
+                                        @forelse ($category->child as $item)
+                                            <li class="has-sub"><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">({{count($item->child)}})</span>
+                                                @if ($item->child)
+                                                    @forelse ($item->child as $value)
+                                                        <ul>
+                                                            <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">({{count($value->child)}})</span></a></li>
+                                                        </ul>
+                                                    @empty
+                                                    @endforelse
+                                                @endif
+
+                                            </li>
+                                        @empty
+                                        @endforelse
+                                    {{-- @endif --}}
+
                                 </ul>
                             </div>
                             <!-- category-sub-menu end -->
@@ -79,13 +61,20 @@
                                 <h2 data-bs-toggle="collapse" href="#collapsePrice" aria-expanded="true">Filter By Price</h2>
                             </div>
                             <div class="filter-area collapse show" id="collapsePrice">
-                                <div id="slider-range" class="price-range mar-bot-20"></div>
-                                <input type="text" id="amount">
+
+                                <form id="priceRange" action="{{route('cartpro.category.price_range')}}" method="get">
+                                    <div id="slider-range" class="price-range mar-bot-20"></div>
+                                    <div class="d-flex justify-content-center">
+                                        <div><input type="text" id="amount" name="amount"></div>
+                                        <div><input type="hidden" name="category_slug" value="{{$category->slug ?? null}}"></div>
+                                        <div><button type="submit" class="mt-2 btn btn-success">{{__('Filter')}}</button></div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 
                         <!-- Filter By Size -->
-                        <div class="sidebar-widget filters">
+                        {{-- <div class="sidebar-widget filters">
                             <div class="sidebar-title">
                                 <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">Filter By Size</h2>
                             </div>
@@ -183,14 +172,18 @@
                                 </div>
                             </div>
                             <!-- filter-sub-area end -->
-                        </div>
+                        </div> --}}
                         <!--sidebar-categories-box end-->
                     </div>
                 </div>
                 <div class="col-lg-9">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="page-title h5 uppercase mb-0">Electronics</h1>
-                        <span class="d-none d-md-block"><strong class="theme-color">{{$category->categoryProduct->count() ?? 0}}</strong> products found</span>
+                        <h1 class="page-title h5 uppercase mb-0">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</h1>
+                        @if (!isset($products))
+                            <span class="d-none d-md-block"><strong class="theme-color">{{$category->categoryProduct->count() ?? 0}}</strong> products found</span>
+                        @else
+                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products)}}</strong> products found</span>
+                        @endif
                     </div>
 
                     <div class="products-header">
@@ -202,7 +195,7 @@
                         <!-- shop-item-filter-list start -->
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Show: 12
+                            Show
                             </button>
                             <input type="hidden" id="categorySlug" value="{{$category->slug}}">
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -214,14 +207,17 @@
                         </div>
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sort by Latest
+                            Sort by
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#">Popularity</a></li>
-                                <li><a class="dropdown-item" href="#">Top rated</a></li>
-                                <li><a class="dropdown-item active" href="#">Latest</a></li>
-                                <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                                <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                                {{-- <li><a class="dropdown-item" href="#">Popularity</a></li>
+                                <li><a class="dropdown-item" href="#">Top rated</a></li> --}}
+                                {{-- <li><a class="dropdown-item" id="sortBy" data-condition="latest" href="{{route('cartpro.category_wise_products.condition',[$category->slug,'latest'])}}">Latest</a></li>
+                                <li><a class="dropdown-item" href="{{route('cartpro.category_wise_products.condition',[$category->slug,'low_to_high'])}}">Price: Low to High</a></li>
+                                <li><a class="dropdown-item" href="{{route('cartpro.category_wise_products.condition',[$category->slug,'high_to_low'])}}">Price: High to Low</a></li> --}}
+                                <li><a class="dropdown-item sortBy" data-condition="latest" data-category_slug="{{$category->slug}}">Latest</a></li>
+                                <li><a class="dropdown-item sortBy" data-condition="low_to_high" data-category_slug="{{$category->slug}}">Price: Low to High</a></li>
+                                <li><a class="dropdown-item sortBy" data-condition="high_to_low" data-category_slug="{{$category->slug}}">Price: High to Low</a></li>
                             </ul>
                         </div>
                         <!-- shop-item-filter-list end -->
@@ -231,6 +227,7 @@
                     <!--Shop product wrapper starts-->
                     <div class="shop-products-wrapper">
                         <div class="product-grid categoryWiseProductField">
+                            @if (!isset($products))
                                 @forelse ($category->categoryProduct as $item)
                                         <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                             @csrf
@@ -247,22 +244,22 @@
                                                         @else
                                                             <img src="{{asset(url('public/images/empty.jpg'))}}" alt="...">
                                                         @endif
-                                                        <div class="product-promo-text style1">
-                                                            <span>Sold</span>
-                                                        </div>
+
+                                                        @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                            <div class="product-promo-text style1">
+                                                                <span>Stock Out</span>
+                                                            </div>
+                                                        @endif
+
                                                         <div class="product-overlay">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                             </a>
-                                                            <a href="wishlist.html">
-                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                            </a>
-                                                            <a href="compare.html">
-                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                            <a>
+                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        {{-- <a class="product-category" href="#">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a> --}}
                                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $category->id)}}">
                                                             {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
                                                         </a>
@@ -355,6 +352,135 @@
                                         </form>
                                 @empty
                                 @endforelse
+                            @else
+                                @forelse ($products as $item)
+                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{$item->id}}">
+                                            <input type="hidden" name="product_slug" value="{{$item->slug}}">
+                                            <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
+                                            <input type="hidden" name="qty" value="1">
+
+                                            <div class="product-grid-item">
+                                                <div class="single-product-wrapper">
+                                                    <div class="single-product-item">
+                                                        @if ($item->image!=NULL)
+                                                            <img src="{{asset('public/'.$item->image)}}" alt="...">
+                                                        @else
+                                                            <img src="{{asset(url('public/images/empty.jpg'))}}" alt="...">
+                                                        @endif
+
+                                                        @if (($item->qty==0) || ($item->in_stock==0))
+                                                            <div class="product-promo-text style1">
+                                                                <span>Stock Out</span>
+                                                            </div>
+                                                        @endif
+
+                                                        <div class="product-overlay">
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
+                                                            </a>
+                                                            <a href="wishlist.html">
+                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                            </a>
+                                                            {{-- <a href="compare.html">
+                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                            </a> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <a class="product-name" href="{{url('product/'.$item->slug.'/'. $category->id)}}">
+                                                            {{$item->product_name ?? null}}
+                                                        </a>
+                                                        <div class="product-short-description">
+                                                            {!!$item->description ?? null !!}
+                                                        </div>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="rating-summary">
+                                                                    <div class="rating-result" title="60%">
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->avg_rating)){  @endphp
+                                                                                        <li><i class="ion-android-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="ion-android-star-outline"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-price">
+                                                                    @if ($item->special_price!=NULL && $item->special_price>0 && $item->special_price < $item->price)
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            <span class="promo-price">{{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '')}} {{env('DEFAULT_CURRENCY_SYMBOL')}}</span>
+                                                                            <span class="old-price">{{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}</span>
+                                                                        @else
+                                                                            <span class="promo-price">{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '')}} </span>
+                                                                            <span class="old-price"> {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        @endif
+                                                                    @else
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            <span class="price">{{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}</span>
+                                                                        @else
+                                                                            <span class="price">{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                        @endif
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-options">
+                                                        <div class="product-price mt-2">
+                                                            @if ($item->special_price!=NULL && $item->special_price>0 && $item->special_price<$item->price)
+                                                                <span class="promo-price">
+                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                        {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                    @else
+                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                    @endif
+                                                                </span>
+                                                                <span class="old-price">
+                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                        {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                    @else
+                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                    @endif
+                                                                </span>
+                                                            @else
+                                                                <span class="price">
+                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                        {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                    @else
+                                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}
+                                                                    @endif
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                            <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>{{__('Add to cart')}}</button>
+
+                                                            {{-- <a class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i> Add to cart</a> --}}
+                                                        <div class="d-flex justify-content-between">
+                                                            <a href="wishlist.html">
+                                                                <span class="ti-heart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span> Wishlist
+                                                            </a>
+                                                            <a href="compare.html">
+                                                                <span class="ti-control-shuffle" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to compare"></span>
+                                                                Comapre
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                @empty
+                                @endforelse
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -403,38 +529,56 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="item-details">
-                                    <a class="item-category" href="">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
                                     <h3 class="item-name">{{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}</h3>
                                     <div class="d-flex justify-content-between">
                                         <div class="item-brand">Brand: <a href=""></a></div>
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-ios-star"></i></li>
-                                                <li><i class="ion-android-star-half"></i></li>
+                                                @php
+                                                    for ($i=1; $i <=5 ; $i++){
+                                                        if ($i<= round($item->product->avg_rating)){  @endphp
+                                                            <li><i class="ion-android-star"></i></li>
+                                                @php
+                                                        }else { @endphp
+                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                @php        }
+                                                    }
+                                                @endphp
                                             </ul>
                                             <span>( 04 )</span>
                                         </div>
                                         <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
                                     </div>
                                     <hr>
-                                    @if ($item->product->special_price>0)
-                                        <div class="item-price">$ {{$item->product->special_price ?? null}}</div>
-                                        <hr>
-                                        <div class="item-price"><del>$ {{$item->product->price ?? null}}</del></div>
-                                        <hr>
+                                    @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                        <div class="item-price">
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                            @else
+                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                            @endif
+                                            <hr>
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                <small class="old-price"><del>{{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}} </del></small>
+                                            @else
+                                                <small class="old-price"><del>{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} </del></small>
+                                            @endif
+                                        </div>
                                     @else
-                                        <div class="item-price">$ {{$item->product->price ?? null}}</div>
-                                        <hr>
+                                        <div class="item-price">
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                            @else
+                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                            @endif
+                                        </div>
                                     @endif
 
                                     <div class="item-short-description">
                                         <p>{!!$item->productTranslation->description ?? $item->productTranslationDefaultEnglish->description ?? null !!}</p>
                                     </div>
                                     <hr>
-                                    <div class="item-variant">
+                                    {{-- <div class="item-variant">
                                         <span>Color:</span> <span class="semi-bold">Green</span>
                                         <ul class="product-variant mt-1">
                                             <li class="bg-green selected"></li>
@@ -450,7 +594,31 @@
                                             <li><span>L</span></li>
                                             <li><span>XL</span></li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
+                                    @php
+                                    $attribute = [];
+                                        if ($item->productAttributeValues!=[]) {
+                                            foreach ($item->productAttributeValues as $value) {
+                                            $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
+                                            }
+                                        }
+                                    @endphp
+                                    @forelse ($attribute as $key => $value)
+                                        <div class="item-variant">
+                                            <span>{{$value}}:</span>
+                                            <input type="hidden" name="attribute_name[]" class="attribute_name" value="{{$value}}">
+                                            <ul class="product-variant size-opt p-0 mt-1">
+                                                @forelse ($item->productAttributeValues as $value)
+                                                    @if ($value->attribute_id == $key)
+                                                        <li class="attribute_value_productTab1" data-attribute_name="{{$value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null }}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}"><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
+                                                        <input type="hidden" name="value_id[]" value="{{$value->attribute_value_id}}">
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </ul>
+                                        </div>
+                                    @empty
+                                    @endforelse
                                     <div class="item-options">
                                         <form class="mb-3">
                                             <div class="input-qty">
@@ -491,3 +659,121 @@
     @endforelse
     <!--Quick shop modal ends-->
 @endsection
+
+@push('scripts')
+
+    <script type="text/javascript">
+
+        //for Product_Tab_1
+        $('.attribute_value_productTab1').on("click",function(e){
+            e.preventDefault();
+            $(this).addClass('selected');
+
+            var selectedVal = $(this).data('value_id');
+            values.push(selectedVal);
+            $('.value_ids_productTab1').val(values);
+        });
+
+        //Limit Category Product Show
+        $(document).on('click','.limitCategoryProductShow',function(event) {
+            event.preventDefault();
+            var limit_data = $(this).data('id');
+            var category_slug = $('#categorySlug').val();
+            $.ajax({
+                url: "{{ route('cartpro.limit_category_product_show') }}",
+                type: "GET",
+                data: {limit_data:limit_data, category_slug:category_slug},
+                success: function (data) {
+                    console.log(data);
+                    $('.categoryWiseProductField').html(data);
+                }
+            })
+        });
+
+        $('.sortBy').on('click',function(e){
+            e.preventDefault();
+            var condition = $(this).data('condition');
+            var category_slug = $(this).data('category_slug');
+            $.ajax({
+                url: "{{route('cartpro.category_wise_products_condition')}}",
+                type: "GET",
+                data: {condition:condition, category_slug:category_slug},
+                success: function (data) {
+                    console.log(data);
+                    $('.categoryWiseProductField').empty();
+                    $('.categoryWiseProductField').html(data);
+                }
+            })
+        });
+
+        $("#priceRange" ).on('click',function(e){
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: "GET",
+                url: "{{route('cartpro.category.price_range')}}",
+                data: form.serialize(),
+                success: function(data){
+                    console.log(data);
+                    $('.categoryWiseProductField').empty();
+                    $('.categoryWiseProductField').html(data);
+                }
+            });
+        });
+
+        $(document).on('submit','.addToCart',function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{{route('product.add_to_cart')}}",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Successfully added on your cart'
+                        })
+
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(data.cart_total);
+                        $('.total_price').text(data.cart_total);
+
+                        var html = '';
+                        var cart_content = data.cart_content;
+                        $.each( cart_content, function( key, value ) {
+                            var image = 'public/'+value.options.image;
+                            html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                    '<img src="'+image+'">'+
+                                    '</a></div><div class="shp__pro__details"><h2>'+
+                                    '<a href="#">'+value.name+'</a></h2>'+
+                                    '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
+                                    '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
+                        });
+                        $('.cart_list').html(html);
+
+                        if (data.wishlist_id>0) {
+                            $('#wishlist_'+data.wishlist_id).remove();
+                        }
+                    }
+                }
+            });
+        });
+
+    </script>
+@endpush

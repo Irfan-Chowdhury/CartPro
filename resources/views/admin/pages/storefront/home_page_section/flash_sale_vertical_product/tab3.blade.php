@@ -23,7 +23,7 @@
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                 @foreach ($categories as $item)
-                    <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name}}</option>
+                    <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach
             </select>
         </div>
@@ -34,7 +34,7 @@
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                 @foreach ($categories as $item)
-                    <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name}}</option>
+                    <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach
             </select>
         </div>

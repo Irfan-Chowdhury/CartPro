@@ -22,10 +22,10 @@
                     </div>
                     <div class="header-top-right">
                         <ul>
-                            <li class="has-dropdown"><a href="#">Language</a>
+                            <li class="has-dropdown"><a href="#"><?php echo e($languages[$locale]->language_name); ?></a>
                                 <ul class="dropdown">
                                     <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <li><a href="<?php echo e($item->local); ?>"><?php echo e($item->language_name); ?></a></li>
+                                        <li><a href="<?php echo e(route('cartpro.default_language_change',$item->id)); ?>" <?php echo e($item->local==Session::get('currentLocal') ? 'selected': ''); ?>><?php echo e($item->language_name); ?></a></li>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </li>
@@ -36,8 +36,7 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Contact Us</a></li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -50,20 +49,19 @@
                         <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                         <div class="logo">
                             <a href="#">
-                                <img src="<?php echo e(asset($header_logo_path)); ?>" alt="Brand logo" style="height:60px; width:280px">
+                                <img src="<?php echo e(asset($header_logo_path)); ?>" alt="Brand logo">
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
                         <form class="header-search">
-                            <input class="" type="text" id="searchText" placeholder="Search products, categories, sku..." name="search">
+                            <input class="" type="text" id="searchText" placeholder="Search products" name="search">
                             <select name="category" class="selectpicker" onchange="location = this.value;">
                                 <option value="" selected="">All Categories</option>
                                 <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <option value="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <?php endif; ?>
-                                
                             </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                         </form>
@@ -84,8 +82,6 @@
                                     <a href="<?php echo e(route('customer_login_form')); ?>"><i class="las la-user-lock" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
                                 </li>
                             <?php endif; ?>
-
-
 
 
                             <?php if(auth()->guard()->check()): ?>
@@ -122,13 +118,10 @@
                 </div>
                 <!-- Search Field-->
                 <div class="row" id="search_field">
-                    
-                    <div class="col-12 d-xl-flex middle-column justify-content-center" >
+                    <div class="col-12 d-xl-flex justify-content-center" >
                         <table id="result">
                         </table>
                     </div>
-                    
-
                 </div>
             </div>
         </div>
@@ -138,7 +131,7 @@
                     <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
                         <div class="category-list">
                             <ul>
-                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Category</a>
+                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i><?php echo e(__('file.Shop By Category')); ?></a>
                                     <ul class="dropdown">
                                         <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <?php if($category->child->isNotEmpty()): ?>
@@ -150,7 +143,7 @@
                                                     </ul>
                                                 </li>
                                             <?php else: ?>
-                                                <li><a href="<?php echo e($category->slug); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
+                                                <li><a href="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><i class="<?php echo e($category->icon ?? null); ?>"></i><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a></li>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <?php endif; ?>
@@ -164,14 +157,16 @@
                             <div id="main-menu" class="main-menu">
                                 <nav id="mobile-nav">
                                     <ul>
-                                        <li class="active"><a href="<?php echo e(route('cartpro.home')); ?>">Home</a></li>
+                                        <li class="active"><a href="<?php echo e(route('cartpro.home')); ?>"><?php echo e(__('file.Home')); ?></a></li>
+                                        
+
                                         <?php if($menu!=NULL): ?>
                                             <?php $__empty_1 = true; $__currentLoopData = $menu->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu_item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <?php if($menu_item->child->isNotEmpty()): ?>
                                                     <li class="has-dropdown"><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a>
+
                                                         <ul class="dropdown">
                                                             <?php $__currentLoopData = $menu_item->child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                
                                                                 <!--Extra-->
                                                                 <?php if($child->child->isNotEmpty()): ?>
                                                                     <li class="has-dropdown"><a href="<?php echo e($child->link); ?>"><?php echo e($child->label); ?></a>
@@ -189,7 +184,15 @@
                                                         </ul>
                                                     </li>
                                                 <?php else: ?>
-                                                    <li><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a></li>
+                                                    <?php if($menu_item->locale==$locale): ?>
+                                                        <?php if(strpos($menu_item->link, 'https://') !== false): ?>
+                                                            <li><a href="<?php echo e($menu_item->link); ?>"><?php echo e($menu_item->label); ?></a></li>
+                                                        <?php else: ?>
+                                                            <li><a href="<?php echo e(route('page.Show',$menu_item->link)); ?>"><?php echo e($menu_item->label); ?></a></li>
+                                                        <?php endif; ?>
+                                                            
+                                                    <?php endif; ?>
+                                                    
                                                 <?php endif; ?>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                             <?php endif; ?>
@@ -275,7 +278,10 @@
                 </div>
                 <div class="shopping__btn">
                     <a class="button style3" href="<?php echo e(route('cart.view_details')); ?>">View Cart</a>
-                    <a class="button style1" href="">Checkout</a>
+                    <form action="<?php echo e(route('cart.checkout')); ?>" method="post">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="button style1">Checkout</button>
+                    </form>
                 </div>
             </div>
         </div>

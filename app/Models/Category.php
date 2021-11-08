@@ -16,7 +16,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'slug', 'parent', 'description','description_position','image','top','is_active','icon'
+        'slug', 'parent', 'description','description_position','image','top','is_active','icon','parent_id'
     ];
 
     public function categoryTranslation()

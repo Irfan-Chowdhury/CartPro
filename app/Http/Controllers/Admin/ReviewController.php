@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ReviewController extends Controller
 {
     public function index()
     {
+        App::setLocale(Session::get('currentLocal'));
+
         $reviews = Review::with('user','product','productTranslation','productTranslationEnglish')->get();
 
         if (request()->ajax())

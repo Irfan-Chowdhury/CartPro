@@ -82,7 +82,7 @@
     }
 
 
-    /*------------------------------------------      
+    /*------------------------------------------
             Open filter menu mobile
       --------------------------------------------*/
     $('.filter-collection-left > a').on('click', function() {
@@ -147,7 +147,7 @@
 
 
     $(document).ready(function(){
-  
+
         $(".banner-slider").slick({
             autoplay:true,
             autoplaySpeed:3000,
@@ -161,7 +161,7 @@
             // fade:true,
             draggable:true,
             prevArrow:'<button class="PrevArrow"></button>',
-            nextArrow:'<button class="NextArrow"></button>', 
+            nextArrow:'<button class="NextArrow"></button>',
         });
 
     })
@@ -169,8 +169,8 @@
 
     $(document).ready(function() {
 
-        /*------------------------------------    
-             left sidebar menu 
+        /*------------------------------------
+             left sidebar menu
         --------------------------------------*/
 
         $('.category__menu').on('click', function() {
@@ -185,8 +185,8 @@
             scrollInertia: 200
         });
 
-        /*------------------------------------    
-             Shopping Cart 
+        /*------------------------------------
+             Shopping Cart
         --------------------------------------*/
 
         $('.cart__menu').on('click', function() {
@@ -209,7 +209,7 @@
         });
 
 
-        //Close body Overlay 
+        //Close body Overlay
         $('.body__overlay').on('click', function() {
             $(this).removeClass('is-visible');
             $('.offsetmenu').removeClass('offsetmenu__on');
@@ -222,7 +222,7 @@
 
 
         /*------------------------------------------
-                        Carousel 
+                        Carousel
         --------------------------------------------*/
 
         //Product carousel 1
@@ -531,7 +531,7 @@
             asNavFor: '.slider-for-modal',
             dots: false,
             focusOnSelect: true,
-            arrows: false,        
+            arrows: false,
         });
     })
 
@@ -550,7 +550,7 @@
         asNavFor: '.slider-for',
         dots: false,
         focusOnSelect: true,
-        arrows: false,        
+        arrows: false,
         vertical: true,
     });
 

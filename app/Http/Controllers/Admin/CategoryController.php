@@ -146,7 +146,9 @@ class CategoryController extends Controller
 
             $category = new Category;
             $category->slug =  $this->slug($request->category_name);
-            $category->parent_id = $request->parent_id;
+            if ($request->parent_id) {
+                $category->parent_id   = $request->parent_id;
+            }
             $category->description = htmlspecialchars($request->description);
             $category->description_position = $request->description_position;
             $category->icon = $request->category_icon;
@@ -209,7 +211,10 @@ class CategoryController extends Controller
             $local = Session::get('currentLocal');
 
             $category = Category::find($request->category_id);
-            $category->parent_id   = $request->parent_id;
+            $category->slug =  $this->slug($request->category_name);
+            if ($request->parent_id) {
+                $category->parent_id   = $request->parent_id;
+            }
             $category->description = $request->description;
             $category->description_position = $request->description_position;
             $category->top    = $request->top;

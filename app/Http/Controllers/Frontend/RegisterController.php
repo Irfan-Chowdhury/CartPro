@@ -25,7 +25,6 @@ class RegisterController extends Controller
                 'billing_first_name' => 'required|string',
                 'billing_last_name'  => 'required|string',
                 'username'   => 'required|string|unique:users',
-                // 'billing_email'  => 'required|string|unique:users',
                 'billing_phone'      => 'required',
                 'password'   => 'required|string|confirmed',
                 'password_confirmation' => 'required',
@@ -67,6 +66,7 @@ class RegisterController extends Controller
             $data['email']      = $request->email;
             $data['phone']      = $request->phone;
             $data['user_type']  = 0;
+            $data['user_type']  = 3; //roles-3-customer
             $image       = $request->file('image');
             if ($image) {
                 $data['image'] = $this->imageStore($image, $directory='images/customers/', $type='customer');

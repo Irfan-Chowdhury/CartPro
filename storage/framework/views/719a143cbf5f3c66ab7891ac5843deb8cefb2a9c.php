@@ -48,7 +48,7 @@
                                                     }
                                                 ?>
                                             </ul>
-                                            <span>( 04 )</span>
+                                            <span>( <?php echo e(round($item->product->avg_rating)); ?> )</span>
                                         </div>
                                         <div class="item-sku">SKU: <?php echo e($item->product->sku ?? null); ?></div>
                                     </div>
@@ -64,9 +64,9 @@
                                             <?php endif; ?>
                                             <hr>
                                             <?php if(env('CURRENCY_FORMAT')=='suffix'): ?>
-                                                <small><del><?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> </del></small>
+                                                <small class="old-price"><del><?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> <?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> </del></small>
                                             <?php else: ?>
-                                                <small><del><?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> </del></small>
+                                                <small class="old-price"><del><?php echo e(env('DEFAULT_CURRENCY_SYMBOL')); ?> <?php echo e(number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')); ?> </del></small>
                                             <?php endif; ?>
                                         </div>
                                     <?php else: ?>

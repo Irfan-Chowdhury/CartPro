@@ -37,7 +37,7 @@
           <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('file.Sales')}}</span></a>
             <ul id="sale" class="collapse list-unstyled">
               <li id="sale-list-menu"><a href="{{route('admin.order.index')}}">{{__('file.Orders')}}</a></li>
-              <li id="sale-list-menu"><a href="">{{__('file.Transactions')}}</a></li>
+              <li id="sale-list-menu"><a href="{{route('admin.transaction.index')}}">{{__('file.Transactions')}}</a></li>
             </ul>
           </li>
 
@@ -85,14 +85,24 @@
                         <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('Store Front')}}</a></li>
                     @endcan
                     {{-- @can('slider') --}}
-                        <li><a href="{{route('admin.slider')}}"><span>{{__('Slider')}}</span></a></li>
+                        <li><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
                     {{-- @endcan --}}
-                    <li><a href="{{route('admin.color.index')}}"><span>{{__('Color')}}</span></a></li>
+                    <li><a href="{{route('admin.color.index')}}"><span>{{__('file.Color')}}</span></a></li>
                 </ul>
             </li>
           @endcan
 
 
+          <li><a href="{{route('admin.reports.coupon')}}"><i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a></li>
+
+        {{-- <li><a href="#report" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a>
+            <ul id="report" class="collapse list-unstyled">
+                <li id="navigation-menu"><a href="{{route('report.today')}}">{{__('file.Today Order')}}</a></li>
+                <li id="navigation-menu"><a href="{{route('report.this_week')}}">{{__('file.This Month')}}</a></li>
+                <li id="navigation-menu"><a href="{{route('report.this_year')}}">{{__('file.This Year')}}</a></li>
+                <li id="navigation-menu"><a href="{{route('report.filter_report')}}">{{__('file.Filter Report')}}</a></li>
+            </ul>
+        </li> --}}
 
           @can('site-setting')
             <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{__('Site Settings')}}</span></a>

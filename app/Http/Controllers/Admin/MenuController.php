@@ -14,6 +14,8 @@ use App\Traits\SlugTrait;
 use Harimayco\Menu\Facades\Menu;
 use Illuminate\Support\Facades\Session;
 use Harimayco\Menu\Models\Menus;
+use Illuminate\Support\Facades\App;
+
 // use Harimayco\Menu\Models\MenuItems;
 
 
@@ -26,6 +28,8 @@ class MenuController extends Controller
     {
         if (auth()->user()->can('menu-view'))
         {
+            App::setLocale(Session::get('currentLocal'));
+
             $locale = Session::get('currentLocal');
 
             $menus = Menus::with(['menuTranslations'=> function ($query) use ($locale){
@@ -38,6 +42,8 @@ class MenuController extends Controller
             ->get();
 
             $currentUrl = url()->current();
+
+            // return $currentUrl;
 
 
             if ($request->ajax())

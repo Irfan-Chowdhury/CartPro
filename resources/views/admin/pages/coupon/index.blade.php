@@ -5,7 +5,7 @@
     <div class="container-fluid"><span id="alert_message"></span></div>
 
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">{{__('Coupon')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Coupon')}}</h4>
         <br>
 
         @if (auth()->user()->can('coupon-store'))

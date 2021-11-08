@@ -30,13 +30,13 @@
                     <h5 class="text-bold"><?php echo e(__('Header Logo')); ?></h5><br>
                     <?php $__empty_1 = true; $__currentLoopData = $storefront_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <?php if($item->title=='header_logo'): ?>
-                            <img src="<?php echo e(asset('public/'.$item->image)); ?>" id="header_logo" height="100px" width="100px">
+                            <img src="<?php echo e(asset('public/'.$item->image)); ?>" id="header_logo" height="50px" width="100px">
                             <?php break; ?>
                         <?php elseif($key == ($total_storefront_images-1)): ?>
-                            <img src="<?php echo e(asset('public/images/empty.jpg')); ?>" id="header_logo" height="100px" width="100px">
+                            <img src="<?php echo e(asset('public/images/empty.jpg')); ?>" id="header_logo" height="50px" width="100px">
                         <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <img src="<?php echo e(asset('public/images/empty.jpg')); ?>" id="header_logo" height="100px" width="100px">
+                        <img src="<?php echo e(asset('public/images/empty.jpg')); ?>" id="header_logo" height="50px" width="100px">
                     <?php endif; ?>
                     <br><br>
                     <input type="file"   name="image_header_logo" id="headerLogo" class="form-control" onchange="showImage(this,'header_logo')">

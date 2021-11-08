@@ -21,10 +21,10 @@
                     </div>
                     <div class="header-top-right">
                         <ul>
-                            <li class="has-dropdown"><a href="#">Language</a>
+                            <li class="has-dropdown"><a href="#">{{$languages[$locale]->language_name}}</a>
                                 <ul class="dropdown">
                                     @foreach ($languages as $item)
-                                        <li><a href="{{$item->local}}">{{$item->language_name}}</a></li>
+                                        <li><a href="{{route('cartpro.default_language_change',$item->id)}}" {{$item->local==Session::get('currentLocal') ? 'selected': ''}}>{{$item->language_name}}</a></li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -35,8 +35,8 @@
                                     @endforeach
                                 </ul>
                             </li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Contact Us</a></li>
+                            {{-- <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Contact Us</a></li> --}}
                         </ul>
                     </div>
                 </div>
@@ -49,20 +49,19 @@
                         <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                         <div class="logo">
                             <a href="#">
-                                <img src="{{asset($header_logo_path)}}" alt="Brand logo" style="height:60px; width:280px">
+                                <img src="{{asset($header_logo_path)}}" alt="Brand logo">
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
                         <form class="header-search">
-                            <input class="" type="text" id="searchText" placeholder="Search products, categories, sku..." name="search">
+                            <input class="" type="text" id="searchText" placeholder="Search products" name="search">
                             <select name="category" class="selectpicker" onchange="location = this.value;">
                                 <option value="" selected="">All Categories</option>
                                 @forelse ($categories as $category)
                                     <option value="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option>
                                 @empty
                                 @endforelse
-                                {{-- {{route('cartpro.category_wise_products',$item->category->slug)}} --}}
                             </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                         </form>
@@ -83,8 +82,6 @@
                                     <a href="{{route('customer_login_form')}}"><i class="las la-user-lock" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login"></i></a>
                                 </li>
                             @endauth
-
-
 
 
                             @auth
@@ -120,13 +117,10 @@
                 </div>
                 <!-- Search Field-->
                 <div class="row" id="search_field">
-                    {{-- <div class="col-lg-2 col-7"></div> --}}
-                    <div class="col-12 d-xl-flex middle-column justify-content-center" >
+                    <div class="col-12 d-xl-flex justify-content-center" >
                         <table id="result">
                         </table>
                     </div>
-                    {{-- <div class="col-lg-2 col-5"></div> --}}
-
                 </div>
             </div>
         </div>
@@ -136,7 +130,7 @@
                     <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
                         <div class="category-list">
                             <ul>
-                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i> Shop By Category</a>
+                                <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i>{{__('file.Shop By Category')}}</a>
                                     <ul class="dropdown">
                                         @forelse ($categories as $category)
                                             @if ($category->child->isNotEmpty())
@@ -148,7 +142,7 @@
                                                     </ul>
                                                 </li>
                                             @else
-                                                <li><a href="{{$category->slug}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -162,14 +156,18 @@
                             <div id="main-menu" class="main-menu">
                                 <nav id="mobile-nav">
                                     <ul>
-                                        <li class="active"><a href="{{route('cartpro.home')}}">Home</a></li>
+                                        <li class="active"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
+                                        {{-- <li><a href="{{route('page.about_us')}}">{{__('file.About Us')}}</a></li>
+                                        <li><a href="{{route('page.terms_and_conditions')}}">{{__('file.Term of Service')}}</a></li>
+                                        <li><a href="{{route('page.faq')}}">{{__('file.FAQ')}}</a></li> --}}
+
                                         @if ($menu!=NULL)
                                             @forelse ($menu->items as $menu_item)
                                                 @if ($menu_item->child->isNotEmpty())
                                                     <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
+
                                                         <ul class="dropdown">
                                                             @foreach($menu_item->child as $child)
-                                                                {{-- <li><a href="{{$child->link}}">{{$child->label}}</a></li> --}}
                                                                 <!--Extra-->
                                                                 @if ($child->child->isNotEmpty())
                                                                     <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
@@ -187,7 +185,15 @@
                                                         </ul>
                                                     </li>
                                                 @else
-                                                    <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li>
+                                                    @if ($menu_item->locale==$locale)
+                                                        @if(strpos($menu_item->link, 'https://') !== false)
+                                                            <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li>
+                                                        @else
+                                                            <li><a href="{{route('page.Show',$menu_item->link)}}">{{$menu_item->label}}</a></li>
+                                                        @endif
+                                                            {{-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> --}}
+                                                    @endif
+                                                    {{-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> --}}
                                                 @endif
                                             @empty
                                             @endforelse
@@ -273,7 +279,10 @@
                 </div>
                 <div class="shopping__btn">
                     <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
-                    <a class="button style1" href="">Checkout</a>
+                    <form action="{{route('cart.checkout')}}" method="post">
+                        @csrf
+                        <button type="submit" class="button style1">Checkout</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -27,7 +27,10 @@
                 
                 
                 <form method="POST" action="<?php echo e(route('admin.login')); ?>" id="login-form">
-                    <?php echo csrf_field(); ?>
+                    
+                    <?php echo e(csrf_field()); ?>
+
+                    
                     <div class="form-group-material">
 
 
@@ -100,7 +103,7 @@ unset($__errorArgs, $__bag); ?>
                 </form>
                 <!-- This three buttons for demo only-->
                 <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">LogIn as Admin</button>
-                <button type="submit" class="btn btn-info btn-sm default customer-btn">LogIn as Customer</button>
+                
                 <br><br>
                 <?php if(Route::has('password.request')): ?>
                     <a class="forgot-pass" href="<?php echo e(route('password.request')); ?>">

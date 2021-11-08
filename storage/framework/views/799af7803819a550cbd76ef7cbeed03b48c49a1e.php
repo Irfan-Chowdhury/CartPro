@@ -1,104 +1,10 @@
 <?php
-
-
-    $languages = Illuminate\Support\Facades\Cache::remember('languages', 300, function () {
-        return App\Models\Language::orderBy('language_name','ASC')->get();
-    });
-
-    $currency_codes = App\Models\CurrencyRate::select('currency_code')->get();
-
-    $storefront_images = Illuminate\Support\Facades\Cache::remember('storefront_images', 300, function () {
-        return  App\Models\StorefrontImage::select('title','type','image')->get();
-    });
-
-    $empty_image = 'public/images/empty.jpg';
-    $favicon_logo_path = $empty_image;
-    $header_logo_path  = $empty_image;
-    foreach ($storefront_images as $key => $item) {
-        if ($item->title=='favicon_logo'){
-            $favicon_logo_path = 'public'.$item->image;
-        }
-        elseif ($item->title=='header_logo') {
-            $header_logo_path  = 'public'.$item->image;
-        }
-    }
-    //Appereance-->Storefront --> Setting
-    $settings = Illuminate\Support\Facades\Cache::remember('settings', 300, function () {
-        return App\Models\Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
-    });
-
-    $categories = Illuminate\Support\Facades\Cache::remember('categories', 300, function () {
-        return App\Models\Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-                    ->where('parent_id',NULL)
-                    ->where('is_active',1)
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','DESC')
-                    ->get();
-    });
-
-    $menus = Harimayco\Menu\Models\Menus::with('items')
-                    ->where('is_active',1)
-                    ->get();
-    $menu = null;
-    $footer_menu_one = null;
-    $footer_menu_two = null;
-
-    foreach ($settings as $key => $item) {
-        if ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
-            foreach ($menus as $key2 => $value) {
-                if ($value->id==$item->plain_value) {
-                    $menu = $menus[$key2];
-                }
-            }
-            // $menu = Harimayco\Menu\Models\Menus::with('items')
-            // ->where('is_active',1)
-            // ->where('id',$item->plain_value)
-            // ->first();
-        }
-
-        if ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
-            $footer_menu_one_title = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? null;
-        }
-        if ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
-            foreach ($menus as $key2 => $value) {
-                if ($value->id==$item->plain_value) {
-                    $footer_menu_one = $menus[$key2];
-                }
-            }
-        }
-
-        if ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
-            $footer_menu_title_two = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
-        }
-        if ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
-            foreach ($menus as $key2 => $value) {
-                if ($value->id==$item->plain_value) {
-                    $footer_menu_two = $menus[$key2];
-                }
-            }
-        }
-
-        if ($item->key=='storefront_address' && $item->plain_value==NULL) {
-            $storefront_address = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
-        }
-    }
-    $cart_count = \Gloudemans\Shoppingcart\Facades\Cart::count();
-    $cart_subtotal = \Gloudemans\Shoppingcart\Facades\Cart::subtotal();
-    $cart_total = \Gloudemans\Shoppingcart\Facades\Cart::total();
-    $cart_contents = \Gloudemans\Shoppingcart\Facades\Cart::content();
-
-    //Newslatter
-    $setting_newslatter = App\Models\SettingNewsletter::first();
-
-    //Setting Store
-    $setting_store =  App\Models\SettingStore::first();
-    $total_wishlist =  App\Models\Wishlist::count();
-
-    if(!Session::get('currentLocal')){
-        Session::put('currentLocal', 'en');
-    }
-
+        $cart_count = Cart::count();
+        $cart_subtotal = Cart::subtotal();
+        $cart_total = Cart::total();
+        $cart_contents = Cart::content();
 ?>
+
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -123,6 +29,7 @@
     <link href="<?php echo e(asset('public/frontend/css/bootstrap-colorpicker.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('public/frontend/css/payment-fonts.css')); ?>" rel="stylesheet" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
 
     <?php echo $__env->yieldContent('meta_info'); ?>
 
@@ -162,7 +69,6 @@
 </head>
 
 
-
 <body>
     <div id="demo">
         <h6>Colorways</h6>
@@ -193,6 +99,8 @@
     <!--Footer-->
     <?php echo $__env->make('frontend.includes.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+
+
     <script>
         var chatbox = document.getElementById('fb-customer-chat');
         chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
@@ -216,7 +124,6 @@
     </script>
 
     
-    
     <script src="<?php echo e(asset('public/frontend/js/sweetalert2@11.js')); ?>"></script>
 
 
@@ -231,7 +138,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            // $('#newsletter-modal').modal('toggle');
+            $('#newsletter-modal').modal('toggle');
             <?php if(session()->has('type')): ?>
                 const Toast = Swal.mixin({
                     toast: true,
@@ -334,6 +241,14 @@
                         }
                         // $('.cart_list').html(JSON.parse(html));
                     }
+                    else if(data.type=='quantity_limit'){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Available product is : '+data.product_quantity,
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        });
+                    }
                 }
             });
         });
@@ -383,6 +298,14 @@
                                     '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
                         });
                         $('.cart_list').html(html);
+                    }
+                    else if(data.type=='quantity_limit'){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Available product is : '+data.product_quantity,
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        });
                     }
                 }
             });
@@ -473,6 +396,8 @@
             })
         });
 
+
+        //Search field
         $('#search_field').hide();
 
         $(document).ready(function(){
@@ -538,19 +463,46 @@
             });
         });
 
-        $(document).on('click','.limitCategoryProductShow',function(event) {
-            event.preventDefault();
-            var limit_data = $(this).data('id');
-            var category_slug = $('#categorySlug').val();
+        $("#newsLatterSubmitFormPopUp").on("submit",function(e){
+            e.preventDefault();
             $.ajax({
-                url: "<?php echo e(route('cartpro.limit_category_product_show')); ?>",
-                type: "GET",
-                data: {limit_data:limit_data, category_slug:category_slug},
+                url: "<?php echo e(route('cartpro.newslatter_store')); ?>",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
                 success: function (data) {
-                    console.log(data);
-                    $('.categoryWiseProductField').html(data);
+                    if (data.type=='error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                    else if (data.type=='success') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message,
+                        })
+
+                        $('#newsLatterSubmitFormPopUp')[0].reset();
+                        $('#newsletter-modal').modal('hide');
+                    }
                 }
-            })
+            });
         });
 
         $('.attribute_value').on("click",function(e){
@@ -572,6 +524,15 @@
             values.push(selectedVal);
             $('#value_ids').val(values);
 
+        });
+
+        $('#disable_popup').on("click",function (e) {
+            var disable_popup =  $('#disable_popup').val();
+            if (disable_popup==1) {
+                $('#disable_popup_newslatter').val(1);
+            }else{
+                $('#disable_popup_newslatter').val(0);
+            }
         });
 
         $('#stripeContent').hide();

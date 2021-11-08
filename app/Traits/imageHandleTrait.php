@@ -15,7 +15,11 @@ trait imageHandleTrait{
         $location = public_path($directory.$img);
         if ($type=='brand') {
             Image::make($image)->encode('webp', 60)->resize(500,150)->save($location);
-        }else {
+        }
+        elseif ($type=='header_logo') {
+            Image::make($image)->encode('webp', 60)->fit(280,62)->save($location);
+        }
+        else {
             Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
         }
         $imageUrl = $directory.$img;

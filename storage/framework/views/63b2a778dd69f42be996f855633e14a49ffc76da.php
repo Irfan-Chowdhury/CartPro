@@ -29,6 +29,16 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b><?php echo e(__('file.Default Currency Code')); ?><span class="text-danger">*</span></b></label>
+                        <div class="col-sm-8">
+                            <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='<?php echo e(__('Select Currency')); ?>'>
+                                <?php $__currentLoopData = $currencies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $currency): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($currency->currency_code); ?>" <?php echo e($currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''); ?>><?php echo e($currency->currency_code); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>Default Currency Symbol <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" name="default_currency" <?php if(isset($setting_currency->default_currency)): ?> value="<?php echo e($setting_currency->default_currency); ?>" <?php endif; ?>>

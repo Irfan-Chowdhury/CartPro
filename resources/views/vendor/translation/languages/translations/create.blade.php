@@ -24,11 +24,11 @@
 
                     @include('translation::forms.text', ['field' => 'value', 'label' => __('translation::translation.value_label'), 'placeholder' => __('translation::translation.value_placeholder')])
 
-                    <div class="input-group">
+                    {{-- <div class="input-group">
 
                         <button v-on:click="toggleAdvancedOptions" class="text-blue">{{ __('translation::translation.advanced_options') }}</button>
 
-                    </div>
+                    </div> --}}
 
                     <div v-show="showAdvancedOptions">
 

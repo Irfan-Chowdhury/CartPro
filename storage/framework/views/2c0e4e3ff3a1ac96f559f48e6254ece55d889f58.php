@@ -18,7 +18,7 @@
                                                 <div>
                                                     <h3><?php echo e($item->sliderTranslation[0]->slider_title); ?></h3>
                                                     <h5><?php echo e($item->sliderTranslation[0]->slider_subtitle); ?></h5>
-                                                    <a class="button style1 md" href="">Read More</a>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -37,7 +37,7 @@
                                     </div>
                                     <div>
                                         <h4><?php echo e($slider_banners[$key]['title']); ?></h4>
-                                        <a href="<?php echo e($slider_banners[$key]['action_url']); ?>" class="link-hov style1">Shop Now</a>
+                                        
                                     </div>
                                 </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -73,7 +73,6 @@
                                 </div>
                                 <div>
                                     <h4><?php echo e($slider_banners[$key]['title']); ?></h4>
-                                    <a href="<?php echo e($slider_banners[$key]['action_url']); ?>" class="link-hov style1">Shop Now</a>
                                 </div>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -91,8 +90,8 @@
             <div class="col-md-12">
                 <div class="section-title mb-3">
                     <div class="d-flex align-items-center">
-                        <h3>Top categories</h3>
-                        <a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a>
+                        <h3><?php echo e(__('file.Top Categories')); ?></h3>
+                        
                     </div>
                     <!-- Add Pagination -->
                     <div class="category-navigation">
@@ -176,9 +175,11 @@
                                                                     <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                                                 <?php endif; ?>
 
-                                                                <div class="product-promo-text style1">
-                                                                    <span>Sold</span>
-                                                                </div>
+                                                                <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                    <div class="product-promo-text style1">
+                                                                        <span>Stock Out</span>
+                                                                    </div>
+                                                                <?php endif; ?>
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#<?php echo e($item->product->slug ?? null); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                     </a>
@@ -246,7 +247,11 @@
                                                                         </div>
                                                                     </div>
                                                                     <div>
-                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                            <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        <?php else: ?>
+                                                                             <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        <?php endif; ?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -280,9 +285,11 @@
                                                                 <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                                             <?php endif; ?>
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            <?php endif; ?>
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#<?php echo e($item->product->slug ?? null); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -349,8 +356,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                </div>
+                                                                    <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php else: ?>
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php endif; ?>                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -383,9 +393,11 @@
                                                                 <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                                             <?php endif; ?>
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            <?php endif; ?>
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#<?php echo e($item->product->slug ?? null); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -452,8 +464,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                                </div>
+                                                                    <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php else: ?>
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php endif; ?>                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -486,9 +501,12 @@
                                                                 <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                                             <?php endif; ?>
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            <?php endif; ?>
+
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#<?php echo e($item->product->slug ?? null); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -555,8 +573,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                </div>
+                                                                    <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php else: ?>
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <?php endif; ?>                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -694,7 +715,11 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                            <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        <?php else: ?>
+                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="daily-deals-wrap">
@@ -830,7 +855,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php else: ?>
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php endif; ?>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -923,7 +953,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php else: ?>
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php endif; ?>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1016,7 +1051,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php else: ?>
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <?php endif; ?>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1048,7 +1088,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="section-title mb-3">
-                    <h3>Trending</h3>
+                    <h3><?php echo e(__('file.Trending')); ?></h3>
                 </div>
             </div>
         </div>
@@ -1070,9 +1110,11 @@
                                     <?php else: ?>
                                         <img src="<?php echo e(asset('public/images/empty.jpg')); ?>">
                                     <?php endif; ?>
-                                    <div class="product-promo-text style1">
-                                        <span>Sold</span>
-                                    </div>
+                                    <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                        <div class="product-promo-text style1">
+                                            <span>Stock Out</span>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="product-overlay">
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_<?php echo e($item->product->slug); ?>"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                         </a>
@@ -1142,7 +1184,12 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            <?php if(($item->product->qty==0) || ($item->product->in_stock==0)): ?>
+                                                <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            <?php else: ?>
+                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            <?php endif; ?>
+                                            
                                         </div>
                                     </div>
                                 </div>

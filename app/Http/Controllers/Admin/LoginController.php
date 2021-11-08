@@ -64,7 +64,8 @@ class LoginController extends Controller
                 // return redirect()->intended(route('admin.dashboard','en'));
             }
             else {
-                return "OK";
+                Auth::logout();
+                return abort('403', __('You are not authorized'));
             }
         }
         else {

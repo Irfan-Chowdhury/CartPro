@@ -13,7 +13,8 @@ use App\Models\Tax;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -35,6 +36,10 @@ class CartController extends Controller
                         },
                         ])
                         ->find($request->product_id);
+
+            if ($product->qty==0 || $request->qty > $product->qty) {
+                return response()->json(['type'=>'quantity_limit','product_quantity'=>$product->qty]);
+            }
 
             $data = [];
             $data['id']     = $product->id;
@@ -79,93 +84,13 @@ class CartController extends Controller
 
     public function cartViewDetails()
     {
-        // $tax =  Tax::where('country','Bangladesh')->first();
-
-        // if (!empty($tax) && $tax->based_on=='shipping_address') {
-        //     return $tax->rate;
-        // }
-        // elseif(!empty($tax) && $tax->based_on=='billing_address'){
-        //     return $tax->rate;
-
-        // }elseif(!empty($tax) && $tax->based_on=='store_address'){
-        //     return $tax->rate;
-
-        // }else {
-        //     return 'Empty' ;
-        // }
-
-
-        // return Auth::user()->id ?? null;
-        //---------- Test -----------
-        // $attribuite_translations = AttributeTranslation::select('attribute_name')->get();
-
-        // $content =  Cart::content();
-        // // return $content;
-
-
-        // $option_keys =[];
-        // $option_values =[];
-        // foreach ($content as $row) // প্রত্যেকটা প্রোডাক্টের জন্য cart details "content" এর মধ্যে Array আকারে জমা হয় ।
-        // {
-        //     $order_detail = new OrderDetail();
-        //     $order_detail->order_id = 18;
-        //     $order_detail->product_id = $row->id;
-        //     $order_detail->image = $row->options->image;
-        //     $order_detail->price = $row->price;
-        //     $order_detail->qty = $row->qty;
-        //     $order_detail->weight = $row->weight;
-        //     $order_detail->discount = $row->discount;
-        //     $order_detail->tax = $row->tax;
-        //     $order_detail->subtotal = $row->subtotal;
-
-        //     $test = $row->options;
-
-
-        //     // foreach ($row->options as $key => $item) {
-
-        //     //     if($key != 'image'){
-        //     //         $option_keys[] = $key;
-        //     //         $option_values[] = $item;
-        //     //     }
-        //     //     // foreach ($attribuite_translations as $value) {
-        //     //     //     if($value->attribute_name == $key){
-        //     //     //         $order_detail->option = $key;
-        //     //     //         $order_detail->option_value = $item;
-        //     //     //         $incr++;
-        //     //     //     }
-        //     //     // }
-        //     // }
-
-        //     return $test;
-
-        //     $order_detail->option_1 = $option_keys;
-        //     $order_detail->option_value_1 = $option_values;
-
-        // }
-
-        // return $$order_detail;
-
-        // $attribuite_translations = AttributeTranslation::select('attribute_name')->get();
-
-        // $data =  Cart::get('36fa7ed8166df8a4ace5ea8e27866bbc');
-
-        // // return $data->options;
-        // $options = [];
-        // foreach ($data->options as $key => $item) {
-        //     foreach ($attribuite_translations as $value) {
-        //         if($value->attribute_name == $key){
-        //             $options[] = $key;
-        //         }
-        //     }
-        // }
-        // return $options;
-
-        // foreach ($attribuite_translations as $key => $value) {
-        //     // return $value->options->category_id;
-        //     if($value->attribute_name == $data->options->Size){
-        //         return;
-        //     }
-        // }
+        if(!Session::get('currentLocal')){
+            Session::put('currentLocal', 'en');
+            $locale = 'en';
+        }else {
+            $locale = Session::get('currentLocal');
+        }
+        App::setLocale($locale);
 
         ////---------- Test End-----------
 
@@ -221,6 +146,15 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
+        if(!Session::get('currentLocal')){
+            Session::put('currentLocal', 'en');
+            $locale = 'en';
+        }else {
+            $locale = Session::get('currentLocal');
+        }
+        App::setLocale($locale);
+
+
         $cart_content = Cart::content();
         $cart_subtotal = Cart::subtotal();
         $total = Cart::total();

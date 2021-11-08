@@ -179,4 +179,76 @@ class OrderController extends Controller
         Cart::destroy();
         return response()->json(['success' => 'Payment Successfully']);
     }
+
+    public function cashOnDeliveryStore(Request $request)
+    {
+        // return response()->json('ok Fahim');
+
+        $order = new Order();
+        $order->user_id = Auth::user()->id ?? null;
+        $order->billing_first_name = $request->billing_first_name;
+        $order->billing_last_name = $request->billing_last_name;
+        $order->billing_email = $request->billing_email;
+        $order->billing_phone = $request->billing_phone;
+        $order->billing_country = $request->billing_country;
+        $order->billing_address_1 = $request->billing_address_1;
+        $order->billing_address_2 = $request->billing_address_2;
+        $order->billing_city = $request->billing_city;
+        $order->billing_state = $request->billing_state;
+        $order->billing_zip_code = $request->billing_zip_code;
+        $order->shipping_method = 'Paypal'; //Chage Later
+        $order->shipping_cost = 10; //Chage Later
+        $order->payment_method = 'Cash On Delivery';
+        $order->total = implode(explode(',',$request->total));
+        $order->order_status = 'pending';
+        $order->payment_id = rand(10,999999999);
+        // $order->currency = 'BD';
+        // $order->currency_rate = 5;
+
+        $shipping = new Shipping();
+        $shipping->shipping_first_name = $request->shipping_first_name;
+        $shipping->shipping_last_name = $request->shipping_last_name;
+        $shipping->shipping_email = $request->shipping_email;
+        $shipping->shipping_phone = $request->shipping_phone;
+        $shipping->shipping_country = $request->shipping_country;
+        $shipping->shipping_address_1 = $request->shipping_address_1;
+        $shipping->shipping_address_2 = $request->shipping_address_2;
+        $shipping->shipping_city = $request->shipping_city;
+        $shipping->shipping_state = $request->shipping_state;
+        $shipping->shipping_zip_code = $request->shipping_zip_code;
+
+        $order->save();
+        if ($request->shipping_address_check==1) { //if selected shipping
+            $shipping->order_id = $order->id;
+            $shipping->save();
+        }
+
+        $content    = Cart::content();
+
+        foreach ($content as $row) // প্রত্যেকটা প্রোডাক্টের জন্য cart details "content" এর মধ্যে Array আকারে জমা হয় ।
+        {
+            $order_detail = new OrderDetail();
+            $order_detail->order_id   = $order->id;
+            $order_detail->product_id = $row->id;
+            $order_detail->image      = $row->options->image;
+            $order_detail->options    = $row->options;
+            $order_detail->price      = $row->price;
+            $order_detail->qty        = $row->qty;
+            $order_detail->weight     = $row->weight;
+            $order_detail->discount   = $request->coupon_value ?? 0.00;
+            $order_detail->tax        = $row->tax;
+            $order_detail->subtotal   = $row->subtotal;
+            $order_detail->save();
+        }
+
+        $order_details = OrderDetail::where('order_id',$order->id)->get();
+        foreach ($order_details as $row) {
+            DB::table('products')
+                ->where('id',$row->product_id)
+                ->update(['qty' => DB::raw('qty -'.$row->qty)]);
+        }
+
+        Cart::destroy();
+        return response()->json(['success' => 'Payment Successfully']);
+    }
 }

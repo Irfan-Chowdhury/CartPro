@@ -27,7 +27,9 @@
                 {{-- @include('shared.errors') --}}
                 {{-- @include('shared.flash_message') --}}
                 <form method="POST" action="{{ route('admin.login') }}" id="login-form">
-                    @csrf
+                    {{-- @csrf --}}
+                    {{ csrf_field() }}
+                    
                     <div class="form-group-material">
 
 
@@ -71,7 +73,7 @@
                 </form>
                 <!-- This three buttons for demo only-->
                 <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">LogIn as Admin</button>
-                <button type="submit" class="btn btn-info btn-sm default customer-btn">LogIn as Customer</button>
+                {{-- <button type="submit" class="btn btn-info btn-sm default customer-btn">LogIn as Customer</button> --}}
                 <br><br>
                 @if (Route::has('password.request'))
                     <a class="forgot-pass" href="{{ route('password.request') }}">

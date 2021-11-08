@@ -308,22 +308,18 @@
                         </div>
                         <hr>
                         <div class="payment-options">
-                            <label class="custom-checkbox">
+                            {{-- <label class="custom-checkbox">
                                 <input type="radio" name="bank-transfer" value="card">
                                 <span class="sm-heading">Direct Bank Transfer</span>
-                            </label>
-                            <div class="alert alert-general no-border mar-bot-0">
+                            </label> --}}
+                            {{-- <div class="alert alert-general no-border mar-bot-0">
                                 <div class="alert-text">
                                     <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
                                 </div>
-                            </div>
+                            </div> --}}
                             <label class="custom-checkbox">
-                                <input type="radio" name="bank-transfer" >
-                                <span class="sm-heading">Credit card</span>
-                                <span class="card-options"><img src="{{asset('public/frontend/images/payment/payment-1.png')}}" alt="..."></span>
-                                <span class="card-options pad-right-5"><img src="{{asset('public/frontend/images/payment/payment-2.png')}}" alt="..."></span>
-                                <span class="card-options pad-right-5"><img src="{{asset('public/frontend/images/payment/payment-3.png')}}" alt="..."></span>
-
+                                <input type="radio" name="bank-transfer" id="cashOnDelivery">
+                                <span class="sm-heading">Cash On Delivery</span>
                             </label>
                             <label class="custom-checkbox">
                                 <input type="radio" name="bank-transfer" id='paypal' value="paypal">
@@ -562,7 +558,7 @@ $(function(){
 
                                     payment_method:'Paid By Paypal',
                                     coupon_value:coupon_value,
-                                    total:'total',
+                                    total:total,
                                     payment_id:details.id,
                                 },
                                 success: function (data) {
@@ -743,6 +739,129 @@ $(function(){
                     });
                 }
             }
+    });
+
+    $('#cashOnDelivery').on('click',function(event){
+        $('#stripeContent').hide();
+
+
+
+        $('#orderBtn').on('click',function(event){
+
+            var billing_create_account_check = $("#billing_create_account_check:checked").val();
+            if (billing_create_account_check) {
+                var billing_first_name = $("input[name=billing_first_name]").val();
+                var billing_last_name = $("input[name=billing_last_name]").val();
+                var username = $("input[name=username]").val();
+                var billing_email = $("input[name=billing_email]").val();
+                var billing_phone = $("input[name=billing_phone]").val();
+                var password = $("input[name=password]").val();
+                var password_confirmation = $("input[name=password_confirmation]").val();
+                $.ajax({
+                    url: "{{ route('customer.register') }}",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: 'JSON',
+                    data: {
+                        billing_first_name:billing_first_name,
+                        billing_last_name:billing_last_name,
+                        username:username,
+                        billing_email:billing_email,
+                        billing_phone:billing_phone,
+                        password:password,
+                        password_confirmation:password_confirmation,
+                        billing_create_account_check:billing_create_account_check
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        let html = '';
+                        if (data.errors) {
+                            for (var count = 0; count < data.errors.length; count++) {
+                                html += '<p>' + data.errors[count] + '</p>';
+                            }
+                            $('#alert_div').removeClass('d-none');
+                            $('#alert_message').html(html);
+                        }
+                        else if (data.type=='success') {
+                            console.log('OK');
+                        }
+                    }
+                })
+            }
+
+            var billing_first_name = $("input[name=billing_first_name]").val();
+            var billing_last_name = $("input[name=billing_last_name]").val();
+            var billing_country = $("#billing_country").val();
+            var billing_address_1 = $("input[name=billing_address_1]").val();
+            var billing_city = $("input[name=billing_city]").val();
+            var billing_state = $("input[name=billing_state]").val();
+            var billing_zip_code = $("input[name=billing_zip_code]").val();
+            var billing_email = $("input[name=billing_email]").val();
+            var billing_phone = $("input[name=billing_phone]").val();
+
+            var  coupon_value = $("#coupon_value").val();
+
+            var shipping_address_check = $("#shipping_address_check_check:checked").val();
+            if (!shipping_address_check) {
+                shipping_address_check=0;
+            }
+            //Shipping
+            var shipping_first_name = $("input[name=shipping_first_name]").val();
+            var shipping_last_name = $("input[name=shipping_last_name]").val();
+            var shipping_country = $("#shipping_country option:selected").text();
+            var shipping_address_1 = $("input[name=shipping_address_1]").val();
+            var shipping_city = $("input[name=shipping_city]").val();
+            var shipping_state = $("input[name=shipping_state]").val();
+            var shipping_zip_code = $("input[name=shipping_zip_code]").val();
+            var shipping_email = $("input[name=shipping_email]").val();
+            var shipping_phone = $("input[name=shipping_phone]").val();
+
+            var total = $('.total_amount').text();
+
+            $.ajax({
+                url: "{{ route('order.cash_on_delivery') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'JSON',
+                data:{
+                    billing_first_name:billing_first_name,
+                    billing_last_name:billing_last_name,
+                    billing_country:billing_country,
+                    billing_address_1:billing_address_1,
+                    billing_city:billing_city,
+                    billing_state:billing_state,
+                    billing_zip_code:billing_zip_code,
+                    billing_email:billing_email,
+                    billing_phone:billing_phone,
+
+                    shipping_address_check:shipping_address_check,
+
+                    shipping_first_name:shipping_first_name,
+                    shipping_last_name:shipping_last_name,
+                    shipping_country:shipping_country,
+                    shipping_address_1:shipping_address_1,
+                    shipping_city:shipping_city,
+                    shipping_state:shipping_state,
+                    shipping_zip_code:shipping_zip_code,
+                    shipping_email:shipping_email,
+                    shipping_phone:shipping_phone,
+
+                    payment_method:'Paid By Paypal',
+                    coupon_value:coupon_value,
+                    total:total,
+                },
+                success: function (data) {
+                    console.log(data);
+                    // alert('Transaction completed by ' + details.payer.name.given_name);
+                    //window.location.href="{{route('cartpro.home')}}",
+                }
+            });
+
+        });
     });
 });
 </script>

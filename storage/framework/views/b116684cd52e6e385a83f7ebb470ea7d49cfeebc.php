@@ -20,10 +20,8 @@
         <div class="container">
             <div class="breadcrumb-section">
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="home.html">Shop</a></li>
-                    <li><a href="home.html">Women</a></li>
-                    <li class="active">White Striped top</li>
+                    <li><a href="<?php echo e(route('cartpro.home')); ?>">Home</a></li>
+                    <li class="active"><a href="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><?php echo e($category->catTranslation->category_name); ?></a> </li>
                 </ul>
             </div>
 
@@ -69,7 +67,7 @@
                         <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
 
                         <div class="item-details">
-                            <a class="item-category" href="<?php echo e($category->slug); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
+                            <a class="item-category" href="<?php echo e(route('cartpro.category_wise_products',$category->slug)); ?>"><?php echo e($category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null); ?></a>
                             <h3 class="item-name"><?php echo e($product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL); ?></h3>
                             <div class="d-flex justify-content-between">
                                 <div class="item-brand">Brand: <a href=""><?php echo e($product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null); ?></a></div>
@@ -123,10 +121,15 @@
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
-                            <hr>
-                            <div class="item-short-description">
-                                <p><?php echo e(strip_tags($product->productTranslation->short_description ?? $product->productTranslationDefaultEnglish->short_description ?? NULL)); ?></p>
-                            </div>
+
+
+                            <?php if(isset($product->productTranslation->short_description) || isset($product->productTranslationDefaultEnglish->short_description)): ?>
+                                <hr>
+                                <div class="item-short-description">
+                                    <p><?php echo e(strip_tags($product->productTranslation->short_description ?? $product->productTranslationDefaultEnglish->short_description ?? NULL)); ?></p>
+                                </div>
+                            <?php endif; ?>
+
                             <hr>
                             <?php $__empty_1 = true; $__currentLoopData = $attribute; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="item-variant">
@@ -191,12 +194,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="true">Description</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="branding-tab_one" data-bs-toggle="tab" href="#size" role="tab" aria-selected="false">Size Guide</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="branding-tab_two" data-bs-toggle="tab" href="#shipping" role="tab" aria-selected="false">Shipping</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" id="graphic-design-tab" data-bs-toggle="tab" href="#comments" role="tab" aria-selected="false">Reviews <span class="text-grey"> (<?php echo e(count($reviews)); ?>)</span></a>
                         </li>
@@ -418,6 +416,7 @@
             </div>
         </div>
     </section>
+
     
     <!--content wrapper ends-->
     <!--Product area starts-->
@@ -432,10 +431,6 @@
             var product_id = $(this).data('product_id');
             var category_id = $(this).data('category_id');
             var product_slug = $(this).data('product_slug');
-
-            console.log(product_id);
-            console.log(category_id);
-            console.log(product_slug);
             $.ajax({
                 url: "<?php echo e(route('wishlist.add')); ?>",
                 type: "GET",

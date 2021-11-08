@@ -167,6 +167,9 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+        Harimayco\Menu\MenuServiceProvider::class,
+
 
 
         /*
@@ -177,8 +180,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
-        Harimayco\Menu\MenuServiceProvider::class,
 
     ],
 

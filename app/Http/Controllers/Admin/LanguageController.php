@@ -27,6 +27,8 @@ class LanguageController extends Controller
     {
         if (auth()->user()->can('locale-view'))
         {
+            App::setLocale(Session::get('currentLocal'));
+
             $languages = Language::orderBy('language_name','ASC')->get();
 
             return view('admin.pages.setting.language.index',compact('languages'));

@@ -48,7 +48,7 @@
                                                     }
                                                 @endphp
                                             </ul>
-                                            <span>( 04 )</span>
+                                            <span>( {{round($item->product->avg_rating)}} )</span>
                                         </div>
                                         <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
                                     </div>
@@ -62,9 +62,9 @@
                                             @endif
                                             <hr>
                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                <small><del>{{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}} </del></small>
+                                                <small class="old-price"><del>{{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}} </del></small>
                                             @else
-                                                <small><del>{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} </del></small>
+                                                <small class="old-price"><del>{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} </del></small>
                                             @endif
                                         </div>
                                     @else

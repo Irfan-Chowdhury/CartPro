@@ -43,6 +43,9 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        // $result = Analytics::fetchVisitorsAndPageViews(Period::days(7));
+        // return $result;
+
         App::setLocale(Session::get('currentLocal'));
 
         $orders = Order::get();
@@ -52,10 +55,18 @@ class AdminController extends Controller
         return view('admin.home',compact('orders','products','customers'));
     }
 
+    public function chart()
+    {
+        $result = Analytics::fetchVisitorsAndPageViews(Period::days(7));
+
+        return response()->json($result);
+    }
+
 
     public function googleAnalytics()
     {
-        $analytics = Analytics::fetchMostVisitedPages(Period::days(1));
+        // $analytics = Analytics::fetchMostVisitedPages(Period::days(1));
+        $analytics = Analytics::fetchVisitorsAndPageViews(Period::days(1));
         dd($analytics);
     }
 
@@ -105,6 +116,9 @@ class AdminController extends Controller
                 'messege'=>'Successfully Logout',
                 'alert-type'=>'success'
                  );
+
+        Session::flush();
+
              return Redirect()->route('admin')->with($message);
     }
 

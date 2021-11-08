@@ -16,7 +16,7 @@
             <div class="col-lg-5 col-md-6">
                 <form class="newsletter" id="newsLatterSubmitForm" action="<?php echo e(route('cartpro.newslatter_store')); ?>" method="POST">
                     <?php echo csrf_field(); ?>
-                    <input class="" type="text" placeholder="Enter your email" name="email">
+                    <input type="email" placeholder="Enter your email" name="email" required>
                     <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
                 </form>
             </div>
@@ -35,7 +35,7 @@
     <div class="row">
         <div class="col-lg-5 col-md-4">
             <div class="footer-logo">
-                <a href="#"><img src="<?php echo e($header_logo_path ?? null); ?>" style="height:60px; width:280px" alt="..."></a>
+                <a href="#"><img src="<?php echo e(asset($header_logo_path)); ?>"></a>
             </div>
             <div class="footer-text">
                 <h5 class="text-grey mb-0">Got Question? Call us:</h5>
@@ -47,10 +47,20 @@
                 <p><span><i class="las la-map-marker"></i> &nbsp; <?php echo e($storefront_address); ?></span></p>
             </div>
             <ul class="footer-social mt-3 p-0">
-                <li><a href="#"><i class="ti-facebook"></i></a></li>
-                <li><a href="#"><i class="ti-twitter"></i></a></li>
-                <li><a href="#"><i class="ti-instagram"></i></a></li>
-                <li><a href="#"><i class="ti-pinterest"></i></a></li>
+                <?php if($storefront_facebook_link!=null): ?>
+                    <li><a href="<?php echo e($storefront_facebook_link); ?>"><i class="ti-facebook"></i></a></li>
+                <?php endif; ?>
+                <?php if($storefront_twitter_link!=null): ?>
+                    <li><a href="<?php echo e($storefront_twitter_link); ?>"><i class="ti-twitter"></i></a></li>
+                <?php endif; ?>
+                <?php if($storefront_instagram_link!=null): ?>
+                    <li><a href="<?php echo e($storefront_instagram_link); ?>"><i class="ti-instagram"></i></a></li>
+                <?php endif; ?>
+                <?php if($storefront_youtube_link!=null): ?>
+                    <li><a href="<?php echo e($storefront_youtube_link); ?>"><i class="ti-youtube"></i></a></li>
+                <?php endif; ?>
+
+                
             </ul>
         </div>
         <div class="col-lg-7 col-md-8">
@@ -114,6 +124,8 @@
 </div>
 <!-- Footer section Ends-->
 <!-- Cookie consent Starts-->
+
+    <?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <!-- Cookie consent Ends-->
 <!-- Quick Shop Modal starts -->
@@ -237,33 +249,40 @@
 </div>
 <!--Quick shop modal ends-->
 <!-- Quick Shop Modal starts -->
-<div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-    <div class="modal-content" style="background-image: url('images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
-        <div class="modal-body">
-            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
-            </button>
-            <div class="row">
-                <div class="col-lg-7">
-                    <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
-                    <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
-                    <form class="newsletter mb-5">
-                        <input class="" type="text" placeholder="Enter your email">
-                        <button type="submit" class="button style1 btn-search">Subscribe</button>
-                    </form>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="disable-popup">
-                        <label class="form-check-label" for="disable-popup">
-                            Got it! Don't show this popup again.
-                        </label>
+
+<?php if(Session::get('disable_newslatter')!=1): ?>
+    <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-image: url('public/frontend/images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
+                <div class="modal-body">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+                    </button>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
+                            <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
+                            <form class="newsletter" id="newsLatterSubmitFormPopUp" action="<?php echo e(route('cartpro.newslatter_store')); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <input class="" type="email" placeholder="Enter your email" name="email" required>
+                                <input type="hidden" name="disable_newslatter" value="0" id="disable_popup_newslatter">
+                                <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button> <br>
+                            </form>
+
+                            <div class="form-check">
+                                <label class="form-check-label" for="disable-popup">
+                                    Got it! Don't show this popup again.
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="1" id="disable_popup">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
+<?php endif; ?>
+
 <!--Quick shop modal ends-->
 <!-- FACEBOOK CHAT PLUGIN STARTS -->
 <!-- Messenger Chat plugin Code -->

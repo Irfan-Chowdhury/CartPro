@@ -19,7 +19,7 @@
                                                 <div>
                                                     <h3>{{$item->sliderTranslation[0]->slider_title}}</h3>
                                                     <h5>{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
-                                                    <a class="button style1 md" href="">Read More</a>
+                                                    {{-- <a class="button style1 md" href="">Read More</a> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -38,7 +38,7 @@
                                     </div>
                                     <div>
                                         <h4>{{$slider_banners[$key]['title']}}</h4>
-                                        <a href="{{$slider_banners[$key]['action_url']}}" class="link-hov style1">Shop Now</a>
+                                        {{-- <a href="{{$slider_banners[$key]['action_url']}}" class="link-hov style1">Shop Now</a> --}}
                                     </div>
                                 </div>
                             @endforeach
@@ -74,7 +74,6 @@
                                 </div>
                                 <div>
                                     <h4>{{$slider_banners[$key]['title']}}</h4>
-                                    <a href="{{$slider_banners[$key]['action_url']}}" class="link-hov style1">Shop Now</a>
                                 </div>
                             </div>
                         @endforeach
@@ -92,8 +91,8 @@
             <div class="col-md-12">
                 <div class="section-title mb-3">
                     <div class="d-flex align-items-center">
-                        <h3>Top categories</h3>
-                        <a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a>
+                        <h3>{{__('file.Top Categories')}}</h3>
+                        {{-- <a href="#" class="button style4 mb-2 d-none d-md-block">All categories</a> --}}
                     </div>
                     <!-- Add Pagination -->
                     <div class="category-navigation">
@@ -176,9 +175,11 @@
                                                                     <img src="{{asset('public/images/empty.jpg')}}">
                                                                 @endif
 
-                                                                <div class="product-promo-text style1">
-                                                                    <span>Sold</span>
-                                                                </div>
+                                                                @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                    <div class="product-promo-text style1">
+                                                                        <span>Stock Out</span>
+                                                                    </div>
+                                                                @endif
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                     </a>
@@ -239,7 +240,11 @@
                                                                         </div>
                                                                     </div>
                                                                     <div>
-                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                            <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        @else
+                                                                             <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -273,9 +278,11 @@
                                                                 <img src="{{asset('public/images/empty.jpg')}}">
                                                             @endif
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            @endif
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -335,8 +342,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                </div>
+                                                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @else
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @endif                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,9 +379,11 @@
                                                                 <img src="{{asset('public/images/empty.jpg')}}">
                                                             @endif
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            @endif
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -431,8 +443,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <a class="button style2 sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i></a>
-                                                                </div>
+                                                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @else
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @endif                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -465,9 +480,12 @@
                                                                 <img src="{{asset('public/images/empty.jpg')}}">
                                                             @endif
 
-                                                            <div class="product-promo-text style1">
-                                                                <span>Sold</span>
-                                                            </div>
+                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                <div class="product-promo-text style1">
+                                                                    <span>Stock Out</span>
+                                                                </div>
+                                                            @endif
+
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -527,8 +545,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                </div>
+                                                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                        <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @else
+                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    @endif                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -660,7 +681,11 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                            <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        @else
+                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="daily-deals-wrap">
@@ -788,7 +813,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @else
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @endif
+                                                                {{-- <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button> --}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -874,7 +904,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @else
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @endif
+                                                                {{-- <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button> --}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -960,7 +995,12 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                    <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @else
+                                                                    <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                @endif
+                                                                {{-- <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button> --}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -992,7 +1032,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="section-title mb-3">
-                    <h3>Trending</h3>
+                    <h3>{{__('file.Trending')}}</h3>
                 </div>
             </div>
         </div>
@@ -1014,9 +1054,11 @@
                                     @else
                                         <img src="{{asset('public/images/empty.jpg')}}">
                                     @endif
-                                    <div class="product-promo-text style1">
-                                        <span>Sold</span>
-                                    </div>
+                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                        <div class="product-promo-text style1">
+                                            <span>Stock Out</span>
+                                        </div>
+                                    @endif
                                     <div class="product-overlay">
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                         </a>
@@ -1078,7 +1120,12 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                <button class="button style2 sm" disabled title="Disabled" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            @else
+                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                            @endif
+                                            {{-- <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button> --}}
                                         </div>
                                     </div>
                                 </div>

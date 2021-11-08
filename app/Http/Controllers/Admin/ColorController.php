@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ColorController extends Controller
@@ -13,6 +15,8 @@ class ColorController extends Controller
     {
         if (auth()->user()->can('tag-view'))
         {
+            App::setLocale(Session::get('currentLocal'));
+
             $colors = Color::get();
 
             if (request()->ajax())

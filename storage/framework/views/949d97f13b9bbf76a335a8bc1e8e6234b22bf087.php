@@ -37,7 +37,7 @@
           <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-dollar"></i><span><?php echo e(__('file.Sales')); ?></span></a>
             <ul id="sale" class="collapse list-unstyled">
               <li id="sale-list-menu"><a href="<?php echo e(route('admin.order.index')); ?>"><?php echo e(__('file.Orders')); ?></a></li>
-              <li id="sale-list-menu"><a href=""><?php echo e(__('file.Transactions')); ?></a></li>
+              <li id="sale-list-menu"><a href="<?php echo e(route('admin.transaction.index')); ?>"><?php echo e(__('file.Transactions')); ?></a></li>
             </ul>
           </li>
 
@@ -85,14 +85,17 @@
                         <li id="navigation-menu"><a href="<?php echo e(route('admin.storefront')); ?>"><?php echo e(__('Store Front')); ?></a></li>
                     <?php endif; ?>
                     
-                        <li><a href="<?php echo e(route('admin.slider')); ?>"><span><?php echo e(__('Slider')); ?></span></a></li>
+                        <li><a href="<?php echo e(route('admin.slider')); ?>"><span><?php echo e(__('file.Slider')); ?></span></a></li>
                     
-                    <li><a href="<?php echo e(route('admin.color.index')); ?>"><span><?php echo e(__('Color')); ?></span></a></li>
+                    <li><a href="<?php echo e(route('admin.color.index')); ?>"><span><?php echo e(__('file.Color')); ?></span></a></li>
                 </ul>
             </li>
           <?php endif; ?>
 
 
+          <li><a href="<?php echo e(route('admin.reports.coupon')); ?>"><i class="dripicons-document-remove"></i><span><?php echo e(__('file.Reports')); ?></span></a></li>
+
+        
 
           <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('site-setting')): ?>
             <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span><?php echo e(__('Site Settings')); ?></span></a>

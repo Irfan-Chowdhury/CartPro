@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CurrencyRate;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -24,11 +26,20 @@ class OrderController extends Controller
             })
             ->addColumn('customer_name', function ($row)
             {
-                return $row->billing_first_name.' '.$row->billing_last_name;
+                if ($row->billing_first_name==NULL && $row->billing_last_name==NULL) {
+                    return Auth::user()->first_name.' '.Auth::user()->last_name;
+                }else {
+                    return $row->billing_first_name.' '.$row->billing_last_name;
+                }
             })
             ->addColumn('customer_email', function ($row)
             {
-                return $row->billing_email;
+                if ($row->billing_first_name==NULL && $row->billing_last_name==NULL) {
+                    return Auth::user()->email;
+                }else {
+                    return $row->billing_email;
+                }
+
             })
             ->addColumn('created_at', function ($row)
             {
@@ -49,12 +60,45 @@ class OrderController extends Controller
         return view('admin.pages.order.index');
     }
 
+    public function transactionIndex()
+    {
+        $orders = Order::orderBy('id','DESC')->where('order_status','completed')->get();
+
+        if (request()->ajax())
+        {
+            return datatables()->of($orders)
+            ->setRowId(function ($row){
+                return $row->id;
+            })
+            ->addColumn('created_at', function ($row)
+            {
+                return date('Y-m-d',strtotime($row->created_at));
+            })
+            ->addColumn('action', function ($row)
+            {
+                $actionBtn = "";
+
+                $actionBtn .= '<a href="'.route('admin.order.details', $row->id).'" class="view btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                    &nbsp;';
+
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+        return view('admin.pages.order.transaction');
+    }
+
     public function orderDetails($id)
     {
         $order = Order::with('orderDetails.product.productTranslation','shippingDetails')->find($id);
 
-        // return $order;
-        return view('admin.pages.order.order_details',compact('order'));
+        $currency_rate = 0.00;
+        $default_currency_code = env('DEFAULT_CURRENCY_CODE');
+        if ($default_currency_code) {
+            $currency_rate = CurrencyRate::where('currency_code',$default_currency_code)->first()->currency_rate;
+        }
+        return view('admin.pages.order.order_details',compact('order','currency_rate'));
     }
 
     public function orderStatus(Request $request)

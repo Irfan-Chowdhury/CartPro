@@ -43,7 +43,7 @@
                                     <a class="list-group-item list-group-item-action" id="product-images" data-toggle="list" href="#images" role="tab" aria-controls="images"><?php echo e(__('Images')); ?></a>
                                     <a class="list-group-item list-group-item-action" id="product-seo" data-toggle="list" href="#seo" role="tab" aria-controls="seo"><?php echo e(__('SEO')); ?></a>
                                     <a class="list-group-item list-group-item-action" id="product-attribute" data-toggle="list" href="#attribute" role="tab" aria-controls="attribute"><?php echo e(__('Attributes')); ?></a>
-                                    <a class="list-group-item list-group-item-action" id="" data-toggle="list" href="" role="tab" aria-controls="seo"><?php echo e(__('Options')); ?></a>
+                                    
                                     <a class="list-group-item list-group-item-action" id="product-additional" data-toggle="list" href="#additional" role="tab" aria-controls="additional"><?php echo e(__('Additional')); ?></a>
                                 </div>
                             </div>

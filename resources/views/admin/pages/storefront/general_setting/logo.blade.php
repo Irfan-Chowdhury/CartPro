@@ -30,13 +30,13 @@
                     <h5 class="text-bold">{{__('Header Logo')}}</h5><br>
                     @forelse ($storefront_images as $key=> $item)
                         @if ($item->title=='header_logo')
-                            <img src="{{asset('public/'.$item->image)}}" id="header_logo" height="100px" width="100px">
+                            <img src="{{asset('public/'.$item->image)}}" id="header_logo" height="50px" width="100px">
                             @break
                         @elseif ($key == ($total_storefront_images-1))
-                            <img src="{{asset('public/images/empty.jpg')}}" id="header_logo" height="100px" width="100px">
+                            <img src="{{asset('public/images/empty.jpg')}}" id="header_logo" height="50px" width="100px">
                         @endif
                     @empty
-                        <img src="{{asset('public/images/empty.jpg')}}" id="header_logo" height="100px" width="100px">
+                        <img src="{{asset('public/images/empty.jpg')}}" id="header_logo" height="50px" width="100px">
                     @endforelse
                     <br><br>
                     <input type="file"   name="image_header_logo" id="headerLogo" class="form-control" onchange="showImage(this,'header_logo')">

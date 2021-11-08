@@ -58,6 +58,12 @@
                   </div>
                 </div>
             </div>
+
+            <div class="col-sm-10">
+                <h1 class="card-title">Page View Statistics</h1>
+                <canvas id="canvas"></canvas>
+            </div>
+
             <div class="col-sm-12">
                 <div class="card">
                   <div class="card-body">
@@ -95,3 +101,47 @@
           </div>
     </section>
 @endsection
+
+@push('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
+<script>
+    var url = "{{route('admin.dashboard.chart')}}";
+    var Years = new Array();
+    var Labels = new Array();
+    var Prices = new Array();
+    $(document).ready(function(){
+        $.get(url, function(response){
+            response.forEach(function(data){
+                const date = new Date(data.date);  // 2009-11-10
+                const month = date.toLocaleString('default', { month: 'long' });
+                Years.push(month);
+                Labels.push(data.pageTitle);
+                Prices.push(data.pageViews);
+            });
+            var ctx = document.getElementById("canvas").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels:Years,
+                    datasets: [{
+                        label: 'Page Views',
+                        data: Prices,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+@endpush
