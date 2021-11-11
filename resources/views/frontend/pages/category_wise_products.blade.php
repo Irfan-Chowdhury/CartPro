@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col">
                     <ul>
-                        <li><a href="#">Home</a></li>
+                        <li><a href="{{route('cartpro.home')}}">Home</a></li>
                         <li class="active">Shop</li>
                     </ul>
                 </div>

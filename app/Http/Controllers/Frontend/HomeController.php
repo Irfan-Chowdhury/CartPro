@@ -41,16 +41,6 @@ use Newsletter;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-        // if(!Session::get('currentLocal')){
-        //     Session::put('currentLocal', 'en');
-        //     $locale = 'en';
-        // }else {
-        //     $locale = Session::get('currentLocal');
-        // }
-        // App::setLocale($locale);
-    }
 
     public function index()
     {
@@ -447,75 +437,3 @@ class HomeController extends Controller
         return redirect()->back();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-       // foreach ($settings as $key => $setting)
-        // {
-        //     if ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
-        //         return 'ok';
-        //         if ($settings[$key-1]->plain_value=='category_products') {
-
-        //             // return $settings[$key-1]->plain_value;
-        //             // $product_tab_one_section_1 = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-        //             // ->where('category_id',$setting->plain_value)->get();
-
-        //             $product_tab_one_section_1 = Cache::remember('category_product', 150, function () use ($setting) {
-        //                 return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-        //                                 ->where('category_id',$setting->plain_value)->get();
-        //             });
-
-        //             if (empty($product_tab_one_section_1)) { //if category_products matched but the category_id doesn't exists in category_product table
-        //                 $product_tab_one_section_1 = [];
-        //             }
-        //         }
-        //         $product_tabs_one_titles[] = $settings[($key-2)]->key;
-        //     }
-
-        //     if ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
-        //         if ($settings[$key-1]->plain_value=='category_products') {
-        //             $product_tab_one_section_2 = Cache::remember('category_product', 150, function () use ($setting) {
-        //                 return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-        //                                         ->where('category_id',$setting->plain_value)->get();
-        //             });
-        //             if (empty($product_tab_one_section_2)){
-        //                 $product_tab_one_section_2 = [];
-        //             }
-        //         }
-        //         $product_tabs_one_titles[] = $settings[($key-2)]->key;
-        //     }
-
-        //     if ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
-        //         if ($settings[$key-1]->plain_value=='category_products') {
-        //             $product_tab_one_section_3 = Cache::remember('category_product', 150, function () use ($setting) {
-        //                 return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-        //                                                         ->where('category_id',$setting->plain_value)->get();
-        //             });
-        //             if (empty($product_tab_one_section_3)) {
-        //                 $product_tab_one_section_3 = [];
-        //             }
-        //         }
-        //         $product_tabs_one_titles[] = $settings[($key-2)]->key;
-        //     }
-
-        //     if ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
-        //         if ($settings[$key-1]->plain_value=='category_products') {
-        //             $product_tab_one_section_4 =  Cache::remember('category_product', 150, function () use ($setting) {
-        //                 return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish')
-        //                                         ->where('category_id',$setting->plain_value)->get();
-        //             });
-        //             if (empty($product_tab_one_section_4)) {
-        //                 $product_tab_one_section_4 = [];
-        //             }
-        //         }
-        //         $product_tabs_one_titles[] = $settings[($key-2)]->key;
-        //     }

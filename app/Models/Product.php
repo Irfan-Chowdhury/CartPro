@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Kirschbaum\PowerJoins\PowerJoins;
 
 class Product extends Model
 {
+    use PowerJoins;
+
     protected $fillable = [
         'brand_id',
         'tax_class_id',

@@ -157,6 +157,8 @@
                                 <nav id="mobile-nav">
                                     <ul>
                                         <li class="active"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
+                                        <li><a href="{{route('cartpro.home')}}">{{__('file.Shop')}}</a></li>
+                                        <li><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
                                         {{-- <li><a href="{{route('page.about_us')}}">{{__('file.About Us')}}</a></li>
                                         <li><a href="{{route('page.terms_and_conditions')}}">{{__('file.Term of Service')}}</a></li>
                                         <li><a href="{{route('page.faq')}}">{{__('file.FAQ')}}</a></li> --}}

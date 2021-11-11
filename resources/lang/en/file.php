@@ -698,4 +698,6 @@ return array (
   'yearly report' => 'Yearly Report',
   'Color'=>'Color',
   'Slider'=>'Slider',
+  'Shop'=>'Shop',
+  'Brands'=>'Brands',
 );

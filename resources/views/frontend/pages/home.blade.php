@@ -180,13 +180,12 @@
                                                                         <span>Stock Out</span>
                                                                     </div>
                                                                 @endif
+
                                                                 <div class="product-overlay">
-                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
-                                                                    </a>
-                                                                    <a>
-                                                                        <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
-                                                                    </a>
+                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                                    <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
                                                                 </div>
+
                                                             </div>
                                                             <div class="product-details">
                                                                 <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
@@ -1152,7 +1151,7 @@
 
 
 
-<!--Product area starts-->
+<!--Product area starts Brands-->
 <section class="brand-tab-section">
     <div class="container">
         <div class="row">
@@ -1178,7 +1177,8 @@
         </div>
     </div>
 </section>
-<!--product area ends-->
+<!--Product area starts Brands-->
+
 <!--Hero Promo Area starts--->
 <div class="hero-promo-area v1">
     <div class="container">

@@ -31,7 +31,7 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session", "token"
+    | Supported: "session"
     |
     */
 
@@ -39,16 +39,6 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-        ],
-        // 'admin' => [
-        //     'driver' => 'session',
-        //     'provider' => 'admins',
-        // ],
-
-        'api' => [
-            'driver' => 'passport',
-            'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -80,6 +70,7 @@ return [
             'model' => App\User::class,
             // 'model' => App\Models\User::class,
         ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -104,12 +95,6 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'admins' => [
-            'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

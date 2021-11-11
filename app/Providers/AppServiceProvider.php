@@ -37,7 +37,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
             $locale = 'en';
