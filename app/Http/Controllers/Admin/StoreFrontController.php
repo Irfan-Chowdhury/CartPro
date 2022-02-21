@@ -197,9 +197,9 @@ class StoreFrontController extends Controller
     {
 
         $validator = Validator::make($request->all(),[
-            'image_favicon_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            'image_header_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-            'image_mail_logo'    => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'image_favicon_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
+            'image_header_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
+            'image_mail_logo'    => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             // 'image_topbar_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -217,6 +217,7 @@ class StoreFrontController extends Controller
                     [ 'image' => $this->imageStore($request->image_favicon_logo,$directory,$type='store_front')]
                 );
         }
+
         if ($request->title_header_logo=="header_logo" && (!empty($request->image_header_logo))) {
             $this->previousImageDeleteFromStorefront('header_logo');
             StorefrontImage::updateOrCreate(

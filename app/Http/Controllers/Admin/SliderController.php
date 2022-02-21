@@ -126,7 +126,7 @@ class SliderController extends Controller
             $validator = Validator::make($request->only('slider_title','type','slider_image'),[
                 'slider_title'  => 'required|unique:slider_translations,slider_title',
                 'type'          => 'required',
-                'slider_image'  => 'required|image|max:10240|mimes:jpeg,png,jpg,gif',
+                'slider_image'  => 'required|image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             ]);
 
             if ($validator->fails()){
@@ -205,7 +205,7 @@ class SliderController extends Controller
             $validator = Validator::make($request->only('slider_title','type','slider_image'),[
                 'slider_title'  => 'required|unique:slider_translations,slider_title,'.$request->slider_Translation_id,
                 'type'          => 'required',
-                'slider_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+                'slider_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             ]);
 
             if ($validator->fails()){

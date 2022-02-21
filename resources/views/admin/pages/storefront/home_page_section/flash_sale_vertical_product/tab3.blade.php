@@ -5,12 +5,12 @@
         <input type="text" name="storefront_vertical_product_3_title" class="form-control" placeholder="Type Title" value="{{$setting[143]->settingTranslation->value ?? null}}" >
     </div>
 </div>
-<div class="form-group row">
+<div class="form-group row d-none">
     <label class="col-sm-4 col-form-label"><b>Type</b></label>
     <div class="col-sm-8">
         <select name="storefront_vertical_product_3_type" id="storefrontVerticalProduct_3_Type" class="form-control" data-live-search="true" data-live-search-style="begins">
             <option value="">-- Select Type --</option>
-            <option value="{{__('category_products')}}" {{ $setting[144]->plain_value == 'category_products' ? 'selected="selected"' : '' }}>{{__('Category Products')}}</option>
+            <option value="{{__('category_products')}}" selected {{ $setting[144]->plain_value == 'category_products' ? 'selected="selected"' : '' }}>{{__('Category Products')}}</option>
             <option value="{{__('custom_products')}}" {{ $setting[144]->plain_value == 'custom_products' ? 'selected="selected"' : '' }}>{{__('Custom Products')}}</option>
             <option value="{{__('latest_products')}}" {{ $setting[144]->plain_value == 'latest_products' ? 'selected="selected"' : '' }}>{{__('Latest Products')}}</option>
             <option value="{{__('recently_viewed_products')}}" {{ $setting[144]->plain_value == 'recently_viewed_products' ? 'selected="selected"' : '' }}>{{__('Recently Viewed Products')}}</option>
@@ -22,6 +22,7 @@
         <label class="col-sm-4 col-form-label"><b>Category</b></label>
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                <option value="NULL">NULL</option>
                 @foreach ($categories as $item)
                     <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach
@@ -33,6 +34,7 @@
         <label class="col-sm-4 col-form-label"><b>Category</b></label>
         <div class="col-sm-8">
             <select name="storefront_vertical_product_3_category_id" id="storefrontVerticalProduct_3_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                <option value="NULL">NULL</option>
                 @foreach ($categories as $item)
                     <option value="{{$item->id}}" {{ $setting[145]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach

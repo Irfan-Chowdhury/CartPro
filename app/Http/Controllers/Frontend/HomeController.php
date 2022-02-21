@@ -220,6 +220,8 @@ class HomeController extends Controller
             }
         }
 
+        // return $storefront_vertical_product_1_title;
+
 
         if ($active_campaign_flash_id) {
             $flash_sales = FlashSale::with('flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
