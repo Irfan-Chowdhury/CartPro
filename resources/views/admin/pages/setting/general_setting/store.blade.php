@@ -1,56 +1,56 @@
 <div class="card">
-    <h3 class="card-header p-3"><b>Store</b></h3>
+    <h3 class="card-header p-3"><b>@lang('file.Store')</b></h3>
     <hr>
     <div class="card-body">
         <div class="row">
             <div class="col-md-10">
-                <form id="storeSubmit" method="POST" action="{{route('admin.setting.store.store_or_update')}}">
+                <form id="storeSubmit" method="POST" action="{{route('admin.setting.store.store_or_update')}}" enctype="multipart/form-data">
 
                     @csrf
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Store Name <span class="text-danger">*</span></b></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Store Name') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_name" @empty(!$setting_store) value="{{$setting_store->store_name}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Store Tagline</b></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Store Tagline')</b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_tagline" @empty(!$setting_store) value="{{$setting_store->store_tagline}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Email <span class="text-danger">*</span> </b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Email') <span class="text-danger">*</span> </b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_email" @empty(!$setting_store) value="{{$setting_store->store_email}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Phone <span class="text-danger">*</span> </b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Phone') <span class="text-danger">*</span> </b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_phone" @empty(!$setting_store) value="{{$setting_store->store_phone}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Address 1 </b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Address 1') </b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_address_1" @empty(!$setting_store) value="{{$setting_store->store_address_1}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Address 2 </b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Address 2') </b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_address_2" @empty(!$setting_store) value="{{$setting_store->store_address_2}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store City</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store City')</b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_city" @empty(!$setting_store) value="{{$setting_store->store_city}}" @endempty class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Country</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Country')</b></label>
                         <div class="col-sm-8">
                             <select name="store_country" class="form-control selectpicker" data-live-search="true" title='{{__('Select Conutry')}}'>
                                 @foreach ($countries as $country)
@@ -59,37 +59,51 @@
                             </select>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store State</b></label>
-                        <div class="col-sm-8">
-                            <input type="text" name="" class="form-control">
-                        </div>
-                    </div> --}}
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Store Zip</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Store Zip')</b></label>
                         <div class="col-sm-8">
                             <input type="text" name="store_zip" @empty(!$setting_store) value="{{$setting_store->store_zip}}" @endempty class="form-control">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Admin Logo')</b></label>
+
+                        <div class="col-sm-8">
+                            <div class="d-flex justify-content-between">
+                                @if(isset($setting_store->admin_logo) && $setting_store->admin_logo!==null && Illuminate\Support\Facades\File::exists(public_path($setting_store->admin_logo)))
+                                    <div><img src="{{asset('public/'.$setting_store->admin_logo)}}" id="admin_logo" width="100px" height="100px"></div>
+                                @else
+                                    <div><img src="https://dummyimage.com/100x100/000000/0f6954.png&text=Admin-Logo"  height="100px" width="100px"></div>
+                                @endif
+                            </div>
+                            <div>
+                                <input type="file" id="admin_logo" name="admin_logo" class="form-control" onchange="showImage(this,'admin_logo')">
+                            </div>
+
+                        </div>
+                    </div>
                     <br>
 
-                    <h3 class="text-bold">Privacy Settings</h3><br>
+
+                    <!-- Privacy Settings -->
+
+                    <h3 class="text-bold">@lang('file.Privacy Settings')</h3><br>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Hide Store Phone</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Hide Store Phone')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
                                 <input type="checkbox" value="1" name="hide_store_phone" @empty(!$setting_store) {{$setting_store->hide_store_phone =="1" ? "checked" : ''}} @endempty class="form-check-input">
-                                <label class="p-0 form-check-label" for="exampleCheck1">Hide store phone from the storefront</label>
+                                <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Hide store phone from the storefront')</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Hide Store Email</b></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Hide Store Email')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
                                 <input type="checkbox" value="1" name="hide_store_email" @empty(!$setting_store) {{$setting_store->hide_store_email =="1" ? "checked" : ''}} @endempty class="form-check-input">
-                                <label class="p-0 form-check-label" for="exampleCheck1">Hide store email from the storefront</label>
+                                <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Hide store email from the storefront')</label>
                             </div>
                         </div>
                     </div>
@@ -99,7 +113,7 @@
                     <div class="form-group row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">@lang('file.Save')</button>
                         </div>
                     </div>
                 </form>
@@ -110,7 +124,24 @@
     </div>
 </div>
 
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
 
-{{-- https://github.com/antonioribeiro/countries --}}
-{{-- https://dev.to/kingsconsult/how-to-get-the-entire-country-list-in-laravel-8-downwards-ahb --}}
-{{-- https://github.com/DougSisk/laravel-country-state --}}
+            //Image Show Before Upload End
+            function showImage(data, logo){
+                if(data.files && data.files[0]){
+                    var obj = new FileReader();
+
+                    obj.onload = function(d){
+                        var image = document.getElementById(logo);
+                        image.src = d.target.result;
+                    }
+                    obj.readAsDataURL(data.files[0]);
+                }
+            }
+
+        })(jQuery);
+    </script>
+@endpush

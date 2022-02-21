@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\CategoryTranslation;
 use App\Models\Coupon;
 use App\Models\CouponTranslation;
 use App\Models\Product;
@@ -21,11 +20,6 @@ class CouponController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('coupon-view'))
@@ -34,7 +28,7 @@ class CouponController extends Controller
             App::setLocale($locale);
 
             $coupons = Coupon::with(['couponTranslations'=> function ($query) use ($locale){
-                $query->where('locale',$locale) //locale name correction
+                $query->where('locale',$locale)
                 ->orWhere('locale','en')
                 ->orderBy('id','DESC');
             }])
@@ -142,24 +136,17 @@ class CouponController extends Controller
             $coupon = new Coupon();
             $coupon->slug          = $this->slug($request->coupon_name);
             $coupon->coupon_code   = $request->coupon_code;
-            // $coupon->value         = $request->value;
             $coupon->value         = number_format((float)$request->value, env('FORMAT_NUMBER'), '.', '');
-
             $coupon->discount_type = $request->discount_type;
             $coupon->free_shipping = $request->free_shipping ?? 0;
-
-            // $coupon->minimum_spend = $request->minimum_spend;
-            // $coupon->maximum_spend = $request->maximum_spend;
             $coupon->minimum_spend = number_format((float)$request->minimum_spend, env('FORMAT_NUMBER'), '.', '');
             $coupon->maximum_spend = number_format((float)$request->maximum_spend, env('FORMAT_NUMBER'), '.', '');
-
-            $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon;
-            $coupon->usage_limit_per_customer = $request->usage_limit_per_customer;
+            // $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon ?? 0;
+            // $coupon->usage_limit_per_customer = $request->usage_limit_per_customer  ?? 0;
             $coupon->used          = $request->used ?? 0;
             $coupon->is_active     = $request->is_active ?? 0;
-            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date));
-            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date));
-
+            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date)) ?? NULL;
+            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date)) ?? NULL;
             $coupon_translation  = new CouponTranslation();
             $coupon_translation->locale      = $locale;
             $coupon_translation->coupon_name = $request->coupon_name;
@@ -221,8 +208,6 @@ class CouponController extends Controller
             'products','categories'])
         ->find($id);
 
-        // return $coupon;
-
         return view('admin.pages.coupon.edit',compact('products','categories','locale','coupon'));
     }
 
@@ -245,24 +230,21 @@ class CouponController extends Controller
         if (auth()->user()->can('coupon-edit'))
         {
             $coupon = Coupon::find($request->coupon_id);
+            $coupon->slug          = $this->slug($request->coupon_name);
             $coupon->coupon_code   = $request->coupon_code;
-            // $coupon->value         = $request->value;
             $coupon->value         = number_format((float)$request->value, env('FORMAT_NUMBER'), '.', '');
 
             $coupon->discount_type = $request->discount_type;
             $coupon->free_shipping = $request->free_shipping ?? 0;
-
-            // $coupon->minimum_spend = $request->minimum_spend;
-            // $coupon->maximum_spend = $request->maximum_spend;
             $coupon->minimum_spend = number_format((float)$request->minimum_spend, env('FORMAT_NUMBER'), '.', '');
             $coupon->maximum_spend = number_format((float)$request->maximum_spend, env('FORMAT_NUMBER'), '.', '');
 
-            $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon;
-            $coupon->usage_limit_per_customer = $request->usage_limit_per_customer;
+            // $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon  ?? NULL;
+            // $coupon->usage_limit_per_customer = $request->usage_limit_per_customer  ?? NULL;
             $coupon->used          = $request->used ?? 0;
             $coupon->is_active     = $request->is_active ?? 0;
-            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date));
-            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date));
+            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date)) ?? NULL;
+            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date)) ?? NULL;
 
 
             DB::beginTransaction();
@@ -317,83 +299,3 @@ class CouponController extends Controller
         }
     }
 }
-
-
-
-
-
-// $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
-//     $query->where('local',$locale)
-//     ->orWhere('local','en');
-//     // ->orderBy('id','DESC');
-//     // ->orderBy('local');
-// }])
-// ->where('is_active',1)
-// ->get();
-// //return $categories;
-
-// $category_translation  = CategoryTranslation::where('category_id',13);
-//                         // ->where('local',$locale)->pluck('local');
-
-// if ($category_translation->where('local',$locale)->pluck('local')) {
-//     $locale = $category_translation->where('local',$locale)->pluck('local');
-// }else{
-//     $locale = $category_translation->where('local','en')->pluck('local');
-// }
-// return $locale;
-
-// //Test
-// foreach ($categories as $item) {
-//     if ($item->categoryTranslation->isNotEmpty()) {
-//         foreach ($item->categoryTranslation as $key => $value){
-//             if ($key<1){
-//                 if ($value->local==$locale){
-//                     echo $value->category_name.'</br>';
-//                 }elseif ($value->local=='en') {
-//                     echo $value->category_name.'</br>';
-//                 }
-//             }
-//         }
-//     }
-//     else{
-//         echo 'NULL'.'</br>';
-//     }
-// }
-// // foreach ($products as $item) {
-// //     if ($item->productTranslation->isNotEmpty()) {
-// //         foreach ($item->productTranslation as $key => $value){
-// //             if ($key<1){
-// //                 if ($value->local==$locale){
-// //                     echo $value->product_name.'</br>';
-// //                 }elseif ($value->local=='en') {
-// //                     echo $value->product_name.'</br>';
-// //                 }
-// //             }
-// //         }
-// //     }
-// //     else{
-// //         echo 'NULL'.'</br>';
-// //     }
-// // }
-
-// //Test
-
-
-
-//Follow this
-// foreach ($categories as $item) {
-//     if ($item->categoryTranslation->isNotEmpty()) {
-//         foreach ($item->categoryTranslation as $key => $value){
-
-//             if ($value->local==$locale){
-//                 echo $value->category_name.'</br>';
-//                 break;
-//             }
-//             else{
-//                 echo $value->category_name.'</br>';
-//                 break;
-//             }
-
-//         }
-//     }
-// }

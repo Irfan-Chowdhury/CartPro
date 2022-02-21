@@ -1,6 +1,4 @@
-{{-- @extends('admin.main')
 
-@section('admin_content') --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +16,7 @@
     <link rel="stylesheet" href="<?php echo asset('public/css/style.default.css') ?>" id="theme-stylesheet"
           type="text/css">
     <!-- Custom stylesheet - for your changes-->
-    
+
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/favicon.ico">
 </head>
@@ -28,7 +26,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
-                
+
                 <div class="card-body">
                     <form method="POST" action="{{ route('create.user') }}">
                         @csrf

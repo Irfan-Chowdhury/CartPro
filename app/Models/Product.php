@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Kirschbaum\PowerJoins\PowerJoins;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use PowerJoins;
+    use PowerJoins, SoftDeletes;
 
     protected $fillable = [
         'brand_id',
@@ -31,12 +32,8 @@ class Product extends Model
         'avg_rating'
     ];
 
-
-    // public function productTranslation()
-    // {
-    // 	return $this->hasMany(ProductTranslation::class,'product_id');
-    // }
-
+    protected $dates = ['deleted_at'];
+    
     public function productTranslation()
     {
     	$locale = Session::get('currentLocal');
@@ -118,14 +115,4 @@ class Product extends Model
     {
         return $this->hasMany(CategoryProduct::class);
     }
-
-
-
-
-
-    // public function tags()
-    // {
-    //     return $this->belongsToMany(Tag::class)
-    //                 ->withPivot('name');
-    // }
 }

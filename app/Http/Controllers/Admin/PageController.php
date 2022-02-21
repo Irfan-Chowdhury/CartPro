@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Exception;
 use Illuminate\Support\Facades\App;
 
 class PageController extends Controller
@@ -26,7 +24,7 @@ class PageController extends Controller
             App::setLocale(Session::get('currentLocal'));
 
             $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
-                $query->where('locale',$locale) //locale name correction
+                $query->where('locale',$locale)
                 ->orWhere('locale','en')
                 ->orderBy('id','DESC');
             }])
@@ -46,9 +44,9 @@ class PageController extends Controller
                             foreach ($row->pageTranslations as $key => $value){
                                 if ($key<1){
                                     if ($value->locale==$locale){
-                                        return $value->page_name;
+                                        return htmlspecialchars_decode($value->page_name);
                                     }elseif($value->locale=='en'){
-                                        return $value->page_name;
+                                        return htmlspecialchars_decode($value->page_name);
                                     }
                                 }
                             }
@@ -72,16 +70,10 @@ class PageController extends Controller
                                 $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
                             }
                         }
-
-                        // $domain_name = $_SERVER['SERVER_NAME'];
-                        // $page_url =  'https://'.$domain_name.'/page/'.$row->slug;
-                        // $actionBtn .= '<button type="button" class="copy_to_clipboard ml-2 btn btn-outline-dark btn-sm" data-url="'.$page_url.'">Copy To Clipboard</button>';
-
                         return $actionBtn;
                     })
                     ->addColumn('copy_url', function ($row)
                     {
-                        // $domain_name = $_SERVER['SERVER_NAME'];
                         return $row->slug;
                     })
                     ->rawColumns(['action'])
@@ -103,22 +95,21 @@ class PageController extends Controller
                     'body' => 'required'
                 ]);
 
-                if ($validator->fails())
-                {
+                if ($validator->fails()){
                     return response()->json(['errors' => $validator->errors()->all()]);
                 }
 
                 $locale = Session::get('currentLocal');
 
                 $page = new Page();
-                $page->slug      = $this->slug($request->page_name);
+                $page->slug      = $this->slug(htmlspecialchars_decode($request->page_name));
                 $page->is_active = $request->is_active ?? 0;
                 $page->save();
 
                 $page_translation = new PageTranslation();
                 $page_translation->page_id   = $page->id;
                 $page_translation->locale    = $locale;
-                $page_translation->page_name = $request->page_name;
+                $page_translation->page_name = htmlspecialchars_decode($request->page_name);
                 $page_translation->body      = $request->body;
                 $page_translation->save();
 
@@ -133,8 +124,9 @@ class PageController extends Controller
 
         $page = Page::find($request->page_id);
         $page_translation = PageTranslation::where('page_id',$request->page_id)->where('locale',$locale)->first();
+        $page_translation_body = htmlspecialchars_decode($page_translation->body);
 
-        return response()->json(['page'=> $page, 'page_translation' => $page_translation]);
+        return response()->json(['page'=> $page, 'page_translation' => $page_translation, 'page_translation_body'=> $page_translation_body]);
     }
 
     public function update(Request $request)
@@ -155,12 +147,13 @@ class PageController extends Controller
                 }
 
                 $page = Page::find($request->page_id);
+                $page->slug      = $this->slug(htmlspecialchars_decode($request->page_name));
                 $page->is_active = $request->is_active ?? 0;
                 $page->update();
 
                 PageTranslation::UpdateOrCreate(
                     [ 'page_id'   => $request->page_id,  'locale' => $locale ],
-                    [ 'page_name' => $request->page_name, 'body' => $request->body]);
+                    [ 'page_name' => htmlspecialchars_decode($request->page_name), 'body' => $request->body]);
 
                 return response()->json(['success'=>'Data updated Successfully']);
             }
@@ -182,7 +175,6 @@ class PageController extends Controller
     public function bulkAction(Request $request)
     {
         if ($request->ajax()) {
-
             return $this->bulkActionData($request->action_type, Page::whereIn('id',$request->idsArray));
         }
     }

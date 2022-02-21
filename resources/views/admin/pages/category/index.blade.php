@@ -1,4 +1,5 @@
 @extends('admin.main')
+@section('title','Admin | Category')
 @section('admin_content')
 <section>
 @php
@@ -12,7 +13,6 @@
         <div class="container-fluid mb-3">
             @if (auth()->user()->can('category-store'))
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record">
-                    {{-- <i class="fa fa-plus"></i> {{trans('file.Add_Category')}} --}}
                     <i class="fa fa-plus"></i> @lang('file.Add_Category')
                 </button>
             @endif
@@ -29,10 +29,10 @@
                     <tr>
                         <th class="not-exported"></th>
                         <th scope="col">{{__('file.Image')}}</th>
-                        <th scope="col">{{__('Category Name')}}</th>
-                        <th scope="col">@lang('Parent')</th>
-                        <th scope="col">@lang('Status')</th>
-                        <th scope="col">@lang('Action')</th>
+                        <th scope="col">{{__('file.Category Name')}}</th>
+                        <th scope="col">@lang('file.Parent')</th>
+                        <th scope="col">@lang('file.Status')</th>
+                        <th scope="col">@lang('file.Action')</th>
                     </tr>
                 </thead>
             </table>
@@ -43,389 +43,380 @@
     @include('admin.pages.category.edit_modal')
     @include('admin.includes.confirm_modal')
 
+    @endsection
 
-    <script type="text/javascript">
+    @push('scripts')
+        <script type="text/javascript">
+            (function ($) {
+                "use strict";
 
 
-        $(document).ready(function () {
-            let table_table = $('#category_list-table').DataTable({
-                initComplete: function () {
-                    this.api().columns([1]).every(function () {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
+                $(document).ready(function () {
+                    let table_table = $('#category_list-table').DataTable({
+                        initComplete: function () {
+                            this.api().columns([1]).every(function () {
+                                var column = this;
+                                var select = $('<select><option value=""></option></select>')
+                                    .appendTo($(column.footer()).empty())
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
 
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
+                                        column
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                    });
+
+                                column.data().unique().sort().each(function (d, j) {
+                                    select.append('<option value="' + d + '">' + d + '</option>');
+                                    $('select').selectpicker('refresh');
+                                });
                             });
+                        },
+                        responsive: true,
+                        fixedHeader: {
+                            header: true,
+                            footer: true
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "{{ route('admin.category') }}",
+                        },
 
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                            $('select').selectpicker('refresh');
-                        });
-                    });
-                },
-                responsive: true,
-                fixedHeader: {
-                    header: true,
-                    footer: true
-                },
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: "{{ route('admin.category') }}",
-                },
+                        columns: [
+                            {
+                                data: null,
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'category_image',
+                                name: 'category_image',
+                            },
+                            {
+                                data: 'category_name',
+                                name: 'category_name',
+                            },
+                            {
+                                data: 'parent',
+                                name: 'parent',
 
-                columns: [
-                    {
-                        data: null,
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'category_image',
-                        name: 'category_image',
-                    },
-                    {
-                        data: 'category_name',
-                        name: 'category_name',
-                    },
-                    {
-                        data: 'parent',
-                        name: 'parent',
-
-                    },
-                    // {
-                    //     data: 'description',
-                    //     name: 'description',
-                    // },
-                    // {
-                    //     data: 'description_position',
-                    //     name: 'description_position',
-                    //     render:function (data) {
-                    //       if (data==0) {
-                    //         return "Top";
-                    //       }else{
-                    //         return "Bottom";
-                    //       }
-                    //     }
-                    // },
-                    // {
-                    //     data: 'image',
-                    //     name: 'image',
-                    //     render:function (data) {
-                    //      return "<img class='profile-photo md' src={{ URL::to('/') }}/" + data + "/>";
-                    //    }
-
-                    // },
-                    {
-                        data: 'is_active',
-                        name: 'is_active',
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                    }
-                ],
-
-
-                "order": [],
-                'language': {
-                    'lengthMenu': '_MENU_ {{__("records per page")}}',
-                    "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                    "search": '{{trans("file.Search")}}',
-                    'paginate': {
-                        'previous': '{{trans("file.Previous")}}',
-                        'next': '{{trans("file.Next")}}'
-                    }
-                },
-                'columnDefs': [
-                    {
-                        "orderable": false,
-                        'targets': [0],
-                    },
-                    {
-                        'render': function (data, type, row, meta) {
-                            if (type === 'display') {
-                                data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                            },
+                            {
+                                data: 'is_active',
+                                name: 'is_active',
+                            },
+                            {
+                                data: 'action',
+                                name: 'action',
+                                orderable: false,
                             }
+                        ],
 
-                            return data;
+
+                        "order": [],
+                        'language': {
+                            'lengthMenu': '_MENU_ {{__("records per page")}}',
+                            "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
+                            "search": '{{trans("file.Search")}}',
+                            'paginate': {
+                                'previous': '{{trans("file.Previous")}}',
+                                'next': '{{trans("file.Next")}}'
+                            }
                         },
-                        'checkboxes': {
-                            'selectRow': true,
-                            'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                        },
-                        'targets': [0]
-                    }
-                ],
+                        'columnDefs': [
+                            {
+                                "orderable": false,
+                                'targets': [0],
+                            },
+                            {
+                                'render': function (data, type, row, meta) {
+                                    if (type === 'display') {
+                                        data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                                    }
+
+                                    return data;
+                                },
+                                'checkboxes': {
+                                    'selectRow': true,
+                                    'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+                                },
+                                'targets': [0]
+                            }
+                        ],
 
 
-                'select': {style: 'multi', selector: 'td:first-child'},
-                'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                dom: '<"row"lfB>rtip',
-                buttons: [
-                    {
-                        extend: 'pdf',
-                        text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
-                        exportOptions: {
-                            columns: ':visible:Not(.not-exported)',
-                            rows: ':visible'
-                        },
-                    },
-                    {
-                        extend: 'csv',
-                        text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
-                        exportOptions: {
-                            columns: ':visible:Not(.not-exported)',
-                            rows: ':visible'
-                        },
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i title="print" class="fa fa-print"></i>',
-                        exportOptions: {
-                            columns: ':visible:Not(.not-exported)',
-                            rows: ':visible'
-                        },
-                    },
-                    {
-                        extend: 'colvis',
-                        text: '<i title="column visibility" class="fa fa-eye"></i>',
-                        columns: ':gt(0)'
-                    },
-                ],
-            });
-            new $.fn.dataTable.FixedHeader(table_table);
-        });
+                        'select': {style: 'multi', selector: 'td:first-child'},
+                        'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        dom: '<"row"lfB>rtip',
+                        buttons: [
+                            {
+                                extend: 'pdf',
+                                text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
+                                exportOptions: {
+                                    columns: ':visible:Not(.not-exported)',
+                                    rows: ':visible'
+                                },
+                            },
+                            {
+                                extend: 'csv',
+                                text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
+                                exportOptions: {
+                                    columns: ':visible:Not(.not-exported)',
+                                    rows: ':visible'
+                                },
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i title="print" class="fa fa-print"></i>',
+                                exportOptions: {
+                                    columns: ':visible:Not(.not-exported)',
+                                    rows: ':visible'
+                                },
+                            },
+                            {
+                                extend: 'colvis',
+                                text: '<i title="column visibility" class="fa fa-eye"></i>',
+                                columns: ':gt(0)'
+                            },
+                        ],
+                    });
+                    new $.fn.dataTable.FixedHeader(table_table);
+                });
 
 
-        $('#create_record').click(function () {
-            $('.modal-title').text('{{__('Add Category')}}');
-            $('#formModal').modal('show');
-        });
+                $('#create_record').click(function () {
+                    $('#formModal').modal('show');
+                });
 
-        //----------Insert Data----------------------
+                //----------Insert Data----------------------
 
-        $('#submitForm').on('submit', function (e) {
-            e.preventDefault();
+                $("#submitButton").on("click",function(e){
+                    $('#submitButton').text('Saving ...');
+                });
 
-            $.ajax({
-                url: "{{route('admin.category.store')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    let html = '';
-                    if (data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for (let count = 0; count < data.errors.length; count++) {
-                            html += '<p>' + data.errors[count] + '</p>';
+                $('#submitForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.category.store')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                            }
+                            else if(data.success){
+                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#submitForm')[0].reset();
+                                $("#formModal").modal('hide');
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                                $('#submitButton').text('Save');
+                            }
                         }
-                        html += '</div>';
-                    }
-                    if(data.success){
-                        $('#category_list-table').DataTable().ajax.reload();
-                        $('#submitForm')[0].reset();
-                        $("#formModal").modal('hide');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').addClass('alert alert-success').html(data.success);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                }
-            });
-        });
+                    });
+                });
 
-        $(document).on('click', '.edit', function () {
+                $(document).on('click', '.edit', function () {
 
-            var id = $(this).data("id");
-            $('#alert_message').html('');
+                    var id = $(this).data("id");
+                    $('#alert_message').html('');
 
-            $.ajax({
-                url: "{{ route('admin.category.edit') }}",
-                type: "GET",
-                data: {category_id:id},
-                success: function (data) {
-                    console.log(data);
-                    $('#category_id').val(data.category.id);
-                    $('#category_translation_id').val(data.categoryTranslation.id);
-                    $('#category_name_edit').val(data.categoryTranslation.category_name);
-                    $('#description_edit').val(data.category.description);
-                    $('#cateogry_icon_edit').val(data.category.icon);
-                    $('#parent_id_edit').selectpicker('val', data.category.parent_id);
-                    $('#description_position_edit').selectpicker('val', data.category.description_position);
-                    if (data.category.top === 1) {
-                        $('#top_edit').prop('checked', true);
-                    } else {
-                        $('#top_edit').prop('checked', false);
-                    }
-                    if (data.category.is_active === 1) {
-                        $('#isActive_edit').prop('checked', true);
-                    } else {
-                        $('#isActive_edit').prop('checked', false);
-                    }
-                    $('#editModal').modal('show');
-                }
-            })
-        });
-
-        //----------Update Data----------------------
-
-        $('#updateForm').on('submit', function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: "{{route('admin.category.update')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    let html = '';
-                    if (data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for (let count = 0; count < data.errors.length; count++) {
-                            html += '<p>' + data.errors[count] + '</p>';
+                    $.ajax({
+                        url: "{{ route('admin.category.edit') }}",
+                        type: "GET",
+                        data: {category_id:id},
+                        success: function (data) {
+                            console.log(data);
+                            $('#category_id').val(data.category.id);
+                            $('#category_translation_id').val(data.categoryTranslation.id);
+                            $('#category_name_edit').val(data.categoryTranslation.category_name);
+                            $('#description_edit').val(data.category.description);
+                            $('#cateogry_icon_edit').val(data.category.icon);
+                            $('#parent_id_edit').selectpicker('val', data.category.parent_id);
+                            $('#description_position_edit').selectpicker('val', data.category.description_position);
+                            if (data.category.top === 1) {
+                                $('#top_edit').prop('checked', true);
+                            } else {
+                                $('#top_edit').prop('checked', false);
+                            }
+                            if (data.category.is_active === 1) {
+                                $('#isActive_edit').prop('checked', true);
+                            } else {
+                                $('#isActive_edit').prop('checked', false);
+                            }
+                            $('#editModal').modal('show');
                         }
-                        html += '</div>';
-                        $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
-                    }
-                    else if(data.success){
-                        $('#category_list-table').DataTable().ajax.reload();
-                        $('#updateForm')[0].reset();
-                        $("#editModal").modal('hide');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').addClass('alert alert-success').html(data.success);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                }
-            });
-        });
+                    })
+                });
 
+                //----------Update Data----------------------
 
-    //---------- Active -------------
-	$(document).on("click",".active",function(e){
-		e.preventDefault();
-		var categoryId = $(this).data("id");
-		console.log(categoryId);
+                $("#UpdateButton").on("click",function(e){
+                    $('#UpdateButton').text('Updating ...');
+                });
 
-		$.ajax({
-			url: "{{route('admin.category.active')}}",
-			type: "GET",
-			data: {id:categoryId},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#category_list-table').DataTable().ajax.reload();
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
+                $('#updateForm').on('submit', function (e) {
+                    e.preventDefault();
 
-	//---------- Inactive -------------
-	$(document).on("click",".inactive",function(e){
-		e.preventDefault();
-		var categoryId = $(this).data("id");
-		console.log(categoryId);
-
-		$.ajax({
-			url: "{{route('admin.category.inactive')}}",
-			type: "GET",
-			data: {id:categoryId},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#category_list-table').DataTable().ajax.reload();
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
-
-
-        //Bulk Action
-    $("#bulk_action").on("click",function(){
-        var idsArray = [];
-        let table = $('#category_list-table').DataTable();
-        idsArray = table.rows({selected: true}).ids().toArray();
-
-        if(idsArray.length === 0){
-            alert("Please Select at least one checkbox.");
-        }else{
-            $('#bulkConfirmModal').modal('show');
-            let action_type;
-
-            $("#active").on("click",function(){
-                console.log(idsArray);
-                action_type = "active";
-                $.ajax({
-                    url: "{{route('admin.category.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#category_list-table').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
+                    $.ajax({
+                        url: "{{route('admin.category.update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                            }
+                            else if(data.success){
+                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#updateForm')[0].reset();
+                                $("#editModal").modal('hide');
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                                $('#UpdateButton').text('Update');
+                            }
                         }
+                    });
+                });
+
+
+                //---------- Active -------------
+                $(document).on("click",".active",function(e){
+                    e.preventDefault();
+                    var categoryId = $(this).data("id");
+                    console.log(categoryId);
+
+                    $.ajax({
+                        url: "{{route('admin.category.active')}}",
+                        type: "GET",
+                        data: {id:categoryId},
+                        success: function(data){
+                            console.log(data);
+                            if(data.success){
+                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //---------- Inactive -------------
+                $(document).on("click",".inactive",function(e){
+                    e.preventDefault();
+                    var categoryId = $(this).data("id");
+                    console.log(categoryId);
+
+                    $.ajax({
+                        url: "{{route('admin.category.inactive')}}",
+                        type: "GET",
+                        data: {id:categoryId},
+                        success: function(data){
+                            console.log(data);
+                            if(data.success){
+                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                    //Bulk Action
+                $("#bulk_action").on("click",function(){
+                    var idsArray = [];
+                    let table = $('#category_list-table').DataTable();
+                    idsArray = table.rows({selected: true}).ids().toArray();
+
+                    if(idsArray.length === 0){
+                        alert("Please Select at least one checkbox.");
+                    }else{
+                        $('#bulkConfirmModal').modal('show');
+                        let action_type;
+
+                        $("#active").on("click",function(){
+                            console.log(idsArray);
+                            action_type = "active";
+                            $.ajax({
+                                url: "{{route('admin.category.bulk_action')}}",
+                                method: "GET",
+                                data: {idsArray:idsArray,action_type:action_type},
+                                success: function (data) {
+                                    if(data.success){
+                                        $('#bulkConfirmModal').modal('hide');
+                                        table.rows('.selected').deselect();
+                                        $('#category_list-table').DataTable().ajax.reload();
+                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                        $('#alert_message').addClass('alert alert-success').html(data.success);
+                                        setTimeout(function() {
+                                            $('#alert_message').fadeOut("slow");
+                                        }, 3000);
+                                    }
+                                }
+                            });
+                        });
+                        $("#inactive").on("click",function(){
+                            action_type = "inactive";
+                            console.log(idsArray);
+                            $.ajax({
+                                url: "{{route('admin.category.bulk_action')}}",
+                                method: "GET",
+                                data: {idsArray:idsArray,action_type:action_type},
+                                success: function (data) {
+                                    if(data.success){
+                                        $('#bulkConfirmModal').modal('hide');
+                                        table.rows('.selected').deselect();
+                                        $('#category_list-table').DataTable().ajax.reload();
+                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                        $('#alert_message').addClass('alert alert-success').html(data.success);
+                                        setTimeout(function() {
+                                            $('#alert_message').fadeOut("slow");
+                                        }, 3000);
+                                    }
+                                }
+                            });
+                        });
                     }
                 });
-            });
-            $("#inactive").on("click",function(){
-                action_type = "inactive";
-                console.log(idsArray);
-                $.ajax({
-                    url: "{{route('admin.category.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#category_list-table').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-        }
-    });
 
 
-    </script>
-@endsection
+            })(jQuery);
+        </script>
+    @endpush

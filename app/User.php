@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Models\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasRoles;
 
@@ -42,5 +43,10 @@ class User extends Authenticatable
     public function roleName()
     {
         return $this->belongsTo('Spatie\Permission\Models\Role','role','id');
+    }
+
+    public function orders()
+    {
+    	return $this->hasMany(Order::class,'user_id');
     }
 }

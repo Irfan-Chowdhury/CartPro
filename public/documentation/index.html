@@ -1,0 +1,916 @@
+<!doctype html>
+<!--[if IE 6 ]><html lang="en-us" class="ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en-us" class="ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en-us" class="ie8"> <![endif]-->
+<!--[if (gt IE 7)|!(IE)]><!-->
+<html lang="en-us">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>CartPro - Documentation</title>
+    <meta name="description" content="PeoplePro offers a comprehensive HR & payroll solution to manage all of your business HR needs which can also be customized according to your requirements." />
+    <meta name="author" content="LionCoders">
+    <meta name="copyright" content="LionCoders">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700">
+    <link rel="stylesheet" href="public/documentation/assets/css/documenter_style.css" media="all">
+    <link rel="stylesheet" href="public/documentation/assets/css/jquery.mCustomScrollbar.css" media="all">
+
+    <script src="public/documentation/assets/js/jquery.js"></script>
+    <script src="public/documentation/assets/js/jquery.mCustomScrollbar.js"></script>
+    <script src="public/documentation/assets/js/smooth-scroll.min.js"></script>
+    <script src="public/documentation/assets/js/typeAhead.js"></script>
+    <script src="public/documentation/assets/js/script.js"></script>
+</head>
+
+<body>
+<div id="documenter_sidebar">
+    <img src="public/documentation/assets/images/logo-cartpro.png" style="border: none;margin: 10px 30px -10px;width: 150px">
+
+    <ul id="documenter_nav">
+        <li><a class="current" href="#documenter_cover">Start</a></li>
+        <li><a href="#server_requirement" title="SERVER REQUIREMENTS">Server Requirements</a></li>
+        <li><a href="#install" title="INSTALL">Install</a></li>
+        <li><a href="#admin_log_in" title="Log In">Log In</a></li>
+        <li><a href="#admin_dashboard" title="Admin DASHBOARD">Dashboard</a></li>
+        <li><a href="#empty_database" title="Empty Database">Empty Database</a></li>
+        <li><a href="#datatable_options" title="Datatable Options">Datatable Options</a></li>
+        <li><a href="#category" title="Categories">Categories</a></li>
+        <li><a href="#brand" title="Brands">Brands</a></li>
+        <li><a href="#attribute_set" title="Attribute Set">Attribute Set</a></li>
+        <li><a href="#attributes" title="Attributes">Attributes</a></li>
+        <li><a href="#tag" title="Tag">Tags</a></li>
+        <li><a href="#product" title="Product">Catalog</a></li>
+        <li><a href="#review" title="review">Reviews</a></li>
+        <li><a href="#order" title="Order">Order</a></li>
+        <li><a href="#transaction" title="Transaction">Transaction</a></li>
+        <li><a href="#flash_sale" title="Flash Sale">Flash Sale</a></li>
+        <li><a href="#coupon" title="Coupons">Coupons</a></li>
+        <li><a href="#page" title="Page">Pages</a></li>
+        <li><a href="#menu" title="Menu">Menus</a></li>
+        <li><a href="#user" title="Users">Users</a></li>
+        <li><a href="#role" title="Roles">Roles</a></li>
+        <li><a href="#tax" title="Taxes">Taxes</a></li>
+        <li><a href="#storefront" title="Storefront">Storefront</a></li>
+        <li><a href="#slider" title="Slider">Slider</a></li>
+        <li><a href="#color" title="Color">Color</a></li>
+        <li><a href="#setting" title="Settings">Settings</a></li>
+        <li><a href="#support" title="Support">Support</a></li>
+    </ul>
+</div>
+<div id="documenter_content">
+
+
+    <div id="the-basics">
+        <input class="typeahead form-control" type="text" placeholder="Search">
+    </div>
+
+    <section id="documenter_cover">
+        <h1>CartPro- Laravel E-commerce System</h1>
+        <div id="documenter_buttons"></div>
+        <hr>
+        <ul>
+            <li>By : LionCoders</li>
+            <li>Version : 1.0.1</li>
+            <li>Support : <a href="mailto:support@lion-coders.com">support@lion-coders.com</a></li>
+        </ul>
+        <p>  CartPro is a complete E-Commerce system to easily start your online E-Commerce business. It has a powerful admin panel for managing products, categories, coupons, orders, pages, and much more. CartPro is extremely optimized for giving customers the best purchasing experience.
+            The system is highly performant and protected against SQL injection, XSS, CSRF, and other attacks.</p>
+        <p>
+            The documentation is written in a chronological order . There are some dependencies that need to be
+            maintained
+            properly in a sequential order . Please try to follow that . You can also seach using the search bar for
+            a specific
+            query.
+        </p>
+    </section>
+
+    <section id="server_requirement">
+        <div class="page-header">
+            <h3>SERVER REQUIREMENT</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            The software is built on most popular PHP framework Laravel(Version 8). The minimum
+            requirements for running the software is listed below .Please do check if your server matches those
+            requirements</p>
+        <ul>
+            <li>PHP &gt;= 7.3.0</li>
+            <li>BCMath PHP Extension</li>
+            <li>Ctype PHP Extension</li>
+            <li>Fileinfo PHP Extension</li>
+            <li>JSON PHP Extension</li>
+            <li>Mbstring PHP Extension</li>
+            <li>OpenSSL PHP Extension</li>
+            <li>PDO PHP Extension</li>
+            <li>Tokenizer PHP Extension</li>
+            <li>XML PHP Extension</li>
+        </ul>
+        <p>
+            &nbsp;</p>
+        <p>
+            <strong><i>NB:</strong> Please note if you try to install the application on any other server say LiteSpeed or IIS, you
+                may get undesirable result. We do not recommend you to use other server than Apache or Nginx. Also
+                we do not provide support for installation in server other than Apache and localhost installation. Please follow the installation process,
+            below. Do not use php artisan serve command. And lastly we don't provide support in the localhost (except online server).</i></p>
+    </section>
+    <section id="install">
+        <div class="page-header">
+            <h3>INSTALL</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Online Hosting</strong><br>
+        Upload the zip folder you downloaded from Codecanyon to your hosting and unzip it. Please make sure you configure your web hosting’s settings, so that it shows hidden files and folders. This is to ensure that if you copy/move the contents from the unzipped folder to any other location, you copy all the files including ‘.htaccess’, ‘.env’ files which are necessary for the proper functioning of the software.
+        Now you can access the folder where you have CartPro from your browser.
+        </p>
+        <p>
+            Now follow the installation process below.
+        </p>
+
+
+        <h2><strong>Step 1</strong></h2>
+        <ul>
+            <li>
+                Please read the license arrangement before proceeding.
+            </li>
+
+            <li> You need to accept and continue for going to
+                the next step.
+            </li>
+            <img alt="" src="public/documentation/assets/images/step1.png">
+        </ul>
+        <h2><strong>Step 2</strong></h2>
+        <ul>
+            <li>
+                The system will automatically check for the server requirements. If all the requirements are
+                fulfilled,
+                You can proceed for further action.
+            </li>
+            <img alt="" src="public/documentation/assets/images/step2.png">
+        </ul>
+        <h2><strong>Step 3</strong></h2>
+        <ul>
+            <li>
+                You have to fill up the form with correct information.
+            </li>
+            <li>Please input the purchase code.
+            </li>
+            <li>
+                Input your database host e.g(localhost).
+            </li>
+            <li>
+                Your database username e.g(root).
+            </li>
+            <li>your
+                database password (if any).
+            </li>
+            <li>
+                The database name that you have already created.
+            </li>
+            <li>
+                Click on submit.
+            </li>
+            The system wil automatically import the database. This is a
+            batch process,please wait patiently while the action is processing.
+            </li>
+            <img alt="" src="public/documentation/assets/images/step3.png">
+            <img alt="" src="public/documentation/assets/images/step3_1.png">
+        </ul>
+        <h2><strong>Step 4</strong></h2>
+        <ul>
+            <li>
+                Congratulations! You have successfully installed CartPro.<br>
+                <strong>Note :</strong> your project folder contains 'install' folder, then please delete
+                the folder.
+            </li>
+            <img alt="" src="public/documentation/assets/images/step4.png">
+        </ul>
+
+        <h2><strong>Error</strong></h2>
+        <ul>
+            <li>
+                If you face a "Fatal error: Maximum execution time of ** seconds exceeded",
+                Do not worry, the software is installed properly.<br>
+                <strong>Note :</strong> your project folder contains 'install' folder, then please delete
+                the folder.
+            </li>
+        </ul>
+
+        <p>After successful installation you can login with <br>
+            username:<strong>admin</strong><br>
+            password:<strong>admin</strong></p>
+        <br>
+
+    </section>
+
+    <section id="admin_log_in">
+        <div class="page-header">
+            <h3>Log In</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            After installation go to the project/root url.Then you will be prompt to login.
+            The login credentials provided below are for initial usage only - do not forget
+            to update your password after first successful login.
+
+        <ul>
+            <li>Username ::: admin</li>
+            <li>Password ::: admin</li>
+        </ul>
+
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/adminLoginPage.png">
+        </p>
+        <p>
+            After successful login you will be redirected to the admin dashboard.
+        </p>
+    </section>
+
+    <section id="admin_dashboard">
+        <div class="page-header">
+            <h3>Admin DASHBOARD</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            The system offers an informative,interactive and user friendly admin dashboard.
+            The dashboard shows summarized information about the organization in a nutshell.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_1.png">
+        </p>
+    </section>
+
+    <section id="empty_database">
+        <div class="page-header">
+            <h3>Empty Database</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            After first time login you may want to delete the preloaded data. For that, Click on the
+            Empty Database. All the
+            preloaded data will be deleted from the database except few mandatory record that is essential for
+            running the software properly.<br>
+            <strong>Note:</strong> This is a batch process, so the action will take some time. Please wait
+            patiently.
+            <strong>***</strong> This action is irreversible, if you have your own data/record in the database, this
+            action will delete all of them.
+            This action is recommended only for the first time, unless you are sure about what you are doing.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_2.png">
+        </p>
+    </section>
+
+    <section id="datatable_options">
+        <div class="page-header">
+            <h3>Datatable Options</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            DataTables is a table enhancing plug-in that offers sorting, paging and filtering
+            abilities . In this software, datatable is used as a toll for showing data. <br>
+            Here are some of the features and usage for datatable :::
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_3.png">
+        </p>
+        <ol>
+            <li>you can select how many records to be shown in a single page (10,25 or all).Default is 10</li>
+            <li><strong>Search:</strong> Search the records/rows using keywords</li>
+            <li>You can export the records to a pdf using this button</li>
+            <li>You can export the records to a csv using this button</li>
+            <li>You can print the records using this button</li>
+            <li>You can hide/show specific columns using this button</li>
+            <!-- <li>View details of a specific record</li>
+            <li>Edit/Update a specific record</li>
+            <li>Delete a specific record</li> -->
+            <li><strong>Selector:</strong> You can select all the records/rows and perform action like print to
+                pdf/csv/print or delete multiple rows
+            </li>
+            <li><strong>Sorting:</strong> Sort columns</li>
+            <li>Edit Data</li>
+            <li>Active/Inactive Data</li>
+        </ol>
+    </section>
+
+    <section id="category">
+        <div class="page-header">
+            <h3>Category</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Category</strong>.<br>
+            You can data create, edit and active-inactive in Category.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_4.png">
+        </p>
+    </section>
+
+    <section id="brand">
+        <div class="page-header">
+            <h3>Brands</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Brands</strong>.<br>
+            You can data create, edit and active-inactive in Brand.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_5.png">
+        </p>
+    </section>
+
+    <section id="attribute_set">
+        <div class="page-header">
+            <h3>Attribute Sets</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Attribute Set</strong>.<br>
+            You can data create, edit and active-inactive in Attribute Set.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_6.png">
+        </p>
+    </section>
+
+    <section id="attributes">
+        <div class="page-header">
+            <h3>Attributes</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Attributes</strong>.<br>
+            You can data create, edit and active-inactive in Attributes.
+        </p>
+        <p>
+            <img src="public/documentation/assets/images/cartpro_admin/Screenshot_7.png">
+        </p>
+        <p>
+            During attribute create you can set Attribute Set Name, New Attribute Name, Categories, Filterable, Status.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_8.png">
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_9.png">
+
+        </p>
+    </section>
+
+    <section id="tag">
+        <div class="page-header">
+            <h3>Tags</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Tags</strong>.<br>
+            You can data create, edit and active-inactive in Tags.
+        </p>
+        <p>
+            <img src="public/documentation/assets/images/cartpro_admin/Screenshot_10.png">
+        </p>
+    </section>
+
+    <section id="product">
+        <div class="page-header">
+            <h3>Catalog</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Products</strong> --> <strong>Catalog</strong>.<br>
+            You can create, edit data and active-inactive in Products.
+        </p>
+        <p>
+            <img src="public/documentation/assets/images/cartpro_admin/Screenshot_11.png">
+        </p>
+        <p>
+            During Creating a product
+        </p>
+
+        <!--General-->
+        <p><b><i>1. General:</i></b></p>
+        <p>You can set Product Name, Description, Brand, Categories, Tax, Tags Status</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_12.png"></p>
+
+        <!--Price-->
+        <p><b><i>2. Price:</i></b></p>
+        <p>You can set Price, Special Price, Special Price Type, Special Price Start, Special Price End</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_13.png"></p>
+
+        <!--Inventory-->
+        <p><b><i>3. Inventory:</i></b></p>
+        <p>You can set SKU, Inventory Management, Quantity, Stock Availibility</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_14.png"></p>
+
+        <!--Image-->
+        <p><b><i>4. Image:</i></b></p>
+        <p>You can set Single Image (Basic), Multiple Images (Additional)</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_15.png"></p>
+
+        <!--SEO-->
+        <p><b><i>5. SEO:</i></b></p>
+        <p>You can set Meta Title, Meta Description for SEO</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_16.png"></p>
+
+        <!--Attribute-->
+        <p><b><i>6. Attribute:</i></b></p>
+        <p>You can set Attribute</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_17.png"></p>
+
+        <!--Additional-->
+        <p><b><i>7. Additional:</i></b></p>
+        <p>You can set additional information</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_18.png"></p>
+    </section>
+
+    <section id="review">
+        <div class="page-header">
+            <h3>Reviews</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Product</strong> -> <strong>Reviews</strong>.<br>
+            Customers can review a product and give a rating to it from the product page. By default, when you install FleetCart all reviews will be approved automatically. But you can change this behavior from the settings.
+            You can also see product specific reviews from the product edit page under the Reviews tab in Advanced Information group.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_19.png"></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_20.png"></p>
+    </section>
+
+    <section id="order">
+        <div class="page-header">
+            <h3>Orders</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Sales</strong> -> <strong>Order</strong>.<br>
+            You can see all order records from the order details.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_21.png"></p>
+        <p>
+            <strong>Show Order</strong>.<br>
+            Click on the order row in the table to view the details of the order.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_22.png"></p>
+    </section>
+
+    <section id="transaction">
+        <div class="page-header">
+            <h3>Transaction</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Sales</strong> -> <strong>Transaction</strong>.<br>
+            ransactions page has a list of all transaction IDs and it's payment method. You can view the order details of the transaction by clicking the order ID in the table.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_23.png"></p>
+    </section>
+
+    <section id="flash_sale">
+        <div class="page-header">
+            <h3>Flash Sale</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Flash Sale</strong><br>
+            You can create, edit and active-inactive data in Flash Sales.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_24.png"></p>
+        <p>
+            <strong>Flash Sale --> Flash Sale Create</strong><br>
+            1. Products : You have to choose any Product Name, then have to set End Date, Price , Quantity.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_25.png"></p>
+        <p> 2. Settings : You have to input Campaign Name, status.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_26.png"></p>
+    </section>
+
+    <section id="coupon">
+        <div class="page-header">
+            <h3>Coupons</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Coupons</strong><br>
+            You can create, edit and active-inactive data in Coupons.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_27.png"></p>
+        <p>
+            <strong>Coupons --> Create</strong><br>
+            1. General : You can set Coupon Name, Coupon Code, Discount Type, Value, Free Shipping, Start Date, End Date, Status.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_28.png"></p>
+        <p> 2. Usage Restrictions : You can set Minimum Spend, Maximum Spend, Products, Category.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_29.png"></p>
+        <p> 3. Usage Limits : You can set Usage Limit Per Coupon, Usage Limit Per Customer.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_30.png"></p>
+    </section>
+
+    <section id="page">
+        <div class="page-header">
+            <h3>Pages</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Pages</strong><br>
+            You can create, edit and active-inactive data in Pages.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_31.png"></p>
+        <p>
+            <strong>Pages --> Add Page</strong><br>
+            1. General : You can set Page Name, Body, Active.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_32.png"></p>
+    </section>
+
+    <section id="menu">
+        <div class="page-header">
+            <h3>Menus</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Menus</strong><br>
+            You can create, edit and active-inactive data in Menus.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_33.png"></p>
+        <p>
+            <strong>Menus --> Add New Menu</strong><br>
+            You can set Menu Name, Status.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_34.png"></p>
+        <p>
+            <strong>Menus --> Menu Structure</strong><br>
+            Please click on the eye icon from the Menu Page and then go Menu Structure.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_35.png"></p>
+
+    </section>
+
+    <section id="user">
+        <div class="page-header">
+            <h3>Users</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Users And Roles --> Users</strong><br>
+            You can create, edit and active-inactive data in Users.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_36.png"></p>
+        <p>
+            <strong>Menus --> Add New User</strong><br>
+            You can set Name User.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_37.png"></p>
+    </section>
+
+    <section id="role">
+        <div class="page-header">
+            <h3>Roles</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Users And Roles --> Roles</strong><br>
+            You can create, edit and active-inactive data in Roles and also set Permission.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_38.png"></p>
+        <p>
+            <strong>Add New Role</strong><br>
+            You can set Role.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_39.png"></p>
+        <p>
+            <strong>Permission</strong><br>
+            You can set Permission according to role.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_40.png"></p>
+    </section>
+
+    <section id="tax">
+        <div class="page-header">
+            <h3>Taxes</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Localizations --> Taxes </strong><br>
+            You can create, edit and active-inactive data in Taxes.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_41.png"></p>
+        <p>
+            <strong>Add New Tax</strong><br>
+            You can add new Tax.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_42.png"></p>
+    </section>
+
+    <section id="storefront">
+        <div class="page-header">
+            <h3>Storefront</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Appearance --> Storefront </strong><br>
+            You can modify data from Storefront. Thee is two section. General Setting Section and Home Page Section. <br>
+            <i><b>1. General</b></i>
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_43.png"></p>
+
+        <p><i><b>2. Menus</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_44.png"></p>
+
+        <p><i><b>3. Social Links</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_45.png"></p>
+
+        <p><i><b>4. Features</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_46.png"></p>
+
+        <p><i><b>5. Logo</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_47.png"></p>
+
+        <p><i><b>6. Footer</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_48.png"></p>
+
+        <p><i><b>7. Newslatter</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_49.png"></p>
+
+        <p><i><b>8. Product Page</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_50.png"></p>
+
+        <p><i><b>9. Slider Banner</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_51.png"></p>
+
+        <p><i><b>10. One Colunm Banner</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_52.png"></p>
+
+        <p><i><b>11. Two Colunm Banner</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_53.png"></p>
+
+        <p><i><b>12. Three Colunm Banner</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_54.png"></p>
+
+        <p><i><b>13. Three Colunm Full Width Banner</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_55.png"></p>
+
+        <p><i><b>14. Featured Category</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_56.png"></p>
+
+        <p><i><b>15. Top Brands</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_57.png"></p>
+
+        <p><i><b>16. Flash Sales and Verticle Products</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_58.png"></p>
+
+        <p><i><b>17. Products Tabs One</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_59.png"></p>
+
+        <p><i><b>18. Products Tabs Two</b></i></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_60.png"></p>
+    </section>
+
+    <section id="slider">
+        <div class="page-header">
+            <h3>Slider</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Appearence --> Slider </strong><br>
+            You can create, edit and active-inactive data in Slider.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_61.png"></p>
+
+        <p><b><i>Add Slider</i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_62.png"></p>
+    </section>
+
+    <section id="color">
+        <div class="page-header">
+            <h3>Color</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Appearence --> Color </strong><br>
+            You can create, edit and active-inactive data in Color.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_63.png"></p>
+
+        <p><b><i>Add Color</i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_64.png"></p>
+    </section>
+
+    <section id="setting">
+        <div class="page-header">
+            <h3>Setting</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Site Settings -->  Setting </strong><br>
+            You can modify data from Storefront. Thee is two section. General Setting Section and Home Page Section. <br>
+            <i><b>1. General</b></i>
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_65.png"></p>
+
+        <p><i><b>2. Maintenance</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_66.png"></p>
+
+        <p><i><b>3. Store</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_67.png"></p>
+
+        <p><i><b>4. Currency</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_68.png"></p>
+
+        <p><i><b>5. SMS</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_69.png"></p>
+
+        <p><i><b>6. Mail</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_70.png"></p>
+
+        <p><i><b>7. Newslatter</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_71.png"></p>
+
+        <p><i><b>8. Custom CSS/JS</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_72.png"></p>
+
+        <p><i><b>9. Facebook</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_73.png"></p>
+
+        <p><i><b>10. Google</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_74.png"></p>
+
+        <p><i><b>11. Free Shipping</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_75.png"></p>
+
+        <p><i><b>12. Local Pickup</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_76.png"></p>
+
+        <p><i><b>13. Flat Rate</b></i></b></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_77.png"></p>
+    </section>
+
+    <section id="support">
+        <div class="page-header">
+            <h3>SUPPORT</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            Thanks a lot for using this user friendly software. Hope you found this documentation helpful for using
+            this software. Please support this product by giving your ratings and testimonial.</p>
+        <p>
+            With best wishes - <a href="http://lion-coders.com">LionCoders</a>
+        </p>
+    </section>
+
+
+
+
+
+    <!-- End CartPro Documentation -->
+</div>
+<script type="text/javascript">
+
+    $("#documenter_sidebar").mCustomScrollbar({
+        theme: "light",
+        scrollInertia: 200
+    });
+
+
+    var substringMatcher = function (strs) {
+        return function findMatches(q, cb) {
+            var matches, substringRegex;
+
+            // an array that will be populated with substring matches
+            matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function (i, str) {
+                if (substrRegex.test(str)) {
+                    matches.push(str);
+                }
+            });
+
+            cb(matches);
+        };
+    };
+
+    var states = ['Start',
+        'Server Requirements',
+        'Install',
+        'Software Update',
+        'Log In',
+        'Admin Dashboard',
+        'Empty Database',
+        'Datatable Options',
+        'Location',
+        'Company',
+        'Department',
+        'Designation',
+        'Office Shift',
+        'Account List',
+        'Roles Access',
+        'General Setting',
+        'Mail Server',
+        'Language Setting',
+        'Variable Type',
+        'Variable Method',
+        'Employee List',
+        'Import Employee',
+        'User List',
+        'Assign Role',
+        'User Last Login',
+        'Location',
+        'Award',
+        'Travel',
+        'Transfer',
+        'Resignation',
+        'Complaint',
+        'Warning',
+        'Termination',
+        'Announcement',
+        'Company Policy',
+        'Attendance',
+        'Datewise Attendance',
+        'Monthly Attendance',
+        'Update Attendance',
+        'Import Attendance',
+        'Manage Holiday',
+        'Manage Leave',
+        'Payslip Report',
+        'Attendance Report',
+        'Training Report',
+        'Project Report',
+        'Task Report',
+        'Employee Report',
+        'Account Report',
+        'Expense Report',
+        'Deposit Report',
+        'Transaction Report',
+        'Job Post',
+        'Job Candidate',
+        'Job Interview',
+        'CMS',
+        'New Payment',
+        'Payslip History',
+        'HR Calendar',
+        'Event',
+        'Meeting',
+        'Client',
+        'Tax Type',
+        'Project',
+        'Task',
+        'Invoice',
+        'Support Ticket',
+        'Account Balance',
+        'Payee',
+        'Payer',
+        'Deposit',
+        'Expense',
+        'Transaction',
+        'Transfer',
+        'Asset Category',
+        'Asset',
+        'File Configuration',
+        'File Manager',
+        'Official Document',
+        'Client Dashboard',
+        'Client Project',
+        'Client Task',
+        'Client Invoice',
+        'Client Invoice Paid',
+        'Employee Dashboard',
+        'Support',
+        'General Error'
+    ];
+
+    $('#the-basics .typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'states',
+            source: substringMatcher(states)
+        });
+
+    $('.typeahead').bind('typeahead:select', function (ev, suggestion) {
+        let a = suggestion.toLowerCase();
+        a = a.replace(/\s+/g, "_");
+
+        let site_url = window.location.href;
+
+        site_url = site_url.split("#")[0];
+
+        window.location.href = site_url + '#' + a;
+    });
+
+
+</script>
+</body>
+
+</html>

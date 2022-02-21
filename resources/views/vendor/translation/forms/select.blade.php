@@ -8,6 +8,16 @@
             @else
                 <option value="{{ $key }}" @if(isset($selected) && $selected === $key) selected="selected" @endif>{{ $value }}</option>
             @endif
+
+            {{-- @php
+                $locale = \Illuminate\Support\Facades\Session::get('currentLocal');
+            @endphp
+
+            @if(is_numeric($key))
+                <option value="{{ $value }}" @if(isset($locale) && $locale === $value) selected="selected" @endif>{{ $value }}</option>
+            @else
+                <option value="{{ $key }}" @if(isset($locale) && $locale === $key) selected="selected" @endif>{{ $value }}</option>
+            @endif --}}
         @endforeach
     </select>
 

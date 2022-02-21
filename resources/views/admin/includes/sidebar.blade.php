@@ -7,29 +7,27 @@
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{__('file.Dashboard') }}</span></a></li>
           @can('product')
-            <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cube"></i><span>{{__('file.Products')}}</span></a>
+            <li class="has-dropdown"><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cube"></i><span>{{__('file.Products')}}</span></a>
                 <ul id="product" class="collapse list-unstyled ">
-                @can('category')
-                    <li id="category-menu"><a href="{{route('admin.category')}}">{{__('file.Category')}}</a></li>
-                @endcan
-                @can('brand')
-                    <li id="brand-list-menu"><a href="{{route('admin.brand')}}">{{__('file.Brand')}}</a></li>
-                @endcan
-                @can('attribute_set')
-                    <li id="brand-list-menu"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute-Set')}}</a></li>
-                @endcan
-                @can('attribute')
-                    <li id="brand-list-menu"><a href="{{route('admin.attribute.index')}}">{{__('file.Attributes')}}</a></li>
-                @endcan
-                @can('tag')
-                    <li id="brand-list-menu"><a href="{{route('admin.tag.index')}}">{{__('file.Tags')}}</a></li>
-                @endcan
-                @can('catalog')
-                    <li id="brand-list-menu"><a href="{{route('admin.products.index')}}">{{__('file.Catalog')}}</a></li>
-                @endcan
-
-                <li id="brand-list-menu"><a href="{{route('admin.review.index')}}">{{__('file.Reviews')}}</a></li>
-
+                    @can('category')
+                        <li id="category-menu"><a href="{{route('admin.category')}}">{{__('file.Category')}}</a></li>
+                    @endcan
+                    @can('brand')
+                        <li id="brand-list-menu"><a href="{{route('admin.brand')}}">{{__('file.Brand')}}</a></li>
+                    @endcan
+                    @can('attribute_set')
+                        <li id="brand-list-menu"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute_Set')}}</a></li>
+                    @endcan
+                    @can('attribute')
+                        <li id="brand-list-menu"><a href="{{route('admin.attribute.index')}}">{{__('file.Attributes')}}</a></li>
+                    @endcan
+                    @can('tag')
+                        <li id="brand-list-menu"><a href="{{route('admin.tag.index')}}">{{__('file.Tags')}}</a></li>
+                    @endcan
+                    @can('catalog')
+                        <li id="brand-list-menu"><a href="{{route('admin.products.index')}}">{{__('file.Catalog')}}</a></li>
+                    @endcan
+                    <li id="brand-list-menu"><a href="{{route('admin.review.index')}}">{{__('file.Reviews')}}</a></li>
                 </ul>
             </li>
           @endcan
@@ -68,21 +66,19 @@
             </li>
           @endcan
 
-
-
-            <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-globe"></i><span>{{__('Localization')}}</span></a>
+            <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-globe"></i><span>{{__('file.Localization')}}</span></a>
                 <ul id="localization" class="collapse list-unstyled">
-                    <li><a href="{{route('admin.tax.index')}}">{{__('Taxes')}}</a></li>
-                    <li><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('Translations')}}</a></li>
-                    <li><a href="{{route('admin.currency_rate.index')}}">{{__('Currency Rates')}}</a></li>
+                    <li><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
+                    <li><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
+                    <li><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
                 </ul>
             </li>
 
           @can('appearance')
-            <li><a href="#menu" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-paint-brush"></i><span>{{trans('Appearance')}}</span></a>
+            <li><a href="#menu" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-paint-brush"></i><span>{{trans('file.Appearance')}}</span></a>
                 <ul id="menu" class="collapse list-unstyled">
                     @can('store_front')
-                        <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('Store Front')}}</a></li>
+                        <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('file.Store Front')}}</a></li>
                     @endcan
                     {{-- @can('slider') --}}
                         <li><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
@@ -92,26 +88,29 @@
             </li>
           @endcan
 
-
-          <li><a href="{{route('admin.reports.coupon')}}"><i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a></li>
-
-        {{-- <li><a href="#report" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a>
+        <li><a href="#report" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a>
             <ul id="report" class="collapse list-unstyled">
-                <li id="navigation-menu"><a href="{{route('report.today')}}">{{__('file.Today Order')}}</a></li>
-                <li id="navigation-menu"><a href="{{route('report.this_week')}}">{{__('file.This Month')}}</a></li>
-                <li id="navigation-menu"><a href="{{route('report.this_year')}}">{{__('file.This Year')}}</a></li>
-                <li id="navigation-menu"><a href="{{route('report.filter_report')}}">{{__('file.Filter Report')}}</a></li>
+                <li><a href="{{route('admin.reports.coupon')}}">@lang('file.Coupon Report')</a></li>
+                <li><a href="{{route('admin.reports.customer_orders')}}">@lang('file.Customer Order Report')</a></li>
+                <li><a href="{{route('admin.reports.product_stock_report')}}">@lang('file.Product Stock Report')</a></li>
+                <li><a href="{{route('admin.reports.product_view_report')}}">@lang('file.Product View Report')</a></li>
+                <li><a href="{{route('admin.reports.sales_report')}}">@lang('file.Sales Report')</a></li>
+                <li><a href="{{route('admin.reports.search_report')}}">@lang('file.Search Report')</a></li>
+                <li><a href="{{route('admin.reports.shipping_report')}}">@lang('file.Shipping Report')</a></li>
+                <li><a href="{{route('admin.reports.tax_report')}}">@lang('file.Tax Report')</a></li>
+                {{-- <li><a href="{{route('admin.reports.product_purchase_report')}}">@lang('file.Product Purchase Report')</a></li> --}}
             </ul>
-        </li> --}}
+        </li>
 
           @can('site-setting')
-            <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{__('Site Settings')}}</span></a>
-                <ul id="setting" class="collapse list-unstyled">
+            <li class="has-dropdown">
+                <a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{trans('file.Site Settings')}}</span></a>
+                <ul id="setting" class="collapse list-unstyled ">
                     @can('setting')
-                        <li id="navigation-menu"><a href="{{route('admin.setting.index')}}">{{__('Setting')}}</a></li>
+                        <li id="employee_list"><a href="{{route('admin.setting.index')}}">{{__('file.Setting')}}</a></li>
                     @endcan
                     @can('locale')
-                        <li id="navigation-menu"><a href="{{route('admin.setting.language')}}">{{trans('file.Language')}}</a></li>
+                        <li id="language"><a href="{{route('admin.setting.language')}}">{{__('file.Language')}}</a></li>
                     @endcan
                 </ul>
             </li>

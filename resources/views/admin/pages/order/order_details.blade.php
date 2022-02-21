@@ -1,4 +1,5 @@
 @extends('admin.main')
+@section('title','Admin| Show Order')
 @section('admin_content')
 
 <section>
@@ -113,7 +114,6 @@
                         <th>{{__('file.Product')}}</th>
                         <th>{{__('file.Unit Price')}}</th>
                         <th>{{__('file.Quantity')}}</th>
-                        {{-- <th>{{__('file.Line Total')}}</th> --}}
                     </tr>
 
                     @forelse ($order->orderDetails as $item)
@@ -133,26 +133,34 @@
 
     </div>
 </section>
-
-<script type="text/javascript">
-    $('.orderStatus').on('click',function(){
-        var order_status = $(this).val();
-        var order_id = $('#order_id').val();
-        $.ajax({
-            url: "{{ route('admin.order.status') }}",
-                type: "GET",
-                data: {
-                    order_id:order_id,
-                    order_status:order_status,
-                },
-                success: function (data) {
-                    console.log(data);
-                    if (data.type=='success') {
-                        location.reload(true);
-                    }
-                }
-        });
-    });
-</script>
-
 @endsection
+
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+            $('.orderStatus').on('click',function(){
+                var order_status = $(this).val();
+                var order_id = $('#order_id').val();
+                $.ajax({
+                    url: "{{ route('admin.order.status') }}",
+                        type: "GET",
+                        data: {
+                            order_id:order_id,
+                            order_status:order_status,
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.type=='success') {
+                                location.reload(true);
+                            }
+                        }
+                });
+            });
+
+            
+        })(jQuery);
+    </script>
+@endpush
+

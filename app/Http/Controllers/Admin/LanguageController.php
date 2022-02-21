@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-
 //JoeDixon
 use JoeDixon\Translation\Drivers\Translation;
-use JoeDixon\Translation\Http\Requests\LanguageRequest;
 
 class LanguageController extends Controller
 {
@@ -80,10 +78,29 @@ class LanguageController extends Controller
     public function delete($id)
     {
         $language = Language::find($id);
+        File::deleteDirectory('resources/lang/'.$language->local);
         $language->delete();
 
         session()->flash('type','success');
         session()->flash('message','Successfully Deleted');
+        return redirect()->back();
+    }
+
+    public function update(Request $request)
+    {
+        $language = Language::find($request->id);
+
+        $old_directory = 'resources/lang/'.$language->local;
+        $new_directory = 'resources/lang/'.$request->local;
+        File::copyDirectory($old_directory,$new_directory);
+        File::deleteDirectory($old_directory);
+
+        $language->language_name = htmlspecialchars($request->language_name);
+        $language->local         = strtolower(htmlspecialchars(trim($request->local)));
+        $language->update();
+
+        session()->flash('type','success');
+        session()->flash('message','Successfully Updated');
         return redirect()->back();
     }
 
@@ -100,67 +117,3 @@ class LanguageController extends Controller
         return redirect()->back();
     }
 }
-
-// public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->only('language_name','local'),[
-    //         'language_name' => 'required',
-    //         'local'         => 'required',
-    //     ]);
-
-    //     if ($validator->fails()){
-    //         return response()->json(['errors' => "<b>Please fill the required Option</b>"]);
-    //     }
-
-    //     $languages = $this->language();
-
-    //     $language = new Language();
-    //     $language->language_name = $languages[$request->language_id]['language_name'];
-    //     $language->local         = $languages[$request->language_id]['local'];
-
-    //     if (empty($request->default)) {
-    //         $language->default   = 0;
-    //     }
-    //     else {
-
-    //         Language::where('default', '=', 1)->update(['default' => 0]);
-
-    //         $language->default       = $request->default;
-    //     }
-
-    //     $language->save();
-
-    //     session()->flash('type','success');
-    //     session()->flash('message','Successfully Saved');
-    //     return redirect()->back();
-
-    //     // return $languages[$request->language_id]['language_name'];
-    // }
-
-
-
-
-    // protected function language()
-    // {
-    //     $languages = array(
-    //         [], //0
-    //         [   //1
-    //             'language_name' => 'English',
-    //             'local'         => 'en',
-    //         ],
-    //         [
-    //             'language_name' => 'Bangla',
-    //             'local'         => 'bn',
-    //         ],
-    //         [
-    //             'language_name' => 'France',
-    //             'local'         => 'fr',
-    //         ],
-    //         [
-    //             'language_name' => 'Hindi',
-    //             'local'         => 'hi',
-    //         ],
-    //     );
-
-    //     return $languages;
-    // }

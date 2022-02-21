@@ -48,13 +48,21 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 | and wonderful application we have prepared for them.
 |
 */
+$install = is_dir('install');
 
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+if ($install == true) {
+	header("location:install/index.php");
+}else {
+	$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
+	$response = $kernel->handle(
+		$request = Illuminate\Http\Request::capture()
+	);
 
-$response->send();
+	$response->send();
 
-$kernel->terminate($request, $response);
+	$kernel->terminate($request, $response);
+}
+
+
+

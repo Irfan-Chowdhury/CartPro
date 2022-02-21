@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Coupon extends Model
 {
@@ -11,10 +12,28 @@ class Coupon extends Model
         'usage_limit_per_customer', 'used', 'is_active', 'start_date', 'end_date',
     ];
 
+    //old
     public function couponTranslations()
     {
     	return $this->hasMany(CouponTranslation::class,'coupon_id');
     }
+
+
+    //new
+    public function couponTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(CouponTranslation::class,'coupon_id')
+                    ->where('locale',$locale);
+
+    }
+
+    public function couponTranslationEnglish()
+    {
+    	return $this->hasOne(CouponTranslation::class,'coupon_id')
+                    ->where('locale','en');
+    }
+
 
     public function products()
     {
@@ -24,5 +43,10 @@ class Coupon extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'coupon_categories');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class,'coupon_id');
     }
 }

@@ -4,7 +4,6 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-10">
-                {{-- <form id="smsSubmit" action="{{route('admin.setting.sms.store_or_update')}}" method="POST"> --}}
                 <form id="smsSubmit">
                     @csrf
 
@@ -131,7 +130,3 @@
     </div>
 </div>
 
-
-{{-- https://github.com/antonioribeiro/countries --}}
-{{-- https://dev.to/kingsconsult/how-to-get-the-entire-country-list-in-laravel-8-downwards-ahb --}}
-{{-- https://github.com/DougSisk/laravel-country-state --}}

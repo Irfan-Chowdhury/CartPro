@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\Customer;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,15 +12,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\imageHandleTrait;
+use App\Traits\ENVFilePutContent;
 
 class UserAccountController extends Controller
 {
-    use imageHandleTrait;
+    use imageHandleTrait, ENVFilePutContent;
 
     public function userAccount()
     {
-        // $orders = Order::with('orderDetails.productTranslation','orderDetails.baseImage')->where('user_id',26)->get();
-
         $locale = Session::get('currentLocal');
 
         $orders = DB::table('orders')
@@ -30,21 +29,9 @@ class UserAccountController extends Controller
                 $join->on('product_translations.product_id', '=', 'products.id')
                 ->where('product_translations.local', '=', $locale);
             })
-            // ->where('user_id',26)
             ->where('user_id',Auth::user()->id)
             ->select('orders.total','product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options')
             ->get();
-
-        // return $orders;
-
-        // $data = [];
-        // foreach ($orders as $key => $value) {
-        //     $data[$key]= $value->options;
-        // }
-        // $string = serialize($data[0]);
-        // $newvar = unserialize($string);
-        // $test = explode(",",$data[0]);
-        // return $test[3];
 
         return view('frontend.pages.user_account',compact('orders'));
     }
@@ -54,7 +41,8 @@ class UserAccountController extends Controller
     {
         Auth::logout();
         Session::flush();
-        
+        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',NULL);
+        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE',1.00);
         return redirect('/login');
     }
 
@@ -62,11 +50,11 @@ class UserAccountController extends Controller
     public function userProfileUpdate(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'first_name' => 'required|string',
-            'last_name'  => 'required|string',
-            'phone'      => 'required',
+            'first_name' => 'nullable|required|string',
+            'last_name'  => 'nullable|required|string',
+            'phone'      => 'nullable|required',
             'password'   => 'confirmed',
-            'image'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
         if ($validator->fails()) {
@@ -83,9 +71,11 @@ class UserAccountController extends Controller
         if ($image) {
             $data['image'] = $this->imageStore($image, $directory='images/customers/', $type='customer');
         }
-        $data['password']   = Hash::make($request->password);
+        if ($request->password) {
+            $data['password']   = Hash::make($request->password);
+        }
         User::whereId(Auth::user()->id)->update($data);
-
+        Customer::where('user_id',Auth::user()->id)->update($data);
 
         session()->flash('alert_message','Profile Updated Successfully');
         session()->flash('alert_type','success');

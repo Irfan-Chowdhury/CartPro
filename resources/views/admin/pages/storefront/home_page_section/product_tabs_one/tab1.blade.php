@@ -1,6 +1,6 @@
-                    <h4 class="mt-3 text-bold">{{__('Tab - 1')}}</h4><br>
+                    <h4 class="mt-3 text-bold">{{__('file.Tab - 1')}}</h4><br>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Title</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
                             <input type="text" name="storefront_product_tabs_1_section_tab_1_title" class="form-control" placeholder="Type Title"
                             @forelse ($setting[82]->settingTranslations as $key => $item)
@@ -13,21 +13,19 @@
                             @endforelse >
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>Type</b></label>
+
+                    <div class="form-group row d-none">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Type')</b></label>
                         <div class="col-sm-8">
                             <select name="storefront_product_tabs_1_section_tab_1_product_type" id="storefrontProductTabs_1_SectionTab_1_ProductType" class="form-control" data-live-search="true" data-live-search-style="begins">
                                 <option value="">-- Select Type --</option>
-                                <option value="{{__('category_products')}}" {{ $setting[83]->plain_value == 'category_products' ? 'selected="selected"' : '' }}>{{__('Category Products')}}</option>
-                                <option value="{{__('custom_products')}}" {{ $setting[83]->plain_value == 'custom_products' ? 'selected="selected"' : '' }}>{{__('Custom Products')}}</option>
-                                <option value="{{__('latest_products')}}" {{ $setting[83]->plain_value == 'latest_products' ? 'selected="selected"' : '' }}>{{__('Latest Products')}}</option>
-                                <option value="{{__('recently_viewed_products')}}" {{ $setting[83]->plain_value == 'recently_viewed_products' ? 'selected="selected"' : '' }}>{{__('Recently Viewed Products')}}</option>
+                                <option value="{{__('category_products')}}" selected>{{__('Category Products')}}</option>
                             </select>
                         </div>
                     </div>
                     @if ((!empty($setting[83]->plain_value)) && ($setting[83]->plain_value == 'category_products'))
                         <div class="form-group row" id="categoryFeild_1">
-                            <label class="col-sm-4 col-form-label"><b>Category</b></label>
+                            <label class="col-sm-4 col-form-label"><b>@lang('file.Category')</b></label>
                             <div class="col-sm-8">
                                 <select name="storefront_product_tabs_1_section_tab_1_category_id" id="storefrontProductTabs_1_SectionTab_1_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                     @foreach ($categories as $item)
@@ -46,7 +44,7 @@
                         </div>
                     @else
                         <div class="form-group row" id="categoryFeild_1">
-                            <label class="col-sm-4 col-form-label"><b>Category</b></label>
+                            <label class="col-sm-4 col-form-label"><b>@lang('file.Category')</b></label>
                             <div class="col-sm-8">
                                 <select name="storefront_product_tabs_1_section_tab_1_category_id" id="storefrontProductTabs_1_SectionTab_1_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
                                     @foreach ($categories as $item)
@@ -66,12 +64,12 @@
                     @endif
                     <div class="form-group row" id="productTabsField1">
                         @if ((!empty($setting[83]->plain_value)) && ($setting[83]->plain_value == 'custom_products'))
-                            <label class="col-sm-4 col-form-label"><b> {{__('Products')}}</b></label>
+                            <label class="col-sm-4 col-form-label"><b> {{__('file.Products')}}</b></label>
                             <div class="col-sm-8">
                                 <input type="text" name="storefront_product_tabs_1_section_tab_1_products" value="{{$setting[85]->plain_value}}" class="form-control">
                             </div>
                         @elseif((!empty($setting[83]->plain_value)) && (($setting[83]->plain_value == 'latest_products') || ($setting[83]->plain_value == 'recently_viewed_products')))
-                            <label class="col-sm-4 col-form-label"><b> {{__('Products Limit')}}</b></label>
+                            <label class="col-sm-4 col-form-label"><b> {{__('file.Products Limit')}}</b></label>
                             <div class="col-sm-8">
                                 <input type="text" name="storefront_product_tabs_1_section_tab_1_products_limit" value="{{$setting[86]->plain_value}}" class="form-control">
                             </div>

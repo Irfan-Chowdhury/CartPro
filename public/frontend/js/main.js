@@ -1,24 +1,6 @@
 (function($) {
     "use strict";
 
-
-    $('.color-change').click(function() {
-        var color = $(this).data('color');
-        $('body').css('--theme-color', color);
-    });
-
-    $('#color-input').on('change',function() {
-        var color = $(this).val();
-        $('body').css('--theme-color', color);
-    });
-
-
-
-    $(window).on('resize', function() {
-        var win = $(this); //this = window
-        if (win.width() > 990) { history.go(0); } else if (win.width() < 990) { history.go(0); }
-    });
-
     //Detect device mobile
     var isMobile = false;
     if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ($(window).width() < 990)) {
@@ -118,33 +100,6 @@
             scrollTop: 0 // Scroll to top of body
         }, 700);
     });
-
-
-    /* -------------------------------------
-        JS FOR MAP START
-    -------------------------------------- */
-    function map() {
-        if ($('#mapid').length > 0) {
-            var lat = $('#mapid').data('lat');
-            var lang = $('#mapid').data('lang');
-            var mymap = L.map('mapid').setView([lat, lang], 20);
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                    'Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(mymap);
-
-            var marker = "<img src='images/others/map-marker.png'>";
-            var popup = L.popup()
-                .setLatLng([lat, lang])
-                .setContent(marker)
-                .openOn(mymap);
-        }
-    }
-    map();
-
 
     $(document).ready(function(){
 
@@ -405,10 +360,11 @@
         //Brands carousel
         var swiper = new Swiper('.brand-slider-wrapper', {
 
-            slidesPerView: 6,
+            slidesPerView: 5,
             spaceBetween: 30,
             simulateTouch: true,
             loop: true,
+            centeredSlides: true,
             navigation: {
                 nextEl: '.brand-button-next',
                 prevEl: '.brand-button-prev',
@@ -462,17 +418,19 @@
         /*------------------------
              price range slider
         --------------------------*/
-        $("#slider-range").slider({
-            range: true,
-            min: 0,
-            max: 500,
-            values: [75, 300],
-            slide: function(event, ui) {
-                $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-            }
-        });
-        $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-            " - $" + $("#slider-range").slider("values", 1));
+        // if ($('#slider-range').length) {
+        //     $("#slider-range").slider({
+        //         range: true,
+        //         min: 0,
+        //         max: 500,
+        //         values: [75, 300],
+        //         slide: function(event, ui) {
+        //             $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+        //         }
+        //     });
+        //     $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+        //         " - $" + $("#slider-range").slider("values", 1));
+        // }
 
 
 

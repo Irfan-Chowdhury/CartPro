@@ -28,16 +28,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Expr\Empty_;
 use App\Traits\ENVFilePutContent;
+use App\Traits\imageHandleTrait;
 
 class SettingController extends Controller
 {
-    use ENVFilePutContent;
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
+    use ENVFilePutContent, imageHandleTrait;
 
     public function index()
     {
@@ -120,10 +116,6 @@ class SettingController extends Controller
         $setting_bank_transfer  = SettingBankTransfer::latest()->first();
         $setting_check_money_order  = SettingCheckMoneyOrder::latest()->first();
 
-
-        // return 'ok';
-
-
         return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','selected_countries','setting_store','selected_currencies',
                     'setting_currency','setting_sms','setting_mail','setting_newsletter','setting_custom_css_js','setting_facebook','setting_google',
                     'setting_free_shipping','setting_local_pickup','setting_flat_rate','setting_paypal','setting_strip','setting_paytm',
@@ -173,10 +165,11 @@ class SettingController extends Controller
 
     public function storeStoreOrUpdate(Request $request)
     {
-        $validator = Validator::make($request->only('store_name','store_email','store_phone'),[
+        $validator = Validator::make($request->only('store_name','store_email','store_phone','admin_logo'),[
             'store_name' => 'required',
             'store_email'=> 'required',
             'store_phone'=> 'required',
+            'admin_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
         if ($validator->fails())
@@ -198,29 +191,49 @@ class SettingController extends Controller
         $data['hide_store_phone'] = $request->hide_store_phone;
         $data['hide_store_email'] = $request->hide_store_email;
 
+        $admin_logo   = $request->file('admin_logo');
 
         $setting_store = SettingStore::latest()->first();
-
-        if (empty($setting_store)) {
-            SettingStore::create($data);
-        }else {
+        if ($setting_store) {
+            if ($admin_logo) {
+                $this->previousImageDelete($setting_store->admin_logo); //previous image will be deleted
+                $data['admin_logo'] = $this->imageStore($admin_logo, $directory='images/general/',$type='general');
+            }
             SettingStore::whereId($setting_store->id)->update($data);
+        }else {
+            $data['admin_logo'] = $this->imageStore($admin_logo, $directory='images/general/',$type='general');
+            SettingStore::create($data);
         }
+
         return response()->json(['success' => __('Data Added successfully.')]);
     }
 
     public function currencyStoreOrUpdate(Request $request)
     {
+
         if ($request->ajax()) {
             $validator = Validator::make($request->only('default_currency','currency_format','default_currency_code'),[
-                'default_currency' => 'required', //Symbol
+                'default_currency' => 'required',
                 'default_currency_code' => 'required',
                 'currency_format'=> 'required',
             ]);
 
-            if ($validator->fails())
-            {
+            if ($validator->fails()){
                 return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
+            $default_currency_code = $request->default_currency_code;
+            $selected_currencies = Currency::whereIn('currency_name',$request->supported_currencies)->select('currency_name','currency_code')->get();
+
+            $match = 0;
+            foreach ($selected_currencies as $value) {
+                if ($default_currency_code==$value->currency_code) {
+                    $match =1;
+                }
+            }
+
+            if ($match == 0) {
+                return response()->json(['selectionError' => 'You must set Default Currency value in Supported Currency']);
             }
 
 
@@ -237,7 +250,7 @@ class SettingController extends Controller
 
             $data = [];
             $data['supported_currency'] = implode(",", $request->supported_currencies);
-            $data['default_currency_code']    = $request->default_currency_code;
+            $data['default_currency_code']    = $default_currency_code;
             $data['default_currency']    = $request->default_currency;
             $data['currency_format'] = $request->currency_format;
             $data['exchange_rate_service'] = $request->exchange_rate_service;
@@ -254,34 +267,19 @@ class SettingController extends Controller
                 SettingCurrency::whereId($setting_currency->id)->update($data);
             }
 
-            DB::table('currency_rates')->delete();
-            for ($i=0; $i <count($request->supported_currencies) ; $i++) {
-                $data = Currency::where('currency_name',$request->supported_currencies[$i])->select('currency_code')->first();
-
-                $currency_rate = new CurrencyRate();
-                $currency_rate->currency_name = $request->supported_currencies[$i];
-                $currency_rate->currency_code = $data->currency_code;
-                $currency_rate->save();
+            CurrencyRate::whereNotIn('currency_name',$request->supported_currencies)->delete();
+            foreach ($selected_currencies as $value) {
+                CurrencyRate::updateOrCreate(
+                    [ 'currency_name' => $value->currency_name],
+                    [ 'currency_code' => $value->currency_code]
+                );
             }
+
 
             //Default Currency
             $this->dataWriteInENVFile('DEFAULT_CURRENCY_CODE',$request->default_currency_code);
             $this->dataWriteInENVFile('DEFAULT_CURRENCY_SYMBOL',$request->default_currency);
             $this->dataWriteInENVFile('CURRENCY_FORMAT',$request->currency_format);
-
-            // $path = '.env';
-            // if ($request->default_currency) {
-            //     $searchArray = array('DEFAULT_CURRENCY_SYMBOL=' . env('DEFAULT_CURRENCY_SYMBOL'));
-            //     $replaceArray= array('DEFAULT_CURRENCY_SYMBOL=' . $request->default_currency);
-            //     file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            // }
-            // //Currency Format
-            // if ($request->currency_format) {
-            //     $searchArray = array('CURRENCY_FORMAT=' . env('CURRENCY_FORMAT'));
-            //     $replaceArray= array('CURRENCY_FORMAT=' . $request->currency_format);
-            //     file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-            // }
-
 
             return response()->json(['success' => __('Data added Successfully')]);
         }
@@ -359,7 +357,6 @@ class SettingController extends Controller
             $data['invoice_mail']  = $request->invoice_mail;
             $data['mail_order_status'] = $request->mail_order_status;
 
-
             $setting_mail = SettingMail::latest()->first();
 
             if (empty($setting_mail)) {
@@ -367,6 +364,15 @@ class SettingController extends Controller
             }else {
                 SettingMail::whereId($setting_mail->id)->update($data);
             }
+
+            $this->dataWriteInENVFile('MAIL_HOST',$data['mail_host']);
+            $this->dataWriteInENVFile('MAIL_PORT',$data['mail_port']);
+            $this->dataWriteInENVFile('MAIL_USERNAME',$data['mail_username']);
+            $this->dataWriteInENVFile('MAIL_PASSWORD',$data['mail_password']);
+            $this->dataWriteInENVFile('MAIL_ENCRYPTION',$data['mail_encryption']);
+            $this->dataWriteInENVFile('MAIL_FROM_ADDRESS',$data['mail_address']);
+            $this->dataWriteInENVFile('MAIL_FROM_NAME',$data['mail_name']);
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }
@@ -439,6 +445,10 @@ class SettingController extends Controller
             }else {
                 SettingFacebook::whereId($setting_facebook->id)->update($data);
             }
+
+            $this->dataWriteInENVFile('FACEBOOK_CLIENT_ID',$request->app_id);
+            $this->dataWriteInENVFile('FACEBOOK_CLIENT_SECRET',$request->app_secret);
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }
@@ -468,6 +478,21 @@ class SettingController extends Controller
             }else {
                 SettingGoogle::whereId($setting_google->id)->update($data);
             }
+
+            $this->dataWriteInENVFile('GOOGLE_CLIENT_ID','"'.$request->client_id.'"');
+            $this->dataWriteInENVFile('GOOGLE_CLIENT_SECRET','"'.$request->client_secret.'"');
+
+            return response()->json(['success' => __('Data Added successfully.')]);
+        }
+    }
+
+    public function githubStoreOrUpdate(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $this->dataWriteInENVFile('GITHUB_CLIENT_ID',$request->github_client_id);
+            $this->dataWriteInENVFile('GITHUB_CLIENT_SECRET',$request->github_client_secret);
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }
@@ -584,11 +609,6 @@ class SettingController extends Controller
 
             $setting_paypal = SettingPaypal::latest()->first();
 
-            // $path = '.env';
-            // $searchArray = array('PAYPAL_SANDBOX_CLIENT_ID=' . env('PAYPAL_SANDBOX_CLIENT_ID'));
-            // $replaceArray= array('PAYPAL_SANDBOX_CLIENT_ID=' . $request->client_id);
-            // file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
-
             $this->dataWriteInENVFile('PAYPAL_SANDBOX_CLIENT_ID',$request->client_id);
             $this->dataWriteInENVFile('PAYPAL_SANDBOX_CLIENT_SECRET',$request->secret);
 
@@ -631,6 +651,22 @@ class SettingController extends Controller
             }else {
                 SettingStrip::whereId($setting_strip->id)->update($data);
             }
+
+            $this->dataWriteInENVFile('STRIPE_KEY',$request->publishable_key);
+            $this->dataWriteInENVFile('STRIPE_SECRET',$request->secret_key);
+
+            return response()->json(['success' => __('Data Added successfully.')]);
+        }
+    }
+
+
+    public function sslcommerzStoreOrUpdate(Request $request)
+    {
+        if ($request->ajax()) {
+            $this->dataWriteInENVFile('SSL_COMMERZ_STATUS',$request->status);
+            $this->dataWriteInENVFile('STORE_ID',$request->store_id);
+            $this->dataWriteInENVFile('STORE_PASSWORD',$request->store_password);
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }
@@ -777,6 +813,3 @@ class SettingController extends Controller
 
 }
 
-// https://github.com/antonioribeiro/countries
-// https://dev.to/kingsconsult/how-to-get-the-entire-country-list-in-laravel-8-downwards-ahb
-// https://github.com/DougSisk/laravel-country-state

@@ -20,11 +20,6 @@ class FlashSaleController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('flash_sale-view'))
@@ -118,14 +113,13 @@ class FlashSaleController extends Controller
                     'campaign_name' => 'required|unique:flash_sale_translations',
                 ]);
 
-                if ($validator->fails())
-                {
-                    return response()->json(['errors' => $validator->errors()->all()]);
-                }
+                // if ($validator->fails())
+                // {
+                //     return response()->json(['errors' => $validator->errors()->all()]);
+                // }
+
 
                 if ($validator->fails()){
-                    session()->flash('type','danger');
-                    session()->flash('message','Something Error. Please Try Again');
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
 
@@ -172,7 +166,9 @@ class FlashSaleController extends Controller
                     }
                 }
 
-                return response()->json(['success' => __('Data Saved successfully.')]);
+                session()->flash('type','success');
+                session()->flash('message','Successfully Updated');
+                return redirect()->back();
             }
         }
 
@@ -187,10 +183,7 @@ class FlashSaleController extends Controller
                     ->where('is_active',1)
                     ->get();
 
-        $flashSale = FlashSale::with(['flashSaleProducts','flashSaleTranslations'=> function ($query) use ($local){
-                $query->where('local',$local)
-                    ->first();
-            }])
+        $flashSale = FlashSale::with('flashSaleProducts','flashSaleTranslation','flashSaleTranslationEnglish')
             ->whereId($id)
             ->first();
 
@@ -204,13 +197,11 @@ class FlashSaleController extends Controller
             'end_date'  => 'required',
             'price'     => 'required',
             'qty'       => 'required',
-            // 'campaign_name' => 'required|unique:flash_sale_translations,campaign_name,'.$request->product_translation_id,
-            'campaign_name' => 'required',
+            'campaign_name' => 'required|unique:flash_sale_translations,campaign_name,'.$request->flash_sale_translation_id,
         ]);
 
-        if ($validator->fails())
-        {
-            return response()->json(['errors' => $validator->errors()->all()]);
+        if ($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $locale      = Session::get('currentLocal');
@@ -226,7 +217,9 @@ class FlashSaleController extends Controller
             // DB::beginTransaction();
             // try {
                 $flashSale            = FlashSale::find($id);
+
                 $flashSale->is_active = $request->is_active ?? 0;
+                $flashSale->slug      = $this->slug($request->campaign_name);
                 $flashSale->update();
 
                 DB::table('flash_sale_translations')
@@ -258,7 +251,6 @@ class FlashSaleController extends Controller
             //     return response()->json(['error' => $e->getMessage()]);
             // }
 
-            // return response()->json(['success' => __('Data Updated successfully.')]);
             session()->flash('type','success');
             session()->flash('message','Successfully Updated');
             return redirect()->back();
@@ -282,17 +274,5 @@ class FlashSaleController extends Controller
         if ($request->ajax()) {
             return $this->bulkActionData($request->action_type, FlashSale::whereIn('id',$request->idsArray));
         }
-
-        // if ($request->ajax()) {
-        //     if ($request->action_type==='active'){
-        //         $data  = FlashSale::whereIn('id',$request->idsArray);
-        //         $dataUpdate = $data->update(['is_active'=>1]);
-        //         $dataId= $data->pluck('id');
-        //         return response()->json(['success' => 'Data Active Successfully','dataId'=>$dataId]);
-        //     }elseif($request->action_type==='inactive') {
-        //         FlashSale::whereIn('id',$request->idsArray)->update(['is_active'=>0]);
-        //         return response()->json(['success' => 'Data Inactive Successfully']);
-        //     }
-        // }
     }
 }

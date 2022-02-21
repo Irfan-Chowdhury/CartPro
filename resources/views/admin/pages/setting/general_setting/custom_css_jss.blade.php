@@ -35,8 +35,3 @@
 
     </div>
 </div>
-
-
-{{-- https://github.com/antonioribeiro/countries --}}
-{{-- https://dev.to/kingsconsult/how-to-get-the-entire-country-list-in-laravel-8-downwards-ahb --}}
-{{-- https://github.com/DougSisk/laravel-country-state --}}

@@ -65,16 +65,16 @@
                                                     <span class="amount">
                                                         @if(env('CURRENCY_FORMAT')=='suffix')
                                                             @if ($item->product->special_price>0 && ($item->product->special_price < $item->product->price))
-                                                                {{number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                {{number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                             @else
-                                                                {{number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')}} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                {{number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
 
                                                             @endif
                                                         @else
                                                             @if ($item->product->special_price>0 && ($item->product->special_price < $item->product->price))
-                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '')}}
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}
                                                             @else
-                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '')}}
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}
                                                             @endif
                                                         @endif
                                                     </span></td>
@@ -116,7 +116,6 @@
                 console.log(data);
                 if (data.type=='success') {
                     $('#wishlist_'+wishlist_id).remove();
-
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -133,6 +132,7 @@
                         title: data.message
                     })
                 }
+                $('.wishlist_count').text(data.wishlist_count);
             }
         })
     });

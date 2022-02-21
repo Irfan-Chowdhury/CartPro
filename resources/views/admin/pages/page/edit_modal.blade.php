@@ -4,7 +4,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">{{__('Add Page')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
+          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Page')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -17,24 +17,24 @@
             <div class="modal-body">
 
               <div class="form-group">
-                <label class="text-bold">{{__('Page Name')}} &nbsp; <span class="text-danger">*</span></label>
+                <label class="text-bold">{{__('file.Page Name')}} &nbsp; <span class="text-danger">*</span></label>
                 <input type="text" name="page_name" id="page_name_edit"  class="form-control" placeholder="Type Page Name" >
               </div>
 
               <div class="form-group">
-                <label for="inputEmail3"><b>{{__('Body')}} <span class="text-danger">*</span></b></label>
+                <label for="inputEmail3"><b>{{__('file.Body')}} <span class="text-danger">*</span></b></label>
                 <textarea name="body" id="body_edit" class="form-control text-editor"></textarea>
             </div>
 
             <br>
               <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="is_active" id="is_active_edit" value="1">
-                <label class="form-check-label text-bold" for="exampleCheck1">{{__('Active')}}</label>
+                <input type="checkbox" checked class="form-check-input" name="is_active" id="is_active_edit" value="1">
+                <label class="form-check-label text-bold" for="exampleCheck1">{{__('file.Active')}}</label>
               </div>
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">Submit</button>
+                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
             </div>
 
         </form>

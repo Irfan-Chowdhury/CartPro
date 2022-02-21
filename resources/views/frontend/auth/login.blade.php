@@ -43,11 +43,13 @@
 
             <div class="col-md-6 offset-md-3">
                 <div class="ui-dash tab-content mar-bot-30">
+
+                    <!-- Login -->
                     <div class="tab-pane fade @if (!session()->has('error')) show active @endif" id="login" role="tabpanel">
                         <form id="login-form" action="{{route('customer.login')}}" method="post">
                             @csrf
                             <div class="form-group">
-                                <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="email" value="" required>
+                                <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="username" required>
                             </div>
                             <div class="form-group">
                                 <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
@@ -58,43 +60,27 @@
                                         <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
                                         <label for="remember"> Remember Me</label>
                                     </div>
-                                    <a href="#" tabindex="5" class="forgot-password theme-color">Forgot Password?</a>
+                                    <a href="{{ route('customer.password.request') }}" tabindex="5" class="forgot-password theme-color">@lang('file.Forgot Password')</a>
                                 </div>
                             </div>
                             <div class="form-group mt-4 mb-1">
                                 <button type="submit" class="button style1 d-block text-center w-100">{{__('file.Log In')}}</button>
-                                {{-- <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="button style1 d-block text-center w-100" value="Log In"> --}}
                             </div>
                         </form>
                         <div class="social-profile-login text-center mb-5">
                             <h5>Or Login with</h5>
                             <ul class="footer-social mar-top-20 pad-left-15">
-                                <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                <li><a href="#"><i class="ti-pinterest"></i></a></li>
+                                <li><a href="{{route('login.google')}}"><i class="ti-google"></i></a></li>
+                                <li><a href="{{route('login.facebook')}}"><i class="ti-facebook"></i></a></li>
+                                <li><a href="{{route('login.github')}}"><i class="ti-github"></i></a></li>
                             </ul>
                         </div>
                     </div>
+
+                    <!-- Rgister -->
                     <div class="tab-pane fade @if (session()->has('error')) show active @endif" id="register" role="tabpanel">
                         <form id="register-form" action="{{route('customer.register')}}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group">
-                                <input type="text" name="first_name" tabindex="1" class="form-control @error('first_name') is-invalid @enderror" placeholder="First Name" value="{{ old('first_name') }}" autocomplete="first_name" autofocus>
-                                @error('first_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="last_name" tabindex="1" class="form-control @error('last_name') is-invalid @enderror" placeholder="Last Name" value="{{ old('last_name') }}" autocomplete="last_name" autofocus>
-                                @error('last_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
                             <div class="form-group">
                                 <input type="text" name="username" tabindex="1" class="form-control @error('username') is-invalid @enderror" placeholder="Username" value="{{ old('username') }}" autocomplete="username" autofocus>
                                 @error('username')
@@ -106,22 +92,6 @@
                             <div class="form-group">
                                 <input type="email" name="email" tabindex="1" class="form-control @error('email') is-invalid @enderror" placeholder="Email Address" value="{{ old('email') }}" autocomplete="email" autofocus>
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="phone" tabindex="1" class="form-control @error('phone') is-invalid @enderror" placeholder="Phone" value="{{ old('phone') }}" autocomplete="phone" autofocus>
-                                @error('phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <input type="file" name="image" tabindex="1" class="form-control @error('image') is-invalid @enderror" >
-                                @error('image')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

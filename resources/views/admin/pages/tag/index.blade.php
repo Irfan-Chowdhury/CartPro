@@ -1,18 +1,18 @@
 @extends('admin.main')
+
+@section('title','Admin | Tag')
 @section('admin_content')
-
-
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">{{__('Tags')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Tags')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('tag-store'))
             <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-                <i class="fa fa-plus"></i> {{__('Add Tag')}}
+                <i class="fa fa-plus"></i> {{__('file.Add Tag')}}
             </button>
         @endif
 
@@ -28,7 +28,7 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{trans('Tag Name')}}</th>
+        		    <th scope="col">{{trans('file.Tag Name')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
@@ -42,8 +42,12 @@
 @include('admin.pages.tag.edit_form_modal')
 @include('admin.includes.confirm_modal')
 
+@endsection
 
-<script type="text/javascript">
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
 
     $(document).ready(function () {
 
@@ -182,19 +186,11 @@
         new $.fn.dataTable.FixedHeader(table);
     });
 
-    // $('#formModal').on('click', function () {
-    //     $('#modalTitle').text('{{__('Add Tag')}}');
-    //     $('#submitButton').text('{{__('Save')}}');
-    //     // $('#tagName').empty().val('');
-    //     $('#formModal').modal('show');
-    // });
-
     //----------Insert Data----------------------
     $("#submitForm").on("submit",function(e){
         e.preventDefault();
         var tagName  = $("#tagName").val();
         var isActive = $("#isActive").val();
-		// console.log(tagName);
 
         $.ajax({
             url: "{{route('admin.tag.store')}}",
@@ -238,9 +234,9 @@
             type: "GET",
             data: {tag_id:rowId},
             success: function (data) {
-                console.log(data.tag_name);
                 $('#tagIdEdit').val(data.tag.id);
-                $('#tagNameEdit').val(data.tag_name);
+                $('#tagNameEdit').val(data.tag_translation.tag_name);
+                $('#tagTranslationId').val(data.tag_translation.id);
                 if (data.tag.is_active == 1) {
                         $('#isActiveEdit').prop('checked', true);
                 } else {
@@ -249,7 +245,6 @@
                 $('#EditFormModal').modal('show');
             }
         })
-        //$('#titleModalLabel').empty();
     });
 
 
@@ -268,10 +263,13 @@
             success: function (data) {
 
                 console.log(data);
-                // let html = '';
 
-                if (data.error) {
-                    html = '<div class="alert alert-danger">' + data.error + '</div>';
+                if (data.errors) {
+                    var html = '<div class="alert alert-danger">';
+                    for (let count = 0; count < data.errors.length; count++) {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                    html += '</div>';
                     $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
                 }
                 else if(data.success){
@@ -397,12 +395,12 @@
         }
     });
 
-</script>
+})(jQuery);
+    </script>
+@endpush
 
 
 
 
 
 
-
-@endsection

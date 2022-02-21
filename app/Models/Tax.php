@@ -15,11 +15,6 @@ class Tax extends Model
         'is_active',
     ];
 
-    // public function taxTranslation()
-    // {
-    // 	return $this->hasMany(TaxTranslation::class,'tax_id');
-    // }
-
     public function taxTranslation()
     {
         $locale = Session::get('currentLocal');
@@ -27,9 +22,20 @@ class Tax extends Model
                 ->where('locale',$locale);
     }
 
+
     public function taxTranslationDefaultEnglish()
     {
     	 return $this->hasOne(TaxTranslation::class,'tax_id')
                         ->where('locale','en');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class,'tax_id');
+    }
+
+    public function taxNameTest()
+    {
+    	return $this->hasMany(TaxTranslation::class,'tax_id');
     }
 }

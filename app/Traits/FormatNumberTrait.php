@@ -9,13 +9,23 @@ trait FormatNumberTrait{
     public function formatNumber($number) {
 
         $settingGeneral = SettingGeneral::select('number_format_type')->latest()->first();
-        return number_format((float)$number, $settingGeneral->number_format_type, '.', '');
+        if ($settingGeneral) {
+            return number_format((float)$number, $settingGeneral->number_format_type, '.', '');
+        }else {
+            return;
+        }
+
     }
 
     public function totalFormatNumber() {
 
         $settingGeneral = SettingGeneral::select('number_format_type')->latest()->first();
-        return $settingGeneral->number_format_type;
+        if ($settingGeneral) {
+            return $settingGeneral->number_format_type;
+        }else {
+            return;
+        }
+
     }
 }
 

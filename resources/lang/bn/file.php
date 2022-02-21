@@ -9,9 +9,11 @@ return array (
   'Accounting' => 'Accounting',
   'Action' => 'একশন',
   'Active' => 'Active',
+  'Add' => 'যোগ করুন',
   'Add Account' => 'Add Account',
   'Add Adjustment' => 'Add Adjustment',
   'Add Attendance' => 'Add Attendance',
+  'Add Attribute Set' => 'এট্রিবিউট সেট',
   'Add Biller' => 'Add Biller',
   'Add Brand' => 'ব্র্যান্ড সংযুক্ত করুন',
   'Add Coupon' => 'Add Coupon',
@@ -49,7 +51,7 @@ return array (
   'Address' => 'Address',
   'Adjustment' => 'Adjustment',
   'Adjustment List' => 'Adjustment List',
-  'Admin' => 'Admin',
+  'Admin' => 'এডমিন',
   'Alert' => 'Alert',
   'Alert Quantity' => 'Alert Quantity',
   'All' => 'All',
@@ -60,12 +62,14 @@ return array (
   'All columns are required' => 'All columns are required',
   'Already have an account' => 'Already have an account',
   'Amount' => 'Amount',
+  'Appearance' => 'এপারেন্স',
   'Approve' => 'Approve',
   'Attach Document' => 'Attach Document',
   'Attach File' => 'Attach File',
   'Attendance' => 'Attendance',
   'Attribute Name' => 'Attribute Name',
   'Attribute Set' => 'Attribute Set',
+  'Attribute Sets' => 'এট্রিবিউট সেট',
   'Attribute_Set' => 'এট্রিবিউট সেট',
   'Attributes' => 'এট্রিবিউটস',
   'Attributes Edit' => 'Attributes Editing',
@@ -111,7 +115,7 @@ return array (
   'Clear' => 'Clear',
   'Close' => 'Close',
   'Code' => 'Code',
-  'Color' => 'রং',
+  'Color' => 'কালার',
   'Column visibility' => 'Column visibility',
   'Combo Products' => 'Combo Products',
   'Company Name' => 'Company Name',
@@ -127,6 +131,7 @@ return array (
   'Coupon Discount' => 'Coupon Discount',
   'Coupon List' => 'Coupon List',
   'Coupon Name' => 'Coupon Name',
+  'Coupon Report' => 'কুপন রিপোর্ট',
   'Coupons' => 'কুপন্স',
   'Create' => 'Create',
   'Create Attribute' => 'Create Attribute',
@@ -137,10 +142,13 @@ return array (
   'Credit' => 'Credit',
   'Currency' => 'Currency',
   'Currency Position' => 'Currency Position',
+  'Currency Rates' => 'কারেন্সি রেটস',
   'Current Password' => 'Current Password',
+  'Customer' => 'কাস্টমার',
   'Customer Details' => 'Customer Details',
   'Customer Group' => 'Customer Group',
   'Customer List' => 'Customer List',
+  'Customer Order Report' => 'কাস্টমার অর্ডার রিপোর্ট',
   'Customer Report' => 'Customer Report',
   'Daily Purchase' => 'Daily Purchase',
   'Daily Purchase Report' => 'Daily Purchase Report',
@@ -195,6 +203,7 @@ return array (
   'Featured product will be displayed in POS' => 'Featured product will be displayed in POS',
   'File Link' => 'File Link',
   'Files' => 'Files',
+  'Filter Report' => 'ফিলটার রিপোর্ট',
   'Filterable' => 'ফিল্টারেবল',
   'Final File' => 'Final File',
   'Final Report' => 'Final Report',
@@ -255,7 +264,10 @@ return array (
   'Language' => 'ভাষা',
   'Last 7 Days' => 'Last 7 Days',
   'Late' => 'Late',
-  'List' => 'List',
+  'Latest' => 'লেটেস্ট',
+  'Latest Orders' => 'লেটেস্ট অর্ডার',
+  'List' => 'লিস্ট',
+  'Localization' => 'লোকালাইজেশন',
   'LogIn' => 'LogIn',
   'Logo' => 'লগো',
   'Loss' => 'Loss',
@@ -305,6 +317,7 @@ return array (
   'Or' => 'Or',
   'Order' => 'Order',
   'Order Discount' => 'Order Discount',
+  'Order ID' => 'অর্ডার আইডি',
   'Order Table' => 'Order Table',
   'Order Tax' => 'Order Tax',
   'Ordered' => 'Ordered',
@@ -313,6 +326,7 @@ return array (
   'PDF' => 'PDF',
   'POS Setting' => 'POS Setting',
   'Packing' => 'Packing',
+  'Page View Statistics' => 'পেজ ভিউ স্ট্যাটিস্টিক্স',
   'Pages' => 'পেজ',
   'Paid' => 'Paid',
   'Paid Amount' => 'Paid Amount',
@@ -341,6 +355,8 @@ return array (
   'Present' => 'Present',
   'Previous' => 'Previous',
   'Price' => 'Price',
+  'Price: High to Low' => 'Price: High to Low',
+  'Price: Low to High' => 'Price: Low to High',
   'Print' => 'Print',
   'Product Code' => 'Product Code',
   'Product Cost' => 'Product Cost',
@@ -350,11 +366,14 @@ return array (
   'Product Invoice Details' => 'Product Invoice Details',
   'Product Name' => 'Product Name',
   'Product Price' => 'Product Price',
+  'Product Purchase Report' => 'প্রডাক্ট পারসেস রিপোর্ট',
   'Product Quantity Alert' => 'Product Quantity Alert',
   'Product Report' => 'Product Report',
+  'Product Stock Report' => 'প্রডাক্ট স্টক রিপোর্ট',
   'Product Tax' => 'Product Tax',
   'Product Type' => 'Product Type',
   'Product Unit' => 'Product Unit',
+  'Product View Report' => 'প্রডাক্ট ভিউ রিপোর্ট',
   'Products' => 'প্রডাক্টস',
   'Promotion' => 'Promotion',
   'Promotion Ends' => 'Promotion Ends',
@@ -409,14 +428,16 @@ return array (
   'Sale Status' => 'Sale Status',
   'Sale Unit' => 'Sale Unit',
   'Sales' => 'সেলস',
+  'Sales Report' => 'সেলস রিপোর্ট',
   'Sample File' => 'Sample File',
   'Search' => 'Search',
+  'Search Report' => 'সার্চ রিপোর্ট',
   'Select Product' => 'Select Product',
-  'Select SMS gateway' =>
+  'Select SMS gateway' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Select SMS gateway...',
       ),
@@ -424,13 +445,16 @@ return array (
   ),
   'Send SMS' => 'Send SMS',
   'Sent' => 'Sent',
+  'Setting' => 'সেটিং',
   'Settings' => 'Settings',
   'Shipping' => 'Shipping',
   'Shipping Cost' => 'Shipping Cost',
+  'Shipping Report' => 'শিপিং রিপোর্ট',
   'Shop By Category' => 'শপ বাই ক্যাটাগরী',
   'Showing' => 'Showing',
   'Signature' => 'Signature',
   'Site Logo' => 'Site Logo',
+  'Site Settings' => 'সাইট সেটিংস',
   'Site Title' => 'Site Title',
   'Slider' => 'স্লাইডার',
   'Sold' => 'Sold',
@@ -451,7 +475,7 @@ return array (
   'Stock Value by Cost' => 'Stock Value by Cost',
   'Stock Value by Price' => 'Stock Value by Price',
   'Stock Worth (Price/Cost)' => 'Stock Worth (Price/Cost)',
-  'Store Front' => 'Store Front',
+  'Store Front' => 'স্টোর ফ্রন্ট',
   'Subtotal' => 'SubTotal',
   'Subtraction' => 'Subtraction',
   'Suffix' => 'Suffix',
@@ -466,13 +490,15 @@ return array (
   'Tax Name' => 'Tax Name',
   'Tax Number' => 'Tax Number',
   'Tax Rate' => 'Tax Rate',
+  'Tax Report' => 'ট্যাক্স রিপোর্ট',
+  'Taxes' => 'ট্যাক্স',
   'Term of Service' => 'টার্ম অফ সার্ভিস',
   'Thank you for shopping with us. Please come again' => 'Thank you for shopping with us. Please come again',
   'The correct column order is' => 'The correct column order is',
   'The field labels marked with * are required input fields' => 'The field labels marked with * are required input fields',
   'Theme' => 'Theme',
   'This Month' => 'এই মাস',
-  'This Year' => 'এই বছর',
+  'This Year' => 'This Year',
   'This product has variant' => 'This product has variant',
   'Time Zone' => 'Time Zone',
   'Title' => 'Title',
@@ -481,44 +507,48 @@ return array (
   'To Warehouse' => 'To Warehouse',
   'To display Image it must be stored in' => 'To display Image it must be stored in',
   'Today Order' => 'আজকের অর্ডার',
+  'Top Categories' => 'টপ ক্যাটাগরিস',
   'Total' => 'Total',
   'Total Item' => 'Total Item',
+  'Total Orders' => 'মোট অর্ডার',
+  'Total Products' => 'মোট প্রডাক্টস',
   'Total Quantity' => 'Total Quantity',
+  'Total Register Customers' => 'মোট রেজিস্টার কাস্টমার',
+  'Total Sales' => 'টোটাল সেলস',
   'Touchscreen keybord' => 'Touchscreen keybord',
   'Transactions' => 'ট্রান্সেকশন',
   'Transfer' => 'Transfer',
   'Transfer Details' => 'Transfer Details',
   'Transfer List' => 'Transfer List',
   'Transfer Status' => 'Transfer Status',
+  'Translations' => 'ট্রান্সলেশন',
+  'Trending' => 'ট্রেন্ডিং',
   'Type' => 'Type',
-  'This Year'=>'This Year',
-  'Filter Report'=>'ফিলটার রিপোর্ট',
-
-  'Type Product Name or Code' =>
+  'Type Product Name or Code' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type Product Name or Code...',
       ),
     ),
   ),
-  'Type date or purchase reference' =>
+  'Type date or purchase reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or purchase reference...',
       ),
     ),
   ),
-  'Type date or sale reference' =>
+  'Type date or sale reference' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Type date or sale reference...',
       ),
@@ -599,7 +629,6 @@ return array (
   'grand total' => 'Grand Total',
   'import' => 'Import',
   'import_product' => 'Import Product',
-  'latest' => 'Latest',
   'logout' => 'Logout',
   'name' => 'Name',
   'parent' => 'Parent',
@@ -624,8 +653,4 @@ return array (
   'update' => 'Update',
   'welcome' => 'Welcome',
   'yearly report' => 'Yearly Report',
-  'Top Categories'=>'টপ ক্যাটাগরিস',
-  'Trending'=>'ট্রেন্ডিং',
-  'Color'=>'কালার',
-  'Slider'=>'স্লাইডার',
 );

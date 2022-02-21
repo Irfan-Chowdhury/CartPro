@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Models\SettingCashOnDelivery;
 use App\Models\SettingFlatRate;
 use App\Models\SettingFreeShipping;
 use App\Models\SettingLocalPickup;
+use App\Models\SettingPaypal;
+use App\Models\SettingStrip;
 use App\Models\Tax;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -37,14 +40,19 @@ class CartController extends Controller
                         ])
                         ->find($request->product_id);
 
-            if ($product->qty==0 || $request->qty > $product->qty) {
+            if (($product->manage_stock==1) && ($product->qty==0 || $request->qty > $product->qty)) {
                 return response()->json(['type'=>'quantity_limit','product_quantity'=>$product->qty]);
             }
+
+
+
 
             $data = [];
             $data['id']     = $product->id;
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
             $data['qty']    = $request->qty;
+            $data['tax']    = 0;
+
 
             if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price){
                 $data['price']  = $product->special_price;
@@ -60,14 +68,13 @@ class CartController extends Controller
                 }
             }
 
-            // $data['options']['color'] = '';
-            // $data['options']['size']  = '';
             $data['options']['product_slug']  = $request->product_slug;
             $data['options']['category_id']  = $request->category_id;
+
             $data = Cart::add($data);
 
             $cart_count = Cart::count();
-            $cart_total = Cart::total();
+            $cart_total = implode(explode(',',Cart::total()));
             $cart_content = Cart::content();
 
             if ($request->wishlist_id) {
@@ -76,7 +83,6 @@ class CartController extends Controller
             }else {
                 $wishlist_id = 0;
             }
-
 
             return response()->json(['type'=>'success','cart_content'=>$cart_content, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total,'wishlist_id'=>$wishlist_id]);
         }
@@ -92,8 +98,6 @@ class CartController extends Controller
         }
         App::setLocale($locale);
 
-        ////---------- Test End-----------
-
         $setting_free_shipping = SettingFreeShipping::latest()->first();
         $setting_local_pickup = SettingLocalPickup::latest()->first();
         $setting_flat_rate = SettingFlatRate::latest()->first();
@@ -102,6 +106,8 @@ class CartController extends Controller
         $cart_content  = Cart::content();
         $cart_subtotal = Cart::subtotal();
         $cart_total    = Cart::total();
+
+
         return view('frontend.pages.cart_details',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate'));
     }
 
@@ -119,30 +125,38 @@ class CartController extends Controller
     public function cartQuantityChange(Request $request)
     {
         if ($request->ajax()) {
+
+            $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
+
             Cart::update($request->rowId, ['qty'  => $request->qty]);
-            $cart_subtotal = Cart::get($request->rowId)->subtotal;
-            $cart_count = Cart::count();
-            $subtotal = Cart::subtotal();
-            $cart_total = Cart::total();
 
-            $total = Cart::total();
-            $total_amount = implode(explode(',',$total)) + $request->shipping_charge - $request->coupon_value;
-            $cart_total = number_format($total_amount, 2); //convert 10000 to 10,000
+            $specificCart = Cart::get($request->rowId);
+            $cartSpecificSubtotal = number_format((float)$specificCart->subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
 
-            return response()->json(['type'=>'success','cart_subtotal'=>$cart_subtotal, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total,'subtotal'=>$subtotal,'total'=>$total]);
+            $cartSpecificCount = $specificCart->qty;
+            $cartCount = Cart::count();
+
+            $cartTotal = implode(explode(',',Cart::total()));
+
+            return response()->json(['type'=>'success','cartSpecificSubtotal'=>$cartSpecificSubtotal,'cartSpecificCount'=>$cartSpecificCount,'cartCount'=>$cartCount,'cartTotal'=>$cartTotal]);
         }
+
+        //Previous
+        // if ($request->ajax()) {
+        //     Cart::update($request->rowId, ['qty'  => $request->qty]);
+        //     $cart_subtotal = Cart::get($request->rowId)->subtotal;
+        //     $cart_count = Cart::count();
+        //     $subtotal = Cart::subtotal();
+        //     $cart_total = Cart::total();
+
+        //     $total = Cart::total();
+        //     $total_amount = implode(explode(',',$total)) + $request->shipping_charge - $request->coupon_value;
+        //     $cart_total = number_format($total_amount, 2); //convert 10000 to 10,000
+
+        //     return response()->json(['type'=>'success','cart_subtotal'=>$cart_subtotal, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total,'subtotal'=>$subtotal,'total'=>$total]);
+        // }
     }
 
-    public function shippingCharge(Request $request)
-    {
-        if ($request->ajax()) {
-            $total = Cart::total();
-            $cart_total = implode(explode(',',$total)) + $request->cost - $request->coupon_value; //convert 10,000 to 10000
-            $total_with_shipping = number_format($cart_total, 2); //convert 10000 to 10,000
-
-            return response()->json(['type'=>'success','total_with_shipping'=>$total_with_shipping]);
-        }
-    }
 
     public function checkout(Request $request)
     {
@@ -154,62 +168,144 @@ class CartController extends Controller
         }
         App::setLocale($locale);
 
+        $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
 
         $cart_content = Cart::content();
-        $cart_subtotal = Cart::subtotal();
-        $total = Cart::total();
+        $cart_subtotal = number_format((float) implode(explode(',',Cart::subtotal())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
+        $cart_total = number_format((float) implode(explode(',',Cart::total())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
 
         $setting_free_shipping = SettingFreeShipping::latest()->first();
         $setting_local_pickup = SettingLocalPickup::latest()->first();
         $setting_flat_rate = SettingFlatRate::latest()->first();
-
-        $shipping_charge = $request->shipping ?? 0;
-
-        $total_with_shipping = implode(explode(',',$total)) + $shipping_charge;
-        $cart_total = number_format($total_with_shipping, 2);
-
         $countries = Country::all();
 
-        return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','shipping_charge','countries'));
+        $cash_on_delivery = SettingCashOnDelivery::select('status')->latest()->first();
+        $stripe = SettingStrip::select('status')->latest()->first();
+        $paypal = SettingPaypal::select('status')->latest()->first();
+
+        // return $paypal;
+
+        return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',
+                                            'cash_on_delivery','stripe','paypal'));
+    }
+
+    public function countryWiseTax(Request $request)
+    {
+        if ($request->ajax()) {
+
+            //Coupon
+            if ($request->coupon_code!=NULL) {
+                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->first();
+                if ($coupon) {
+                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->first()->value;
+                }
+            }else {
+                $coupon_value = 0;
+            }
+
+            //Shipping_cost
+            if ($request->shipping_cost!=NULL) {
+                $shipping_cost = $request->shipping_cost;
+            }else {
+                $shipping_cost = 0;
+            }
+
+            //Tax
+            $tax =  Tax::where('country',$request->billing_country)->first();
+            if ($tax) {
+                $tax_rate = $tax->rate;
+                $tax_id = $tax->id;
+            }else {
+                $tax_rate = 0;
+                $tax_id = null;
+            }
+
+            $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
+
+            $cart_total = implode(explode(',',Cart::total()));
+            $total_amount = (($cart_total + $shipping_cost + $tax_rate) - $coupon_value) * $CHANGE_CURRENCY_RATE;
+
+            return response()->json(['total_amount'=>number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', ''),
+                                    'coupon_value'=>$coupon_value,
+                                    'tax_rate'=>$tax_rate,
+                                    'tax_id'=>$tax_id]);
+        }
     }
 
     public function applyCoupon(Request $request)
     {
         if ($request->ajax()) {
-            $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->first()->value ?? 0;
 
-            $cart_total = Cart::total();
+            //Coupon
+            if ($request->coupon_code!=NULL) {
+                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->first();
+                if ($coupon) {
+                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->first()->value;
+                }
+            }else {
+                $coupon_value = 0;
+            }
 
-            $total_with_charge_after_coupon = implode(explode(',',$cart_total)) + $request->shipping_charge - $coupon_value;
-            $total_amount = number_format($total_with_charge_after_coupon, 2); //10000 to 10,000
 
-            return response()->json(['type'=>'success','total_amount'=>$total_amount,'coupon_value'=>$coupon_value]);
+            //Shipping Cost
+            if ($request->shipping_cost!=NULL) {
+                $shipping_cost = $request->shipping_cost;
+            }else {
+                $shipping_cost = 0;
+            }
+
+
+            //Tax
+            $tax =  Tax::where('id',$request->tax_id)->first();
+            if ($tax) {
+                $tax_rate = $tax->rate;
+                $tax_id = $tax->id;
+            }else {
+                $tax_rate = 0;
+                $tax_id = null;
+            }
+
+            $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
+
+            $cart_total = implode(explode(',',Cart::total()));
+            $total_amount = (($cart_total + $shipping_cost + $tax_rate) - $coupon_value) * $CHANGE_CURRENCY_RATE;
+
+
+            return response()->json(['type'=>'success','total_amount'=>number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', ''),
+                                    'coupon_value'=>$coupon_value,
+                                    'tax_rate'=>$tax_rate,
+                                    'tax_id'=>$tax_id]);
         }
     }
 
-    public function countryWiseTax(Request $request)
+    public function shippingCharge(Request $request)
     {
+        if ($request->ajax()) {
 
-        $tax =  Tax::where('country',$request->billing_country)->first();
+            //Coupon
+            $coupon_value = $request->coupon_value!=NULL ? $request->coupon_value : 0;
 
-        if (!empty($tax) && $tax->based_on=='shipping_address') {
-            $total_amount = $request->total + $tax->rate;
-            $tax_rate = $tax->rate;
+            //Tax
+            $tax =  Tax::where('id',$request->tax_id)->first();
+            if ($tax) {
+                $tax_rate = $tax->rate;
+                $tax_id = $tax->id;
+            }else {
+                $tax_rate = 0;
+                $tax_id = null;
+            }
+
+            $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
+
+            $cart_total = implode(explode(',',Cart::total()));
+            $total_amount = (($cart_total + $request->shipping_cost + $tax_rate) - $coupon_value) * $CHANGE_CURRENCY_RATE;
+
+            return response()->json(['type'=>'success',
+                                    'total_amount'=>number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', ''),
+                                    'coupon_value'=>$coupon_value,
+                                    'tax_rate'=>$tax_rate,
+                                    'tax_id'=>$tax_id]);
+
         }
-        elseif(!empty($tax) && $tax->based_on=='billing_address'){
-            $total_amount = $request->total + $tax->rate;
-            $tax_rate = $tax->rate;
-
-        }elseif(!empty($tax) && $tax->based_on=='store_address'){
-            $total_amount = $request->total + $tax->rate;
-            $tax_rate = $tax->rate;
-
-        }else {
-            $total_amount = $request->total;
-            $tax_rate = 0;
-        }
-
-        return response()->json(['total_amount'=>$total_amount,'tax_rate'=>$tax_rate]);
-
     }
 }

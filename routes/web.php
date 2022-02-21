@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\NavigationController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportController;
@@ -24,19 +26,26 @@ use App\Http\Controllers\Admin\StoreFrontController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\LocaleFileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\BrandProductController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryProductController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\OrderController;
-use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\PageController AS FrontendPageController;
 use App\Http\Controllers\Frontend\UserAccountController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Frontend\ShopProductController;
+use App\Http\Controllers\Frontend\SslCommerzPaymentController;
+use App\Http\Controllers\Frontend\TagProductController;
+use Illuminate\Support\Facades\File;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -60,26 +69,49 @@ DefaultAuth::routes();
 
 //New Format Start
 
-Route::post('/customer/register', [Frontend\RegisterController::class,'customerRegister'])->name('customer.register');
+Route::get('/documentation',function(){
+    if (env('USER_VERIFIED')==1) {
+        return File::get(public_path() . '/documentation/index.html');
+    }else {
+        return view('404_error');
+    }
+});
+
 Route::get('/login',[Auth\LoginController::class,'showCustomerLoginForm'])->name('customer_login_form');
-Route::post('/customer/login', [Auth\LoginController::class,'customerLogin'])->name('customer.login');
+Route::post('/customer/login', [Auth\LoginController::class,'customerLogin'])->name('customer.login')->middleware('XSS');
+Route::post('/customer/register', [Frontend\RegisterController::class,'customerRegister'])->name('customer.register')->middleware('XSS');
+Route::get('/password/reset', [Auth\ForgotPasswordController::class,'showLinkRequestForm'])->name('customer.password.request');
+Route::post('/password/email', [Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
 
-
-Route::group(['namespace'=>'Frontend'], function (){
+Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
     Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
+    Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
-    //Brand
+    Route::get('/keyword_hit',[HomeController::class,'test'])->name('cartpro.keyword_hit');
+
+    //Brand and Brand Wise Products
     Route::get('/brands',[BrandProductController::class,'brands'])->name('cartpro.brands');
     Route::get('/brand/{brand_slug}',[BrandProductController::class,'brandWiseProducts'])->name('cartpro.brand.products');
+
+    //Shop and Shop Wise Products
+    Route::get('/shop',[ShopProductController::class,'index'])->name('cartpro.shop');
+    Route::get('limit_shop_products_show',[ShopProductController::class,'limitShopProductShow'])->name('cartpro.limit_shop_product_show');
+    Route::get('/shop_products_show_sortby',[ShopProductController::class,'shopProductsShowSortby'])->name('cartpro.shop_products_show_sortby');
+
 
     Route::get('product/{product_slug}/{category_id}',[HomeController::class,'product_details'])->name('cartpro.product_details');
     Route::get('data_ajax_search',[HomeController::class,'dataAjaxSearch'])->name('cartpro.data_ajax_search');
 
+    //Category Wise Products
     Route::get('/category/{slug}',[CategoryProductController::class,'categoryWiseProducts'])->name('cartpro.category_wise_products');
     Route::get('limit_category_products_show',[CategoryProductController::class,'limitCategoryProductShow'])->name('cartpro.limit_category_product_show');
     Route::get('/category_sortby_condition',[CategoryProductController::class,'categoryWiseConditionProducts'])->name('cartpro.category_wise_products_condition');
     Route::get('/category_price_range/',[CategoryProductController::class,'categoryWisePriceRangeProducts'])->name('cartpro.category.price_range');
+    Route::get('/category_filter_by_attribute_value/',[CategoryProductController::class,'categoryProductsFilterByAttributeValue'])->name('cartpro.category.filter_by_attribute_value');
+
+
+    Route::get('/tag/{slug}',[TagProductController::class,'tagWiseProducts'])->name('tag_wise_products');
 
 
     //Cart
@@ -97,21 +129,26 @@ Route::group(['namespace'=>'Frontend'], function (){
 
     Route::post('newslatter/store',[HomeController::class,'newslatterStore'])->name('cartpro.newslatter_store');
     //payment -Paypal
-    Route::get('order-store',[OrderController::class,'orderStore'])->name('order.store');
+    Route::get('order-store',[Frontend\OrderController::class,'orderStore'])->name('order.store');
     //payment -Stripe
-    Route::post('/stripe/payment',[OrderController::class,'handlePost'])->name('stripe.payment');
+    Route::post('/stripe/payment',[Frontend\OrderController::class,'handlePost'])->name('stripe.payment');
     //Cash On Delivery
-    Route::post('/order/cash_on_delivery',[OrderController::class,'cashOnDeliveryStore'])->name('order.cash_on_delivery');
+    Route::post('/order/cash_on_delivery',[Frontend\OrderController::class,'cashOnDeliveryStore'])->name('order.cash_on_delivery');
+
+    //Success Pages
+    Route::get('/payment_success',function(){
+        return view('frontend.pages.payment_success');
+    });
+
 
     //Wishlist
-
     Route::prefix('/wishlist')->group(function () {
         Route::get('',[WishlistController::class,'index'])->name('wishlist.index');
         Route::get('/add',[WishlistController::class,'addToWishlist'])->name('wishlist.add');
         Route::get('/remove',[WishlistController::class,'removeToWishlist'])->name('wishlist.remove');
     });
 
-    Route::get('page/{page_slug}',[PageController::class,'pageShow'])->name('page.Show');
+    Route::get('page/{page_slug}',[FrontendPageController::class,'pageShow'])->name('page.Show');
 
     Route::group(['prefix' => '/user_account','middleware'=>'customer_check'], function () {
         Route::get('/',[UserAccountController::class,'userAccount'])->name('user_account')->middleware('customer_check');
@@ -119,6 +156,54 @@ Route::group(['namespace'=>'Frontend'], function (){
         Route::post('/logout',[UserAccountController::class,'userLogout'])->name('user_logout');
     });
     Route::post('/review/store',[HomeController::class,'reviewStore'])->name('review.store');
+
+
+    //SSL Commerze (New)
+    Route::post('/payment/process',[Frontend\PaymentController::class,'paymentProcees'])->name('payment.process');
+    Route::post('/success', [Frontend\PaymentController::class, 'success']);
+    Route::post('/fail', [Frontend\PaymentController::class, 'fail']);
+    Route::post('/cancel', [Frontend\PaymentController::class, 'cancel']);
+    Route::post('/ipn', [Frontend\PaymentController::class, 'ipn']);
+
+
+    // SSLCOMMERZ Start Default
+    Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+    Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+    Route::post('/payment/pay', [SslCommerzPaymentController::class, 'index'])->name('pay');
+    Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+    //SSLCOMMERZ END
+
+
+    //Paypal
+    Route::post('/paypal/create',[Frontend\PaymentController::class,'PaypalCreate']);
+
+
+
+    //Google Login
+    Route::get('/login/google', [Auth\LoginController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('/login/google/callback', [Auth\LoginController::class, 'handleGoogleCallback']);
+
+    //Facebook Login
+    Route::get('/login/facebook', [Auth\LoginController::class, 'redirectToFacebook'])->name('login.facebook');
+    Route::get('/login/facebook/callback', [Auth\LoginController::class, 'handleFacebookCallback']);
+
+    //Github Login
+    Route::get('/login/github', [Auth\LoginController::class, 'redirectToGithub'])->name('login.github');
+    Route::get('/login/github/callback', [Auth\LoginController::class, 'handleGithubCallback']);
+
+
+    //Socolite Tutorial
+    //https://www.youtube.com/watch?v=jIckLu1cKew
+
+
+
+
+
+
+
+
+
 });
 //New Format End
 
@@ -133,14 +218,18 @@ Route::group(['namespace'=>'Frontend'], function (){
 
 Route::get('/admin',[Auth\LoginController::class,'showAdminLoginForm'])->name('admin');
 Route::get('/admin/home',[AdminController::class,'index']);
-Route::post('/admin/login',[Auth\LoginController::class,'login'])->name('admin.login');
+Route::post('/admin/login',[LoginController::class,'login'])->name('admin.login')->middleware('XSS');
 Route::get('/admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('admin_check');
 Route::get('admin/dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');
 Route::get('/admin/logout',[AdminController::class,'Logout'])->name('admin.logout');
 Route::get('/admin/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
 
-Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
+Route::group(['prefix' => 'admin','middleware'=>['admin_check','middleware'=>'XSS']], function () {
     Route::group(['namespace'=>'Admin'], function () {
+
+        //Admin Profile
+        Route::get('/profile',[ProfileController::class,'index'])->name('admin.profile');
+        Route::post('/profile/update',[ProfileController::class,'profileUpdate'])->name('admin.profile_update');
 
         //--Category--
         Route::group(['prefix' => '/categories'], function () {
@@ -218,6 +307,7 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::get('/active',[ProductController::class,'active'])->name('admin.products.active');
             Route::get('/inactive',[ProductController::class,'inactive'])->name('admin.products.inactive');
             Route::get('/bulk_action',[ProductController::class,'bulkAction'])->name('admin.products.bulk_action');
+            Route::get('/delete/{id}',[ProductController::class,'delete'])->name('admin.products.delete');
         });
 
         Route::prefix('review')->group(function () {
@@ -324,15 +414,6 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::get('/inactive-test',[MenuController::class,'inactive'])->name('admin.menu.inactive');
             Route::get('test/bulk_action',[MenuController::class,'bulkAction'])->name('admin.menu.bulk_action');
 
-
-            Route::group(['prefix' => 'navigation'], function () {
-                Route::get('/index',[NavigationController::class,'index'])->name('admin.menu.navigation');
-                Route::get('/data-fetch-by-type',[NavigationController::class,'dataFetchByType'])->name('admin.menu.navigation.data-fetch-by-type');
-                Route::post('/store',[NavigationController::class,'store'])->name('admin.menu.navigation.store');
-                Route::get('/delete',[NavigationController::class,'delete'])->name('admin.menu.navigation.delete');
-                Route::get('/delete/checkbox',[NavigationController::class,'deleteCheckbox'])->name('admin.menu.navigation.delete.checkbox');
-            });
-
             //--Menus Items--
             Route::get('/{menuId}/items',[MenuItemController::class,'index'])->name('admin.menu.menu_item');
             Route::get('/items/data-fetch-by-type',[MenuItemController::class,'dataFetchByType'])->name('admin.menu.menu_item.data-fetch-by-type');
@@ -343,7 +424,6 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::get('/inactive',[MenuItemController::class,'inactive'])->name('admin.menu.menu_item.inactive');
             Route::get('/items/delete/{id}',[MenuItemController::class,'delete'])->name('admin.menu.menu_item.delete'); //Not Deleted
             Route::get('/bulk_action',[MenuItemController::class,'bulkAction'])->name('admin.menu.menu_item.bulk_action');
-
         });
 
         //Store Front
@@ -363,8 +443,8 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::post('/three_column_banners/store',[StoreFrontController::class,'threeColumnBannersStore'])->name('admin.storefront.three_column_banners.store');
             Route::post('/three_column_full_width_banners/store',[StoreFrontController::class,'threeColumnFllWidthBannersStore'])->name('admin.storefront.three_column_full_width_banners.store');
             Route::post('/top_brands/store',[StoreFrontController::class,'topBrandsStore'])->name('admin.storefront.top_brands.store');
+            Route::post('/top_categories/store',[StoreFrontController::class,'topCategoriesStore'])->name('admin.storefront.top_categories.store');
             Route::post('/flash_sale_and_vertical_products/store',[StoreFrontController::class,'flashSaleAndVerticalProductsStore'])->name('admin.storefront.flash_sale_and_vertical_products.store');
-
             Route::post('/product_tab_one/store',[StoreFrontController::class,'productTabsOneStore'])->name('admin.storefront.product_tab_one.store');
             Route::post('/product_tab_two/store',[StoreFrontController::class,'productTabsTwoStore'])->name('admin.storefront.product_tab_two.store');
         });
@@ -392,15 +472,17 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
 
         //---- temporaray ---
          //Report
-         Route::get('reports/coupon',[ReportController::class,'reportCoupon'])->name('admin.reports.coupon');
-         Route::get('reports/customer_orders',[ReportController::class,'reportcustomerOrders'])->name('admin.reports.customer_orders');
-         Route::get('reports/product_stock_report',[ReportController::class,'productStockReport'])->name('admin.reports.product_stock_report');
-         Route::get('reports/product_view_report',[ReportController::class,'productViewReport'])->name('admin.reports.product_view_report');
-         Route::get('reports/sales_report',[ReportController::class,'salesReportReport'])->name('admin.reports.sales_report');
-         Route::get('reports/search_report',[ReportController::class,'searchReport'])->name('admin.reports.search_report');
-         Route::get('reports/shipping_report',[ReportController::class,'shippingReport'])->name('admin.reports.shipping_report');
-         Route::get('reports/tax_report',[ReportController::class,'taxReport'])->name('admin.reports.tax_report');
-         Route::get('reports/product_purchase_report',[ReportController::class,'productPurchaseReport'])->name('admin.reports.product_purchase_report');
+         Route::group(['prefix' => 'reports'], function () {
+            Route::get('coupon',[ReportController::class,'reportCoupon'])->name('admin.reports.coupon');
+            Route::get('customer_orders',[ReportController::class,'reportcustomerOrders'])->name('admin.reports.customer_orders');
+            Route::get('product_stock_report',[ReportController::class,'productStockReport'])->name('admin.reports.product_stock_report');
+            Route::get('product_view_report',[ReportController::class,'productViewReport'])->name('admin.reports.product_view_report');
+            Route::get('sales_report',[ReportController::class,'salesReport'])->name('admin.reports.sales_report');
+            Route::get('search_report',[ReportController::class,'searchReport'])->name('admin.reports.search_report');
+            Route::get('shipping_report',[ReportController::class,'shippingReport'])->name('admin.reports.shipping_report');
+            Route::get('tax_report',[ReportController::class,'taxReport'])->name('admin.reports.tax_report');
+            Route::get('product_purchase_report',[ReportController::class,'productPurchaseReport'])->name('admin.reports.product_purchase_report');
+         });
 
 
          Route::get('report/today',[ReportController::class,'todayReport'])->name('report.today');
@@ -422,12 +504,14 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::post('/custom_css_js/store',[SettingController::class,'customCssJsStoreOrUpdate'])->name('admin.setting.custom_css_js.store_or_update');
             Route::post('/facebook/store',[SettingController::class,'facebookStoreOrUpdate'])->name('admin.setting.facebook.store_or_update');
             Route::post('/google/store',[SettingController::class,'googleStoreOrUpdate'])->name('admin.setting.google.store_or_update');
+            Route::post('/github/store',[SettingController::class,'githubStoreOrUpdate'])->name('admin.setting.github.store_or_update');
             Route::post('/free_shipping/store',[SettingController::class,'freeShippingStoreOrUpdate'])->name('admin.setting.free_shipping.store_or_update');
             Route::post('/local_pickup/store',[SettingController::class,'localPickupStoreOrUpdate'])->name('admin.setting.local_pickup.store_or_update');
             Route::post('/flat_rate/store',[SettingController::class,'flatRateStoreOrUpdate'])->name('admin.setting.flat_rate.store_or_update');
             Route::post('/paypal/store',[SettingController::class,'paypalStoreOrUpdate'])->name('admin.setting.paypal.store_or_update');
             Route::post('/strip/store',[SettingController::class,'stripStoreOrUpdate'])->name('admin.setting.strip.store_or_update');
             Route::post('/paytm/store',[SettingController::class,'paytmStoreOrUpdate'])->name('admin.setting.paytm.store_or_update');
+            Route::post('/sslcommerz/store',[SettingController::class,'sslcommerzStoreOrUpdate'])->name('admin.setting.sslcommerz.store_or_update');
             Route::post('/cash_on_delivery/store',[SettingController::class,'cashonDeliveryStoreOrUpdate'])->name('admin.setting.cash_on_delivery.store_or_update');
             Route::post('/bank_transfer/store',[SettingController::class,'bankTransferStoreOrUpdate'])->name('admin.setting.bank_transfer.store_or_update');
             Route::post('/check_money_order/store',[SettingController::class,'cehckMoneyOrderStoreOrUpdate'])->name('admin.setting.check_money_order.store_or_update');
@@ -437,6 +521,7 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
             Route::group(['prefix' => 'language'], function () {
                 Route::get('/',[LanguageController::class,'index'])->name('admin.setting.language');
                 Route::post('/store',[LanguageController::class,'store'])->name('admin.setting.language.store');
+                Route::post('/update',[LanguageController::class,'update'])->name('admin.setting.language.update');
                 Route::get('/delete/{id}',[LanguageController::class,'delete'])->name('admin.setting.language.delete');
                 Route::get('/defaultChange/{id}',[LanguageController::class,'defaultChange'])->name('admin.setting.language.defaultChange');
             });
@@ -444,5 +529,6 @@ Route::group(['prefix' => 'admin','middleware'=>['admin_check']], function () {
 
         Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');
 
+        Route::get('/delete',[SliderController::class,'delete'])->name('cartpro.delete');
     });
 });

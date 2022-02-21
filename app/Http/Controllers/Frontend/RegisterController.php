@@ -16,8 +16,6 @@ class RegisterController extends Controller
 
     public function customerRegister(Request $request)
     {
-        // return response()->json($request->all());
-
         $data = [];
 
         if ($request->billing_create_account_check) {
@@ -44,36 +42,27 @@ class RegisterController extends Controller
         }
         else {
             $validator2 = Validator::make($request->all(),[
-                'first_name' => 'required|string',
-                'last_name'  => 'required|string',
+                'first_name' => 'nullable|string',
+                'last_name'  => 'nullable|string',
                 'username'   => 'required|string|unique:users',
                 'email'      => 'required|string|email|unique:users',
-                'phone'      => 'required',
+                'phone'      => 'nullable',
                 'password'   => 'required|string|confirmed',
                 'password_confirmation' => 'required',
-                // 'gender'  => 'required',
-                'image'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+                'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
             ]);
 
             if($validator2->fails()){
-                session()->flash('error','');
+                session()->flash('message','');
                 return redirect()->back()->withErrors($validator2)->withInput();
             }
 
-            $data['first_name'] = $request->first_name;
-            $data['last_name']  = $request->last_name;
             $data['username']   = $request->username;
             $data['email']      = $request->email;
-            $data['phone']      = $request->phone;
             $data['user_type']  = 0;
-            $data['user_type']  = 3; //roles-3-customer
-            $image       = $request->file('image');
-            if ($image) {
-                $data['image'] = $this->imageStore($image, $directory='images/customers/', $type='customer');
-            }
+            $data['is_active']  = 1;
             $data['password']   = Hash::make($request->password);
         }
-
         $user = User::create($data);
         $data['user_id'] = $user->id;
         Customer::create($data);

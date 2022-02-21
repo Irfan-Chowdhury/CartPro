@@ -31,4 +31,16 @@ class Setting extends Model
     {
     	return $this->hasOne(StorefrontImage::class,'setting_id');
     }
+
+    public function page()
+    {
+        return $this->belongsTo(Page::class,'plain_value');
+    }
+
+    public function pageTranslation()
+    {
+        $locale = Session::get('currentLocal');
+    	return $this->hasOne(PageTranslation::class,'page_id')
+                    ->where('locale',$locale);
+    }
 }

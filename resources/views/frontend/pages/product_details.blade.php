@@ -22,8 +22,9 @@
         <div class="container">
             <div class="breadcrumb-section">
                 <ul>
-                    <li><a href="{{route('cartpro.home')}}">Home</a></li>
+                    <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
                     <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name}}</a> </li>
+                    <li><p>{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</p></li>
                 </ul>
             </div>
 
@@ -33,12 +34,20 @@
                         <div class="slider-nav">
                              @if ($product->baseImage)
                                 <div class="slider-nav__item">
-                                    <img src="{{asset('public/'.$product->baseImage->image)}}" alt="..." />
+                                    @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
+                                        <img src="{{asset('public/'.$product->baseImage->image)}}">
+                                    @else
+                                        <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
+                                    @endif
                                 </div>
                             @endif
                             @forelse ($product->additionalImage as $value)
                                 <div class="slider-nav__item">
-                                    <img src="{{asset('public/'.$value->image)}}" alt="..." />
+                                    @if (isset($value->image) && Illuminate\Support\Facades\File::exists(public_path($value->image)))
+                                        <img src="{{asset('public/'.$value->image)}}">
+                                    @else
+                                        <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
+                                    @endif
                                 </div>
                             @empty
                             @endforelse
@@ -47,12 +56,20 @@
                         <div class="slider-for">
                             @if ($product->baseImage)
                                 <div class="slider-for__item ex1">
-                                    <img src="{{asset('public/'.$product->baseImage->image)}}" alt="..." />
+                                    @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
+                                        <img src="{{asset('public/'.$product->baseImage->image)}}">
+                                    @else
+                                        <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
+                                    @endif
                                 </div>
                             @endif
                             @forelse ($product->additionalImage as $value)
                                 <div class="slider-for__item ex1">
-                                    <img src="{{asset('public/'.$value->image)}}" alt="..." />
+                                    @if (isset($value->image) && Illuminate\Support\Facades\File::exists(public_path($value->image)))
+                                        <img src="{{asset('public/'.$value->image)}}">
+                                    @else
+                                        <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
+                                    @endif
                                 </div>
                             @empty
                             @endforelse
@@ -65,55 +82,56 @@
                         <input type="hidden" name="product_id" value="{{$product->id}}">
                         <input type="hidden" name="product_slug" value="{{$product->slug}}">
                         <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
-                        {{-- <input type="number" name="qty" class="input-number" value="{{$product_cart_qty ?? 1}}" min="1"> --}}
                         <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
 
                         <div class="item-details">
                             <a class="item-category" href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
                             <h3 class="item-name">{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</h3>
                             <div class="d-flex justify-content-between">
-                                <div class="item-brand">Brand: <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
+                                <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
                                 <div class="item-review">
                                     <ul class="p-0 m-0">
                                         @php
                                             for ($i=1; $i <=5 ; $i++){
                                                 if ($i<= round($product->avg_rating)){  @endphp
-                                                    <li><i class="ion-android-star"></i></li>
+                                                    <li><i class="las la-star"></i></li>
                                         @php
                                                 }else { @endphp
-                                                    <li><i class="ion-android-star-outline"></i></li>
+                                                    <li><i class="lar la-star"></i></li>
                                         @php        }
                                             }
                                         @endphp
                                     </ul>
                                     <span>( {{round($product->avg_rating)}} )</span>
                                 </div>
-                                <div class="item-sku">SKU: LC123456789</div>
+                                @if ($product->sku)
+                                    <div class="item-sku">@lang('file.SKU') : {{$product->sku}}</div>
+                                @endif
                             </div>
                             <hr>
                             @if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        {{ number_format((float)$product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                     @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                     @endif
                                 </div>
                                 <div class="old-price">
                                     <del>
                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                            {{ number_format((float)$product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                         @else
-                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                         @endif
                                     </del>
                                 </div>
                             @else
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                     @else
-                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }}
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                     @endif
                                 </div>
                             @endif
@@ -151,27 +169,28 @@
                                                 <span class="ti-minus"></span>
                                             </button>
                                         </span>
-                                        <input type="number" name="qty" class="input-number" value="{{$product_cart_qty ?? 1}}" min="1">
+                                        <input type="number" name="qty" class="input-number" value="1" min="1">
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus">
                                                 <span class="ti-plus"></span>
                                             </button>
                                         </span>
                                     </div>
-                                    <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                                    <a>
-                                        <button class="button button-icon style4 sm" id="addToWishList" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
-                                        {{-- <span class="ti-heart add_to_wishlist" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span> --}}
-                                    </a>
-                                    {{-- <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button> --}}
+
+                                    @if (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
+                                        <button disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Out of Stock" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to cart')</span></span></button>
+                                    @else
+                                        <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to cart')</span></span></button>
+                                    @endif
+                                    <a><div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to wishlist')</span></span></div></a>
                             </div>
                             <hr>
-                            <div class="item-share mt-3"><span>Share</span>
+                            <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
                                 <ul class="footer-social d-inline pad-left-15">
-                                    <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                    <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                    <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                    <li><a href="#"><i class="ti-pinterest"></i></a></li>
+                                    <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
+                                    <li><a href="{{$socialShare['twitter']}}"><i class="ti-twitter"></i></a></li>
+                                    <li><a href="{{$socialShare['linkedin']}}"><i class="ti-linkedin"></i></a></li>
+                                    <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -188,16 +207,10 @@
                 <div class="col-md-12 tabs style2">
                     <ul class="nav nav-tabs mar-top-30 product-details-tab" id="lionTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="true">Description</a>
-                        </li>
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" id="branding-tab_one" data-bs-toggle="tab" href="#size" role="tab" aria-selected="false">Size Guide</a>
+                            <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="true">@lang('file.Description')</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="branding-tab_two" data-bs-toggle="tab" href="#shipping" role="tab" aria-selected="false">Shipping</a>
-                        </li> --}}
-                        <li class="nav-item">
-                            <a class="nav-link" id="graphic-design-tab" data-bs-toggle="tab" href="#comments" role="tab" aria-selected="false">Reviews <span class="text-grey"> ({{count($reviews)}})</span></a>
+                            <a class="nav-link" id="graphic-design-tab" data-bs-toggle="tab" href="#comments" role="tab" aria-selected="false">@lang('file.Reviews') <span class="text-grey"> ({{count($reviews)}})</span></a>
                         </li>
                     </ul>
                 </div>
@@ -207,7 +220,7 @@
             <div class="container">
                 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
                     <div class="desc-intro">
-                        {!!$product->productTranslation->description ?? $product->productTranslationDefaultEnglish->description ?? null !!}
+                        {!! htmlspecialchars_decode($product->productTranslation->description ?? $product->productTranslationDefaultEnglish->description ?? null) !!}
                     </div>
                 </div>
                 <div class="tab-pane fade" id="size" role="tabpanel" aria-labelledby="graphic-design-tab">
@@ -311,10 +324,10 @@
                                                 @php
                                                     for ($i=1; $i <=5 ; $i++){
                                                         if ($i<=$item->rating){  @endphp
-                                                            <li><i class="ion-android-star"></i></li>
+                                                            <li><i class="las la-star"></i></li>
                                                 @php
                                                         }else { @endphp
-                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                            <li><i class="lar la-star"></i></li>
                                                 @php        }
                                                     }
                                                 @endphp
@@ -340,11 +353,16 @@
                                     <div class="col-sm-12">
                                         <label >Your Rating</label>
                                         <ul class="product-rating">
-                                            <li><i class="ion-ios-star-outline" id="star_1"></i></li>
-                                            <li><i class="ion-ios-star-outline" id="star_2"></i></li>
-                                            <li><i class="ion-ios-star-outline" id="star_3"></i></li>
-                                            <li><i class="ion-ios-star-outline" id="star_4"></i></li>
-                                            <li><i class="ion-ios-star-outline" id="star_5"></i></li>
+                                            @php
+                                                for ($i=1; $i <=5 ; $i++){
+                                                    if ($i<=$product->rating){  @endphp
+                                                        <li><i class="las la-star"></i></li>
+                                            @php
+                                                    }else { @endphp
+                                                        <li><i class="lar la-star"></i></li>
+                                            @php        }
+                                                }
+                                            @endphp
                                         </ul>
                                     </div>
                                     <div class="col-sm-12 text-area">
@@ -370,14 +388,6 @@
                                             </div>
                                         </div>
                                     @else
-                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                            </symbol>
-                                        </svg>
-                                        <div class="m-3 alert alert-danger d-flex align-items-center" role="alert">
-                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg> --}}
-
                                         @foreach ($reviews as $item)
                                             @if ($item->userId==Auth::user()->id)
                                                 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -402,7 +412,7 @@
                                                                       @else
                                                                         @foreach ($reviews as $item)
                                                                             @if ($item->userId==Auth::user()->id)
-                                                                                disabled title="Disabled"
+                                                                                disabled title="Out of stock"
                                                                                 @break
                                                                             @endif
                                                                         @endforeach
@@ -421,18 +431,13 @@
         </div>
     </section>
 
-    {{-- <div class="container text-center mar-top-20">
-        <div class="item-categories"><span>Categories:</span> <a href="#">Men</a>, <a href="#">Jacket</a> ,<a href="#">Leather</a></div>
-        <div class="item-tags"><span>Tags:</span> <a href="#">Men’s Clothing</a>, <a href="#">Clothing</a>, <a href="#">Fashion</a></div>
-    </div> --}}
-    <!--content wrapper ends-->
-    <!--Product area starts-->
-    {{-- <section class="product-tab-section">
+    <!-- Realated Product area starts-->
+    <section class="product-tab-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
                     <div class="section-title style1 mar-bot-30">
-                        <h3>Related Products</h3>
+                        <h3>@lang('file.Related Products')</h3>
                     </div>
                 </div>
             </div>
@@ -440,649 +445,104 @@
                 <div class="col-md-12">
                     <div class="product-slider-wrapper v1 swiper-container">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-11.jpg" alt="...">
-                                        <div class="product-promo-text style3">
-                                            <p>Sold</p>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Stylish check shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
+                            @forelse ($category_products as $item)
+                                @if ($item->product->is_active==1) <!--Change in query later-->
+                                    <div class="swiper-slide">
+                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                            <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                            <input type="hidden" name="qty" value="1">
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style4">
-                                    <div class="single-product-item v1">
-                                        <img class="product-img" src="images/products/product-13.jpg" alt="...">
-                                        <img class="product-img-hover" src="images/products/product-14.jpg" alt="...">
-                                        <div class="product-promo-text style5">
-                                            <p>-30%</p>
-                                        </div>
-                                        <div class="sidebar-content-wrap v2 sidebar-single-active text-center">
-                                            <div class="daily-deals-wrap v2">
-                                                <!-- countdown start -->
-                                                <div class="countdown-deals text-center" data-countdown="2019/5/01"></div>
-                                                <!-- countdown end -->
-                                            </div>
-                                        </div>
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Stretch Tshirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
+                                            <div class="single-product-wrapper">
+                                                <div class="single-product-item">
+                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                        @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
+                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                        @else
+                                                            <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
+                                                        @endif
+                                                    </a>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style3">
-                                    <div class="single-product-item">
-                                        <div class="product-item-img">
-                                            <img src="images/products/product-12.jpg" alt="...">
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Stretch Tshirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price"><span class="price">$499</span></div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="size-checkbox">
-                                                    <form action="#">
-                                                        <ul class="size-opt">
-                                                            <li><span>S</span></li>
-                                                            <li class="selected"><span>M</span></li>
-                                                            <li><span>L</span></li>
-                                                            <li><span>XL</span></li>
-                                                        </ul>
-                                                    </form>
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-8.gif" alt="...">
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Cotton shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
+                                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                        <div class="product-promo-text style1">
+                                                            <span>Stock Out</span>
+                                                        </div>
+                                                    @endif
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style3">
-                                    <div class="single-product-item">
-                                        <div class="product-item-img">
-                                            <img src="images/products/product-5.jpg" alt="...">
-                                        </div>
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Pleated skirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price"><span class="price">$499</span></div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="size-checkbox">
-                                                    <form action="#">
-                                                        <ul class="size-opt">
-                                                            <li><span>S</span></li>
-                                                            <li class="selected"><span>M</span></li>
-                                                            <li><span>L</span></li>
-                                                            <li><span>XL</span></li>
-                                                        </ul>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                                    <div class="product-overlay">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                    </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style4">
-                                    <div class="single-product-item v1">
-                                        <img class="product-img" src="images/products/product-9.jpg" alt="...">
-                                        <img class="product-img-hover" src="images/products/product-10.jpg" alt="...">
-                                        <div class="product-promo-text style1">
-                                            <p>Hot</p>
-                                        </div>
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Stretch Tshirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
                                                 </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
+                                                <div class="product-details">
+                                                    <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                    <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                    </a>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style3">
-                                    <div class="single-product-item">
-                                        <div class="product-item-img">
-                                            <img src="images/products/product-17.jpg" alt="...">
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Stretch Tshirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="rating-summary">
+                                                                <div class="rating-result" title="60%">
+                                                                    <ul class="product-rating">
+                                                                        @php
+                                                                            for ($i=1; $i <=5 ; $i++){
+                                                                                if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                    <li><i class="las la-star"></i></li>
+                                                                        @php
+                                                                                }else { @endphp
+                                                                                    <li><i class="lar la-star"></i></li>
+                                                                        @php        }
+                                                                            }
+                                                                        @endphp
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-price">
+                                                                @if ($item->product->special_price>0)
+                                                                    <span class="promo-price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        @else
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                    <span class="old-price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        @else
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                @else
+                                                                    <span class="price">
+                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                            {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        @else
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL'){{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @endif
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                                <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                            @else
+                                                                <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="product-price"><span class="price">$499</span></div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="size-checkbox">
-                                                    <form action="#">
-                                                        <ul class="size-opt">
-                                                            <li><span>S</span></li>
-                                                            <li class="selected"><span>M</span></li>
-                                                            <li><span>L</span></li>
-                                                            <li><span>XL</span></li>
-                                                        </ul>
-                                                    </form>
-                                                </div>
-                                            </div>
-
-                                        </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-11.jpg" alt="...">
-                                        <div class="product-promo-text style3">
-                                            <p>Sold</p>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#">
-                                                <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Stylish check shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-4.jpg" alt="...">
-                                        <div class="product-promo-text style3">
-                                            <p>Sold</p>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#">
-                                                <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Stylish check shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-8.gif" alt="...">
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Cotton shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style2">
-                                    <div class="single-product-item">
-                                        <img src="images/products/product-15.jpg" alt="...">
-                                        <div class="product-promo-text style3">
-                                            <p>Sold</p>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <a href="#">
-                                                <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Stylish check shirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-product-wrapper style4">
-                                    <div class="single-product-item v1">
-                                        <img class="product-img" src="images/products/product-9.jpg" alt="...">
-                                        <img class="product-img-hover" src="images/products/product-10.jpg" alt="...">
-                                        <div class="product-promo-text style1">
-                                            <p>Hot</p>
-                                        </div>
-                                        <div class="product-overlay style1">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal">    <span class="ti-zoom-in" data-toggle="tooltip" data-placement="right" title="quick view"></span>
-                                            </a>
-                                            <a href="wishlist.html">
-                                                <span class="ti-heart" data-toggle="tooltip" data-placement="right" title="Add to wishlist"></span>
-                                            </a>
-                                            <a href="compare.html">
-                                                <span class="ti-control-shuffle" data-toggle="tooltip" data-placement="right" title="Add to compare"></span>
-                                            </a>
-                                            <a class="button style1 sm">Add to cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product-details">
-                                        <div class="product-details--1st">
-                                            <a class="product-name" href="#">
-                                                Slim Stretch Tshirt
-                                            </a>
-                                            <div class="rating-summary">
-                                                <div class="rating-result" title="60%">
-                                                    <ul class="product-rating">
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                        <li><i class="ion-android-star-half"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <span class="price">$383</span>
-                                                <span class="old-price">$499</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-details--hover">
-                                            <div class="product-list-options">
-                                                <div class="product-color">
-                                                    <span class="bg-green selected"></span>
-                                                    <span class="bg-antique"></span>
-                                                    <span class="bg-amber"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                @endif
+                            @empty
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -1093,88 +553,141 @@
                 </div>
             </div>
         </div>
-    </section> --}}
-    <!--product area ends-->
+    </section>
+
+    @forelse ($category_products as $item)
+        @include('frontend.includes.quickshop')
+    @empty
+    @endforelse
+    <!--Related product area ends-->
 
     @endsection
 
 @push('scripts')
+    <script src="{{ asset('publlic/js/share.js') }}"></script>
+
     <script type="text/javascript">
-        $('#addToWishList').on("click",function(e){
-            var product_id = $(this).data('product_id');
-            var category_id = $(this).data('category_id');
-            var product_slug = $(this).data('product_slug');
-            $.ajax({
-                url: "{{ route('wishlist.add') }}",
-                type: "GET",
-                data: {
-                    product_id:product_id,
-                    category_id:category_id,
-                    product_slug:product_slug
-                },
-                success: function (data) {
-                    if (data.type=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: data.message,
-                        })
+        (function ($) {
+            "use strict";
+
+            $("#productAddToCartSingle").on("submit",function(e){
+                e.preventDefault();
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
                     }
-                    $('.wishlist_count').text(data.wishlist_count);
-                }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Successfully added on your cart'
+                });
+
+                $.ajax({
+                    url: "{{route('product.add_to_cart')}}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log('ok');
+                        if (data.type=='success') {
+                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}}
+                            let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
+
+                            $('.cart_count').text(data.cart_count);
+                            $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                            $('.total_price').text(amountConvertToCurrency.toFixed(2));
+
+                            var html = '';
+                            var cart_content = data.cart_content;
+                            $.each( cart_content, function( key, value ) {
+                                let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
+
+                                var image = 'public/'+value.options.image;
+                                html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                        '<img src="'+image+'">'+
+                                        '</a></div><div class="shp__pro__details"><h2>'+
+                                        '<a href="#">'+value.name+'</a></h2>'+
+                                        '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
+                                        '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
+                            });
+                            $('.cart_list').html(html);
+
+                            if (data.wishlist_id>0) {
+                                $('#wishlist_'+data.wishlist_id).remove();
+                            }
+                        }
+                        else if(data.type=='quantity_limit'){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Available product is : '+data.product_quantity
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('#star_1').on('click',function(){
+                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#rating').val(1);
+
+                $('#star_2').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
             })
-        });
+            $('#star_2').on('click',function(){
+                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+                $('#rating').val(2);
+                $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+            })
+            $('#star_3').on('click',function(){
+                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+                $('#rating').val(3);
+                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+            })
+            $('#star_4').on('click',function(){
+                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
+                $('#rating').val(4);
+                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+            })
+            $('#star_5').on('click',function(){
+                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_5').removeClass('las la-star-outline').addClass('las la-star');
+                $('#rating').val(5);
+            })
 
-        $('#star_1').on('click',function(){
-            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#rating').val(1);
+            $('.attribute_value_productTab1').on("click",function(e){
+                e.preventDefault();
+                $(this).addClass('selected');
 
-            $('#star_2').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_3').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-        })
-        $('#star_2').on('click',function(){
-            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#rating').val(2);
-            $('#star_3').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-        })
-        $('#star_3').on('click',function(){
-            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#rating').val(3);
-            $('#star_4').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-        })
-        $('#star_4').on('click',function(){
-            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_4').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#rating').val(4);
-            $('#star_5').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
-        })
-        $('#star_5').on('click',function(){
-            $('#star_1').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_2').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_3').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_4').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#star_5').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
-            $('#rating').val(5);
-        })
+                var selectedVal = $(this).data('value_id');
+                values.push(selectedVal);
+                $('.value_ids_products').val(values);
+            });
+
+        })(jQuery);
     </script>
 @endpush

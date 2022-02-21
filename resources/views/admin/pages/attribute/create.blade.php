@@ -1,9 +1,14 @@
 @extends('admin.main')
-@section('admin_content')
 
+@section('title','Admin | Attributes Create')
+
+
+@section('admin_content')
 
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
+    @include('admin.includes.alert_message')
+
     <div class="container-fluid mb-3">
         <h4 class="font-weight-bold mt-3">@lang('file.Attributes Create')</h4>
         <div id="success_alert" role="alert"></div>
@@ -87,17 +92,17 @@
                                                         <div class="col-sm-8">
                                                             <div class="form-group form-check">
                                                                 <input type="checkbox" class="form-check-input" name="is_filterable" value="1" id="isActive">
-                                                                <span>{{__('Use this attribute for filtering products')}}</span>
+                                                                <span>{{__('file.Use this attribute for filtering products')}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Status</b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Status')</b></label>
                                                         <div class="col-sm-8">
                                                             <div class="form-group form-check">
-                                                                <input type="checkbox" class="form-check-input" name="is_active" value="1" id="isActive">
-                                                                <span>{{__('Active')}}</span>
+                                                                <input type="checkbox" checked class="form-check-input" name="is_active" value="1" id="isActive">
+                                                                <span>{{__('file.Active')}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -123,7 +128,7 @@
                                                         <input type="text" name="value_name[]" class="form-control" placeholder="{{__('Type Value Name')}}">
                                                     </div>
                                                     <div class="col-2">
-                                                        <label>Delete</label><br>
+                                                        <label>@lang('file.Delete')</label><br>
                                                         <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
                                                     </div>
                                                 </div>
@@ -147,25 +152,35 @@
     </div>
 
 </section>
-
-<script type="text/javascript">
-    $(document).on('click', '#addMore', function(){
-        console.log('ok');
-        var rand = Math.floor(Math.random() * 90000) + 10000;
-        $('.variants').append('<div class="row"><div class="col-6 form-group"><label>{{__('Value Name')}}</label><input type="text" name="value_name[]" required class="form-control" placeholder="{{__('Type Value Name')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
-    })
-
-    $(document).on('click', '.del-row', function(){
-        $(this).parent().parent().html('');
-    })
-
-    $(document).ready(function(){
-        $(".mul-select").select2({
-                placeholder: "Select Category", //placeholder
-                tags: true,
-                tokenSeparators: ['/',',',';'," "]
-        });
-    })
-</script>
-
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+
+(function ($) {
+    "use strict";
+
+        $(document).on('click', '#addMore', function(){
+            console.log('ok');
+            var rand = Math.floor(Math.random() * 90000) + 10000;
+            $('.variants').append('<div class="row"><div class="col-6 form-group"><label>{{__('Value Name')}}</label><input type="text" name="value_name[]" required class="form-control" placeholder="{{__('Type Value Name')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+        })
+
+        $(document).on('click', '.del-row', function(){
+            $(this).parent().parent().html('');
+        })
+
+        $(document).ready(function(){
+            $(".mul-select").select2({
+                    placeholder: "Select Category",
+                    tags: true,
+                    tokenSeparators: ['/',',',';'," "]
+            });
+        })
+
+})(jQuery);
+
+
+</script>
+@endpush
+

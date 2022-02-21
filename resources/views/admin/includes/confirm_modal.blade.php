@@ -6,8 +6,8 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-footer">
-                <button type="button" id="active" class="btn btn-success text-center">@lang('Active')</button>
-                <button type="button" id="inactive" class="btn btn-danger text-center">@lang('Inactive')</button>
+                <button type="button" id="active" class="btn btn-success text-center">@lang('file.Active')</button>
+                <button type="button" id="inactive" class="btn btn-danger text-center">@lang('file.Inactive')</button>
             </div>
         </div>
     </div>

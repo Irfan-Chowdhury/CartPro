@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel"><b>Add New Language</b></h5>
+          <h5 class="modal-title" id="createModalLabel"><b>@lang('file.Add New Language')</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -15,22 +15,8 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
 
-                        {{-- <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Select Language &nbsp;<span class="text-danger">*</span></b></label>
-                            <div class="col-sm-8">
-                                <select name='language_id' id="footerMenuTwoId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Choose Language')}}'>
-                                    @foreach ($languages as $key=> $item)
-                                        @if($languages[$key]==NULL) 
-                                            @php continue @endphp
-                                        @else
-                                            <option value="{{$key}}"> {{$languages[$key]['language_name']}} ({{$languages[$key]['local']}})</option>    
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div> --}}
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Language Name</b></label>
+                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Language Name')</b></label>
                             <div class="col-sm-8">
                                 <input type="text" name="language_name" id="navbarText" class="form-control @error('language_name') is-invalid @enderror" value="{{old('language_name')}}" id="inputEmail3" placeholder="Type Your Language Name" >
                                 @error('language_name')
@@ -40,7 +26,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Local</b></label>
+                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Locale')</b></label>
                             <div class="col-sm-8">
                                 <input type="text" name="local" id="navbarText" class="form-control  @error('local') is-invalid @enderror" value="{{old('local')}}" id="inputEmail3" placeholder="Example: 'en', 'bn', 'fr' etc." >
                                 @error('local')
@@ -48,13 +34,13 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>Status</b></label>
+                            <label class="col-md-4 col-form-label"><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
-                                <input class="form-check-input" type="checkbox" name="default" id="default" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">Default Language</label>
+                                <input class="form-check-input" checked type="checkbox" name="default" id="default" value="1" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">@lang('file.Default Language')</label>
                             </div>
                         </div>
 
@@ -62,8 +48,7 @@
                     <div class="col-md-2"></div>
                 </div>
 
-                    {{-- <button type="submit" class="btn btn-primary">Save</button> --}}
-                
+
                 </div>
                 <div class="row mb-5">
                     <div class="col-sm-2"></div>
@@ -74,9 +59,8 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        {{-- <button type="button" class="btn btn-primary" id="save-button">Save</button> --}}
-                        <button type="submit" class="btn btn-primary" id="save-button">Save</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>   
+                        <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Save')</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('file.Close')</button>
                     </div>
                 </div>
             </form>

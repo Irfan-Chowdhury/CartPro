@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class CategoryProduct extends Model
 {
     protected $table = 'category_product';
+
 
     /*
     |--------------------------------------------------------------------------
@@ -78,17 +81,4 @@ class CategoryProduct extends Model
     {
         return $this->hasMany(ProductAttributeValue::class,'product_id','product_id');
     }
-
-    // public function brandTranslation()
-    // {
-    //     $locale = Session::get('currentLocal');
-    //     return $this->hasOne(BrandTranslation::class,'brand_id')
-    //                 ->where('local',$locale);
-    // }
-
-    // public function brandTranslationDefaultEnglish()
-    // {
-    // 	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
-    //                     ->where('local','en');
-    // }
 }

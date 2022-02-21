@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\AttributeTranslation;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Shipping;
@@ -11,10 +11,8 @@ use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Stripe;
-// use Session;
 
 class OrderController extends Controller
 {
@@ -23,8 +21,6 @@ class OrderController extends Controller
         $validator1 = Validator::make($request->all(),[
             'billing_first_name' => 'required|string',
             'billing_last_name'  => 'required|string',
-            // 'billing_username'   => 'required|string',
-            // 'billing_email'  => 'required|string|unique:users',
             'billing_phone'      => 'required',
         ]);
 
@@ -50,8 +46,7 @@ class OrderController extends Controller
         $order->total = $request->total;
         $order->order_status = 'completed';
         $order->payment_id = $request->payment_id;
-        // $order->currency = 'BD';
-        // $order->currency_rate = 5;
+        $order->date = date('Y-m-d');
 
         $shipping = new Shipping();
         $shipping->shipping_first_name = $request->shipping_first_name;
@@ -66,14 +61,14 @@ class OrderController extends Controller
         $shipping->shipping_zip_code = $request->shipping_zip_code;
 
         $order->save();
-        if ($request->shipping_address_check==1) { //if selected shipping
+        if ($request->shipping_address_check==1) {
             $shipping->order_id = $order->id;
             $shipping->save();
         }
 
         $content    = Cart::content();
 
-        foreach ($content as $row) // প্রত্যেকটা প্রোডাক্টের জন্য cart details "content" এর মধ্যে Array আকারে জমা হয় ।
+        foreach ($content as $row)
         {
             $order_detail = new OrderDetail();
             $order_detail->order_id   = $order->id;
@@ -97,13 +92,16 @@ class OrderController extends Controller
         }
 
         Cart::destroy();
-
         return response()->json(['success' => 'Payment Successfully']);
     }
 
 
     public function handlePost(Request $request) //stripe
     {
+
+        return response()->json('ok');
+
+
         $order = new Order();
         $order->user_id = Auth::user()->id ?? null;
         $order->billing_first_name = $request->billing_first_name;
@@ -122,8 +120,7 @@ class OrderController extends Controller
         $order->total = implode(explode(',',$request->total));
         $order->order_status = 'completed';
         $order->payment_id = $request->stripeToken;
-        // $order->currency = 'BD';
-        // $order->currency_rate = 5;
+        $order->date = date('Y-m-d');
 
         $shipping = new Shipping();
         $shipping->shipping_first_name = $request->shipping_first_name;
@@ -137,15 +134,15 @@ class OrderController extends Controller
         $shipping->shipping_state = $request->shipping_state;
         $shipping->shipping_zip_code = $request->shipping_zip_code;
 
-        $order->save();
+        // $order->save();
 
-        if ($request->shipping_address_check==1) { //if selected shipping
+        if ($request->shipping_address_check==1) {
             $shipping->order_id = $order->id;
-            $shipping->save();
+            // $shipping->save();
         }
 
         $content    = Cart::content();
-        foreach ($content as $row) // প্রত্যেকটা প্রোডাক্টের জন্য cart details "content" এর মধ্যে Array আকারে জমা হয় ।
+        foreach ($content as $row)
         {
             $order_detail = new OrderDetail();
             $order_detail->order_id   = $order->id;
@@ -158,8 +155,9 @@ class OrderController extends Controller
             $order_detail->discount   = $request->coupon_value;
             $order_detail->tax        = $row->tax;
             $order_detail->subtotal   = $row->subtotal;
-            $order_detail->save();
+            // $order_detail->save();
         }
+
 
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         Stripe\Charge::create ([
@@ -182,7 +180,6 @@ class OrderController extends Controller
 
     public function cashOnDeliveryStore(Request $request)
     {
-        // return response()->json('ok Fahim');
 
         $order = new Order();
         $order->user_id = Auth::user()->id ?? null;
@@ -202,8 +199,12 @@ class OrderController extends Controller
         $order->total = implode(explode(',',$request->total));
         $order->order_status = 'pending';
         $order->payment_id = rand(10,999999999);
-        // $order->currency = 'BD';
-        // $order->currency_rate = 5;
+        $order->date = date('Y-m-d');
+
+        if ($request->coupon_code) {
+            $coupon = Coupon::where('coupon_code',$request->coupon_code)->first();
+            $order->coupon_id = $coupon->id;
+        }
 
         $shipping = new Shipping();
         $shipping->shipping_first_name = $request->shipping_first_name;
@@ -225,7 +226,7 @@ class OrderController extends Controller
 
         $content    = Cart::content();
 
-        foreach ($content as $row) // প্রত্যেকটা প্রোডাক্টের জন্য cart details "content" এর মধ্যে Array আকারে জমা হয় ।
+        foreach ($content as $row)
         {
             $order_detail = new OrderDetail();
             $order_detail->order_id   = $order->id;
@@ -249,6 +250,6 @@ class OrderController extends Controller
         }
 
         Cart::destroy();
-        return response()->json(['success' => 'Payment Successfully']);
+        return response()->json(['type' => 'success']);
     }
 }

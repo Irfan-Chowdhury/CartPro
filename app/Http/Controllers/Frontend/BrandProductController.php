@@ -29,10 +29,13 @@ class BrandProductController extends Controller
 
     public function brandWiseProducts($slug)
     {
-        // $brand = Brand::with('brandTranslation','brandTranslationEnglish')->where('slug',$slug)->first();
-        // $products = Product::with('productTranslation','baseImage')->where('brand_id',$brand->id)->get();
+        // $str = url()->current();
+        // $data = explode("/",$str);
+        // return url('/');
+
 
         $locale = Session::get('currentLocal');
+
 
         $brand = $this->brandInfo($locale, $slug);
         if (!$brand) {
@@ -72,20 +75,6 @@ class BrandProductController extends Controller
                     ->where('brand_id',$brand->id)
                     ->orderBy('id','DESC')
                     ->get();
-        // return $product;
-
-        // $productAttributeValues = [];
-
-        // $product_attribute_value_data = ProductAttributeValue::get();
-        // foreach ($products as $key => $item) {
-        //     foreach ($product_attribute_value_data as $key => $value) {
-        //         if ($item->id==$value->product_id) {
-        //             $productAttributeValues[] = $category_product[$key];
-        //         }
-        //     }
-        // }
-
-
 
         return view('frontend.pages.brand_wise_product',compact('brand','products','product_images','category_ids','product_attr_val'));
     }

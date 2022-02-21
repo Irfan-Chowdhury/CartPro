@@ -12,15 +12,11 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use App\Traits\imageHandleTrait;
 use App\Traits\ActiveInactiveTrait;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
     use imageHandleTrait, ActiveInactiveTrait;
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
 
     public function index()
     {
@@ -42,13 +38,12 @@ class UserController extends Controller
                     })
                     ->addColumn('image', function ($row)
                     {
-                        // return $row->roleName->name;
-
-                        if ($row->image==NULL) {
-                            return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
-                        }else {
+                        if($row->image!=NULL && (File::exists(public_path($row->image)))) {
                             $url = url("public/".$row->image);
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                        }
+                        else {
+                            return '<img src="https://dummyimage.com/50x50/000000/0f6954.png&text=User">';
                         }
                     })
                     ->addColumn('full_name',function($data)
@@ -163,9 +158,7 @@ class UserController extends Controller
                 $data['last_name'] = htmlspecialchars($request->last_name);
                 $data['phone'] = htmlspecialchars($request->phone);
                 $data['email'] = htmlspecialchars($request->email);
-                //if ($request->password) {
                     $data['password'] = Hash::make($request->password);
-                //}
                 $data['user_type']= 1;
                 $data['role']     = $request->role;
                 $data['is_active']= $request->is_active;
@@ -176,7 +169,6 @@ class UserController extends Controller
                 User::whereId($id)->update($data);
 
                 $user = User::find($id);
-                // return response()->json($user);
                 $user->syncRoles($request->role);
 
                 return response()->json(['success' => __('Data Updated Successfully.')]);
@@ -224,15 +216,4 @@ class UserController extends Controller
         }
 
     }
-
-    // public function status($id,$status)
-    // {
-    //     //echo "string";
-    //     //return $status;
-    //     User::where('id',$id)->update(['status'=>$status]);
-    //     return response()->json(['success' => _('updates')]);
-    // }
-
-
-
 }

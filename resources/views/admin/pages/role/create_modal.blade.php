@@ -4,7 +4,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">{{__('Add Role')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message"></span>
+          <h5 class="modal-title" id="modalTitle">{{__('file.Add Role')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message"></span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -20,7 +20,7 @@
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="is_active" id="isActive" value="1" id="isActive">
+                <input type="checkbox" checked class="form-check-input" name="is_active" id="isActive" value="1" id="isActive">
                 <label class="form-check-label" for="exampleCheck1">{{__('Active')}}</label>
               </div>
             </div>
