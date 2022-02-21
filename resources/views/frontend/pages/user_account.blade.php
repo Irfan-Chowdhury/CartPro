@@ -30,14 +30,18 @@
                             @else
                                 <img src="{{asset('public/images/user_default_image.jpg')}}" style="width:195px; height:190px" alt="...">
                             @endif
-                            
-                            <h4 class="user-name mar-top-10">Hello! <span>{{Auth::user()->first_name}}</span></h4>
+
+                            <h4 class="user-name mar-top-10">Hello! <span>{{Auth::user()->username}}</span></h4>
                         </div>
                         <ul class="user-info">
-                            <li>Full Name: <span>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</span></li>
+                            @if (Auth::user()->first_name && Auth::user()->last_name)
+                                <li>Full Name: <span>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</span></li>
+                            @endif
                             <li>User Name: <span>{{Auth::user()->username}}</span></li>
                             <li>Email: <span>{{Auth::user()->email}}</span></li>
-                            <li>Phone: <span>{{Auth::user()->phone}}</span></li>
+                            @if (Auth::user()->phone)
+                                <li>Phone: <span>{{Auth::user()->phone}}</span></li>
+                            @endif
                             {{-- <li>Country: <span>USA</span></li> --}}
                             {{-- <li>Postcode: <span>10000</span></li> --}}
                         </ul>
@@ -49,7 +53,7 @@
                 </div>
 
 
-                <!-- Modal -->
+                <!-- Edit Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -124,6 +128,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="col-md-9 tabs style1">
                     <div class="row">
                         <div class="col-md-12 tabs style2">
@@ -134,12 +140,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="branding" aria-selected="false">Orders</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#account_details" role="tab" aria-controls="graphic_design" aria-selected="false">Account Details </a>
-                                </li>
                                 <form action="{{route('user_logout')}}" method="post">
                                     @csrf
-                                        <button data-toggle="tab" role="tab" aria-controls="graphic_design" aria-selected="false" type="submit">{{__('file.logout')}}</button>
+                                    <button data-toggle="tab" role="tab" aria-controls="graphic_design" aria-selected="false" type="submit">{{__('file.logout')}}</button>
                                 </form>
 
                             </ul>
@@ -211,6 +214,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane fade mar-top-30" id="addresses" role="tabpanel">
                                     <p>The following addresses will be used on the checkout page by default.</p>
                                     <div class="row">
@@ -234,7 +238,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mar-bot-30">
                                             <div class="upload-img">
-                                                <i class="ion-ios-photos"></i>
+                                                <i class="las la-image"></i>
                                                 <a href="#" class="d-block">Upload Image</a>
                                                 <a href="#" class="d-block">Remove</a>
                                             </div>
@@ -278,6 +282,7 @@
                                         <a href="#" class="button style1">Save Changes</a>
                                     </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>

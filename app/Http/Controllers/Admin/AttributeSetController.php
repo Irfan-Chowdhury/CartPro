@@ -44,8 +44,6 @@ class AttributeSetController extends Controller
                     $actionBtn = "";
                     if (auth()->user()->can('attribute_set-edit'))
                     {
-                        // $actionBtn .= '<a href="'.route('admin.attribute_set.edit', $row->id) .'" class="edit btn btn-info btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                        //         &nbsp; ';
                         $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                                 &nbsp; ';
                     }
@@ -130,11 +128,11 @@ class AttributeSetController extends Controller
 
                 DB::table('attribute_set_translations')
                 ->updateOrInsert(
-                    [   //condition
+                    [
                         'attribute_set_id'  => $request->attribute_set_id,
                         'locale'             => Session::get('currentLocal'),
                     ],
-                    [   //set value
+                    [
                         'attribute_set_name' => $request->attribute_set_name,
                     ]
                 );
@@ -164,28 +162,4 @@ class AttributeSetController extends Controller
             return $this->bulkActionData($request->action_type, AttributeSet::whereIn('id',$request->idsArray));
         }
     }
-
-    // public function active(Request $request)
-    // {
-    //     if ($request->ajax())
-    //     {
-    //         $attributeSet = AttributeSet::find($request->attribute_set_id);
-    //         $attributeSet->is_active = 1;
-    //         $attributeSet->save();
-
-    //         return response()->json(['success' => 'Data Active Successfully']);
-    //     }
-    // }
-
-    // public function inactive(Request $request)
-    // {
-    //     if ($request->ajax())
-    //     {
-    //         $attributeSet = AttributeSet::find($request->attribute_set_id);
-    //         $attributeSet->is_active = 0;
-    //         $attributeSet->save();
-
-    //         return response()->json(['success' => 'Data Inactive Successfully']);
-    //     }
-    // }
 }

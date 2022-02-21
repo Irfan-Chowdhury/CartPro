@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Admin | Login</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -23,16 +23,15 @@
     <div class="container">
         <div class="form-outer text-center d-flex align-items-center">
             <div class="form-inner">
-                <div class="logo"><span>CartPro</span></div>
-                {{-- @include('shared.errors') --}}
-                {{-- @include('shared.flash_message') --}}
+                <div class="logo"><span>{{$setting_store->store_name ?? NULL}}</span></div>
+
+                @include('admin.includes.alert_message')
+
+
                 <form method="POST" action="{{ route('admin.login') }}" id="login-form">
-                    {{-- @csrf --}}
-                    {{ csrf_field() }}
-                    
+                    @csrf
+
                     <div class="form-group-material">
-
-
                         <input id="username" type="text" class="input-material @error('username') is-invalid @enderror"
                                name="username" value="{{ old('username') }}" required autofocus>
                         <label for="username" class="label-material">{{ __('Username') }}</label>
@@ -45,8 +44,6 @@
                     </div>
 
                     <div class="form-group-material">
-
-
                         <input id="password" type="password"
                                class="input-material @error('password') is-invalid @enderror" name="password" required
                                autocomplete="current-password">
@@ -60,7 +57,7 @@
                     </div>
 
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="remember"
+                        <input type="checkbox" value="1" class="custom-control-input" name="remember"
                                id="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="custom-control-label" for="remember">{{ __('Remember Me') }}</label>
                     </div>
@@ -73,17 +70,8 @@
                 </form>
                 <!-- This three buttons for demo only-->
                 <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">LogIn as Admin</button>
-                {{-- <button type="submit" class="btn btn-info btn-sm default customer-btn">LogIn as Customer</button> --}}
                 <br><br>
-                @if (Route::has('password.request'))
-                    <a class="forgot-pass" href="{{ route('password.request') }}">
-                        {{ __('Forgot Your Password?') }}
-                    </a>
-                @endif
             </div>
-            {{-- @php
-                $general_settings = \App\GeneralSetting::latest()->first();
-            @endphp --}}
             <div class="copyrights text-center">
                 <p>{{ __('Developed by')}} <a href="" class="external">LionCoders</a></p>
             </div>
@@ -91,6 +79,8 @@
     </div>
 </div>
 <script type="text/javascript" src="{{asset('public/vendor/jquery/jquery-3.5.1.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
 
 <script type="text/javascript">
 

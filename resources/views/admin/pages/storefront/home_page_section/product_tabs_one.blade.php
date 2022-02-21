@@ -1,5 +1,5 @@
 <div class="card">
-    <h3 class="card-header p-2"><b>{{__('Product Tabs One')}}</b></h3>
+    <h3 class="card-header p-2"><b>{{__('file.Product Tabs')}}</b></h3>
     <hr>
     <div class="card-body">
         <div class="row">
@@ -9,15 +9,17 @@
 
                     <!-- DB_ROW_ID-80:  => setting[81] -->
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Section Status</b></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Section Status')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
                                 <input type="checkbox" @if($setting[81]->plain_value==1) checked @endif value="1" name="storefront_product_tabs_1_section_enabled" class="form-check-input">
-                                <label class="p-0 form-check-label" for="exampleCheck1">Enable product tabs one section</label>
+                                <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable product tabs one section')</label>
                             </div>
                         </div>
                     </div>
 
+
+                    <!-- All 'Type' have been made invisble by using 'd-none' and 'category_product' default selected -->
 
                      <!-- Tab-1 -->
                      @include('admin.pages.storefront.home_page_section.product_tabs_one.tab1')
@@ -38,7 +40,7 @@
                     <div class="form-group row mt-5">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary save">@lang('file.Save')</button>
                         </div>
                     </div>
                 </form>

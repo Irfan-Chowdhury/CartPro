@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use App\Traits\ActiveInactiveTrait;
+use Illuminate\Support\Facades\App;
 
 class TaxController extends Controller
 {
@@ -21,15 +22,7 @@ class TaxController extends Controller
     {
         $countries = Country::all();
         $locale = Session::get('currentLocal');
-
-        // $taxes = Tax::with(['taxTranslation'=> function ($query) use ($locale){
-        //     $query->where('locale',$locale)
-        //     ->orWhere('locale','en')
-        //     ->orderBy('id','DESC');
-        // }])
-        // ->orderBy('is_active','DESC')
-        // ->orderBy('id','DESC')
-        // ->get();
+        App::setLocale($locale);
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -50,19 +43,14 @@ class TaxController extends Controller
             ->addColumn('action', function ($row)
             {
                 $actionBtn = "";
-                // if (auth()->user()->can('tag-edit'))
-                // {
                     $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                     &nbsp; ';
-                // }
-                // if (auth()->user()->can('tag-action'))
-                // {
+
                     if ($row->is_active==1) {
                         $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                     }else {
                         $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                     }
-                // }
                 return $actionBtn;
             })
             ->rawColumns(['action'])

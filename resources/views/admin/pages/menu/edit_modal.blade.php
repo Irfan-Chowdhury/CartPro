@@ -19,16 +19,16 @@
                     <div class="col-md-8">
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>{{ trans('Menu Name') }} &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>{{ trans('file.Menu Name') }} &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="menu_name" id="menu_name_edit" placeholder="Type Menu Name">
                         </div>
 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>{{ trans('Status') }}</b></label>
+                            <label class="col-md-4 col-form-label"><b>{{ trans('file.Status') }}</b></label>
                             <div class="col-md-8 form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="is_active_edit" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">{{ trans('Enable the slide') }}</label>
+                                <label class="form-check-label" for="defaultCheck1">{{ trans('file.Enable the slide') }}</label>
                             </div>
                         </div>
 
@@ -40,7 +40,7 @@
                     <div class="col-sm-2"></div>
                     <div class="col-sm-6">
                         <div id="alertMessageBox">
-                            <div id="alertMessage" class="text-light"></div>
+                            <div id="alertMessageEdit" class="text-light"></div>
                         </div>
                     </div>
                     <div class="col-sm-1"></div>

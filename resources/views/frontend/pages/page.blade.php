@@ -7,12 +7,10 @@
             </div>
             <div class="row">
                 @if ($page->pageTranslation)
-                    {!! $page->pageTranslation->body !!}
+                    {!! htmlspecialchars_decode($page->pageTranslation->body ?? $page->pageTranslation->body ?? null) !!}
                 @else
-                    
+                    <h1>Empty Data</h1>
                 @endif
-
-
             </div>
         </div>
     </section>

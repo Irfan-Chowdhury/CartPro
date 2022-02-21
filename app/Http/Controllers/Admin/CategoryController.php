@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Http\Request;
-
-use App\Models\Category;
-use App\Models\CategoryTranslation;
-use App\Models\Language;
-use Illuminate\Support\Facades\DB;
-use Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
-use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\App;
-use App\Traits\imageHandleTrait;
+use Illuminate\Support\Facades\File;
+use App\Interfaces\CategoryInterface;
 
 class CategoryController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait, imageHandleTrait;
+    use ActiveInactiveTrait;
+
+    protected $category;
+    public function __construct(CategoryInterface $category){
+        $this->category = $category;
+    }
 
     public function index()
     {
@@ -27,94 +27,52 @@ class CategoryController extends Controller
 
         if (auth()->user()->can('category-view'))
         {
-            $local = Session::get('currentLocal');
-            $currentActiveLocal = $local;
-
-            $categories = Category::with(['categoryTranslation'=> function ($query) use ($currentActiveLocal){
-                        $query->where('local',$currentActiveLocal)
-                        ->orWhere('local','en')
-                        ->orderBy('id','DESC');
-                    },
-                    'parentCategory','child','catTranslation','categoryTranslationDefaultEnglish'
-                    ])
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','DESC')
-                    ->get();
-
+            $categories = $this->category->getAll();
 
             //Check Later
             if (request()->ajax())
             {
                 return datatables()->of($categories)
-                    ->setRowId(function ($category)
-                    {
-                        return $category->id;
+                    ->setRowId(function ($category){
+                        return $category['id'];
                     })
-                    ->addColumn('category_image', function ($row)
-                    {
-                        if ($row->image==null) {
+                    ->addColumn('category_image', function ($row){
+                        if ($row['image']==null) {
                             return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
                         }
                         else {
-                            $url = url("public/".$row->image);
+                            if (!File::exists(public_path($row['image']))) {
+                                $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category';
+                            }else {
+                                $url = url("public/".$row['image']);
+                            }
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
                     })
-                    ->addColumn('category_name', function ($row)
-                    {
-                        return $row->catTranslation->category_name ?? $row->categoryTranslationDefaultEnglish->category_name ?? 'NULL';
-
-                        // if ($row->categoryTranslation->count()>0){
-                        //     foreach ($row->categoryTranslation as $key => $value){
-                        //         if ($key<1){
-                        //             if ($value->local==$local){
-                        //                 return $value->category_name;
-                        //             }elseif($value->local=='en'){
-                        //                 return $value->category_name;
-                        //             }
-                        //         }
-                        //     }
-                        // }else {
-                        //     return "NULL";
-                        // }
+                    ->addColumn('category_name', function ($row){
+                        return $row['category_name'] ?? $row['category_name'] ?? NULL;
                     })
-                    ->addColumn('parent', function ($row) use ($local)
-                    {
-                        if ($row->parentCategory!=NULL) {
-                            $categoryTranslation = CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local',$local)->first();
-                            if ($categoryTranslation) {
-                                return $categoryTranslation->category_name;
-                            }else {
-                                return CategoryTranslation::where('category_id',$row->parentCategory->id)->where('local','en')->first()->category_name;
-                            }
-                        }else {
-                            return 'NONE';
-                        }
+                    ->addColumn('parent', function ($row){
+                        return $row['parent_category_name'];
                     })
-                    ->addColumn('is_active', function ($row)
-                    {
-                        if($row->is_active==1){
+                    ->addColumn('is_active', function ($row){
+                        if($row['is_active']==1){
                             return '<span class="p-2 badge badge-success">Active</span>';
                         }else{
                             return '<span class="p-2 badge badge-danger">Inactive</span>';
                         }
                     })
-                    ->addColumn('action', function ($row)
-                    {
-                        // $actionBtn .= '<a href="'.route('admin.category.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                        //                 &nbsp; ';
+                    ->addColumn('action', function ($row){
                         $actionBtn = "";
-                        if (auth()->user()->can('category-edit'))
-                        {
-                            $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                        if (auth()->user()->can('category-edit')){
+                            $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row['id'].'"><i class="dripicons-pencil"></i></button>
                                             &nbsp; ';
                         }
-                        if (auth()->user()->can('category-action'))
-                        {
-                            if ($row->is_active==1) {
-                                $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                        if (auth()->user()->can('category-action')){
+                            if ($row['is_active']==1) {
+                                $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row['id'].'"><i class="fa fa-thumbs-down"></i></button>';
                             }else {
-                                $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                                $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row['id'].'"><i class="fa fa-thumbs-up"></i></button>';
                             }
                         }
                         return $actionBtn;
@@ -123,181 +81,76 @@ class CategoryController extends Controller
                     ->rawColumns(['is_active','action','category_image'])
                     ->make(true);
             }
-            return view('admin.pages.category.index',compact('categories','currentActiveLocal'));
+            return view('admin.pages.category.index',compact('categories'));
         }
         return abort('403', __('You are not authorized'));
     }
 
     public function store(Request $request)
     {
-        if (auth()->user()->can('category-store'))
-        {
-
-            $local = Session::get('currentLocal');
+        if (auth()->user()->can('category-store')){
 
             $validator = Validator::make($request->only('category_name'),[
                 'category_name' => 'required|unique:category_translations,category_name',
             ]);
-
-            if ($validator->fails())
-            {
+            if ($validator->fails()){
                 return response()->json(['errors' => $validator->errors()->all()]);
             }
-
-            $category = new Category;
-            $category->slug =  $this->slug($request->category_name);
-            if ($request->parent_id) {
-                $category->parent_id   = $request->parent_id;
-            }
-            $category->description = htmlspecialchars($request->description);
-            $category->description_position = $request->description_position;
-            $category->icon = $request->category_icon;
-            $image = $request->file('image');
-            if ($image) {
-                $category->image = $this->imageStore($image, $directory='images/categories/',$type='category');
-            }
-            if ($request->top == null) {
-                $category->top = 0;
-            }
-            else
-            {
-                $category->top = 1;
-            }
-
-            if (empty($request->is_active)) {
-                $category->is_active = 0;
-            }else {
-                $category->is_active = 1;
-            }
-            $category->save();
-
-            $crandTranslation                = new CategoryTranslation();
-            $crandTranslation->category_id   = $category->id;
-            $crandTranslation->local         = $local;
-            $crandTranslation->category_name = $request->category_name;
-            $crandTranslation->save();
-
+            $this->category->store($request->all());
             return response()->json(['success' => __('Data Successfully Saved')]);
         }
     }
 
     public function edit(Request $request)
     {
-        $local = Session::get('currentLocal');
-
-        $category = Category::find($request->category_id);
-        $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local',$local)->first();
-
-        if (!isset($categoryTranslation)) {
-            $categoryTranslation = CategoryTranslation::where('category_id',$request->category_id)->where('local','en')->first();
-        }
+        $category            = $this->category->find($request->category_id);
+        $categoryTranslation = $this->category->categoryTranslation($request->category_id);
         return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
     }
 
-
     public function update(Request $request)
     {
-        if (auth()->user()->can('category-edit'))
-        {
+        if (auth()->user()->can('category-edit')){
+            //validation
             $validator = Validator::make($request->only('category_name'),[
                 'category_name' => 'required|unique:category_translations,category_name,'.$request->category_translation_id,
             ]);
-
-            if ($validator->fails())
-            {
+            if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()->all()]);
             }
 
-            $local = Session::get('currentLocal');
+            $locale = Session::get('currentLocal');
 
-            $category = Category::find($request->category_id);
-            $category->slug =  $this->slug($request->category_name);
-            if ($request->parent_id) {
-                $category->parent_id   = $request->parent_id;
-            }
-            $category->description = $request->description;
-            $category->description_position = $request->description_position;
-            $category->top    = $request->top;
-            $category->is_active   = $request->is_active;
-            $category->icon   = $request->category_icon;
+            //Operation
+            $this->category->update($request->category_id, $request->all());
 
-            if ($request->image) {
-                $category->image = $this->imageStore($request->image, $directory='images/categories/',$type='category');
-            }
-
-            $category->update();
-
-            DB::table('category_translations')
-            ->updateOrInsert(
-                [
-                    'category_id' => $request->category_id,
-                    'local'       =>  $local,
-                ], //condition
-                [
-                    'category_name' => $request->category_name,
-                ]
-            );
-
-            return response()->json(['success' => 'Data Saved Successfully']);
-
-            session()->flash('type','success');
-            session()->flash('message','Successfully Updated');
-            return redirect()->back();
+            return response()->json(['success' => 'Data Updated Successfully']);
         }
     }
 
-    public function delete($id)
-    {
-        Category::where('id',$id)->update(['is_active'=>0]);
-
-        session()->flash('type','success');
-        session()->flash('message','Successfully Deleted');
-        return redirect()->back();
-
-        return response()->json(['success' => __('Data is successfully deleted')]);
-    }
-
     public function active(Request $request){
-        if (auth()->user()->can('category-action'))
-        {
+        if (auth()->user()->can('category-action')){
             if ($request->ajax()){
-                return $this->activeData(Category::find($request->id));
+                return $this->activeData($this->category->find($request->id));
             }
         }
     }
 
     public function inactive(Request $request){
-        if (auth()->user()->can('category-action'))
-        {
+        if (auth()->user()->can('category-action')){
             if ($request->ajax()){
-                return $this->inactiveData(Category::find($request->id));
+                return $this->inactiveData($this->category->find($request->id));
             }
         }
 
     }
 
-    public function bulkAction(Request $request)
-    {
-        if (auth()->user()->can('category-action'))
-        {
+    public function bulkAction(Request $request){
+        if (auth()->user()->can('category-action')){
             if ($request->ajax()) {
-                return $this->bulkActionData($request->action_type, Category::whereIn('id',$request->idsArray));
+                return $this->bulkActionData($request->action_type, $this->category->selectedCategories($request->idsArray));
             }
         }
 
     }
-
-    // function delete_by_selection(Request $request)
-    // {
-
-    //         $category_id = $request['CategoryListIdArray'];
-    //         $categories = Category::whereIn('id', $category_id);
-    //         if ($categories->delete())
-    //         {
-    //             return response()->json(['success' => __('Multi Delete', ['key' => trans('file.Account')])]);
-    //         } else
-    //         {
-    //             return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
-    //         }
-    // }
 }

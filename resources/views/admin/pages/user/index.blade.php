@@ -1,4 +1,5 @@
 @extends('admin.main')
+@section('title','Admin | Users')
 @section('admin_content')
 <section>
 
@@ -8,11 +9,11 @@
         <div class="container-fluid">
 
             @if (auth()->user()->can('user-store'))
-                <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('Add User')}}</button>
+                <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('file.Add User')}}</button>
             @endif
 
             @if (auth()->user()->can('user-action'))
-                <button type="button" class="btn btn-danger" name="" id="bulk_action"><i class="fa fa-minus-circle"></i> {{__('Bulk Action')}}</button>
+                <button type="button" class="btn btn-danger" name="" id="bulk_action"><i class="fa fa-minus-circle"></i> {{__('file.Bulk Action')}}</button>
             @endif
         </div>
 
@@ -21,12 +22,12 @@
       <thead>
       <tr>
       <th class="not-exported"></th>
-      <th scope="col">{{__('Image')}}</th>
-      <th scope="col">{{__('Full Name')}}</th>
-      <th scope="col">{{__('Username')}}</th>
-      <th scope="col">{{__('Role')}}</th>
-      <th scope="col">{{__('Email')}}</th>
-      <th scope="col">{{__('Status')}}</th>
+      <th scope="col">{{__('file.Image')}}</th>
+      <th scope="col">{{__('file.Full Name')}}</th>
+      <th scope="col">{{__('file.Username')}}</th>
+      <th scope="col">{{__('file.Role')}}</th>
+      <th scope="col">{{__('file.Email')}}</th>
+      <th scope="col">{{__('file.Status')}}</th>
       <th scope="col">{{trans('file.action')}}</th>
     </tr>
   </thead>
@@ -38,7 +39,14 @@
     @include('admin.pages.user.form_modal')
     @include('admin.includes.confirm_modal')
 
+    @endsection
+
+
+    @push('scripts')
     <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
 
         $(document).ready(function () {
             let table = $('#user_list_table').DataTable({
@@ -201,42 +209,6 @@
             $('#action').val('{{trans("file.Add")}}');
             $('#formModal').modal('show');
         });
-
-
-    //     $('.parent_load').click(function () {
-    //     $.ajax({
-    //         url:'{{route('parent.load')}}',
-    //         dataType:"json",
-    //         success:function(data) {
-    //             if (data.success) {
-    //                 data.data.forEach(function(val){
-    //                     $('#parent').html('<option value="'+val.id+'">'+val.category_name+'</option>');
-    //                 });
-    //             }
-    //         }
-    //     });
-    // });
-
-
-        // $('#user_list_table').on('click','.status',function () {
-        //     let id = $(this).data('id');
-        //     let status = $(this).data('status');
-
-        //     var target = "{{route('admin.user')}}/" + id +'/'+ status  ;
-
-        //     $.ajax({
-        //         url:target,
-        //         dataType:"json",
-        //         success:function(data) {
-        //             let html = '';
-        //             if (data.success) {
-        //                 html = '<div class="alert alert-success">'+data.success + "</div>";
-        //                 $('#user_list_table').DataTable().ajax.reload();
-        //             }
-        //             $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-        //         }
-        //     })
-        // });
 
 
         $('#sample_form').on('submit', function (event) {
@@ -527,5 +499,6 @@
         });
 
 
+})(jQuery);
     </script>
-@endsection
+@endpush

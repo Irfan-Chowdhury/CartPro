@@ -1,4 +1,5 @@
 @extends('admin.main')
+@section('title','Admin | Currency')
 @section('admin_content')
 
 <section>
@@ -16,6 +17,7 @@
                     <th class="not-exported"></th>
                     <th scope="col">{{trans('file.Currency')}}</th>
                      <th scope="col">{{trans('file.Code')}}</th>
+                    <th scope="col">{{trans('file.Symbol')}}</th>
                     <th scope="col">{{trans('file.Rate')}}</th>
                     <th scope="col">{{trans('file.Action')}}</th>
                 </tr>
@@ -51,6 +53,11 @@
                             <input type="hidden" class="col-md-8 form-control" name="id" id="id">
                         </div>
 
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Symbol</label>
+                            <input type="text" class="col-md-8 form-control" name="currency_symbol" id="currency_symbol">
+                        </div>
+
                     </div>
                     <div class="col-md-2"></div>
                 </div>
@@ -74,186 +81,197 @@
     </div>
   </div>
 
+  @endsection
 
-<script type="text/javascript">
+  @push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+          "use strict";
 
-    $(document).ready(function () {
+            $(document).ready(function () {
 
-        let table = $('#data_list_table').DataTable({
-            initComplete: function () {
-                this.api().columns([1]).every(function () {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
+                let table = $('#data_list_table').DataTable({
+                    initComplete: function () {
+                        this.api().columns([1]).every(function () {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
 
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                                $('select').selectpicker('refresh');
+                            });
                         });
+                    },
+                    responsive: true,
+                    fixedHeader: {
+                        header: true,
+                        footer: true
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "{{ route('admin.currency_rate.index') }}",
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'currency_name',
+                            name: 'currency_name',
+                        },
+                        {
+                            data: 'currency_code',
+                            name: 'currency_code',
+                        },
+                        {
+                            data: 'currency_symbol',
+                            name: 'currency_symbol',
+                        },
+                        {
+                            data: 'currency_rate',
+                            name: 'currency_rate',
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                        },
+                    ],
 
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
-                        $('select').selectpicker('refresh');
-                    });
-                });
-            },
-            responsive: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('admin.currency_rate.index') }}",
-            },
-            columns: [
-                {
-                    data: null,
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'currency_name',
-                    name: 'currency_name',
-                },
-                {
-                    data: 'currency_code',
-                    name: 'currency_code',
-                },
-                {
-                    data: 'currency_rate',
-                    name: 'currency_rate',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                },
-            ],
-
-            "order": [],
-            'language': {
-                'lengthMenu': '_MENU_ {{__("records per page")}}',
-                "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                "search": '{{trans("file.Search")}}',
-                'paginate': {
-                    'previous': '{{trans("file.Previous")}}',
-                    'next': '{{trans("file.Next")}}'
-                }
-            },
-            'columnDefs': [
-                {
-                    "orderable": false,
-                    'targets': [0],
-                },
-                {
-                    'render': function (data, type, row, meta) {
-                        if (type === 'display') {
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                    "order": [],
+                    'language': {
+                        'lengthMenu': '_MENU_ {{__("records per page")}}',
+                        "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
+                        "search": '{{trans("file.Search")}}',
+                        'paginate': {
+                            'previous': '{{trans("file.Previous")}}',
+                            'next': '{{trans("file.Next")}}'
                         }
+                    },
+                    'columnDefs': [
+                        {
+                            "orderable": false,
+                            'targets': [0],
+                        },
+                        {
+                            'render': function (data, type, row, meta) {
+                                if (type === 'display') {
+                                    data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                                }
 
-                        return data;
-                    },
-                    'checkboxes': {
-                        'selectRow': true,
-                        'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                    },
-                    'targets': [0]
-                }
-            ],
-            'select': {style: 'multi', selector: 'td:first-child'},
-            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            dom: '<"row"lfB>rtip',
-            buttons: [
-                {
-                    extend: 'pdf',
-                    text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'csv',
-                    text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'print',
-                    text: '<i title="print" class="fa fa-print"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'colvis',
-                    text: '<i title="column visibility" class="fa fa-eye"></i>',
-                    columns: ':gt(0)'
-                },
-            ],
-        });
-        new $.fn.dataTable.FixedHeader(table);
-    });
-
-        // ------------ Edit ------------------
-        $(document).on("click",".edit",function(e){
-            e.preventDefault();
-            var currencyRateId = $(this).data("id");
-
-            $.ajax({
-                url: "{{route('admin.currency_rate.edit')}}",
-                type: "GET",
-                data: {currency_rate_id:currencyRateId},
-                success: function(data){
-                    $('#currency_rate').val(data.currency_rate);
-                    $('#id').val(data.id);
-                    $('#EditformModal').modal('show');
-                }
+                                return data;
+                            },
+                            'checkboxes': {
+                                'selectRow': true,
+                                'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+                            },
+                            'targets': [0]
+                        }
+                    ],
+                    'select': {style: 'multi', selector: 'td:first-child'},
+                    'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    dom: '<"row"lfB>rtip',
+                    buttons: [
+                        {
+                            extend: 'pdf',
+                            text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
+                            exportOptions: {
+                                columns: ':visible:Not(.not-exported)',
+                                rows: ':visible'
+                            },
+                        },
+                        {
+                            extend: 'csv',
+                            text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
+                            exportOptions: {
+                                columns: ':visible:Not(.not-exported)',
+                                rows: ':visible'
+                            },
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i title="print" class="fa fa-print"></i>',
+                            exportOptions: {
+                                columns: ':visible:Not(.not-exported)',
+                                rows: ':visible'
+                            },
+                        },
+                        {
+                            extend: 'colvis',
+                            text: '<i title="column visibility" class="fa fa-eye"></i>',
+                            columns: ':gt(0)'
+                        },
+                    ],
+                });
+                new $.fn.dataTable.FixedHeader(table);
             });
-        });
 
-        //----------Update Data----------------------
-    $("#updateForm").on("submit",function(e){
-        e.preventDefault();
+            // ------------ Edit ------------------
+            $(document).on("click",".edit",function(e){
+                e.preventDefault();
+                var currencyRateId = $(this).data("id");
+                var currency_symbol = $('#currency_symbol').val();
 
-        var formData = new FormData(this); //For Image always use this method
+                $.ajax({
+                    url: "{{route('admin.currency_rate.edit')}}",
+                    type: "GET",
+                    data: {currency_rate_id:currencyRateId,currency_symbol:currency_symbol},
+                    success: function(data){
+                        $('#currency_rate').val(data.currency_rate);
+                        $('#currency_symbol').val(data.currency_symbol);
+                        $('#id').val(data.id);
+                        $('#EditformModal').modal('show');
+                    }
+                });
+            });
 
-        $.ajax({
-            url: "{{route('admin.currency_rate.update')}}",
-            type: "POST",
-            data: formData,
-            contentType: false, //That means we send mulitpart/data
-            processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
-            success: function(data){
-                console.log(data);
-                if (data.errors) {
-                    $("#alertMessageEdit").addClass('bg-danger text-center text-light p-1').html(data.errors) //Check in create modal
-                }
-                else if(data.success){
-                    $("#EditformModal").modal('hide');
-                    $('#data_list_table').DataTable().ajax.reload();
-                    $('#updatetForm')[0].reset();
-                    $('select').selectpicker('refresh');
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                    ("#alertMessageEdit").removeClass('bg-danger text-center text-light p-1');
-                }
-            }
-        });
-    });
+            //----------Update Data----------------------
+            $("#updateForm").on("submit",function(e){
+                e.preventDefault();
+
+                var formData = new FormData(this); //For Image always use this method
+
+                $.ajax({
+                    url: "{{route('admin.currency_rate.update')}}",
+                    type: "POST",
+                    data: formData,
+                    contentType: false, //That means we send mulitpart/data
+                    processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
+                    success: function(data){
+                        console.log(data);
+                        if (data.errors) {
+                            $("#alertMessageEdit").addClass('bg-danger text-center text-light p-1').html(data.errors) //Check in create modal
+                        }
+                        else if(data.success){
+                            $("#EditformModal").modal('hide');
+                            $('#data_list_table').DataTable().ajax.reload();
+                            $('#updatetForm')[0].reset();
+                            $('select').selectpicker('refresh');
+                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                            ("#alertMessageEdit").removeClass('bg-danger text-center text-light p-1');
+                        }
+                    }
+                });
+            });
 
 
-    </script>
+            })(jQuery);
+        </script>
+    @endpush
 
-@endsection

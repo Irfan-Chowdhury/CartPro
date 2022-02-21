@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel"><b>Add New Tax</b></h5>
+          <h5 class="modal-title" id="createModalLabel"><b>@lang('file.Add New Tax')</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -19,26 +19,26 @@
                     <div class="col-md-8">
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Tax Class &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Class') &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="tax_class" placeholder="Type tax class">
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>Based On &nbsp;<span class="text-danger">*</span></b></label>
+                            <label class="col-md-4 col-form-label"><b>@lang('file.Based On') &nbsp;<span class="text-danger">*</span></b></label>
                             <select name="based_on" class="col-md-8 form-control selectpicker">
                                 <option value="">{{__('-- Select Type --')}}</option>
-                                <option value="shipping_address">Shipping Address</option>
-                                <option value="billing_address">Billing Address</option>
-                                <option value="store_address">Store address</option>
+                                <option value="shipping_address">@lang('file.Shipping Address')</option>
+                                <option value="billing_address">@lang('file.Billing Address')</option>
+                                <option value="store_address">@lang('file.Store address')</option>
                             </select>
                         </div>
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Tax Name &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Name') &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="tax_name" placeholder="Type tax name">
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>Country &nbsp;<span class="text-danger">*</span></b></label>
-                            <select name="country" class="col-md-8 form-control selectpicker" data-live-search="true" title='{{__('Select Conutry')}}'>
+                            <label class="col-md-4 col-form-label"><b>@lang('file.Country') &nbsp;<span class="text-danger">*</span></b></label>
+                            <select name="country" class="col-md-8 form-control selectpicker" data-live-search="true" title='{{__('file.Select Conutry')}}'>
                                 @foreach ($countries as $country)
                                     <option value="{{$country->country_name}}">{{$country->country_name}}</option>
                                 @endforeach
@@ -46,31 +46,31 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>State</b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.State')</b></label>
                             <input type="text" class="col-md-8 form-control" name="state" placeholder="Type state">
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>City</b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.City')</b></label>
                             <input type="text" class="col-md-8 form-control" name="city" placeholder="Type city">
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Zip</b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Zip')</b></label>
                             <input type="text" class="col-md-8 form-control" name="zip" placeholder="Type Zip">
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Rate</b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Rate')</b></label>
                             <input type="text" class="col-md-8 form-control" name="rate" placeholder="Type rate">
                         </div>
 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>Status</b></label>
+                            <label class="col-md-4 col-form-label"><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">Enable the slide</label>
+                                <input class="form-check-input" checked type="checkbox" name="is_active" value="1" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">@lang('file.Enable the Tax')</label>
                             </div>
                         </div>
 
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <button type="submit" class="btn btn-primary" id="save-button">Save</button>
+                        <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Save')</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>

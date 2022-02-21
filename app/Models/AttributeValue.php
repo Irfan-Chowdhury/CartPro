@@ -18,7 +18,6 @@ class AttributeValue extends Model
     }
 
 
-    // For Edit Product
     public function attrValueTranslation()
     {
         $locale = Session::get('currentLocal');

@@ -39,7 +39,7 @@
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">Submit</button>
+                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
             </div>
 
         </form>

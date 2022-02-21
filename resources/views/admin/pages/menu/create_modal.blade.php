@@ -3,12 +3,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel"><b>Add New Menu</b></h5>
+          <h5 class="modal-title" id="createModalLabel"><b>@lang('file.Add New Menu')</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
+
+            <div id="error_message" role="alert"></div>
+
             <form method="POST" id="submitForm" action="{{route('admin.menu.store')}}">
                 @csrf
 
@@ -17,16 +20,16 @@
                     <div class="col-md-8">
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Menu Name &nbsp;<span class="text-danger">*</span></b></label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Menu Name') &nbsp;<span class="text-danger">*</span></b></label>
                             <input type="text" class="col-md-8 form-control" name="menu_name" id="menu_name" placeholder="Type Menu Name">
                         </div>
 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label"><b>Status</b></label>
+                            <label class="col-md-4 col-form-label"><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">Enable the slide</label>
+                                <input class="form-check-input" checked type="checkbox" name="is_active" id="is_active" value="1" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">@lang('file.Enable the slide')</label>
                             </div>
                         </div>
 
@@ -34,23 +37,9 @@
                     <div class="col-md-2"></div>
                 </div>
 
-                <button type="submit" id="save-button" class="btn btn-primary">Save</button>
+                <button type="submit" id="save-button" class="btn btn-primary">@lang('file.Save')</button>
             </form>
         </div>
-        {{-- <div class="row mb-5">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-6">
-                <div id="alertMessageBox">
-                    <div id="alertMessage" class="text-light"></div>
-                </div>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary" id="save-button">Save</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div> --}}
-
       </div>
     </div>
   </div>

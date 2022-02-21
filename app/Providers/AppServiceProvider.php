@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Category;
 use App\Models\CurrencyRate;
 use App\Models\Language;
+use App\Models\Order;
 use App\Models\Setting;
 use App\Models\SettingNewsletter;
 use App\Models\SettingStore;
@@ -17,6 +18,8 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use phpDocumentor\Reflection\Types\Null_;
+use Share;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -52,21 +55,131 @@ class AppServiceProvider extends ServiceProvider
         $empty_image = 'public/images/empty.jpg';
         $favicon_logo_path = $empty_image;
         $header_logo_path  = $empty_image;
+        $topbar_logo_path  = 'public/images/top_images.gif';
+
+        $one_column_banner_image  = $empty_image;
+
+        $two_column_banner_image_1  = $empty_image;
+        $two_column_banner_image_2  = $empty_image;
+
+        $three_column_banners_image_1  = $empty_image;
+        $three_column_banners_image_2  = $empty_image;
+        $three_column_banners_image_3  = $empty_image;
+
+        $three_column_full_width_banners_image_1  = $empty_image;
+        $three_column_full_width_banners_image_2  = $empty_image;
+        $three_column_full_width_banners_image_3  = $empty_image;
+
+        $payment_method_image = $empty_image;
+
         foreach ($storefront_images as $key => $item) {
             if ($item->title=='favicon_logo'){
-                $favicon_logo_path = 'public'.$item->image;
+                if (!file_exists('public'.$item->image)) {
+                    $favicon_logo_path = 'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
+                }else{
+                    $favicon_logo_path = url('public'.$item->image);
+                }
+            }
+            if ($item->title=='topbar_logo'){
+                if (!file_exists('public'.$item->image)) {
+                    $topbar_logo_path = 'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
+                }else{
+                    $topbar_logo_path = url('public'.$item->image);
+                }
             }
             elseif ($item->title=='header_logo') {
-                $header_logo_path  = 'public'.$item->image;
+                if (!file_exists('public'.$item->image)) {
+                    $header_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
+                }else{
+                    $header_logo_path = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='accepted_payment_method_image') {
+                if (!file_exists('public'.$item->image)) {
+                    $payment_method_image = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
+                }else{
+                    $payment_method_image = url('public'.$item->image);
+                }
+            }
+
+            //one_column_banner_image
+            elseif ($item->title=='one_column_banner_image') {
+                if (!file_exists('public'.$item->image)) {
+                    $one_column_banner_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $one_column_banner_image = url('public'.$item->image);
+                }
+            }
+
+            //two_column_banner_image
+            elseif ($item->title=='two_column_banner_image_1') {
+                if (!file_exists('public'.$item->image)) {
+                    $two_column_banner_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $two_column_banner_image_1 = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='two_column_banner_image_2') {
+                if (!file_exists('public'.$item->image)) {
+                    $two_column_banner_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $two_column_banner_image_2 = url('public'.$item->image);
+                }
+            }
+            //three_column_banner_image
+            elseif ($item->title=='three_column_banners_image_1') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_banners_image_1 = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='three_column_banners_image_2') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_banners_image_2 = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='three_column_banners_image_3') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_banners_image_3 = url('public'.$item->image);
+                }
+            }
+
+            //three_column_banner_image_full
+            elseif ($item->title=='three_column_full_width_banners_image_1') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_full_width_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_full_width_banners_image_1 = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='three_column_full_width_banners_image_2') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_full_width_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_full_width_banners_image_2 = url('public'.$item->image);
+                }
+            }
+            elseif ($item->title=='three_column_full_width_banners_image_3') {
+                if (!file_exists('public'.$item->image)) {
+                    $three_column_full_width_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+                }else{
+                    $three_column_full_width_banners_image_3 = url('public'.$item->image);
+                }
             }
         }
+
         //Appereance-->Storefront --> Setting
-        $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
-        $categories = Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-                        ->where('parent_id',NULL)
+        $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
+        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+                        // ->where('parent_id',NULL)
                         ->where('is_active',1)
                         ->orderBy('is_active','DESC')
-                        ->orderBy('id','DESC')
+                        ->orderBy('id','ASC')
                         ->get();
 
         $menus = Menus::with('items')
@@ -84,13 +197,18 @@ class AppServiceProvider extends ServiceProvider
         $storefront_twitter_link = null;
         $storefront_instagram_link = null;
         $storefront_youtube_link = null;
+        $storefront_copyright_text = null;
+        $two_column_banner_enabled = null;
+        $three_column_banner_enabled = null;
+        $three_column_banner_full_enabled = null;
+        $flash_sale_and_vertical_products_section_enabled = null;
+        $top_categories_section_enabled = null;
 
         foreach ($settings as $key => $item) {
             if ($item->key=='storefront_theme_color' && $item->plain_value!=NULL) {
                 $storefront_theme_color = $item->plain_value;
             }
-
-            if ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
                 foreach ($menus as $key2 => $value) {
                     if ($value->id==$item->plain_value) {
                         $menu = $menus[$key2];
@@ -98,64 +216,117 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
 
-            if ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
+            elseif ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
                 $footer_menu_one_title = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? null;
             }
 
-            if ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
                 foreach ($menus as $key2 => $value) {
                     if ($value->id==$item->plain_value) {
                         $footer_menu_one = $menus[$key2];
                     }
                 }
             }
-            if ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
+            elseif ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
                 $footer_menu_title_two = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
             }
-            if ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
                 foreach ($menus as $key2 => $value) {
                     if ($value->id==$item->plain_value) {
                         $footer_menu_two = $menus[$key2];
                     }
                 }
             }
-            if ($item->key=='storefront_address' && $item->plain_value==NULL) {
+            elseif ($item->key=='storefront_address' && $item->plain_value==NULL) {
                 $storefront_address = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
             }
 
-            if ($item->key=='storefront_facebook_link' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_facebook_link' && $item->plain_value!=NULL) {
                 $storefront_facebook_link = $item->plain_value;
             }
 
-            if ($item->key=='storefront_twitter_link' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_twitter_link' && $item->plain_value!=NULL) {
                 $storefront_twitter_link = $item->plain_value;
             }
 
-            if ($item->key=='storefront_instagram_link' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_instagram_link' && $item->plain_value!=NULL) {
                 $storefront_instagram_link = $item->plain_value;
             }
 
-            if ($item->key=='storefront_youtube_link' && $item->plain_value!=NULL) {
+            elseif ($item->key=='storefront_youtube_link' && $item->plain_value!=NULL) {
                 $storefront_youtube_link = $item->plain_value;
+            }
+            elseif($item->key=='storefront_copyright_text'){
+                $storefront_copyright_text = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? NULL;
+            }
+
+            //One Column Enable
+            elseif ($item->key=='storefront_one_column_banner_enabled' && $item->plain_value!=NULL) {
+                $one_column_banner_enabled = $item->plain_value;
+            }
+            //Two Column Enable
+            elseif ($item->key=='storefront_two_column_banner_enabled' && $item->plain_value!=NULL) {
+                $two_column_banner_enabled = $item->plain_value;
+            }
+            //Three Column Enable
+            elseif ($item->key=='storefront_three_column_banners_enabled' && $item->plain_value!=NULL) {
+                $three_column_banner_enabled = $item->plain_value;
+            }
+
+            //Three Column Full Enable
+            elseif ($item->key=='storefront_three_column_full_width_banners_enabled' && $item->plain_value!=NULL) {
+                $three_column_banner_full_enabled = $item->plain_value;
+            }
+
+            //Flash Sale and Verticle Products end
+            elseif ($item->key=='storefront_flash_sale_and_vertical_products_section_enabled' && $item->plain_value!=NULL) {
+                $flash_sale_and_vertical_products_section_enabled = $item->plain_value;
+            }
+
+            //Top Categories
+            elseif ($item->key=='storefront_top_categories_section_enabled' && $item->plain_value!=NULL) {
+                $top_categories_section_enabled = $item->plain_value;
             }
         }
 
 
         //Cart
         $cart_count = Cart::count();
-        $cart_subtotal = Cart::subtotal();
-        $cart_total = Cart::total();
+        $cart_subtotal = implode(explode(',',Cart::subtotal()));
+        $cart_total = implode(explode(',',Cart::total()));
         $cart_contents = Cart::content();
 
         //Newslatter
         $setting_newslatter = SettingNewsletter::first();
-
         $setting_store =  SettingStore::first();
+
         if (Auth::check()) {
             $total_wishlist = Wishlist::where('user_id',Auth::user()->id)->count();
         }else {
             $total_wishlist = 0;
         }
+
+        $orders = Order::get();
+
+        $CHANGE_CURRENCY_SYMBOL = env('USER_CHANGE_CURRENCY_SYMBOL');
+        if ($CHANGE_CURRENCY_SYMBOL==NULL) {
+            $CHANGE_CURRENCY_SYMBOL = NULL;
+        }
+        $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE');
+
+        //Update it this process in every where in home
+        $settings_new = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish','page'])->get()->keyBy('key');
+        $socialShare = Share::page(url()->current(),
+                'Social Share'
+            )
+            ->facebook()
+            ->twitter()
+            ->linkedin()
+            ->telegram()
+            ->whatsapp()
+            ->reddit()
+            ->getRawLinks();
+
 
         View::share(['languages'=>$languages,
                     'currency_codes'=>$currency_codes,
@@ -184,6 +355,33 @@ class AppServiceProvider extends ServiceProvider
                     'storefront_twitter_link'=>$storefront_twitter_link,
                     'storefront_instagram_link'=>$storefront_instagram_link,
                     'storefront_youtube_link'=>$storefront_youtube_link,
+                    'payment_method_image'=>$payment_method_image,
+                    'storefront_copyright_text'=>$storefront_copyright_text,
+                    'orders'=>$orders,
+                    'topbar_logo_path'=>$topbar_logo_path,
+                    'one_column_banner_enabled'=>$one_column_banner_enabled,
+                    'one_column_banner_image'=>$one_column_banner_image,
+                    'two_column_banner_enabled'=>$two_column_banner_enabled,
+                    'two_column_banner_image_1'=>$two_column_banner_image_1,
+                    'two_column_banner_image_2'=>$two_column_banner_image_2,
+                    'three_column_banner_enabled'=>$three_column_banner_enabled,
+                    'three_column_banners_image_1'=>$three_column_banners_image_1,
+                    'three_column_banners_image_2'=>$three_column_banners_image_2,
+                    'three_column_banners_image_3'=>$three_column_banners_image_3,
+                    'three_column_banner_full_enabled'=>$three_column_banner_full_enabled,
+                    'three_column_full_width_banners_image_1'=>$three_column_full_width_banners_image_1,
+                    'three_column_full_width_banners_image_2'=>$three_column_full_width_banners_image_2,
+                    'three_column_full_width_banners_image_3'=>$three_column_full_width_banners_image_3,
+                    'CHANGE_CURRENCY_SYMBOL'=> $CHANGE_CURRENCY_SYMBOL,
+                    'CHANGE_CURRENCY_RATE'=> $CHANGE_CURRENCY_RATE,
+                    'settings_new'=> $settings_new,
+                    'socialShare'=> $socialShare,
+                    'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,
+                    'top_categories_section_enabled'=> $top_categories_section_enabled,
             ]);
+
+            $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);
+            $this->app->bind(\App\Payment\IStripePayment::class,\App\Payment\StripePayment::class);
+            $this->app->bind(\App\ViewModels\IPaymentModel::class,\App\ViewModels\PaymentModel::class);
     }
 }

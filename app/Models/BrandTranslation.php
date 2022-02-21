@@ -11,7 +11,7 @@ class BrandTranslation extends Model
         'brand_id', 'local','brand_name',
     ];
 
-    public function brand() //still not use
+    public function brand() 
     {
         return $this->belongsTo('App\Models\Brand','brand_id','id');
     }

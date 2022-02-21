@@ -170,6 +170,7 @@ return [
             Spatie\Analytics\AnalyticsServiceProvider::class,
             Spatie\Permission\PermissionServiceProvider::class,
             Harimayco\Menu\MenuServiceProvider::class,
+            Jorenvh\Share\Providers\ShareServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -179,6 +180,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
 
     ],
 
@@ -236,6 +238,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Menu' => Harimayco\Menu\Facades\Menu::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'Share' => Jorenvh\Share\ShareFacade::class,
     ],
 
 ];

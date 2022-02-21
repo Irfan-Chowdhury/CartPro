@@ -1,17 +1,18 @@
 @extends('admin.main')
+@section('title','Admin | Tax')
 @section('admin_content')
 
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">{{__('Taxes')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Taxes')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('tag-store'))
             <button type="button" class="btn btn-info" name="createModalForm" data-toggle="modal" data-target="#createModalForm">
-                <i class="fa fa-plus"></i> {{__('Add Tax')}}
+                <i class="fa fa-plus"></i> {{__('file.Add Tax')}}
             </button>
         @endif
 
@@ -28,7 +29,7 @@
         	   <tr>
         		    <th class="not-exported"></th>
         		    <th scope="col">{{trans('Tax Name')}}</th>
-        		    <th scope="col">{{trans('Country')}}</th>
+        		    <th scope="col">{{trans('file.Country')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
@@ -41,8 +42,15 @@
 @include('admin.pages.tax.edit_modal')
 @include('admin.includes.confirm_modal')
 
+@endsection
 
-<script type="text/javascript">
+
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -398,6 +406,6 @@
             });
         }
     });
-</script>
-
-@endsection
+ })(jQuery);
+    </script>
+@endpush

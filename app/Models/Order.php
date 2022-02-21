@@ -21,9 +21,16 @@ class Order extends Model
         'shipping_method',
         'shipping_cost',
         'payment_method',
+        'coupon_id',
+        'payment_id',
+        'discount ',
         'total',
-        'currency',
-        'currency_rate',
+        'currency_base_total',
+        'currency_symbol',
+        'order_status',
+        'payment_status',
+        'date',
+        'tax_id ',
     ];
 
     public function orderDetails()

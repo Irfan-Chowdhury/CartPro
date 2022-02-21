@@ -4,30 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use App\Http\Controllers\Controller;
-use App\Models\Page;
 use App\Models\Slider;
 use App\Models\SliderTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Image;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Str;
 use App\Traits\SlugTrait;
 use App\Traits\imageHandleTrait;
 use Exception;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\DeleteWithFileTrait;
 
 class SliderController extends Controller
 {
-    use SlugTrait,imageHandleTrait, ActiveInactiveTrait;
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
+    use SlugTrait, imageHandleTrait, ActiveInactiveTrait, DeleteWithFileTrait;
 
     public function index(Request $request)
     {
@@ -59,11 +52,11 @@ class SliderController extends Controller
             })
             ->addColumn('slider_image', function ($row)
             {
-                if ($row->slider_image==NULL) {
-                    return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
-                }else {
-                    $url = url("public/".$row->slider_image);
-                    return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                if ($row->slider_image_secondary!=NULL && (File::exists(public_path($row->slider_image_secondary)))){
+                    $url = url("public/".$row->slider_image_secondary);
+                    return  '<img src="'. $url .'"/>';
+                }else  {
+                    return '<img src="https://dummyimage.com/50x50/000000/0f6954.png&text=Slider">';
                 }
             })
             ->addColumn('slider_title', function ($row) use ($locale)
@@ -111,10 +104,12 @@ class SliderController extends Controller
                 $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
                               &nbsp;' ;
                 if ($row->is_active==1) {
-                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
                 }else {
                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
                 }
+                $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+
                 return $actionBtn;
             })
             ->rawColumns(['slider_image','action'])
@@ -124,35 +119,25 @@ class SliderController extends Controller
         return view('admin.pages.slider.index',compact('categories','sliders','locale'));
     }
 
-    // public function dataFetchByType(Request $request)
-    // {
-    //     if ($request->type=='category') {
-    //         $categories = Category::where('is_active',1)->select('id','category_name')->get();
-    //         return view('admin.includes.dependancy.dependancy_category',compact('categories'));
-    //     }
-    //     elseif ($request->type=='page') {
-    //         $pages = Page::where('status',1)->select('id','page_name')->get();
-    //         return view('admin.includes.dependancy.dependancy_page',compact('pages'));
-    //     }
-    //     elseif ($request->type=='url') {
-    //         return view('admin.includes.dependancy.dependancy_url');
-    //     }
-    // }
-
-
     public function store(Request $request)
     {
-        $validator = Validator::make($request->only('slider_title','type','slider_image'),[
-            'slider_title'  => 'required|unique:slider_translations,slider_title',
-            'type'          => 'required',
-            'slider_image'  => 'required|image|max:10240|mimes:jpeg,png,jpg,gif',
-        ]);
-
-        if ($validator->fails()){
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
-
         if ($request->ajax()) {
+
+            $validator = Validator::make($request->only('slider_title','type','slider_image'),[
+                'slider_title'  => 'required|unique:slider_translations,slider_title',
+                'type'          => 'required',
+                'slider_image'  => 'required|image|max:10240|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+            elseif ($request->type=='category' && $request->category_id==NULL) {
+                return response()->json(['errors' => 'Please select a category']);
+            }
+            elseif ($request->type=='url' && $request->url==NULL) {
+                return response()->json(['errors' => 'Please fillup the url']);
+            }
 
             $data = [];
             $data['slider_slug']    = $this->slug($request->slider_title);
@@ -161,7 +146,8 @@ class SliderController extends Controller
             $data['url']            = $request->url;
             $data['target']         = $request->target;
             if ($request->slider_image) {
-                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445);
+                $data['slider_image_secondary'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/secondary/',$width=100, $height=58);
             }
             $data['type']           = $request->type;
             $data['text_alignment'] = $request->text_alignment;
@@ -196,28 +182,43 @@ class SliderController extends Controller
     {
         $locale = Session::get('currentLocal');
         $slider = Slider::find($request->slider_id);
+
+        if($slider->slider_image!=NULL && (File::exists(public_path($slider->slider_image)))) {
+            $slider_image = url("public/".$slider->slider_image);
+        }else {
+            $slider_image = 'https://dummyimage.com/100x100/000000/0f6954.png&text=Slider';
+        }
+
         $sliderTranslation = SliderTranslation::where('slider_id',$request->slider_id)->where('locale',$locale)->first();
 
         if (!isset($sliderTranslation)) {
             $sliderTranslation = SliderTranslation::where('slider_id',$request->slider_id)->where('locale','en')->first();
         }
-        return response()->json(['slider' => $slider, 'sliderTranslation'=>$sliderTranslation]);
+        return response()->json(['slider' => $slider, 'sliderTranslation'=>$sliderTranslation,'slider_image'=>$slider_image]);
     }
 
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->only('slider_title','type','slider_image'),[
-            'slider_title'  => 'required',
-            'type'          => 'required',
-            'slider_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
-        ]);
-
-        if ($validator->fails()){
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
-
         if ($request->ajax()) {
+
+            $validator = Validator::make($request->only('slider_title','type','slider_image'),[
+                'slider_title'  => 'required|unique:slider_translations,slider_title,'.$request->slider_Translation_id,
+                'type'          => 'required',
+                'slider_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+            elseif ($request->type=='category' && $request->category_id==NULL) {
+                return response()->json(['errors' => 'Please select a category']);
+            }
+            elseif ($request->type=='url' && $request->url==NULL) {
+                return response()->json(['errors' => 'Please fillup the url']);
+            }
+
+            $slider =  Slider::find($request->slider_id);
 
             $data = [];
             $data['slider_slug']    = $this->slug($request->slider_title);
@@ -226,9 +227,11 @@ class SliderController extends Controller
             $data['url']            = $request->url;
             $data['target']         = $request->target;
             if ($request->slider_image) {
-                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/');
+                $this->previousImageDelete($slider->slider_image);
+                $this->previousImageDelete($slider->slider_image_secondary);
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445);
+                $data['slider_image_secondary'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/secondary/',$width=100, $height=58);
             }
-            $data['type']           = $request->type;
             $data['text_alignment']      = $request->text_alignment;
             $data['is_active']      = $request->is_active;
 
@@ -239,7 +242,7 @@ class SliderController extends Controller
 
             DB::beginTransaction();
             try {
-                $slider =  Slider::find($request->slider_id)->update($data);
+                $slider->update($data);
 
                 SliderTranslation::UpdateOrCreate(
                     [
@@ -265,23 +268,6 @@ class SliderController extends Controller
         }
     }
 
-
-    // public function delete($id)
-    // {
-    //     $slider = Slider::find($id);
-
-    //     if (File::exists(public_path().$slider->image)) //delete previous image from storage
-    //     {
-    //         File::delete(public_path().$slider->image);
-    //         $slider->delete();
-
-    //         return redirect()->back();
-    //     }
-    //     else{
-    //         return "Problem";
-    //     }
-    // }
-
     public function active(Request $request){
         if ($request->ajax()){
             return $this->activeData(Slider::find($request->id));
@@ -303,14 +289,11 @@ class SliderController extends Controller
 
     public function delete(Request $request)
     {
-        $slider = Slider::find($request->slider_id);
-
-        if (File::exists(public_path().$slider->image)) //delete previous image from storage
-        {
-            File::delete(public_path().$slider->image);
-            $slider->delete();
-
-            return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);
+        if ($request->ajax()) {
+            $slider = Slider::find($request->slider_id);
+            $this->deleteWithImage($slider, $slider->slider_image);
+            $this->deleteWithImage($slider, $slider->slider_image_secondary);
         }
+        return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);
     }
 }

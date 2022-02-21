@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Attribute;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeSet;
-// use App\Models\AttributeSetTranslation; //No
 use App\Models\AttributeValue;
 use App\Models\AttributeValueTranslation;
 use App\Models\Category;
@@ -139,7 +138,7 @@ class AttributeController extends Controller
 
             $attributeTranslation = new AttributeTranslation();
             $attributeTranslation->attribute_id = $attribute->id;
-            $attributeTranslation->local        = Session::get('currentLocal');
+            $attributeTranslation->locale        = Session::get('currentLocal');
             $attributeTranslation->attribute_name = $request->attribute_name;
             $attributeTranslation->save();
 
@@ -181,44 +180,11 @@ class AttributeController extends Controller
         }
     }
 
-    // public function edit($id)
-    // {
-    //     $attribute                 = Attribute::find($id);
-    //     $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('local',Session::get('currentLocal'))->first();
-
-    //     if (isset($attribute->attributeValue)) {
-    //         $attributeValueTranslation = AttributeValueTranslation::where('attribute_value_id',$attribute->attributeValue->id)->where('local',Session::get('currentLocal'))->get();
-    //         // return $attributeValueTranslation;
-    //     }else {
-    //         $attributeValueTranslation = NULL;
-    //     }
-
-    //     $local = Session::get('currentLocal');
-
-    //     $attributeSets = AttributeSet::with(['attributeSetTranslation'=> function ($query) use ($local){
-    //         $query->where('local',$local)
-    //         ->orWhere('local','en')
-    //         ->orderBy('id','DESC');
-    //     }])->get();
-
-    //     $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
-    //         $query->where('local',$local)
-    //         ->orWhere('local','en')
-    //         ->orderBy('id','DESC');
-    //     },
-    //     'parentCategory'
-    //     ])
-    //     ->get();
-
-    //     return view('admin.pages.attribute.edit',compact('attribute','attributeTranslation','attributeValueTranslation','local','attributeSets','categories'));
-    // }
-
     public function edit($id)
     {
         $local = Session::get('currentLocal');
         App::setLocale($local);
 
-        // $attribute                 = Attribute::find($id);
         $attribute                 = Attribute::with('categories')->where('id',$id)->first();
         $attributeTranslation      = AttributeTranslation::where('attribute_id',$id)->where('locale',Session::get('currentLocal'))->first();
         if (!isset($attributeTranslation)) {
@@ -261,7 +227,7 @@ class AttributeController extends Controller
         $local = Session::get('currentLocal');
 
         $validator = Validator::make($request->only('attribute_name'),[
-            'attribute_name'  => 'required',
+            'attribute_name'  => 'required|unique:attribute_translations,attribute_name,'.$request->attribute_translation_id,
         ]);
 
         if ($validator->fails()){
@@ -271,8 +237,8 @@ class AttributeController extends Controller
         if (auth()->user()->can('attribute-edit'))
         {
             $attribute = Attribute::find($id);
+            $attribute->slug             = $this->slug($request->attribute_name);
             $attribute->attribute_set_id = $request->attribute_set_id;
-            // $attribute->category_id      = $request->category_id;
             if ($request->is_filterable==1) {
                 $attribute->is_filterable = 1;
             }else {
@@ -288,11 +254,11 @@ class AttributeController extends Controller
 
             DB::table('attribute_translations')
             ->updateOrInsert(
-                [   //condition
+                [
                     'attribute_id'  => $id,
                     'locale'         => $local,
                 ],
-                [   //set value
+                [
                     'attribute_name' => $request->attribute_name,
                 ]
             );
@@ -310,7 +276,6 @@ class AttributeController extends Controller
             $attributeValueNameArray = $request->value_name;
             $attributeValueIdArray   = $request->attribute_value_id;
 
-            //AttributeValue::where('attribute_id',$id)->whereNotIn('id',$attributeValueIdArray)->delete();
             if (empty($attributeValueNameArray)) {
                 AttributeValue::where('attribute_id',$id)->delete();
             }
@@ -319,15 +284,15 @@ class AttributeController extends Controller
 
                 AttributeValue::where('attribute_id',$id)->whereNotIn('id',$attributeValueIdArray)->delete();
 
-                foreach ($attributeValueNameArray as $key => $value) { //Update, Insert
+                foreach ($attributeValueNameArray as $key => $value) {
                     DB::table('attribute_value_translations')
                     ->updateOrInsert(
-                        [   //condition
+                        [
                             'attribute_id'  => $id,
                             'attribute_value_id'  => $attributeValueIdArray[$key],
                             'local'               => $local,
                         ],
-                        [   //set value
+                        [
                             'value_name' => $attributeValueNameArray[$key],
                         ]
                     );
@@ -383,13 +348,11 @@ class AttributeController extends Controller
         $attribute = Attribute::find($request->attribute_id);
 
         if (isset($attribute->attributeValue)) {
-            // $attributeValueTranslation = AttributeValueTranslation::where('attribute_value_id',$attribute->attributeValue->id)->where('local',Session::get('currentLocal'))->get();
             $attributeValueTranslation = AttributeValueTranslation::where('attribute_id',$request->attribute_id)->where('local',Session::get('currentLocal'))->get();
         }else {
             $attributeValueTranslation = NULL;
         }
 
-        //return response()->json($request->attribute_id);
 
         $output = '';
 		foreach ($attributeValueTranslation as $row)
@@ -399,76 +362,4 @@ class AttributeController extends Controller
 
         return response()->json($output);
     }
-
 }
-
-
-
-
-//-------- Value ---------
-
-
-
-
-
-        //$attributeValue = AttributeValue::where('attribute_id',$id)->pluck('id'); //show- attribute_values.id [2,3,4,5]
-        // $attributeValue = AttributeValue::where('attribute_id',$id)->select('id')->get(); //show- attribute_values.id [ {id:2}, {id:3}, {id:4}, {id:5} ]
-        // return $attributeValue[0]->attribute_id;
-        //return $attributeValue; // id = 2,3,4,5
-
-
-        //----Previous---
-            // $attributeValue = AttributeValue::where('attribute_id',$id)->get();
-            // $attributeValueTranslation = [];
-            // if (isset($attributeValue)) {
-            //     foreach ($attributeValue as $key => $item) {
-            //         $attributeValueTranslation[$key] = AttributeValueTranslation::where('attribute_value_id',$item->id)
-            //                                             ->where('local',Session::get('currentLocal'))
-            //                                             ->get();
-            //     }
-            // }else {
-            //     $attributeValueTranslation = NULL;
-            // }
-
-            // return $attributeValueTranslation;
-        //----Previous---
-
-
-        // return count($attributeValueTranslation);
-        // return $attributeValueTranslation[1][0]->value_name; //ok
-
-        //-------- Value ---------
-
-
-//Edit Blade
-// <input type="text" name="value_name[]" required class="form-control" value="{{$attributeValueTranslation[$key][0]->value_name}}">
-//                                                         <input type="hidden" name="attribute_value_id[]" required class="form-control" value="{{$attributeValueTranslation[$key][0]->attribute_value_id}}">
-
-
-
-
-
-// if ($request->value_name && $request->attribute_value_id) {
-
-        //     $attributeValueNameArray = $request->value_name;
-
-        //     // AttributeValueTranslation::where('attribute_value_id',$attribute->attributeValue->id)
-        //     //                         ->where('local',Session::get('currentLocal'))
-        //     //                         ->whereNotIn('value_name',$attributeValueNameArray)
-        //     //                         // ->update(['value_name'=>$attributeValueNameArray]);
-        //     //                         ->delete();
-
-        //     foreach ($attributeValueNameArray as $key => $value) {
-        //         DB::table('attribute_value_translations')
-        //         ->updateOrInsert(
-        //             [   //condition
-        //                 'attribute_value_id'  => $attribute->attributeValue->id,
-        //                 'local'     => Session::get('currentLocal'),
-        //                 // 'value_name' => $attributeValueNameArray[$key],
-        //             ],
-        //             [   //set value
-        //                 'value_name' => $attributeValueNameArray[$key],
-        //             ]
-        //         );
-        //     }
-        // }

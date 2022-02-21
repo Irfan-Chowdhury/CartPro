@@ -27,7 +27,11 @@
                     <div class="col">
                         <div class="card">
                             <a class="brand-wrapper" href="{{route('cartpro.brand.products',$brand->slug)}}">
-                                <img src="{{asset('public/'.$brand->brand_logo)}}">
+                                @if (isset($brand->brand_logo) && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
+                                    <img src="{{asset('public/'.$brand->brand_logo)}}">
+                                @else
+                                    <img src="https://dummyimage.com/620x150/12787d/ffffff&text=CartPro">
+                                @endif
                             </a>
                         </div>
                     </div>

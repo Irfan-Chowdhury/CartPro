@@ -26,10 +26,4 @@ class AttributeSet extends Model
     {
     	return $this->hasMany(Attribute::class,'attribute_set_id');
     }
-
-    //Special
-    // public function attributeTranslation()
-    // {
-    // 	return $this->hasMany(AttributeTranslation::class,'attribute_set_id');
-    // }
 }

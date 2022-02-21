@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-//use App\Models\Menu;
-//use App\Models\MenuItem;
 use App\Models\MenuTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,9 +13,6 @@ use Harimayco\Menu\Facades\Menu;
 use Illuminate\Support\Facades\Session;
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Support\Facades\App;
-
-// use Harimayco\Menu\Models\MenuItems;
-
 
 class MenuController extends Controller
 {
@@ -42,9 +37,6 @@ class MenuController extends Controller
             ->get();
 
             $currentUrl = url()->current();
-
-            // return $currentUrl;
-
 
             if ($request->ajax())
             {
@@ -112,10 +104,9 @@ class MenuController extends Controller
                     'menu_name' => 'required|unique:menu_translations,menu_name',
                 ]);
 
-
-                // if ($validator->fails()){
-                //     return response()->json(['errors' => "<b>Please fill the required Option</b>"]);
-                // }
+                if ($validator->fails()){
+                    return response()->json(['errors' => $validator->errors()->all()]);
+                }
 
 
                 $locale = Session::get('currentLocal');
@@ -139,10 +130,11 @@ class MenuController extends Controller
 
     public function edit(Request $request)
     {
+
         $locale = Session::get('currentLocal');
         if ($request->ajax()) {
 
-            $menu = Menu::find($request->menu_id);
+            $menu = Menus::find($request->menu_id);
             $menuTranslation = MenuTranslation::where('menu_id',$request->menu_id)->where('locale',$locale)->first();
 
             if (!$menuTranslation) {
@@ -162,12 +154,12 @@ class MenuController extends Controller
                     'menu_name' => 'required|unique:menu_translations,menu_name,'.$request->menu_translation_id,
                 ]);
 
-                if ($validator->fails())
-                {
+                if ($validator->fails()){
                     return response()->json(['errors' => $validator->errors()->all()]);
                 }
 
-                $menu = Menu::find($request->menu_id);
+                $menu = Menus::find($request->menu_id);
+                $menu->slug =  $this->slug($request->menu_name);
                 $menu->is_active = $request->is_active ?? 0;
                 $menu->update();
 
@@ -201,8 +193,4 @@ class MenuController extends Controller
             return $this->bulkActionData($request->action_type, Menu::whereIn('id',$request->idsArray));
         }
     }
-
 }
-
-
-// <a href="javascript:void(0)" name="delete" data-id="'.$row->id.'" class="delete btn btn-danger btn-sm"><i class="dripicons-trash"></i></a>'

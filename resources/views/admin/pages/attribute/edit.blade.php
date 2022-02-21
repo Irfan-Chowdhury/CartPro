@@ -1,9 +1,27 @@
 @extends('admin.main')
-@section('admin_content')
 
+@section('title','Admin | Attributes Edit')
+
+@section('admin_content')
 
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
+
+    @include('admin.includes.alert_message')
+
+    <!-- Alert Message -->
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    <!-- Alert Message -->
+
     <div class="container-fluid mb-3">
         <h4 class="font-weight-bold mt-3">@lang('file.Attributes Edit')</h4>
         <div id="success_alert" role="alert"></div>
@@ -13,6 +31,7 @@
     <div class="container">
         <form action="{{route('admin.attribute.update',$attribute->id)}}" method="POST">
             @csrf
+            <input type="hidden" name="attribute_translation_id" value="{{$attributeTranslation->id}}">
             <div class="row">
                 <div class="col-4">
                     <div class="list-group" id="list-tab" role="tablist">
@@ -95,7 +114,7 @@
                                                 <div class="col-sm-8">
                                                     <div class="form-group form-check">
                                                         <input type="checkbox" class="form-check-input" name="is_filterable" value="1" @if($attribute->is_filterable==1) checked @endif id="isActive">
-                                                        <span>{{__('Use this attribute for filtering products')}}</span>
+                                                        <span>{{__('file.Use this attribute for filtering products')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,7 +124,7 @@
                                                 <div class="col-sm-8">
                                                     <div class="form-group form-check">
                                                         <input type="checkbox" class="form-check-input" name="is_active" value="1" @if($attribute->is_active==1) checked @endif id="isActive">
-                                                        <span>{{__('Active')}}</span>
+                                                        <span>{{__('file.Active')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,17 +206,27 @@
 
 </section>
 
-
-<script type="text/javascript">
-    $(document).on('click', '#addMore', function(){
-        console.log('ok');
-        var rand = Math.floor(Math.random() * 90000) + 10000;
-        $('.variants').append('<div class="row"><div class="col-6 form-group"><label>{{__('Value Name')}}</label><input type="text" name="add_more_value_name[]" required class="form-control" placeholder="{{__('Type Value Name')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
-    })
-
-    $(document).on('click', '.del-row', function(){
-        $(this).parent().parent().html('');
-    })
-</script>
-
 @endsection
+
+
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+
+            $(document).on('click', '#addMore', function(){
+                console.log('ok');
+                var rand = Math.floor(Math.random() * 90000) + 10000;
+                $('.variants').append('<div class="row"><div class="col-6 form-group"><label>{{__('Value Name')}}</label><input type="text" name="add_more_value_name[]" required class="form-control" placeholder="{{__('Type Value Name')}}"></div><div class="col-2"><label>Delete</label><br><span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span></div></div></div>');
+            })
+
+            $(document).on('click', '.del-row', function(){
+                $(this).parent().parent().html('');
+            })
+
+
+        })(jQuery);
+    </script>
+@endpush
+

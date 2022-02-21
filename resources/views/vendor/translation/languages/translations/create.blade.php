@@ -5,7 +5,6 @@
     <div class="panel w-1/2">
 
         <div class="panel-header">
-
             {{ __('translation::translation.add_translation') }}
 
         </div>

@@ -1,37 +1,32 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\Models\Brand;
-use App\Models\BrandTranslation;
-use App\Models\Language;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Str;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBrandRequest;
 use App\Traits\ActiveInactiveTrait;
-use App\Traits\SlugTrait;
-use App\Traits\imageHandleTrait;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use App\Interfaces\BrandInterface;
 
 class BrandController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait, imageHandleTrait;
+    use ActiveInactiveTrait;
+
+    protected $brand;
+    public function __construct(BrandInterface $brand){
+        $this->brand = $brand;
+    }
+
 
     public function index()
     {
         if (auth()->user()->can('brand-view'))
         {
-
-            $local = Session::get('currentLocal');
-            App::setLocale($local);
-
-            $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','DESC')
-                        ->get();
+            App::setLocale(session('currentLocal'));
+            $brands = $this->brand->getAll();
 
             if (request()->ajax())
             {
@@ -42,16 +37,20 @@ class BrandController extends Controller
                     ->addColumn('brand_logo', function ($row)
                     {
                         if ($row->brand_logo==null) {
-                            return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
+                            $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
                         }
                         elseif ($row->brand_logo!=null) {
-                            $url = url("public/".$row->brand_logo);
-                            return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                            if (!File::exists(public_path($row->brand_logo))) {
+                                $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
+                            }else {
+                                $url = url("public/".$row->brand_logo);
+                            }
                         }
+                        return  '<img src="'. $url .'" height="50px" width="50px"/>';
                     })
-                    ->addColumn('brand_name', function ($row) use ($local)
+                    ->addColumn('brand_name', function ($row)
                     {
-                        return $row->brandTranslation->brand_name ?? $row->brandTranslationEnglish->brand_name ?? null;
+                        return $row->brand_name;
                     })
                     ->addColumn('action', function ($row)
                     {
@@ -72,85 +71,39 @@ class BrandController extends Controller
                     ->rawColumns(['brand_logo','action'])
                     ->make(true);
             }
-            return view('admin.pages.brand.index',compact('brands','local'));
+            return view('admin.pages.brand.index',compact('brands'));
         }
         return abort('403', __('You are not authorized'));
-
     }
 
-    public function store(Request $request)
+    public function store(StoreBrandRequest $request)
     {
-        if (auth()->user()->can('brand-store'))
-        {
-            $brand       = new Brand;
-            $brand->slug = $this->slug($request->brand_name);
-            $image       = $request->file('brand_logo');
-            if ($image) {
-                $brand->brand_logo = $this->imageStore($image, $directory='images/brands/', $type='brand');
-            }
-            if (empty($request->is_active)) {
-                $brand->is_active = 0;
-            }else {
-                $brand->is_active = 1;
-            }
-            $brand->save();
+        if (auth()->user()->can('brand-store')){
 
-            $local                        = Session::get('currentLocal');
-            $brandTranslation             = new BrandTranslation();
-            $brandTranslation->brand_id   = $brand->id;
-            $brandTranslation->local      = $local;
-            $brandTranslation->brand_name = $request->brand_name;
-            $brandTranslation->save();
+            // return $request->all();
 
-            // return response()->json(['success' => "Successfully Done"]);
+            $this->brand->store($request->all());
+            session()->flash('type','success');
+            session()->flash('message','Successfully Saved');
             return redirect()->back();
         }
     }
 
     public function brandEdit($id)
     {
-        $local    = Session::get('currentLocal');
-        App::setLocale($local);
-        
-        $brand    = Brand::find($id);
-        $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local',$local)->first();
-        if (!isset($brandTranslation)) {
-            $brandTranslation = BrandTranslation::where('brand_id',$id)->where('local','en')->first();
-        }
-
-        return view('admin.pages.brand.edit',compact('brand','brandTranslation','local'));
+        App::setLocale(session('currentLocal'));
+        $brand = $this->brand->findById($id);
+        $brandTranslation = $this->brand->brandTranslation($id);
+        return view('admin.pages.brand.edit',compact('brand','brandTranslation'));
     }
 
-    public function brandUpdate(Request $request, $id)
+    public function brandUpdate(StoreBrandRequest $request, $id)
     {
         if (auth()->user()->can('brand-edit'))
         {
-            $brand   = Brand::find($id);
-            if (empty($request->is_active)) {
-                $brand->is_active = 0;
-            }else {
-                $brand->is_active = 1;
-            }
-            $brand_logo   = $request->file('brand_logo');
-            if ($brand_logo) {
-                $this->previousImageDelete($brand->brand_logo); //previous image will be deleted
-                $brand->brand_logo = $this->imageStore($brand_logo, $directory='images/brands/',$type='brand');
-            }
-            $brand->update();
-
-            DB::table('brand_translations')
-            ->updateOrInsert(
-                [
-                    'brand_id' => $request->brand_id,
-                    'local'    => $request->local,
-                ], //condition
-                [
-                    'brand_name' => $request->brand_name,
-                ]
-            );
-
+            $this->brand->update($id, $request->all());
             session()->flash('type','success');
-            session()->flash('message','Successfully Saved');
+            session()->flash('message','Successfully Updated');
             return redirect()->back();
         }
 
@@ -166,53 +119,19 @@ class BrandController extends Controller
 
     public function active(Request $request){
         if ($request->ajax()){
-            return $this->activeData(Brand::find($request->id));
+            return $this->activeData($this->brand->findById($request->id));
         }
     }
 
     public function inactive(Request $request){
         if ($request->ajax()){
-            return $this->inactiveData(Brand::find($request->id));
+            return $this->inactiveData($this->brand->findById($request->id));
         }
     }
 
-    public function bulkAction(Request $request)
-    {
+    public function bulkAction(Request $request){
         if ($request->ajax()) {
-            return $this->bulkActionData($request->action_type, Brand::whereIn('id',$request->idsArray));
+            return $this->bulkActionData($request->action_type, $this->brand->selectedBrands($request->idsArray));
         }
     }
 }
-
-
-
-//Testing bellow
-
-// $data = [];
-
-// $language = Language::where('default',1)->first();
-
-// $brands = Brand::all();
-
-// foreach ($brands as $key => $value) {
-
-//     $brandTranslationDefault = BrandTranslation::with('brand')
-//             //->select('brand_id','brand_name','local','brand:brand_logo')
-//             ->Where('brand_id',$value->id)
-//             ->Where('local','=',$language->local)
-//             ->first();
-
-//     $brandTranslationEnglish = BrandTranslation::with('brand')
-//             ->Where('brand_id',$value->id)
-//             ->Where('local','=','en')
-//             ->first();
-
-//     if ($brandTranslationDefault) {
-//         $data[$key] = $brandTranslationDefault;
-//     }elseif ($brandTranslationEnglish) {
-//         $data[$key] = $brandTranslationEnglish;
-//     }else {
-//         $data[$key]=NULL;
-//     }
-// }
-// return $data;

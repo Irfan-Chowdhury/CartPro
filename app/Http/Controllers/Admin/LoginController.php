@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
-//use validator;
 class LoginController extends Controller
 {
     /*
@@ -46,7 +43,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
+        $validator = $this->validateLogin($request);
 
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
@@ -55,13 +52,12 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
+
         if ($this->attemptLogin($request))
         {
             if (auth()->user()->user_type==1){
                 Session::put('currentLocal', 'en');
-                //App::setLocale('en');
                 return redirect()->intended(route('admin.dashboard'));
-                // return redirect()->intended(route('admin.dashboard','en'));
             }
             else {
                 Auth::logout();
@@ -69,7 +65,9 @@ class LoginController extends Controller
             }
         }
         else {
-            return redirect()->back()->withInput($request->only('username','remember'))->with('failed','this credential does not match');
+            session()->flash('type','danger');
+            session()->flash('message','Credential does not match');
+            return redirect()->back();
         }
     }
 }

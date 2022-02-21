@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+                        <span aria-hidden="true"><i class="las la-times"></i></span>
                     </button>
                     <div class="row">
                         <div class="col-md-6">
@@ -17,20 +17,7 @@
                                     @empty
                                     @endforelse
                                 </div>
-                                <div class="slider-nav-modal">
-                                    {{-- <div class="slider-nav__item">
-                                        <img src="{{asset('public/frontend/images/products/apple-watch.png')}}" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="{{asset('public/frontend/images/products/apple-watch-2.jpg')}}" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="{{asset('public/frontend/images/products/apple-watch-3.jpg')}}" alt="..." />
-                                    </div>
-                                    <div class="slider-nav__item">
-                                        <img src="{{asset('public/frontend/images/products/apple-watch-4.jpg')}}" alt="..." />
-                                    </div> --}}
-                                </div>
+                                <div class="slider-nav-modal"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -52,28 +39,21 @@
                                                 @php
                                                     for ($i=1; $i <=5 ; $i++){
                                                         if ($i<= round($item->product->avg_rating)){  @endphp
-                                                            <li><i class="ion-android-star"></i></li>
+                                                            <li><i class="las la-star"></i></li>
                                                 @php
                                                         }else { @endphp
-                                                            <li><i class="ion-android-star-outline"></i></li>
+                                                            <li><i class="lar la-star"></i></li>
                                                 @php        }
                                                     }
                                                 @endphp
                                             </ul>
-                                            <span>( 04 )</span>
+                                            <span>( {{round($item->product->avg_rating)}} )</span>
                                         </div>
-                                        <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
+                                        @if ($item->product->sku)
+                                            <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
+                                        @endif
                                     </div>
                                     <hr>
-                                    {{-- @if ($item->product->special_price>0)
-                                        <div class="item-price">$ {{$item->product->special_price ?? null}}</div>
-                                        <hr>
-                                        <div class="item-price"><del>$ {{$item->product->price ?? null}}</del></div>
-                                        <hr>
-                                    @else
-                                        <div class="item-price">$ {{$item->product->price ?? null}}</div>
-                                        <hr>
-                                    @endif --}}
                                     @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                         <div class="item-price">
                                             @if(env('CURRENCY_FORMAT')=='suffix')
@@ -140,19 +120,27 @@
                                                 </button>
                                             </span>
                                         </div>
-                                        <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                                        <a>
-                                            <button class="button button-icon style4 sm add_to_wishlist" data-product_id="{{$item->product->id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
-                                        </a>
+                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                            <button disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
+                                            <a>
+                                                <button class="button button-icon style4 sm" data-product_id="{{$item->product->id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
+                                            </a>
+                                        @else
+                                            <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
+                                            <a>
+                                                <div class="button button-icon style4 sm add_to_wishlist" data-product_id="{{$item->product->id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></div>
+                                            </a>
+                                        @endif
+
                                     </div>
 
                                     <hr>
-                                    <div class="item-share mt-3"><span>Share</span>
+                                    <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
                                         <ul class="footer-social d-inline pad-left-15">
-                                            <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                            <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                            <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                            <li><a href="#"><i class="ti-pinterest"></i></a></li>
+                                            <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
+                                            <li><a href="{{$socialShare['twitter']}}"><i class="ti-twitter"></i></a></li>
+                                            <li><a href="{{$socialShare['linkedin']}}"><i class="ti-linkedin"></i></a></li>
+                                            <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li>
                                         </ul>
                                     </div>
                                 </div>

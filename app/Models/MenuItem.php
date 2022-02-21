@@ -23,11 +23,6 @@ class MenuItem extends Model
     	return $this->hasMany(MenuItemTranslation::class,'menu_item_id');
     }
 
-    // public function menuTranslations()
-    // {
-    // 	return $this->hasMany(MenuTranslation::class,'menu_id');
-    // }
-
     public function parentMenu(){
         return $this->belongsTo(self::class,'parent_id');
     }

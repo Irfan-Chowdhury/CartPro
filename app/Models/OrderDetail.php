@@ -24,11 +24,5 @@ class OrderDetail extends Model
         return $this->hasOne(ProductImage::class,'product_id','product_id')
                     ->where('type','base');
     }
-
-    // public function productTranslationEnglish()
-    // {
-    // 	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
-    //                     ->where('local','en');
-    // }
 }
 

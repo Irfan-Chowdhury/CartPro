@@ -4,9 +4,8 @@
 
             <div class="modal-header">
 
-                <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add_User')}}</h5>
-                <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="close"><span
-                            aria-hidden="true">×</span></button>
+                <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add User')}}</h5>
+                <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
 
             <div class="modal-body">
@@ -17,42 +16,42 @@
                     <div class="row">
 
                         <div class="col-md-6 form-group">
-                            <label>{{__('First Name')}} *</label>
+                            <label>{{__('file.First Name')}} *</label>
                             <input type="text" name="first_name" id="first_name" required class="form-control"
                                    placeholder="{{__('First Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Last Name')}} *</label>
+                            <label>{{__('file.Last Name')}} *</label>
                             <input type="text" name="last_name" id="last_name" required class="form-control"
                                    placeholder="{{__('Last Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Username')}} *</label>
+                            <label>{{__('file.Username')}} *</label>
                             <input type="text" name="username" id="username" required class="form-control"
                                    placeholder="{{__('User Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Phone')}} *</label>
+                            <label>{{__('file.Phone')}} *</label>
                             <input type="text" name="phone" id="phone" required class="form-control"
                                    placeholder="{{__('phone')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Email')}} *</label>
+                            <label>{{__('file.Email')}} *</label>
                             <input type="email" name="email" id="email" required class="form-control"
                                    placeholder="{{__('email')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Password')}} *</label>
+                            <label>{{__('file.Password')}} *</label>
                             <input type="password" name="password" id="password" class="form-control"
                                    placeholder="{{__('password')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Confirm password')}} *</label>
+                            <label>{{__('file.Confirm password')}} *</label>
                             <input type="password" name="confirm_password" id="confirm_password" class="form-control"
                                    placeholder="{{__('Confirm Password')}}">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>{{__('Role')}} *</label>
+                            <label>{{__('file.Role')}} *</label>
                             <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" required name="role" id="role">
                                 @foreach ($roles as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -60,13 +59,13 @@
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="exampleFormControlFile1">{{__('Image')}}</label>
+                            <label for="exampleFormControlFile1">{{__('file.Image')}}</label>
                             <input type="file" class="form-control-file" name="image" id="exampleFormControlFile1">
                         </div>
                         <div class="col-md-6 form-group">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" id="isActive" id="default" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">{{__('Active')}}</label>
+                                <input class="form-check-input" checked type="checkbox" name="is_active" id="isActive" id="default" value="1" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">{{__('file.Active')}}</label>
                             </div>
                         </div>
                         <div class="container">

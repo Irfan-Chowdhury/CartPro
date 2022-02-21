@@ -25,8 +25,11 @@ class CurrencyRateController extends Controller
             ->addColumn('currency_code', function ($row){
                 return $row->currency_code ?? "";
             })
+            ->addColumn('currency_symbol', function ($row){
+                return $row->currency_symbol ?? "";
+            })
             ->addColumn('currency_rate', function ($row){
-                return number_format((float)$row->currency_rate, env('FORMAT_NUMBER'), '.', '');
+                return number_format($row->currency_rate, env('FORMAT_NUMBER'), '.', '');
             })
             ->addColumn('action', function ($row)
             {
@@ -34,7 +37,7 @@ class CurrencyRateController extends Controller
                     &nbsp; ';
                 return $actionBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','currency_symbol'])
             ->make(true);
 
         }
@@ -45,7 +48,7 @@ class CurrencyRateController extends Controller
     {
         $data = CurrencyRate::find($request->currency_rate_id);
 
-        return response()->json(['id'=>$data->id, 'currency_rate'=> number_format((float)$data->currency_rate, env('FORMAT_NUMBER'), '.', '')]);
+        return response()->json(['id'=>$data->id,'currency_symbol'=>$data->currency_symbol, 'currency_rate'=> number_format((float)$data->currency_rate, env('FORMAT_NUMBER'), '.', '')]);
     }
 
     public function update(Request $request)
@@ -53,6 +56,7 @@ class CurrencyRateController extends Controller
         if (request()->ajax()) {
             $data = CurrencyRate::find($request->id);
             $data->currency_rate = number_format((float)$request->currency_rate, env('FORMAT_NUMBER'), '.', '');
+            $data->currency_symbol = $request->currency_symbol;
             $data->update();
 
             return response()->json(['success' => 'Data Updated Successfully']);

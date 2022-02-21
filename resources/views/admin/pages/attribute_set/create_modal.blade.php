@@ -21,7 +21,7 @@
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="is_active" value="1" id="isActive">
+                <input type="checkbox" checked class="form-check-input" name="is_active" value="1" id="isActive">
                 <label class="form-check-label" for="exampleCheck1">{{__('file.Active')}}</label>
               </div>
             </div>

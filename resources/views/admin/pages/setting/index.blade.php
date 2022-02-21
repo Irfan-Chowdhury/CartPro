@@ -1,4 +1,5 @@
 @extends('admin.main')
+@section('title','Admin | Setting')
 @section('admin_content')
 
 <style>
@@ -66,13 +67,11 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="general-settings" data-toggle="list" href="#general" role="tab" aria-controls="home">General</a>
-                            <a class="list-group-item list-group-item-action" id="maintenance-settings" data-toggle="list" href="#maintenance" role="tab" aria-controls="maintenance">Maintenance</a>
                             <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">Store</a>
                             <a class="list-group-item list-group-item-action" id="currency-settings" data-toggle="list" href="#currency" role="tab" aria-controls="settings">Currency</a>
-                            <a class="list-group-item list-group-item-action" id="sms-settings" data-toggle="list" href="#sms" role="tab" aria-controls="profile">SMS</a>
                             <a class="list-group-item list-group-item-action" id="mail-settings" data-toggle="list" href="#mail" role="tab" aria-controls="mail">Mail</a>
                             <a class="list-group-item list-group-item-action" id="newsletter-settings" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">Newsletter</a>
-                            <a class="list-group-item list-group-item-action" id="custom_css_js-settings" data-toggle="list" href="#customCssJss" role="tab" aria-controls="customCssJss">Custom CSS / JSS</a>
+                            <a class="list-group-item list-group-item-action" id="emptyDatabase-settings" data-toggle="list" href="#emptyDatabase" role="tab" aria-controls="emptyDatabase">Empty Database</a>
                         </div>
                     </div>
                 </div>
@@ -90,6 +89,7 @@
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="facebook-social_login" data-toggle="list" href="#facebook" role="tab" aria-controls="facebook">Facebook</a>
                             <a class="list-group-item list-group-item-action" id="google-social_login" data-toggle="list" href="#google" role="tab" aria-controls="google">Google</a>
+                            <a class="list-group-item list-group-item-action" id="github-social_login" data-toggle="list" href="#github" role="tab" aria-controls="github">Github</a>
                         </div>
                     </div>
                 </div>
@@ -124,10 +124,8 @@
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="paypal-payment_methods" data-toggle="list" href="#paypal" role="tab" aria-controls="paypal">Paypal</a>
                             <a class="list-group-item list-group-item-action" id="strip-payment_methods" data-toggle="list" href="#strip" role="tab" aria-controls="strip">Strip</a>
-                            <a class="list-group-item list-group-item-action" id="paytm-payment_methods" data-toggle="list" href="#paytm" role="tab" aria-controls="paytm">Paytm</a>
+                            <a class="list-group-item list-group-item-action" id="sslcommerz-payment_methods" data-toggle="list" href="#sslcommerz" role="tab" aria-controls="sslcommerz">SSL Commerz</a>
                             <a class="list-group-item list-group-item-action" id="cash_on_delivery-payment_methods" data-toggle="list" href="#cash_on_delivery" role="tab" aria-controls="cash_on_delivery">Cash On Delivery</a>
-                            <a class="list-group-item list-group-item-action" id="bank_transfer-payment_methods" data-toggle="list" href="#bank_transfer" role="tab" aria-controls="bank_transfer">Bank Transfer</a>
-                            <a class="list-group-item list-group-item-action" id="check_money_order-payment_methods" data-toggle="list" href="#check_money_order" role="tab" aria-controls="check_money_order">Check Money / Order</a>
                         </div>
                     </div>
                 </div>
@@ -181,6 +179,11 @@
                         @include('admin.pages.setting.general_setting.custom_css_jss')
                     </div>
 
+                    <!-- Custom CSS/Js -->
+                    <div class="tab-pane fade" id="emptyDatabase" role="tabpanel" aria-labelledby="emptyDatabase-settings">
+                        @include('admin.pages.setting.general_setting.empty_database')
+                    </div>
+
                     <!----------------------------------- Social Login ------------------------------------------>
 
                     <!-- Facebook -->
@@ -191,6 +194,11 @@
                     <!-- Google -->
                     <div class="tab-pane fade" id="google" role="tabpanel" aria-labelledby="google-social_login">
                         @include('admin.pages.setting.social_login.google')
+                    </div>
+
+                    <!-- Github -->
+                    <div class="tab-pane fade" id="github" role="tabpanel" aria-labelledby="github-social_login">
+                        @include('admin.pages.setting.social_login.github')
                     </div>
 
                     <!----------------------------------- Shipping Methods ------------------------------------------>
@@ -222,6 +230,11 @@
                         @include('admin.pages.setting.payment_method.strip')
                     </div>
 
+                    <!-- SSL Commerz  -->
+                    <div class="tab-pane fade" id="sslcommerz" role="tabpanel" aria-labelledby="sslcommerz-payment_methods">
+                        @include('admin.pages.setting.payment_method.sslcommerz')
+                    </div>
+
                     <!-- Paytm  -->
                     <div class="tab-pane fade" id="paytm" role="tabpanel" aria-labelledby="paytm-payment_methods">
                         @include('admin.pages.setting.payment_method.paytm')
@@ -246,762 +259,832 @@
           </div>
     </div>
 </div>
-
-
-<script type="text/javascript">
-    //----------Insert Data----------------------
-
-    //General
-    $('#generalSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.general.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                console.log(data);
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Store
-    $('#storeSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.store.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Currency - exchange rate service
-    $('#exchangeRateService').change(function() {
-        var exchangeRateService = $('#exchangeRateService').val();
-
-        if (exchangeRateService=="fixer") {
-            data = '<label class="col-sm-4 col-form-label"><b> {{__('Fixer Access Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="fixer_access_key" class="form-control">';
-            data += '</div>';
-            $('#exchangeRateServiceField').html(data);
-        }
-        else if (exchangeRateService=="forge") {
-            data = '<label class="col-sm-4 col-form-label"><b> {{__('Forge API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="forge_api_key" class="form-control">';
-            data += '</div>';
-            $('#exchangeRateServiceField').html(data);
-        }
-        else if (exchangeRateService=="currency_data_feed") {
-            data = '<label class="col-sm-4 col-form-label"><b> {{__('Currency Data Feed API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data += '<div class="col-sm-8">';
-            data += '<input type="text" name="currency_data_feed_key" class="form-control">';
-            data += '</div>';
-            $('#exchangeRateServiceField').html(data);
-        }else{
-            $('#exchangeRateServiceField').empty();
-        }
-    });
-
-
-    //Currency Submit
-    $('#currencySubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.currency.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-
-                console.log(data);
-
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if (data.error_exchange_rate_service) {
-                    html = '<div class="alert alert-danger">';
-                    html += '<p>' + data.error_exchange_rate_service + '</p>';
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //SMS Service - Change SMS Service
-    $('#smsService').change(function() {
-        var smsService = $('#smsService').val();
-
-        if (smsService=="vonage") {
-            data1 = '<label class="col-sm-4 col-form-label"><b> {{__('API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data1 += '<div class="col-sm-8">';
-            data1 += '<input type="text" name="api_key" class="form-control">';
-            data1 += '</div>';
-            $('#vonageApiKeyField').html(data1);
-
-
-            data2 = '<label class="col-sm-4 col-form-label"><b> {{__('API Secret')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data2 += '<div class="col-sm-8">';
-            data2 += '<input type="text" name="api_secret" class="form-control">';
-            data2 += '</div>';
-            $('#vonageApiSecretField').html(data2);
-
-            $('#twilioAccountSidField').empty();
-            $('#twilioAuthTokenField').empty();
-        }
-        else if (smsService=="twilio") {
-            data3 = '<label class="col-sm-4 col-form-label"><b> {{__('Account SID')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data3 += '<div class="col-sm-8">';
-            data3 += '<input type="text" name="account_sid" class="form-control">';
-            data3 += '</div>';
-            $('#twilioAccountSidField').html(data3);
-
-
-            data4 = '<label class="col-sm-4 col-form-label"><b> {{__('Auth Token')}} &nbsp;<span class="text-danger">*</span> </b></label>';
-            data4 += '<div class="col-sm-8">';
-            data4 += '<input type="text" name="auth_token" class="form-control">';
-            data4 += '</div>';
-            $('#twilioAuthTokenField').html(data4);
-
-            $('#vonageApiKeyField').empty();
-            $('#vonageApiSecretField').empty();
-        }else{
-            $('#vonageApiKeyField').empty();
-            $('#vonageApiSecretField').empty();
-            $('#twilioAccountSidField').empty();
-            $('#twilioAuthTokenField').empty();
-        }
-    });
-
-    //SMS Submit
-    $('#smsSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.sms.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if (data.error_sms_service) {
-                    html = '<div class="alert alert-danger">';
-                    html += '<p>' + data.error_sms_service + '</p>';
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //Mail Submit
-    $('#mailSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.mail.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //newletter Submit
-    $('#newletterSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.newsletter.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //custom css/js Submit
-    $('#customCssJssSubmit').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.setting.custom_css_js.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Facebook
-    $('#facebookSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.facebook.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Google
-    $('#googleSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.google.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //free Shipping Submit
-    $('#freeShippingSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.free_shipping.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //local pickup Submit
-    $('#localPickupSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.local_pickup.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //Flat Rate
-    $('#flatRateSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.flat_rate.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Paypal
-    $('#paypalSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.paypal.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Strip
-    $('#stripSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.strip.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Paytm
-    $('#paytmSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.paytm.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //Cash On Delivery
-    $('#cashOnDeliverySubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.cash_on_delivery.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Bank Transfer
-    $('#bankTransferSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.bank_transfer.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-    //Check Money / Order
-    $('#checkMoneyOrderSubmit').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{route('admin.setting.check_money_order.store_or_update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alert_message').fadeIn("slow");
-                    $('#alert_message').html(html);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.success){
-                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#alert_message').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-
-
-
-
-    //Image Show Before Upload End
-    function showImage(data, logo){
-        if(data.files && data.files[0]){
-            var obj = new FileReader();
-
-            obj.onload = function(d){
-                var image = document.getElementById(logo);
-                image.src = d.target.result;
-            }
-            obj.readAsDataURL(data.files[0]);
-        }
-    }
-
-</script>
-
-
 @endsection
+
+
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+                //----------Insert Data----------------------
+
+                //General
+                $('#generalSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.general.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            console.log(data);
+
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Store
+                $('#storeSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.store.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Currency - exchange rate service
+                $('#exchangeRateService').change(function() {
+                    var exchangeRateService = $('#exchangeRateService').val();
+
+                    if (exchangeRateService=="fixer") {
+                        data = '<label class="col-sm-4 col-form-label"><b> {{__('Fixer Access Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data += '<div class="col-sm-8">';
+                        data += '<input type="text" name="fixer_access_key" class="form-control">';
+                        data += '</div>';
+                        $('#exchangeRateServiceField').html(data);
+                    }
+                    else if (exchangeRateService=="forge") {
+                        data = '<label class="col-sm-4 col-form-label"><b> {{__('Forge API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data += '<div class="col-sm-8">';
+                        data += '<input type="text" name="forge_api_key" class="form-control">';
+                        data += '</div>';
+                        $('#exchangeRateServiceField').html(data);
+                    }
+                    else if (exchangeRateService=="currency_data_feed") {
+                        data = '<label class="col-sm-4 col-form-label"><b> {{__('Currency Data Feed API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data += '<div class="col-sm-8">';
+                        data += '<input type="text" name="currency_data_feed_key" class="form-control">';
+                        data += '</div>';
+                        $('#exchangeRateServiceField').html(data);
+                    }else{
+                        $('#exchangeRateServiceField').empty();
+                    }
+                });
+
+
+                //Currency Submit
+                $('#currencySubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.currency.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            let html = '';
+
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if (data.error_exchange_rate_service) {
+                                html = '<div class="alert alert-danger">';
+                                html += '<p>' + data.error_exchange_rate_service + '</p>';
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.selectionError){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-danger').html(data.selectionError);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //SMS Service - Change SMS Service
+                $('#smsService').change(function() {
+                    var smsService = $('#smsService').val();
+
+                    if (smsService=="vonage") {
+                        data1 = '<label class="col-sm-4 col-form-label"><b> {{__('API Key')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data1 += '<div class="col-sm-8">';
+                        data1 += '<input type="text" name="api_key" class="form-control">';
+                        data1 += '</div>';
+                        $('#vonageApiKeyField').html(data1);
+
+
+                        data2 = '<label class="col-sm-4 col-form-label"><b> {{__('API Secret')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data2 += '<div class="col-sm-8">';
+                        data2 += '<input type="text" name="api_secret" class="form-control">';
+                        data2 += '</div>';
+                        $('#vonageApiSecretField').html(data2);
+
+                        $('#twilioAccountSidField').empty();
+                        $('#twilioAuthTokenField').empty();
+                    }
+                    else if (smsService=="twilio") {
+                        data3 = '<label class="col-sm-4 col-form-label"><b> {{__('Account SID')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data3 += '<div class="col-sm-8">';
+                        data3 += '<input type="text" name="account_sid" class="form-control">';
+                        data3 += '</div>';
+                        $('#twilioAccountSidField').html(data3);
+
+
+                        data4 = '<label class="col-sm-4 col-form-label"><b> {{__('Auth Token')}} &nbsp;<span class="text-danger">*</span> </b></label>';
+                        data4 += '<div class="col-sm-8">';
+                        data4 += '<input type="text" name="auth_token" class="form-control">';
+                        data4 += '</div>';
+                        $('#twilioAuthTokenField').html(data4);
+
+                        $('#vonageApiKeyField').empty();
+                        $('#vonageApiSecretField').empty();
+                    }else{
+                        $('#vonageApiKeyField').empty();
+                        $('#vonageApiSecretField').empty();
+                        $('#twilioAccountSidField').empty();
+                        $('#twilioAuthTokenField').empty();
+                    }
+                });
+
+                //SMS Submit
+                $('#smsSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.sms.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if (data.error_sms_service) {
+                                html = '<div class="alert alert-danger">';
+                                html += '<p>' + data.error_sms_service + '</p>';
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //Mail Submit
+                $('#mailSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.mail.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //newletter Submit
+                $('#newletterSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.newsletter.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //custom css/js Submit
+                $('#customCssJssSubmit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{route('admin.setting.custom_css_js.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Facebook
+                $('#facebookSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.facebook.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Google
+                $('#googleSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.google.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Google
+                $('#githubSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.github.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //free Shipping Submit
+                $('#freeShippingSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.free_shipping.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //local pickup Submit
+                $('#localPickupSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.local_pickup.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //Flat Rate
+                $('#flatRateSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.flat_rate.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Paypal
+                $('#paypalSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.paypal.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Strip
+                $('#stripSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.strip.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //SSL Commerz
+                $('#sslComerzSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.sslcommerz.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Paytm
+                $('#paytmSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.paytm.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //Cash On Delivery
+                $('#cashOnDeliverySubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.cash_on_delivery.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Bank Transfer
+                $('#bankTransferSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.bank_transfer.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+                //Check Money / Order
+                $('#checkMoneyOrderSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.check_money_order.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+            // $('#supportedCurrencies').change(function (e) {
+            //     var test = $('#supportedCurrencies').val();
+            //     console.log(test[0]);
+            // });
+
+            })(jQuery);
+    </script>
+@endpush
+

@@ -5,45 +5,53 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
-
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
 use App\Models\FlashSale;
+use App\Models\KeywordHit;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
-use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
-use App\Models\ProductAttributeValue;
 use App\Models\ProductTranslation;
 use App\Models\Review;
 use App\Models\Setting;
-use App\Models\SettingGeneral;
-use App\Models\SettingNewsletter;
-use App\Models\SettingStore;
+use App\Models\SettingCurrency;
 use App\Models\Slider;
-use App\Models\StorefrontImage;
-use Harimayco\Menu\Models\Menus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-// use Cart;
-// use Gloudemans\Cart;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
-use SebastianBergmann\Environment\Console;
 use Newsletter;
-
+use App\Traits\CurrencyConrvertion;
+use App\Traits\ENVFilePutContent;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
+    use CurrencyConrvertion,ENVFilePutContent;
 
     public function index()
     {
+        // $old_directory = "irfan" ;
+        // $new_directory = "fahim" ;
+        // File::copyDirectory($old_directory,$new_directory);
+        // File::deleteDirectory($old_directory);
+        // return  'ok';
+
+        // $rowId = 'b6919a1641cd57bf6431c500a0575107';
+        // Cart::update($rowId, ['qty'  => 1]); // Will update the size option with new value
+
+        // return Cart::tax();
+        // return Cart::subtotal();
+        // return Cart::total();
+        // return implode(explode(',',Cart::subtotal()));
+        // return Cart::content();
+        // return Cart::tax(0.0);
+        // return Cart::destroy();
 
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
@@ -54,23 +62,10 @@ class HomeController extends Controller
         App::setLocale($locale);
 
 
-        // $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
-        // return $languages[$locale]->language_name;
-
-
         Session::put('disable_newslatter',1);
 
         $locale = Session::get('currentLocal');
         $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
-
-
-        $top_categories = Category::with(['catTranslation','parentCategory','categoryTranslationDefaultEnglish','child'])
-            ->where('top',1)
-            ->where('is_active',1)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
-
 
 
         //Storefront Theme Color
@@ -104,7 +99,7 @@ class HomeController extends Controller
 
         //Slider
         $sliders = Cache::remember('sliders', 150, function () use ($locale) {
-            return Slider::with(['sliderTranslation'=> function ($query) use ($locale){
+            return Slider::with(['category','sliderTranslation'=> function ($query) use ($locale){
                 $query->where('locale',$locale)
                 ->orWhere('locale','en')
                 ->orderBy('id','DESC');
@@ -117,9 +112,9 @@ class HomeController extends Controller
 
         //Slider Banner
         $slider_banners = $this->getSliderBanner($settings);
-        // $slider_banners = [];
-        // $i = 0;
-        // $slider_banner_loop = 'start';
+        // return $slider_banners ;
+
+        // return $slider_banners[1]['action_url'];
 
         foreach ($settings as $key => $setting)
         {
@@ -128,13 +123,13 @@ class HomeController extends Controller
                 $storefront_theme_color = $setting->plain_value;
             }
 
-            if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
                 $store_front_slider_format = $setting->plain_value;
             }
 
 
             //----- Category-Product Start -----
-            if ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -145,7 +140,7 @@ class HomeController extends Controller
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
-            if ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -156,7 +151,7 @@ class HomeController extends Controller
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
-            if ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -167,7 +162,7 @@ class HomeController extends Controller
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
 
-            if ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -180,14 +175,13 @@ class HomeController extends Controller
 
 
             //Flash sale and vertical product
-            if ($setting->key=='storefront_flash_sale_title') {
+            elseif ($setting->key=='storefront_flash_sale_title') {
                 $storefront_flash_sale_title = $setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null;
             }
-            if ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
+            elseif ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
                 $active_campaign_flash_id = $setting->plain_value;
             }
-
-            if ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -197,7 +191,7 @@ class HomeController extends Controller
                 }
                 $storefront_vertical_product_1_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
             }
-            if ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -207,7 +201,7 @@ class HomeController extends Controller
                 }
                 $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
             }
-            if ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
+            elseif ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
@@ -216,6 +210,13 @@ class HomeController extends Controller
                     }
                 }
                 $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+            }
+            //Top Brands
+            elseif ($setting->key=='storefront_top_brands_section_enabled' && $setting->plain_value!=NULL) {
+                $storefront_top_brands_section_enabled = $setting->plain_value ?? null;
+            }
+            elseif ($setting->key=='storefront_top_brands' && $setting->plain_value!=NULL) {
+                $storefront_top_brands = $setting->plain_value;
             }
         }
 
@@ -226,13 +227,13 @@ class HomeController extends Controller
                                     'flashSaleProducts.product.productAttributeValues')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
 
+        $brand_ids = json_decode($storefront_top_brands);
 
-        $brands = Cache::remember('brands', 150, function () {
-            return Brand::where('is_active',1)
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','DESC')
-                    ->get();
-        });
+        $brands = Brand::whereIn('id',$brand_ids)
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get();
 
         $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
                         ->select('product_id')
@@ -243,19 +244,19 @@ class HomeController extends Controller
                         ->take(10)
                         ->get();
 
-        return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners','top_categories',
+        // return $product_tab_one_section_1;
+
+        return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
                                                 'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
                                                 'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
                                                 'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
                                                 'storefront_vertical_product_2_title','storefront_vertical_product_3_title',
-                                                'vertical_product_1','vertical_product_2','vertical_product_3','order_details'));
+                                                'vertical_product_1','vertical_product_2','vertical_product_3','order_details','storefront_top_brands_section_enabled'));
     }
 
 
     public function product_details($product_slug, $category_id)
     {
-        // return Cart::content();
-
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')
@@ -270,15 +271,11 @@ class HomeController extends Controller
                     ->where('slug',$product_slug)
                     ->first();
 
-        // return $product->avg_rating;
-
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
         }
 
-        // $attribute_names = array_unique($attribute);
-        // return $attribute_names;
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
@@ -309,21 +306,25 @@ class HomeController extends Controller
             $reviews =[];
         }
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews'));
+
+        //Related Products
+        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+                                'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+                            ->where('category_id', $category_id)
+                            ->get();
+
+
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
     }
 
     public function dataAjaxSearch(Request $request)
     {
         if ($request->ajax()) {
-            $locale = Session::get('currentLocal');
-            // $products   = DB::table('products')
-            //             ->join('product_translations','product_translations.product_id','products.id')
-            //             ->innerjoin('product_images','product_images.product_id','products.id')
-            //             // ->where('product_translations.product_name','LIKE', "%samsung%")
-            //             ->where('product_translations.product_name','LIKE', "{$request->search_txt}%")
-            //             ->select('products.id AS product_id','products.slug','product_translations.product_name')
-            //             ->get();
 
+            $base_url = url('/');
+
+            $locale = Session::get('currentLocal');
             $products = ProductTranslation::with(['product:id,slug','product.baseImage'=> function($query){
                                 return $query->where('type','base');
                             },
@@ -337,9 +338,9 @@ class HomeController extends Controller
             foreach ($products as $key => $item) {
                 if ($item->product->baseImage!=null) {
                     $image_url = url("public".$item->product->baseImage->image);
-                    $html .= '<tr><td><a href="product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:35px;width:35px"/>&nbsp'.$item->product_name.'</a></td></tr>';
+                    $html .= '<tr><td><a href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:35px;width:35px"/>&nbsp'.$item->product_name.'</a></td></tr>';
                 }else {
-                    $html .= '<tr><td><a href="product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'</a></td></tr>';
+                    $html .= '<tr><td><a href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'</a></td></tr>';
                 }
             }
             return response()->json($html);
@@ -349,13 +350,6 @@ class HomeController extends Controller
     public function newslatterStore(Request $request)
     {
         if ($request->ajax()) {
-            // $validator = Validator::make($request->all(),[
-            //     'email' => 'required|email|unique:newslatters,email|max:55',
-            // ]);
-
-            // if ($validator->fails()){
-            //     return response()->json(['type'=>'error','errors' => $validator->errors()]);
-            // }
 
             if ($request->disable_newslatter==1) {
                 Session::put('disable_newslatter',1);
@@ -379,12 +373,15 @@ class HomeController extends Controller
     protected function getSliderBanner($settings)
     {
         $slider_banners = [];
+        $empty_image = 'images/empty.jpg';
 
         for ($i=0; $i < 3; $i++) {
             foreach ($settings as $item){
                 if ($item->key=='storefront_slider_banner_'.($i+1).'_image') {
                     if ($item->storeFrontImage) {
                         $slider_banners[$i]['image'] = $item->storeFrontImage->image;
+                    }else {
+                        $slider_banners[$i]['image'] = $empty_image;
                     }
                 }
                 elseif ($item->key=='storefront_slider_banner_'.($i+1).'_title') {
@@ -434,6 +431,44 @@ class HomeController extends Controller
         Session::put('currentLocal', $language->local);
 
         App::setLocale($language->local);
+        return redirect()->back();
+    }
+
+    public function test(Request $request)
+    {
+        // KeywordHit::updatetOrCreate(
+        //     ['keyword' =>  request('searchText')],
+        //     ['hit' =>   DB::raw('hit+1')]
+        // );
+
+        if ($request->ajax()) {
+            $dataCheck = KeywordHit::where('keyword',$request->searchText);
+            if ($dataCheck->exists()) {
+                $get_data = $dataCheck->first();
+                $increment = $get_data->hit+1;
+                $get_data->update(['hit'=>$increment]);
+            }else {
+                $keyword_hit = new KeywordHit();
+                $keyword_hit->keyword = $request->searchText;
+                $keyword_hit->hit = 1;
+                $keyword_hit->save();
+            }
+            return response()->json('ok');
+        }
+    }
+
+    public function currencyChange($currency_code)
+    {
+        // $main_amount = 500;
+        // $this->CurrencyConvert($main_amount);
+        // $this->CurrencySymbol();
+
+        Session::put('currency_code', $currency_code);
+
+        $currency_symbol = $this->CurrencySymbol();
+        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',$currency_symbol);
+        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE',$this->ChangeCurrencyRate());
+
         return redirect()->back();
     }
 }

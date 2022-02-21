@@ -1,6 +1,12 @@
 @extends('admin.main')
+@section('title','Admin | Brand | Edit')
+
 @section('admin_content')
 <section>
+
+    @include('admin.includes.alert_message')
+    @include('admin.includes.error_message')
+
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
     </div>
@@ -11,7 +17,7 @@
         @csrf
 
             <input type="hidden" name="brand_id" value="{{$brand->id}}">
-            <input type="hidden" name="local" value="{{$local}}">
+            <input type="hidden" name="brand_translation_id" value="{{$brandTranslation->id}}">
 
 
             <div class="col-md-6 form-group">
@@ -20,10 +26,10 @@
             </div>
 
             <div class="mt-3 col-md-6 form-group">
-                @if($brand->brand_logo!==null)
+                @if($brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
                     <img id="item_photo" src="{{asset('public/'.$brand->brand_logo)}}"  height="100px" width="100px">
-                @else
-                    <img id="item_photo" src="{{asset('public/images/empty.jpg')}}"  height="100px" width="100px">
+                @elseif($brand->brand_logo==null || (!Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo))))
+                    <img id="item_photo" src="https://dummyimage.com/100x100/000000/0f6954.png&text=Brand"  height="100px" width="100px">
                 @endif
                 <input type="file" name="brand_logo" id="brandLogo" class="mt-3 form-control" onchange="showImage(this,'item_photo')">
             </div>
@@ -39,26 +45,27 @@
             <div class="col form-group" align="center">
                 <input type="hidden" name="action" id="action"/>
                 <input type="hidden" name="hidden_id" id="hidden_id"/>
-                <button type="submit" class="btn btn-success">Update</button>
-                {{-- <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value={{trans('file.Add')}}> --}}
+                <button type="submit" class="btn btn-success">@lang('file.Update')</button>
             </div>
     </form>
 
 </section>
-
-<script type="text/javascript">
-    function showImage(data, imgId){
-        if(data.files && data.files[0]){
-            var obj = new FileReader();
-
-            obj.onload = function(d){
-                var image = document.getElementById(imgId);
-                image.src = d.target.result;
-            }
-            obj.readAsDataURL(data.files[0]);
-        }
-    }
-    //Image Show Before Upload End
-</script>
-
 @endsection
+
+
+@push('scripts')
+    <script type="text/javascript">
+        "use strict";
+        function showImage(data, imgId){
+            if(data.files && data.files[0]){
+                var obj = new FileReader();
+                obj.onload = function(d){
+                    var image = document.getElementById(imgId);
+                    image.src = d.target.result;
+                }
+                obj.readAsDataURL(data.files[0]);
+            }
+        }
+    </script>
+@endpush
+

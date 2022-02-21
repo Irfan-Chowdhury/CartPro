@@ -1,7 +1,7 @@
 @php
         $cart_count = Cart::count();
-        $cart_subtotal = Cart::subtotal();
-        $cart_total = Cart::total();
+        $cart_subtotal = implode(explode(',',Cart::subtotal()));
+        $cart_total = implode(explode(',',Cart::total()));
         $cart_contents = Cart::content();
 
         if (Auth::check()) {
@@ -10,13 +10,19 @@
             $total_wishlist = 0;
         }
 
-        // if(!Illuminate\Support\Facades\Session::get('currentLocal')){
-        //     Illuminate\Support\Facades\Session::put('currentLocal', 'en');
-        //     $locale = 'en';
+        if(!Illuminate\Support\Facades\Session::get('currentLocal')){
+            Illuminate\Support\Facades\Session::put('currentLocal', 'en');
+            $locale = 'en';
+        }else {
+            $locale = Illuminate\Support\Facades\Session::get('currentLocal');
+        }
+        Illuminate\Support\Facades\App::setLocale($locale);
+
+        // if (Illuminate\Support\Facades\Auth::check()) {
+        //     $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();
         // }else {
-        //     $locale = Illuminate\Support\Facades\Session::get('currentLocal');
+        //     $total_wishlist = 0;
         // }
-        // Illuminate\Support\Facades\App::setLocale($locale);
 @endphp
 
 
@@ -29,59 +35,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset('public/frontend/images/favicon.png')}}" />
-    <!-- google fonts-->
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
-    <!-- Plugins CSS -->
-    <link href="{{asset('public/frontend/css/plugins.css')}}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    <link href="{{asset('public/frontend/css/bootstrap-select.min.css')}}" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{asset($favicon_logo_path)}}"/>
+
+    <!-- Bootstrap CSS -->
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('public/frontend/css/cartPro-style.css')}}" rel="stylesheet" />
-    <!-- <link href="css/bootstrap-rtl.min.css" rel="stylesheet"> -->
-    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/payment-fonts.css')}}" rel="stylesheet" />
+    <link href="{{asset('public/frontend/css/cartpro-style.css')}}" rel="stylesheet"/>
+
+    <!-- Plugins CSS -->
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}"></noscript>
+
+    <!-- google fonts-->
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap"></noscript>
+
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"></noscript>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
 
     @yield('meta_info')
 
     <!-- Document Title -->
-    {{-- <title>CartPro - ecommerce HTML Template</title> --}}
-    <title>@yield('title','CartPro')</title>
+    @if ($setting_store)
+        <title>@yield('title',$setting_store->store_name)</title>
+    @endif
 
     @yield('extra_css')
 
+    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+
     <style>
-        /* .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid blue;
-            border-right: 16px solid green;
-            border-bottom: 16px solid red;
-            border-left: 16px solid pink;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        } */
         :root {
             --theme-color: {{$storefront_theme_color ?? "#0071df"}};
+            /* --theme-color: #80ff00; */
         }
     </style>
-</head>
+    <style>
+        #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 40%;width: 40px;}
+    </style>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZZBZQHXN8Q');
+    </script>
+</head>
 
 <body>
     <div id="demo">
@@ -96,13 +106,14 @@
             <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
             <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
         </ul>
-        <h6>Custom color</h6>
-        <input type="text" id="color-input" class="form-control" value="#0071df">
-        <div class="demo-btn"><i class="las la-cog"></i></div>
+        @if (env('USER_VERIFIED')==1)
+            <div class="demo-btn"><i class="las la-cog"></i></div>
+        @endif
     </div>
 
 
     <!--Header-->
+
     @include('frontend.includes.header')
 
     <div class="center loader"></div>
@@ -113,52 +124,101 @@
     <!--Footer-->
     @include('frontend.includes.footer')
 
-
-
-    <script>
-        var chatbox = document.getElementById('fb-customer-chat');
-        chatbox.setAttribute("page_id", "CUSTOMER FACEBOOK PAGE ID GOES HERE");
-        chatbox.setAttribute("attribution", "biz_inbox");
-
-        window.fbAsyncInit = function() {
-            FB.init({
-                xfbml: true,
-                version: 'v11.0'
-            });
-        };
-
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-
-    {{-- Sweetalert2 --}}
-    <script src="{{asset('public/frontend/js/sweetalert2@11.js')}}"></script>
-
-
-    <!-- FACEBOOK CHAT PLUGIN ENDS -->
-
     <!--Plugin js -->
     <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap-select.min.js')}}"></script>
+
+    <!-- Sweetalert2 -->
+    <script src="{{asset('public/frontend/js/sweetalert2@11.js')}}"></script>
+
     <!-- Main js -->
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#newsletter-modal').modal('toggle');
-            @if(session()->has('type'))
+    <!--Colorpicker js -->
+    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
+    <script src="{{asset('public/js/share.js')}}"></script>
+
+    <script>
+        (function ($) {
+            "use strict";
+            $('.demo-btn').on('click', function(){
+                $('#demo').toggleClass('open');
+
+                $('.color-change').click(function() {
+
+                    var color = $(this).data('color');
+                    $('#color-input').val(color);
+                    $('body').css('--theme-color', color);
+
+                });
+
+                $('#color-input').on('change',function() {
+
+                    var color = $(this).val();
+                    $('body').css('--theme-color', color);
+
+                });
+
+            });
+
+
+            $('#color-input').colorpicker({
+
+            });
+        })(jQuery);
+    </script>
+
+    <script>
+        (function ($) {
+            "use strict";
+
+            $(document).ready(function() {
+                $('#newsletter-modal').modal('toggle');
+                @if(session()->has('type'))
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Successfully added on your cart'
+                    })
+                @endif
+
+                let amountConvertToCurrency = parseFloat($('.cart_total').text()) * {{$CHANGE_CURRENCY_RATE}}
+                $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                $('.total_price').text(amountConvertToCurrency.toFixed(2));
+            });
+
+            //Category-Wise-Product
+            $('.view-list').on('click', function(){
+                $(this).addClass('active');
+                $('.product-grid').addClass('list-view');
+                $('.view-grid').removeClass('active');
+            });
+
+            $('.view-grid').on('click', function(){
+                $(this).addClass('active');
+                $('.product-grid').removeClass('list-view');
+                $('.view-list').removeClass('active');
+            });
+
+            let values = [];
+
+            // $(".addToCart").on("submit",function(e){
+            $(document).on('submit','.addToCart',function(e) {
+                e.preventDefault();
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 1500,
                     timerProgressBar: true,
                     didOpen: (toast) => {
                         toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -169,388 +229,295 @@
                     icon: 'success',
                     title: 'Successfully added on your cart'
                 })
-            @endif
-        });
+                $.ajax({
+                    url: "{{route('product.add_to_cart')}}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.type=='success') {
+                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
+                            let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
 
-        //Category-Wise-Product
-        $('.view-list').on('click', function(){
-            $(this).addClass('active');
-            $('.product-grid').addClass('list-view');
-            $('.view-grid').removeClass('active');
-        });
+                            $('.cart_count').text(data.cart_count);
+                            $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                            $('.total_price').text(amountConvertToCurrency.toFixed(2));
 
-        $('.view-grid').on('click', function(){
-            $(this).addClass('active');
-            $('.product-grid').removeClass('list-view');
-            $('.view-list').removeClass('active');
-        });
-    </script>
+                            var html = '';
+                            var cart_content = data.cart_content;
+                            $.each( cart_content, function( key, value ) {
+                                let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
 
-    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
+                                var image = 'public/'+value.options.image;
+                                html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                        '<img src="'+image+'">'+
+                                        '</a></div><div class="shp__pro__details"><h2>'+
+                                        '<a href="#">'+value.name+'</a></h2>'+
+                                        '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
+                                        '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
+                            });
+                            $('.cart_list').html(html);
 
-
-    <script>
-
-
-        let values = [];
-
-        $('.demo-btn').on('click', function(){
-            $('#demo').toggleClass('open');
-        });
-        $(function () {
-            $('#color-input').colorpicker({
-            });
-        });
-
-
-        $(".addToCart").on("submit",function(e){
-            e.preventDefault();
-
-            $.ajax({
-                url: "{{route('product.add_to_cart')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.type=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            if (data.wishlist_id>0) {
+                                $('#wishlist_'+data.wishlist_id).remove();
                             }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Successfully added on your cart'
-                        })
-
-                        $('.cart_count').text(data.cart_count);
-                        $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.cart_total);
-
-                        var html = '';
-                        var cart_content = data.cart_content;
-                        $.each( cart_content, function( key, value ) {
-                            var image = 'public/'+value.options.image;
-                            html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                    '<img src="'+image+'">'+
-                                    '</a></div><div class="shp__pro__details"><h2>'+
-                                    '<a href="#">'+value.name+'</a></h2>'+
-                                    '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
-                                    '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
-                        });
-                        $('.cart_list').html(html);
-
-                        if (data.wishlist_id>0) {
-                            $('#wishlist_'+data.wishlist_id).remove();
                         }
-                        // $('.cart_list').html(JSON.parse(html));
-                    }
-                    else if(data.type=='quantity_limit'){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Available product is : '+data.product_quantity,
-                            footer: '<a href="">Why do I have this issue?</a>'
-                        });
-                    }
-                }
-            });
-        });
-
-        $("#productAddToCartSingle").on("submit",function(e){
-            e.preventDefault();
-            console.log(values);
-            $.ajax({
-                url: "{{route('product.add_to_cart')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    if (data.type=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Successfully added on your cart'
-                        })
-
-                        $('.cart_count').text(data.cart_count);
-                        $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.cart_total);
-
-                        var html = '';
-                        var cart_content = data.cart_content;
-                        $.each( cart_content, function( key, value ) {
-                            var image = 'public/'+value.options.image;
-                            html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                    '<img src="'+image+'">'+
-                                    '</a></div><div class="shp__pro__details"><h2>'+
-                                    '<a href="#">'+value.name+'</a></h2>'+
-                                    '<span>'+value.qty+'</span> x <span class="shp__price"> $'+value.price+'</span>'+
-                                    '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="ion-ios-close-empty"></i></a></div></div>';
-                        });
-                        $('.cart_list').html(html);
-                    }
-                    else if(data.type=='quantity_limit'){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Available product is : '+data.product_quantity,
-                            footer: '<a href="">Why do I have this issue?</a>'
-                        });
-                    }
-                }
-            });
-        });
-
-        $(document).on('click','.remove_cart',function(event) {
-            event.preventDefault();
-            var rowId = $(this).data('id');
-            // var removeCartItemId = $(this).parent().parent().attr('id');
-
-            $.ajax({
-                url: "{{ route('cart.remove') }}",
-                type: "GET",
-                data: {rowId:rowId},
-                success: function (data) {
-                    if (data.type=='success') {
-                        // $('#'+removeCartItemId).remove();
-                        $('#'+rowId).remove();
-                        $('.cart_count').text(data.cart_count);
-                        $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.cart_total);
-                    }
-                }
-            })
-        });
-
-        $(document).on('click','.remove_cart_from_details',function(event) {
-            event.preventDefault();
-            var rowId = $(this).data('id');
-            var removeCartItemFromDetails = $(this).closest('tr');
-            $.ajax({
-                url: "{{ route('cart.remove') }}",
-                type: "GET",
-                data: {rowId:rowId},
-                success: function (data) {
-                    if (data.type=='success') {
-                        removeCartItemFromDetails.remove();
-                        $('.cart_count').text(data.cart_count);
-                        $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.cart_total);
-
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Successfully deleted from cart'
-                        })
-                    }
-                }
-            })
-        });
-
-        $('.quantity_change_submit').on("click",function(e){
-            e.preventDefault();
-            var rowId = $(this).data('id');
-            var input_number = $('.'+rowId).val();
-            var shipping_charge =$('.shippingCharge:checked').val();
-            if (!shipping_charge) {
-                shipping_charge = 0;
-            }
-            var coupon_value = $('#coupon_value').val();
-            if (!coupon_value) {
-                coupon_value = 0;
-            }
-            console.log(coupon_value);
-            $.ajax({
-                url: "{{ route('cart.quantity_change') }}",
-                type: "GET",
-                data: {rowId:rowId,qty:input_number,shipping_charge:shipping_charge,coupon_value:coupon_value},
-                success: function (data) {
-                    if (data.type=='success') {
-                        $('.cart_count').text(data.cart_count);
-                        $('.cartSubtotal').text(data.subtotal);
-                        $('.cart_total').text(data.cart_total);
-                        $('.total_price').text(data.total);
-                        $('.subtotal_'+rowId).text(data.cart_subtotal);
-                    }
-                }
-            })
-        });
-
-
-        //Search field
-        $('#search_field').hide();
-
-        $(document).ready(function(){
-            $('#searchText').keyup(function(){
-                var txt = $(this).val();
-                if (txt!='') {
-                    $.ajax({
-                        url: "{{ route('cartpro.data_ajax_search') }}",
-                        type: "GET",
-                        data: {search_txt:txt},
-                        success: function (data) {
-                            $('#search_field').show();
-                            $('#result').html(data);
+                        else if(data.type=='quantity_limit'){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Available product is : '+data.product_quantity
+                            });
                         }
-                    })
-                }
-                else{
-                    $('#search_field').hide();
-                    $('#result').empty();
-                }
-
-            })
-        });
-
-        $("#newsLatterSubmitForm").on("submit",function(e){
-            e.preventDefault();
-            $.ajax({
-                url: "{{route('cartpro.newslatter_store')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    if (data.type=='error') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong!',
-                        })
                     }
-                    else if (data.type=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: data.message,
-                        })
-
-                        $('#newsLatterSubmitForm')[0].reset();
-                    }
-                }
+                });
             });
-        });
 
-        $("#newsLatterSubmitFormPopUp").on("submit",function(e){
-            e.preventDefault();
-            $.ajax({
-                url: "{{route('cartpro.newslatter_store')}}",
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function (data) {
-                    if (data.type=='error') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong!',
-                        })
-                    }
-                    else if (data.type=='success') {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: data.message,
-                        })
-
-                        $('#newsLatterSubmitFormPopUp')[0].reset();
-                        $('#newsletter-modal').modal('hide');
-                    }
-                }
+            $('.forbidden_wishlist').on("click",function(e){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please Login First',
+                });
             });
-        });
 
-        $('.attribute_value').on("click",function(e){
-            e.preventDefault();
-            $(this).addClass('selected');
 
-            // var attribute_name = $(this).data('attribute_name');
-            // attribute_name_arr.push(attribute_name);
-            // var unique_attribute_name = attribute_name_arr.filter(function(itm, i, attribute_name_arr) {
-            //     return i == attribute_name_arr.indexOf(itm);
-            // });
-            // $.each(unique_attribute_name, function( key, value ) {
-            //     if (value == attribute_name) {
-            //         $(this).addClass('selected');
+            $(document).on('click','.remove_cart',function(event) {
+                event.preventDefault();
+                var rowId = $(this).data('id');
+                $.ajax({
+                    url: "{{ route('cart.remove') }}",
+                    type: "GET",
+                    data: {rowId:rowId},
+                    success: function (data) {
+                        if (data.type=='success') {
+                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
+                            $('#'+rowId).remove();
+                            $('.'+rowId).remove();
+                            $('.cart_count').text(data.cart_count);
+                            $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                            $('.total_price').text(amountConvertToCurrency.toFixed(2));
+                        }
+                    }
+                })
+            });
+
+            // $('.quantity_change_submit').on("click",function(e){
+            //     e.preventDefault();
+            //     var rowId = $(this).data('id');
+            //     var input_number = $('.'+rowId).val();
+            //     var shipping_charge =$('.shippingCharge:checked').val();
+            //     if (!shipping_charge) {
+            //         shipping_charge = 0;
             //     }
+            //     var coupon_value = $('#coupon_value').val();
+            //     if (!coupon_value) {
+            //         coupon_value = 0;
+            //     }
+            //     console.log(coupon_value);
+            //     $.ajax({
+            //         url: "{{ route('cart.quantity_change') }}",
+            //         type: "GET",
+            //         data: {rowId:rowId,qty:input_number,shipping_charge:shipping_charge,coupon_value:coupon_value},
+            //         success: function (data) {
+            //             if (data.type=='success') {
+            //                 $('.cart_count').text(data.cart_count);
+            //                 $('.cartSubtotal').text(data.subtotal);
+            //                 $('.cart_total').text(data.cart_total);
+            //                 $('.total_price').text(data.total);
+            //                 $('.subtotal_'+rowId).text(data.cart_subtotal);
+            //             }
+            //         }
+            //     })
             // });
 
-            var selectedVal = $(this).data('value_id');
-            values.push(selectedVal);
-            $('#value_ids').val(values);
+            //Search field
+            $('#search_field').hide();
 
-        });
+            $(document).ready(function(){
+                $('#searchText').keyup(function(){
+                    var txt = $(this).val();
+                    if (txt!='') {
+                        $.ajax({
+                            url: "{{ route('cartpro.data_ajax_search') }}",
+                            type: "GET",
+                            data: {search_txt:txt},
+                            success: function (data) {
+                                $('#search_field').show();
+                                $('#result').empty().html(data);
+                            }
+                        })
+                    }
+                    else{
+                        $('#search_field').hide();
+                        $('#result').empty();
+                    }
 
-        $('#disable_popup').on("click",function (e) {
-            var disable_popup =  $('#disable_popup').val();
-            if (disable_popup==1) {
-                $('#disable_popup_newslatter').val(1);
-            }else{
-                $('#disable_popup_newslatter').val(0);
-            }
-        });
+                })
+            });
 
-        $('#stripeContent').hide();
+            $("#newsLatterSubmitForm").on("submit",function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: "{{route('cartpro.newslatter_store')}}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.type=='error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                        else if (data.type=='success') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message,
+                            })
 
+                            $('#newsLatterSubmitForm')[0].reset();
+                        }
+                    }
+                });
+            });
+
+            $("#newsLatterSubmitFormPopUp").on("submit",function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: "{{route('cartpro.newslatter_store')}}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.type=='error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                        else if (data.type=='success') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message,
+                            })
+
+                            $('#newsLatterSubmitFormPopUp')[0].reset();
+                            $('#newsletter-modal').modal('hide');
+                        }
+                    }
+                });
+            });
+
+            $('.attribute_value').on("click",function(e){
+                e.preventDefault();
+                $(this).addClass('selected');
+
+                // var attribute_name = $(this).data('attribute_name');
+                // attribute_name_arr.push(attribute_name);
+                // var unique_attribute_name = attribute_name_arr.filter(function(itm, i, attribute_name_arr) {
+                //     return i == attribute_name_arr.indexOf(itm);
+                // });
+                // $.each(unique_attribute_name, function( key, value ) {
+                //     if (value == attribute_name) {
+                //         $(this).addClass('selected');
+                //     }
+                // });
+
+                var selectedVal = $(this).data('value_id');
+                values.push(selectedVal);
+                $('#value_ids').val(values);
+
+            });
+
+            $('#disable_popup').on("click",function (e) {
+                var disable_popup =  $('#disable_popup').val();
+                if (disable_popup==1) {
+                    $('#disable_popup_newslatter').val(1);
+                }else{
+                    $('#disable_popup_newslatter').val(0);
+                }
+            });
+
+            $(document).on('click','.add_to_wishlist',function(e) {
+                e.preventDefault();
+                var product_id = $(this).data('product_id');
+                var category_id = $(this).data('category_id');
+                var product_slug = $(this).data('product_slug');
+
+                $.ajax({
+                    url: "{{ route('wishlist.add') }}",
+                    type: "GET",
+                    data: {
+                        product_id:product_id,
+                        category_id:category_id,
+                        product_slug:product_slug
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.type=='success') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message,
+                            });
+                        }else if(data.type=='not_authorized'){
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.message,
+                            });
+                        }
+                        $('.wishlist_count').text(data.wishlist_count);
+                    }
+                })
+            });
+
+            $('#stripeContent').hide();
+        })(jQuery);
     </script>
 
     {{-- @if (\Route::current()->getName() == 'cart.view_details')
@@ -562,10 +529,10 @@
                 // var data = $("#deleteCart").val();
                 // console.log(data);
             });
+
         </script>
     @endif --}}
     @stack('scripts')
 </body>
-
 </html>
 

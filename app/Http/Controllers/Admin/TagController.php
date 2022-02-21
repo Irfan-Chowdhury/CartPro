@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\SlugTrait;
+
 
 class TagController extends Controller
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, SlugTrait;
 
     public function index()
     {
@@ -94,7 +96,7 @@ class TagController extends Controller
             if ($request->ajax())
             {
                 $tag = new Tag();
-                $tag->slug  = $this->make_slug($request->tag_name);
+                $tag->slug  = $this->slug($request->tag_name);
                 if ($request->is_active==1) {
                     $tag->is_active = 1;
                 }else {
@@ -113,36 +115,30 @@ class TagController extends Controller
         }
     }
 
-    public function make_slug($string) {
-
-        if (Session::get('currentLocal')=='en') {
-            $string = strtolower($string);
-        }
-        return preg_replace('/\s+/u', '-', trim($string));
-    }
-
     public function edit(Request $request)
     {
         $tag = Tag::find($request->tag_id);
-        $tag_name = TagTranslation::where('tag_id',$request->tag_id)
+        $tag_translation = TagTranslation::where('tag_id',$request->tag_id)
                         ->where('local',Session::get('currentLocal'))
-                        ->pluck('tag_name');
+                        ->select('tag_name','id')
+                        ->first();
 
-        return response()->json(['tag' => $tag , 'tag_name' => $tag_name]);
+        return response()->json(['tag' => $tag , 'tag_translation' => $tag_translation]);
     }
 
-    public function update(Request $request) //Unique validation update later
+    public function update(Request $request)
     {
         $validator = Validator::make($request->only('tag_name'),[
-            'tag_name'  => 'required',
+            'tag_name'  => 'required|unique:tag_translations,tag_name,'.$request->tag_translation_id,
         ]);
         if ($validator->fails()){
-            return response()->json(['error' => 'Please fill up the required field.']);
+            return response()->json(['errors' => $validator->errors()->all()]);
         }
 
         if (auth()->user()->can('tag-edit'))
         {
             $tag = Tag::find($request->tag_id);
+            $tag->slug  = $this->slug($request->tag_name);
             if ($request->is_active==1) {
                 $tag->is_active = 1;
             }else {
@@ -152,11 +148,11 @@ class TagController extends Controller
 
             DB::table('tag_translations')
             ->updateOrInsert(
-                [   //condition
+                [
                     'tag_id'  => $request->tag_id,
                     'local'   => Session::get('currentLocal'),
                 ],
-                [   //set value
+                [
                     'tag_name' => $request->tag_name,
                 ]
             );

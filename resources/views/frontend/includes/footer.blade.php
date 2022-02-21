@@ -5,11 +5,11 @@
             <div class="col-lg-7 col-md-6">
                 <div class="d-flex align-items-center">
                     <div>
-                        <i class="ion-ios-paperplane-outline me-3"></i>
+                        <i class="las la-paper-plane me-3"></i>
                     </div>
                     <div>
-                        <h3 class="mb-0">Subscribe to our Newsletter</h3>
-                        <p>Get <strong>10%</strong> discount on your next order when you signup!</p>
+                        <h3 class="mb-0">@lang('file.Subscribe to our Newsletter')</h3>
+                        <p>@lang('file.Subscribe to our newsletter & get notification about discounts.')</p>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                 <form class="newsletter" id="newsLatterSubmitForm" action="{{route('cartpro.newslatter_store')}}" method="POST">
                     @csrf
                     <input type="email" placeholder="Enter your email" name="email" required>
-                    <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
+                    <button type="submit" class="button style1 btn-search" type="submit">@lang('file.Subscribe')</button>
                 </form>
             </div>
         </div>
@@ -29,51 +29,60 @@
 <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
 <!--Scroll to top ends-->
 <!-- Footer section Starts-->
-<div class="footer-wrapper pt-0">
-<div class="container">
-    <hr class="mt-0">
-    <div class="row">
-        <div class="col-lg-5 col-md-4">
-            <div class="footer-logo">
-                <a href="#"><img src="{{asset($header_logo_path)}}"></a>
+<div class="footer-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-4">
+                <div class="footer-logo">
+                    <a href="#"><img src="{{$header_logo_path}}"></a>
+                </div>
+                <div class="footer-text">
+                    <h5 class="text-grey mb-0">@lang('file.Got Question? Call us') :</h5>
+                    <h4>{{$setting_store->store_email ?? null}}</h4>
+                </div>
+                <div class="footer-text">
+                    <h6 class="text-grey mb-0">@lang('file.Contact Info')</h6>
+                    <p><span><i class="las la-envelope"></i> &nbsp; {{$setting_store->store_email ?? null}}</span></p>
+                    <p><span><i class="las la-map-marker"></i> &nbsp; {{$storefront_address}}</span></p>
+                </div>
+                <ul class="footer-social mt-3 p-0">
+                    @if ($storefront_facebook_link!=null)
+                        <li><a href="{{$storefront_facebook_link}}"><i class="ti-facebook"></i></a></li>
+                    @endif
+                    @if ($storefront_twitter_link!=null)
+                        <li><a href="{{$storefront_twitter_link}}"><i class="ti-twitter"></i></a></li>
+                    @endif
+                    @if ($storefront_instagram_link!=null)
+                        <li><a href="{{$storefront_instagram_link}}"><i class="ti-instagram"></i></a></li>
+                    @endif
+                    @if ($storefront_youtube_link!=null)
+                        <li><a href="{{$storefront_youtube_link}}"><i class="ti-youtube"></i></a></li>
+                    @endif
+                </ul>
             </div>
-            <div class="footer-text">
-                <h5 class="text-grey mb-0">Got Question? Call us:</h5>
-                <h4>{{$setting_store->store_email ?? null}}</h4>
-            </div>
-            <div class="footer-text">
-                <h6 class="text-grey mb-0">Contact Info</h6>
-                <p><span><i class="las la-envelope"></i> &nbsp; {{$setting_store->store_email ?? null}}</span></p>
-                <p><span><i class="las la-map-marker"></i> &nbsp; {{$storefront_address}}</span></p>
-            </div>
-            <ul class="footer-social mt-3 p-0">
-                @if ($storefront_facebook_link!=null)
-                    <li><a href="{{$storefront_facebook_link}}"><i class="ti-facebook"></i></a></li>
-                @endif
-                @if ($storefront_twitter_link!=null)
-                    <li><a href="{{$storefront_twitter_link}}"><i class="ti-twitter"></i></a></li>
-                @endif
-                @if ($storefront_instagram_link!=null)
-                    <li><a href="{{$storefront_instagram_link}}"><i class="ti-instagram"></i></a></li>
-                @endif
-                @if ($storefront_youtube_link!=null)
-                    <li><a href="{{$storefront_youtube_link}}"><i class="ti-youtube"></i></a></li>
-                @endif
-
-                {{-- <li><a href="#"><i class="ti-twitter"></i></a></li>
-                <li><a href="#"><i class="ti-instagram"></i></a></li>
-                <li><a href="#"><i class="ti-pinterest"></i></a></li> --}}
-            </ul>
-        </div>
-        <div class="col-lg-7 col-md-8">
-            <div class="row">
-                <div class="col-md-4 col-sm-6">
-                    <div class="footer-widget style1">
-                        <h3>{{$footer_menu_one_title}}</h3>
-                        <div class="d-flex justify-content-between">
+            <div class="col-lg-7 col-md-8">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="footer-widget style1">
+                            <h3>{{$footer_menu_one_title}}</h3>
+                            <div class="d-flex justify-content-between">
+                                <ul class="footer-menu">
+                                    @if ($footer_menu_one)
+                                        @forelse($footer_menu_one->items as $value)
+                                            <li><a class="" href="">{{$value->label}}</a></li>
+                                        @empty
+                                        @endforelse
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="footer-widget style1">
+                            <h3>{{$footer_menu_title_two}}</h3>
                             <ul class="footer-menu">
-                                @if ($footer_menu_one)
-                                    @forelse($footer_menu_one->items as $value)
+                                @if ($footer_menu_two)
+                                    @forelse($footer_menu_two->items as $value)
                                         <li><a class="" href="">{{$value->label}}</a></li>
                                     @empty
                                     @endforelse
@@ -81,54 +90,36 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="footer-widget style1">
-                        <h3>{{$footer_menu_title_two}}</h3>
-                        <ul class="footer-menu">
-                            @if ($footer_menu_two)
-                                @forelse($footer_menu_two->items as $value)
-                                    <li><a class="" href="">{{$value->label}}</a></li>
-                                @empty
-                                @endforelse
-                            @endif
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="footer-widget style1">
-                        <h3>Company</h3>
-                        <ul class="footer-menu">
-                            <li><a class="" href="about.html">About us</a></li>
-                            <li><a class="" href="contact.html">Contact</a></li>
-                            <li><a class="" href="#">Career</a></li>
-                        </ul>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="footer-widget style1">
+                            <h3>Company</h3>
+                            <ul class="footer-menu">
+                                <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
+                                <li><a href="{{route('cartpro.brands')}}">@lang('file.Brands')</a></li>
+                                <li><a href="{{route('cartpro.shop')}}">@lang('file.Shop')</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row footer-bottom">
-        <div class="col-md-6">
-            <p>&copy; 2020. All rights reserved</p>
-        </div>
-        <div class="col-md-6">
-            <div class="footer-payment-options">
-                <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Stripe"><i class="pw pw-stripe"></i></span>
-                <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Paypal"><i class="pw pw-paypal"></i></span>
-                <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Visa"><i class="pw pw-visa"></i></span>
-                <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Mastercard"><i class="pw pw-mastercard"></i></span>
-                <span data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Amex"><i class="pw pw-american-express"></i></span>
+        <div class="row footer-bottom">
+            <div class="col-md-6">
+                <p>{!! html_entity_decode($storefront_copyright_text) !!}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="footer-payment-options">
+                    <img src="{{$payment_method_image}}" width="342px" height="30px">
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- Footer section Ends-->
 <!-- Cookie consent Starts-->
 {{-- <div class="alert alert-primary alert-dismissible fade show cookie-alert" role="alert">
 <div class="d-flex justify-content-center align-items-center">
-    <i class="ion-ios-information"></i> --}}
+    <i class="las la-info-circle"></i> --}}
     @include('cookieConsent::index')
 {{-- </div>
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -140,7 +131,7 @@
     <div class="modal-content">
         <div class="modal-body">
             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+                <span aria-hidden="true"><i class="las la-times"></i></span>
             </button>
             <div class="row">
                 <div class="col-md-6">
@@ -183,11 +174,11 @@
                             <div class="item-brand">Brand: <a href="">Samsung</a></div>
                             <div class="item-review">
                                 <ul class="p-0 m-0">
-                                    <li><i class="ion-ios-star"></i></li>
-                                    <li><i class="ion-ios-star"></i></li>
-                                    <li><i class="ion-ios-star"></i></li>
-                                    <li><i class="ion-ios-star"></i></li>
-                                    <li><i class="ion-android-star-half"></i></li>
+                                    <li><i class="las la-star"></i></li>
+                                    <li><i class="las la-star"></i></li>
+                                    <li><i class="las la-star"></i></li>
+                                    <li><i class="las la-star"></i></li>
+                                    <li><i class="las la-star-half"></i></li>
                                 </ul>
                                 <span>( 04 )</span>
                             </div>
@@ -262,11 +253,11 @@
             <div class="modal-content" style="background-image: url('public/frontend/images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
                 <div class="modal-body">
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+                        <span aria-hidden="true"><i class="las la-times"></i></span>
                     </button>
                     <div class="row">
                         <div class="col-lg-7">
-                            <h3 class="h2 semi-bold">Get <span class="theme-color">10%</span> discount!</h3>
+                            <h3 class="h2 semi-bold">@lang('file.Subscribe to our newsletter & get notification about discounts.')</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
                             <form class="newsletter" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
                                 @csrf
@@ -290,9 +281,3 @@
 @endif
 
 <!--Quick shop modal ends-->
-<!-- FACEBOOK CHAT PLUGIN STARTS -->
-<!-- Messenger Chat plugin Code -->
-<div id="fb-root"></div>
-<!-- Your Chat plugin code -->
-<div id="fb-customer-chat" class="fb-customerchat">
-</div>

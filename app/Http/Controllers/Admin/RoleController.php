@@ -13,11 +13,6 @@ class RoleController extends Controller
 {
     use ActiveInactiveTrait;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:admin');
-    // }
-
     public function index()
     {
         if (auth()->user()->can('role-view'))
@@ -101,14 +96,6 @@ class RoleController extends Controller
 
     public function update(Request $request)
     {
-        // $validator = Validator::make($request->only('role_name'),[
-        //     'role_name'  => 'required',
-        // ]);
-
-        // if ($validator->fails()){
-        //     return response()->json(['errors' => 'Please fill up the required field.']);
-        // }
-
         if (auth()->user()->can('role-edit'))
         {
             if ($request->ajax()) {

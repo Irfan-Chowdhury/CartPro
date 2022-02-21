@@ -19,5 +19,6 @@ class SettingStore extends Model
         'store_zip',
         'hide_store_phone',
         'hide_store_email',
+        'admin_logo',
     ];
 }

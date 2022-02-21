@@ -46,14 +46,15 @@ function addcustommenu() {
       labelmenu: $('#custom-menu-item-name').val(),
       linkmenu: $('#custom-menu-item-url').val(),
       rolemenu: $('#custom-menu-item-role').val(),
-      idmenu: $('#idmenu').val()
+      idmenu: $('#idmenu').val(),
+      locale: $('#locale').val()
     },
 
     url: addcustommenur,
     type: 'POST',
     success: function(response) {
       window.location.reload();
-      console.log('1');
+      console.log('ok1');
     },
     complete: function() {
       $('#spincustomu').hide();
@@ -143,7 +144,7 @@ function actualizarmenu() {
       $('#spincustomu2').show();
     },
     success: function(response) {
-      console.log('ok');
+      console.log('ok1');
     },
     complete: function() {
       $('#spincustomu2').hide();

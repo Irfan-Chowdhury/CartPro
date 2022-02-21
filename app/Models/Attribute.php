@@ -15,11 +15,6 @@ class Attribute extends Model
         'is_active'
     ];
 
-    // public function attributeTranslation()
-    // {
-    // 	return $this->hasMany(AttributeTranslation::class,'attribute_id');
-    // }
-
     //Attribute
     public function attributeTranslation()
     {
@@ -63,15 +58,4 @@ class Attribute extends Model
     {
         return $this->belongsToMany(Category::class); //db: attribute_category
     }
-
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Category::class,'category_attribute');
-    // }
-
-    //For Produc
-    // public function attributeValueTranslation()
-    // {
-    // 	return $this->hasMany(AttributeValueTranslation::class,'attribute_id');
-    // }
 }
