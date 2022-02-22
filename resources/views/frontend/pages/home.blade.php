@@ -693,7 +693,8 @@
                                                         @endif
 
                                                         <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                            {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a> --}}
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                             <a>
                                                                 <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
                                                             </a>
@@ -819,85 +820,87 @@
                             <div class="list-slider-wrapper-1 swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        @forelse ($vertical_product_1 as $item)
-                                            @if ($item->product->is_active==1)
-                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                    <input type="hidden" name="qty" value="1">
+                                        @forelse ($vertical_product_1 as $key => $item)
+                                            @if ($key<3)
+                                                @if ($item->product->is_active==1)
+                                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                        <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                        <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                        <input type="hidden" name="qty" value="1">
 
-                                                    <div class="single-product-wrapper list">
-                                                        <div class="single-product-item">
+                                                        <div class="single-product-wrapper list">
+                                                            <div class="single-product-item">
 
-                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
-                                                            @else
-                                                                <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
-                                                            @endif
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @else
+                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                @endif
 
-                                                        </div>
-                                                        <div class="product-details">
-                                                            <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
-                                                            </a>
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <div class="rating-summary">
-                                                                        <div class="rating-result" title="60%">
-                                                                            <ul class="product-rating">
-                                                                                @php
-                                                                                    for ($i=1; $i <=5 ; $i++){
-                                                                                        if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                            <li><i class="las la-star"></i></li>
-                                                                                @php
-                                                                                        }else { @endphp
-                                                                                            <li><i class="lar la-star"></i></li>
-                                                                                @php        }
-                                                                                    }
-                                                                                @endphp
-                                                                            </ul>
+                                                            </div>
+                                                            <div class="product-details">
+                                                                <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                    {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                                </a>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <div class="rating-summary">
+                                                                            <div class="rating-result" title="60%">
+                                                                                <ul class="product-rating">
+                                                                                    @php
+                                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                                <li><i class="las la-star"></i></li>
+                                                                                    @php
+                                                                                            }else { @endphp
+                                                                                                <li><i class="lar la-star"></i></li>
+                                                                                    @php        }
+                                                                                        }
+                                                                                    @endphp
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-price">
+                                                                            @if ($item->product->special_price>0)
+                                                                                <span class="promo-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                                <span class="old-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @else
+                                                                                <span class="price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
-                                                                    <div class="product-price">
-                                                                        @if ($item->product->special_price>0)
-                                                                            <span class="promo-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
-                                                                            <span class="old-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                    <div>
+                                                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                                            <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @else
-                                                                            <span class="price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                        <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @else
-                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @endif
-                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                @endif
                                             @endif
                                         @empty
                                         @endif
@@ -918,85 +921,87 @@
                             <div class="list-slider-wrapper-2 swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        @forelse ($vertical_product_2 as $item)
-                                            @if ($item->product->is_active==1)
-                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                    <input type="hidden" name="qty" value="1">
+                                        @forelse ($vertical_product_2 as $key => $item)
+                                            @if ($key<3)
+                                                @if ($item->product->is_active==1)
+                                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                        <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                        <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                        <input type="hidden" name="qty" value="1">
 
-                                                    <div class="single-product-wrapper list">
-                                                        <div class="single-product-item">
-                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
-                                                            @else
-                                                                <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
-                                                            @endif
+                                                        <div class="single-product-wrapper list">
+                                                            <div class="single-product-item">
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @else
+                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                @endif
 
 
-                                                        </div>
-                                                        <div class="product-details">
-                                                            <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
-                                                            </a>
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <div class="rating-summary">
-                                                                        <div class="rating-result" title="60%">
-                                                                            <ul class="product-rating">
-                                                                                @php
-                                                                                    for ($i=1; $i <=5 ; $i++){
-                                                                                        if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                            <li><i class="las la-star"></i></li>
-                                                                                @php
-                                                                                        }else { @endphp
-                                                                                            <li><i class="lar la-star"></i></li>
-                                                                                @php        }
-                                                                                    }
-                                                                                @endphp
-                                                                            </ul>
+                                                            </div>
+                                                            <div class="product-details">
+                                                                <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                    {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                                </a>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <div class="rating-summary">
+                                                                            <div class="rating-result" title="60%">
+                                                                                <ul class="product-rating">
+                                                                                    @php
+                                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                                <li><i class="las la-star"></i></li>
+                                                                                    @php
+                                                                                            }else { @endphp
+                                                                                                <li><i class="lar la-star"></i></li>
+                                                                                    @php        }
+                                                                                        }
+                                                                                    @endphp
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-price">
+                                                                            @if ($item->product->special_price>0)
+                                                                                <span class="promo-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                                <span class="old-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @else
+                                                                                <span class="price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
-                                                                    <div class="product-price">
-                                                                        @if ($item->product->special_price>0)
-                                                                            <span class="promo-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
-                                                                            <span class="old-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                    <div>
+                                                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                                            <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @else
-                                                                            <span class="price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                        <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @else
-                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @endif
-                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                @endif
                                             @endif
                                         @empty
                                         @endif
@@ -1017,84 +1022,86 @@
                             <div class="list-slider-wrapper-3 swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        @forelse ($vertical_product_3 as $item)
-                                            @if ($item->product->is_active==1)
-                                                <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                                    <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                                    <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
-                                                    <input type="hidden" name="qty" value="1">
+                                        @forelse ($vertical_product_3 as $key => $item)
+                                            @if ($key<3)
+                                                @if ($item->product->is_active==1)
+                                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                        <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
+                                                        <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                                        <input type="hidden" name="qty" value="1">
 
-                                                    <div class="single-product-wrapper list">
-                                                        <div class="single-product-item">
-                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
-                                                            @else
-                                                                <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
-                                                            @endif
+                                                        <div class="single-product-wrapper list">
+                                                            <div class="single-product-item">
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @else
+                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                @endif
 
-                                                        </div>
-                                                        <div class="product-details">
-                                                            <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                                {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
-                                                            </a>
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <div class="rating-summary">
-                                                                        <div class="rating-result" title="60%">
-                                                                            <ul class="product-rating">
-                                                                                @php
-                                                                                    for ($i=1; $i <=5 ; $i++){
-                                                                                        if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                            <li><i class="las la-star"></i></li>
-                                                                                @php
-                                                                                        }else { @endphp
-                                                                                            <li><i class="lar la-star"></i></li>
-                                                                                @php        }
-                                                                                    }
-                                                                                @endphp
-                                                                            </ul>
+                                                            </div>
+                                                            <div class="product-details">
+                                                                <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
+                                                                    {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                                </a>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <div class="rating-summary">
+                                                                            <div class="rating-result" title="60%">
+                                                                                <ul class="product-rating">
+                                                                                    @php
+                                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                                <li><i class="las la-star"></i></li>
+                                                                                    @php
+                                                                                            }else { @endphp
+                                                                                                <li><i class="lar la-star"></i></li>
+                                                                                    @php        }
+                                                                                        }
+                                                                                    @endphp
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-price">
+                                                                            @if ($item->product->special_price>0)
+                                                                                <span class="promo-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                                <span class="old-price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @else
+                                                                                <span class="price">
+                                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    @else
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
-                                                                    <div class="product-price">
-                                                                        @if ($item->product->special_price>0)
-                                                                            <span class="promo-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
-                                                                            <span class="old-price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                    <div>
+                                                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                                            <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @else
-                                                                            <span class="price">
-                                                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                                @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                                @endif
-                                                                            </span>
+                                                                            <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                        <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @else
-                                                                        <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                    @endif
-                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                @endif
                                             @endif
                                         @empty
                                         @endif

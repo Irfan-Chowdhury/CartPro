@@ -1,5 +1,6 @@
     <!-- Quick Shop Modal starts -->
-    <div class="modal fade quickshop" id="flash_sale_{{$item->product->slug ?? null}}" tabindex="-1" role="dialog" aria-labelledby="flash_sale_{{$item->product->slug ?? null}}" aria-hidden="true">
+    {{-- <div class="modal fade quickshop" id="flash_sale_{{$item->product->slug ?? null}}" tabindex="-1" role="dialog" aria-labelledby="flash_sale_{{$item->product->slug ?? null}}" aria-hidden="true"> --}}
+    <div class="modal fade quickshop" id="id_{{$item->product->id}}" tabindex="-1" role="dialog" aria-labelledby="flash_sale_{{$item->product->slug ?? null}}" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-body">

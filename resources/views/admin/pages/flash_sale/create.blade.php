@@ -19,7 +19,6 @@
     <div class="container">
         <form action="{{route('admin.flash_sale.store')}}" id="submitForm" method="POST">
             @csrf
-
             <div class="card">
                 <div class="card-body">
 
@@ -219,42 +218,42 @@
             })
 
 
-            $('#submitForm').on('submit', function (event) {
-                event.preventDefault();
-                console.log('ok');
-                $.ajax({
-                    url: "{{ route('admin.flash_sale.store') }}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
+            // $('#submitForm').on('submit', function (event) {
+            //     event.preventDefault();
+            //     console.log('ok');
+            //     $.ajax({
+            //         url: "{{ route('admin.flash_sale.store') }}",
+            //         method: "POST",
+            //         data: new FormData(this),
+            //         contentType: false,
+            //         cache: false,
+            //         processData: false,
+            //         dataType: "json",
+            //         success: function (data) {
+            //             console.log(data);
 
-                        var html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        if (data.error) {
-                            html = '<div class="alert alert-danger">' + data.error + '</div>';
-                        }
-                        if (data.success) {
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                            $('#submitForm')[0].reset();
-                            $('select').selectpicker('refresh');
-                            $('.date').datepicker('update');
-                            $('#employee-table').DataTable().ajax.reload();
-                        }
-                        $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                    }
-                });
-            });
+            //             var html = '';
+            //             if (data.errors) {
+            //                 html = '<div class="alert alert-danger">';
+            //                 for (var count = 0; count < data.errors.length; count++) {
+            //                     html += '<p>' + data.errors[count] + '</p>';
+            //                 }
+            //                 html += '</div>';
+            //             }
+            //             if (data.error) {
+            //                 html = '<div class="alert alert-danger">' + data.error + '</div>';
+            //             }
+            //             if (data.success) {
+            //                 html = '<div class="alert alert-success">' + data.success + '</div>';
+            //                 $('#submitForm')[0].reset();
+            //                 $('select').selectpicker('refresh');
+            //                 $('.date').datepicker('update');
+            //                 $('#employee-table').DataTable().ajax.reload();
+            //             }
+            //             $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+            //         }
+            //     });
+            // });
 
 
         })(jQuery);

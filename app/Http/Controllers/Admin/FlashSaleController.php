@@ -103,7 +103,7 @@ class FlashSaleController extends Controller
     {
         if (auth()->user()->can('flash_sale-store'))
         {
-            if ($request->ajax()) {
+            // if ($request->ajax()) {
 
                 $validator = Validator::make($request->all(),[
                     'product_id'=> 'required',
@@ -169,7 +169,7 @@ class FlashSaleController extends Controller
                 session()->flash('type','success');
                 session()->flash('message','Successfully Updated');
                 return redirect()->back();
-            }
+            // }
         }
 
     }

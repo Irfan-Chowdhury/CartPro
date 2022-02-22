@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2022 at 10:52 PM
+-- Generation Time: Feb 22, 2022 at 10:43 AM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- PHP Version: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -147,7 +147,9 @@ INSERT INTO `brands` (`id`, `slug`, `brand_logo`, `is_active`, `created_at`, `up
 (4, 'asus', 'images/brands/IYD2AmX929.png', 1, '2022-02-14 05:20:10', '2022-02-14 05:20:10'),
 (6, 'macbook', 'images/brands/HKwCvZdvUH.jpg', 1, '2022-02-14 23:32:19', '2022-02-14 23:32:19'),
 (7, 'lg', 'images/brands/ntKHCu8jVB.png', 1, '2022-02-20 03:38:46', '2022-02-20 03:38:46'),
-(8, 'sony', 'images/brands/Q70VGBwFGS.jpg', 1, '2022-02-20 04:10:53', '2022-02-20 04:10:53');
+(8, 'sony', 'images/brands/Q70VGBwFGS.jpg', 1, '2022-02-20 04:10:53', '2022-02-20 04:10:53'),
+(9, 'canon', 'images/brands/9StdOHUO4c.jpg', 1, '2022-02-22 01:07:51', '2022-02-22 01:07:51'),
+(10, 'fujifilm', 'images/brands/kwYagkVGzn.jpg', 1, '2022-02-22 01:21:51', '2022-02-22 01:21:51');
 
 -- --------------------------------------------------------
 
@@ -175,7 +177,9 @@ INSERT INTO `brand_translations` (`id`, `brand_id`, `local`, `brand_name`, `crea
 (4, 4, 'en', 'ASUS', '2022-02-14 05:20:10', '2022-02-14 05:20:10'),
 (6, 6, 'en', 'Macbook', '2022-02-14 23:32:20', '2022-02-14 23:32:20'),
 (7, 7, 'en', 'LG', '2022-02-20 03:38:47', '2022-02-20 03:38:47'),
-(8, 8, 'en', 'Sony', '2022-02-20 04:10:53', '2022-02-20 04:10:53');
+(8, 8, 'en', 'Sony', '2022-02-20 04:10:53', '2022-02-20 04:10:53'),
+(9, 9, 'en', 'Canon', '2022-02-22 01:07:51', '2022-02-22 01:07:51'),
+(10, 10, 'en', 'Fujifilm', '2022-02-22 01:21:51', '2022-02-22 01:21:51');
 
 -- --------------------------------------------------------
 
@@ -212,7 +216,9 @@ INSERT INTO `categories` (`id`, `slug`, `parent_id`, `image`, `icon`, `top`, `is
 (10, 'iphone', 1, 'images/categories/m7HodRuLNT.jpg', '', 1, 1, '2022-02-14 02:27:43', '2022-02-14 02:27:43'),
 (11, 'featured-phone', 1, 'images/categories/dAb7jF7Vgo.png', NULL, 1, 1, '2022-02-14 03:11:50', '2022-02-14 03:12:38'),
 (12, 'desktop', 2, 'images/categories/Q6IozrjfVZ.png', '', 0, 1, '2022-02-14 05:03:29', '2022-02-14 05:03:29'),
-(13, 'laptop', 2, 'images/categories/1wsyq0n63O.jpg', NULL, 1, 1, '2022-02-14 05:04:12', '2022-02-14 05:04:40');
+(13, 'laptop', 2, 'images/categories/1wsyq0n63O.jpg', NULL, 1, 1, '2022-02-14 05:04:12', '2022-02-14 05:04:40'),
+(14, 'camera-&-photo', NULL, 'images/categories/bwznVNPEDn.jpg', 'las la-photo-video', 1, 1, '2022-02-22 00:47:13', '2022-02-22 00:47:13'),
+(15, 'tablet', NULL, 'images/categories/wgUPDcKBP8.png', 'las la-tablet', 1, 1, '2022-02-22 02:30:23', '2022-02-22 02:30:23');
 
 -- --------------------------------------------------------
 
@@ -256,7 +262,19 @@ INSERT INTO `category_product` (`category_id`, `product_id`) VALUES
 (5, 19),
 (5, 20),
 (5, 21),
-(5, 22);
+(5, 22),
+(4, 23),
+(4, 24),
+(4, 25),
+(14, 26),
+(14, 27),
+(14, 28),
+(7, 29),
+(7, 30),
+(7, 31),
+(15, 32),
+(4, 33),
+(2, 34);
 
 -- --------------------------------------------------------
 
@@ -290,7 +308,9 @@ INSERT INTO `category_translations` (`id`, `category_id`, `local`, `category_nam
 (10, 10, 'en', 'iPhone', '2022-02-14 02:27:43', '2022-02-14 02:27:43'),
 (11, 11, 'en', 'Featured Phone', '2022-02-14 03:11:50', '2022-02-14 03:11:50'),
 (12, 12, 'en', 'Desktop', '2022-02-14 05:03:29', '2022-02-14 05:03:29'),
-(13, 13, 'en', 'Laptop', '2022-02-14 05:04:12', '2022-02-14 05:04:12');
+(13, 13, 'en', 'Laptop', '2022-02-14 05:04:12', '2022-02-14 05:04:12'),
+(14, 14, 'en', 'Camera & Photo', '2022-02-22 00:47:13', '2022-02-22 00:47:13'),
+(15, 15, 'en', 'Tablet', '2022-02-22 02:30:23', '2022-02-22 02:30:23');
 
 -- --------------------------------------------------------
 
@@ -731,6 +751,13 @@ CREATE TABLE `flash_sales` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `flash_sales`
+--
+
+INSERT INTO `flash_sales` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
+(2, 'spring', 1, '2022-02-22 02:45:34', '2022-02-22 02:45:34');
+
 -- --------------------------------------------------------
 
 --
@@ -749,6 +776,15 @@ CREATE TABLE `flash_sale_products` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `flash_sale_products`
+--
+
+INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `end_date`, `price`, `qty`, `position`, `created_at`, `updated_at`) VALUES
+(2, 2, 32, '2022-04-30', '120.00', 10, 0, '2022-02-22 02:45:34', '2022-02-22 02:45:34'),
+(5, 2, 33, '2022-04-28', '30.00', 20, 0, NULL, NULL),
+(6, 2, 34, '2022-03-10', '40.00', 20, 0, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -763,6 +799,13 @@ CREATE TABLE `flash_sale_translations` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `flash_sale_translations`
+--
+
+INSERT INTO `flash_sale_translations` (`id`, `flash_sale_id`, `local`, `campaign_name`, `created_at`, `updated_at`) VALUES
+(2, 2, 'en', 'Spring', '2022-02-22 02:45:34', '2022-02-22 02:45:34');
 
 -- --------------------------------------------------------
 
@@ -1303,7 +1346,19 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_pr
 (19, NULL, 1, 'beats-studio3-wireless-headphones-–-matte-black', '339.0000', '289.0000', '', NULL, '1970-01-01', '1970-01-01', '289.0000', 'KE35VGET', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-20 04:32:39', '2022-02-20 04:32:39', NULL),
 (20, NULL, 1, 'bose-quietcomfort-noise-cancelling-earbuds-–-black', '319.0000', '279.0000', '', NULL, '1970-01-01', '1970-01-01', '279.0000', 'CIKO6AE', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-20 04:35:57', '2022-02-20 04:36:29', NULL),
 (21, NULL, 1, 'bose-noise-cancelling-wireless-bluetooth', '479.0000', '439.0000', '', NULL, '1970-01-01', '1970-01-01', '439.0000', 'RO5JK73', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-20 04:39:41', '2022-02-20 04:39:41', NULL),
-(22, NULL, 1, 'google-pixel-buds,-clearly-white', '304.9500', '204.9500', '', NULL, '1970-01-01', '1970-01-01', '204.9500', 'HM45UYA', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-20 04:42:50', '2022-02-20 04:42:50', NULL);
+(22, NULL, 1, 'google-pixel-buds,-clearly-white', '304.9500', '204.9500', '', NULL, '1970-01-01', '1970-01-01', '204.9500', 'HM45UYA', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-20 04:42:50', '2022-02-20 04:42:50', NULL),
+(23, NULL, 1, 'cubitt-smart-watch-ct2s-waterproof-fitness-tracker', '65.0000', '95.0000', '', NULL, '1970-01-01', '1970-01-01', '95.0000', 'KM45VGRT', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 00:19:37', '2022-02-22 00:19:37', NULL),
+(24, NULL, 1, 'apple-watch-series-3-gps-–-42mm-–-sport-band', '299.0000', '249.0000', '', NULL, '1970-01-01', '1970-01-01', '249.0000', 'EQA5VGRT', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 00:25:42', '2022-02-22 00:25:42', NULL),
+(25, 1, 1, 'samsung-galaxy-watch-active-2-aluminum', '249.9900', '229.9900', '', NULL, '1970-01-01', '1970-01-01', '229.9900', 'CE45UGT', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 00:41:30', '2022-02-22 00:41:30', NULL),
+(26, 9, 1, 'canon-eos-rebel-camera-t7-ef-s-18-55mm-is-ii-kit', '529.9900', '479.9900', '', NULL, '1970-01-01', '1970-01-01', '479.9900', 'KMT5VET', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 01:10:55', '2022-02-22 01:10:55', NULL),
+(27, 9, 1, 'canon-sx740bk-powershot-sx740-hs-digital-camera', '499.9500', '399.9500', '', NULL, '1970-01-01', '1970-01-01', '399.9500', 'BE9TGAV', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 01:18:44', '2022-02-22 01:18:44', NULL),
+(28, 10, 1, 'fujifilm-16642939-x100v-digital-camera-–-silver', '1699.0000', '1399.0000', '', NULL, '1970-01-01', '1970-01-01', '1399.0000', 'BE459GRT', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 01:24:21', '2022-02-22 01:24:21', NULL),
+(29, NULL, 1, 'first-dance-extra-large-shoes-for-men-casual-shoes-camo-print-big-size-fashion-sneakers-for-man', '180.0000', '0.0000', '', NULL, '1970-01-01', '1970-01-01', '0.0000', 'GDSFSDF', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 01:44:26', '2022-02-22 01:44:26', NULL),
+(30, NULL, 1, 'cokafil-mens-running-shoes-athletic-walking-blade-tennis-shoes-fashion-sneakers', '550.0000', '0.0000', '', NULL, '1970-01-01', '1970-01-01', '0.0000', '17998302', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 02:02:42', '2022-02-22 02:02:42', NULL),
+(31, NULL, 1, 'wonder-nation-toddler-girls-glitter-casual-mary-jane-sneakers', '2156.0000', '0.0000', '', NULL, '1970-01-01', '1970-01-01', '0.0000', '45581026', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 02:10:24', '2022-02-22 02:10:24', NULL),
+(32, NULL, 1, 'dragon-touch-max10-tablet-android-10.0-os', '189.9900', '129.9900', '', NULL, '1970-01-01', '1970-01-01', '129.9900', 'ZR45VGRT', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 02:33:31', '2022-02-22 02:33:31', NULL),
+(33, NULL, 1, 'garmin-vivo-smart-3-activity-tracker-–-large', '49.9900', '39.9900', '', NULL, '1970-01-01', '1970-01-01', '39.9900', 'BE458GET', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 02:58:36', '2022-02-22 02:58:36', NULL),
+(34, NULL, 1, 'echo-dot-(4th-gen,-2020-release)-|-smart-speaker', '49.9900', '69.0000', '', NULL, '1970-01-01', '1970-01-01', '69.0000', 'SO4JK47', 0, NULL, 1, NULL, 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', 0, '2022-02-22 03:40:18', '2022-02-22 03:40:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -1426,7 +1481,45 @@ INSERT INTO `product_images` (`id`, `product_id`, `image`, `type`, `created_at`,
 (87, 21, '/images/products/leeBIPpxsU.webp', 'additional', NULL, NULL),
 (88, 22, '/images/products/4l1LV6eNfS.webp', 'base', NULL, NULL),
 (89, 22, '/images/products/PWHNUfOUzj.webp', 'additional', NULL, NULL),
-(90, 22, '/images/products/CFiNLnfr18.webp', 'additional', NULL, NULL);
+(90, 22, '/images/products/CFiNLnfr18.webp', 'additional', NULL, NULL),
+(91, 23, '/images/products/8druJ8Ag4k.webp', 'base', NULL, NULL),
+(92, 23, '/images/products/1H4OSSruDh.webp', 'additional', NULL, NULL),
+(93, 23, '/images/products/maiNKUN0Ns.webp', 'additional', NULL, NULL),
+(94, 24, '/images/products/DvKRMbOFCR.webp', 'base', NULL, NULL),
+(95, 24, '/images/products/m3JmjZr2Tz.webp', 'additional', NULL, NULL),
+(96, 25, '/images/products/ag323drGTc.webp', 'base', NULL, NULL),
+(97, 25, '/images/products/8RZz6OVtzc.webp', 'additional', NULL, NULL),
+(98, 25, '/images/products/sa5ViWTL2l.webp', 'additional', NULL, NULL),
+(99, 25, '/images/products/NlSBCbaI6A.webp', 'additional', NULL, NULL),
+(100, 25, '/images/products/rUynPy3Ycs.webp', 'additional', NULL, NULL),
+(101, 26, '/images/products/6w5arLEMnO.webp', 'base', NULL, NULL),
+(102, 26, '/images/products/rTm0iWtKmV.webp', 'additional', NULL, NULL),
+(103, 26, '/images/products/lc47s7w3ts.webp', 'additional', NULL, NULL),
+(104, 26, '/images/products/PkZbOVkW96.webp', 'additional', NULL, NULL),
+(105, 27, '/images/products/Jx35Akri7E.webp', 'base', NULL, NULL),
+(106, 27, '/images/products/S0CzUuQDPh.webp', 'additional', NULL, NULL),
+(107, 28, '/images/products/aBVVN9YOoL.webp', 'base', NULL, NULL),
+(108, 28, '/images/products/dKtnbPI11v.webp', 'additional', NULL, NULL),
+(109, 28, '/images/products/m0S71yuTbk.webp', 'additional', NULL, NULL),
+(110, 28, '/images/products/PUorDiJK3r.webp', 'additional', NULL, NULL),
+(111, 28, '/images/products/0NXjd9NC7Z.webp', 'additional', NULL, NULL),
+(112, 29, '/images/products/qMXuTWrl3c.webp', 'base', NULL, NULL),
+(113, 29, '/images/products/F0h0OME5OW.webp', 'additional', NULL, NULL),
+(114, 29, '/images/products/JoTeeinvkL.webp', 'additional', NULL, NULL),
+(115, 30, '/images/products/h9DUMY5jzX.webp', 'base', NULL, NULL),
+(116, 30, '/images/products/5cuBzB92xE.webp', 'additional', NULL, NULL),
+(117, 30, '/images/products/nHdiHvRNs0.webp', 'additional', NULL, NULL),
+(118, 30, '/images/products/Dr3Sd0LoJq.webp', 'additional', NULL, NULL),
+(119, 31, '/images/products/pPGVDEnby0.webp', 'base', NULL, NULL),
+(120, 31, '/images/products/Z6smEl2Wwd.webp', 'additional', NULL, NULL),
+(121, 32, '/images/products/5lTSsvNPfJ.webp', 'base', NULL, NULL),
+(122, 32, '/images/products/Pd9PzCo6X9.webp', 'additional', NULL, NULL),
+(123, 33, '/images/products/v5Q6OuT0Yp.webp', 'base', NULL, NULL),
+(124, 33, '/images/products/NAsHYwqBzv.webp', 'additional', NULL, NULL),
+(125, 33, '/images/products/Qk9YchwYOS.webp', 'additional', NULL, NULL),
+(126, 34, '/images/products/DmjxpgwnIv.webp', 'base', NULL, NULL),
+(127, 34, '/images/products/34Emkm87Ee.webp', 'additional', NULL, NULL),
+(128, 34, '/images/products/5LBEFwlRMA.webp', 'additional', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1484,7 +1577,19 @@ INSERT INTO `product_translations` (`id`, `product_id`, `local`, `product_name`,
 (19, 19, 'en', 'Beats Studio3 Wireless Headphones – Matte Black', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-20 04:32:39', '2022-02-20 04:32:39'),
 (20, 20, 'en', 'Bose QuietComfort Noise Cancelling Earbuds – Black', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-20 04:35:57', '2022-02-20 04:35:57'),
 (21, 21, 'en', 'Bose Noise Cancelling Wireless Bluetooth', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-20 04:39:41', '2022-02-20 04:39:41'),
-(22, 22, 'en', 'Google Pixel Buds, Clearly White', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-20 04:42:50', '2022-02-20 04:42:50');
+(22, 22, 'en', 'Google Pixel Buds, Clearly White', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-20 04:42:50', '2022-02-20 04:42:50'),
+(23, 23, 'en', 'Cubitt Smart Watch CT2S Waterproof Fitness Tracker', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 00:19:37', '2022-02-22 00:19:37'),
+(24, 24, 'en', 'Apple Watch Series 3 GPS – 42mm – Sport Band', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 00:25:42', '2022-02-22 00:25:42'),
+(25, 25, 'en', 'SAMSUNG Galaxy Watch Active 2 Aluminum', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 00:41:30', '2022-02-22 00:41:30'),
+(26, 26, 'en', 'Canon EOS Rebel Camera T7 EF-S 18-55mm IS II Kit', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 01:10:55', '2022-02-22 01:10:55'),
+(27, 27, 'en', 'Canon SX740BK PowerShot SX740 HS Digital Camera', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 01:18:44', '2022-02-22 01:18:44'),
+(28, 28, 'en', 'Fujifilm 16642939 X100V Digital Camera – Silver', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 01:24:22', '2022-02-22 01:24:22'),
+(29, 29, 'en', 'FIRST DANCE Extra Large Shoes for Men Casual Shoes Camo Print Big Size Fashion Sneakers for Man', '<p>&lt;ul class=\"p-4 f\"&gt; &lt;li&gt;Ethylene Vinyl Acetate sole&lt;/li&gt; &lt;li&gt;Extra big size shoes for men, size from 12 to 15.&lt;/li&gt; &lt;li&gt;Good quality PU upper with camo print, suitable for autumn and winter&lt;/li&gt; &lt;li&gt;Lightweight EVA outsole, very comfortable to wear.&lt;/li&gt; &lt;li&gt;Classic lace up styles, easy to handle.&lt;/li&gt; &lt;li&gt;If you have troubles finding the right big size shoes for you, you should try ours.&lt;/li&gt; &lt;/ul&gt;</p>', 'FIRST DANCE Extra Large Shoes for Men Casual Shoes Camo Print Big Size Fashion Sneakers for Man', NULL, NULL, '2022-02-22 01:44:26', '2022-02-22 01:44:26'),
+(30, 30, 'en', 'COKAFIL Mens Running Shoes Athletic Walking Blade Tennis Shoes Fashion Sneakers', '<ul class=\"p-4 f\">\r\n<li>Mesh Fabric</li>\r\n<li>Rubber sole</li>\r\n<li>Slip-on closure type easy put on &amp; off，simple and stylish color scheme,looking for beauty in simple life</li>\r\n<li>Fashion mesh upper design,keeps the feet dry and breathable, makes you fell comfortable while exercising</li>\r\n<li>Breathing Insole - The interior of the shoe is designed with a honeycomb hole to absorb sweat and deodorize, allowing your feet to breathe freely</li>\r\n<li>Blade Sneakers - The sole is made of Hollow Carved technology , providing stable support and optimal shock absorption for sports</li>\r\n<li>How To Define - Designed for walking comfortably and casual wear, but not really meant to be worn while doing a hard-core workout or High-intensity exercise</li>\r\n</ul>', 'COKAFIL Mens Running Shoes Athletic Walking Blade Tennis Shoes Fashion Sneakers', NULL, NULL, '2022-02-22 02:02:42', '2022-02-22 02:02:42'),
+(31, 31, 'en', 'Wonder Nation Toddler Girls Glitter Casual Mary-Jane Sneakers', '<div id=\"additional-info\" class=\"\">\r\n<table id=\"product-attribute-specs-table\" class=\"featureTable\">\r\n<tbody>\r\n<tr>\r\n<td>Color</td>\r\n<td>Pink</td>\r\n</tr>\r\n<tr>\r\n<td>Brand</td>\r\n<td>Wonder Nation</td>\r\n</tr>\r\n<tr>\r\n<td>Gender</td>\r\n<td>Female</td>\r\n</tr>\r\n<tr>\r\n<td>Manufacturer Part Number</td>\r\n<td>GTWN41CA001</td>\r\n</tr>\r\n<tr>\r\n<td>Age Group</td>\r\n<td>Toddler</td>\r\n</tr>\r\n<tr>\r\n<td>Material</td>\r\n<td>UPPER:PU+ POLYESTER;OUTSOLE:TPR+POLYESTER</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</div>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<li>Vintage style meets modern flare with this Casual Mary Jane Sneaker from Wonder Nation. Featuring a durable canvas upper and sturdy outsole, with a stay-put strap to ensure a snug fit. The Mary Jane sneaker is great for all day wear with any outfit!</li>\r\n</ul>\r\n<p>&nbsp;</p>', 'Material: Upper: Polyurethane/Polyester; Outsole: Thermoplastic Rubber/Polyester\r\n    Care: Wipe clean\r\n    Country of Origin: Imported\r\n    Closure: Slip on style for easy on and off; stay put strap\r\n    Features: Lightweight and durable; glitter accents; flower embellishment \r\n    Mary Jane Shoes for Girls from Wonder Nation', NULL, NULL, '2022-02-22 02:10:24', '2022-02-22 02:10:24'),
+(32, 32, 'en', 'Dragon Touch Max10 Tablet Android 10.0 OS', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 02:33:31', '2022-02-22 02:33:31'),
+(33, 33, 'en', 'Garmin Vivo smart 3 Activity Tracker – Large', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 02:58:36', '2022-02-22 02:58:36'),
+(34, 34, 'en', 'Echo Dot (4th Gen, 2020 release) | Smart speaker', '<p>The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.</p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'The Aspire 5 is a compact laptop in a thin case with a metal cover, a high-quality Full HD IPS display and a rich set of interfaces. Thanks to its powerful components, the laptop can handle resource-intensive tasks perfectly and is also suitable for most games.', NULL, NULL, '2022-02-22 03:40:18', '2022-02-22 03:40:18');
 
 -- --------------------------------------------------------
 
@@ -1807,25 +1912,25 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (79, 'storefront_three_column_full_width_banners_3_open_in_new_window', 0, '0', NULL, '2022-01-20 07:01:45'),
 (80, 'storefront_top_brands_section_enabled', 0, '0', NULL, '2022-01-30 01:17:34'),
 (81, 'storefront_top_brands', 0, '[\"4\",\"19\",\"20\",\"21\",\"23\"]', NULL, '2022-01-20 07:01:48'),
-(82, 'storefront_product_tabs_1_section_enabled', 0, '1', NULL, '2022-02-20 04:27:31'),
+(82, 'storefront_product_tabs_1_section_enabled', 0, '1', NULL, '2022-02-22 02:20:23'),
 (83, 'storefront_product_tabs_1_section_tab_1_title', 1, NULL, NULL, NULL),
-(84, 'storefront_product_tabs_1_section_tab_1_product_type', 0, 'category_products', NULL, '2022-02-20 04:27:31'),
-(85, 'storefront_product_tabs_1_section_tab_1_category_id', 0, '1', NULL, '2022-02-20 04:27:31'),
+(84, 'storefront_product_tabs_1_section_tab_1_product_type', 0, 'category_products', NULL, '2022-02-22 02:20:23'),
+(85, 'storefront_product_tabs_1_section_tab_1_category_id', 0, '1', NULL, '2022-02-22 02:20:23'),
 (86, 'storefront_product_tabs_1_section_tab_1_products', 0, NULL, NULL, NULL),
 (87, 'storefront_product_tabs_1_section_tab_1_products_limit', 0, NULL, NULL, NULL),
 (88, 'storefront_product_tabs_1_section_tab_2_title', 1, NULL, NULL, NULL),
-(89, 'storefront_product_tabs_1_section_tab_2_product_type', 0, 'category_products', NULL, '2022-02-20 04:27:31'),
-(90, 'storefront_product_tabs_1_section_tab_2_category_id', 0, '2', NULL, '2022-02-20 04:27:31'),
+(89, 'storefront_product_tabs_1_section_tab_2_product_type', 0, 'category_products', NULL, '2022-02-22 02:20:23'),
+(90, 'storefront_product_tabs_1_section_tab_2_category_id', 0, '2', NULL, '2022-02-22 02:20:24'),
 (91, 'storefront_product_tabs_1_section_tab_2_products', 0, NULL, NULL, NULL),
 (92, 'storefront_product_tabs_1_section_tab_2_products_limit', 0, NULL, NULL, NULL),
 (93, 'storefront_product_tabs_1_section_tab_3_title', 1, NULL, NULL, NULL),
-(94, 'storefront_product_tabs_1_section_tab_3_product_type', 0, 'category_products', NULL, '2022-02-20 04:27:31'),
-(95, 'storefront_product_tabs_1_section_tab_3_category_id', 0, '3', NULL, '2022-02-20 04:27:31'),
+(94, 'storefront_product_tabs_1_section_tab_3_product_type', 0, 'category_products', NULL, '2022-02-22 02:20:24'),
+(95, 'storefront_product_tabs_1_section_tab_3_category_id', 0, '3', NULL, '2022-02-22 02:20:24'),
 (96, 'storefront_product_tabs_1_section_tab_3_products', 0, NULL, NULL, NULL),
 (97, 'storefront_product_tabs_1_section_tab_3_products_limit', 0, NULL, NULL, NULL),
 (98, 'storefront_product_tabs_1_section_tab_4_title', 1, NULL, NULL, NULL),
-(99, 'storefront_product_tabs_1_section_tab_4_product_type', 0, 'category_products', NULL, '2022-02-20 04:27:32'),
-(100, 'storefront_product_tabs_1_section_tab_4_category_id', 0, '5', NULL, '2022-02-20 04:27:32'),
+(99, 'storefront_product_tabs_1_section_tab_4_product_type', 0, 'category_products', NULL, '2022-02-22 02:20:24'),
+(100, 'storefront_product_tabs_1_section_tab_4_category_id', 0, '5', NULL, '2022-02-22 02:20:24'),
 (101, 'storefront_product_tabs_1_section_tab_4_products', 0, NULL, NULL, NULL),
 (102, 'storefront_product_tabs_1_section_tab_4_products_limit', 0, NULL, NULL, NULL),
 (103, 'storefront_product_tabs_2_section_enabled', 0, NULL, NULL, NULL),
@@ -1856,22 +1961,22 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (128, 'storefront_slider_banner_3_title', 1, NULL, NULL, NULL),
 (129, 'storefront_slider_banner_3_call_to_action_url', 0, 'http://localhost:8081/CartPro/product/bose-noise-cancelling-wireless-bluetooth/5', NULL, '2022-02-21 15:40:54'),
 (130, 'storefront_slider_banner_3_open_in_new_window', 0, '0', NULL, '2022-02-21 15:40:54'),
-(131, 'storefront_flash_sale_and_vertical_products_section_enabled', 0, '1', NULL, '2022-02-21 14:29:42'),
+(131, 'storefront_flash_sale_and_vertical_products_section_enabled', 0, '1', NULL, '2022-02-22 03:02:44'),
 (132, 'storefront_flash_sale_title', 1, NULL, NULL, NULL),
-(133, 'storefront_flash_sale_active_campaign_flash_id', 0, '1', NULL, '2022-01-29 22:36:28'),
+(133, 'storefront_flash_sale_active_campaign_flash_id', 0, '2', NULL, '2022-02-22 03:02:44'),
 (134, 'storefront_vertical_product_1_title', 1, NULL, NULL, NULL),
-(135, 'storefront_vertical_product_1_type', 0, 'category_products', NULL, '2022-02-21 14:29:43'),
-(136, 'storefront_vertical_product_1_category_id', 0, 'NULL', NULL, '2022-02-21 14:29:43'),
+(135, 'storefront_vertical_product_1_type', 0, 'category_products', NULL, '2022-02-22 03:02:44'),
+(136, 'storefront_vertical_product_1_category_id', 0, '4', NULL, '2022-02-22 03:02:44'),
 (137, 'storefront_vertical_product_1_products', 0, NULL, NULL, NULL),
 (138, 'storefront_vertical_product_1_products_limit', 0, NULL, NULL, NULL),
 (139, 'storefront_vertical_product_2_title', 1, NULL, NULL, NULL),
-(140, 'storefront_vertical_product_2_type', 0, 'category_products', NULL, '2022-02-21 14:29:43'),
-(141, 'storefront_vertical_product_2_category_id', 0, 'NULL', NULL, '2022-02-21 14:29:43'),
+(140, 'storefront_vertical_product_2_type', 0, 'category_products', NULL, '2022-02-22 03:02:44'),
+(141, 'storefront_vertical_product_2_category_id', 0, '14', NULL, '2022-02-22 03:02:44'),
 (142, 'storefront_vertical_product_2_products', 0, NULL, NULL, NULL),
 (143, 'storefront_vertical_product_2_products_limit', 0, NULL, NULL, NULL),
 (144, 'storefront_vertical_product_3_title', 1, NULL, NULL, NULL),
-(145, 'storefront_vertical_product_3_type', 0, 'category_products', NULL, '2022-02-21 14:29:43'),
-(146, 'storefront_vertical_product_3_category_id', 0, '', NULL, '2022-02-21 14:29:43'),
+(145, 'storefront_vertical_product_3_type', 0, 'category_products', NULL, '2022-02-22 03:02:44'),
+(146, 'storefront_vertical_product_3_category_id', 0, '7', NULL, '2022-02-22 03:02:44'),
 (147, 'storefront_vertical_product_3_products', 0, NULL, NULL, NULL),
 (148, 'storefront_vertical_product_3_products_limit', 0, NULL, NULL, NULL),
 (149, 'store_front_slider_format', 0, 'half_width', NULL, '2022-01-26 03:31:58'),
@@ -2248,9 +2353,9 @@ INSERT INTO `setting_translations` (`id`, `setting_id`, `locale`, `value`, `crea
 (56, 93, 'en', 'Television', '2021-09-21 04:50:54', '2022-02-20 01:44:11'),
 (57, 98, 'en', 'Headphone', '2021-09-21 04:50:54', '2022-02-20 04:27:32'),
 (58, 132, 'en', 'Best Deals', '2021-10-21 02:09:37', '2021-10-21 02:10:11'),
-(59, 134, 'en', '', '2021-10-21 03:46:08', '2022-02-21 14:29:43'),
-(60, 139, 'en', '', '2021-10-21 03:46:08', '2022-02-21 14:29:43'),
-(61, 144, 'en', '', '2021-10-21 04:19:23', '2022-02-21 14:29:43'),
+(59, 134, 'en', 'Watches', '2021-10-21 03:46:08', '2022-02-22 00:20:25'),
+(60, 139, 'en', 'Camera', '2021-10-21 03:46:08', '2022-02-22 01:11:45'),
+(61, 144, 'en', 'Shoes', '2021-10-21 04:19:23', '2022-02-22 01:45:11'),
 (62, 132, 'bn', 'বেস্ট ডিল', '2021-11-01 07:05:32', '2021-11-01 07:05:32'),
 (63, 134, 'bn', 'ঘড়ি', '2021-11-01 07:05:32', '2021-11-01 07:06:30'),
 (64, 139, 'bn', 'শার্ট', '2021-11-01 07:05:32', '2021-11-01 07:06:30'),
@@ -3100,25 +3205,25 @@ ALTER TABLE `attribute_value_translations`
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `brand_translations`
 --
 ALTER TABLE `brand_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `category_translations`
 --
 ALTER TABLE `category_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `colors`
@@ -3172,19 +3277,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `flash_sales`
 --
 ALTER TABLE `flash_sales`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `flash_sale_products`
 --
 ALTER TABLE `flash_sale_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `flash_sale_translations`
 --
 ALTER TABLE `flash_sale_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `images`
@@ -3274,19 +3379,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `product_translations`
 --
 ALTER TABLE `product_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `reviews`
