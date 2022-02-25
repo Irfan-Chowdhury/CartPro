@@ -44,9 +44,9 @@ class PageController extends Controller
                             foreach ($row->pageTranslations as $key => $value){
                                 if ($key<1){
                                     if ($value->locale==$locale){
-                                        return htmlspecialchars_decode($value->page_name);
+                                        return $value->page_name;
                                     }elseif($value->locale=='en'){
-                                        return htmlspecialchars_decode($value->page_name);
+                                        return $value->page_name;
                                     }
                                 }
                             }

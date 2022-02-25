@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2022 at 10:43 AM
+-- Generation Time: Feb 25, 2022 at 04:39 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.26
 
@@ -1167,6 +1167,15 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('irfanchowdhury434@gmail.com', '$2y$10$0CPDos0nEiPWV7fNr6eTV.Emy2/coczkcllnc5aJ6gTujrQjMVohu', '2022-02-24 01:11:02'),
+('zuahir2025@gmail.com', '$2y$10$/3XCJqCoLZ3mzD880G8xae2KVwX9cohwn72gdlsPWyag9/qOFY1ci', '2022-02-24 01:31:51'),
+('zuhair2025@gmail.com', '$2y$10$PPI617q4e6CWxsYh5mQ6eOv7TekVTGr3b.uKkZTAce51nCqMshR8W', '2022-02-24 01:32:55');
 
 -- --------------------------------------------------------
 
@@ -2607,7 +2616,7 @@ INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `phone`, `emai
 (32, 'juhair95', NULL, NULL, NULL, 'juhair95@gmail.com', '$2y$10$.R3a1Eqtq1rIQ4wVa3nY.OgdY4lKuPv0qwfk1FFiEDz.rmWnH7nRa', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-25 04:02:23', '2021-12-25 04:02:23'),
 (33, 'qihili', 'Melodie', 'Bush', '+1 (363) 236-8974', 'duxupamu@mailinator.com', '$2y$10$/vl.HJs2awM7JQUKYfjIq.8m5k4jwt0ALbXAZc66t.ZSwKsoQyfVW', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-01-05 17:28:20', '2022-01-05 17:28:20'),
 (42, 'irfanchowdhury80@gmail.com', 'Irfan Chowdhury', NULL, NULL, 'irfanchowdhury80@gmail.com', NULL, 0, NULL, NULL, 'https://lh3.googleusercontent.com/a-/AOh14Ggrsn2UgQ_0Y3HLgGbHi8kaBUczNoTN_PwmzZ0hzA=s96-c', NULL, NULL, NULL, NULL, 1, '112073730973873758091', '2022-01-11 03:44:59', '2022-01-11 03:44:59'),
-(43, 'ferigyxy', 'Alan', 'Cantrell', '+1 (987) 341-9149', 'nubaqufody@mailinator.com', '$2y$10$hN/SSRleeEtzM0mkf7jisO2JgrGsZBDmpDuURleKR47nn5aWy6GHG', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-01-16 09:39:12', '2022-01-16 09:39:12');
+(43, 'ferigyxy', 'Alan', 'Cantrell', '+1 (987) 341-9149', 'zuhair2025@gmail.com', '$2y$10$hN/SSRleeEtzM0mkf7jisO2JgrGsZBDmpDuURleKR47nn5aWy6GHG', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-01-16 09:39:12', '2022-01-16 09:39:12');
 
 -- --------------------------------------------------------
 
@@ -3265,7 +3274,7 @@ ALTER TABLE `currency_rates`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -3583,7 +3592,7 @@ ALTER TABLE `tax_translations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `wishlists`
