@@ -54,7 +54,7 @@
                                 <input type="text" name="storefront_copyright_text" placeholder="Type Copyright Text" class="form-control"
                                 @forelse ($setting[35]->settingTranslations as $key => $item)
                                     @if ($item->locale==$locale)
-                                        value="{{$item->value}}" @break
+                                        value="{{htmlspecialchars_decode($item->value)}}" @break
                                     @elseif($item->locale=='en')
                                         value="{{$item->value}}" @break
                                     @endif

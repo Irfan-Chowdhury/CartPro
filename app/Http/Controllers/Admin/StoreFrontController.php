@@ -246,7 +246,7 @@ class StoreFrontController extends Controller
     public function footerStore(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'storefront_payment_method_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
+            'storefront_payment_method_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
         if ($validator->fails())
@@ -275,7 +275,7 @@ class StoreFrontController extends Controller
                     );
                 }
                 else{
-                    Setting::where('key',$key)->update(['plain_value'=>json_encode($value)]);
+                    Setting::where('key',$key)->update(['plain_value'=>$value]);
                 }
             }
 

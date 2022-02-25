@@ -245,7 +245,7 @@
                                 <div class="shipping">
                                     <div class="label">@lang('file.Shiping')</div>
 
-                                    @if ($setting_free_shipping->shipping_status==1)
+                                    @if (isset($setting_free_shipping) && $setting_free_shipping->shipping_status==1)
                                         <div class="custom-control custom-radio mt-3">
                                             <input type="radio" data-shipping_type='free' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_free_shipping->minimum_amount ?? 0}}">
                                             <label class="custom-control-label" for="customRadio1">{{$setting_free_shipping->label ?? null}}
@@ -260,7 +260,7 @@
                                         </div>
                                     @endif
 
-                                    @if ($setting_local_pickup->pickup_status==1)
+                                    @if (isset($setting_local_pickup) && $setting_local_pickup->pickup_status==1)
                                         <div class="custom-control custom-radio mt-3">
                                             <input type="radio" data-shipping_type='local_pickup' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_local_pickup->cost ?? null}}">
                                             <label class="custom-control-label" for="customRadio2">{{$setting_local_pickup->label ?? null}}
@@ -275,7 +275,7 @@
                                         </div>
                                     @endif
 
-                                    @if ($setting_flat_rate->flat_status==1)
+                                    @if (isset($setting_flat_rate) && $setting_flat_rate->flat_status==1)
                                         <div class="custom-control custom-radio mt-3">
                                             <input type="radio" data-shipping_type='flat_rate' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_flat_rate->cost ?? null}}">
                                             <label class="custom-control-label" for="customRadio3">{{$setting_flat_rate->label ?? null}}
@@ -317,14 +317,14 @@
                                 <hr>
                                 <div class="payment-options">
 
-                                    @if ($cash_on_delivery->status==1)
+                                    @if (isset($cash_on_delivery) && $cash_on_delivery->status==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id="cashOnDelivery" value="cash_on_delivery">
                                             <span class="sm-heading">@lang('file.Cash On Delivery')</span>
                                         </label>
                                     @endif
 
-                                    @if ($paypal->status==1)
+                                    @if (isset($paypal) && $paypal->status==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id='paypal' value="paypal">
                                             <span class="card-options"><img src="{{asset('public/frontend/images/payment_gateway_logo/paypal.jpg')}}" alt="..."></span>
@@ -332,7 +332,7 @@
                                         </label>
                                     @endif
 
-                                    @if ($stripe->status==1)
+                                    @if (isset($stripe) && $stripe->status==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id='stripe' value="stripe">
                                             <span class="card-options"><img src="{{asset('public/frontend/images/payment_gateway_logo/stripe.png')}}" alt="..."></span>

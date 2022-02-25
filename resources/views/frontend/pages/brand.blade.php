@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 @forelse ($brands as $brand)
-                    <div class="col">
+                    <div class="col-md-3">
                         <div class="card">
                             <a class="brand-wrapper" href="{{route('cartpro.brand.products',$brand->slug)}}">
                                 @if (isset($brand->brand_logo) && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
