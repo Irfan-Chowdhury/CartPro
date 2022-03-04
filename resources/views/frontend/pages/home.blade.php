@@ -14,14 +14,14 @@
                                 @if ($item->sliderTranslation->isNotEmpty())
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
-                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
+                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
                                         @else
                                             <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/12787d/ffffff&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
                                                 <div>
-                                                    <h3>{{$item->sliderTranslation[0]->slider_title}}</h3>
-                                                    <h5>{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
+                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_title}}</h3>
+                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -48,6 +48,7 @@
                         </div>
                     </div>
                 @else
+                    {{-- Half Width --}}
                     <div class="col-md-8">
                         <div class="banner-slider">
                             @foreach ($sliders as $item)
@@ -60,8 +61,8 @@
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
                                                 <div>
-                                                    <h3>{{$item->sliderTranslation[0]->slider_title}}</h3>
-                                                    <h5>{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
+                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_title}}</h3>
+                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
 
                                                     @if ($item->type=='category')
                                                         <a class="button style1 md" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">Read More</a>
@@ -665,6 +666,7 @@
         <div class="container">
             <div class="row">
 
+                {{-- Flash Sale --}}
                 <div class="col-xl-4 col-md-12">
                     <div class="section-title mb-3">
                         <h3>
@@ -682,6 +684,8 @@
                                                 <input type="hidden" name="product_id" value="{{$item->product->id}}">
                                                 <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
                                                 <input type="hidden" name="category_id" value="{{$item->product->categoryProduct[0]->category_id}}">
+                                                <input type="hidden" name="flash_sale" value="1">
+                                                <input type="hidden" name="flash_sale_price" value="{{$item->price}}">
                                                 <input type="hidden" name="qty" value="1">
 
                                                 <div class="single-product-wrapper deals">
@@ -724,7 +728,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="product-price">
-                                                                    @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                                                    {{-- @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                         <span class="promo-price">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
                                                                                 {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
@@ -738,9 +742,16 @@
                                                                             @else
                                                                                 @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                             @endif
-                                                                        </span>
-                                                                    @else
+                                                                        </span> --}}
+                                                                    @if ($item->price>0 && $item->price<$item->product->price)
                                                                         <span class="promo-price">
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                {{ number_format((float)$item->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                            @else
+                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @endif
+                                                                        </span>
+                                                                        <span class="old-price">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
                                                                                 {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                             @else
@@ -784,8 +795,8 @@
                                                         <div class="progress">
                                                             <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
-                                                        @if ($item->product->manage_stock==1)
-                                                            Available: {{$item->product->qty}}
+                                                        @if ($item->qty>=0)
+                                                            Available: {{$item->qty}}
                                                         @endif
 
                                                     </div>
@@ -805,6 +816,7 @@
                     </div>
                 </div>
 
+                {{-- Verticle --}}
                 <div class="col-xl-8 col-md-12">
                     <div class="row">
 

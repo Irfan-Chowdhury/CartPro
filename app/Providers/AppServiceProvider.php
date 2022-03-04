@@ -49,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         App::setLocale($locale);
 
 
+
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();
         $storefront_images = StorefrontImage::select('title','type','image')->get();

@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="form-group col-md-6 ">
-                            <label>{{__('Parent Category')}} </label>
+                            <label>{{__('file.Parent Category')}} </label>
                             <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}' name="parent_id" id="parent_id_edit">
                                     <option value="">{{trans('file.None') }}</option>
                                 @foreach($categories as $category)

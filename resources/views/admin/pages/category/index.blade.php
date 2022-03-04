@@ -13,12 +13,12 @@
         <div class="container-fluid mb-3">
             @if (auth()->user()->can('category-store'))
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record">
-                    <i class="fa fa-plus"></i> @lang('file.Add_Category')
+                    <i class="fa fa-plus"></i> @lang('file.Add Category')
                 </button>
             @endif
             @if (auth()->user()->can('category-action'))
                 <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
-                    <i class="fa fa-minus-circle"></i> @lang('file.Bulk_Action')
+                    <i class="fa fa-minus-circle"></i> @lang('file.Bulk Action')
                 </button>
             @endif
         </div>

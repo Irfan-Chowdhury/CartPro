@@ -181,6 +181,7 @@ class HomeController extends Controller
             elseif ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
                 $active_campaign_flash_id = $setting->plain_value;
             }
+
             elseif ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
@@ -229,6 +230,8 @@ class HomeController extends Controller
                                     'flashSaleProducts.product.productAttributeValues')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
 
+        // return $flash_sales;
+
         $brand_ids = json_decode($storefront_top_brands);
 
         $brands = Brand::whereIn('id',$brand_ids)
@@ -259,6 +262,7 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
+        App::setLocale(Session::get('currentLocal'));
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')

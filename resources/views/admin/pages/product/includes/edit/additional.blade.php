@@ -22,14 +22,14 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Product New From')}}</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="new_from" id="newFrom" value="{{date('Y-m-d',strtotime($product->new_from))}}" class="form-control datepicker">
+                            <input type="text" name="new_from" id="newFrom" value="{{$product->new_from}}" class="form-control datepicker">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Product New To')}}</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="new_to" id="newTo" value="{{date('Y-m-d',strtotime($product->new_to))}}" class="form-control datepicker">
+                            <input type="text" name="new_to" id="newTo" value="{{$product->new_to}}" class="form-control datepicker">
                         </div>
                     </div>
 

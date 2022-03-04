@@ -100,6 +100,10 @@ class SliderController extends Controller
             {
                 return ucfirst($row->text_alignment);
             })
+            ->addColumn('text_color_code', function ($row)
+            {
+                return $row->text_color;
+            })
             ->addColumn('action', function($row){
                 $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
                               &nbsp;' ;
@@ -146,11 +150,13 @@ class SliderController extends Controller
             $data['url']            = $request->url;
             $data['target']         = $request->target;
             if ($request->slider_image) {
-                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445);
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445); //half width
+                $data['slider_image_full_width'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/full_width/',$width=1920, $height=650);
                 $data['slider_image_secondary'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/secondary/',$width=100, $height=58);
             }
             $data['type']           = $request->type;
             $data['text_alignment'] = $request->text_alignment;
+            $data['text_color']      = $request->text_color;
             $data['is_active']      = $request->is_active;
 
             $sliderTranslation = [];
@@ -167,10 +173,8 @@ class SliderController extends Controller
                 SliderTranslation::create($sliderTranslation);
                 DB::commit();
             }
-            catch (Exception $e)
-            {
+            catch (Exception $e){
                 DB::rollback();
-
                 return response()->json(['error' => $e->getMessage()]);
             }
 
@@ -227,12 +231,15 @@ class SliderController extends Controller
             $data['url']            = $request->url;
             $data['target']         = $request->target;
             if ($request->slider_image) {
-                $this->previousImageDelete($slider->slider_image);
+                $this->previousImageDelete($slider->slider_image); //half width
+                $this->previousImageDelete($slider->slider_image_full_width);
                 $this->previousImageDelete($slider->slider_image_secondary);
-                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445);
+                $data['slider_image'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/',$width=775, $height=445); //half width
+                $data['slider_image_full_width'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/full_width/',$width=1920, $height=650);
                 $data['slider_image_secondary'] = $this->imageSliderStore($request->slider_image, $directory='images/sliders/secondary/',$width=100, $height=58);
             }
             $data['text_alignment']      = $request->text_alignment;
+            $data['text_color']      = $request->text_color;
             $data['is_active']      = $request->is_active;
 
             $sliderTranslation = [];
@@ -291,7 +298,8 @@ class SliderController extends Controller
     {
         if ($request->ajax()) {
             $slider = Slider::find($request->slider_id);
-            $this->deleteWithImage($slider, $slider->slider_image);
+            $this->deleteWithImage($slider, $slider->slider_image); //half width
+            $this->deleteWithImage($slider, $slider->slider_image_full_width);
             $this->deleteWithImage($slider, $slider->slider_image_secondary);
         }
         return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);

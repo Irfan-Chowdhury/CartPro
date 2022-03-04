@@ -12,7 +12,10 @@
     @endif
 @endsection
 
-@section('title',$product->productTranslation->product_name)
+@php
+    $product_name = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
+@endphp
+@section('title',$product_name)
 
 
 @section('frontend_content')

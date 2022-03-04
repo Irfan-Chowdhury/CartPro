@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Library\SslCommerz\SslCommerzNotification;
 use App\Models\Coupon;
 use App\Models\Customer;
+use App\Models\FlashSaleProduct;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Shipping;
@@ -177,18 +178,26 @@ class PaymentController extends Controller
             $order_detail->subtotal   = $row->subtotal;
             $order_detail->save();
         }
-
         return $order->id;
     }
 
     protected function reduceProductQuantity($order_id){
         $order_details = OrderDetail::where('order_id',$order_id)->get();
         foreach ($order_details as $row) {
-            DB::table('products')
+
+            if (FlashSaleProduct::where('product_id',$row->product_id)->exists()) {
+                DB::table('flash_sale_products')
+                ->where('product_id',$row->product_id)
+                ->update(['qty' => DB::raw('qty -'.$row->qty)]);
+            }else {
+                DB::table('products')
                 ->where('id',$row->product_id)
                 ->where('manage_stock',1)
                 ->update(['qty' => DB::raw('qty -'.$row->qty)]);
+            }
         }
+
+
         Cart::destroy();
     }
 

@@ -15,10 +15,12 @@ class Slider extends Model
         'category_id',
         'url',
         'slider_image',
+        'slider_image_full_width',
         'slider_image_secondary',
         'target',
         'is_active',
-        'text_alignment'
+        'text_alignment',
+        'text_color'
     ];
 
     protected $dates = ['deleted_at'];

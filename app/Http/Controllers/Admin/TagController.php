@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
-
+use Illuminate\Support\Facades\App;
 
 class TagController extends Controller
 {
@@ -22,6 +22,8 @@ class TagController extends Controller
         if (auth()->user()->can('tag-view'))
         {
             $local = Session::get('currentLocal');
+            App::setLocale($local);
+
 
             $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)
@@ -117,13 +119,15 @@ class TagController extends Controller
 
     public function edit(Request $request)
     {
-        $tag = Tag::find($request->tag_id);
-        $tag_translation = TagTranslation::where('tag_id',$request->tag_id)
-                        ->where('local',Session::get('currentLocal'))
-                        ->select('tag_name','id')
-                        ->first();
+        if ($request->ajax()) {
+            $tag = Tag::find($request->tag_id);
+            $tag_translation = TagTranslation::where('tag_id',$request->tag_id)->where('local',session('currentLocal'))->first();
+            if (!isset($tag_translation)) {
+                $tag_translation = TagTranslation::where('tag_id',$request->tag_id)->where('local','en')->first();
+            }
+            return response()->json(['tag' => $tag , 'tag_translation' => $tag_translation]);
+        }
 
-        return response()->json(['tag' => $tag , 'tag_translation' => $tag_translation]);
     }
 
     public function update(Request $request)

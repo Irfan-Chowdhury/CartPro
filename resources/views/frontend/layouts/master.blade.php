@@ -10,13 +10,7 @@
             $total_wishlist = 0;
         }
 
-        if(!Illuminate\Support\Facades\Session::get('currentLocal')){
-            Illuminate\Support\Facades\Session::put('currentLocal', 'en');
-            $locale = 'en';
-        }else {
-            $locale = Illuminate\Support\Facades\Session::get('currentLocal');
-        }
-        Illuminate\Support\Facades\App::setLocale($locale);
+        
 
         // if (Illuminate\Support\Facades\Auth::check()) {
         //     $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();

@@ -215,15 +215,15 @@ class ProductController extends Controller
 
                 $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
                 $product->special_price_type = $request->special_price_type;
-                $product->special_price_start= date("Y-m-d",strtotime($request->special_price_start));
-                $product->special_price_end  = date("Y-m-d",strtotime($request->special_price_end));
+                $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)): null;
+                $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)): null;
                 $product->selling_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
                 $product->sku           = $request->sku;
                 $product->manage_stock  = $request->manage_stock==0 ? 0:1;
                 $product->qty           = $request->qty;
                 $product->in_stock      = $request->in_stock==0 ? 0:1;
-                $product->new_from      = date("Y-m-d",strtotime($request->new_from));
-                $product->new_to        = date("Y-m-d",strtotime($request->new_to));
+                $product->new_from      = $request->new_from==true ? date("Y-m-d",strtotime($request->new_from)): null;
+                $product->new_to        = $request->new_to==true ? date("Y-m-d",strtotime($request->new_to)): null;
                 $product->avg_rating    = 0;
                 $product->is_active     = $request->is_active==0 ? 0 : 1;
                 $product->save();
@@ -376,7 +376,7 @@ class ProductController extends Controller
         // return $request->all();
 
         $validator = Validator::make($request->all(),[
-            'product_name'=> 'required|unique:product_translations,product_name,'.$request->product_translation_id,
+            'product_name'=> 'required|max:255|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
             'price'       => 'required',
             'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
@@ -387,7 +387,6 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()){
-
             session()->flash('type','danger');
             session()->flash('message','Something Wrong');
             return redirect()->back()->withErrors($validator)->withInput();
@@ -401,23 +400,24 @@ class ProductController extends Controller
             if ($request->brand_id) {
                 $product->brand_id      = $request->brand_id;
             }
-            $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
+            if (session('currentLocal')=='en') {
+                $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
+            }
             $product->tax_id        = $request->tax_id;
             $product->price         = $request->price; //1st option
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', ''); //2nd option
 
             $product->special_price_type = $request->special_price_type;
-            $product->special_price_start= date("Y-m-d",strtotime($request->special_price_start));
-            $product->special_price_end  = date("Y-m-d",strtotime($request->special_price_end));
+            $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)) : null;
+            $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)) : null;
 
             $product->selling_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
-
             $product->sku           = $request->sku;
             $product->manage_stock  = $request->manage_stock;
             $product->qty           = $request->qty;
             $product->in_stock      = $request->in_stock;
-            $product->new_from      = date("Y-m-d",strtotime($request->new_from));
-            $product->new_to        = date("Y-m-d",strtotime($request->new_to));
+            $product->new_from      = $request->new_from==true ? date("Y-m-d",strtotime($request->new_from)) : null;
+            $product->new_to        = $request->new_to==true ? date("Y-m-d",strtotime($request->new_to)) : null;
 
             if ($request->is_active==1) {
                 $product->is_active = 1;

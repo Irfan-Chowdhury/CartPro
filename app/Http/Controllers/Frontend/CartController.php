@@ -53,8 +53,10 @@ class CartController extends Controller
             $data['qty']    = $request->qty;
             $data['tax']    = 0;
 
-
-            if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price){
+            if (isset($request->flash_sale) && $request->flash_sale==1) {
+                $data['price']  = $request->flash_sale_price;
+            }
+            else if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price){
                 $data['price']  = $product->special_price;
             }else {
                 $data['price']  = $product->price;

@@ -24,6 +24,7 @@
                     <th scope="col">{{__('file.Subtitle')}}</th>
                     <th scope="col">{{__('file.Type')}}</th>
                     <th scope="col">{{__('file.Text Alignment')}}</th>
+                    <th scope="col">{{__('file.Text Color Code')}}</th>
                     <th scope="col">{{__('file.Status')}}</th>
                     <th scope="col">{{trans('file.action')}}</th>
         	   </tr>
@@ -111,6 +112,10 @@
                         {
                             data: 'text_alignment',
                             name: 'text_alignment',
+                        },
+                        {
+                            data: 'text_color_code',
+                            name: 'text_color_code',
                         },
                         {
                             data: 'is_active',
@@ -297,6 +302,7 @@
                         $('#typeEdit').selectpicker('val',data.slider.type);
                         $('#textAlignment').selectpicker('val',data.slider.text_alignment);
                         $('#sliderTranslationId').val(data.sliderTranslation.id);
+                        $('#textColor').val(data.slider.text_color);
 
                         if (data.slider.type=='category') {
                             $('#url_edit').addClass('d-none');

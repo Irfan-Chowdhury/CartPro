@@ -29,6 +29,8 @@
                                 <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
                                 <input type="hidden" name="qty" value="1">
                                 <input type="hidden" name="value_ids" class="value_ids_flashSale">
+                                <input type="hidden" name="flash_sale" value="1">
+                                <input type="hidden" name="flash_sale_price" value="{{$item->price}}">
 
                                 <div class="item-details">
                                     <a class="item-category" href="">{{$item->product->categoryProduct[0]->categoryTranslation->category_name ?? null}}</a>
@@ -55,26 +57,18 @@
                                         @endif
                                     </div>
                                     <hr>
-                                    @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                    @if ($item->price>0 && $item->price<$item->product->price)
                                         <div class="item-price">
                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                             @else
-                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->special_price, env('FORMAT_NUMBER'), '.', '') }}
+                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}
                                             @endif
                                             <hr>
                                             @if(env('CURRENCY_FORMAT')=='suffix')
                                                 <small class="old-price"><del>{{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}} </del></small>
                                             @else
                                                 <small class="old-price"><del>{{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} </del></small>
-                                            @endif
-                                        </div>
-                                    @else
-                                        <div class="item-price">
-                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                            @else
-                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->product->price, env('FORMAT_NUMBER'), '.', '') }}
                                             @endif
                                         </div>
                                     @endif
