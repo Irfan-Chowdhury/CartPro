@@ -172,7 +172,11 @@
                                                 <span class="ti-minus"></span>
                                             </button>
                                         </span>
-                                        <input type="number" name="qty" class="input-number" value="1" min="1">
+                                        @if (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
+                                            <input type="number" name="qty" class="input-number" value="1" min="1" max="0">
+                                        @else
+                                            <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$product->qty}}">
+                                        @endif
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus">
                                                 <span class="ti-plus"></span>
@@ -572,6 +576,29 @@
     <script type="text/javascript">
         (function ($) {
             "use strict";
+
+            $(".quantity-left-minus").on("click",function(e){
+                $(".quantity-right-plus").prop("disabled",false);
+            })
+            $(".quantity-right-plus").on("click",function(e){
+                var inputNumber = $('.input-number').val();
+                var maxNumber = $('.input-number').attr('max');
+                if (maxNumber==0) {
+                    console.log(Number(maxNumber));
+                }else{
+                    if ((Number(inputNumber)+1) > Number(maxNumber)) {
+                        $('.input-number').val(Number(maxNumber)-1);
+                        $(this).prop("disabled",true);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Available product is : '+ maxNumber,
+                        });
+                    }
+                }
+            })
+
+
 
             $("#productAddToCartSingle").on("submit",function(e){
                 e.preventDefault();

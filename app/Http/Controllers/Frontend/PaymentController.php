@@ -87,8 +87,8 @@ class PaymentController extends Controller
             Customer::create($data);
         }
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $order_id = $this->orderStore($request);
 
             if ($request->payment_type=='sslcommerz'){
@@ -104,15 +104,14 @@ class PaymentController extends Controller
                 $this->reduceProductQuantity($order_id);
                 return $this->destroyOthers();
             }
-            
-            DB::commit();
 
-        }catch (Exception $e)
-        {
-            DB::rollback();
+        //     DB::commit();
 
-            return response()->json(['error' => $e->getMessage()]);
-        }
+        // }catch (Exception $e)
+        // {
+        //     DB::rollback();
+        //     return response()->json(['error' => $e->getMessage()]);
+        // }
     }
 
     protected function destroyOthers(){

@@ -27,9 +27,40 @@ class Tag extends Model
     //Use tagTranslations and tagTranslationEnglish used in Category Wise Products
     public function tagTranslations()
     {
-        $locale = Session::get('currentLocal');
-        return $this->hasOne(TagTranslation::class,'tag_id')
-                    ->where('local',$locale);
+        // $locale = Session::get('currentLocal');
+        // return $this->hasOne(TagTranslation::class,'tag_id')
+        //             ->where('local',$locale);
+
+        //****************** Test  *******************
+
+        $locale = 'kk';
+        return  $this->hasOne(TagTranslation::class,'tag_id')
+                      ->where('local', $locale ?? 'en')
+                    //   ->orWhere('local','en')
+                      ->select('tag_id','tag_name','local');  //??
+
+                    //   $this->hasOne(TagTranslation::class,'tag_id')
+                    //   ->where('local','bn')
+                    //   ->select('tag_id','tag_name','local');
+
+        // $query->hasOne(TagTranslation::class,'tag_id')
+        //             ->where('local','en');
+
+                // ->when(isset($locale), function ($query) use ($locale) {
+                //     $query->where('local', 'nn');
+                // })
+                // ->when(isset($locale), function ($query) use ($locale) {
+                //     $query->where('local', 'en');
+                // });
+
+        // if ($data) {
+        //     return 'ok';
+        // }
+        // else {
+        //     return $this->tagTranslationEnglish();
+        // }
+
+
     }
 
     public function tagTranslationEnglish()

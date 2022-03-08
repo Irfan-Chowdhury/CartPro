@@ -19,6 +19,9 @@ class TagController extends Controller
 
     public function index()
     {
+        // return Tag::with('tagTranslations')->where('id',5)->get();
+        return Tag::with('tagTranslations')->find(5);
+
         if (auth()->user()->can('tag-view'))
         {
             $local = Session::get('currentLocal');

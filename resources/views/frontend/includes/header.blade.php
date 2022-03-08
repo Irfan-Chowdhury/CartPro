@@ -59,13 +59,6 @@
                             @csrf
 
                             <input type="text" list="browsers" id="searchText" placeholder="Search Products" name="search">
-                            <select name="category" class="selectpicker" onchange="location = this.value;">
-                                <option value="" selected="">@lang('file.All Categories')</option>
-                                @forelse ($categories->where('parent_id',NULL) as $category)
-                                    <option value="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</option>
-                                @empty
-                                @endforelse
-                            </select>
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                             <!-- Search Field-->
                             <div class="row" id="search_field">
