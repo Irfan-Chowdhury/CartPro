@@ -1,3 +1,4 @@
+
 <!--Create Modal -->
 <div class="modal fade" id="createModalForm" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -78,7 +79,7 @@
 
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Text Color')</b></label>
-                            <input type="color" name="text_color" class="col-md-4 form-control">
+                            <input type="text" id="color-input" name="text_color" class="col-md-8 form-control colorpicker-element" value="#333" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
 
                         <div class="form-group row">

@@ -1,17 +1,11 @@
-<div class="js-cookie-consent cookie-consent">
-    <div class="alert alert-primary alert-dismissible fade show cookie-alert" role="alert">
-        <div class="d-flex justify-content-center align-items-center">
-            <i class="las la-info-circle mr-3"></i>
+<div class="js-cookie-consent cookie-consent fixed-bottom p-2 text-center">
 
-    <span class="cookie-consent__message" style="margin-left:5px;">
+    <span class="cookie-consent__message">
         {!! trans('cookieConsent::texts.message') !!}
     </span>
 
-    <button class="js-cookie-consent-agree cookie-consent__agree" style="margin-left:3px; padding-left:5px; color:#084298; background-color:#CFE2FF;border:0px">
-        <b>Accept</b>
+    <button class="js-cookie-consent-agree cookie-consent__agree button style1 md mt-3">
+        {{ trans('cookieConsent::texts.agree') }}
     </button>
 
-    </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
 </div>

@@ -4,7 +4,7 @@
 
     body
     {
-        background:#f2f2f2;
+        background:#59b210;
     }
 
     .payment
@@ -16,7 +16,8 @@
 	}
    .payment_header
    {
-	   background:rgba(255,102,0,1);
+	   /*background:rgba(255,102,0,1);*/
+	   background:#59b210;
 	   padding:20px;
        border-radius:20px 20px 0px 0px;
 
@@ -57,7 +58,8 @@
         color:#fff;
         border-radius:30px;
         padding:5px 10px;
-        background:rgba(255,102,0,1);
+        /*background:rgba(255,102,0,1);*/
+        background:#59b210;
         transition:all ease-in-out 0.3s;
     }
 

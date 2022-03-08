@@ -1,3 +1,10 @@
+@push('css')
+<link rel="preload" href="http://demo.lion-coders.com/soft/sarchholm/css/bootstrap-colorpicker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="http://demo.lion-coders.com/soft/sarchholm/css/bootstrap-colorpicker.css" rel="stylesheet"></noscript>
+<style>
+    #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 35%;width: 40px;}
+</style>
+@endpush
 <div class="card">
     <h4 class="card-header"><b>General</b></h4>
     <hr>
@@ -25,9 +32,22 @@
 
                     <!-- setting[1] => DB_ROW_ID-2: storefront_theme_color -->
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Theme Color')</b></label>
-                        <div class="col-sm-2">
-                            <input type="color" name="storefront_theme_color" class="form-control" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Theme Color')</b></label>
+                        <div class="col-sm-6">
+                            <h6>color Presets</h6>
+                            <ul id="switcher">
+                                <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
+                                <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
+                                <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
+                                <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
+                                <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
+                                <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
+                                <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
+                                <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
+                            </ul>
+
+                            <h6>Custom color</h6>
+                            <input type="text" id="color-input" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
 
@@ -110,3 +130,24 @@
 
     </div>
 </div>
+@push('scripts')
+<script src="http://demo.lion-coders.com/soft/sarchholm/js/bootstrap-colorpicker.js"></script>
+<script>
+    (function ($) {
+        "use strict";
+
+        $('.color-change').click(function() {
+
+            var color = $(this).data('color');
+            $('#color-input').val(color);
+
+        });
+
+        $('#color-input').colorpicker({
+
+        });
+
+    })(jQuery);
+
+</script>
+@endpush

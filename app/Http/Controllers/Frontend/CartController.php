@@ -44,6 +44,9 @@ class CartController extends Controller
                 return response()->json(['type'=>'quantity_limit','product_quantity'=>$product->qty]);
             }
 
+
+
+
             $data = [];
             $data['id']     = $product->id;
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;

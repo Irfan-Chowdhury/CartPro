@@ -1,6 +1,13 @@
 @extends('admin.main')
 @section('title','Admin | Slider')
 @section('admin_content')
+@push('css')
+<link rel="preload" href="http://demo.lion-coders.com/soft/sarchholm/css/bootstrap-colorpicker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="http://demo.lion-coders.com/soft/sarchholm/css/bootstrap-colorpicker.css" rel="stylesheet"></noscript>
+<style>
+    #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 35%;width: 40px;}
+</style>
+@endpush
 <section>
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
@@ -42,6 +49,19 @@
 
 
 @push('scripts')
+
+    <script src="http://demo.lion-coders.com/soft/sarchholm/js/bootstrap-colorpicker.js"></script>
+    <script>
+        (function ($) {
+            "use strict";
+    
+            $('#color-input,#textColor').colorpicker({
+    
+            });
+    
+        })(jQuery);
+    
+    </script>
     <script type="text/javascript">
         (function ($) {
             "use strict";

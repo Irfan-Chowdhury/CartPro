@@ -62,8 +62,8 @@
                             <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                             <!-- Search Field-->
                             <div class="row" id="search_field">
-                                <table id="result">
-                                </table>
+                                <ul id="result">
+                                </ul>
                             </div>
                         </form>
                     </div>

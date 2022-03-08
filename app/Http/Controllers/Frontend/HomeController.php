@@ -36,22 +36,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        // $old_directory = "irfan" ;
-        // $new_directory = "fahim" ;
-        // File::copyDirectory($old_directory,$new_directory);
-        // File::deleteDirectory($old_directory);
-        // return  'ok';
-
-        // $rowId = 'b6919a1641cd57bf6431c500a0575107';
-        // Cart::update($rowId, ['qty'  => 1]); // Will update the size option with new value
-
-        // return Cart::tax();
-        // return Cart::subtotal();
-        // return Cart::total();
-        // return implode(explode(',',Cart::subtotal()));
-        // return Cart::content();
-        // return Cart::tax(0.0);
-        // return Cart::destroy();
 
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
@@ -331,11 +315,11 @@ class HomeController extends Controller
             $base_url = url('/');
 
             $locale = Session::get('currentLocal');
-            $products = ProductTranslation::with(['product:id,slug','product.baseImage'=> function($query){
+            $products = ProductTranslation::with(['product:id,slug,price','product.baseImage'=> function($query){
                                 return $query->where('type','base');
                             },
                             'product.categoryProduct'])
-                            ->where('product_name','LIKE', $request->search_txt.'%')
+                            ->where('product_name','LIKE', '%'.$request->search_txt.'%')
                             ->where('local',$locale)
                             ->select('product_id','product_name','local')
                             ->get();
@@ -344,9 +328,9 @@ class HomeController extends Controller
             foreach ($products as $key => $item) {
                 if ($item->product->baseImage!=null) {
                     $image_url = url("public".$item->product->baseImage->image);
-                    $html .= '<tr><td><a href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:35px;width:35px"/>&nbsp'.$item->product_name.'</a></td></tr>';
+                    $html .= '<li><a class="d-flex" href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:50px;width:50px"/><div><h6>'.$item->product_name.'</h6><span class="price">'.$item->product->price.'</span></div></a></li>';
                 }else {
-                    $html .= '<tr><td><a href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'</a></td></tr>';
+                    $html .= '<li><a class="d-flex" href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'<br>'.$item->product->price.'</a></li>';
                 }
             }
             return response()->json($html);

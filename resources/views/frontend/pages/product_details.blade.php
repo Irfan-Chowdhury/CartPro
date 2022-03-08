@@ -576,7 +576,7 @@
     <script type="text/javascript">
         (function ($) {
             "use strict";
-
+            
             $(".quantity-left-minus").on("click",function(e){
                 $(".quantity-right-plus").prop("disabled",false);
             })
@@ -597,7 +597,6 @@
                     }
                 }
             })
-
 
 
             $("#productAddToCartSingle").on("submit",function(e){

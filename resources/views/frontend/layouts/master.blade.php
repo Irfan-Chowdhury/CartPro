@@ -300,35 +300,6 @@
                 })
             });
 
-            // $('.quantity_change_submit').on("click",function(e){
-            //     e.preventDefault();
-            //     var rowId = $(this).data('id');
-            //     var input_number = $('.'+rowId).val();
-            //     var shipping_charge =$('.shippingCharge:checked').val();
-            //     if (!shipping_charge) {
-            //         shipping_charge = 0;
-            //     }
-            //     var coupon_value = $('#coupon_value').val();
-            //     if (!coupon_value) {
-            //         coupon_value = 0;
-            //     }
-            //     console.log(coupon_value);
-            //     $.ajax({
-            //         url: "{{ route('cart.quantity_change') }}",
-            //         type: "GET",
-            //         data: {rowId:rowId,qty:input_number,shipping_charge:shipping_charge,coupon_value:coupon_value},
-            //         success: function (data) {
-            //             if (data.type=='success') {
-            //                 $('.cart_count').text(data.cart_count);
-            //                 $('.cartSubtotal').text(data.subtotal);
-            //                 $('.cart_total').text(data.cart_total);
-            //                 $('.total_price').text(data.total);
-            //                 $('.subtotal_'+rowId).text(data.cart_subtotal);
-            //             }
-            //         }
-            //     })
-            // });
-
             //Search field
             $('#search_field').hide();
 
@@ -336,6 +307,8 @@
                 $('#searchText').keyup(function(){
                     var txt = $(this).val();
                     if (txt!='') {
+                        $('#search_field').show();
+                        $('#result').html('<li>loading...</li>');
                         $.ajax({
                             url: "{{ route('cartpro.data_ajax_search') }}",
                             type: "GET",
@@ -346,11 +319,13 @@
                             }
                         })
                     }
+                    else if(txt.length === 0 ) {
+                        $('#search_field').hide();
+                    }
                     else{
                         $('#search_field').hide();
                         $('#result').empty();
                     }
-
                 })
             });
 

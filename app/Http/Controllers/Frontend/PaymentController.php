@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
 use Stripe;
-use Exception;
-
 
 class PaymentController extends Controller
 {
@@ -87,31 +85,21 @@ class PaymentController extends Controller
             Customer::create($data);
         }
 
-        // DB::beginTransaction();
-        // try {
-            $order_id = $this->orderStore($request);
+        $order_id = $this->orderStore($request);
 
-            if ($request->payment_type=='sslcommerz'){
-                $this->SSLCommerz($request, $order_id);
-            }elseif ($request->payment_type=='paypal'){
-                $this->reduceProductQuantity($order_id);
-                return $this->destroyOthers();
-            }elseif ($request->payment_type=='cash_on_delivery'){
-                $this->reduceProductQuantity($order_id);
-                return $this->destroyOthers();
-            }elseif ($request->payment_type=='stripe'){
-                $this->stripe($request);
-                $this->reduceProductQuantity($order_id);
-                return $this->destroyOthers();
-            }
-
-        //     DB::commit();
-
-        // }catch (Exception $e)
-        // {
-        //     DB::rollback();
-        //     return response()->json(['error' => $e->getMessage()]);
-        // }
+        if ($request->payment_type=='sslcommerz'){
+            $this->SSLCommerz($request, $order_id);
+        }elseif ($request->payment_type=='paypal'){
+            $this->reduceProductQuantity($order_id);
+            return $this->destroyOthers();
+        }elseif ($request->payment_type=='cash_on_delivery'){
+            $this->reduceProductQuantity($order_id);
+            return $this->destroyOthers();
+        }elseif ($request->payment_type=='stripe'){
+            $this->stripe($request);
+            $this->reduceProductQuantity($order_id);
+            return $this->destroyOthers();
+        }
     }
 
     protected function destroyOthers(){
