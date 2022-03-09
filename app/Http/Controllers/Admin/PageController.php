@@ -120,12 +120,16 @@ class PageController extends Controller
 
     public function edit(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        if ($request->ajax()) {
+            $locale = Session::get('currentLocal');
 
-        $page = Page::find($request->page_id);
-        $page_translation = PageTranslation::where('page_id',$request->page_id)->where('locale',$locale)->first();
-        $page_translation_body = htmlspecialchars_decode($page_translation->body);
-
+            $page = Page::find($request->page_id);
+            $page_translation = PageTranslation::where('page_id',$request->page_id)->where('locale',$locale)->first();
+            if (!isset($page_translation)) {
+                $page_translation = PageTranslation::where('page_id',$request->page_id)->where('locale','en')->first();
+            }
+            $page_translation_body = htmlspecialchars_decode($page_translation->body);
+        }
         return response()->json(['page'=> $page, 'page_translation' => $page_translation, 'page_translation_body'=> $page_translation_body]);
     }
 
@@ -147,7 +151,9 @@ class PageController extends Controller
                 }
 
                 $page = Page::find($request->page_id);
-                $page->slug      = $this->slug(htmlspecialchars_decode($request->page_name));
+                if ($locale=='en') {
+                    $page->slug      = $this->slug(htmlspecialchars_decode($request->page_name));
+                }
                 $page->is_active = $request->is_active ?? 0;
                 $page->update();
 

@@ -36,12 +36,12 @@
 
     <div class="d-flex">
         <div class="p-2">
-            <h2 class="font-weight-bold mt-3">Settings</h2>
+            <h2 class="font-weight-bold mt-3">@lang('file.Settings')</h2>
         </div>
         <div class="ml-auto p-2">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">@lang('file.Dashboard')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Site Setting</li>
                 </ol>
             </nav>
@@ -60,18 +60,18 @@
             <div class="card mb-0">
                 <div class="card-header" id="generalSettings">
                     <div class="btn" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
-                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>General Settings</h5>
+                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>@lang('file.General Settings')</h5>
                     </div>
                 </div>
                 <div id="collapse1" class="collapse show" aria-labelledby="generalSettings" data-parent="#accordion">
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="general-settings" data-toggle="list" href="#general" role="tab" aria-controls="home">General</a>
-                            <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">Store</a>
-                            <a class="list-group-item list-group-item-action" id="currency-settings" data-toggle="list" href="#currency" role="tab" aria-controls="settings">Currency</a>
-                            <a class="list-group-item list-group-item-action" id="mail-settings" data-toggle="list" href="#mail" role="tab" aria-controls="mail">Mail</a>
-                            <a class="list-group-item list-group-item-action" id="newsletter-settings" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">Newsletter</a>
-                            <a class="list-group-item list-group-item-action" id="emptyDatabase-settings" data-toggle="list" href="#emptyDatabase" role="tab" aria-controls="emptyDatabase">Empty Database</a>
+                            <a class="list-group-item list-group-item-action active" id="general-settings" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.General')</a>
+                            <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">@lang('file.Store')</a>
+                            <a class="list-group-item list-group-item-action" id="currency-settings" data-toggle="list" href="#currency" role="tab" aria-controls="settings">@lang('file.Currency')</a>
+                            <a class="list-group-item list-group-item-action" id="mail-settings" data-toggle="list" href="#mail" role="tab" aria-controls="mail">@lang('file.Mail')</a>
+                            <a class="list-group-item list-group-item-action" id="newsletter-settings" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">@lang('file.Newsletter')</a>
+                            <a class="list-group-item list-group-item-action" id="emptyDatabase-settings" data-toggle="list" href="#emptyDatabase" role="tab" aria-controls="emptyDatabase">@lang('file.Empty Database')</a>
                         </div>
                     </div>
                 </div>
@@ -81,15 +81,15 @@
              <div class="card mb-0">
                 <div class="card-header" id="socialLogin">
                     <div class="btn" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapseOne">
-                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>Social Logins</h5>
+                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>@lang('file.Social Logins')</h5>
                     </div>
                 </div>
                 <div id="collapse2" class="collapse" aria-labelledby="socialLogin" data-parent="#accordion">
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action" id="facebook-social_login" data-toggle="list" href="#facebook" role="tab" aria-controls="facebook">Facebook</a>
-                            <a class="list-group-item list-group-item-action" id="google-social_login" data-toggle="list" href="#google" role="tab" aria-controls="google">Google</a>
-                            <a class="list-group-item list-group-item-action" id="github-social_login" data-toggle="list" href="#github" role="tab" aria-controls="github">Github</a>
+                            <a class="list-group-item list-group-item-action" id="facebook-social_login" data-toggle="list" href="#facebook" role="tab" aria-controls="facebook">@lang('file.Facebook')</a>
+                            <a class="list-group-item list-group-item-action" id="google-social_login" data-toggle="list" href="#google" role="tab" aria-controls="google">@lang('file.Google')</a>
+                            <a class="list-group-item list-group-item-action" id="github-social_login" data-toggle="list" href="#github" role="tab" aria-controls="github">@lang('file.Github')</a>
                         </div>
                     </div>
                 </div>
@@ -98,15 +98,15 @@
              <div class="card mb-0">
                 <div class="card-header" id="shippingMethod">
                     <div class="btn" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapseOne">
-                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>Shipping Methods</h5>
+                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>@lang('file.Shipping Methods')</h5>
                     </div>
                 </div>
                 <div id="collapse3" class="collapse" aria-labelledby="shippingMethod" data-parent="#accordion">
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action" id="free_shipping-shipping_methods" data-toggle="list" href="#free_shipping" role="tab" aria-controls="free_shipping">Free Shipping</a>
-                            <a class="list-group-item list-group-item-action" id="local_pickup-shipping_methods" data-toggle="list" href="#local_pickup" role="tab" aria-controls="local_pickup">Local Pickup</a>
-                            <a class="list-group-item list-group-item-action" id="flat_rate-shipping_methods" data-toggle="list" href="#flat_rate" role="tab" aria-controls="flat_rate">Flat Rate</a>
+                            <a class="list-group-item list-group-item-action" id="free_shipping-shipping_methods" data-toggle="list" href="#free_shipping" role="tab" aria-controls="free_shipping">@lang('file.Free Shipping')</a>
+                            <a class="list-group-item list-group-item-action" id="local_pickup-shipping_methods" data-toggle="list" href="#local_pickup" role="tab" aria-controls="local_pickup">@lang('file.Local Pickup')</a>
+                            <a class="list-group-item list-group-item-action" id="flat_rate-shipping_methods" data-toggle="list" href="#flat_rate" role="tab" aria-controls="flat_rate">@lang('file.Flat Rate')</a>
                         </div>
                     </div>
                 </div>
@@ -116,16 +116,16 @@
              <div class="card">
                 <div class="card-header" id="paymentMethod">
                     <div class="btn" data-toggle="collapse" data-target="#collapse4" aria-expanded="true" aria-controls="collapseFour">
-                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>Payment Methods</h5>
+                        <h5 class="text-bold"><i class="fa fa-angle-right"></i>@lang('file.Payment Methods')</h5>
                     </div>
                 </div>
                 <div id="collapse4" class="collapse" aria-labelledby="paymentMethod" data-parent="#accordion">
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action" id="paypal-payment_methods" data-toggle="list" href="#paypal" role="tab" aria-controls="paypal">Paypal</a>
-                            <a class="list-group-item list-group-item-action" id="strip-payment_methods" data-toggle="list" href="#strip" role="tab" aria-controls="strip">Strip</a>
-                            <a class="list-group-item list-group-item-action" id="sslcommerz-payment_methods" data-toggle="list" href="#sslcommerz" role="tab" aria-controls="sslcommerz">SSL Commerz</a>
-                            <a class="list-group-item list-group-item-action" id="cash_on_delivery-payment_methods" data-toggle="list" href="#cash_on_delivery" role="tab" aria-controls="cash_on_delivery">Cash On Delivery</a>
+                            <a class="list-group-item list-group-item-action" id="paypal-payment_methods" data-toggle="list" href="#paypal" role="tab" aria-controls="paypal">@lang('file.Paypal')</a>
+                            <a class="list-group-item list-group-item-action" id="strip-payment_methods" data-toggle="list" href="#strip" role="tab" aria-controls="strip">@lang('file.Strip')</a>
+                            <a class="list-group-item list-group-item-action" id="sslcommerz-payment_methods" data-toggle="list" href="#sslcommerz" role="tab" aria-controls="sslcommerz">@lang('file.SSL Commerz')</a>
+                            <a class="list-group-item list-group-item-action" id="cash_on_delivery-payment_methods" data-toggle="list" href="#cash_on_delivery" role="tab" aria-controls="cash_on_delivery">@lang('file.Cash On Delivery')</a>
                         </div>
                     </div>
                 </div>

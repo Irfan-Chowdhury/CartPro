@@ -6,18 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Traits\FlashSaleProductsIds;
 
 class ShopProductController extends Controller
 {
+    use FlashSaleProductsIds;
+
     public function index()
     {
         $locale = Session::get('currentLocal');
         App::setLocale(Session::get('currentLocal'));
+
+        $flash_sale_products_ids = $this->getFlashSaleProductIds(Setting::get()); //Change it Later
 
         $products = DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
@@ -54,7 +60,7 @@ class ShopProductController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val'));
+        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','flash_sale_products_ids'));
     }
 
     public function limitShopProductShow(Request $request)
@@ -277,9 +283,9 @@ class ShopProductController extends Controller
 
                                 $html .= '</div>';
                                 if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0)){
-                                    $html .='<button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>Add to cart</button>';
-                                }else{
-                                    $html .='<button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title=Out of Stock"><i class="las la-cart-plus"></i></button>';
+                                    $html .=  '<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled tooltip"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>';
+                                }else {
+                                    $html .=  '<button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
                                 }
                                 $html .='<div class="d-flex justify-content-between">';
                                     if(Auth::check()){

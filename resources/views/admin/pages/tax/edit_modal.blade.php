@@ -15,6 +15,7 @@
                 @csrf
 
                 <input type="hidden" name="tax_id" id="tax_id">
+                <input type="hidden" name="tax_translation_id" id="taxTranslationId">
 
                 <div class="row">
                     <div class="col-md-2"></div>

@@ -56,7 +56,20 @@ class PaymentController extends Controller
 
     public function paymentProcees(Request $request)
     {
-        // return $request->payment_type;
+        $validator = Validator::make($request->all(),[
+            'billing_first_name' => 'required|string',
+            'billing_last_name'  => 'required|string',
+            'billing_country'  => 'required',
+            'billing_phone'      => 'required|numeric',
+            'billing_email'      => 'required|email',
+            'shipping_phone'=> 'nullable|numeric',
+            'shipping_email'=> 'nullable|email',
+        ]);
+        if($validator->fails()){
+            return redirect(route("cart.checkout"), 307)->withErrors($validator)->withInput();
+        }
+
+
         if ($request->billing_create_account_check) {
             $validator = Validator::make($request->all(),[
                 'billing_first_name' => 'required|string',
@@ -230,27 +243,29 @@ class PaymentController extends Controller
 
         // # CUSTOMER INFORMATION
         $post_data['cus_name'] = $request->billing_first_name.' '.$request->billing_last_name;
-        $post_data['cus_email'] = $request->billing_email;
-        $post_data['cus_add1'] = $request->billing_address_1;
-        $post_data['cus_add2'] = $request->billing_address_2;
-        $post_data['cus_city'] = $request->billing_city;
-        $post_data['cus_state'] = $request->billing_state;
-        $post_data['cus_postcode'] = $request->billing_zip_code;
-        $post_data['cus_country'] = $request->billing_country;
-        $post_data['cus_phone'] = $request->billing_phone;
-        $post_data['cus_fax'] = "";
+        $post_data['cus_email'] = $request->billing_email ?? 'no-mail@gmail.com';
+        $post_data['cus_add1'] = $request->billing_address_1 ?? 'Unknown';
+        $post_data['cus_add2'] = $request->billing_address_2 ?? 'Unknown';
+        $post_data['cus_city'] = $request->billing_city ?? 'Unknown';
+        $post_data['cus_state'] = $request->billing_state ?? 'Unknown';
+        $post_data['cus_postcode'] = $request->billing_zip_code ?? 'Unknown';
+        $post_data['cus_country'] = $request->billing_country ?? 'Unknown';
+        $post_data['cus_phone'] = $request->billing_phone ?? 'Unknown';
+        $post_data['cus_fax'] = "" ?? 'Unknown';
 
         // # SHIPMENT INFORMATION
         $post_data['ship_name'] = $request->shipping_first_name.' '.$request->shipping_last_name;
-        $post_data['ship_add1'] = $request->shipping_address_1;
-        $post_data['ship_add2'] = $request->shipping_address_2;
-        $post_data['ship_city'] = $request->shipping_city;
-        $post_data['ship_state'] = $request->shipping_state;
-        $post_data['ship_postcode'] = $request->shipping_zip_code;
-        $post_data['ship_phone'] = $request->shipping_phone;
-        $post_data['ship_country'] = $request->shipping_country;
-
-        $post_data['shipping_method'] = $request->shipping_type;
+        if ($post_data['ship_name']==NULL) {
+            $post_data['ship_name'] = 'Unknown';
+        }
+        $post_data['ship_add1'] = $request->shipping_address_1  ?? 'Unknown';
+        $post_data['ship_add2'] = $request->shipping_address_2  ?? 'Unknown';
+        $post_data['ship_city'] = $request->shipping_city  ?? 'Unknown';
+        $post_data['ship_state'] = $request->shipping_state ?? 'Unknown';
+        $post_data['ship_postcode'] = $request->shipping_zip_code ?? 'Unknown';
+        $post_data['ship_phone'] = $request->shipping_phone  ?? 'Unknown';
+        $post_data['ship_country'] = $request->shipping_country  ?? 'Unknown';
+        $post_data['shipping_method'] = $request->shipping_type ?? 'free';
         $post_data['product_name'] = "Unknown";
         $post_data['product_category'] = "Unknown";
         $post_data['product_profile'] = "Unknown";

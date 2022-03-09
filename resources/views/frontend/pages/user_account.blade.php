@@ -199,9 +199,9 @@
                                                                     <td class="product-subtotal">
                                                                         <span class="amount">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ $item->total }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                                                {{ $item->subtotal }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
                                                                             @else
-                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ $item->total }}
+                                                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ $item->subtotal }}
                                                                             @endif
                                                                         </span></td>
                                                                 </tr>

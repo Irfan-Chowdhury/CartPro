@@ -46,6 +46,10 @@
                 </div>
             @endif
 
+            <!-- Error Message -->
+                @include('frontend.includes.error_message')
+            <!-- Error Message -->
+
             <div class="row">
                 <form action="{{route('payment.process')}}" method="POST"
                     data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" class="validation" id="payment-form">
@@ -60,24 +64,33 @@
                     <div class="row">
                         <div class="col-md-6 mar-top-30">
                             <h3 class="section-title">@lang('file.Billing Details')</h3>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="billing_first_name" placeholder="First Name *">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="billing_last_name" placeholder="Last Name *">
+                                </div>
+
+
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_first_name" placeholder="First Name *">
+                                <input class="form-control" type="email" name="billing_email" placeholder="Email *">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_last_name" placeholder="Last Name *">
+                                <input class="form-control" type="text" name="billing_phone" placeholder="Phone *">
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group">
                                     <select class="form-control" name="billing_country" id="billingCountry">
-                                        <option value="">--Select Country--</option>
+                                        <option value="">* Select Country</option>
                                         @foreach ($countries as $country)
                                             <option value="{{$country->country_name}}">{{$country->country_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-12">
                                 <input class="form-control" type="text" name="billing_address_1" placeholder="Street Address">
                             </div>
@@ -93,12 +106,8 @@
                             <div class="col-sm-6">
                                 <input class="form-control" type="text" name="billing_zip_code" placeholder="Postcode / Zip">
                             </div>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="email" name="billing_email" placeholder="Email *">
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_phone" placeholder="Phone *">
-                            </div>
+                        </div>
+
 
                             @if (!Auth::check())
                                 <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
@@ -170,10 +179,10 @@
                                         <input class="form-control" type="text" name="shipping_zip_code" placeholder="Postcode / Zip">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_email" placeholder="Email *">
+                                        <input class="form-control" type="text" name="shipping_email" placeholder="Email">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_phone" placeholder="Phone *">
+                                        <input class="form-control" type="text" name="shipping_phone" placeholder="Phone">
                                     </div>
                                 </div>
                             </div>
@@ -348,8 +357,8 @@
                                         </label>
                                     @endif
                                     <div class="custom-control custom-checkbox text-center mt-5 mb-5">
-                                        <input type="checkbox" class="custom-control-input" id="accept_terms">
-                                        <label class="custom-control-label" for="accept_terms">I've read and accecpt the <a class="theme-color" href="">Terms & Conditions</a></label>
+                                        <input type="checkbox" class="custom-control-input" id="acceptTerms">
+                                        <label class="custom-control-label" for="accept_terms">I've read and accecpt the <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
                                     </div>
                                 </div>
                             </div>
@@ -362,8 +371,8 @@
                                 @include('frontend.pages.payment_page.stripe_from')
                             </div>
 
-                            <div class="checkout-actions mar-top-30" id="payNowPaypal">
-                                <button class="button lg style1 d-block text-center w-100" id="orderBtn">{{__('file.Pay Now')}}</button>
+                            <div class="checkout-actions mar-top-30">
+                                <button class="button lg style1 d-block text-center w-100" disabled title="disabled"  id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>
@@ -382,12 +391,15 @@
 <script>
 $(function(){
 
-    // $(document).ready(function() {
-    //     var cartTotalConvertToCurrency = parseFloat($('.cartSubtotal').text()) * {{$CHANGE_CURRENCY_RATE}}
-    //     $('.cartSubtotal').text(cartTotalConvertToCurrency.toFixed(2));
-    //     $('#totalAmount').val({{$cart_total}}); //For Form
-    // });
-
+    $('#acceptTerms').change(function() {
+        if(this.checked) {
+            $('#orderBtn').prop("disabled",false);
+            $('#orderBtn').prop("title",'Pay Now');
+        }else{
+            $('#orderBtn').prop("disabled",true);
+            $('#orderBtn').prop("title",'Disable');
+        }
+    });
 
     $('#billingCountry').change(function() {
         var billingCountry = $("#billingCountry").val();

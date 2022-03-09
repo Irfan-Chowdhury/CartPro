@@ -14,8 +14,6 @@ class CurrencyRateController extends Controller
     {
         if (request()->ajax())
         {
-            App::setLocale(Session::get('currentLocal'));
-
             $currency_rates = CurrencyRate::all();
 
             return datatables()->of($currency_rates)

@@ -12,7 +12,9 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use App\Traits\imageHandleTrait;
 use App\Traits\ActiveInactiveTrait;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -22,6 +24,8 @@ class UserController extends Controller
     {
         if (auth()->user()->can('user-view'))
         {
+            App::setLocale(Session::get('currentLocal'));
+
             $roles =  Role::where('is_active','=',1)->select('id','name')->get();
             $users = User::with('roleName')
                     ->orderBy('is_active','DESC')

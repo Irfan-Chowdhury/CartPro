@@ -9,10 +9,12 @@ use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
 use App\Models\FlashSale;
+use App\Models\FlashSaleProduct;
 use App\Models\KeywordHit;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
 use App\Models\OrderDetail;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\ProductTranslation;
 use App\Models\Review;
@@ -28,14 +30,18 @@ use Illuminate\Support\Facades\Cache;
 use Newsletter;
 use App\Traits\CurrencyConrvertion;
 use App\Traits\ENVFilePutContent;
+use App\Traits\FlashSaleProductsIds;
 use Illuminate\Support\Facades\File;
+use Harimayco\Menu\Models\Menus;
 
 class HomeController extends Controller
 {
-    use CurrencyConrvertion,ENVFilePutContent;
+    use CurrencyConrvertion,ENVFilePutContent, FlashSaleProductsIds;
 
     public function index()
     {
+
+        //We change the Logic of Flash Sale Products Later
 
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
@@ -47,10 +53,7 @@ class HomeController extends Controller
 
 
         Session::put('disable_newslatter',1);
-
         $locale = Session::get('currentLocal');
-        $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
-
 
         //Storefront Theme Color
         $storefront_theme_color = "#0071df";
@@ -72,14 +75,24 @@ class HomeController extends Controller
         $storefront_vertical_product_1_title = null;
         $storefront_vertical_product_2_title = null;
         $storefront_vertical_product_3_title = null;
+        $flash_sale_products_ids = [];
         $vertical_product_1 = [];
         $vertical_product_2 = [];
         $vertical_product_3 = [];
 
+
+        //Settings
+        $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+
+        //Bad Practice but we will change this later.
+        $flash_sale_products_ids = $this->getFlashSaleProductIds($settings);
+
+        //CategoryProducts
         $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
                                                 'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
                                                 'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                                            ->get();
+                                                ->whereNotIn('product_id',$flash_sale_products_ids) //new line
+                                                ->get();
 
         //Slider
         $sliders = Cache::remember('sliders', 150, function () use ($locale) {
@@ -96,9 +109,6 @@ class HomeController extends Controller
 
         //Slider Banner
         $slider_banners = $this->getSliderBanner($settings);
-        // return $slider_banners ;
-
-        // return $slider_banners[1]['action_url'];
 
         foreach ($settings as $key => $setting)
         {
@@ -156,8 +166,6 @@ class HomeController extends Controller
                 }
                 $product_tabs_one_titles[] = $settings[($key-2)]->key;
             }
-
-
             //Flash sale and vertical product
             elseif ($setting->key=='storefront_flash_sale_title') {
                 $storefront_flash_sale_title = $setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null;
@@ -205,16 +213,12 @@ class HomeController extends Controller
             }
         }
 
-        // return $storefront_vertical_product_1_title;
-
-
+        //Change this later.
         if ($active_campaign_flash_id) {
-            $flash_sales = FlashSale::with('flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
+            $flash_sales = FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
                                     'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
-                                    'flashSaleProducts.product.productAttributeValues')->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+                                    'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
         }
-
-        // return $flash_sales;
 
         $brand_ids = json_decode($storefront_top_brands);
 
@@ -225,6 +229,7 @@ class HomeController extends Controller
                 ->get();
 
         $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
+                        ->whereNotIn('product_id',$flash_sale_products_ids) //new line
                         ->select('product_id')
                         ->groupBy('product_id')
                         ->selectRaw('SUM(qty) AS qty_of_sold')
@@ -232,8 +237,6 @@ class HomeController extends Controller
                         ->skip(0)
                         ->take(10)
                         ->get();
-
-        // return $product_tab_one_section_1;
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
                                                 'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
@@ -260,6 +263,8 @@ class HomeController extends Controller
                     ])
                     ->where('slug',$product_slug)
                     ->first();
+
+        $flash_sale_product =  FlashSaleProduct::where('product_id',$product->id)->first() ?? null;
 
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
@@ -305,7 +310,7 @@ class HomeController extends Controller
                             ->get();
 
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products','flash_sale_product'));
     }
 
     public function dataAjaxSearch(Request $request)

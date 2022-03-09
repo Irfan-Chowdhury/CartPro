@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\CurrencyRate;
 use App\Models\Language;
 use App\Models\Order;
+use App\Models\Page;
 use App\Models\Setting;
 use App\Models\SettingNewsletter;
 use App\Models\SettingStore;
@@ -204,6 +205,8 @@ class AppServiceProvider extends ServiceProvider
         $three_column_banner_full_enabled = null;
         $flash_sale_and_vertical_products_section_enabled = null;
         $top_categories_section_enabled = null;
+        $terms_and_condition_page_id = null;
+        $terms_and_condition_page_slug = null;
 
         foreach ($settings as $key => $item) {
             if ($item->key=='storefront_theme_color' && $item->plain_value!=NULL) {
@@ -288,8 +291,16 @@ class AppServiceProvider extends ServiceProvider
             elseif ($item->key=='storefront_top_categories_section_enabled' && $item->plain_value!=NULL) {
                 $top_categories_section_enabled = $item->plain_value;
             }
+
+            //Tems and condition for checkout page
+            elseif ($item->key=='storefront_terms_and_condition_page' && $item->plain_value!=NULL) {
+                $terms_and_condition_page_id = $item->plain_value;
+            }
         }
 
+        if ($terms_and_condition_page_id!=null) {
+            $terms_and_condition_page_slug = Page::find($terms_and_condition_page_id)->slug;
+        }
 
         //Cart
         $cart_count = Cart::count();
@@ -379,6 +390,7 @@ class AppServiceProvider extends ServiceProvider
                     'socialShare'=> $socialShare,
                     'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,
                     'top_categories_section_enabled'=> $top_categories_section_enabled,
+                    'terms_and_condition_page_slug'=> $terms_and_condition_page_slug,
             ]);
 
             $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);

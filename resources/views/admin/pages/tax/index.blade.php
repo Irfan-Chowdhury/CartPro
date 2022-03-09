@@ -28,7 +28,7 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{trans('Tax Name')}}</th>
+        		    <th scope="col">{{trans('file.Tax Name')}}</th>
         		    <th scope="col">{{trans('file.Country')}}</th>
         		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.action')}}</th>
@@ -252,6 +252,7 @@
                 console.log(data);
 
                 $('#tax_id').val(data.tax.id);
+                $('#taxTranslationId').val(data.taxTranslation.id);
                 $('#tax_class').val(data.taxTranslation.tax_class);
                 $('#based_on').selectpicker('val',data.tax.based_on);
                 $('#tax_name').val(data.taxTranslation.tax_name);

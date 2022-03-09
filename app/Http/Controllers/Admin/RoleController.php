@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use App\Traits\ActiveInactiveTrait;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class RoleController extends Controller
 {
@@ -17,6 +18,9 @@ class RoleController extends Controller
     {
         if (auth()->user()->can('role-view'))
         {
+            App::setLocale(Session::get('currentLocal'));
+
+
             $roles = Role::orderBy('is_active','DESC')
             ->orderBy('id','DESC')
             ->get();

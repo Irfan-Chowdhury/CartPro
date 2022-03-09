@@ -1,9 +1,6 @@
 <?php
 namespace App\Traits;
 
-/**
- *
- */
 trait ActiveInactiveTrait{
 
     public function activeData($Model)

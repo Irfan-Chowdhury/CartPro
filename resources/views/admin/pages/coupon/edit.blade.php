@@ -43,7 +43,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Coupon Name') }}<span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" name="coupon_name" id="coupon_name" class="form-control" @if($coupon->couponTranslations->isNotEmpty()) value="{{$coupon->couponTranslations[0]->coupon_name}}" @endif placeholder="Type Coupon Name" >
+                                                            <input type="text" name="coupon_name" id="coupon_name" class="form-control" @if($coupon->couponTranslation || $coupon->couponTranslationEnglish) value="{{$coupon->couponTranslation->coupon_name ?? $coupon->couponTranslationEnglish->coupon_name ?? null }}" @endif placeholder="Type Coupon Name" >
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">

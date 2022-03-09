@@ -6,7 +6,7 @@
     <div class="container-fluid"><span id="alert_message"></span></div>
 
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">{{__('Currency Rates')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Currency Rates')}}</h4>
         <br>
     </div>
 
@@ -32,7 +32,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel"><b>Edit Tax</b></h5>
+          <h5 class="modal-title" id="editModalLabel"><b>@lang('file.Edit Tax')</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -48,13 +48,13 @@
                     <div class="col-md-8">
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Rate</label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Rate')</label>
                             <input type="text" class="col-md-8 form-control" name="currency_rate" id="currency_rate">
                             <input type="hidden" class="col-md-8 form-control" name="id" id="id">
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>Symbol</label>
+                            <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Symbol')</label>
                             <input type="text" class="col-md-8 form-control" name="currency_symbol" id="currency_symbol">
                         </div>
 
@@ -71,8 +71,8 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <button type="submit" class="btn btn-primary" id="save-button">Update</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Update')</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('file.Close')</button>
                     </div>
                 </div>
             </form>

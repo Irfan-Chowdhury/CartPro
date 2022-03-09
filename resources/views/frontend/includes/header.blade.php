@@ -72,7 +72,6 @@
                             <li class="d-lg-none">
                                 <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
                             </li>
-
                             @auth
                                 <li>
                                     <a href="{{route('user_account')}}"><i class="las la-user" data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Account"></i></a>
@@ -207,9 +206,9 @@
                                                         @else
                                                             <li class="{{$last_word==$menu_item->link ? 'active' : ''}}"><a href="{{route('page.Show',$menu_item->link)}}">{{$menu_item->label}}</a></li>
                                                         @endif
-                                                            {{-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> --}}
+                                                            <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
                                                     @endif
-                                                    {{-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> --}}
+                                                    <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
                                                 @endif
                                             @empty
                                             @endforelse

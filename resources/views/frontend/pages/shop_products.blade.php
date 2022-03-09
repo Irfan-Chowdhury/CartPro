@@ -47,7 +47,8 @@
                     <div class="col-lg-9">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="page-title h5 uppercase mb-0"></h1>
-                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products)}}</strong> @lang('file.Products Found')</span>
+                            {{-- $flash_sale_products_ids change it later --}}
+                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products) - count($flash_sale_products_ids)}}</strong> @lang('file.Products Found')</span>
                         </div>
 
                         <div class="products-header">
@@ -84,6 +85,7 @@
                         <div class="shop-products-wrapper">
                             <div class="product-grid shopProductsField">
                                 @forelse ($products as $item)
+                                    @if (!isset($flash_sale_products_ids[$item->id])) <!--Have to change later-->
                                         <form class="addToCart">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$item->id}}">
@@ -167,7 +169,7 @@
                                                             </div>
                                                             <div>
                                                                 @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                                    <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                                 @else
                                                                     <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                 @endif
@@ -211,6 +213,7 @@
                                                 </div>
                                             </div>
                                         </form>
+                                    @endif
                                 @empty
                                 @endforelse
                             </div>

@@ -87,11 +87,19 @@
                         <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
                         <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
 
+                        @isset($flash_sale_product)
+                            <input type="hidden" name="flash_sale" value="1">
+                            <input type="hidden" name="flash_sale_price" value="{{$flash_sale_product->price}}">
+                        @endisset
+
+
                         <div class="item-details">
                             <a class="item-category" href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
                             <h3 class="item-name">{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</h3>
                             <div class="d-flex justify-content-between">
-                                <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
+                                @if (isset($product->brandTranslation->brand_name)||isset($product->brandTranslationEnglish->brand_name))
+                                    <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
+                                @endif
                                 <div class="item-review">
                                     <ul class="p-0 m-0">
                                         @php
@@ -112,7 +120,26 @@
                                 @endif
                             </div>
                             <hr>
-                            @if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
+
+                            @if(isset($flash_sale_product)) <!--New Added-->
+                                <div class="item-price">
+                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                        {{ number_format((float)$flash_sale_product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                    @else
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$flash_sale_product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                    @endif
+                                </div>
+                                <div class="old-price">
+                                    <del>
+                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                            {{ number_format((float)$product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                        @else
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                        @endif
+                                    </del>
+                                </div>
+
+                            @elseif ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
                                         {{ number_format((float)$product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
@@ -172,7 +199,9 @@
                                                 <span class="ti-minus"></span>
                                             </button>
                                         </span>
-                                        @if (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
+                                        @if(isset($flash_sale_product)) <!--New Added-->
+                                            <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$flash_sale_product->qty}}">
+                                        @elseif (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
                                             <input type="number" name="qty" class="input-number" value="1" min="1" max="0">
                                         @else
                                             <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$product->qty}}">
@@ -537,7 +566,7 @@
                                                         </div>
                                                         <div>
                                                             @if (($item->product->qty==0) || ($item->product->in_stock==0))
-                                                                <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                             @else
                                                                 <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                             @endif
@@ -576,7 +605,7 @@
     <script type="text/javascript">
         (function ($) {
             "use strict";
-            
+
             $(".quantity-left-minus").on("click",function(e){
                 $(".quantity-right-plus").prop("disabled",false);
             })

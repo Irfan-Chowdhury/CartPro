@@ -269,7 +269,7 @@ class CategoryProductController extends Controller
                                     $html .='</div>
                                     </div>';
                                     if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0)){
-                                        $html .= '<button class="button style2 sm" disabled title="Stock Out" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
+                                        $html .= '<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>';
                                     }else {
                                         $html .= '<button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
                                     }
@@ -501,9 +501,9 @@ class CategoryProductController extends Controller
                                     $html .='</div>
                                     </div>';
                                     if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0)){
-                                        $html .= '<button class="button style2 sm" disabled title="Stock Out" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
+                                        $html .=  '<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled tooltip"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>';
                                     }else {
-                                        $html .= '<button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
+                                        $html .=  '<button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>';
                                     }
 
                                 $html .= '</div>

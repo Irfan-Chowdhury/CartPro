@@ -26,7 +26,7 @@
                             @forelse ($product_stock_reports as $item)
                                 <tr>
                                     <td>{{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}</td>
-                                    <td>{{$item->qty}}</td>
+                                    <td>{{$item->qty ?? 'No Traking Inventory'}}</td>
                                     <td>{{$item->in_stock==1  ? 'In Stock':'Out Stock'}}</td>
                                 </tr>
                             @empty

@@ -69,7 +69,9 @@
                                 <ul class="footer-menu">
                                     @if ($footer_menu_one)
                                         @forelse($footer_menu_one->items as $value)
-                                            <li><a class="" href="">{{$value->label}}</a></li>
+                                            @if ($value->locale==$locale)
+                                                <li><a class="" href="">{{$value->label}}</a></li>
+                                            @endif
                                         @empty
                                         @endforelse
                                     @endif

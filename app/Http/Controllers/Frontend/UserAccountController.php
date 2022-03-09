@@ -30,7 +30,7 @@ class UserAccountController extends Controller
                 ->where('product_translations.local', '=', $locale);
             })
             ->where('user_id',Auth::user()->id)
-            ->select('orders.total','product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options')
+            ->select('orders.total','product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.subtotal','order_details.options')
             ->get();
 
         return view('frontend.pages.user_account',compact('orders'));

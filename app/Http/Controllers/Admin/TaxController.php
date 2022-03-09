@@ -22,7 +22,7 @@ class TaxController extends Controller
     {
         $countries = Country::all();
         $locale = Session::get('currentLocal');
-        App::setLocale($locale);
+        // App::setLocale($locale);
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -62,7 +62,6 @@ class TaxController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->only('tax_name','based_on','country','tax_class'),[
             'tax_class'  => 'required',
             'based_on'  => 'required',
@@ -73,7 +72,6 @@ class TaxController extends Controller
         if ($validator->fails()){
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-
 
         if ($request->ajax())
         {
@@ -118,13 +116,12 @@ class TaxController extends Controller
             'tax_class'  => 'required',
             'based_on'  => 'required',
             'country'  => 'required',
-            'tax_name'  => 'required|unique:tax_translations,tax_name,'.$request->tax_id,
+            'tax_name'  => 'required|unique:tax_translations,tax_name,'.$request->tax_translation_id,
         ]);
 
         if ($validator->fails()){
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-
 
         if ($request->ajax())
         {

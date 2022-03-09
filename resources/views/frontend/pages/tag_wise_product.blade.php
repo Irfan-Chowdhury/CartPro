@@ -117,7 +117,7 @@
                                                             </div>
                                                             <div>
                                                                 @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                                    <button class="button style2 sm" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
+                                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                                 @else
                                                                         <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
                                                                 @endif

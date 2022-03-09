@@ -224,7 +224,8 @@ Route::get('admin/dashboard/chart',[AdminController::class,'chart'])->name('admi
 Route::get('/admin/logout',[AdminController::class,'Logout'])->name('admin.logout');
 Route::get('/admin/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
 
-Route::group(['prefix' => 'admin','middleware'=>['admin_check','middleware'=>'XSS']], function () {
+// Route::group(['prefix' => 'admin','middleware'=>['admin_check','middleware'=>'XSS']], function () {
+Route::group(['prefix' => 'admin','middleware'=>['admin_check','XSS','set_locale']], function () {
     Route::group(['namespace'=>'Admin'], function () {
 
         //Admin Profile

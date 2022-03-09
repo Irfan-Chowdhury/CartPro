@@ -15,7 +15,6 @@ class WishlistController extends Controller
             return view('frontend.auth.login');
         }
 
-
         $wishlists = Wishlist::with(['product.productTranslation','product.baseImage'=> function ($query){
             $query->where('type','base');
         }])->get();

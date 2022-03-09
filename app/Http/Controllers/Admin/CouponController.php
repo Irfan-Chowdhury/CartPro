@@ -200,13 +200,7 @@ class CouponController extends Controller
             }])
             ->where('is_active',1)
             ->get();
-
-        $coupon = Coupon::with(['couponTranslations'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-                    ->first();
-            },
-            'products','categories'])
-        ->find($id);
+        $coupon = Coupon::with('couponTranslation','couponTranslationEnglish')->find($id);
 
         return view('admin.pages.coupon.edit',compact('products','categories','locale','coupon'));
     }
