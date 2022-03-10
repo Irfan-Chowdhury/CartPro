@@ -31,7 +31,7 @@
                                 <img src="{{asset('public/images/user_default_image.jpg')}}" style="width:195px; height:190px" alt="...">
                             @endif
 
-                            <h4 class="user-name mar-top-10">Hello! <span>{{Auth::user()->username}}</span></h4>
+                            <h4 class="user-name mt-3">Hello! <span>{{Auth::user()->username}}</span></h4>
                         </div>
                         <ul class="user-info">
                             @if (Auth::user()->first_name && Auth::user()->last_name)
@@ -45,8 +45,7 @@
                             {{-- <li>Country: <span>USA</span></li> --}}
                             {{-- <li>Postcode: <span>10000</span></li> --}}
                         </ul>
-                        {{-- <button class="button sm style1 mar-top-10" href="#"><i class="ti-pencil"></i> </button> --}}
-                        <button class="button sm style1 mar-top-10" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button class="button sm d-block w-100 style1 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i class="ti-pencil"></i> Edit Profile
                         </button>
                     </div>
@@ -138,26 +137,29 @@
                                     <a class="nav-link active" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="all" aria-selected="true">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="branding" aria-selected="false">Orders</a>
+                                    {{-- <a class="nav-link" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="branding" aria-selected="false">Orders</a> --}}
+                                    <a class="nav-link" href="{{route('user.order.history')}}">Orders</a>
                                 </li>
-                                <form action="{{route('user_logout')}}" method="post">
-                                    @csrf
-                                    <button data-toggle="tab" role="tab" aria-controls="graphic_design" aria-selected="false" type="submit">{{__('file.logout')}}</button>
-                                </form>
+                                <li>
+                                    <form action="{{route('user_logout')}}" method="post">
+                                        @csrf
+                                        <button class="btn btn-text nav-link" data-toggle="tab" role="tab" aria-controls="graphic_design" aria-selected="false" type="submit">{{__('file.logout')}}</button>
+                                    </form>
+                                </li>
+
 
                             </ul>
                         </div>
 
                         <div class="col-md-12 mar-top-30">
                             <div class="user-dashboard-tab__content tab-content">
-                                <div class="tab-pane fade mar-top-30 show active" id="dashboard" role="tabpanel">
+                                <div class="tab-pane fade mt-3 show active" id="dashboard" role="tabpanel">
                                     <p>Hello <strong>{{Auth::user()->first_name}}</strong>,</p>
                                     <p>From your account dashboard you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details</a>.</p>
                                 </div>
 
                                 <div class="tab-pane fade mar-top-30" id="orders" role="tabpanel">
                                     <div class="container">
-
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="table-content table-responsive">

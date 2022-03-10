@@ -328,7 +328,6 @@ class HomeController extends Controller
                             ->where('local',$locale)
                             ->select('product_id','product_name','local')
                             ->get();
-
             $html = '';
             foreach ($products as $key => $item) {
                 if ($item->product->baseImage!=null) {

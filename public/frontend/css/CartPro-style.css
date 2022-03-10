@@ -156,6 +156,7 @@ section {
 .bg-green {
 	background-color: #c7e0b8!important
 }
+
 .cookie-consent {
     border-top: 3px solid var(--theme-color);
     box-shadow: 0 5px 10px rgba(0,0,0,0.3);
@@ -167,6 +168,7 @@ section {
     background: #fff;
     color: #333 !important;
 }
+
 body {
 	color: #555;
 	font-family: 'Work Sans', sans-serif;
@@ -694,46 +696,11 @@ a.underline:after {
 .header-search input {
 	border-right: none;
 	padding: 0 15px;
-	width: calc(100% - 200px)
+	width: calc(100% - 70px)
 }
 
 .header-mobile .header-search input {
 	width: 100%
-}
-
-.header-search .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
-	line-height: 20px;
-	width: auto
-}
-
-.header-search .dropdown {
-	border: none
-}
-
-.header-search .bootstrap-select .btn {
-	background-color: #fff;
-	border-radius: 0;
-	border-left: none;
-	border-right: none;
-	color: #777;
-	margin-left: -4px;
-	font-size: 14px;
-	padding: 0 .5em;
-	width: auto
-}
-
-.header-search .bootstrap-select .btn:hover {
-	border-bottom: 1px solid #e5e8ec;
-	border-top: 1px solid #e5e8ec
-}
-
-.bootstrap-select .dropdown-toggle::after {
-	border: none;
-	content: '\e64b';
-	font-family: themify;
-	font-size: 8px;
-	height: auto;
-	margin: 0 10px
 }
 
 .header-search .btn-search {
@@ -759,9 +726,10 @@ a.underline:after {
 	padding: 15px;
 	position: absolute;
 	top: 49px;
-	width: 95%;
+	width: calc(100% - 70px);
 	z-index: 999;
 }
+
 #search_field a {
     color: #555;
     line-height: 20px;
@@ -797,7 +765,6 @@ a.underline:after {
     color: var(--theme-color);
     font-weight: 500;
 }
-
 
 .offset-menu-wrapper li {
 	display: inline-block
@@ -873,7 +840,7 @@ li.wishlist__menu .badge {
 }
 
 li.cart__menu .total {
-	background-color: #f7f8f9;
+	background-color: #e5e8ec;
 	border-radius: 25px;
 	font-size: 16px;
 	padding: 5px 15px
@@ -1173,8 +1140,8 @@ li.wishlist__menu {
 }
 
 .category-button {
-	border: 1px solid #e5e8ec;
-	border-bottom: none;
+    background-color: #e5e8ec;
+	border: none;
 	padding: 0 15px
 }
 
@@ -1777,8 +1744,9 @@ li.wishlist__menu {
 }
 
 .promo-icon i {
-	font-size: 25px;
-	color: var(--theme-color)
+	font-size: 36px;
+    color: var(--theme-color);
+    margin-right: 20px;
 }
 
 .promo-icon.style1 {
@@ -1808,7 +1776,9 @@ li.wishlist__menu {
 
 .single-promo-item.style2 {
 	padding-bottom: 50px;
-	padding-top: 50px
+	padding-top: 50px;
+	display: flex;
+    justify-content: center;
 }
 
 .single-promo-item.style3 {
@@ -3546,6 +3516,11 @@ input[type=number] {
 	width: 80px;
 	height: 80px;
 	border-radius: 50%
+}
+
+.user-details ul {
+	list-style: none;
+	text-align: left;
 }
 
 .user-dashboard-tab__content {

@@ -29,10 +29,11 @@ use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
 use Exception;
 use App\Interfaces\BrandInterface;
+use App\Traits\imageHandleTrait;
 
 class ProductController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait;
+    use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait, imageHandleTrait;
 
     protected $brand;
     public function __construct(BrandInterface $brand){
@@ -49,8 +50,14 @@ class ProductController extends Controller
 
     public function index()
     {
+        // $product_images =  ProductImage::get();
+        // foreach ($product_images as $key => $value) {
+        //     $data = str_replace("/images/products","/images/products/large",$value->image);
+        //     ProductImage::where('id',$value->id)->update(['image'=>$data]);
+        // }
+        // return 'ok';
 
-        // return Product::withTrashed()->get();
+
 
         if (auth()->user()->can('product-view'))
         {
@@ -75,10 +82,10 @@ class ProductController extends Controller
                         return '<img src="'.url("public/images/products/empty.jpg").'" alt="" height="50px" width="50px">';
                     }elseif ($row->baseImage->type=='base') {
 
-                        if (!File::exists(public_path($row->baseImage->image))) {
+                        if (!File::exists(public_path($row->baseImage->image_small))) {
                             $url = 'https://dummyimage.com/50x50/000/fff';
                         }else {
-                            $url = url("public/".$row->baseImage->image);
+                            $url = url("public/".$row->baseImage->image_small);
                         }
                         return  '<img src="'. $url .'" height="50px" width="50px"/>';
                     }
@@ -240,9 +247,13 @@ class ProductController extends Controller
 
                 //----------------- Base Image --------------
                 if (!empty($request->base_image)){
+                    $image_name = $this->imageStoreProduct($request->base_image);
+
                     $productImage = [];
                     $productImage['product_id'] = $product->id;
-                    $productImage['image']      = $this->imageStore($request->base_image, $type='product');
+                    $productImage['image']        = '/images/products/large/'.$image_name;
+                    $productImage['image_medium'] = '/images/products/medium/'.$image_name;
+                    $productImage['image_small']  = '/images/products/small/'.$image_name;
                     $productImage['type']       = 'base';
                     ProductImage::insert($productImage);
                 }
@@ -251,10 +262,14 @@ class ProductController extends Controller
                 if (!empty($request->additional_images)) {
                     $additionalImagesArray = $request->additional_images;
                     foreach($additionalImagesArray as $key => $image){
+                        $image_name = $this->imageStoreProduct($image);
                         $data = [];
                         $data['product_id'] = $product->id;
-                        $data['image'] =  $this->imageStore($image,$type='product');
+                        $data['image']        = '/images/products/large/'.$image_name;
+                        $data['image_medium'] = '/images/products/medium/'.$image_name;
+                        $data['image_small']  = '/images/products/small/'.$image_name;
                         $data['type']  = 'additional';
+
                         ProductImage::insert($data);
                     }
                 }
@@ -373,8 +388,6 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // return $request->all();
-
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|max:255|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
@@ -447,13 +460,23 @@ class ProductController extends Controller
                 if ($productImage) {
                     if (File::exists(public_path().$productImage->image)) {
                         File::delete(public_path().$productImage->image);
+                        File::delete(public_path().$productImage->image_medium);
+                        File::delete(public_path().$productImage->image_small);
                     }
-                    $productImage->image  = $this->imageStore($request->base_image,$type='product');
+                    $image_name = $this->imageStoreProduct($request->base_image);
+                    $productImage->image  = '/images/products/large/'.$image_name;
+                    $productImage->image_medium  = '/images/products/medium/'.$image_name;
+                    $productImage->image_small  = '/images/products/small/'.$image_name;
                     $productImage->update();
                 }else {
+                    //check this line later
+                    $image_name = $this->imageStoreProduct($request->base_image);
+
                     $productImage = new ProductImage();
                     $productImage->product_id = $id;
-                    $productImage->image = $this->imageStore($request->base_image,$type='product');
+                    $productImage->image  = '/images/products/large/'.$image_name;
+                    $productImage->image_medium  = '/images/products/medium/'.$image_name;
+                    $productImage->image_small  = '/images/products/small/'.$image_name;
                     $productImage->type  = 'base';
                     $productImage->save();
                 }
@@ -467,15 +490,19 @@ class ProductController extends Controller
 
                     if (File::exists(public_path().$value->image)) {
                         File::delete(public_path().$value->image);
+                        File::delete(public_path().$value->image_medium);
+                        File::delete(public_path().$value->image_small);
                         $data[$key]->delete();
                     }
-
                 }
                 $additionalImagesArray = $request->additional_images;
                 foreach($additionalImagesArray as $key => $image){
+                    $image_name = $this->imageStoreProduct($image);
                     $productImage = new ProductImage();
                     $productImage->product_id = $id;
-                    $productImage->image = $this->imageStore($image,$type='product');
+                    $productImage->image = '/images/products/large/'.$image_name;
+                    $productImage->image_medium = '/images/products/medium/'.$image_name;
+                    $productImage->image_small = '/images/products/small/'.$image_name;
                     $productImage->type  = 'additional';
                     $productImage->save();
                 }
@@ -539,20 +566,18 @@ class ProductController extends Controller
         }
     }
 
-    protected function imageStore($image, $type)
+    protected function imageStoreProduct($image)
     {
-        $directory  ='/images/products/';
-        $img   = Str::random(10). '.' .'webp';
-        $location = public_path($directory.$img);
-        if ($type=='product') {
-            Image::make($image)->encode('webp', 60)->fit(720,660)->save($location);
-        }
-        else {
-            Image::make($image)->encode('webp', 60)->resize(300,300)->save($location);
-        }
-        $imageUrl = $directory.$img;
+        $directory_large  ='/images/products/large/';
+        $directory_medium  ='/images/products/medium/';
+        $directory_small  ='/images/products/small/';
+        $image_name        = Str::random(10). '.' .$image->getClientOriginalExtension();
 
-        return $imageUrl;
+        Image::make($image)->fit(720,660)->save(public_path($directory_large.$image_name));
+        Image::make($image)->fit(400,400)->save(public_path($directory_medium.$image_name));
+        Image::make($image)->fit(100,100)->save(public_path($directory_small.$image_name));
+
+        return $image_name;
     }
 
 

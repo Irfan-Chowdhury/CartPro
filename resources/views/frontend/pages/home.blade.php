@@ -208,8 +208,8 @@
 
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
-                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
@@ -312,8 +312,8 @@
 
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
-                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
@@ -416,8 +416,8 @@
 
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
-                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
@@ -518,8 +518,8 @@
 
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
-                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                            @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
@@ -690,8 +690,8 @@
 
                                                 <div class="single-product-wrapper deals">
                                                     <div class="single-product-item">
-                                                        @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->product->baseImage->image)}}"></a>
+                                                        @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
                                                         @else
                                                             <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=Best-Deals">
                                                         @endif
@@ -845,8 +845,8 @@
                                                         <div class="single-product-wrapper list">
                                                             <div class="single-product-item">
 
-                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_small)))
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_small)}}"></a>
                                                                 @else
                                                                     <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
                                                                 @endif
@@ -1178,8 +1178,8 @@
                                 <div class="single-product-wrapper">
                                     <div class="single-product-item">
                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                        @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image)))
-                                            <img class="lazy" src="{{asset('public/'.$item->product->baseImage->image)}}">
+                                        @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
+                                            <img class="lazy" src="{{asset('public/'.$item->product->baseImage->image_medium)}}">
                                         @else
                                             <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
                                         @endif

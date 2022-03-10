@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2022 at 05:06 PM
+-- Generation Time: Mar 10, 2022 at 11:58 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.26
 
@@ -284,7 +284,27 @@ INSERT INTO `category_product` (`category_id`, `product_id`) VALUES
 (7, 31),
 (15, 32),
 (4, 33),
-(2, 34);
+(2, 34),
+(1, 39),
+(1, 40),
+(1, 41),
+(1, 42),
+(6, 43),
+(7, 43),
+(8, 43),
+(9, 43),
+(12, 43),
+(13, 43),
+(14, 43),
+(15, 43),
+(3, 44),
+(4, 44),
+(6, 44),
+(10, 44),
+(15, 44),
+(1, 47),
+(1, 48),
+(9, 48);
 
 -- --------------------------------------------------------
 
@@ -676,6 +696,13 @@ CREATE TABLE `coupons` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `slug`, `coupon_code`, `value`, `discount_type`, `free_shipping`, `minimum_spend`, `maximum_spend`, `used`, `is_active`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 'গ্রীষ্ম-২০২২', 'summer2022', '10.0000', 'fixed', 0, '0.0000', '0.0000', 0, 1, '1970-01-01', '1970-01-01', '2022-03-08 22:54:10', '2022-03-08 23:01:32');
+
 -- --------------------------------------------------------
 
 --
@@ -712,6 +739,16 @@ CREATE TABLE `coupon_translations` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `coupon_translations`
+--
+
+INSERT INTO `coupon_translations` (`id`, `coupon_id`, `locale`, `coupon_name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'en', 'Summer-2022', '2022-03-08 22:54:10', '2022-03-08 22:54:10'),
+(2, 1, 'de', 'Sommer-2022', '2022-03-08 23:00:51', '2022-03-08 23:00:51'),
+(3, 1, 'es', 'Verano-2022', '2022-03-08 23:01:12', '2022-03-08 23:01:12'),
+(4, 1, 'bn', 'গ্রীষ্ম-২০২২', '2022-03-08 23:01:32', '2022-03-08 23:01:32');
 
 -- --------------------------------------------------------
 
@@ -845,7 +882,8 @@ CREATE TABLE `flash_sale_products` (
 INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `end_date`, `price`, `qty`, `position`, `created_at`, `updated_at`) VALUES
 (2, 2, 32, '2022-04-30', '120.00', 10, 0, '2022-02-22 02:45:34', '2022-02-22 02:45:34'),
 (5, 2, 33, '2022-04-28', '30.00', 19, 0, NULL, NULL),
-(6, 2, 34, '2022-03-10', '40.00', 20, 0, NULL, NULL);
+(6, 2, 34, '2022-03-10', '40.00', 20, 0, NULL, NULL),
+(7, 2, 3, '2022-03-12', '100.00', 10, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -897,6 +935,13 @@ CREATE TABLE `keyword_hits` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `keyword_hits`
+--
+
+INSERT INTO `keyword_hits` (`id`, `keyword`, `hit`, `created_at`, `updated_at`) VALUES
+(1, '', 1, '2022-03-05 23:08:47', '2022-03-05 23:08:47');
 
 -- --------------------------------------------------------
 
@@ -971,7 +1016,16 @@ CREATE TABLE `menu_items` (
 INSERT INTO `menu_items` (`id`, `locale`, `label`, `link`, `parent`, `sort`, `class`, `menu`, `depth`, `created_at`, `updated_at`) VALUES
 (1, 'en', 'Terms & Condition', 'terms-&-condition', 0, 0, NULL, 1, 0, '2022-02-25 11:41:30', '2022-02-25 11:47:47'),
 (2, 'en', 'About Us', 'about-us', 0, 1, NULL, 1, 0, '2022-02-25 11:47:47', '2022-02-25 11:49:01'),
-(3, 'en', 'FAQ', 'faq', 0, 3, NULL, 1, 0, '2022-02-25 11:49:01', '2022-02-25 11:49:01');
+(3, 'en', 'FAQ', 'faq', 0, 2, NULL, 1, 0, '2022-02-25 11:49:01', '2022-03-08 23:30:52'),
+(5, 'bn', 'টার্মস এন্ড কন্ডিশন', 'terms-&-condition', 0, 4, NULL, 1, 0, '2022-03-08 23:24:58', '2022-03-08 23:24:58'),
+(6, 'bn', 'আমদের সম্পর্কে', 'about-us', 0, 5, NULL, 1, 0, '2022-03-08 23:25:44', '2022-03-08 23:25:44'),
+(7, 'bn', 'প্রশ্ন ও জিজ্ঞাসা', 'faq', 0, 6, NULL, 1, 0, '2022-03-08 23:26:17', '2022-03-08 23:26:17'),
+(8, 'de', 'Allgemeine Geschäftsbedingungen', 'terms-&-condition', 0, 7, NULL, 1, 0, '2022-03-08 23:27:32', '2022-03-08 23:28:14'),
+(9, 'de', 'Über uns', 'about-us', 0, 8, NULL, 1, 0, '2022-03-08 23:27:45', '2022-03-08 23:27:45'),
+(10, 'de', 'Häufig Fragen und Fragen', 'faq', 0, 9, NULL, 1, 0, '2022-03-08 23:28:41', '2022-03-08 23:28:41'),
+(11, 'es', 'Términos y Condiciones', 'terms-&-condition', 0, 10, NULL, 1, 0, '2022-03-08 23:29:11', '2022-03-08 23:29:11'),
+(12, 'es', 'Sobre nosotros', 'about-us', 0, 11, NULL, 1, 0, '2022-03-08 23:29:22', '2022-03-08 23:29:22'),
+(13, 'es', 'Preguntas más frecuentes', 'faq', 0, 12, NULL, 1, 0, '2022-03-08 23:29:34', '2022-03-08 23:29:34');
 
 -- --------------------------------------------------------
 
@@ -1193,7 +1247,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `billing_first_name`, `billing_last_name`, `billing_email`, `billing_phone`, `billing_country`, `billing_address_1`, `billing_address_2`, `billing_city`, `billing_state`, `billing_zip_code`, `shipping_method`, `shipping_cost`, `payment_method`, `coupon_id`, `payment_id`, `discount`, `total`, `currency_base_total`, `currency_symbol`, `order_status`, `payment_status`, `date`, `tax_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Test ff', 'gdgdgd', 'test144@gmail.com', '345345555355', 'United States', 'ggdg', 'fgeter', 'fdfg', 'dfgfdgf', 'fdgfd', 'free', '0', 'cash_on_delivery', NULL, '621e2d3cea259', NULL, '30.00', '30.00', '$', 'completed', 'pending', '2022-03-01', NULL, '2022-03-01 08:27:08', '2022-03-01 22:37:20');
+(1, 1, 'Test ff', 'gdgdgd', 'test144@gmail.com', '345345555355', 'United States', 'ggdg', 'fgeter', 'fdfg', 'dfgfdgf', 'fdgfd', 'free', '0', 'cash_on_delivery', NULL, '621e2d3cea259', NULL, '30.00', '30.00', '$', 'completed', 'pending', '2022-03-01', NULL, '2022-03-01 08:27:08', '2022-03-01 22:37:20'),
+(2, NULL, 'Test', 'Lasdsd', 'irfanchowdhury434@gmail.com', 'Test', 'Canada', 'dasdd', 'sad', 'dsads', 'sdsad', 'asdsa', 'free', '0', 'cash_on_delivery', NULL, '6225c483b512c', NULL, '200.00', '200.00', '$', 'pending', 'pending', '2022-03-07', NULL, '2022-03-07 02:38:27', '2022-03-07 02:38:27'),
+(3, 1, 'Promiq', 'Chowdhury', 'promi@gmail.com', '01829498634', 'United States', 'Ttes', 'Test', 'Ctesas', 'Caslia', '3456', 'free', '0', 'cash_on_delivery', NULL, '6228670bea345', NULL, '640.50', '640.50', '$', 'pending', 'pending', '2022-03-09', NULL, '2022-03-09 02:36:27', '2022-03-09 02:36:27'),
+(4, 1, 'Saimon', 'Khan', 'saimon@gmail.com', '01829498546', 'Bangladesh', 'Muradpur', 'Ma villa', 'Chittagong', 'Bnagladesh', '4430', 'free', '0', 'cash_on_delivery', NULL, '6229cbd268105', NULL, '710.00', '710.00', '$', 'pending', 'pending', '2022-03-10', 1, '2022-03-10 03:58:42', '2022-03-10 03:58:42');
 
 -- --------------------------------------------------------
 
@@ -1225,7 +1282,12 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `brands`, `categories`, `tags`, `price`, `qty`, `weight`, `image`, `options`, `tax`, `discount`, `subtotal`, `created_at`, `updated_at`) VALUES
-(1, 1, 33, NULL, NULL, NULL, '30.00', 1, 1, '/images/products/v5Q6OuT0Yp.webp', '{\"image\":\"\\/images\\/products\\/v5Q6OuT0Yp.webp\",\"product_slug\":\"garmin-vivo-smart-3-activity-tracker-\\u2013-large\",\"category_id\":\"4\"}', '0.00', '', '30.00', '2022-03-01 08:27:09', '2022-03-01 08:27:09');
+(1, 1, 33, NULL, NULL, NULL, '30.00', 1, 1, '/images/products/v5Q6OuT0Yp.webp', '{\"image\":\"\\/images\\/products\\/v5Q6OuT0Yp.webp\",\"product_slug\":\"garmin-vivo-smart-3-activity-tracker-\\u2013-large\",\"category_id\":\"4\"}', '0.00', '', '30.00', '2022-03-01 08:27:09', '2022-03-01 08:27:09'),
+(2, 2, 3, NULL, NULL, NULL, '200.00', 1, 1, '/images/products/gxAhN2e8yY.webp', '{\"image\":\"\\/images\\/products\\/gxAhN2e8yY.webp\",\"product_slug\":\"samsung-galaxy-a52-5g-android-cell-phone\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-07 02:38:27', '2022-03-07 02:38:27'),
+(3, 3, 3, NULL, NULL, NULL, '200.00', 2, 1, '/images/products/gxAhN2e8yY.webp', '{\"image\":\"\\/images\\/products\\/gxAhN2e8yY.webp\",\"product_slug\":\"samsung-galaxy-a52-5g-android-cell-phone\",\"category_id\":\"1\"}', '0.00', '', '400.00', '2022-03-09 02:36:28', '2022-03-09 02:36:28'),
+(4, 3, 5, NULL, NULL, NULL, '240.50', 1, 1, '/images/products/XAbIiTyFAC.webp', '{\"image\":\"\\/images\\/products\\/XAbIiTyFAC.webp\",\"product_slug\":\"oneplus-8-pro-onyx-black-android-smartphone\",\"category_id\":\"1\"}', '0.00', '', '240.50', '2022-03-09 02:36:28', '2022-03-09 02:36:28'),
+(5, 4, 7, NULL, NULL, NULL, '500.00', 1, 1, '/images/products/large/9og6IARLNE.webp', '{\"image\":\"\\/images\\/products\\/large\\/9og6IARLNE.webp\",\"product_slug\":\"samsung-galaxy-note-10\",\"category_id\":\"1\"}', '0.00', '', '500.00', '2022-03-10 03:58:42', '2022-03-10 03:58:42'),
+(6, 4, 1, NULL, NULL, NULL, '100.00', 2, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-10 03:58:42', '2022-03-10 03:58:42');
 
 -- --------------------------------------------------------
 
@@ -1248,7 +1310,7 @@ CREATE TABLE `pages` (
 INSERT INTO `pages` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'terms-&-condition', 1, '2022-02-25 11:40:27', '2022-02-25 11:46:30'),
 (2, 'about-us', 1, '2022-02-25 11:47:18', '2022-02-25 11:47:18'),
-(3, 'faq', 1, '2022-02-25 11:48:47', '2022-02-25 11:48:47');
+(3, 'faq', 1, '2022-02-25 11:48:47', '2022-03-08 23:08:08');
 
 -- --------------------------------------------------------
 
@@ -1273,7 +1335,16 @@ CREATE TABLE `page_translations` (
 INSERT INTO `page_translations` (`id`, `page_id`, `locale`, `page_name`, `body`, `created_at`, `updated_at`) VALUES
 (1, 1, 'en', 'Terms & Condition', '&lt;p&gt;This website is operated by a.season. Throughout the site, the terms &amp;ldquo;we&amp;rdquo;, &amp;ldquo;us&amp;rdquo; and &amp;ldquo;our&amp;rdquo; refer to a.season. a.season offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;By visiting our site and/ or purchasing something from us, you engage in our &amp;ldquo;Service&amp;rdquo; and agree to be bound by the following terms and conditions (&amp;ldquo;Terms of Service&amp;rdquo;, &amp;ldquo;Terms&amp;rdquo;), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Online Store Terms&lt;/h4&gt;\n&lt;p&gt;By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence, or that you are the age of majority in your state or province of residence and you have given us your consent to allow any of your minor dependents to use this site.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;General Conditions&lt;/h4&gt;\n&lt;p&gt;We reserve the right to refuse service to anyone for any reason at any time.&lt;br /&gt;You understand that your content (not including credit card information), may be transferred unencrypted and involve (a) transmissions over various networks; and (b) changes to conform and adapt to technical requirements of connecting networks or devices. Credit card information is always encrypted during transfer over networks.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;License&lt;/h4&gt;\n&lt;p&gt;You must not:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;Republish material from&amp;nbsp;&lt;span class=&quot;highlight preview_website_name&quot;&gt;Website Name&lt;/span&gt;&lt;/li&gt;\n&lt;li&gt;Sell, rent or sub-license material from&amp;nbsp;&lt;span class=&quot;highlight preview_website_name&quot;&gt;Website Name&lt;/span&gt;&lt;/li&gt;\n&lt;li&gt;Reproduce, duplicate or copy material from&amp;nbsp;&lt;span class=&quot;highlight preview_website_name&quot;&gt;Website Name&lt;/span&gt;&lt;/li&gt;\n&lt;li&gt;Redistribute content from&amp;nbsp;&lt;span class=&quot;highlight preview_website_name&quot;&gt;Website Name&lt;/span&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Disclaimer&lt;/h4&gt;\n&lt;p&gt;To the maximum extent permitted by applicable law, we exclude all representations:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;limit or exclude our or your liability for death or personal injury;&lt;/li&gt;\n&lt;li&gt;limit or exclude our or your liability for fraud or fraudulent misrepresentation;&lt;/li&gt;\n&lt;li&gt;limit any of our or your liabilities in any way that is not permitted under applicable law; or&lt;/li&gt;\n&lt;li&gt;exclude any of our or your liabilities that may not be excluded under applicable law.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.&lt;/p&gt;', '2022-02-25 11:40:27', '2022-02-25 11:46:30'),
 (2, 2, 'en', 'About Us', '&lt;p&gt;There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;ul&gt;\r\n&lt;li&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/li&gt;\r\n&lt;li&gt;In luctus nunc id lectus pellentesque lacinia.&lt;/li&gt;\r\n&lt;li&gt;Pellentesque laoreet mi molestie tortor aliquam, sed hendrerit nisi consectetur.&lt;/li&gt;\r\n&lt;li&gt;Nam sed sapien sed lacus placerat euismod in consectetur ex.&lt;/li&gt;\r\n&lt;li&gt;Sed et odio ultrices, semper sem sed, scelerisque libero.&lt;/li&gt;\r\n&lt;li&gt;Proin ut ex varius libero viverra pellentesque.&lt;/li&gt;\r\n&lt;/ul&gt;', '2022-02-25 11:47:18', '2022-02-25 11:47:18'),
-(3, 3, 'en', 'FAQ', '&lt;h1 style=&quot;text-align: center;&quot;&gt;Help &amp;amp; FAQ&lt;/h1&gt;\r\n&lt;p&gt;Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;h4&gt;What does LOREM mean?&lt;/h4&gt;\r\n&lt;p&gt;&amp;lsquo;Lorem ipsum dolor sit amet, consectetur adipisici elit&amp;hellip;&amp;rsquo; (complete text) is dummy text that is not meant to mean anything. It is used as a placeholder in magazine layouts, for example, in order to give an impression of the finished document. The text is intentionally unintelligible so that the viewer is not distracted by the content. The language is not real Latin and even the first word &amp;lsquo;Lorem&amp;rsquo; does not exist. It is said that the lorem ipsum text has been common among typesetters since the 16th century.&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;h4&gt;Why do we use it?&lt;/h4&gt;\r\n&lt;p&gt;It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;h4&gt;Where does it come from?&lt;/h4&gt;\r\n&lt;p&gt;Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;h4&gt;Where can I get some?&lt;/h4&gt;\r\n&lt;p&gt;There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\r\n&lt;h4&gt;Why do we use Lorem Ipsum?&lt;/h4&gt;\r\n&lt;p&gt;Many times, readers will get distracted by readable text when looking at the layout of a page. Instead of using filler text that says &amp;ldquo;Insert content here,&amp;rdquo; Lorem Ipsum uses a normal distribution of letters, making it resemble standard English. This makes it easier for designers to focus on visual elements, as opposed to what the text on a page actually says. Lorem Ipsum is absolutely necessary in most design cases, too. Web design projects like landing pages, website redesigns and so on only look as intended when they\'re fully-fleshed out with content.&lt;/p&gt;', '2022-02-25 11:48:47', '2022-02-25 11:48:47');
+(3, 3, 'en', 'FAQ', '&lt;h1 style=&quot;text-align: center;&quot;&gt;Help &amp;amp; FAQ&lt;/h1&gt;\n&lt;p&gt;Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;What does LOREM mean?&lt;/h4&gt;\n&lt;p&gt;&amp;lsquo;Lorem ipsum dolor sit amet, consectetur adipisici elit&amp;hellip;&amp;rsquo; (complete text) is dummy text that is not meant to mean anything. It is used as a placeholder in magazine layouts, for example, in order to give an impression of the finished document. The text is intentionally unintelligible so that the viewer is not distracted by the content. The language is not real Latin and even the first word &amp;lsquo;Lorem&amp;rsquo; does not exist. It is said that the lorem ipsum text has been common among typesetters since the 16th century.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Why do we use it?&lt;/h4&gt;\n&lt;p&gt;It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Where does it come from?&lt;/h4&gt;\n&lt;p&gt;Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Where can I get some?&lt;/h4&gt;\n&lt;p&gt;There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;h4&gt;Why do we use Lorem Ipsum?&lt;/h4&gt;\n&lt;p&gt;Many times, readers will get distracted by readable text when looking at the layout of a page. Instead of using filler text that says &amp;ldquo;Insert content here,&amp;rdquo; Lorem Ipsum uses a normal distribution of letters, making it resemble standard English. This makes it easier for designers to focus on visual elements, as opposed to what the text on a page actually says. Lorem Ipsum is absolutely necessary in most design cases, too. Web design projects like landing pages, website redesigns and so on only look as intended when they\'re fully-fleshed out with content.&lt;/p&gt;', '2022-02-25 11:48:47', '2022-03-08 23:08:08'),
+(4, 3, 'bn', 'প্রশ্ন ও জিজ্ঞাসা', '&lt;p&gt;সাহায্য এবং FAQ&lt;/p&gt;\n&lt;p&gt;Lorem Ipsum হল মুদ্রণ এবং টাইপসেটিং শিল্পের ডামি পাঠ্য। লোরেম ইপসাম 1500 এর দশক থেকে শিল্পের মানক ডামি টেক্সট হয়েছে, যখন একটি অজানা প্রিন্টার টাইপের একটি গ্যালি নিয়েছিল এবং একটি টাইপ নমুনা বই তৈরি করতে এটিকে স্ক্র্যাম্বল করেছিল। এটি শুধুমাত্র পাঁচ শতক নয়, ইলেকট্রনিক টাইপসেটিং-এ লাফ দিয়েও টিকে আছে, যা মূলত অপরিবর্তিত রয়েছে। এটি 1960-এর দশকে লোরেম ইপসাম প্যাসেজ সম্বলিত লেট্রাসেট শীট প্রকাশের মাধ্যমে এবং অতি সম্প্রতি লোরেম ইপসামের সংস্করণ সহ অ্যালডাস পেজমেকারের মতো ডেস্কটপ প্রকাশনা সফ্টওয়্যারের মাধ্যমে জনপ্রিয় হয়েছিল।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;LOREM মানে কি?&lt;/p&gt;\n&lt;p&gt;\'Lorem ipsum dolor sit amet, consectetur adipisici elit...\' (সম্পূর্ণ টেক্সট) হল ডামি টেক্সট যা কিছু বোঝানোর জন্য নয়। এটি ম্যাগাজিন লেআউটে একটি স্থানধারক হিসাবে ব্যবহৃত হয়, উদাহরণস্বরূপ, সমাপ্ত নথির একটি ছাপ দেওয়ার জন্য। পাঠ্যটি ইচ্ছাকৃতভাবে দুর্বোধ্য যাতে দর্শক বিষয়বস্তু দ্বারা বিভ্রান্ত না হয়। ভাষাটি প্রকৃত ল্যাটিন নয় এবং এমনকি প্রথম শব্দ \'লোরেম\'-এর অস্তিত্ব নেই। বলা হয় যে লোরেম ইপসাম টেক্সটটি 16 শতক থেকে টাইপসেটারদের মধ্যে প্রচলিত।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;আমরা কেন এটা ব্যবহার করি?&lt;/p&gt;\n&lt;p&gt;এটি একটি দীর্ঘ প্রতিষ্ঠিত সত্য যে একটি পাঠক একটি পৃষ্ঠার লেআউট দেখার সময় পাঠযোগ্য বিষয়বস্তু দ্বারা বিভ্রান্ত হবে। Lorem Ipsum ব্যবহার করার বিষয় হল যে এটিতে \'এখানে সামগ্রী, এখানে বিষয়বস্তু\' ব্যবহার করার বিপরীতে অক্ষরগুলির একটি কম-বেশি স্বাভাবিক বিতরণ রয়েছে, এটিকে পঠনযোগ্য ইংরেজির মতো দেখায়। অনেক ডেস্কটপ পাবলিশিং প্যাকেজ এবং ওয়েব পেজ এডিটররা এখন তাদের ডিফল্ট মডেল টেক্সট হিসেবে Lorem Ipsum ব্যবহার করে এবং \'lorem ipsum\'-এর জন্য অনুসন্ধান করলে অনেক ওয়েব সাইট তাদের শৈশবকালেই উন্মোচিত হবে। বছরের পর বছর ধরে বিভিন্ন সংস্করণ বিকশিত হয়েছে, কখনও দুর্ঘটনাক্রমে, কখনও কখনও উদ্দেশ্যমূলক (ইনজেক্টেড হিউমার এবং এর মতো)।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;যেখানে এটি থেকে আসে?&lt;/p&gt;\n&lt;p&gt;জনপ্রিয় বিশ্বাসের বিপরীতে, Lorem Ipsum কেবল এলোমেলো পাঠ্য নয়। এটি 45 খ্রিস্টপূর্বাব্দের ধ্রুপদী ল্যাটিন সাহিত্যের একটি অংশে শিকড় রয়েছে, যা এটিকে 2000 বছরেরও বেশি পুরানো করে তোলে। ভার্জিনিয়ার হ্যাম্পডেন-সিডনি কলেজের একজন ল্যাটিন অধ্যাপক রিচার্ড ম্যাকক্লিনটক, লরেম ইপসাম প্যাসেজ থেকে আরও অস্পষ্ট ল্যাটিন শব্দ, কনসেক্টেটুর, এবং ধ্রুপদী সাহিত্যে শব্দের উদ্ধৃতির মধ্য দিয়ে গিয়ে সন্দেহাতীত উৎস আবিষ্কার করেন।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;আমি কোথায় কিছু পেতে পারি?&lt;/p&gt;\n&lt;p&gt;Lorem Ipsum-এর অনুচ্ছেদের অনেক বৈচিত্র উপলব্ধ রয়েছে, কিন্তু অধিকাংশই কিছু আকারে পরিবর্তনের শিকার হয়েছে, ইনজেকশন করা হাস্যরস, বা এলোমেলো শব্দ যা সামান্য বিশ্বাসযোগ্য মনে হচ্ছে না। আপনি যদি Lorem Ipsum-এর একটি প্যাসেজ ব্যবহার করতে যাচ্ছেন, তাহলে আপনাকে নিশ্চিত হতে হবে যে টেক্সটের মাঝখানে বিব্রতকর কিছু লুকানো নেই। ইন্টারনেটের সমস্ত Lorem Ipsum জেনারেটরগুলি প্রয়োজনীয় হিসাবে পূর্বনির্ধারিত অংশগুলি পুনরাবৃত্তি করার প্রবণতা রাখে, এটিকে ইন্টারনেটে প্রথম সত্য জেনারেটর করে তোলে। এটি লরেম ইপসাম তৈরি করতে 200 টিরও বেশি ল্যাটিন শব্দের অভিধান ব্যবহার করে, যা কিছু মডেল বাক্য গঠনের সাথে মিলিত হয় যা যুক্তিসঙ্গত বলে মনে হয়। উত্পন্ন লোরেম ইপসাম তাই সবসময় পুনরাবৃত্তি, ইনজেকশন করা হাস্যরস, বা অ-চরিত্রহীন শব্দ ইত্যাদি থেকে মুক্ত।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;কেন আমরা Lorem Ipsum ব্যবহার করি?&lt;/p&gt;\n&lt;p&gt;অনেক সময়, পাঠকরা একটি পৃষ্ঠার বিন্যাস দেখার সময় পাঠযোগ্য পাঠ্য দ্বারা বিভ্রান্ত হবেন। &quot;এখানে বিষয়বস্তু ঢোকান&quot; বলে ফিলার টেক্সট ব্যবহার করার পরিবর্তে লোরেম ইপসাম অক্ষরগুলির একটি সাধারণ বিতরণ ব্যবহার করে, এটিকে সাধারণ ইংরেজির মতো করে। এটি ডিজাইনারদের ভিজ্যুয়াল উপাদানগুলিতে ফোকাস করা সহজ করে তোলে, একটি পৃষ্ঠার পাঠ্য আসলে যা বলে তার বিপরীতে। বেশিরভাগ ডিজাইনের ক্ষেত্রেও Lorem Ipsum একেবারে প্রয়োজনীয়। ওয়েব ডিজাইন প্রজেক্ট যেমন ল্যান্ডিং পেজ, ওয়েবসাইট রিডিজাইন ইত্যাদি শুধুমাত্র তখনই দেখায় যখন সেগুলি কন্টেন্টের সাথে সম্পূর্ণরূপে পরিপূর্ণ হয়।&lt;/p&gt;', '2022-03-08 23:07:24', '2022-03-08 23:07:24'),
+(5, 2, 'bn', 'আমদের সম্পর্কে', '&lt;p&gt;Lorem Ipsum-এর অনুচ্ছেদের অনেক বৈচিত্র উপলব্ধ রয়েছে, কিন্তু অধিকাংশই কিছু আকারে পরিবর্তনের শিকার হয়েছে, ইনজেকশন করা হাস্যরস, বা এলোমেলো শব্দ যা সামান্য বিশ্বাসযোগ্য মনে হচ্ছে না। আপনি যদি Lorem Ipsum-এর একটি প্যাসেজ ব্যবহার করতে যাচ্ছেন, তাহলে আপনাকে নিশ্চিত হতে হবে যে টেক্সটের মাঝখানে বিব্রতকর কিছু লুকানো নেই। ইন্টারনেটের সমস্ত Lorem Ipsum জেনারেটরগুলি প্রয়োজনীয় হিসাবে পূর্বনির্ধারিত অংশগুলি পুনরাবৃত্তি করার প্রবণতা রাখে, এটিকে ইন্টারনেটে প্রথম সত্য জেনারেটর করে তোলে। এটি লরেম ইপসাম তৈরি করতে 200 টিরও বেশি ল্যাটিন শব্দের অভিধান ব্যবহার করে, যা কিছু মডেল বাক্য গঠনের সাথে মিলিত হয় যা যুক্তিসঙ্গত বলে মনে হয়। উত্পন্ন লোরেম ইপসাম তাই সবসময় পুনরাবৃত্তি, ইনজেকশন করা হাস্যরস, বা অ-চরিত্রহীন শব্দ ইত্যাদি থেকে মুক্ত।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;br /&gt;লুকটাস নুনক আইডি লেক্টাস পেলেনটেস্ক ল্যাকিনিয়াতে।&lt;br /&gt;Pellentesque laoreet mi molestie tortor aliquam, sed hendrerit nisi consectetur.&lt;br /&gt;Nam sed sapien sed lacus placerat euismod in consectetur ex.&lt;br /&gt;Sed et odio ultrices, Semper Sem Sed, scelerisque libero.&lt;br /&gt;প্রিন্ট ইউটি এক্স varius libero viverra pellentesque.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/li&gt;\n&lt;li&gt;In luctus nunc id lectus pellentesque lacinia.&lt;/li&gt;\n&lt;li&gt;Pellentesque laoreet mi molestie tortor aliquam, sed hendrerit nisi consectetur.&lt;/li&gt;\n&lt;li&gt;Nam sed sapien sed lacus placerat euismod in consectetur ex.&lt;/li&gt;\n&lt;li&gt;Sed et odio ultrices, semper sem sed, scelerisque libero.&lt;/li&gt;\n&lt;li&gt;Proin ut ex varius libero viverra pellentesque.&lt;/li&gt;\n&lt;/ul&gt;', '2022-03-08 23:11:32', '2022-03-08 23:11:32'),
+(6, 1, 'bn', 'টার্মস এন্ড কন্ডিশন', '&lt;p&gt;এই ওয়েবসাইট a.season দ্বারা পরিচালিত হয়. পুরো সাইট জুড়ে, &quot;আমরা&quot;, &quot;আমাদের&quot; এবং &quot;আমাদের&quot; শব্দগুলো a.season-কে বোঝায়। a.season এই ওয়েবসাইটটি অফার করে, এই সাইট থেকে উপলব্ধ সমস্ত তথ্য, সরঞ্জাম এবং পরিষেবাগুলি সহ আপনার, ব্যবহারকারীর জন্য, এখানে উল্লিখিত সমস্ত শর্তাবলী, শর্তাবলী, নীতি এবং বিজ্ঞপ্তিগুলি আপনার স্বীকৃতির উপর শর্তযুক্ত।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;আমাদের সাইট পরিদর্শন করে এবং/অথবা আমাদের কাছ থেকে কিছু কেনার মাধ্যমে, আপনি আমাদের &quot;পরিষেবা&quot;-তে নিযুক্ত হন এবং নিম্নলিখিত শর্তাবলী (&quot;পরিষেবার শর্তাবলী&quot;, &quot;শর্তাবলী&quot;) দ্বারা আবদ্ধ হতে সম্মত হন, সেই অতিরিক্ত শর্তাবলী এবং নীতিগুলি সহ এখানে উল্লেখ করা হয়েছে এবং/অথবা হাইপারলিঙ্ক দ্বারা উপলব্ধ। এই পরিষেবার শর্তাবলী সাইটের সমস্ত ব্যবহারকারীর জন্য প্রযোজ্য, যার মধ্যে সীমাবদ্ধতা ছাড়াই ব্যবহারকারী যারা ব্রাউজার, বিক্রেতা, গ্রাহক, বণিক, এবং/অথবা সামগ্রীর অবদানকারী।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;অনলাইন স্টোর শর্তাবলী&lt;/p&gt;\n&lt;p&gt;এই পরিষেবার শর্তাবলীতে সম্মত হওয়ার মাধ্যমে, আপনি প্রতিনিধিত্ব করেন যে আপনার রাজ্য বা বসবাসের প্রদেশে আপনি কমপক্ষে সংখ্যাগরিষ্ঠের বয়স, অথবা আপনি আপনার রাজ্য বা বসবাসের প্রদেশে সংখ্যাগরিষ্ঠের বয়স এবং আপনি আমাদের সম্মতি দিয়েছেন আপনার অপ্রাপ্তবয়স্ক নির্ভরশীলদের এই সাইটটি ব্যবহার করার অনুমতি দিন।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;সাধারণ শর্ত&lt;/p&gt;\n&lt;p&gt;আমরা যে কোন সময় যে কোন কারণে যে কাউকে সেবা প্রত্যাখ্যান করার অধিকার সংরক্ষণ করি।&lt;br /&gt;আপনি বুঝতে পারেন যে আপনার বিষয়বস্তু (ক্রেডিট কার্ডের তথ্য সহ নয়), এনক্রিপ্ট ছাড়া স্থানান্তরিত হতে পারে এবং (ক) বিভিন্ন নেটওয়ার্কে ট্রান্সমিশন জড়িত হতে পারে; এবং (খ) সংযোগকারী নেটওয়ার্ক বা ডিভাইসগুলির প্রযুক্তিগত প্রয়োজনীয়তার সাথে সামঞ্জস্য এবং মানিয়ে নেওয়ার জন্য পরিবর্তন। নেটওয়ার্কে স্থানান্তরের সময় ক্রেডিট কার্ডের তথ্য সর্বদা এনক্রিপ্ট করা হয়।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;লাইসেন্স&lt;/p&gt;\n&lt;p&gt;তুমি অবশ্যই না:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;ওয়েবসাইটের নাম থেকে সামগ্রী পুনঃপ্রকাশ করুন&lt;br /&gt;ওয়েবসাইটের নাম থেকে বিক্রয়, ভাড়া বা উপ-লাইসেন্স সামগ্রী&lt;br /&gt;ওয়েবসাইটের নাম থেকে উপাদান পুনরুত্পাদন, অনুলিপি বা অনুলিপি করুন&lt;br /&gt;ওয়েবসাইটের নাম থেকে সামগ্রী পুনরায় বিতরণ করুন&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;দাবিত্যাগ&lt;/p&gt;\n&lt;p&gt;প্রযোজ্য আইন দ্বারা অনুমোদিত সর্বাধিক পরিমাণে, আমরা সমস্ত উপস্থাপনা বাদ দিই:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;মৃত্যু বা ব্যক্তিগত আঘাতের জন্য আমাদের বা আপনার দায়বদ্ধতা সীমিত বা বাদ দিন;&lt;br /&gt;জালিয়াতি বা প্রতারণামূলক ভুল উপস্থাপনের জন্য আমাদের বা আপনার দায়বদ্ধতাকে সীমাবদ্ধ বা বাদ দিন;&lt;br /&gt;প্রযোজ্য আইনের অধীনে অনুমোদিত নয় এমন যেকোন উপায়ে আমাদের বা আপনার দায়বদ্ধতা সীমাবদ্ধ করুন; বা&lt;br /&gt;প্রযোজ্য আইনের অধীনে বাদ দেওয়া যাবে না এমন কোনো আমাদের বা আপনার দায় বাদ দিন।&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;যতক্ষণ না ওয়েবসাইট এবং ওয়েবসাইটের তথ্য এবং পরিষেবাগুলি বিনামূল্যে প্রদান করা হয়, আমরা কোনও প্রকৃতির ক্ষতি বা ক্ষতির জন্য দায়ী থাকব না।&lt;/p&gt;', '2022-03-08 23:12:08', '2022-03-08 23:12:08'),
+(7, 3, 'de', 'Häufig Fragen und Fragen', '&lt;h1 style=&quot;text-align: center;&quot;&gt;Hilfe &amp;amp; FAQ&lt;/h1&gt;\n&lt;p&gt;Lorem Ipsum ist einfach Blindtext der Druck- und Satzindustrie. Lorem Ipsum ist seit den 1500er Jahren der Standard-Dummy-Text der Branche, als ein unbekannter Drucker eine Reihe von Typen nahm und daraus ein Musterbuch f&amp;uuml;r Typen erstellte. Sie hat nicht nur f&amp;uuml;nf Jahrhunderte, sondern auch den Sprung in den elektronischen Satz &amp;uuml;berstanden und ist im Wesentlichen unver&amp;auml;ndert geblieben. Es wurde in den 1960er Jahren mit der Ver&amp;ouml;ffentlichung von Letraset-Bl&amp;auml;ttern mit Passagen von Lorem Ipsum und in j&amp;uuml;ngerer Zeit mit Desktop-Publishing-Software wie Aldus PageMaker, einschlie&amp;szlig;lich Versionen von Lorem Ipsum, popul&amp;auml;r.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Was bedeutet LOREM?&lt;/p&gt;\n&lt;p&gt;&amp;bdquo;Lorem ipsum dolor sit amet, consectetur adipisici elit&amp;hellip;&amp;ldquo; (vollst&amp;auml;ndiger Text) ist ein Blindtext, der nichts bedeuten soll. Es wird beispielsweise als Platzhalter in Zeitschriftenlayouts verwendet, um einen Eindruck vom fertigen Dokument zu vermitteln. Der Text ist absichtlich unverst&amp;auml;ndlich, damit der Betrachter nicht vom Inhalt abgelenkt wird. Die Sprache ist kein richtiges Latein und nicht einmal das erste Wort &amp;bdquo;Lorem&amp;ldquo; existiert. Der Lorem-ipsum-Text soll unter Schriftsetzern seit dem 16. Jahrhundert &amp;uuml;blich gewesen sein.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Warum verwenden wir es?&lt;/p&gt;\n&lt;p&gt;Es ist eine seit langem bekannte Tatsache, dass ein Leser beim Betrachten des Layouts durch den lesbaren Inhalt einer Seite abgelenkt wird. Der Punkt bei der Verwendung von Lorem Ipsum ist, dass es eine mehr oder weniger normale Verteilung von Buchstaben hat, im Gegensatz zur Verwendung von &amp;bdquo;Inhalt hier, Inhalt hier&amp;ldquo;, wodurch es wie lesbares Englisch aussieht. Viele Desktop-Publishing-Pakete und Webseiten-Editoren verwenden jetzt Lorem Ipsum als ihren Standardmodelltext, und eine Suche nach &amp;bdquo;lorem ipsum&amp;ldquo; wird viele Websites aufdecken, die noch in den Kinderschuhen stecken. Im Laufe der Jahre haben sich verschiedene Versionen entwickelt, manchmal zuf&amp;auml;llig, manchmal absichtlich (eingespritzter Humor und dergleichen).&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Woher kommt das?&lt;/p&gt;\n&lt;p&gt;Entgegen der landl&amp;auml;ufigen Meinung ist Lorem Ipsum nicht einfach zuf&amp;auml;lliger Text. Es hat seine Wurzeln in einem St&amp;uuml;ck klassischer lateinischer Literatur aus dem Jahr 45 v. Chr. und ist damit &amp;uuml;ber 2000 Jahre alt. Richard McClintock, Lateinprofessor am Hampden-Sydney College in Virginia, schlug eines der obskureren lateinischen W&amp;ouml;rter, consectetur, in einer Lorem-Ipsum-Passage nach, und als er die Zitate des Wortes in der klassischen Literatur durchging, entdeckte er die unbestreitbare Quelle.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Wo kann ich welche bekommen?&lt;/p&gt;\n&lt;p&gt;Es gibt viele Variationen von Passagen von Lorem Ipsum, aber die meisten wurden in irgendeiner Form ver&amp;auml;ndert, durch eingespritzten Humor oder willk&amp;uuml;rliche W&amp;ouml;rter, die nicht einmal ann&amp;auml;hernd glaubw&amp;uuml;rdig aussehen. Wenn Sie eine Passage von Lorem Ipsum verwenden, m&amp;uuml;ssen Sie sicher sein, dass nichts Peinliches in der Mitte des Textes versteckt ist. Alle Lorem Ipsum-Generatoren im Internet neigen dazu, vordefinierte Chunks nach Bedarf zu wiederholen, was dies zum ersten echten Generator im Internet macht. Es verwendet ein W&amp;ouml;rterbuch mit &amp;uuml;ber 200 lateinischen W&amp;ouml;rtern, kombiniert mit einer Handvoll Modellsatzstrukturen, um Lorem Ipsum zu generieren, das vern&amp;uuml;nftig aussieht. Das generierte Lorem Ipsum ist daher immer frei von Wiederholungen, eingespritztem Humor, uncharakteristischen W&amp;ouml;rtern etc.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Warum verwenden wir Lorem Ipsum?&lt;/p&gt;\n&lt;p&gt;Leser werden oft durch lesbaren Text abgelenkt, wenn sie sich das Layout einer Seite ansehen. Anstatt F&amp;uuml;lltext zu verwenden, der besagt: &amp;bdquo;Inhalt hier einf&amp;uuml;gen&amp;ldquo;, verwendet Lorem Ipsum eine normale Buchstabenverteilung, sodass er dem Standardenglisch &amp;auml;hnelt. Dies erleichtert es Designern, sich auf visuelle Elemente zu konzentrieren, im Gegensatz zu dem, was der Text auf einer Seite tats&amp;auml;chlich sagt. Auch Lorem Ipsum ist in den meisten Auslegungsf&amp;auml;llen zwingend erforderlich. Webdesign-Projekte wie Zielseiten, Website-Redesigns usw. sehen erst dann wie beabsichtigt aus, wenn sie vollst&amp;auml;ndig mit Inhalten gef&amp;uuml;llt sind.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;', '2022-03-08 23:14:03', '2022-03-08 23:14:03'),
+(8, 3, 'es', 'Preguntas más frecuentes', '&lt;h1 style=&quot;text-align: center;&quot;&gt;&lt;span class=&quot;VIiyi&quot; lang=&quot;es&quot;&gt;&lt;span class=&quot;JLqJ4b&quot; data-language-for-alternatives=&quot;es&quot; data-language-to-translate-into=&quot;en&quot; data-phrase-index=&quot;0&quot; data-number-of-phrases=&quot;1&quot;&gt;Ayuda y preguntas frecuentes&lt;/span&gt;&lt;/span&gt;&lt;/h1&gt;\n&lt;p&gt;Lorem Ipsum es simplemente un texto ficticio de la industria de la impresi&amp;oacute;n y la composici&amp;oacute;n tipogr&amp;aacute;fica. Lorem Ipsum ha sido el texto ficticio est&amp;aacute;ndar de la industria desde la d&amp;eacute;cada de 1500, cuando un impresor desconocido tom&amp;oacute; una galera de tipos y la codific&amp;oacute; para hacer un libro de muestras tipogr&amp;aacute;ficas. Ha sobrevivido no solo cinco siglos, sino tambi&amp;eacute;n el salto a la composici&amp;oacute;n tipogr&amp;aacute;fica electr&amp;oacute;nica, permaneciendo esencialmente sin cambios. Se populariz&amp;oacute; en la d&amp;eacute;cada de 1960 con el lanzamiento de hojas de Letraset que conten&amp;iacute;an pasajes de Lorem Ipsum y, m&amp;aacute;s recientemente, con software de autoedici&amp;oacute;n como Aldus PageMaker, que inclu&amp;iacute;a versiones de Lorem Ipsum.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;iquest;Qu&amp;eacute; significa LOREM?&lt;/p&gt;\n&lt;p&gt;&amp;lsquo;Lorem ipsum dolor sit amet, consectetur adipisici elit&amp;hellip;&amp;rsquo; (texto completo) es un texto ficticio que no pretende significar nada. Se utiliza como marcador de posici&amp;oacute;n en dise&amp;ntilde;os de revistas, por ejemplo, para dar una impresi&amp;oacute;n del documento terminado. El texto es intencionalmente ininteligible para que el espectador no se distraiga con el contenido. El idioma no es el lat&amp;iacute;n real e incluso la primera palabra \'Lorem\' no existe. Se dice que el texto lorem ipsum ha sido com&amp;uacute;n entre los tip&amp;oacute;grafos desde el siglo XVI.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;iquest;Por qu&amp;eacute; lo usamos?&lt;/p&gt;\n&lt;p&gt;Es un hecho establecido desde hace mucho tiempo que un lector se distraer&amp;aacute; con el contenido legible de una p&amp;aacute;gina cuando mire su dise&amp;ntilde;o. El punto de usar Lorem Ipsum es que tiene una distribuci&amp;oacute;n de letras m&amp;aacute;s o menos normal, a diferencia de usar \'Contenido aqu&amp;iacute;, contenido aqu&amp;iacute;\', lo que hace que parezca un ingl&amp;eacute;s legible. Muchos paquetes de autoedici&amp;oacute;n y editores de p&amp;aacute;ginas web ahora usan Lorem Ipsum como su modelo de texto predeterminado, y una b&amp;uacute;squeda de \'lorem ipsum\' descubrir&amp;aacute; muchos sitios web que a&amp;uacute;n est&amp;aacute;n en su infancia. Varias versiones han evolucionado a lo largo de los a&amp;ntilde;os, a veces por accidente, a veces a prop&amp;oacute;sito (humor inyectado y cosas por el estilo).&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;iquest;De d&amp;oacute;nde viene?&lt;/p&gt;\n&lt;p&gt;Contrariamente a la creencia popular, Lorem Ipsum no es simplemente un texto aleatorio. Tiene sus ra&amp;iacute;ces en una pieza de la literatura latina cl&amp;aacute;sica del 45 a. C., por lo que tiene m&amp;aacute;s de 2000 a&amp;ntilde;os. Richard McClintock, profesor de lat&amp;iacute;n en Hampden-Sydney College en Virginia, busc&amp;oacute; una de las palabras latinas m&amp;aacute;s oscuras, consectetur, en un pasaje de Lorem Ipsum, y al revisar las citas de la palabra en la literatura cl&amp;aacute;sica, descubri&amp;oacute; la fuente indudable.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;iquest;Donde puedo conseguir algunos?&lt;/p&gt;\n&lt;p&gt;Hay muchas variaciones de pasajes de Lorem Ipsum disponibles, pero la mayor&amp;iacute;a ha sufrido alteraciones de alguna forma, por humor inyectado o palabras aleatorias que no parecen ni un poco cre&amp;iacute;bles. Si vas a usar un pasaje de Lorem Ipsum, debes asegurarte de que no haya nada vergonzoso escondido en medio del texto. Todos los generadores de Lorem Ipsum en Internet tienden a repetir fragmentos predefinidos seg&amp;uacute;n sea necesario, lo que lo convierte en el primer generador real en Internet. Utiliza un diccionario de m&amp;aacute;s de 200 palabras latinas, combinado con un pu&amp;ntilde;ado de estructuras de oraciones modelo, para generar Lorem Ipsum que parece razonable. Por lo tanto, el Lorem Ipsum generado siempre est&amp;aacute; libre de repeticiones, humor inyectado o palabras no caracter&amp;iacute;sticas, etc.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;iquest;Por qu&amp;eacute; usamos Lorem Ipsum?&lt;/p&gt;\n&lt;p&gt;Muchas veces, los lectores se distraen con el texto legible cuando miran el dise&amp;ntilde;o de una p&amp;aacute;gina. En lugar de usar un texto de relleno que dice &quot;Insertar contenido aqu&amp;iacute;&quot;, Lorem Ipsum usa una distribuci&amp;oacute;n normal de letras, lo que lo hace parecerse al ingl&amp;eacute;s est&amp;aacute;ndar. Esto facilita que los dise&amp;ntilde;adores se centren en los elementos visuales, a diferencia de lo que realmente dice el texto de una p&amp;aacute;gina. Lorem Ipsum tambi&amp;eacute;n es absolutamente necesario en la mayor&amp;iacute;a de los casos de dise&amp;ntilde;o. Los proyectos de dise&amp;ntilde;o web, como p&amp;aacute;ginas de destino, redise&amp;ntilde;os de sitios web, etc., solo se ven seg&amp;uacute;n lo previsto cuando est&amp;aacute;n completamente desarrollados con contenido.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;', '2022-03-08 23:15:38', '2022-03-08 23:15:38'),
+(9, 2, 'de', 'Über uns', '&lt;p&gt;Es gibt viele Variationen von Passagen von Lorem Ipsum, aber die meisten wurden in irgendeiner Form ver&amp;auml;ndert, durch eingespritzten Humor oder willk&amp;uuml;rliche W&amp;ouml;rter, die nicht einmal ann&amp;auml;hernd glaubw&amp;uuml;rdig aussehen. Wenn Sie eine Passage von Lorem Ipsum verwenden, m&amp;uuml;ssen Sie sicher sein, dass nichts Peinliches in der Mitte des Textes versteckt ist. Alle Lorem Ipsum-Generatoren im Internet neigen dazu, vordefinierte Chunks nach Bedarf zu wiederholen, was dies zum ersten echten Generator im Internet macht. Es verwendet ein W&amp;ouml;rterbuch mit &amp;uuml;ber 200 lateinischen W&amp;ouml;rtern, kombiniert mit einer Handvoll Modellsatzstrukturen, um Lorem Ipsum zu generieren, das vern&amp;uuml;nftig aussieht. Das generierte Lorem Ipsum ist daher immer frei von Wiederholungen, eingespritztem Humor, uncharakteristischen W&amp;ouml;rtern etc.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;br /&gt;In luctus nunc id lectus pellentesque lacinia.&lt;br /&gt;Pellentesque laoreet mi molestie tortor aliquam, sed hendrerit nisi consectetur.&lt;br /&gt;Nam sed sapien sed lacus placerat euismod in consectetur ex.&lt;br /&gt;Sed et odio ultrices, semper sem sed, scelerisque libero.&lt;br /&gt;Proin ut ex varius libero viverra pellentesque.&lt;/p&gt;', '2022-03-08 23:17:07', '2022-03-08 23:18:44'),
+(10, 2, 'es', 'Sobre nosotros', '&lt;p&gt;Hay muchas variaciones de pasajes de Lorem Ipsum disponibles, pero la mayor&amp;iacute;a ha sufrido alteraciones de alguna forma, por humor inyectado o palabras aleatorias que no parecen ni un poco cre&amp;iacute;bles. Si vas a usar un pasaje de Lorem Ipsum, debes asegurarte de que no haya nada vergonzoso escondido en medio del texto. Todos los generadores de Lorem Ipsum en Internet tienden a repetir fragmentos predefinidos seg&amp;uacute;n sea necesario, lo que lo convierte en el primer generador real en Internet. Utiliza un diccionario de m&amp;aacute;s de 200 palabras latinas, combinado con un pu&amp;ntilde;ado de estructuras de oraciones modelo, para generar Lorem Ipsum que parece razonable. Por lo tanto, el Lorem Ipsum generado siempre est&amp;aacute; libre de repeticiones, humor inyectado o palabras no caracter&amp;iacute;sticas, etc.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;br /&gt;In luctus nunc id lectus pellentesque lacinia.&lt;br /&gt;Pellentesque laoreet mi molestie tortor aliquam, sed hendrerit nisi consectetur.&lt;br /&gt;Nam sed sapien sed lacus placerat euismod in consectetur ex.&lt;br /&gt;Sed et odio ultrices, semper sem sed, scelerisque libero.&lt;br /&gt;Proin ut ex varius libero viverra pellentesque.&lt;/p&gt;', '2022-03-08 23:19:19', '2022-03-08 23:19:19'),
+(11, 1, 'es', 'Términos y Condiciones', '&lt;p&gt;Este sitio web es operado por a.temporada. En todo el sitio, los t&amp;eacute;rminos &amp;ldquo;nosotros&amp;rdquo;, &amp;ldquo;nos&amp;rdquo; y &amp;ldquo;nuestro&amp;rdquo; se refieren a una.temporada. a.temporada ofrece este sitio web, incluyendo toda la informaci&amp;oacute;n, herramientas y servicios disponibles para ti en este sitio, el usuario, est&amp;aacute; condicionado a la aceptaci&amp;oacute;n de todos los t&amp;eacute;rminos, condiciones, pol&amp;iacute;ticas y notificaciones aqu&amp;iacute; establecidos.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Al visitar nuestro sitio y/o comprar algo de nosotros, usted participa en nuestro &quot;Servicio&quot; y acepta estar sujeto a los siguientes t&amp;eacute;rminos y condiciones (&quot;T&amp;eacute;rminos de servicio&quot;, &quot;T&amp;eacute;rminos&quot;), incluidos los t&amp;eacute;rminos y condiciones y pol&amp;iacute;ticas adicionales referenciado aqu&amp;iacute; y/o disponible por hiperv&amp;iacute;nculo. Estos T&amp;eacute;rminos de servicio se aplican a todos los usuarios del sitio, incluidos, entre otros, los usuarios que son navegadores, proveedores, clientes, comerciantes y/o contribuyentes de contenido.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;T&amp;eacute;rminos de la tienda en l&amp;iacute;nea&lt;/p&gt;\n&lt;p&gt;Al aceptar estos T&amp;eacute;rminos de servicio, usted declara que tiene al menos la mayor&amp;iacute;a de edad en su estado o provincia de residencia, o que tiene la mayor&amp;iacute;a de edad en su estado o provincia de residencia y nos ha dado su consentimiento para permitir que cualquiera de sus dependientes menores use este sitio.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Condiciones generales&lt;/p&gt;\n&lt;p&gt;Nos reservamos el derecho de rechazar el servicio a cualquier persona por cualquier motivo en cualquier momento.&lt;br /&gt;Usted comprende que su contenido (sin incluir la informaci&amp;oacute;n de la tarjeta de cr&amp;eacute;dito) puede transferirse sin cifrar e involucrar (a) transmisiones a trav&amp;eacute;s de varias redes; y (b) cambios para cumplir y adaptarse a los requisitos t&amp;eacute;cnicos de conexi&amp;oacute;n de redes o dispositivos. La informaci&amp;oacute;n de la tarjeta de cr&amp;eacute;dito siempre se cifra durante la transferencia a trav&amp;eacute;s de las redes.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Licencia&lt;/p&gt;\n&lt;p&gt;No debes:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Volver a publicar material del nombre del sitio web&lt;br /&gt;Vender, alquilar o sublicenciar material de Nombre del sitio web&lt;br /&gt;Reproducir, duplicar o copiar material de Nombre del sitio web&lt;br /&gt;Redistribuir contenido del nombre del sitio web&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Descargo de responsabilidad&lt;/p&gt;\n&lt;p&gt;En la medida m&amp;aacute;xima permitida por la ley aplicable, excluimos todas las representaciones:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;limitar o excluir nuestra o su responsabilidad por muerte o lesiones personales;&lt;br /&gt;limitar o excluir nuestra o su responsabilidad por fraude o tergiversaci&amp;oacute;n fraudulenta;&lt;br /&gt;limitar cualquiera de nuestras responsabilidades o las suyas de cualquier manera que no est&amp;eacute; permitida por la ley aplicable; o&lt;br /&gt;excluir cualquiera de nuestras o sus responsabilidades que no puedan ser excluidas bajo la ley aplicable.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Siempre que el sitio web y la informaci&amp;oacute;n y los servicios en el sitio web se proporcionen de forma gratuita, no seremos responsables de ninguna p&amp;eacute;rdida o da&amp;ntilde;o de ning&amp;uacute;n tipo.&lt;/p&gt;', '2022-03-08 23:20:18', '2022-03-08 23:20:18'),
+(12, 1, 'de', 'Allgemeine Geschäftsbedingungen', '&lt;p&gt;Diese Website wird von a.season betrieben. Auf der gesamten Website beziehen sich die Begriffe &amp;bdquo;wir&amp;ldquo;, &amp;bdquo;uns&amp;ldquo; und &amp;bdquo;unser&amp;ldquo; auf a.season. a.season bietet diese Website, einschlie&amp;szlig;lich aller Informationen, Tools und Dienste, die auf dieser Website f&amp;uuml;r Sie, den Benutzer, verf&amp;uuml;gbar sind, unter der Bedingung, dass Sie alle hier aufgef&amp;uuml;hrten Bedingungen, Richtlinien und Hinweise akzeptieren.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Indem Sie unsere Website besuchen und/oder etwas von uns kaufen, nehmen Sie an unserem &amp;bdquo;Service&amp;ldquo; teil und stimmen zu, an die folgenden Allgemeinen Gesch&amp;auml;ftsbedingungen (&amp;bdquo;Nutzungsbedingungen&amp;ldquo;, &amp;bdquo;Bedingungen&amp;ldquo;) gebunden zu sein, einschlie&amp;szlig;lich dieser zus&amp;auml;tzlichen Allgemeinen Gesch&amp;auml;ftsbedingungen und Richtlinien auf die hier verwiesen wird und/oder die per Hyperlink verf&amp;uuml;gbar sind. Diese Nutzungsbedingungen gelten f&amp;uuml;r alle Benutzer der Website, einschlie&amp;szlig;lich, aber nicht beschr&amp;auml;nkt auf Benutzer, die Browser, Verk&amp;auml;ufer, Kunden, H&amp;auml;ndler und/oder Beitragende von Inhalten sind.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Online-Shop-Bedingungen&lt;/p&gt;\n&lt;p&gt;Indem Sie diesen Nutzungsbedingungen zustimmen, erkl&amp;auml;ren Sie, dass Sie in Ihrem Bundesland oder Ihrer Provinz mindestens vollj&amp;auml;hrig sind oder dass Sie in Ihrem Bundesland oder Ihrer Provinz vollj&amp;auml;hrig sind und uns Ihre Zustimmung dazu gegeben haben gestatten Sie Ihren minderj&amp;auml;hrigen Angeh&amp;ouml;rigen die Nutzung dieser Website.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Allgemeine Bedingungen&lt;/p&gt;\n&lt;p&gt;Wir behalten uns das Recht vor, den Service jederzeit und ohne Angabe von Gr&amp;uuml;nden zu verweigern.&lt;br /&gt;Sie verstehen, dass Ihre Inhalte (ohne Kreditkarteninformationen) unverschl&amp;uuml;sselt &amp;uuml;bertragen werden k&amp;ouml;nnen und (a) &amp;Uuml;bertragungen &amp;uuml;ber verschiedene Netzwerke beinhalten; und (b) &amp;Auml;nderungen zur Konformit&amp;auml;t und Anpassung an technische Anforderungen von Verbindungsnetzwerken oder -ger&amp;auml;ten. Kreditkarteninformationen werden w&amp;auml;hrend der &amp;Uuml;bertragung &amp;uuml;ber Netzwerke immer verschl&amp;uuml;sselt.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Lizenz&lt;/p&gt;\n&lt;p&gt;Du darfst nicht:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Ver&amp;ouml;ffentlichen Sie Material von Website Name erneut&lt;br /&gt;Verkaufen, vermieten oder unterlizenzieren Sie Material von Website Name&lt;br /&gt;Reproduzieren, duplizieren oder kopieren Sie Material von Website Name&lt;br /&gt;Verbreiten Sie Inhalte von Website Name&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;Haftungsausschluss&lt;/p&gt;\n&lt;p&gt;Soweit nach geltendem Recht zul&amp;auml;ssig, schlie&amp;szlig;en wir alle Zusicherungen aus:&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;unsere oder Ihre Haftung f&amp;uuml;r Tod oder K&amp;ouml;rperverletzung einschr&amp;auml;nken oder ausschlie&amp;szlig;en;&lt;br /&gt;unsere oder Ihre Haftung f&amp;uuml;r Betrug oder betr&amp;uuml;gerische Falschdarstellung einschr&amp;auml;nken oder ausschlie&amp;szlig;en;&lt;br /&gt;unsere oder Ihre Verbindlichkeiten auf eine Weise einschr&amp;auml;nken, die nach geltendem Recht nicht zul&amp;auml;ssig ist; oder&lt;br /&gt;schlie&amp;szlig;en Sie jegliche unserer oder Ihrer Verbindlichkeiten aus, die nach geltendem Recht nicht ausgeschlossen werden k&amp;ouml;nnen.&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;&lt;br /&gt;Solange die Website und die Informationen und Dienste auf der Website kostenlos zur Verf&amp;uuml;gung gestellt werden, haften wir nicht f&amp;uuml;r Verluste oder Sch&amp;auml;den jeglicher Art.&lt;/p&gt;', '2022-03-08 23:20:48', '2022-03-08 23:20:48');
 
 -- --------------------------------------------------------
 
@@ -1455,7 +1526,7 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_price`, `special_price_type`, `is_special`, `special_price_start`, `special_price_end`, `selling_price`, `sku`, `manage_stock`, `qty`, `in_stock`, `viewed`, `is_active`, `new_from`, `new_to`, `avg_rating`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 2, 1, 'apple-iphone-11-64gb-yellow-fully-unlocked', '100.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'SO4JK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 00:46:06', '2022-03-03 03:33:29', NULL),
 (2, 2, 1, 'apple-iphone-x-64gb-silver-fully-unlocked', '284.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'CE45VERT', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:26:24', '2022-03-03 03:30:06', NULL),
-(3, 1, 1, 'samsung-galaxy-a52-5g-android-cell-phone', '200.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'KGH45YRT', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:30:20', '2022-03-03 03:26:22', NULL),
+(3, 1, 1, 'samsung-galaxy-a52-5g-android-cell-phone', '200.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'KGH45YRT', 1, 2, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:30:20', '2022-03-06 05:41:22', NULL),
 (4, 2, 1, 'apple-iphone-11-pro-max-(64gb)-–-silver', '815.0000', '715.0000', '', NULL, NULL, NULL, '715.0000', 'S57UK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:36:03', '2022-03-03 03:18:38', NULL),
 (5, 3, 1, 'oneplus-8-pro-onyx-black-android-smartphone', '240.5000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'YHE4M7', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:41:17', '2022-03-03 03:15:12', NULL),
 (6, 2, 1, 'apple-iphone-xs-max-64gb--white', '560.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'KLIOLP', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:11:05', '2022-03-03 03:11:51', NULL),
@@ -1486,7 +1557,8 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_pr
 (31, NULL, 1, 'ওয়ান্ডার-নেশন-টডলার-গার্লস-গ্লিটার-ক্যাজুয়াল-মেরি-জেন-স্নিকার্স', '2156.0000', '0.0000', '', NULL, '1970-01-01', '1970-01-01', '0.0000', '45581026', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-22 02:10:24', '2022-03-02 08:19:20', NULL),
 (32, NULL, 1, 'ড্রাগন-টাচ-ম্যাক্স-10-ট্যাবলেট-অ্যান্ড্রয়েড-10.0-ওএস', '189.9900', '129.9900', '', NULL, '1970-01-01', '1970-01-01', '129.9900', 'ZR45VGRT', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-22 02:33:31', '2022-03-02 08:14:51', NULL),
 (33, NULL, 1, 'গারমিন-ভিভো-স্মার্ট-3-অ্যাক্টিভিটি-ট্র্যাকার---বড়', '49.9900', '39.9900', '', NULL, '1970-01-01', '1970-01-01', '39.9900', 'BE458GET', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-22 02:58:36', '2022-03-02 08:09:58', NULL),
-(34, NULL, 1, 'ইকো-ডট-(4th-Gen,-2020-রিলিজ)-|-স্মার্ট-স্পিকার', '49.9900', '69.0000', '', NULL, '1970-01-01', '1970-01-01', '69.0000', 'SO4JK47', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-22 03:40:18', '2022-03-02 07:59:38', NULL);
+(34, NULL, 1, 'ইকো-ডট-(4th-Gen,-2020-রিলিজ)-|-স্মার্ট-স্পিকার', '49.9900', '69.0000', '', NULL, '1970-01-01', '1970-01-01', '69.0000', 'SO4JK47', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-22 03:40:18', '2022-03-02 07:59:38', NULL),
+(48, 1, 1, 'samsung-a12', '100.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'fdsfsge', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-03-10 02:08:25', '2022-03-10 02:08:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -1510,6 +1582,8 @@ CREATE TABLE `product_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `product_id` bigint(20) UNSIGNED NOT NULL,
   `image` varchar(255) NOT NULL,
+  `image_medium` varchar(255) DEFAULT NULL,
+  `image_small` varchar(255) DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1519,135 +1593,138 @@ CREATE TABLE `product_images` (
 -- Dumping data for table `product_images`
 --
 
-INSERT INTO `product_images` (`id`, `product_id`, `image`, `type`, `created_at`, `updated_at`) VALUES
-(1, 1, '/images/products/f6qXdQdZVm.webp', 'base', NULL, NULL),
-(2, 1, '/images/products/fjTtGCeVXq.webp', 'additional', NULL, NULL),
-(3, 1, '/images/products/d6LWjDgIOC.webp', 'additional', NULL, NULL),
-(4, 1, '/images/products/w2fWutUCYg.webp', 'additional', NULL, NULL),
-(5, 1, '/images/products/UgIMV1OlvG.webp', 'additional', NULL, NULL),
-(6, 2, '/images/products/oxnt4KyMw6.webp', 'base', NULL, NULL),
-(7, 2, '/images/products/uzkWGChGRu.webp', 'additional', NULL, NULL),
-(8, 2, '/images/products/WAwfYVJrwW.webp', 'additional', NULL, NULL),
-(9, 2, '/images/products/QnLOPyaiSc.webp', 'additional', NULL, NULL),
-(10, 3, '/images/products/gxAhN2e8yY.webp', 'base', NULL, NULL),
-(11, 3, '/images/products/vL50aZsaHL.webp', 'additional', NULL, NULL),
-(12, 3, '/images/products/lm7LYgCS5I.webp', 'additional', NULL, NULL),
-(13, 4, '/images/products/ydFqlpWr4D.webp', 'base', NULL, NULL),
-(14, 4, '/images/products/qeD9Bz8jGz.webp', 'additional', NULL, NULL),
-(15, 4, '/images/products/ccIIb5kBJu.webp', 'additional', NULL, NULL),
-(16, 4, '/images/products/dCIN7dLIJk.webp', 'additional', NULL, NULL),
-(17, 5, '/images/products/XAbIiTyFAC.webp', 'base', NULL, NULL),
-(18, 5, '/images/products/oUGP4MQBc3.webp', 'additional', NULL, NULL),
-(19, 5, '/images/products/jO705z6Fwh.webp', 'additional', NULL, NULL),
-(20, 5, '/images/products/XoAdBNMrhi.webp', 'additional', NULL, NULL),
-(21, 6, '/images/products/R9phgu9T1C.webp', 'base', NULL, NULL),
-(22, 6, '/images/products/k8R2d1MiCT.webp', 'additional', NULL, NULL),
-(23, 6, '/images/products/rX3IPqNWvn.webp', 'additional', NULL, NULL),
-(24, 6, '/images/products/KHnOGzt8Ep.webp', 'additional', NULL, NULL),
-(25, 7, '/images/products/9og6IARLNE.webp', 'base', NULL, NULL),
-(26, 7, '/images/products/ddRCIVLTXd.webp', 'additional', NULL, NULL),
-(27, 7, '/images/products/oqMANvnaD5.webp', 'additional', NULL, NULL),
-(28, 7, '/images/products/KPHsvgWRDm.webp', 'additional', NULL, NULL),
-(29, 8, '/images/products/keY4OoXOe4.webp', 'base', NULL, NULL),
-(30, 8, '/images/products/dCsNGJQbbb.webp', 'additional', NULL, NULL),
-(31, 8, '/images/products/7tAW8ED5hq.webp', 'additional', NULL, NULL),
-(32, 8, '/images/products/X263gh72gf.webp', 'additional', NULL, NULL),
-(33, 9, '/images/products/aYunFteYg6.webp', 'base', NULL, NULL),
-(34, 9, '/images/products/m6ibd3hpwh.webp', 'additional', NULL, NULL),
-(35, 9, '/images/products/HGuueQID54.webp', 'additional', NULL, NULL),
-(36, 9, '/images/products/lcN6VkqjTw.webp', 'additional', NULL, NULL),
-(37, 10, '/images/products/6E5wX5Zgan.webp', 'base', NULL, NULL),
-(38, 10, '/images/products/ypnzNi6ULc.webp', 'additional', NULL, NULL),
-(39, 10, '/images/products/MB7rDDQ0GS.webp', 'additional', NULL, NULL),
-(40, 10, '/images/products/Z0KMQoUYDp.webp', 'additional', NULL, NULL),
-(41, 10, '/images/products/9bDNSNNhZH.webp', 'additional', NULL, NULL),
-(42, 11, '/images/products/GUSVaGyEPn.webp', 'base', NULL, NULL),
-(43, 11, '/images/products/jDZOoyuMrd.webp', 'additional', NULL, NULL),
-(44, 11, '/images/products/3IXeP0kqnk.webp', 'additional', NULL, NULL),
-(45, 12, '/images/products/GUj2sOZUDj.webp', 'base', '2022-02-15 02:33:30', '2022-02-15 02:33:30'),
-(46, 12, '/images/products/zRjD4PUjzv.webp', 'additional', '2022-02-15 02:33:31', '2022-02-15 02:33:31'),
-(47, 12, '/images/products/YHAQ4uCIox.webp', 'additional', '2022-02-15 02:33:32', '2022-02-15 02:33:32'),
-(48, 12, '/images/products/AgWjOV86tE.webp', 'additional', '2022-02-15 02:33:33', '2022-02-15 02:33:33'),
-(49, 13, '/images/products/LijgcikIje.webp', 'base', NULL, NULL),
-(50, 13, '/images/products/egasouujvJ.webp', 'additional', NULL, NULL),
-(51, 13, '/images/products/ldES6gkTT4.webp', 'additional', NULL, NULL),
-(52, 13, '/images/products/aMYWzUrTZ4.webp', 'additional', NULL, NULL),
-(53, 14, '/images/products/tR6bmjhVtN.webp', 'base', NULL, NULL),
-(54, 14, '/images/products/kgtTyYKePg.webp', 'additional', NULL, NULL),
-(55, 14, '/images/products/ik1a2qwLK1.webp', 'additional', NULL, NULL),
-(56, 14, '/images/products/o3bWuYpmwq.webp', 'additional', NULL, NULL),
-(57, 15, '/images/products/3dcSosTyJm.webp', 'base', NULL, NULL),
-(58, 15, '/images/products/8JGPVEoQkJ.webp', 'additional', NULL, NULL),
-(59, 15, '/images/products/UKDAD3To4p.webp', 'additional', NULL, NULL),
-(60, 15, '/images/products/XwOhm3yofM.webp', 'additional', NULL, NULL),
-(61, 15, '/images/products/pFORtU1Oqi.webp', 'additional', NULL, NULL),
-(62, 16, '/images/products/B0WyOzLmBO.webp', 'base', NULL, NULL),
-(63, 16, '/images/products/O5AOgYJQNm.webp', 'additional', NULL, NULL),
-(64, 16, '/images/products/U0rDGvIU8y.webp', 'additional', NULL, NULL),
-(65, 16, '/images/products/ewoDdf4eay.webp', 'additional', NULL, NULL),
-(66, 17, '/images/products/X6c6DzkEni.webp', 'base', NULL, NULL),
-(67, 17, '/images/products/Y42Io0W3jY.webp', 'additional', NULL, NULL),
-(68, 17, '/images/products/pqrrbXRzcA.webp', 'additional', NULL, NULL),
-(69, 17, '/images/products/QnqCo5ClyJ.webp', 'additional', NULL, NULL),
-(70, 17, '/images/products/1uLvguw6oQ.webp', 'additional', NULL, NULL),
-(71, 18, '/images/products/evhij3lq8R.webp', 'base', NULL, NULL),
-(72, 18, '/images/products/jcCCWoYdo9.webp', 'additional', NULL, NULL),
-(73, 18, '/images/products/o7QDloJpjH.webp', 'additional', NULL, NULL),
-(74, 18, '/images/products/mz39nRoJVk.webp', 'additional', NULL, NULL),
-(75, 19, '/images/products/G0b0EJCKNf.webp', 'base', NULL, NULL),
-(76, 19, '/images/products/tbPvBIbOUV.webp', 'additional', NULL, NULL),
-(77, 19, '/images/products/nNNO8NMFjW.webp', 'additional', NULL, NULL),
-(78, 19, '/images/products/rRL2Mjrd0j.webp', 'additional', NULL, NULL),
-(79, 19, '/images/products/vbHOXoAWLR.webp', 'additional', NULL, NULL),
-(80, 20, '/images/products/MNxwt35GYl.webp', 'base', NULL, NULL),
-(81, 20, '/images/products/w5NyCIRoIZ.webp', 'additional', NULL, NULL),
-(82, 20, '/images/products/fiKlEn7SdR.webp', 'additional', NULL, NULL),
-(83, 20, '/images/products/1SzJc09Q1L.webp', 'additional', NULL, NULL),
-(84, 21, '/images/products/GaaPwCpDKf.webp', 'base', NULL, NULL),
-(85, 21, '/images/products/q27XLRceit.webp', 'additional', NULL, NULL),
-(86, 21, '/images/products/doNhvLEKNs.webp', 'additional', NULL, NULL),
-(87, 21, '/images/products/leeBIPpxsU.webp', 'additional', NULL, NULL),
-(88, 22, '/images/products/4l1LV6eNfS.webp', 'base', NULL, NULL),
-(89, 22, '/images/products/PWHNUfOUzj.webp', 'additional', NULL, NULL),
-(90, 22, '/images/products/CFiNLnfr18.webp', 'additional', NULL, NULL),
-(91, 23, '/images/products/8druJ8Ag4k.webp', 'base', NULL, NULL),
-(92, 23, '/images/products/1H4OSSruDh.webp', 'additional', NULL, NULL),
-(93, 23, '/images/products/maiNKUN0Ns.webp', 'additional', NULL, NULL),
-(94, 24, '/images/products/DvKRMbOFCR.webp', 'base', NULL, NULL),
-(95, 24, '/images/products/m3JmjZr2Tz.webp', 'additional', NULL, NULL),
-(96, 25, '/images/products/ag323drGTc.webp', 'base', NULL, NULL),
-(97, 25, '/images/products/8RZz6OVtzc.webp', 'additional', NULL, NULL),
-(98, 25, '/images/products/sa5ViWTL2l.webp', 'additional', NULL, NULL),
-(99, 25, '/images/products/NlSBCbaI6A.webp', 'additional', NULL, NULL),
-(100, 25, '/images/products/rUynPy3Ycs.webp', 'additional', NULL, NULL),
-(101, 26, '/images/products/6w5arLEMnO.webp', 'base', NULL, NULL),
-(102, 26, '/images/products/rTm0iWtKmV.webp', 'additional', NULL, NULL),
-(103, 26, '/images/products/lc47s7w3ts.webp', 'additional', NULL, NULL),
-(104, 26, '/images/products/PkZbOVkW96.webp', 'additional', NULL, NULL),
-(105, 27, '/images/products/Jx35Akri7E.webp', 'base', NULL, NULL),
-(106, 27, '/images/products/S0CzUuQDPh.webp', 'additional', NULL, NULL),
-(107, 28, '/images/products/aBVVN9YOoL.webp', 'base', NULL, NULL),
-(108, 28, '/images/products/dKtnbPI11v.webp', 'additional', NULL, NULL),
-(109, 28, '/images/products/m0S71yuTbk.webp', 'additional', NULL, NULL),
-(110, 28, '/images/products/PUorDiJK3r.webp', 'additional', NULL, NULL),
-(111, 28, '/images/products/0NXjd9NC7Z.webp', 'additional', NULL, NULL),
-(112, 29, '/images/products/qMXuTWrl3c.webp', 'base', NULL, NULL),
-(113, 29, '/images/products/F0h0OME5OW.webp', 'additional', NULL, NULL),
-(114, 29, '/images/products/JoTeeinvkL.webp', 'additional', NULL, NULL),
-(115, 30, '/images/products/h9DUMY5jzX.webp', 'base', NULL, NULL),
-(116, 30, '/images/products/5cuBzB92xE.webp', 'additional', NULL, NULL),
-(117, 30, '/images/products/nHdiHvRNs0.webp', 'additional', NULL, NULL),
-(118, 30, '/images/products/Dr3Sd0LoJq.webp', 'additional', NULL, NULL),
-(119, 31, '/images/products/pPGVDEnby0.webp', 'base', NULL, NULL),
-(120, 31, '/images/products/Z6smEl2Wwd.webp', 'additional', NULL, NULL),
-(121, 32, '/images/products/5lTSsvNPfJ.webp', 'base', NULL, NULL),
-(122, 32, '/images/products/Pd9PzCo6X9.webp', 'additional', NULL, NULL),
-(123, 33, '/images/products/v5Q6OuT0Yp.webp', 'base', NULL, NULL),
-(124, 33, '/images/products/NAsHYwqBzv.webp', 'additional', NULL, NULL),
-(125, 33, '/images/products/Qk9YchwYOS.webp', 'additional', NULL, NULL),
-(126, 34, '/images/products/DmjxpgwnIv.webp', 'base', NULL, NULL),
-(127, 34, '/images/products/34Emkm87Ee.webp', 'additional', NULL, NULL),
-(128, 34, '/images/products/5LBEFwlRMA.webp', 'additional', NULL, NULL);
+INSERT INTO `product_images` (`id`, `product_id`, `image`, `image_medium`, `image_small`, `type`, `created_at`, `updated_at`) VALUES
+(1, 1, '/images/products/large/f6qXdQdZVm.webp', '/images/products/medium/f6qXdQdZVm.webp', '/images/products/small/f6qXdQdZVm.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(2, 1, '/images/products/large/fjTtGCeVXq.webp', '/images/products/medium/fjTtGCeVXq.webp', '/images/products/small/fjTtGCeVXq.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(3, 1, '/images/products/large/d6LWjDgIOC.webp', '/images/products/medium/d6LWjDgIOC.webp', '/images/products/small/d6LWjDgIOC.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(4, 1, '/images/products/large/w2fWutUCYg.webp', '/images/products/medium/w2fWutUCYg.webp', '/images/products/small/w2fWutUCYg.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(5, 1, '/images/products/large/UgIMV1OlvG.webp', '/images/products/medium/UgIMV1OlvG.webp', '/images/products/small/UgIMV1OlvG.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(6, 2, '/images/products/large/oxnt4KyMw6.webp', '/images/products/medium/oxnt4KyMw6.webp', '/images/products/small/oxnt4KyMw6.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(7, 2, '/images/products/large/uzkWGChGRu.webp', '/images/products/medium/uzkWGChGRu.webp', '/images/products/small/uzkWGChGRu.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(8, 2, '/images/products/large/WAwfYVJrwW.webp', '/images/products/medium/WAwfYVJrwW.webp', '/images/products/small/WAwfYVJrwW.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(9, 2, '/images/products/large/QnLOPyaiSc.webp', '/images/products/medium/QnLOPyaiSc.webp', '/images/products/small/QnLOPyaiSc.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(10, 3, '/images/products/large/gxAhN2e8yY.webp', '/images/products/medium/gxAhN2e8yY.webp', '/images/products/small/gxAhN2e8yY.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(11, 3, '/images/products/large/vL50aZsaHL.webp', '/images/products/medium/vL50aZsaHL.webp', '/images/products/small/vL50aZsaHL.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(12, 3, '/images/products/large/lm7LYgCS5I.webp', '/images/products/medium/lm7LYgCS5I.webp', '/images/products/small/lm7LYgCS5I.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(13, 4, '/images/products/large/ydFqlpWr4D.webp', '/images/products/medium/ydFqlpWr4D.webp', '/images/products/small/ydFqlpWr4D.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(14, 4, '/images/products/large/qeD9Bz8jGz.webp', '/images/products/medium/qeD9Bz8jGz.webp', '/images/products/small/qeD9Bz8jGz.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(15, 4, '/images/products/large/ccIIb5kBJu.webp', '/images/products/medium/ccIIb5kBJu.webp', '/images/products/small/ccIIb5kBJu.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(16, 4, '/images/products/large/dCIN7dLIJk.webp', '/images/products/medium/dCIN7dLIJk.webp', '/images/products/small/dCIN7dLIJk.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(17, 5, '/images/products/large/XAbIiTyFAC.webp', '/images/products/medium/XAbIiTyFAC.webp', '/images/products/small/XAbIiTyFAC.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(18, 5, '/images/products/large/oUGP4MQBc3.webp', '/images/products/medium/oUGP4MQBc3.webp', '/images/products/small/oUGP4MQBc3.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(19, 5, '/images/products/large/jO705z6Fwh.webp', '/images/products/medium/jO705z6Fwh.webp', '/images/products/small/jO705z6Fwh.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(20, 5, '/images/products/large/XoAdBNMrhi.webp', '/images/products/medium/XoAdBNMrhi.webp', '/images/products/small/XoAdBNMrhi.webp', 'additional', NULL, '2022-03-10 00:33:29'),
+(21, 6, '/images/products/large/R9phgu9T1C.webp', '/images/products/medium/R9phgu9T1C.webp', '/images/products/small/R9phgu9T1C.webp', 'base', NULL, '2022-03-10 00:33:29'),
+(22, 6, '/images/products/large/k8R2d1MiCT.webp', '/images/products/medium/k8R2d1MiCT.webp', '/images/products/small/k8R2d1MiCT.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(23, 6, '/images/products/large/rX3IPqNWvn.webp', '/images/products/medium/rX3IPqNWvn.webp', '/images/products/small/rX3IPqNWvn.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(24, 6, '/images/products/large/KHnOGzt8Ep.webp', '/images/products/medium/KHnOGzt8Ep.webp', '/images/products/small/KHnOGzt8Ep.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(25, 7, '/images/products/large/9og6IARLNE.webp', '/images/products/medium/9og6IARLNE.webp', '/images/products/small/9og6IARLNE.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(26, 7, '/images/products/large/ddRCIVLTXd.webp', '/images/products/medium/ddRCIVLTXd.webp', '/images/products/small/ddRCIVLTXd.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(27, 7, '/images/products/large/oqMANvnaD5.webp', '/images/products/medium/oqMANvnaD5.webp', '/images/products/small/oqMANvnaD5.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(28, 7, '/images/products/large/KPHsvgWRDm.webp', '/images/products/medium/KPHsvgWRDm.webp', '/images/products/small/KPHsvgWRDm.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(29, 8, '/images/products/large/keY4OoXOe4.webp', '/images/products/medium/keY4OoXOe4.webp', '/images/products/small/keY4OoXOe4.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(30, 8, '/images/products/large/dCsNGJQbbb.webp', '/images/products/medium/dCsNGJQbbb.webp', '/images/products/small/dCsNGJQbbb.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(31, 8, '/images/products/large/7tAW8ED5hq.webp', '/images/products/medium/7tAW8ED5hq.webp', '/images/products/small/7tAW8ED5hq.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(32, 8, '/images/products/large/X263gh72gf.webp', '/images/products/medium/X263gh72gf.webp', '/images/products/small/X263gh72gf.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(33, 9, '/images/products/large/aYunFteYg6.webp', '/images/products/medium/aYunFteYg6.webp', '/images/products/small/aYunFteYg6.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(34, 9, '/images/products/large/m6ibd3hpwh.webp', '/images/products/medium/m6ibd3hpwh.webp', '/images/products/small/m6ibd3hpwh.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(35, 9, '/images/products/large/HGuueQID54.webp', '/images/products/medium/HGuueQID54.webp', '/images/products/small/HGuueQID54.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(36, 9, '/images/products/large/lcN6VkqjTw.webp', '/images/products/medium/lcN6VkqjTw.webp', '/images/products/small/lcN6VkqjTw.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(37, 10, '/images/products/large/6E5wX5Zgan.webp', '/images/products/medium/6E5wX5Zgan.webp', '/images/products/small/6E5wX5Zgan.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(38, 10, '/images/products/large/ypnzNi6ULc.webp', '/images/products/medium/ypnzNi6ULc.webp', '/images/products/small/ypnzNi6ULc.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(39, 10, '/images/products/large/MB7rDDQ0GS.webp', '/images/products/medium/MB7rDDQ0GS.webp', '/images/products/small/MB7rDDQ0GS.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(40, 10, '/images/products/large/Z0KMQoUYDp.webp', '/images/products/medium/Z0KMQoUYDp.webp', '/images/products/small/Z0KMQoUYDp.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(41, 10, '/images/products/large/9bDNSNNhZH.webp', '/images/products/medium/9bDNSNNhZH.webp', '/images/products/small/9bDNSNNhZH.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(42, 11, '/images/products/large/GUSVaGyEPn.webp', '/images/products/medium/GUSVaGyEPn.webp', '/images/products/small/GUSVaGyEPn.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(43, 11, '/images/products/large/jDZOoyuMrd.webp', '/images/products/medium/jDZOoyuMrd.webp', '/images/products/small/jDZOoyuMrd.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(44, 11, '/images/products/large/3IXeP0kqnk.webp', '/images/products/medium/3IXeP0kqnk.webp', '/images/products/small/3IXeP0kqnk.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(45, 12, '/images/products/large/GUj2sOZUDj.webp', '/images/products/medium/GUj2sOZUDj.webp', '/images/products/small/GUj2sOZUDj.webp', 'base', '2022-02-15 02:33:30', '2022-03-10 00:33:30'),
+(46, 12, '/images/products/large/zRjD4PUjzv.webp', '/images/products/medium/zRjD4PUjzv.webp', '/images/products/small/zRjD4PUjzv.webp', 'additional', '2022-02-15 02:33:31', '2022-03-10 00:33:30'),
+(47, 12, '/images/products/large/YHAQ4uCIox.webp', '/images/products/medium/YHAQ4uCIox.webp', '/images/products/small/YHAQ4uCIox.webp', 'additional', '2022-02-15 02:33:32', '2022-03-10 00:33:30'),
+(48, 12, '/images/products/large/AgWjOV86tE.webp', '/images/products/medium/AgWjOV86tE.webp', '/images/products/small/AgWjOV86tE.webp', 'additional', '2022-02-15 02:33:33', '2022-03-10 00:33:30'),
+(49, 13, '/images/products/large/LijgcikIje.webp', '/images/products/medium/LijgcikIje.webp', '/images/products/small/LijgcikIje.webp', 'base', NULL, '2022-03-10 00:33:30'),
+(50, 13, '/images/products/large/egasouujvJ.webp', '/images/products/medium/egasouujvJ.webp', '/images/products/small/egasouujvJ.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(51, 13, '/images/products/large/ldES6gkTT4.webp', '/images/products/medium/ldES6gkTT4.webp', '/images/products/small/ldES6gkTT4.webp', 'additional', NULL, '2022-03-10 00:33:30'),
+(52, 13, '/images/products/large/aMYWzUrTZ4.webp', '/images/products/medium/aMYWzUrTZ4.webp', '/images/products/small/aMYWzUrTZ4.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(53, 14, '/images/products/large/tR6bmjhVtN.webp', '/images/products/medium/tR6bmjhVtN.webp', '/images/products/small/tR6bmjhVtN.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(54, 14, '/images/products/large/kgtTyYKePg.webp', '/images/products/medium/kgtTyYKePg.webp', '/images/products/small/kgtTyYKePg.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(55, 14, '/images/products/large/ik1a2qwLK1.webp', '/images/products/medium/ik1a2qwLK1.webp', '/images/products/small/ik1a2qwLK1.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(56, 14, '/images/products/large/o3bWuYpmwq.webp', '/images/products/medium/o3bWuYpmwq.webp', '/images/products/small/o3bWuYpmwq.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(57, 15, '/images/products/large/3dcSosTyJm.webp', '/images/products/medium/3dcSosTyJm.webp', '/images/products/small/3dcSosTyJm.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(58, 15, '/images/products/large/8JGPVEoQkJ.webp', '/images/products/medium/8JGPVEoQkJ.webp', '/images/products/small/8JGPVEoQkJ.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(59, 15, '/images/products/large/UKDAD3To4p.webp', '/images/products/medium/UKDAD3To4p.webp', '/images/products/small/UKDAD3To4p.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(60, 15, '/images/products/large/XwOhm3yofM.webp', '/images/products/medium/XwOhm3yofM.webp', '/images/products/small/XwOhm3yofM.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(61, 15, '/images/products/large/pFORtU1Oqi.webp', '/images/products/medium/pFORtU1Oqi.webp', '/images/products/small/pFORtU1Oqi.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(62, 16, '/images/products/large/B0WyOzLmBO.webp', '/images/products/medium/B0WyOzLmBO.webp', '/images/products/small/B0WyOzLmBO.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(63, 16, '/images/products/large/O5AOgYJQNm.webp', '/images/products/medium/O5AOgYJQNm.webp', '/images/products/small/O5AOgYJQNm.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(64, 16, '/images/products/large/U0rDGvIU8y.webp', '/images/products/medium/U0rDGvIU8y.webp', '/images/products/small/U0rDGvIU8y.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(65, 16, '/images/products/large/ewoDdf4eay.webp', '/images/products/medium/ewoDdf4eay.webp', '/images/products/small/ewoDdf4eay.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(66, 17, '/images/products/large/X6c6DzkEni.webp', '/images/products/medium/X6c6DzkEni.webp', '/images/products/small/X6c6DzkEni.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(67, 17, '/images/products/large/Y42Io0W3jY.webp', '/images/products/medium/Y42Io0W3jY.webp', '/images/products/small/Y42Io0W3jY.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(68, 17, '/images/products/large/pqrrbXRzcA.webp', '/images/products/medium/pqrrbXRzcA.webp', '/images/products/small/pqrrbXRzcA.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(69, 17, '/images/products/large/QnqCo5ClyJ.webp', '/images/products/medium/QnqCo5ClyJ.webp', '/images/products/small/QnqCo5ClyJ.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(70, 17, '/images/products/large/1uLvguw6oQ.webp', '/images/products/medium/1uLvguw6oQ.webp', '/images/products/small/1uLvguw6oQ.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(71, 18, '/images/products/large/evhij3lq8R.webp', '/images/products/medium/evhij3lq8R.webp', '/images/products/small/evhij3lq8R.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(72, 18, '/images/products/large/jcCCWoYdo9.webp', '/images/products/medium/jcCCWoYdo9.webp', '/images/products/small/jcCCWoYdo9.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(73, 18, '/images/products/large/o7QDloJpjH.webp', '/images/products/medium/o7QDloJpjH.webp', '/images/products/small/o7QDloJpjH.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(74, 18, '/images/products/large/mz39nRoJVk.webp', '/images/products/medium/mz39nRoJVk.webp', '/images/products/small/mz39nRoJVk.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(75, 19, '/images/products/large/G0b0EJCKNf.webp', '/images/products/medium/G0b0EJCKNf.webp', '/images/products/small/G0b0EJCKNf.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(76, 19, '/images/products/large/tbPvBIbOUV.webp', '/images/products/medium/tbPvBIbOUV.webp', '/images/products/small/tbPvBIbOUV.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(77, 19, '/images/products/large/nNNO8NMFjW.webp', '/images/products/medium/nNNO8NMFjW.webp', '/images/products/small/nNNO8NMFjW.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(78, 19, '/images/products/large/rRL2Mjrd0j.webp', '/images/products/medium/rRL2Mjrd0j.webp', '/images/products/small/rRL2Mjrd0j.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(79, 19, '/images/products/large/vbHOXoAWLR.webp', '/images/products/medium/vbHOXoAWLR.webp', '/images/products/small/vbHOXoAWLR.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(80, 20, '/images/products/large/MNxwt35GYl.webp', '/images/products/medium/MNxwt35GYl.webp', '/images/products/small/MNxwt35GYl.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(81, 20, '/images/products/large/w5NyCIRoIZ.webp', '/images/products/medium/w5NyCIRoIZ.webp', '/images/products/small/w5NyCIRoIZ.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(82, 20, '/images/products/large/fiKlEn7SdR.webp', '/images/products/medium/fiKlEn7SdR.webp', '/images/products/small/fiKlEn7SdR.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(83, 20, '/images/products/large/1SzJc09Q1L.webp', '/images/products/medium/1SzJc09Q1L.webp', '/images/products/small/1SzJc09Q1L.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(84, 21, '/images/products/large/GaaPwCpDKf.webp', '/images/products/medium/GaaPwCpDKf.webp', '/images/products/small/GaaPwCpDKf.webp', 'base', NULL, '2022-03-10 00:33:31'),
+(85, 21, '/images/products/large/q27XLRceit.webp', '/images/products/medium/q27XLRceit.webp', '/images/products/small/q27XLRceit.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(86, 21, '/images/products/large/doNhvLEKNs.webp', '/images/products/medium/doNhvLEKNs.webp', '/images/products/small/doNhvLEKNs.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(87, 21, '/images/products/large/leeBIPpxsU.webp', '/images/products/medium/leeBIPpxsU.webp', '/images/products/small/leeBIPpxsU.webp', 'additional', NULL, '2022-03-10 00:33:31'),
+(88, 22, '/images/products/large/4l1LV6eNfS.webp', '/images/products/medium/4l1LV6eNfS.webp', '/images/products/small/4l1LV6eNfS.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(89, 22, '/images/products/large/PWHNUfOUzj.webp', '/images/products/medium/PWHNUfOUzj.webp', '/images/products/small/PWHNUfOUzj.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(90, 22, '/images/products/large/CFiNLnfr18.webp', '/images/products/medium/CFiNLnfr18.webp', '/images/products/small/CFiNLnfr18.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(91, 23, '/images/products/large/8druJ8Ag4k.webp', '/images/products/medium/8druJ8Ag4k.webp', '/images/products/small/8druJ8Ag4k.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(92, 23, '/images/products/large/1H4OSSruDh.webp', '/images/products/medium/1H4OSSruDh.webp', '/images/products/small/1H4OSSruDh.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(93, 23, '/images/products/large/maiNKUN0Ns.webp', '/images/products/medium/maiNKUN0Ns.webp', '/images/products/small/maiNKUN0Ns.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(94, 24, '/images/products/large/DvKRMbOFCR.webp', '/images/products/medium/DvKRMbOFCR.webp', '/images/products/small/DvKRMbOFCR.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(95, 24, '/images/products/large/m3JmjZr2Tz.webp', '/images/products/medium/m3JmjZr2Tz.webp', '/images/products/small/m3JmjZr2Tz.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(96, 25, '/images/products/large/ag323drGTc.webp', '/images/products/medium/ag323drGTc.webp', '/images/products/small/ag323drGTc.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(97, 25, '/images/products/large/8RZz6OVtzc.webp', '/images/products/medium/8RZz6OVtzc.webp', '/images/products/small/8RZz6OVtzc.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(98, 25, '/images/products/large/sa5ViWTL2l.webp', '/images/products/medium/sa5ViWTL2l.webp', '/images/products/small/sa5ViWTL2l.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(99, 25, '/images/products/large/NlSBCbaI6A.webp', '/images/products/medium/NlSBCbaI6A.webp', '/images/products/small/NlSBCbaI6A.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(100, 25, '/images/products/large/rUynPy3Ycs.webp', '/images/products/medium/rUynPy3Ycs.webp', '/images/products/small/rUynPy3Ycs.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(101, 26, '/images/products/large/6w5arLEMnO.webp', '/images/products/medium/6w5arLEMnO.webp', '/images/products/small/6w5arLEMnO.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(102, 26, '/images/products/large/rTm0iWtKmV.webp', '/images/products/medium/rTm0iWtKmV.webp', '/images/products/small/rTm0iWtKmV.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(103, 26, '/images/products/large/lc47s7w3ts.webp', '/images/products/medium/lc47s7w3ts.webp', '/images/products/small/lc47s7w3ts.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(104, 26, '/images/products/large/PkZbOVkW96.webp', '/images/products/medium/PkZbOVkW96.webp', '/images/products/small/PkZbOVkW96.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(105, 27, '/images/products/large/Jx35Akri7E.webp', '/images/products/medium/Jx35Akri7E.webp', '/images/products/small/Jx35Akri7E.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(106, 27, '/images/products/large/S0CzUuQDPh.webp', '/images/products/medium/S0CzUuQDPh.webp', '/images/products/small/S0CzUuQDPh.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(107, 28, '/images/products/large/aBVVN9YOoL.webp', '/images/products/medium/aBVVN9YOoL.webp', '/images/products/small/aBVVN9YOoL.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(108, 28, '/images/products/large/dKtnbPI11v.webp', '/images/products/medium/dKtnbPI11v.webp', '/images/products/small/dKtnbPI11v.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(109, 28, '/images/products/large/m0S71yuTbk.webp', '/images/products/medium/m0S71yuTbk.webp', '/images/products/small/m0S71yuTbk.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(110, 28, '/images/products/large/PUorDiJK3r.webp', '/images/products/medium/PUorDiJK3r.webp', '/images/products/small/PUorDiJK3r.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(111, 28, '/images/products/large/0NXjd9NC7Z.webp', '/images/products/medium/0NXjd9NC7Z.webp', '/images/products/small/0NXjd9NC7Z.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(112, 29, '/images/products/large/qMXuTWrl3c.webp', '/images/products/medium/qMXuTWrl3c.webp', '/images/products/small/qMXuTWrl3c.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(113, 29, '/images/products/large/F0h0OME5OW.webp', '/images/products/medium/F0h0OME5OW.webp', '/images/products/small/F0h0OME5OW.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(114, 29, '/images/products/large/JoTeeinvkL.webp', '/images/products/medium/JoTeeinvkL.webp', '/images/products/small/JoTeeinvkL.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(115, 30, '/images/products/large/h9DUMY5jzX.webp', '/images/products/medium/h9DUMY5jzX.webp', '/images/products/small/h9DUMY5jzX.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(116, 30, '/images/products/large/5cuBzB92xE.webp', '/images/products/medium/5cuBzB92xE.webp', '/images/products/small/5cuBzB92xE.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(117, 30, '/images/products/large/nHdiHvRNs0.webp', '/images/products/medium/nHdiHvRNs0.webp', '/images/products/small/nHdiHvRNs0.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(118, 30, '/images/products/large/Dr3Sd0LoJq.webp', '/images/products/medium/Dr3Sd0LoJq.webp', '/images/products/small/Dr3Sd0LoJq.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(119, 31, '/images/products/large/pPGVDEnby0.webp', '/images/products/medium/pPGVDEnby0.webp', '/images/products/small/pPGVDEnby0.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(120, 31, '/images/products/large/Z6smEl2Wwd.webp', '/images/products/medium/Z6smEl2Wwd.webp', '/images/products/small/Z6smEl2Wwd.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(121, 32, '/images/products/large/5lTSsvNPfJ.webp', '/images/products/medium/5lTSsvNPfJ.webp', '/images/products/small/5lTSsvNPfJ.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(122, 32, '/images/products/large/Pd9PzCo6X9.webp', '/images/products/medium/Pd9PzCo6X9.webp', '/images/products/small/Pd9PzCo6X9.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(123, 33, '/images/products/large/v5Q6OuT0Yp.webp', '/images/products/medium/v5Q6OuT0Yp.webp', '/images/products/small/v5Q6OuT0Yp.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(124, 33, '/images/products/large/NAsHYwqBzv.webp', '/images/products/medium/NAsHYwqBzv.webp', '/images/products/small/NAsHYwqBzv.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(125, 33, '/images/products/large/Qk9YchwYOS.webp', '/images/products/medium/Qk9YchwYOS.webp', '/images/products/small/Qk9YchwYOS.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(126, 34, '/images/products/large/DmjxpgwnIv.webp', '/images/products/medium/DmjxpgwnIv.webp', '/images/products/small/DmjxpgwnIv.webp', 'base', NULL, '2022-03-10 00:33:32'),
+(127, 34, '/images/products/large/34Emkm87Ee.webp', '/images/products/medium/34Emkm87Ee.webp', '/images/products/small/34Emkm87Ee.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(128, 34, '/images/products/large/5LBEFwlRMA.webp', '/images/products/medium/5LBEFwlRMA.webp', '/images/products/small/5LBEFwlRMA.webp', 'additional', NULL, '2022-03-10 00:33:32'),
+(140, 48, '/images/products/large/MqsyJGWXoC.jpeg', '/images/products/medium/MqsyJGWXoC.jpeg', '/images/products/small/MqsyJGWXoC.jpeg', 'base', NULL, NULL),
+(141, 48, '/images/products/large/PctxG8YXNA.jpeg', '/images/products/medium/PctxG8YXNA.jpeg', '/images/products/small/PctxG8YXNA.jpeg', 'additional', NULL, NULL),
+(142, 48, '/images/products/large/iIxqY3Q2O0.jpeg', '/images/products/medium/iIxqY3Q2O0.jpeg', '/images/products/small/iIxqY3Q2O0.jpeg', 'additional', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1665,7 +1742,12 @@ CREATE TABLE `product_tag` (
 --
 
 INSERT INTO `product_tag` (`product_id`, `tag_id`) VALUES
-(35, 1);
+(35, 1),
+(43, 3),
+(43, 5),
+(43, 6),
+(44, 5),
+(44, 7);
 
 -- --------------------------------------------------------
 
@@ -1833,7 +1915,18 @@ INSERT INTO `product_translations` (`id`, `product_id`, `local`, `product_name`,
 (135, 2, 'bn', 'এপেল আইফোন এক্স ৬৪ জিবি সিলভার সম্পূর্ণরূপে আনলক', '<p><span class=\"VIiyi\" lang=\"bn\"><span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"2\" data-number-of-phrases=\"19\">Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"3\" data-number-of-phrases=\"19\">এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপটি সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"5\" data-number-of-phrases=\"19\">মূল বৈশিষ্ট্য:</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"7\" data-number-of-phrases=\"19\">ধাতু আবরণ সঙ্গে পাতলা শরীর</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"9\" data-number-of-phrases=\"19\">সর্বশেষ ইন্টেল কোর i5-1135G7 প্রসেসর (4 কোর / 8 থ্রেড)</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"11\" data-number-of-phrases=\"19\">8GB DDR4 RAM এবং দ্রুত 512GB PCIe SSD</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"13\" data-number-of-phrases=\"19\">NVIDIA GeForce MX350 2GB GDDR5 গ্রাফিক্স কার্ড</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"15\" data-number-of-phrases=\"19\">ব্যাকলিট কীবোর্ড, অঙ্গভঙ্গি সমর্থন সহ টাচপ্যাড</span></span></p>', 'Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস। এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপটি সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত।', NULL, NULL, NULL, NULL),
 (136, 1, 'de', 'Apple iPhone 11 64 GB gelb vollständig entsperrt', '<p><span class=\"VIiyi\" lang=\"de\"><span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"2\" data-number-of-phrases=\"19\">Das Aspire 5 ist ein kompakter Laptop in einem d&uuml;nnen Geh&auml;use mit Metallabdeckung, einem hochwertigen Full-HD-IPS-Display und einer reichhaltigen Auswahl an Schnittstellen.</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"3\" data-number-of-phrases=\"19\">Dank seiner leistungsstarken Komponenten bew&auml;ltigt der Laptop ressourcenintensive Aufgaben perfekt und ist auch f&uuml;r die meisten Spiele geeignet.</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"5\" data-number-of-phrases=\"19\">Hauptmerkmale:</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"7\" data-number-of-phrases=\"19\">schlankes Geh&auml;use mit Metallabdeckung</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"9\" data-number-of-phrases=\"19\">neuster Intel Core i5-1135G7 Prozessor (4 Kerne / 8 Threads)</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"11\" data-number-of-phrases=\"19\">8 GB DDR4 RAM und schnelle 512 GB PCIe SSD</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"13\" data-number-of-phrases=\"19\">NVIDIA GeForce MX350 2 GB GDDR5-Grafikkarte</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"de\" data-language-to-translate-into=\"en\" data-phrase-index=\"15\" data-number-of-phrases=\"19\">Tastatur mit Hintergrundbeleuchtung, Touchpad mit Gestenunterst&uuml;tzung</span></span></p>', 'Das Aspire 5 ist ein kompakter Laptop in einem dünnen Gehäuse mit Metallabdeckung, einem hochwertigen Full-HD-IPS-Display und einer reichhaltigen Auswahl an Schnittstellen. Dank seiner leistungsstarken Komponenten bewältigt der Laptop ressourcenintensive Aufgaben perfekt und ist auch für die meisten Spiele geeignet', NULL, NULL, NULL, NULL),
 (137, 1, 'es', 'Apple iPhone 11 64GB Amarillo Totalmente Desbloqueado', '<p><span class=\"VIiyi\" lang=\"es\"><span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"2\" data-number-of-phrases=\"19\">La Aspire 5 es una computadora port&aacute;til compacta en una carcasa delgada con una cubierta de metal, una pantalla IPS Full HD de alta calidad y un amplio conjunto de interfaces.</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"3\" data-number-of-phrases=\"19\">Gracias a sus potentes componentes, la computadora port&aacute;til puede manejar perfectamente tareas que requieren muchos recursos y tambi&eacute;n es adecuada para la mayor&iacute;a de los juegos.</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"5\" data-number-of-phrases=\"19\">Caracter&iacute;sticas clave:</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"7\" data-number-of-phrases=\"19\">cuerpo delgado con cubierta de metal</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"9\" data-number-of-phrases=\"19\">&Uacute;ltimo procesador Intel Core i5-1135G7 (4 n&uacute;cleos/8 subprocesos)</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"11\" data-number-of-phrases=\"19\">RAM DDR4 de 8 GB y SSD PCIe r&aacute;pido de 512 GB</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"13\" data-number-of-phrases=\"19\">Tarjeta gr&aacute;fica NVIDIA GeForce MX350 2GB GDDR5</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"es\" data-language-to-translate-into=\"en\" data-phrase-index=\"15\" data-number-of-phrases=\"19\">teclado retroiluminado, touchpad con soporte de gestos</span></span></p>', 'La Aspire 5 es una computadora portátil compacta en una carcasa delgada con una cubierta de metal, una pantalla IPS Full HD de alta calidad y un amplio conjunto de interfaces. Gracias a sus potentes componentes, la computadora portátil puede manejar perfectamente tareas que requieren muchos recursos y también es adecuada para la mayoría de los juegos.', NULL, NULL, NULL, NULL),
-(138, 1, 'bn', 'এপেল আইফোন হলুদ সম্পূর্ণরূপে আনলক করা হয়েছে', '<p><span class=\"VIiyi\" lang=\"bn\"><span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"2\" data-number-of-phrases=\"19\">Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"3\" data-number-of-phrases=\"19\">এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপটি সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"5\" data-number-of-phrases=\"19\">মূল বৈশিষ্ট্য:</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"7\" data-number-of-phrases=\"19\">ধাতু আবরণ সঙ্গে পাতলা শরীর</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"9\" data-number-of-phrases=\"19\">সর্বশেষ ইন্টেল কোর i5-1135G7 প্রসেসর (4 কোর / 8 থ্রেড)</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"11\" data-number-of-phrases=\"19\">8GB DDR4 RAM এবং দ্রুত 512GB PCIe SSD</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"13\" data-number-of-phrases=\"19\">NVIDIA GeForce MX350 2GB GDDR5 গ্রাফিক্স কার্ড</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"15\" data-number-of-phrases=\"19\">ব্যাকলিট কীবোর্ড, অঙ্গভঙ্গি সমর্থন সহ টাচপ্যাড</span></span></p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস। এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপ সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত', NULL, NULL, NULL, NULL);
+(138, 1, 'bn', 'এপেল আইফোন হলুদ সম্পূর্ণরূপে আনলক করা হয়েছে', '<p><span class=\"VIiyi\" lang=\"bn\"><span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"2\" data-number-of-phrases=\"19\">Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"3\" data-number-of-phrases=\"19\">এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপটি সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত।</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"5\" data-number-of-phrases=\"19\">মূল বৈশিষ্ট্য:</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"7\" data-number-of-phrases=\"19\">ধাতু আবরণ সঙ্গে পাতলা শরীর</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"9\" data-number-of-phrases=\"19\">সর্বশেষ ইন্টেল কোর i5-1135G7 প্রসেসর (4 কোর / 8 থ্রেড)</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"11\" data-number-of-phrases=\"19\">8GB DDR4 RAM এবং দ্রুত 512GB PCIe SSD</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"13\" data-number-of-phrases=\"19\">NVIDIA GeForce MX350 2GB GDDR5 গ্রাফিক্স কার্ড</span> <span class=\"JLqJ4b ChMk0b\" data-language-for-alternatives=\"bn\" data-language-to-translate-into=\"en\" data-phrase-index=\"15\" data-number-of-phrases=\"19\">ব্যাকলিট কীবোর্ড, অঙ্গভঙ্গি সমর্থন সহ টাচপ্যাড</span></span></p>\r\n<p>Key Features:</p>\r\n<ul>\r\n<li>slim body with metal cover</li>\r\n<li>latest Intel Core i5-1135G7 processor (4 cores / 8 threads)</li>\r\n<li>8GB DDR4 RAM and fast 512GB PCIe SSD</li>\r\n<li>NVIDIA GeForce MX350 2GB GDDR5 graphics card</li>\r\n<li>backlit keyboard, touchpad with gesture support</li>\r\n</ul>', 'Aspire 5 হল একটি কমপ্যাক্ট ল্যাপটপ যার একটি পাতলা কেস একটি ধাতব কভার, একটি উচ্চ মানের ফুল এইচডি আইপিএস ডিসপ্লে এবং একটি সমৃদ্ধ ইন্টারফেস। এর শক্তিশালী উপাদানগুলির জন্য ধন্যবাদ, ল্যাপটপ সম্পদ-নিবিড় কাজগুলি নিখুঁতভাবে পরিচালনা করতে পারে এবং বেশিরভাগ গেমের জন্যও উপযুক্ত', NULL, NULL, NULL, NULL),
+(139, 38, 'en', 'Test Image 95', '<p>Test Image 95</p>', 'Test Image 95', NULL, NULL, '2022-03-10 01:11:36', '2022-03-10 01:11:36'),
+(140, 39, 'en', 'Image Test', '<p>Image Test</p>', '', NULL, NULL, '2022-03-10 01:15:08', '2022-03-10 01:15:08'),
+(141, 40, 'en', 'Image Test 20', '<p>Image Test 20</p>', '', NULL, NULL, '2022-03-10 01:21:00', '2022-03-10 01:21:00'),
+(142, 41, 'en', 'Test 90', '<p>Test 90</p>', '', NULL, NULL, '2022-03-10 01:23:26', '2022-03-10 01:23:26'),
+(143, 42, 'en', 'Test 4545', '<p>Test 4545</p>', '', NULL, NULL, '2022-03-10 01:29:46', '2022-03-10 01:29:46'),
+(144, 43, 'en', 'Penelope Holland', '<p>Dolor tempora ex est.</p>', '', NULL, NULL, '2022-03-10 01:32:17', '2022-03-10 01:32:17'),
+(145, 44, 'en', 'Alan Frederick', '<p>Laborum. Ipsa, ut re.</p>', '', NULL, NULL, '2022-03-10 01:35:58', '2022-03-10 01:35:58'),
+(146, 45, 'en', 'Isaiah Levy', '<p>Ex sunt ullamco eu q.</p>', '', NULL, NULL, '2022-03-10 01:40:54', '2022-03-10 01:40:54'),
+(147, 46, 'en', 'Stephen Vaughn', '<p>Earum in labore non .</p>', '', NULL, NULL, '2022-03-10 01:47:01', '2022-03-10 01:47:01'),
+(148, 47, 'en', 'Test Irfan', '<p>Test Irfan</p>', '', NULL, NULL, '2022-03-10 01:49:24', '2022-03-10 01:49:24'),
+(149, 48, 'en', 'Samsung A12', '<p>Samsung A12</p>', '', NULL, NULL, '2022-03-10 02:08:25', '2022-03-10 02:08:25');
 
 -- --------------------------------------------------------
 
@@ -2076,11 +2169,11 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_at`, `updated_at`) VALUES
 (1, 'storefront_welcome_text', 1, NULL, NULL, NULL),
-(2, 'storefront_theme_color', 0, '#a842ca', NULL, '2022-03-02 22:55:28'),
+(2, 'storefront_theme_color', 0, '#A842CA', NULL, '2022-03-09 02:04:06'),
 (3, 'storefront_mail_theme_color', 0, '#000000', NULL, '2021-11-27 20:39:51'),
 (4, 'storefront_slider', 0, NULL, NULL, NULL),
-(5, 'storefront_terms_and_condition_page', 0, '', NULL, '2022-03-02 22:55:28'),
-(6, 'storefront_privacy_policy_page', 0, '', NULL, '2022-03-02 22:55:28'),
+(5, 'storefront_terms_and_condition_page', 0, '1', NULL, '2022-03-09 02:04:07'),
+(6, 'storefront_privacy_policy_page', 0, '', NULL, '2022-03-09 02:04:07'),
 (7, 'storefront_address', 1, NULL, NULL, NULL),
 (8, 'storefront_navbar_text', 1, NULL, NULL, NULL),
 (9, 'storefront_primary_menu', 0, '1', NULL, '2022-02-25 12:06:32'),
@@ -2223,7 +2316,7 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (146, 'storefront_vertical_product_3_category_id', 0, '7', NULL, '2022-02-22 03:02:44'),
 (147, 'storefront_vertical_product_3_products', 0, NULL, NULL, NULL),
 (148, 'storefront_vertical_product_3_products_limit', 0, NULL, NULL, NULL),
-(149, 'store_front_slider_format', 0, 'half_width', NULL, '2022-03-02 22:55:28'),
+(149, 'store_front_slider_format', 0, 'half_width', NULL, '2022-03-09 02:04:07'),
 (150, 'storefront_top_categories_section_enabled', 0, '1', NULL, '2022-01-30 04:11:08');
 
 -- --------------------------------------------------------
@@ -2717,9 +2810,9 @@ CREATE TABLE `sliders` (
 --
 
 INSERT INTO `sliders` (`id`, `slider_slug`, `type`, `category_id`, `url`, `slider_image`, `slider_image_full_width`, `slider_image_secondary`, `target`, `is_active`, `text_alignment`, `text_color`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'enhance-your', 'category', 1, '', 'images/sliders/Y6OaZnvCjf.webp', 'images/sliders/full_width/fTPkfLfh9R.webp', 'images/sliders/secondary/Tq0z4vPfJ9.webp', 'new_tab', '1', 'left', '#00ff40', '2022-02-13 03:46:32', '2022-03-02 22:52:46', NULL),
-(2, 'the-world-largest', 'category', 4, '', 'images/sliders/P4HwhrzWJr.webp', 'images/sliders/full_width/QRNczJfKao.webp', 'images/sliders/secondary/l7cWkOI6fx.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:49:20', '2022-03-02 22:51:52', NULL),
-(3, 'shop-what', 'category', 1, '', 'images/sliders/8a3E2Tuj1F.webp', 'images/sliders/full_width/CSynIH3GZk.webp', 'images/sliders/secondary/hoUe7hUuAK.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:51:04', '2022-03-02 22:50:28', NULL),
+(1, 'আপনার-উন্নত', 'category', 1, '', 'images/sliders/Y6OaZnvCjf.webp', 'images/sliders/full_width/fTPkfLfh9R.webp', 'images/sliders/secondary/Tq0z4vPfJ9.webp', 'new_tab', '1', 'left', '#00ff40', '2022-02-13 03:46:32', '2022-03-09 04:12:15', NULL),
+(2, 'বিশ্বের-বৃহত্তম', 'category', 4, '', 'images/sliders/P4HwhrzWJr.webp', 'images/sliders/full_width/QRNczJfKao.webp', 'images/sliders/secondary/l7cWkOI6fx.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:49:20', '2022-03-09 04:11:55', NULL),
+(3, 'shop-what', 'category', 1, '', 'images/sliders/8a3E2Tuj1F.webp', 'images/sliders/full_width/CSynIH3GZk.webp', 'images/sliders/secondary/hoUe7hUuAK.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:51:04', '2022-03-09 04:12:36', NULL),
 (4, 'test', 'category', 1, '', 'images/sliders/5EQfGBuEkE.png', NULL, 'images/sliders/secondary/JbZjhArYT3.png', '', '1', '', NULL, '2022-02-27 06:13:49', '2022-02-28 01:55:19', '2022-02-28 01:55:19'),
 (5, 'trete', 'category', 5, NULL, 'images/sliders/WLKcgLn11h.jpg', NULL, 'images/sliders/secondary/T6nksvxqzO.jpg', 'same_tab', '1', 'left', NULL, '2022-02-27 07:35:16', '2022-02-28 01:55:12', '2022-02-28 01:55:12'),
 (6, 'test-45', 'category', 1, '', 'images/sliders/UzBuaHYyvq.jpg', NULL, 'images/sliders/secondary/LlzSkmMfJP.jpg', 'same_tab', '1', 'left', '#00ff40', '2022-02-28 02:31:23', '2022-03-02 22:48:06', '2022-03-02 22:48:06');
@@ -2747,10 +2840,19 @@ CREATE TABLE `slider_translations` (
 INSERT INTO `slider_translations` (`id`, `slider_id`, `locale`, `slider_title`, `slider_subtitle`, `created_at`, `updated_at`) VALUES
 (1, 1, 'en', 'Enhance Your', 'Entertainment', '2022-02-13 03:46:32', '2022-02-21 15:45:38'),
 (2, 2, 'en', 'The world largest', 'Online Store', '2022-02-21 15:49:20', '2022-02-21 15:49:20'),
-(3, 3, 'en', 'Shop What', 'you desire', '2022-02-21 15:51:04', '2022-02-21 15:51:04'),
+(3, 3, 'en', 'Shop What', 'You Desire', '2022-02-21 15:51:04', '2022-03-09 04:12:36'),
 (4, 4, 'en', 'Test', 'Test 2', '2022-02-27 06:13:49', '2022-02-27 06:13:49'),
 (5, 5, 'en', 'trete', 'tert', '2022-02-27 07:35:16', '2022-02-27 07:35:16'),
-(6, 6, 'en', 'Test 45', 'testbb', '2022-02-28 02:31:23', '2022-02-28 02:31:23');
+(6, 6, 'en', 'Test 45', 'testbb', '2022-02-28 02:31:23', '2022-02-28 02:31:23'),
+(7, 3, 'de', 'Einkaufen was', 'Sie wünschen', '2022-03-09 04:08:12', '2022-03-09 04:08:12'),
+(8, 2, 'de', 'Die weltweit größte', 'Online-Shop', '2022-03-09 04:09:02', '2022-03-09 04:09:02'),
+(9, 1, 'de', 'Verbessern Sie Ihre', 'Unterhaltung', '2022-03-09 04:09:24', '2022-03-09 04:09:24'),
+(10, 3, 'es', 'comprar qué', 'tu deseo', '2022-03-09 04:10:08', '2022-03-09 04:10:08'),
+(11, 2, 'es', 'el mundo mas grande', 'Tienda en línea', '2022-03-09 04:10:31', '2022-03-09 04:10:31'),
+(12, 1, 'es', 'Mejore su', 'Entretenimiento', '2022-03-09 04:10:52', '2022-03-09 04:10:52'),
+(13, 3, 'bn', 'কি দোকান', 'তোমার আকাঙ্খা', '2022-03-09 04:11:29', '2022-03-09 04:11:29'),
+(14, 2, 'bn', 'বিশ্বের বৃহত্তম', 'অনলাইন দোকান', '2022-03-09 04:11:55', '2022-03-09 04:11:55'),
+(15, 1, 'bn', 'আপনার উন্নত', 'বিনোদন', '2022-03-09 04:12:15', '2022-03-09 04:12:15');
 
 -- --------------------------------------------------------
 
@@ -2906,7 +3008,10 @@ CREATE TABLE `tax_translations` (
 --
 
 INSERT INTO `tax_translations` (`id`, `tax_id`, `locale`, `tax_class`, `tax_name`, `state`, `city`, `created_at`, `updated_at`) VALUES
-(1, 1, 'en', 'Bangladesh', 'BD Tax', 'Chittagong', 'Chittagong', '2022-02-13 00:18:27', '2022-02-13 00:18:27');
+(1, 1, 'en', 'Bangladesh', 'BD Tax', 'Chittagong', 'Chittagong', '2022-02-13 00:18:27', '2022-03-09 03:49:29'),
+(2, 1, 'de', 'Bangladesch', 'BD-Steuer', 'Chittagong', 'Chittagong', '2022-03-09 03:37:44', '2022-03-09 03:44:26'),
+(3, 1, 'es', 'Bangladesh', 'BD Steuer', 'Chittagong', 'Chittagong', '2022-03-09 03:50:17', '2022-03-09 03:50:17'),
+(4, 1, 'bn', 'Bangladesh', 'বাংলাদেশ ট্যক্স', 'Chittagong', 'Chittagong', '2022-03-09 03:50:40', '2022-03-09 03:50:40');
 
 -- --------------------------------------------------------
 
@@ -2981,7 +3086,7 @@ CREATE TABLE `wishlists` (
 --
 
 INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `category_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 34, 2, '2022-03-01 08:08:28', '2022-03-01 08:08:28');
+(2, 1, 3, 1, '2022-03-09 09:32:20', '2022-03-09 09:32:20');
 
 --
 -- Indexes for dumped tables
@@ -3600,13 +3705,13 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `coupon_translations`
 --
 ALTER TABLE `coupon_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `currencies`
@@ -3642,7 +3747,7 @@ ALTER TABLE `flash_sales`
 -- AUTO_INCREMENT for table `flash_sale_products`
 --
 ALTER TABLE `flash_sale_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `flash_sale_translations`
@@ -3660,7 +3765,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `keyword_hits`
 --
 ALTER TABLE `keyword_hits`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `languages`
@@ -3678,7 +3783,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `menu_translations`
@@ -3702,13 +3807,13 @@ ALTER TABLE `newsletters`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -3720,7 +3825,7 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `page_translations`
 --
 ALTER TABLE `page_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -3738,19 +3843,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT for table `product_translations`
 --
 ALTER TABLE `product_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -3906,7 +4011,7 @@ ALTER TABLE `sliders`
 -- AUTO_INCREMENT for table `slider_translations`
 --
 ALTER TABLE `slider_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `storefront_images`
@@ -3936,7 +4041,7 @@ ALTER TABLE `taxes`
 -- AUTO_INCREMENT for table `tax_translations`
 --
 ALTER TABLE `tax_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -3948,7 +4053,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

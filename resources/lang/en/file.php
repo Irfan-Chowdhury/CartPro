@@ -1052,4 +1052,5 @@ return array (
   'Text Color'=>'Text Color',
   'Text Color Code'=>'Text Color Code',
   'Place each item in the order you prefer. Click on the arrow to the right of the item to display more configuration options'=>'Place each item in the order you prefer. Click on the arrow to the right of the item to display more configuration options',
+   'Order ID'=>'Order ID',
 );

@@ -20,20 +20,43 @@ class UserAccountController extends Controller
 
     public function userAccount()
     {
-        $locale = Session::get('currentLocal');
+        return view('frontend.pages.user_account');
+    }
 
+    public function orderHistory()
+    {
+        $locale = Session::get('currentLocal');
         $orders = DB::table('orders')
-            ->join('order_details','order_details.order_id','orders.id')
-            ->join('products','products.id','order_details.product_id')
-            ->join('product_translations',function ($join) use($locale) {
-                $join->on('product_translations.product_id', '=', 'products.id')
-                ->where('product_translations.local', '=', $locale);
-            })
+            // ->join('order_details','order_details.order_id','orders.id')
+            // ->join('products','products.id','order_details.product_id')
+            // ->join('product_translations',function ($join) use($locale) {
+            //     $join->on('product_translations.product_id', '=', 'products.id')
+            //     ->where('product_translations.local', '=', $locale);
+            // })
             ->where('user_id',Auth::user()->id)
-            ->select('orders.total','product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.subtotal','order_details.options')
+            ->select('orders.id','orders.total','orders.date','orders.order_status')
             ->get();
 
-        return view('frontend.pages.user_account',compact('orders'));
+        return view('frontend.pages.user_orders',compact('orders'));
+    }
+
+    public function orderHistoryDetails($id)
+    {
+        $locale = Session::get('currentLocal');
+
+        $order_details = DB::table('order_details')
+                    ->join('orders','orders.id','order_details.order_id')
+                    ->join('products','products.id','order_details.product_id')
+                    ->join('product_translations',function ($join) use($locale) {
+                        $join->on('product_translations.product_id', '=', 'products.id')
+                        ->where('product_translations.local', '=', $locale);
+                    })
+                    ->where('user_id',Auth::user()->id)
+                    ->select('product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options','order_details.subtotal')
+                    ->where('order_details.order_id',$id)
+                    ->get();
+
+        return view('frontend.pages.user_order_details',compact('order_details'));
     }
 
 
