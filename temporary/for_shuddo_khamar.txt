@@ -1,0 +1,4 @@
+
+1. Orders table -
+discount - type change
+tax - column add (for amount)

@@ -12,6 +12,7 @@ use App\Models\FlashSaleProduct;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Shipping;
+use App\Models\Tax;
 use App\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -146,7 +147,13 @@ class PaymentController extends Controller
         $order->payment_status = 'pending';
         $order->payment_id = uniqid();
         $order->date = date('Y-m-d');
-        $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
+
+        if (isset($request->tax_id)) {
+            $tax = Tax::find($request->tax_id);
+            $order->tax_id = $tax->id;
+            $order->tax = $tax->rate;
+        }
+        // $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
 
 
         if ($request->coupon_code && $request->coupon_checked==1) {
@@ -154,6 +161,7 @@ class PaymentController extends Controller
             if ($coupon->exists()) {
                 $coupon = Coupon::where('coupon_code',$request->coupon_code)->first();
                 $order->coupon_id = $coupon->id;
+                $order->discount = $coupon->value ?? null;
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Order;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,14 +28,9 @@ class UserAccountController extends Controller
     {
         $locale = Session::get('currentLocal');
         $orders = DB::table('orders')
-            // ->join('order_details','order_details.order_id','orders.id')
-            // ->join('products','products.id','order_details.product_id')
-            // ->join('product_translations',function ($join) use($locale) {
-            //     $join->on('product_translations.product_id', '=', 'products.id')
-            //     ->where('product_translations.local', '=', $locale);
-            // })
             ->where('user_id',Auth::user()->id)
             ->select('orders.id','orders.total','orders.date','orders.order_status')
+            ->orderBy('id','DESC')
             ->get();
 
         return view('frontend.pages.user_orders',compact('orders'));
@@ -56,7 +52,9 @@ class UserAccountController extends Controller
                     ->where('order_details.order_id',$id)
                     ->get();
 
-        return view('frontend.pages.user_order_details',compact('order_details'));
+        $order = Order::find($id);
+
+        return view('frontend.pages.user_order_details',compact('order_details','order'));
     }
 
 
