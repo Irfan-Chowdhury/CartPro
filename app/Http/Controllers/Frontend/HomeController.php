@@ -331,7 +331,7 @@ class HomeController extends Controller
             $html = '';
             foreach ($products as $key => $item) {
                 if ($item->product->baseImage!=null) {
-                    $image_url = url("public".$item->product->baseImage->image);
+                    $image_url = url("public".$item->product->baseImage->image_small);
                     $html .= '<li><a class="d-flex" href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'"><img src="'.$image_url.'" style="height:50px;width:50px"/><div><h6>'.$item->product_name.'</h6><span class="price">'.$item->product->price.'</span></div></a></li>';
                 }else {
                     $html .= '<li><a class="d-flex" href="'.$base_url.'/product/'.$item->product->slug.'/'.$item->product->categoryProduct[0]->category_id.'">'.$item->product_name.'<br>'.$item->product->price.'</a></li>';

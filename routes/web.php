@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
-use App\Http\Controllers\Admin\NavigationController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -32,7 +31,6 @@ use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth;
-use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\BrandProductController;
 use App\Http\Controllers\Frontend\CartController;
@@ -174,6 +172,9 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::post('/fail', [Frontend\PaymentController::class, 'fail']);
     Route::post('/cancel', [Frontend\PaymentController::class, 'cancel']);
     Route::post('/ipn', [Frontend\PaymentController::class, 'ipn']);
+
+    Route::post('/payment/process/paypal-success',[Frontend\PaymentController::class,'paymentProceesPaypalSucccess'])->name('payment.process.paypal.done');
+
 
 
     // SSLCOMMERZ Start Default

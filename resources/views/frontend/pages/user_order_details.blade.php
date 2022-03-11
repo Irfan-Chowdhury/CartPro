@@ -136,11 +136,11 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="plantmore-product-thumbnail">Images</th>
-                                        <th class="cart-product-name">Product</th>
-                                        <th class="plantmore-product-price">Unit Price</th>
-                                        <th class="plantmore-product-quantity">Quantity</th>
-                                        <th class="plantmore-product-subtotal">Subtotal</th>
+                                        <th class="plantmore-product-thumbnail">@lang('file.Images')</th>
+                                        <th class="cart-product-name">@lang('file.Product')</th>
+                                        <th class="plantmore-product-price">@lang('file.Unit Price')</th>
+                                        <th class="plantmore-product-quantity">@lang('file.Quantity')</th>
+                                        <th class="plantmore-product-subtotal">@lang('file.Subtotal')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,8 +192,8 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><i class="fw-bold">Total Quantity:</i> <b>{{$total_quantity}}</b></td>
-                                        <td><i class="fw-bold">Subtotal:</i>
+                                        <td><i class="fw-bold">@lang('file.Total Quantity')</i> <b>{{$total_quantity}}</b></td>
+                                        <td><i class="fw-bold">@lang('file.Subtotal')</i>
                                             <b>
                                                 @if(env('CURRENCY_FORMAT')=='suffix')
                                                     {{ number_format((float)$total_subtotal  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
@@ -216,7 +216,7 @@
                                 <div class="card-body">
                                     <table class="table">
                                         <tr>
-                                            <th><span contenteditable>Subtotal</span></th>
+                                            <th><span contenteditable>@lang('file.Subtotal')</span></th>
                                             <td>
                                                 <span contenteditable>
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -228,7 +228,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><span contenteditable>Tax</span></th>
+                                            <th><span contenteditable>@lang('file.Tax')</span></th>
                                             <td>
                                                 <span contenteditable>
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -240,7 +240,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><span contenteditable>Shipping Cost</span></th>
+                                            <th><span contenteditable>@lang('file.Shipping Cost')</span></th>
                                             <td>
                                                 <span contenteditable>
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -252,7 +252,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><span contenteditable>Discount</span></th>
+                                            <th><span contenteditable>@lang('file.Discount')</span></th>
                                             <td>
                                                 <span contenteditable>
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -265,7 +265,7 @@
                                         </tr>
 
                                         <tr>
-                                            <th><span contenteditable><h6 class="text-success"><b>Total Amount</b></h6></span></th>
+                                            <th><span contenteditable><h6 class="text-success"><b>@lang('file.Total Amount')</b></h6></span></th>
                                             <td><h6 class="text-success">
                                                     <b>
                                                         <span contenteditable>

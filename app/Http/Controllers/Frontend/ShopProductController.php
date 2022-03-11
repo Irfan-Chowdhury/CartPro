@@ -38,7 +38,7 @@ class ShopProductController extends Controller
                         $join->on('product_images.product_id', '=', 'products.id')
                         ->where('product_images.type', '=', 'base');
                     })
-                    ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+                    ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                     ->where('is_active',1)
                     ->orderBy('products.id','ASC')
                     ->get();
@@ -81,7 +81,7 @@ class ShopProductController extends Controller
                     $join->on('product_images.product_id', '=', 'products.id')
                     ->where('product_images.type', '=', 'base');
                 })
-                ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+                ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                 ->where('is_active',1)
                 ->orderBy('products.id','ASC')
                 ->limit($request->limit_data)
@@ -127,7 +127,7 @@ class ShopProductController extends Controller
                                 $join->on('product_images.product_id', '=', 'products.id')
                                 ->where('product_images.type', '=', 'base');
                             })
-                            ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+                            ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
                             ->orderBy('products.id','DESC')
                             ->get();
@@ -145,7 +145,7 @@ class ShopProductController extends Controller
                                 $join->on('product_images.product_id', '=', 'products.id')
                                 ->where('product_images.type', '=', 'base');
                             })
-                            ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+                            ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','ASC')
@@ -164,7 +164,7 @@ class ShopProductController extends Controller
                                 $join->on('product_images.product_id', '=', 'products.id')
                                 ->where('product_images.type', '=', 'base');
                             })
-                            ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+                            ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','DESC')
@@ -198,7 +198,7 @@ class ShopProductController extends Controller
         $html = '';
 
         foreach ($products as $item) {
-            $imageurl = url("public/".$item->image);
+            $imageurl = url("public/".$item->image_medium);
 
             $html .= '<form class="addToCart">
                         <input type="hidden" name="product_id" value="'.$item->id.'">
@@ -225,7 +225,7 @@ class ShopProductController extends Controller
 
 
                         $html .= '<div class="product-overlay">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#'.$item->slug.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
                                     if(Auth::check()){
                                         $html .=  '<a><span class="ti-heart add_to_wishlist" data-product_id="'.$item->id.'" data-product_slug="'.$item->slug.'" data-category_id="'.$category_ids[$item->id]->category_id.'" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>';
                                     }else{

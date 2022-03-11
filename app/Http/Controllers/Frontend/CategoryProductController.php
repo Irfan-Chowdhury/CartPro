@@ -12,50 +12,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Concerns\ToArray;
 
 class CategoryProductController extends Controller
 {
     public function categoryWiseProducts($slug)
     {
-
-        //Test
-
-        // $myfile = fopen("temporary/lang_bn.txt", "r") or die("Unable to open file!");
-        // $data = fread($myfile,filesize("temporary/lang_en.txt"));
-
-        // $test = explode("'",$data);
-
-
-        // $bn = mb_convert_encoding($test, 'UTF-8', 'UTF-8');
-        // // $json = html_entity_decode($test,true);
-        // // $bn = json_decode($json,true);
-
-        // return $bn;
-
-        // $arr1= [];
-
-        // //en
-        // // foreach ($test as $key => $value) {
-        // //     if($value!=NULL){
-        // //         $arr1[] = $value;
-        // //     }
-        // // };
-        // foreach ($bn as $key => $value) {
-        //     if($value!=NULL){
-        //         $arr1[] = $value;
-        //     }
-        // };
-
-        // $result = [];
-        // foreach ($arr1 as $key => $value) {
-        //     if($key%2==0){
-        //         $result[] = $value;
-        //     }
-        // }
-
-        // return $data;
-        //Test
 
         $setting = Setting::where('key','storefront_footer_tag_id')->first();
         $footer_tag_ids = json_decode($setting->plain_value);
@@ -90,7 +51,6 @@ class CategoryProductController extends Controller
         return view('frontend.pages.category_wise_products',compact('category','attribute_values','tags'));
     }
 
-    //Pending
     public function categoryProductsFilterByAttributeValue(Request $request)
     {
         if(!Session::get('currentLocal')){
@@ -229,7 +189,7 @@ class CategoryProductController extends Controller
 
 
                         $html .= '<div class="product-overlay">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#'.$item->product->slug.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->product->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
                                     if(Auth::check()){
                                         $html .= '<a><span class="ti-heart add_to_wishlist" data-product_id="'.$item->id.'" data-product_slug="'.$item->slug.'" data-category_id="'.$category->id.'" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>';
                                     }else {
@@ -461,7 +421,7 @@ class CategoryProductController extends Controller
 
 
                         $html .= '<div class="product-overlay">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#'.$item->slug.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
                                     if(Auth::check()){
                                         $html .= '<a><span class="ti-heart add_to_wishlist" data-product_id="'.$item->id.'" data-product_slug="'.$item->slug.'" data-category_id="'.$category->id.'" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>';
                                     }else {

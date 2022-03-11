@@ -481,10 +481,13 @@ $(function(){
     //----------- Paypal ----------
 
     $('#paypal').on('click',function(event){
+        console.log(50);
+
         $('#payNowPaypal').show();
         $('#stripeContent').hide();
 
         $('#orderBtn').on('click',function(event){
+
             var totalAmountP = parseFloat($("input[name=totalAmount]").val()).toFixed(2);
             paypal_sdk.Buttons({
                 createOrder: function(data, actions) {
@@ -493,7 +496,7 @@ $(function(){
                         method: "POST",
                         data: $('#payment-form').serialize(),
                         success: function (data) {
-                            console.log('ok');
+                            var x = 2;
                         }
                     });
                     return actions.order.create({
@@ -506,7 +509,8 @@ $(function(){
                     });
                 },
                 onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {});
+                    return actions.order.capture().then(function(details) {
+                    });
                 }
             }).render('#paypal-button-container');
             $('#orderBtn').addClass('d-none');

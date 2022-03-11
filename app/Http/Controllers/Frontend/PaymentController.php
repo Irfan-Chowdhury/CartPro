@@ -116,6 +116,11 @@ class PaymentController extends Controller
         }
     }
 
+    public function paymentProceesPaypalSucccess()
+    {
+        return response()->json('fahim');
+    }
+
     protected function destroyOthers(){
         Cart::destroy();
         $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',NULL);
@@ -150,8 +155,14 @@ class PaymentController extends Controller
 
         if (isset($request->tax_id)) {
             $tax = Tax::find($request->tax_id);
-            $order->tax_id = $tax->id;
-            $order->tax = $tax->rate;
+            if ($tax) {
+                $order->tax_id = $tax->id;
+                $order->tax = $tax->rate;
+            }else {
+                $order->tax_id = null;
+                $order->tax = null;
+            }
+
         }
         // $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
 

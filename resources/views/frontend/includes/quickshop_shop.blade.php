@@ -1,5 +1,5 @@
     <!-- Quick Shop Modal starts -->
-    <div class="modal fade quickshop" id="{{$item->slug}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->slug}}" aria-hidden="true">
+    <div class="modal fade quickshop" id="id_{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->slug}}" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-body">

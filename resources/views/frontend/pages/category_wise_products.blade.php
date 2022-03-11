@@ -180,7 +180,7 @@
                         <div class="product-grid categoryWiseProductField">
                             @if (!isset($products))
                                 @forelse ($category->categoryProduct as $item)
-                                    @if ($item->product->is_active==1) <!--Change in query later-->
+                                    @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
                                         <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$item->product_id}}">
@@ -204,7 +204,7 @@
                                                         @endif
 
                                                         <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                             <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
                                                         </div>
                                                     </div>

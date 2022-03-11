@@ -97,8 +97,8 @@
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
 
-                                                        @if (isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="{{asset('public/'.$item->image)}}"></a>
+                                                        @if (isset($item->image_medium) && Illuminate\Support\Facades\File::exists(public_path($item->image_medium)))
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="{{asset('public/'.$item->image_medium)}}"></a>
                                                         @else
                                                             <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
                                                         @endif
@@ -110,7 +110,7 @@
                                                         @endif
 
                                                         <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                             <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" class="ti-heart"  data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category_ids[$item->id]->category_id}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
                                                         </div>
 

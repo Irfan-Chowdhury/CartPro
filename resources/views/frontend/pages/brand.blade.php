@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col">
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">Brands</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.Brands')</li>
                     </ul>
                 </div>
             </div>

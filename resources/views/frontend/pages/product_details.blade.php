@@ -482,7 +482,7 @@
                     <div class="product-slider-wrapper v1 swiper-container">
                         <div class="swiper-wrapper">
                             @forelse ($category_products as $item)
-                                @if ($item->product->is_active==1) <!--Change in query later-->
+                                @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
                                     <div class="swiper-slide">
                                         <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                             @csrf
@@ -509,7 +509,7 @@
                                                     @endif
 
                                                     <div class="product-overlay">
-                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                     </div>
 
                                                 </div>
@@ -592,7 +592,9 @@
     </section>
 
     @forelse ($category_products as $item)
-        @include('frontend.includes.quickshop')
+        @if (isset($item->product))
+            @include('frontend.includes.quickshop')
+        @endif
     @empty
     @endforelse
     <!--Related product area ends-->

@@ -1053,4 +1053,18 @@ return array (
   'Text Color Code'=>'Text Color Code',
   'Place each item in the order you prefer. Click on the arrow to the right of the item to display more configuration options'=>'Place each item in the order you prefer. Click on the arrow to the right of the item to display more configuration options',
    'Order ID'=>'Order ID',
+   'Product'=>'Product',
+   'Unit Price'=>'Unit Price',
+   'Quantity'=>'Quantity',
+   'Subtotal'=>'Subtotal',
+   'Total Quantity'=>'Total Quantity',
+   'Tax'=>'Tax',
+   'Shipping Cost'=>'Shipping Cost',
+   'Discount'=>'Discount',
+   'Total Amount'=>'Total Amount',
+   'Social Logins'=>'Social Logins',
+   'Google'=>'Google',
+   'Shipping Methods'=>'Shipping Methods',
+   'Payment Methods'=>'Payment Methods',
+
 );

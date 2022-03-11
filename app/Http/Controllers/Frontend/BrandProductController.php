@@ -56,7 +56,7 @@ class BrandProductController extends Controller
                         $join->on('product_images.product_id', '=', 'products.id')
                         ->where('product_images.type', '=', 'base');
                     })
-                    ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description')
+                    ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description')
                     ->where('brand_id',$brand->id)
                     ->orderBy('products.id','DESC')
                     ->get();
