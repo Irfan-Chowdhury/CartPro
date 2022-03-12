@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2022 at 11:58 AM
+-- Generation Time: Mar 12, 2022 at 03:02 AM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.26
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -215,7 +215,7 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `slug`, `parent_id`, `image`, `icon`, `top`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'mobile', NULL, 'images/categories/yC9tucZzFA.webp', 'las la-mobile', 1, 1, '2022-02-12 23:38:41', '2022-02-12 23:40:33'),
-(2, 'computers-&-accessories', NULL, 'images/categories/Q1LgGmgWHY.jpg', 'las la-desktop', 1, 1, '2022-02-13 03:27:02', '2022-02-14 00:17:40'),
+(2, 'computers-and-accessories', NULL, 'images/categories/Q1LgGmgWHY.jpg', 'las la-desktop', 1, 1, '2022-02-13 03:27:02', '2022-03-11 12:12:13'),
 (3, 'television', NULL, 'images/categories/pn3vq9MsJR.png', 'las la-tv', 1, 1, '2022-02-13 03:34:39', '2022-02-14 04:17:11'),
 (4, 'watch', NULL, 'images/categories/sUyBsGLV0p.png', 'las la-clock', 1, 1, '2022-02-14 00:27:58', '2022-02-14 00:29:59'),
 (5, 'headphone', NULL, 'images/categories/P4BxNp0WCt.webp', 'las la-headphones', 1, 1, '2022-02-14 00:37:23', '2022-02-14 00:38:29'),
@@ -327,7 +327,7 @@ CREATE TABLE `category_translations` (
 
 INSERT INTO `category_translations` (`id`, `category_id`, `local`, `category_name`, `created_at`, `updated_at`) VALUES
 (1, 1, 'en', 'Mobile', '2022-02-12 23:38:41', '2022-02-12 23:38:41'),
-(2, 2, 'en', 'Computers & Accessories', '2022-02-13 03:27:02', '2022-02-13 03:27:02'),
+(2, 2, 'en', 'Computers and Accessories', '2022-02-13 03:27:02', '2022-02-13 03:27:02'),
 (3, 3, 'en', 'Television', '2022-02-13 03:34:39', '2022-02-13 03:34:39'),
 (4, 4, 'en', 'Watch', '2022-02-14 00:27:58', '2022-02-14 00:27:58'),
 (5, 5, 'en', 'Headphone', '2022-02-14 00:37:23', '2022-02-14 00:37:23'),
@@ -1230,7 +1230,7 @@ CREATE TABLE `orders` (
   `payment_method` varchar(255) DEFAULT NULL,
   `coupon_id` bigint(20) UNSIGNED DEFAULT NULL,
   `payment_id` varchar(191) DEFAULT NULL,
-  `discount` varchar(255) DEFAULT NULL,
+  `discount` decimal(10,2) DEFAULT NULL,
   `total` decimal(10,2) DEFAULT NULL,
   `currency_base_total` decimal(10,2) DEFAULT NULL,
   `currency_symbol` varchar(191) DEFAULT NULL,
@@ -1238,6 +1238,7 @@ CREATE TABLE `orders` (
   `payment_status` varchar(191) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `tax_id` int(11) DEFAULT NULL,
+  `tax` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1246,11 +1247,18 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `billing_first_name`, `billing_last_name`, `billing_email`, `billing_phone`, `billing_country`, `billing_address_1`, `billing_address_2`, `billing_city`, `billing_state`, `billing_zip_code`, `shipping_method`, `shipping_cost`, `payment_method`, `coupon_id`, `payment_id`, `discount`, `total`, `currency_base_total`, `currency_symbol`, `order_status`, `payment_status`, `date`, `tax_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Test ff', 'gdgdgd', 'test144@gmail.com', '345345555355', 'United States', 'ggdg', 'fgeter', 'fdfg', 'dfgfdgf', 'fdgfd', 'free', '0', 'cash_on_delivery', NULL, '621e2d3cea259', NULL, '30.00', '30.00', '$', 'completed', 'pending', '2022-03-01', NULL, '2022-03-01 08:27:08', '2022-03-01 22:37:20'),
-(2, NULL, 'Test', 'Lasdsd', 'irfanchowdhury434@gmail.com', 'Test', 'Canada', 'dasdd', 'sad', 'dsads', 'sdsad', 'asdsa', 'free', '0', 'cash_on_delivery', NULL, '6225c483b512c', NULL, '200.00', '200.00', '$', 'pending', 'pending', '2022-03-07', NULL, '2022-03-07 02:38:27', '2022-03-07 02:38:27'),
-(3, 1, 'Promiq', 'Chowdhury', 'promi@gmail.com', '01829498634', 'United States', 'Ttes', 'Test', 'Ctesas', 'Caslia', '3456', 'free', '0', 'cash_on_delivery', NULL, '6228670bea345', NULL, '640.50', '640.50', '$', 'pending', 'pending', '2022-03-09', NULL, '2022-03-09 02:36:27', '2022-03-09 02:36:27'),
-(4, 1, 'Saimon', 'Khan', 'saimon@gmail.com', '01829498546', 'Bangladesh', 'Muradpur', 'Ma villa', 'Chittagong', 'Bnagladesh', '4430', 'free', '0', 'cash_on_delivery', NULL, '6229cbd268105', NULL, '710.00', '710.00', '$', 'pending', 'pending', '2022-03-10', 1, '2022-03-10 03:58:42', '2022-03-10 03:58:42');
+INSERT INTO `orders` (`id`, `user_id`, `billing_first_name`, `billing_last_name`, `billing_email`, `billing_phone`, `billing_country`, `billing_address_1`, `billing_address_2`, `billing_city`, `billing_state`, `billing_zip_code`, `shipping_method`, `shipping_cost`, `payment_method`, `coupon_id`, `payment_id`, `discount`, `total`, `currency_base_total`, `currency_symbol`, `order_status`, `payment_status`, `date`, `tax_id`, `tax`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Test ff', 'gdgdgd', 'test144@gmail.com', '345345555355', 'United States', 'ggdg', 'fgeter', 'fdfg', 'dfgfdgf', 'fdgfd', 'free', '0', 'cash_on_delivery', NULL, '621e2d3cea259', NULL, '30.00', '30.00', '$', 'completed', 'pending', '2022-03-01', NULL, NULL, '2022-03-01 08:27:08', '2022-03-01 22:37:20'),
+(2, NULL, 'Test', 'Lasdsd', 'irfanchowdhury434@gmail.com', 'Test', 'Canada', 'dasdd', 'sad', 'dsads', 'sdsad', 'asdsa', 'free', '0', 'cash_on_delivery', NULL, '6225c483b512c', NULL, '200.00', '200.00', '$', 'pending', 'pending', '2022-03-07', NULL, NULL, '2022-03-07 02:38:27', '2022-03-07 02:38:27'),
+(3, 1, 'Promiq', 'Chowdhury', 'promi@gmail.com', '01829498634', 'United States', 'Ttes', 'Test', 'Ctesas', 'Caslia', '3456', 'free', '0', 'cash_on_delivery', NULL, '6228670bea345', NULL, '640.50', '640.50', '$', 'pending', 'pending', '2022-03-09', NULL, NULL, '2022-03-09 02:36:27', '2022-03-09 02:36:27'),
+(4, 1, 'Saimon', 'Khan', 'saimon@gmail.com', '01829498546', 'Bangladesh', 'Muradpur', 'Ma villa', 'Chittagong', 'Bnagladesh', '4430', 'free', '0', 'cash_on_delivery', NULL, '6229cbd268105', NULL, '710.00', '710.00', '$', 'pending', 'pending', '2022-03-10', 1, NULL, '2022-03-10 03:58:42', '2022-03-10 03:58:42'),
+(5, 1, 'Kafilus', 'Satter', 'kafil@gmail.com', '01829498651', 'Bangladesh', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'flat_rate', '15', 'cash_on_delivery', 1, '622a450d2c9c6', NULL, '930.00', '930.00', '$', 'pending', 'pending', '2022-03-10', 1, NULL, '2022-03-10 12:35:57', '2022-03-10 12:35:57'),
+(6, 1, 'Promi', 'Chowdhury', 'promi@gmail.com', '01993678742', 'Bangladesh', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'flat_rate', '15', 'cash_on_delivery', 1, '622a4e11513c9', '10.00', '1214.00', '1214.00', '$', 'pending', 'pending', '2022-03-10', 1, '10.00', '2022-03-10 13:14:25', '2022-03-10 13:14:25'),
+(7, 1, 'Promi', 'Chowdhury', 'promi@gmail.com', '01829498634', 'Bangladesh', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'flat_rate', '15', 'cash_on_delivery', 1, '622a4ebd7ce69', '10.00', '615.00', '615.00', '$', 'pending', 'pending', '2022-03-10', 1, '10.00', '2022-03-10 13:17:17', '2022-03-10 13:17:17'),
+(8, 1, 'Promi', 'Chowdhury', 'salman@gmail.com', '01993678742', 'Albania', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', '', '0', 'paypal', NULL, '622ba8524a90c', NULL, '0.01', '0.01', '$', 'pending', 'pending', '2022-03-11', NULL, NULL, '2022-03-11 13:51:46', '2022-03-11 13:51:46'),
+(9, 1, 'Kafilus', 'Khan', 'kafil@gmail.com', '01993678742', 'Bangladesh', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'free', '0', 'paypal', NULL, '622ba8881f5f3', NULL, '10.01', '10.01', '$', 'pending', 'pending', '2022-03-11', 1, '10.00', '2022-03-11 13:52:40', '2022-03-11 13:52:40'),
+(12, 1, 'Saimon', 'Satter', 'promi@gmail.com', '01829498634', 'Angola', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'free', '0', 'paypal', NULL, '622baa58c1ddc', NULL, '0.01', '0.01', '$', 'pending', 'pending', '2022-03-11', NULL, NULL, '2022-03-11 14:00:24', '2022-03-11 14:00:24'),
+(13, 1, 'Kamal', 'Satter', 'promi@gmail.com', '01829498634', 'Antarctica', 'Muradpur', 'Muradpur', 'Chittagong', 'Bangladesh', '4330', 'free', '0', 'paypal', NULL, '622baf020eba7', NULL, '0.02', '0.02', '$', 'pending', 'pending', '2022-03-11', NULL, NULL, '2022-03-11 14:20:18', '2022-03-11 14:20:18');
 
 -- --------------------------------------------------------
 
@@ -1287,7 +1295,19 @@ INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `brands`, `categori
 (3, 3, 3, NULL, NULL, NULL, '200.00', 2, 1, '/images/products/gxAhN2e8yY.webp', '{\"image\":\"\\/images\\/products\\/gxAhN2e8yY.webp\",\"product_slug\":\"samsung-galaxy-a52-5g-android-cell-phone\",\"category_id\":\"1\"}', '0.00', '', '400.00', '2022-03-09 02:36:28', '2022-03-09 02:36:28'),
 (4, 3, 5, NULL, NULL, NULL, '240.50', 1, 1, '/images/products/XAbIiTyFAC.webp', '{\"image\":\"\\/images\\/products\\/XAbIiTyFAC.webp\",\"product_slug\":\"oneplus-8-pro-onyx-black-android-smartphone\",\"category_id\":\"1\"}', '0.00', '', '240.50', '2022-03-09 02:36:28', '2022-03-09 02:36:28'),
 (5, 4, 7, NULL, NULL, NULL, '500.00', 1, 1, '/images/products/large/9og6IARLNE.webp', '{\"image\":\"\\/images\\/products\\/large\\/9og6IARLNE.webp\",\"product_slug\":\"samsung-galaxy-note-10\",\"category_id\":\"1\"}', '0.00', '', '500.00', '2022-03-10 03:58:42', '2022-03-10 03:58:42'),
-(6, 4, 1, NULL, NULL, NULL, '100.00', 2, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-10 03:58:42', '2022-03-10 03:58:42');
+(6, 4, 1, NULL, NULL, NULL, '100.00', 2, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-10 03:58:42', '2022-03-10 03:58:42'),
+(7, 5, 4, NULL, NULL, NULL, '715.00', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '715.00', '2022-03-10 12:35:57', '2022-03-10 12:35:57'),
+(8, 5, 1, NULL, NULL, NULL, '100.00', 2, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-10 12:35:57', '2022-03-10 12:35:57'),
+(9, 6, 1, NULL, NULL, NULL, '100.00', 2, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '200.00', '2022-03-10 13:14:25', '2022-03-10 13:14:25'),
+(10, 6, 10, NULL, NULL, NULL, '999.00', 1, 1, '/images/products/large/6E5wX5Zgan.webp', '{\"image\":\"\\/images\\/products\\/large\\/6E5wX5Zgan.webp\",\"product_slug\":\"apple-macbook-pro-13.3-inch-2.7ghz-dual-core-i5\",\"category_id\":\"2\"}', '0.00', '', '999.00', '2022-03-10 13:14:25', '2022-03-10 13:14:25'),
+(11, 7, 1, NULL, NULL, NULL, '100.00', 1, 1, '/images/products/large/f6qXdQdZVm.webp', '{\"image\":\"\\/images\\/products\\/large\\/f6qXdQdZVm.webp\",\"product_slug\":\"apple-iphone-11-64gb-yellow-fully-unlocked\",\"category_id\":\"1\"}', '0.00', '', '100.00', '2022-03-10 13:17:17', '2022-03-10 13:17:17'),
+(12, 7, 7, NULL, NULL, NULL, '500.00', 1, 1, '/images/products/large/9og6IARLNE.webp', '{\"image\":\"\\/images\\/products\\/large\\/9og6IARLNE.webp\",\"product_slug\":\"samsung-galaxy-note-10\",\"category_id\":\"1\"}', '0.00', '', '500.00', '2022-03-10 13:17:17', '2022-03-10 13:17:17'),
+(13, 8, 4, NULL, NULL, NULL, '0.01', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.01', '2022-03-11 13:51:46', '2022-03-11 13:51:46'),
+(14, 9, 4, NULL, NULL, NULL, '0.01', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.01', '2022-03-11 13:52:40', '2022-03-11 13:52:40'),
+(15, 10, 4, NULL, NULL, NULL, '0.01', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.01', '2022-03-11 13:54:11', '2022-03-11 13:54:11'),
+(16, 11, 4, NULL, NULL, NULL, '0.01', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.01', '2022-03-11 13:59:05', '2022-03-11 13:59:05'),
+(17, 12, 4, NULL, NULL, NULL, '0.01', 1, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.01', '2022-03-11 14:00:24', '2022-03-11 14:00:24'),
+(18, 13, 4, NULL, NULL, NULL, '0.01', 2, 1, '/images/products/large/ydFqlpWr4D.webp', '{\"image\":\"\\/images\\/products\\/large\\/ydFqlpWr4D.webp\",\"product_slug\":\"apple-iphone-11-pro-max-(64gb)-\\u2013-silver\",\"category_id\":\"1\"}', '0.00', '', '0.02', '2022-03-11 14:20:18', '2022-03-11 14:20:18');
 
 -- --------------------------------------------------------
 
@@ -1527,7 +1547,7 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_pr
 (1, 2, 1, 'apple-iphone-11-64gb-yellow-fully-unlocked', '100.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'SO4JK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 00:46:06', '2022-03-03 03:33:29', NULL),
 (2, 2, 1, 'apple-iphone-x-64gb-silver-fully-unlocked', '284.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'CE45VERT', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:26:24', '2022-03-03 03:30:06', NULL),
 (3, 1, 1, 'samsung-galaxy-a52-5g-android-cell-phone', '200.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'KGH45YRT', 1, 2, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:30:20', '2022-03-06 05:41:22', NULL),
-(4, 2, 1, 'apple-iphone-11-pro-max-(64gb)-–-silver', '815.0000', '715.0000', '', NULL, NULL, NULL, '715.0000', 'S57UK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:36:03', '2022-03-03 03:18:38', NULL),
+(4, 2, 1, 'apple-iphone-11-pro-max-(64gb)-–-silver', '815.0000', '0.0100', '', NULL, NULL, NULL, '0.0100', 'S57UK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:36:03', '2022-03-11 13:24:23', NULL),
 (5, 3, 1, 'oneplus-8-pro-onyx-black-android-smartphone', '240.5000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'YHE4M7', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:41:17', '2022-03-03 03:15:12', NULL),
 (6, 2, 1, 'apple-iphone-xs-max-64gb--white', '560.0000', '0.0000', '', NULL, NULL, NULL, '0.0000', 'KLIOLP', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:11:05', '2022-03-03 03:11:51', NULL),
 (7, 1, 1, 'samsung-galaxy-note-10', '590.0000', '500.0000', '', NULL, NULL, NULL, '500.0000', 'LKOUHJ', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:18:25', '2022-03-03 02:39:26', NULL),
@@ -2599,7 +2619,7 @@ CREATE TABLE `setting_paypals` (
 --
 
 INSERT INTO `setting_paypals` (`id`, `status`, `label`, `description`, `sandbox`, `client_id`, `secret`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'Paypal', 'Test', NULL, 'AU9xEUcAhAZ9uK_UNVseT4RAiOVABw38vUjPYDth_M9IGCQp4Ez_WJ8s1HtztNdx3Nt58NuaFKcWX98b', 'EEjSv_jGB0xYCRs3-8L9aEsAp56LeQOOSNNTaXR1LirZxq6Nmgn70tL5jInojNIoCp_JbW_jjoOMT1qG', '2022-02-25 12:14:17', '2022-02-25 12:14:17');
+(1, 1, 'Paypal', 'Test', NULL, 'AU9xEUcAhAZ9uK_UNVseT4RAiOVABw38vUjPYDth_M9IGCQp4Ez_WJ8s1HtztNdx3Nt58NuaFKcWX98b', 'EEjSv_jGB0xYCRs3-8L9aEsAp56LeQOOSNNTaXR1LirZxq6Nmgn70tL5jInojNIoCp_JbW_jjoOMT1qG', '2022-02-25 12:14:17', '2022-03-11 13:32:38');
 
 -- --------------------------------------------------------
 
@@ -3807,13 +3827,13 @@ ALTER TABLE `newsletters`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -4108,13 +4128,6 @@ ALTER TABLE `brand_translations`
 --
 ALTER TABLE `categories`
   ADD CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
-
---
--- Constraints for table `category_product`
---
-ALTER TABLE `category_product`
-  ADD CONSTRAINT `category_product_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `category_product_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
