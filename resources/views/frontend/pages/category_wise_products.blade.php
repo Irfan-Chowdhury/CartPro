@@ -181,7 +181,7 @@
                             @if (!isset($products))
                                 @forelse ($category->categoryProduct as $item)
                                     @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
-                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                        <form class="addToCart">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$item->product_id}}">
                                             <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
@@ -438,8 +438,6 @@
         </div>
     </div>
     <!-- Shop Page Ends-->
-
-
 
     <!-- Quick Shop Modal starts -->
     @forelse ($category->categoryProduct as $item)

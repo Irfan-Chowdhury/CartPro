@@ -21,7 +21,7 @@ class UserAccountController extends Controller
 
     public function userAccount()
     {
-        return view('frontend.pages.user_account');
+        return view('frontend.pages.user_account.dashboard');
     }
 
     public function orderHistory()
@@ -33,7 +33,7 @@ class UserAccountController extends Controller
             ->orderBy('id','DESC')
             ->get();
 
-        return view('frontend.pages.user_orders',compact('orders'));
+        return view('frontend.pages.user_account.user_orders',compact('orders'));
     }
 
     public function orderHistoryDetails($id)
@@ -54,7 +54,7 @@ class UserAccountController extends Controller
 
         $order = Order::find($id);
 
-        return view('frontend.pages.user_order_details',compact('order_details','order'));
+        return view('frontend.pages.user_account.user_order_details',compact('order_details','order'));
     }
 
 

@@ -105,12 +105,14 @@ class CategoryController extends Controller
     {
         $category            = $this->category->find($request->category_id);
         $categoryTranslation = $this->category->categoryTranslation($request->category_id);
+
         return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
     }
 
     public function update(Request $request)
     {
         if (auth()->user()->can('category-edit')){
+
             //validation
             $validator = Validator::make($request->only('category_name'),[
                 'category_name' => 'required|unique:category_translations,category_name,'.$request->category_translation_id,

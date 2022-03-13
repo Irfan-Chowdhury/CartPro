@@ -75,10 +75,10 @@
 
 
                             <div class="col-sm-6">
-                                <input class="form-control" type="email" name="billing_email" placeholder="Email *">
+                                <input class="form-control" type="email" name="billing_email"  placeholder="Email *">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_phone" placeholder="Phone *">
+                                <input class="form-control" type="number" name="billing_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone *">
                             </div>
 
                             <div class="col-12">
@@ -182,7 +182,7 @@
                                         <input class="form-control" type="text" name="shipping_email" placeholder="Email">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_phone" placeholder="Phone">
+                                        <input class="form-control" type="text" name="shipping_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone">
                                     </div>
                                 </div>
                             </div>
@@ -387,6 +387,15 @@
 
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script>
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
 
 <script>
 $(function(){

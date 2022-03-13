@@ -17,6 +17,7 @@ class Product extends Model
         'slug',
         'price',
         'special_price',
+        'is_special',
         'special_price_type',
         'special_price_start',
         'special_price_end',
@@ -33,7 +34,7 @@ class Product extends Model
     ];
 
     protected $dates = ['deleted_at'];
-    
+
     public function productTranslation()
     {
     	$locale = Session::get('currentLocal');

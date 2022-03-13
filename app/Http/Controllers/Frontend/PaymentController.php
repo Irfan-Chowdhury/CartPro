@@ -62,14 +62,14 @@ class PaymentController extends Controller
             'billing_last_name'  => 'required|string',
             'billing_country'  => 'required',
             'billing_phone'      => 'required|numeric',
-            'billing_email'      => 'required|email',
+            'billing_email'      => 'required|regex:/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/',
             'shipping_phone'=> 'nullable|numeric',
             'shipping_email'=> 'nullable|email',
         ]);
         if($validator->fails()){
-            return redirect(route("cart.checkout"), 307)->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
+            // return redirect(route("cart.checkout"), 307)->withErrors($validator)->withInput();
         }
-
 
         if ($request->billing_create_account_check) {
             $validator = Validator::make($request->all(),[
@@ -162,7 +162,6 @@ class PaymentController extends Controller
                 $order->tax_id = null;
                 $order->tax = null;
             }
-
         }
         // $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
 

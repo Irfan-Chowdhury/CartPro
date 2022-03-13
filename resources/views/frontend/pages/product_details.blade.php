@@ -218,7 +218,7 @@
                                     @else
                                         <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to cart')</span></span></button>
                                     @endif
-                                    <a><div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to wishlist')</span></span></div></a>
+                                        <a><div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to wishlist')</span></span></div></a>
                             </div>
                             <hr>
                             <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
@@ -502,7 +502,8 @@
                                                     </a>
 
 
-                                                    @if (($item->product->qty==0) || ($item->product->in_stock==0))
+
+                                                    @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
                                                         <div class="product-promo-text style1">
                                                             <span>Stock Out</span>
                                                         </div>
@@ -633,68 +634,76 @@
             $("#productAddToCartSingle").on("submit",function(e){
                 e.preventDefault();
 
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Successfully added on your cart'
-                });
+                let qty = $("input[name=qty]").val();
+                if (qty) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Successfully added on your cart'
+                    });
+                    $.ajax({
+                        url: "{{route('product.add_to_cart')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log('ok');
+                            if (data.type=='success') {
+                                let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}}
+                                let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
 
-                $.ajax({
-                    url: "{{route('product.add_to_cart')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log('ok');
-                        if (data.type=='success') {
-                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}}
-                            let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
+                                $('.cart_count').text(data.cart_count);
+                                $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                                $('.total_price').text(amountConvertToCurrency.toFixed(2));
 
-                            $('.cart_count').text(data.cart_count);
-                            $('.cart_total').text(amountConvertToCurrency.toFixed(2));
-                            $('.total_price').text(amountConvertToCurrency.toFixed(2));
+                                var html = '';
+                                var cart_content = data.cart_content;
+                                $.each( cart_content, function( key, value ) {
+                                    let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
 
-                            var html = '';
-                            var cart_content = data.cart_content;
-                            $.each( cart_content, function( key, value ) {
-                                let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
+                                    var image = 'public/'+value.options.image;
+                                    html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
+                                            '<img src="'+image+'">'+
+                                            '</a></div><div class="shp__pro__details"><h2>'+
+                                            '<a href="#">'+value.name+'</a></h2>'+
+                                            '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
+                                            '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
+                                });
+                                $('.cart_list').html(html);
 
-                                var image = 'public/'+value.options.image;
-                                html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                        '<img src="'+image+'">'+
-                                        '</a></div><div class="shp__pro__details"><h2>'+
-                                        '<a href="#">'+value.name+'</a></h2>'+
-                                        '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
-                                        '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
-                            });
-                            $('.cart_list').html(html);
-
-                            if (data.wishlist_id>0) {
-                                $('#wishlist_'+data.wishlist_id).remove();
+                                if (data.wishlist_id>0) {
+                                    $('#wishlist_'+data.wishlist_id).remove();
+                                }
+                            }
+                            else if(data.type=='quantity_limit'){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Available product is : '+data.product_quantity
+                                });
                             }
                         }
-                        else if(data.type=='quantity_limit'){
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Available product is : '+data.product_quantity
-                            });
-                        }
-                    }
-                });
+                    });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please insert a number.'
+                    });
+                }
             });
 
             $('#star_1').on('click',function(){

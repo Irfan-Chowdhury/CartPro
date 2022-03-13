@@ -119,9 +119,13 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
         Route::get('/remove', [CartController::class,'cartRomveById'])->name('cart.remove');
         Route::get('/quantity_change', [CartController::class,'cartQuantityChange'])->name('cart.quantity_change');
         Route::get('/shipping_charge', [CartController::class,'shippingCharge'])->name('cart.shipping_charge');
-        Route::post('/checkout', [CartController::class,'checkout'])->name('cart.checkout');
+        // Route::post('/checkout', [CartController::class,'checkout'])->name('cart.checkout');
+        Route::get('/checkout', [CartController::class,'checkout'])->name('cart.checkout');
         Route::get('/apply_coupon', [CartController::class,'applyCoupon'])->name('cart.apply_coupon');
         Route::get('/country_wise_tax', [CartController::class,'countryWiseTax'])->name('cart.country_wise_tax');
+        Route::get('/empty',function(){
+            return view('frontend.pages.cart_empty_page');
+        });
     });
 
 
@@ -144,8 +148,6 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     // });
 
 
-
-
     //Wishlist
     Route::prefix('/wishlist')->group(function () {
         Route::get('',[WishlistController::class,'index'])->name('wishlist.index');
@@ -156,10 +158,9 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::get('page/{page_slug}',[FrontendPageController::class,'pageShow'])->name('page.Show');
 
     Route::group(['prefix' => '/user_account','middleware'=>'customer_check'], function () {
-        Route::get('/',[UserAccountController::class,'userAccount'])->name('user_account')->middleware('customer_check');
+        Route::get('/dashboard',[UserAccountController::class,'userAccount'])->name('user_account')->middleware('customer_check');
         Route::post('/update',[UserAccountController::class,'userProfileUpdate'])->name('user_profile_update');
         Route::post('/logout',[UserAccountController::class,'userLogout'])->name('user_logout');
-
         Route::get('/order/history',[UserAccountController::class,'orderHistory'])->name('user.order.history');
         Route::get('/order/history/details/{id}',[UserAccountController::class,'orderHistoryDetails'])->name('user.order.history.details');
     });

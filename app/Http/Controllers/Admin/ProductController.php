@@ -50,15 +50,6 @@ class ProductController extends Controller
 
     public function index()
     {
-        // $product_images =  ProductImage::get();
-        // foreach ($product_images as $key => $value) {
-        //     $data = str_replace("/images/products","/images/products/large",$value->image);
-        //     ProductImage::where('id',$value->id)->update(['image'=>$data]);
-        // }
-        // return 'ok';
-
-
-
         if (auth()->user()->can('product-view'))
         {
             $local = Session::get('currentLocal');
@@ -221,6 +212,12 @@ class ProductController extends Controller
                 $product->price         = $request->price;
 
                 $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
+
+                if ($request->special_price && $request->price > $request->special_price){
+                    $product->is_special = 1;
+                }else {
+                    $product->is_special = 0;
+                }
                 $product->special_price_type = $request->special_price_type;
                 $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)): null;
                 $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)): null;
@@ -420,6 +417,11 @@ class ProductController extends Controller
             $product->price         = $request->price; //1st option
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', ''); //2nd option
 
+            if ($request->special_price && $request->price > $request->special_price){
+                $product->is_special = 1;
+            }else {
+                $product->is_special = 0;
+            }
             $product->special_price_type = $request->special_price_type;
             $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)) : null;
             $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)) : null;

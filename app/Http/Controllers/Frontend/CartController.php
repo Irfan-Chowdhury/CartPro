@@ -44,9 +44,6 @@ class CartController extends Controller
                 return response()->json(['type'=>'quantity_limit','product_quantity'=>$product->qty]);
             }
 
-
-
-
             $data = [];
             $data['id']     = $product->id;
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
@@ -116,10 +113,11 @@ class CartController extends Controller
     public function cartRomveById(Request $request)
     {
         if ($request->ajax()) {
+            $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
             Cart::remove($request->rowId);
             $cart_content = Cart::content();
             $cart_count = Cart::count();
-            $cart_total = Cart::total();
+            $cart_total = number_format((float) implode(explode(',',Cart::total())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
             return response()->json(['type'=>'success','cart_content'=>$cart_content, 'cart_count'=>$cart_count, 'cart_total'=>$cart_total]);
         }
     }
@@ -160,8 +158,12 @@ class CartController extends Controller
     }
 
 
-    public function checkout(Request $request)
+    public function checkout()
     {
+        if (Cart::count() <= 0) {
+            return redirect(url('cart/empty'));
+        }
+
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
             $locale = 'en';

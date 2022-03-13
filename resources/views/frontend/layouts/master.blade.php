@@ -10,7 +10,7 @@
             $total_wishlist = 0;
         }
 
-        
+
 
         // if (Illuminate\Support\Facades\Auth::check()) {
         //     $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();
@@ -205,7 +205,6 @@
 
             let values = [];
 
-            // $(".addToCart").on("submit",function(e){
             $(document).on('submit','.addToCart',function(e) {
                 e.preventDefault();
                 const Toast = Swal.mixin({
@@ -245,8 +244,7 @@
                             var cart_content = data.cart_content;
                             $.each( cart_content, function( key, value ) {
                                 let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
-
-                                var image = 'public/'+value.options.image;
+                                var image = "{{url('/')}}/"+'public'+value.options.image;
                                 html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
                                         '<img src="'+image+'">'+
                                         '</a></div><div class="shp__pro__details"><h2>'+
@@ -289,12 +287,10 @@
                     data: {rowId:rowId},
                     success: function (data) {
                         if (data.type=='success') {
-                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
                             $('#'+rowId).remove();
-                            $('.'+rowId).remove();
                             $('.cart_count').text(data.cart_count);
-                            $('.cart_total').text(amountConvertToCurrency.toFixed(2));
-                            $('.total_price').text(amountConvertToCurrency.toFixed(2));
+                            $('.cart_total').text(data.cart_total);
+                            $('.total_price').text(data.cart_total);
                         }
                     }
                 })
@@ -415,18 +411,6 @@
             $('.attribute_value').on("click",function(e){
                 e.preventDefault();
                 $(this).addClass('selected');
-
-                // var attribute_name = $(this).data('attribute_name');
-                // attribute_name_arr.push(attribute_name);
-                // var unique_attribute_name = attribute_name_arr.filter(function(itm, i, attribute_name_arr) {
-                //     return i == attribute_name_arr.indexOf(itm);
-                // });
-                // $.each(unique_attribute_name, function( key, value ) {
-                //     if (value == attribute_name) {
-                //         $(this).addClass('selected');
-                //     }
-                // });
-
                 var selectedVal = $(this).data('value_id');
                 values.push(selectedVal);
                 $('#value_ids').val(values);

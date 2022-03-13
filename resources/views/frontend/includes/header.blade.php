@@ -292,10 +292,7 @@
                 </div>
                 <div class="shopping__btn">
                     <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
-                    <form action="{{route('cart.checkout')}}" method="post">
-                        @csrf
-                        <button type="submit" class="button style1">@lang('file.Checkout')</button>
-                    </form>
+                    <a class="button style1" href="{{route('cart.checkout')}}">@lang('file.Checkout')</a>
                 </div>
             </div>
         </div>
