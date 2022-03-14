@@ -1,0 +1,184 @@
+============= cartproshop =============
+Cpanel: cartproshop.com/cpanel
+username: cartproshop
+password: Xc@rtpr0!7
+
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=cartpros_db
+DB_USERNAME=cartpros_db
+DB_PASSWORD=cartpros_db
+
+Dami Data - https://klbtheme.com/machic/
+
+============= shuddo khamar =============
+http://www.shuddhokhamar.com/cpanel
+Username: shuddhok
+Password: EJ03R]hJp0s#p0
+
+
+Fleetcart Documentation- https://docs.envaysoft.com/fleetcart/guide/installation.html
+https://www.itsolutionstuff.com/post/laravel-5-category-treeview-hierarchical-structure-example-with-demoexample.html
+
+
+============= Achille TCHOBO =============
+
+-------------- cPanel -----------------------
+https://cloud-5e5283.managed-vps.net/spanel/login
+| UserName: bossa
+| PassWord:  IXgvfU42EH9z4
+
+
+----- Software -------
+Site: https://scc.bossactif.com/login
+UserName: 
+Pass: $2y$10$vBJ6x4WycNGxRF8vDSkHv.3w56jUiLAkz31yln4qPIR5IRAUlJqk6
+
+Our Pass [admin]: $2y$10$WcnC16AXG/mNrVBWQGjfoegFO.1wjiIiBv5LxEHR6uQaJYVciYCOa
+
+
+
+Admin - manager: $2y$10$GJXcHTzN4pW2QdtEyDGBVeZXAxySvGp1aLLqcj7PlUCpfx7djd0KS
+User - cedricdesirea : $2y$10$vLH8fxsSTxIDbjstNUZme.XZMaeE9O7bZniOqFgjnslauj9fwlBwy
+
+
+
+
+
+
+
+
+
+1. Admin --> Flash Sale: এটার Price এবং Quantity ব্যাসিসে ক্যালকুলেশন করতে হবে । 
+2. Filtering এ  Attribute Value
+3. Admin --> Coupon টা Admin অনুসারে আরো মডিফাই করা লাগবে । 
+4. Translation --> Update টা কাজ করতেছেনা ।
+5. Storefront--> 
+	1. newslater এ  Background Image 
+	6. Featured Categgory
+	7. Product Tabs Two 
+
+6. Setting -->
+	1. Maintence Mode
+	2. SMS
+	3. Mail
+	4. Custom CSS/JS
+7. Admin- Passworsd
+8. Admin Profile
+9. User Register Form minimize
+
+New Issue
+10. Favicon Issue [Solved]
+11. Slider image not updating [Solved]
+12. Tab Load during Onclick functions
+13. Delete On Image
+14. Cart Icon Data
+15. Wishlist timing issue [Solved]
+16. Image Show during new image insert  [brand-->edit, storefront, product-->edit]
+17. Banner Added in new File from old file [Solved]
+18. newslater Popup control from Admin 
+19. Single Anchor in Image [Solved]
+
+================== In New File =================
+File - RegisterController, UserAccountController, useraccount.blade
+     -- [orders --> tax_id,]
+[brand-->edit, storefront, product-->edit]
+
+
+
+================== In Old File Update =================
+1.Slider Issue [Solved]
+2.Banner Added [Solved]
+3.Favicon [Solved]
+4.Pending orders show in Dashboard [Solved]
+5.Admin Profile Update [Solved]
+6.In Product --> Attribute Update [Solved]
+7.Install Folder [Solved]
+8.Admin Logo [Solved]
+
+================== In Skype =================
+Image Part - 
+1. Category Wise Products --> No Results Found [Solved]
+2. Image Sidebar [Unclear]
+3. About us - (Looks Broken) - This is depend on customer's data format because the data by default formated by tinymce editor in code
+4. User Login Page - Center [Solved]
+5. Category Wise products - Icon Issues [Solved]
+
+Written Part - 
+1. most fields need to be nullable, and all nullable fields need to be removed from registration page
+
+
+================== Change  ================= 
+checkout.blade --> name of shipping to shipping_cost
+
+
+
+//Today Note
+1.Onclick এ ট্যাব এ লোড 
+২. যেগুলার সাব ক্যাটাগরি আছে ওগুলা উপরে নিয়ে আসা (Done)
+৩। ব্যানারে লিঙ্ক
+4 . image delete before upate
+
+
+
+@push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+        })(jQuery);
+    </script>
+@endpush
+
+================== New File Updated  ================= 
+1. AttributeController --> update(),
+   attribute.blade.php -> create and edit.blade.php
+
+
+
+https://regexr.com/2tr5t
+> (["'])(?:(?=(\\?))\2.)*?\1
+(["'])(?:(?=(\\?))\2.)*?\1
+
+
+  'About Us' => 'About Us',
+
+Laravel Daily
+--------------------
+1.Eloquent: Query 3-Level Relations with hasManyThrough and withCount : https://www.youtube.com/watch?v=kPFG5Dw63qI&ab_channel=LaravelDaily
+2.Eloquent Query Live-Coding Example: Get Latest Viewed Posts : https://www.youtube.com/watch?v=PHcU-CTh7TY&ab_channel=LaravelDaily
+
+Laravel Vuetify Tutorial Series
+https://www.youtube.com/playlist?list=PL9fcHFJHtFabrQMoRlfit6kSxXZE5YWU9
+
+
+********************* Check for Translation *******************
+
+
+1.৩টা সাইজে 
+১. Product Details page এর জন্য 
+২. Product Listing page (may be shop page)  ??
+3.Search এ ছোট সাইজ 
+
+
+master, header এগুলাতে কাজ করেছে তারিক ভাই  ।
+
+
+
+UPDATE products SET is_special = 1 WHERE `special_price`<>0.0000; 
+
+UPDATE products SET is_special =0 WHERE `special_price`=0.0000; 
+
+SELECT `id`, `price`, `special_price`, `is_special` FROM `products` WHERE `special_price`<>0.0000; 
+
+
+শুক্রবার  রাতের ১১.৩০ এ ওনি আমারে ফোন দিয়ে কনফার্ম হই নিচে আমি সিংগেল প্রজেক্ট কিনা ।
+গতকাল রেজাল্ট পাওয়ার পর ভাবছিলাম আজকে সকালে আমি ওনাকে মেসেজে একটা থ্যাংকু লিখা পাঠামু । দেখি সকালে ওনি নিজে থেকেই আমারে ফোন দিয়া খবর নিতাছে রেজাল্ট পাইছিকিনা । আর সাথে বললো আলমগীর ভাইকে আমার সার্টিফিকেটের বিষয়ে মনে করাই দিতে ।
+ । আমি পুরা থ হইয়া গেছি, আনস্পেক্টেড ছিলো যে ডিপা.  একজন চেয়ারম্যান আমারে এই নিয়ে পর পর দুবার ফোন দিছে । আবার দুঃখ প্রকাশও করছে যে ব্যাস্ততার কারণে সময় পাইনাই রেজাল্ট পাবলিশ করতে ।
+
+এখন এগুলা দেইখা আমার নিজের কাছেও লজ্জা লাগতেছে , ওনার প্রতি আর কি রাগ দেখাতাম ।
+
+
+
+
