@@ -243,12 +243,12 @@
                     type: "GET",
                     data: {page_id:rowId},
                     success: function (data) {
-                        console.log(data.page_translation.id);
+                        console.log(data);
                         $('#page_id').val(data.page.id);
                         $('#page_translation_id').val(data.page_translation.id);
                         $('#page_name_edit').val(data.page_translation.page_name);
-                        tinymce.get('body_edit').setContent(data.page_translation_body);
-                        if (data.page.is_active == 1) {
+                        tinymce.get('#body_edit').setContent(data.page_translation_body);
+                        if (data.page.is_active === 1) {
                                 $('#is_active_edit').prop('checked', true);
                         } else {
                             $('#is_active_edit').prop('checked', false);
@@ -262,19 +262,14 @@
 
             $('#updateForm').on('submit', function (e) {
                 e.preventDefault();
-
-                let page_id = $('#page_id').val();
-                let page_translation_id = $('#page_translation_id').val();
-                let page_name_edit = $('#page_name_edit').val();
-                let body_edit = tinyMCE.get('body_edit').getContent();
-                let is_active_edit = $('#is_active_edit').val();
-
-                //console.log(page_name_edit);
-
-                $.ajax({
+                $.post({
                     url: "{{route('admin.page.update')}}",
                     method: "POST",
-                    data: {page_id:page_id, page_translation_id:page_translation_id, page_name:page_name_edit, body:body_edit, is_active:is_active_edit},
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
                     success: function (data) {
                         console.log(data);
                         let html = '';
@@ -300,6 +295,7 @@
                             }, 3000);
                         }
                     }
+
                 });
             });
 

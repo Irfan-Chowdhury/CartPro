@@ -30,6 +30,10 @@
 
                 <div class="col-md-9 tabs style1">
                      <div class="row">
+
+                        <!-- Tab -->
+                        @include('frontend.pages.user_account.tab_common')
+
                         <div class="table-content table-responsive">
                             <table class="table table-hover">
                                 <thead>

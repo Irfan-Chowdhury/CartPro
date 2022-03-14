@@ -135,6 +135,7 @@ class PageController extends Controller
 
     public function update(Request $request)
     {
+
         if (auth()->user()->can('page-edit'))
         {
             $locale = Session::get('currentLocal');

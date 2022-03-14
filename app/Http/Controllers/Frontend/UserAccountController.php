@@ -32,7 +32,6 @@ class UserAccountController extends Controller
             ->select('orders.id','orders.total','orders.date','orders.order_status')
             ->orderBy('id','DESC')
             ->get();
-
         return view('frontend.pages.user_account.user_orders',compact('orders'));
     }
 

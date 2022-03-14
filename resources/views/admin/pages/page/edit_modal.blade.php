@@ -9,7 +9,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="post" id="updateForm"  class="form-horizontal">
+        <form id="updateForm" class="form-horizontal">
           @csrf
           <input type="hidden" name="page_id" id="page_id">
           <input type="hidden" name="page_translation_id" id="page_translation_id">

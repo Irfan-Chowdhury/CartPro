@@ -31,7 +31,11 @@
                 <div class="col-md-9 tabs style1">
                     <div class="row">
 
-                        @foreach ($orders as $item)
+
+                        <!-- Tab -->
+                        @include('frontend.pages.user_account.tab_common')
+
+                        @forelse ($orders as $item)
                             <div class="card mb-5">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
@@ -67,7 +71,13 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h1>You have no order right now</h1>
+                                </div>
+                            </div>
+                        @endforelse
 
                     </div>
                 </div>
