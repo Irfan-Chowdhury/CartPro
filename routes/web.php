@@ -43,6 +43,7 @@ use App\Http\Controllers\Frontend\ShopProductController;
 use App\Http\Controllers\Frontend\SslCommerzPaymentController;
 use App\Http\Controllers\Frontend\TagProductController;
 use App\Http\Controllers\Frontend\UserBillingAddressController;
+use App\Http\Controllers\Frontend\UserShippingAddressController;
 use Illuminate\Support\Facades\File;
 
 
@@ -153,6 +154,7 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
 
     Route::get('page/{page_slug}',[FrontendPageController::class,'pageShow'])->name('page.Show');
 
+    //User Section
     Route::group(['prefix' => '/user_account','middleware'=>'customer_check'], function () {
         Route::get('/dashboard',[UserAccountController::class,'userAccount'])->name('user_account')->middleware('customer_check');
         Route::post('/update',[UserAccountController::class,'userProfileUpdate'])->name('user_profile_update');
@@ -160,8 +162,20 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
         Route::get('/order/history',[UserAccountController::class,'orderHistory'])->name('user.order.history');
         Route::get('/order/history/details/{id}',[UserAccountController::class,'orderHistoryDetails'])->name('user.order.history.details');
 
+        //Billing Address
         Route::prefix('billing_addrees')->group(function () {
             Route::get('/',[UserBillingAddressController::class,'index'])->name('billing_addrees.index');
+            Route::post('/store',[UserBillingAddressController::class,'store'])->name('billing_addrees.store');
+            Route::post('/update/{id}',[UserBillingAddressController::class,'update'])->name('billing_addrees.update');
+            Route::get('/delete/{id}',[UserBillingAddressController::class,'destroy'])->name('billing_addrees.delete');
+        });
+
+        //Shipping Address
+        Route::prefix('shipping_addrees')->group(function () {
+            Route::get('/',[UserShippingAddressController::class,'index'])->name('shipping_addrees.index');
+            Route::post('/store',[UserShippingAddressController::class,'store'])->name('shipping_addrees.store');
+            Route::post('/update/{id}',[UserShippingAddressController::class,'update'])->name('shipping_addrees.update');
+            Route::get('/delete/{id}',[UserShippingAddressController::class,'destroy'])->name('shipping_addrees.delete');
         });
     });
     Route::post('/review/store',[HomeController::class,'reviewStore'])->name('review.store');

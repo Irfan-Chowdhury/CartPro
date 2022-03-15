@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
-use App\Models\UserBillingAddress;
+use App\Models\UserShippingAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class UserBillingAddressController extends Controller
+class UserShippingAddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,9 +20,9 @@ class UserBillingAddressController extends Controller
     {
         $countries = Country::all();
 
-        $userBillingAddress = UserBillingAddress::where('user_id',Auth::user()->id)->get();
+        $userShippingAddress = UserShippingAddress::where('user_id',Auth::user()->id)->get();
 
-        return view('frontend.pages.user_account.billing_address.index',compact('countries','userBillingAddress'));
+        return view('frontend.pages.user_account.shipping_address.index',compact('countries','userShippingAddress'));
     }
 
     public function create()
@@ -40,19 +40,19 @@ class UserBillingAddressController extends Controller
         }
 
         if ($request->has('is_default')) {
-            UserBillingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
+            UserShippingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
         }
 
-        $userBillingAddress            = new UserBillingAddress;
-        $userBillingAddress->user_id   = Auth::user()->id;
-        $userBillingAddress->country   = $request->country;
-        $userBillingAddress->address_1 = $request->address_1;
-        $userBillingAddress->address_2 = $request->address_2;
-        $userBillingAddress->city      = $request->city;
-        $userBillingAddress->state     = $request->state;
-        $userBillingAddress->zip_code  = $request->zip_code;
-        $userBillingAddress->is_default= $request->has('is_default');
-        $userBillingAddress->save();
+        $userShippingAddress            = new UserShippingAddress;
+        $userShippingAddress->user_id   = Auth::user()->id;
+        $userShippingAddress->country   = $request->country;
+        $userShippingAddress->address_1 = $request->address_1;
+        $userShippingAddress->address_2 = $request->address_2;
+        $userShippingAddress->city      = $request->city;
+        $userShippingAddress->state     = $request->state;
+        $userShippingAddress->zip_code  = $request->zip_code;
+        $userShippingAddress->is_default= $request->has('is_default');
+        $userShippingAddress->save();
 
         session()->flash('success_message','Data Added Successfully');
         return redirect()->back();
@@ -91,19 +91,19 @@ class UserBillingAddressController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->has('is_default')) {
-            UserBillingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
+            UserShippingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
         }
 
-        $userBillingAddress            = UserBillingAddress::find($id);
-        $userBillingAddress->user_id   = Auth::user()->id;
-        $userBillingAddress->country   = $request->country;
-        $userBillingAddress->address_1 = $request->address_1;
-        $userBillingAddress->address_2 = $request->address_2;
-        $userBillingAddress->city      = $request->city;
-        $userBillingAddress->state     = $request->state;
-        $userBillingAddress->zip_code  = $request->zip_code;
-        $userBillingAddress->is_default= $request->has('is_default');
-        $userBillingAddress->update();
+        $userShippingAddress            = UserShippingAddress::find($id);
+        $userShippingAddress->user_id   = Auth::user()->id;
+        $userShippingAddress->country   = $request->country;
+        $userShippingAddress->address_1 = $request->address_1;
+        $userShippingAddress->address_2 = $request->address_2;
+        $userShippingAddress->city      = $request->city;
+        $userShippingAddress->state     = $request->state;
+        $userShippingAddress->zip_code  = $request->zip_code;
+        $userShippingAddress->is_default= $request->has('is_default');
+        $userShippingAddress->update();
 
         session()->flash('success_message','Data Updated Successfully');
         return redirect()->back();
@@ -117,7 +117,7 @@ class UserBillingAddressController extends Controller
      */
     public function destroy($id)
     {
-        UserBillingAddress::find($id)->delete();
+        UserShippingAddress::find($id)->delete();
 
         session()->flash('success_message','Data Deleted Successfully');
         return redirect()->back();

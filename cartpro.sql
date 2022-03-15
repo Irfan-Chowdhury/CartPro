@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2022 at 04:51 PM
+-- Generation Time: Mar 15, 2022 at 03:13 AM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.26
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1166,7 +1166,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (223, '2021_10_28_032646_create_colors_table', 69),
 (224, '2019_12_14_000001_create_personal_access_tokens_table', 70),
 (225, '2022_01_01_060235_create_keyword_hits_table', 70),
-(226, '2022_01_01_084443_add_soft_delete_to_slider_table', 71);
+(226, '2022_01_01_084443_add_soft_delete_to_slider_table', 71),
+(230, '2022_03_14_172533_create_user_billing_addresses_table', 72),
+(231, '2022_03_15_015455_create_user_shipping_addresses_table', 73);
 
 -- --------------------------------------------------------
 
@@ -3121,6 +3123,64 @@ INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `phone`, `emai
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_billing_addresses`
+--
+
+CREATE TABLE `user_billing_addresses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `zip_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_billing_addresses`
+--
+
+INSERT INTO `user_billing_addresses` (`id`, `user_id`, `country`, `address_1`, `address_2`, `city`, `state`, `zip_code`, `is_default`, `created_at`, `updated_at`) VALUES
+(3, 1, 'Ukraine', '46 West Milton Parkway', 'Ad ipsam et dolore a', 'Cillum ut quo corrup', 'Explicabo Maxime id', '52463', 0, '2022-03-14 12:09:38', '2022-03-14 19:31:23'),
+(4, 1, 'Guadeloupe', '96 Second Road', 'Sint laboris quisqua', 'Illum voluptate omn', 'Quis ut obcaecati ma', '51776', 0, '2022-03-14 12:10:04', '2022-03-14 19:31:23'),
+(7, 1, 'Colombia', '21 South White Clarendon Road', 'Dolorem ut et debiti', 'Adipisicing vero seq', 'Aperiam totam except', '10850', 0, '2022-03-14 19:28:10', '2022-03-14 19:31:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_shipping_addresses`
+--
+
+CREATE TABLE `user_shipping_addresses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `zip_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_shipping_addresses`
+--
+
+INSERT INTO `user_shipping_addresses` (`id`, `user_id`, `country`, `address_1`, `address_2`, `city`, `state`, `zip_code`, `is_default`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Togo', '54 East Old Road', 'Recusandae Est aliq', 'Cum optio eiusmod e', 'Vero in voluptatibus', '36244', 0, '2022-03-14 20:10:24', '2022-03-14 20:12:57'),
+(2, 1, 'Heard and Mc Donald Islands', '97 First Street', 'Atque doloremque et', 'Omnis culpa occaeca', 'Quaerat dolores eius', '75508', 1, '2022-03-14 20:12:40', '2022-03-14 20:12:57'),
+(3, 1, 'Mongolia', '86 East Old Boulevard', 'Porro do et dignissi', 'Excepturi est tempor', 'Maiores voluptatum n', '66836', 0, '2022-03-14 20:12:49', '2022-03-14 20:12:57');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `wishlists`
 --
 
@@ -3674,6 +3734,20 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `user_billing_addresses`
+--
+ALTER TABLE `user_billing_addresses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_billing_addresses_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `user_shipping_addresses`
+--
+ALTER TABLE `user_shipping_addresses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_shipping_addresses_user_id_foreign` (`user_id`);
+
+--
 -- Indexes for table `wishlists`
 --
 ALTER TABLE `wishlists`
@@ -3849,7 +3923,7 @@ ALTER TABLE `menu_translations`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
 
 --
 -- AUTO_INCREMENT for table `newsletters`
@@ -4104,6 +4178,18 @@ ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
+-- AUTO_INCREMENT for table `user_billing_addresses`
+--
+ALTER TABLE `user_billing_addresses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `user_shipping_addresses`
+--
+ALTER TABLE `user_shipping_addresses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
@@ -4162,6 +4248,18 @@ ALTER TABLE `brand_translations`
 --
 ALTER TABLE `categories`
   ADD CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
+
+--
+-- Constraints for table `user_billing_addresses`
+--
+ALTER TABLE `user_billing_addresses`
+  ADD CONSTRAINT `user_billing_addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_shipping_addresses`
+--
+ALTER TABLE `user_shipping_addresses`
+  ADD CONSTRAINT `user_shipping_addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

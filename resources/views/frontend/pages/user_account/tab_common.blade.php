@@ -10,7 +10,7 @@
             <a class="nav-link {{Request::routeIs('billing_addrees.index') ? 'active' : ''  }}" href="{{route('billing_addrees.index')}}">Set Billing Address</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="">Set Shipping Address</a>
+            <a class="nav-link {{Request::routeIs('shipping_addrees.index') ? 'active' : ''  }}" href="{{route('shipping_addrees.index')}}">Set Shipping Address</a>
         </li>
         <li>
             <form action="{{route('user_logout')}}" method="post">

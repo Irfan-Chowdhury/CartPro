@@ -1067,4 +1067,22 @@ return array (
    'Shipping Methods'=>'Shipping Methods',
    'Payment Methods'=>'Payment Methods',
 
+   //Billing Address
+   'Select Country'=>'Select Country',
+   'Street Address'=>'Street Address',
+   'Apartment, suite, unit etc. (optional)'=>'Apartment, suite, unit etc. (optional)',
+   'City/Town'=>'City/Town',
+   'State'=>'State',
+   'Postcode / Zip'=>'Postcode / Zip',
+   'Default'=>'Default',
+   'Create'=>'Create',
+   'Create Billing Address'=>'Create Billing Address',
+   'Close'=>'Close',
+   'Billing Address'=>'Billing Address',
+
+   //Shipping
+   'Create Shipping Address'=>'Create Shipping Address',
+   'Shipping Address'=>'Shipping Address',
+
+
 );
