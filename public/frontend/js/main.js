@@ -33,15 +33,22 @@
         var currency_opt = $('.currency-switcher').clone();
         var top_menu = $('.header-top-menu').clone();
         var social = $('.header-top-social').clone();
-        $("#mobile-nav").append(top_menu);
-        $("#mobile-nav").append(lang_opt);
-        $("#mobile-nav").append(currency_opt);
-        $("#mobile-nav").append(social);
+        var cat = $('#cat_menu').clone();
+        $("#mobile_menu").append(top_menu);
+        $("#mobile_menu").append(lang_opt);
+        $("#mobile_menu").append(currency_opt);
+        $("#mobile_menu").append(social);
+        $("#mobile_cat").html(cat);
 
         $(".mega-title").addClass("has-dropdown");
         $(".mega-title ul").addClass("dropdown");
+        
+        $('#menu_tab a').on('click', function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+        })
 
-        $(".has-dropdown").on("click", function() {
+        $(document).on("click", '.has-dropdown', function() {
             $(this).find("> .dropdown").toggleClass("show");
         });
 
@@ -334,8 +341,9 @@
 
         //Deals Slider
         var swiper = new Swiper('.deals-slider-wrapper', {
-            slidesPerView: 1,
+            slidesPerView: 2,
             loop: true,
+            spaceBetween: 30,
             simulateTouch: true,
             navigation: {
                 nextEl: '.deals-button-next',
@@ -351,7 +359,7 @@
                 // when window width is <= 1199px
                 1199: {
                     slidesPerView: 2,
-                    spaceBetween: 15
+                    spaceBetween: 30
                 }
 
             }

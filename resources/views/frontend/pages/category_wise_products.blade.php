@@ -80,7 +80,7 @@
                                 </form>
                             </div>
                         </div>
-                        <br><br>
+                        
 
                         <!-- Filter By Attribute Value-->
                         @if (count($attribute_values)>0)
@@ -114,7 +114,7 @@
                                 <div><button type="submit" class="mt-2 btn btn-success">{{__('file.Filter')}}</button></div>
                             </form>
                         @endif
-                        <br><br>
+                        
                         <!--sidebar-categories-box end-->
 
                         <!-- Tags -->

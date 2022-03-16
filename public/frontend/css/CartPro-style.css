@@ -39,6 +39,10 @@ ul {
 	padding-left: 0
 }
 
+li {
+    position: relative;
+}
+
 ::selection {
 	background: #021523;
 	color: #fff;
@@ -633,7 +637,7 @@ a.underline:after {
 	visibility: visible
 }
 
-.has-dropdown>a:after {
+.has-dropdown:after {
 	content: '\e64b';
 	font-family: themify;
 	font-size: 8px;
@@ -1192,9 +1196,11 @@ li.wishlist__menu {
 	padding: 15px!important
 }
 
-.category-list .has-dropdown>a:after {
-	float: right;
-	font-size: 12px
+.category-list .has-dropdown:after {
+	font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 0;
 }
 
 .category-list .dropdown {
@@ -1253,7 +1259,7 @@ li.wishlist__menu {
 	font-size: 16px;
 	color: #021523;
 	font-weight: 500;
-	display: block;
+	display: inline;
 	padding: 0 12px;
 }
 
@@ -1960,7 +1966,14 @@ li.wishlist__menu {
 
 .single-product-wrapper.deals {
 	border: 1px solid #e5e8ec;
-	margin: 0 1px
+	margin: 0 1px;
+	display: flex;
+	padding: 15px;
+	text-align: left
+}
+
+.single-product-wrapper.deals .single-product-item {
+	padding: 15px;
 }
 
 .single-product-wrapper.list {
@@ -2664,6 +2677,9 @@ span.promo-price {
 }
 
 @media all and (min-width:1024px) {
+    #menu_tab {
+        display: none;
+    }
 	.brand-navigation .brand-button-prev {
 		left: 30px
 	}
@@ -4078,6 +4094,17 @@ input[type=number] {
 	.cookie-alert {
 		width: 80%
 	}
+	.header-top-right > ul > li:last-child > a {
+        padding-right: 10px;
+    }
+	#menu_tab li .nav-link.active {
+	    background: none;
+	    border: none;
+	}
+	#menu_tab li a {
+	    display: inline-block;
+	    background: #e5e8ec;
+	}
 }
 
 @media all and (max-width:1023px) {
@@ -4090,7 +4117,7 @@ input[type=number] {
 	#mobile-nav {
 		background-color: #fff;
 		height: 100%;
-		left: 0;
+		left: -300px;
 		opacity: 0;
 		overflow-y: scroll;
 		padding: 20px;
@@ -4101,6 +4128,7 @@ input[type=number] {
 		z-index: 999999
 	}
 	#mobile-nav.show {
+	    left: 0;
 		opacity: 1;
 		visibility: visible
 	}
@@ -4114,14 +4142,15 @@ input[type=number] {
 		float: left;
 		margin-right: 15px
 	}
-	.main-menu #mobile-nav ul li {
+	#menu_tab_content ul li {
 		border-top: 1px solid #e5e8ec;
 		display: block;
 		text-align: left
 	}
-	.has-dropdown>a::after {
+	.has-dropdown::after {
 		position: absolute;
-		right: 0
+		right: 0;
+		top: 0
 	}
 	.main-menu #mobile-nav ul li .dropdown {
 		border: none;
@@ -4137,6 +4166,7 @@ input[type=number] {
 		visibility: hidden;
 		width: 100%
 	}
+	.has-dropdown .dropdown.show,
 	.main-menu #mobile-nav ul li .dropdown.show {
 		height: 100%;
 		opacity: 1;
@@ -4158,9 +4188,6 @@ input[type=number] {
 	}
 	.header-bottom {
 		border-bottom: none
-	}
-	.header-top-right .has-dropdown>a::after {
-		position: relative
 	}
 	.header-top-social {
 		bottom: 0;

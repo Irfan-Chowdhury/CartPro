@@ -667,7 +667,7 @@
             <div class="row">
 
                 {{-- Flash Sale --}}
-                <div class="col-xl-4 col-md-12">
+                <div class="col-md-12">
                     <div class="section-title mb-3">
                         <h3>
                             {{$storefront_flash_sale_title}}
@@ -817,7 +817,7 @@
                 </div>
 
                 {{-- Verticle --}}
-                <div class="col-xl-8 col-md-12">
+                <div class="col-md-12">
                     <div class="row">
 
                         <div class="col-md-4">

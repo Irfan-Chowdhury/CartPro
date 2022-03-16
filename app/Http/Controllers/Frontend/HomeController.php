@@ -52,7 +52,8 @@ class HomeController extends Controller
         App::setLocale($locale);
 
 
-        Session::put('disable_newslatter',1);
+        // Session::put('disable_newslatter',1); //update it setting
+        Session::forget('disable_newslatter');
         $locale = Session::get('currentLocal');
 
         //Storefront Theme Color

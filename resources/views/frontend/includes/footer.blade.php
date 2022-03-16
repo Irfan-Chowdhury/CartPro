@@ -9,7 +9,7 @@
                     </div>
                     <div>
                         <h3 class="mb-0">@lang('file.Subscribe to our Newsletter')</h3>
-                        <p>@lang('file.Subscribe to our newsletter & get notification about discounts.')</p>
+                        <p>@lang('file.Subscribe and get notification about discounts')</p>
                     </div>
                 </div>
             </div>
@@ -259,7 +259,7 @@
                     </button>
                     <div class="row">
                         <div class="col-lg-7">
-                            <h3 class="h2 semi-bold">@lang('file.Subscribe to our newsletter & get notification about discounts.')</h3>
+                            <h3 class="h2 semi-bold">@lang('file.Subscribe and get notification about discounts')</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
                             <form class="newsletter" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
                                 @csrf

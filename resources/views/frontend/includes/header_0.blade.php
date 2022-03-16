@@ -123,7 +123,7 @@
                         <div class="category-list">
                             <ul>
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i>{{__('file.Shop By Category')}}</a>
-                                    <ul id="cat_menu" class="dropdown">
+                                    <ul class="dropdown">
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
                                                 <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
@@ -147,90 +147,73 @@
                         <div class="main-header-inner">
                             <div id="main-menu" class="main-menu">
                                 <nav id="mobile-nav">
+                                    <ul>
+                                        @php
+                                            $str = url()->current();
+                                            $data = explode("/",$str);
+                                            $last_word = $data[count($data)-1];
+                                        @endphp
 
-                                    <ul class="nav nav-tabs" id="menu_tab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" data-toggle="tab" href="#mobile_menu" role="tab" aria-controls="mobile_menu" aria-selected="true">Menu</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" data-toggle="tab" href="#mobile_cat" role="tab" aria-controls="mobile_cat" aria-selected="false">Categories</a>
-                                        </li>
-                                    </ul>
+                                        <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
+                                        <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
+                                        <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
 
-                                    <div class="tab-content" id="menu_tab_content">
-                                        <div class="tab-pane fade show active" id="mobile_menu" role="tabpanel" aria-labelledby="menu-tab">
-                                            <ul>
-                                                @php
-                                                    $str = url()->current();
-                                                    $data = explode("/",$str);
-                                                    $last_word = $data[count($data)-1];
-                                                @endphp
+                                        @if ($settings_new['storefront_terms_and_condition_page']->page!=NULL)
+                                            <li class="{{$last_word==$settings_new['storefront_terms_and_condition_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_terms_and_condition_page']->page->slug)}}">{{$settings_new['storefront_terms_and_condition_page']->page->pageTranslation->page_name}}</a></li>
+                                        @endif
+                                        @if ($settings_new['storefront_privacy_policy_page']->page!=NULL)
+                                            <li class="{{$last_word==$settings_new['storefront_privacy_policy_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_privacy_policy_page']->page->slug)}}">{{$settings_new['storefront_privacy_policy_page']->page->pageTranslation->page_name}}</a></li>
+                                        @endif
 
-                                                <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
-                                                <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
-                                                <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
-
-                                                @if ($settings_new['storefront_terms_and_condition_page']->page!=NULL)
-                                                    <li class="{{$last_word==$settings_new['storefront_terms_and_condition_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_terms_and_condition_page']->page->slug)}}">{{$settings_new['storefront_terms_and_condition_page']->page->pageTranslation->page_name}}</a></li>
-                                                @endif
-                                                @if ($settings_new['storefront_privacy_policy_page']->page!=NULL)
-                                                    <li class="{{$last_word==$settings_new['storefront_privacy_policy_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_privacy_policy_page']->page->slug)}}">{{$settings_new['storefront_privacy_policy_page']->page->pageTranslation->page_name}}</a></li>
-                                                @endif
-
-                                                @if ($menu!=NULL)
-                                                    @forelse ($menu->items as $menu_item)
-                                                        @if ($menu_item->child->isNotEmpty())
-                                                            <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
-                                                                <ul class="dropdown">
-                                                                    @foreach($menu_item->child as $child)
-                                                                        <!--Extra-->
-                                                                        @if ($child->child->isNotEmpty())
-                                                                            @if ($child->locale==$locale)
-                                                                                @if(strpos($menu_item->link, 'https://') !== false)
-                                                                                    <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
-                                                                                @else
-                                                                                    <li class="has-dropdown"><a href="{{route('page.Show',$child->link)}}">{{$child->label}}</a></li>
-                                                                                @endif
-                                                                            @endif
-                                                                                    <ul class="dropdown">
-                                                                                        @foreach($child->child as $sub_child)
-                                                                                            @if ($sub_child->locale==$locale)
-                                                                                                @if(strpos($sub_child->link, 'https://') !== false)
-                                                                                                    <li><a href="{{$sub_child->link}}">{{$sub_child->label}}</a></li>
-                                                                                                @else
-                                                                                                    <li><a href="{{route('page.Show',$sub_child->link)}}">{{$sub_child->label}}</a></li>
-                                                                                                @endif
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </ul>
-                                                                                </li>
+                                        @if ($menu!=NULL)
+                                            @forelse ($menu->items as $menu_item)
+                                                @if ($menu_item->child->isNotEmpty())
+                                                    <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
+                                                        <ul class="dropdown">
+                                                            @foreach($menu_item->child as $child)
+                                                                <!--Extra-->
+                                                                @if ($child->child->isNotEmpty())
+                                                                    @if ($child->locale==$locale)
+                                                                        @if(strpos($menu_item->link, 'https://') !== false)
+                                                                            <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
                                                                         @else
-                                                                            <li><a href="{{$child->link}}">{{$child->label}}</a></li>
+                                                                            <li class="has-dropdown"><a href="{{route('page.Show',$child->link)}}">{{$child->label}}</a></li>
                                                                         @endif
-                                                                        <!--Extra End-->
-                                                                    @endforeach
-                                                                </ul>
-                                                            </li>
-                                                        @else
-                                                            @if ($menu_item->locale==$locale)
-                                                                @if(strpos($menu_item->link, 'https://') !== false)
-                                                                    <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li>
+                                                                    @endif
+                                                                            <ul class="dropdown">
+                                                                                @foreach($child->child as $sub_child)
+                                                                                    @if ($sub_child->locale==$locale)
+                                                                                        @if(strpos($sub_child->link, 'https://') !== false)
+                                                                                            <li><a href="{{$sub_child->link}}">{{$sub_child->label}}</a></li>
+                                                                                        @else
+                                                                                            <li><a href="{{route('page.Show',$sub_child->link)}}">{{$sub_child->label}}</a></li>
+                                                                                        @endif
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        </li>
                                                                 @else
-                                                                    <li class="{{$last_word==$menu_item->link ? 'active' : ''}}"><a href="{{route('page.Show',$menu_item->link)}}">{{$menu_item->label}}</a></li>
+                                                                    <li><a href="{{$child->link}}">{{$child->label}}</a></li>
                                                                 @endif
-                                                                    <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
-                                                            @endif
-                                                            <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
+                                                                <!--Extra End-->
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+                                                @else
+                                                    @if ($menu_item->locale==$locale)
+                                                        @if(strpos($menu_item->link, 'https://') !== false)
+                                                            <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li>
+                                                        @else
+                                                            <li class="{{$last_word==$menu_item->link ? 'active' : ''}}"><a href="{{route('page.Show',$menu_item->link)}}">{{$menu_item->label}}</a></li>
                                                         @endif
-                                                    @empty
-                                                    @endforelse
+                                                            <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
+                                                    @endif
+                                                    <!-- <li><a href="{{$menu_item->link}}">{{$menu_item->label}}</a></li> -->
                                                 @endif
-                                            </ul>
-                                        </div>
-                                        <div class="tab-pane fade" id="mobile_cat" role="tabpanel" aria-labelledby="category-tab">
-                                            
-                                        </div>
-                                    </div>
+                                            @empty
+                                            @endforelse
+                                        @endif
+                                    </ul>
                                 </nav>
                             </div>
                         </div>
@@ -242,7 +225,7 @@
             <div class="container">
                 <div id="header-search" class="d-lg-none">
                     <form class="header-search" class="d-lg-none">
-                        <input class="" type="text" placeholder="Search Products..." name="search" autofocus>
+                        <input class="" type="text" placeholder="Search products, categories, sku..." name="search" autofocus>
                         <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
                     </form>
                 </div>

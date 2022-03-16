@@ -67,18 +67,18 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="billing_first_name" placeholder="First Name *">
+                                    <input class="form-control" type="text" name="billing_first_name" @auth value="{{auth()->user()->first_name}}" @endauth placeholder="First Name *">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="billing_last_name" placeholder="Last Name *">
+                                    <input class="form-control" type="text" name="billing_last_name" @auth value="{{auth()->user()->last_name}}" @endauth  placeholder="Last Name *">
                                 </div>
 
 
                             <div class="col-sm-6">
-                                <input class="form-control" type="email" name="billing_email"  placeholder="Email *">
+                                <input class="form-control" type="email" name="billing_email" @auth value="{{auth()->user()->email}}" @endauth placeholder="Email *">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="number" name="billing_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone *">
+                                <input class="form-control" type="number" name="billing_phone" @auth value="{{auth()->user()->phone}}" @endauth min='0' onkeypress="return isNumberKey(event)" placeholder="Phone *">
                             </div>
 
                             <div class="col-12">
@@ -86,25 +86,25 @@
                                     <select class="form-control" name="billing_country" id="billingCountry">
                                         <option value="">* Select Country</option>
                                         @foreach ($countries as $country)
-                                            <option value="{{$country->country_name}}">{{$country->country_name}}</option>
+                                            <option value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_1" placeholder="Street Address">
+                                <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="Street Address">
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_2" placeholder="Apartment, suite, unit etc. (optional)">
+                                <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="Apartment, suite, unit etc. (optional)">
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_city" placeholder="City / Town">
+                                <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="City / Town">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_state" placeholder="State / County">
+                                <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="State / County">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_zip_code" placeholder="Postcode / Zip">
+                                <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="Postcode / Zip">
                             </div>
                         </div>
 
@@ -152,37 +152,37 @@
                                     <div class="col-sm-6">
                                         <input class="form-control" type="text" name="shipping_last_name" placeholder="Last Name *">
                                     </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" name="shipping_email" placeholder="Email">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" name="shipping_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone">
+                                    </div>
 
                                     <div class="col-12">
                                         <div class="form-group">
                                             <select class="form-control" name="shipping_country" id="shipping_country">
                                                 <option value="">--Select Country--</option>
                                                 @foreach ($countries as $country)
-                                                    <option value="{{$country->country_name}}">{{$country->country_name}}</option>
+                                                    <option value="{{$country->country_name}}" @isset($shipping_address) {{$country->country_name==$shipping_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_address_1" placeholder="Street Address">
+                                        <input class="form-control" type="text" name="shipping_address_1" @isset($shipping_address) value="{{$shipping_address->address_1 ?? ''}}" @endisset placeholder="Street Address">
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_address_2" placeholder="Apartment, suite, unit etc. (optional)">
+                                        <input class="form-control" type="text" name="shipping_address_2" @isset($shipping_address) value="{{$shipping_address->address_2 ?? ''}}" @endisset placeholder="Apartment, suite, unit etc. (optional)">
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_city" placeholder="City / Town">
+                                        <input class="form-control" type="text" name="shipping_city" @isset($shipping_address) value="{{$shipping_address->city ?? ''}}" @endisset placeholder="City / Town">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_state" placeholder="State / County">
+                                        <input class="form-control" type="text" name="shipping_state" @isset($shipping_address) value="{{$shipping_address->state ?? ''}}" @endisset placeholder="State / County">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_zip_code" placeholder="Postcode / Zip">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_email" placeholder="Email">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone">
+                                        <input class="form-control" type="text" name="shipping_zip_code" @isset($shipping_address) value="{{$shipping_address->zip_code ?? ''}}" @endisset placeholder="Postcode / Zip">
                                     </div>
                                 </div>
                             </div>
@@ -400,19 +400,9 @@
 <script>
 $(function(){
 
-    $('#acceptTerms').change(function() {
-        if(this.checked) {
-            $('#orderBtn').prop("disabled",false);
-            $('#orderBtn').prop("title",'Pay Now');
-        }else{
-            $('#orderBtn').prop("disabled",true);
-            $('#orderBtn').prop("title",'Disable');
-        }
-    });
-
-    $('#billingCountry').change(function() {
-        var billingCountry = $("#billingCountry").val();
-        var couponCode = $('#couponCode').val();
+    var billingCountry = $("#billingCountry").val();
+    if (billingCountry) {
+        var couponCode   = $('#couponCode').val();
         var shippingCost = $("#shippingCost").val();
         $.ajax({
             url: "{{ route('cart.country_wise_tax') }}",
@@ -423,15 +413,35 @@ $(function(){
                 shipping_cost:shippingCost,
             },
             success: function (data) {
-                console.log(data);
                 $('.tax_rate').text(data.tax_rate);
                 $('#taxId').val(data.tax_id); //For Form
                 $('.total_amount').text(data.total_amount);
                 $('#totalAmount').val(data.total_amount); //For Form
             }
-        })
-
-    });
+        });
+    }else{
+        $('#billingCountry').change(function() {
+            var billingCountry = $("#billingCountry").val();
+            var couponCode = $('#couponCode').val();
+            var shippingCost = $("#shippingCost").val();
+            $.ajax({
+                url: "{{ route('cart.country_wise_tax') }}",
+                type: "GET",
+                data: {
+                    billing_country:billingCountry,
+                    coupon_code:couponCode,
+                    shipping_cost:shippingCost,
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('.tax_rate').text(data.tax_rate);
+                    $('#taxId').val(data.tax_id); //For Form
+                    $('.total_amount').text(data.total_amount);
+                    $('#totalAmount').val(data.total_amount); //For Form
+                }
+            })
+        });
+    }
 
     //Coupon
     $('#applyCoupon').on("click",function(e){
@@ -485,6 +495,16 @@ $(function(){
         })
     });
 
+
+    $('#acceptTerms').change(function() {
+        if(this.checked) {
+            $('#orderBtn').prop("disabled",false);
+            $('#orderBtn').prop("title",'Pay Now');
+        }else{
+            $('#orderBtn').prop("disabled",true);
+            $('#orderBtn').prop("title",'Disable');
+        }
+    });
 
 
     //----------- Paypal ----------

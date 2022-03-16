@@ -13,10 +13,13 @@ use App\Models\SettingLocalPickup;
 use App\Models\SettingPaypal;
 use App\Models\SettingStrip;
 use App\Models\Tax;
+use App\Models\UserBillingAddress;
+use App\Models\UserShippingAddress;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -187,10 +190,15 @@ class CartController extends Controller
         $stripe = SettingStrip::select('status')->latest()->first();
         $paypal = SettingPaypal::select('status')->latest()->first();
 
-        // return $paypal;
+        $billing_address = null;
+        $shipping_address= null;
+        if(Auth::check()){
+            $billing_address = UserBillingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
+            $shipping_address = UserShippingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
+        }
 
         return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',
-                                            'cash_on_delivery','stripe','paypal'));
+                                            'cash_on_delivery','stripe','paypal','billing_address','shipping_address'));
     }
 
     public function countryWiseTax(Request $request)

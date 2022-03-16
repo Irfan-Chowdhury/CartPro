@@ -146,10 +146,8 @@
                 });
 
                 $('#color-input').on('change',function() {
-
                     var color = $(this).val();
                     $('body').css('--theme-color', color);
-
                 });
 
             });
