@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2022 at 03:13 AM
+-- Generation Time: Mar 17, 2022 at 08:36 AM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- PHP Version: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -3100,7 +3100,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `phone`, `email`, `password`, `user_type`, `role`, `role_id`, `image`, `email_verified_at`, `remember_token`, `last_login_at`, `last_login_ip`, `is_active`, `porvider_id`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'Irfan', 'Chowdhury', '123456789', 'admin@gmail.com', '$2y$10$WcnC16AXG/mNrVBWQGjfoegFO.1wjiIiBv5LxEHR6uQaJYVciYCOa', 1, 4, 0, 'images/admin/aNiJfKILIo.webp', NULL, 'bdPgdVmH8nKDs0a9quLJobpYBNkjLoY3u7VVSLIXwIkvZGD94ISznt2tbEkh', NULL, NULL, 1, NULL, '2020-12-13 14:35:51', '2022-01-18 22:39:06'),
+(1, 'admin', 'Irfan', 'Chowdhury', '123456789', 'admin@gmail.com', '$2y$10$WcnC16AXG/mNrVBWQGjfoegFO.1wjiIiBv5LxEHR6uQaJYVciYCOa', 1, 4, 0, 'images/admin/aNiJfKILIo.webp', NULL, 'OpPstGg0ABWBnlxApTLefoKJIlSjnkWDVrh8Ah8mFlZwRfS6CYeoqsZAYbQN', NULL, NULL, 1, NULL, '2020-12-13 14:35:51', '2022-01-18 22:39:06'),
 (2, 'irfan', 'Irfan ', 'Chowdhury', '01829498634', 'irfanchowdhury81@gmail.com', '$2y$10$Bpkr0QPBwpiw6Ax8sqvSy.5sZVa96Np7Dnhyz97WBw7cuT1w7pzOi', 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-01-31 02:33:22', '2021-08-10 11:53:08'),
 (3, 'arman', 'Arman', 'Alam', '01829498635', 'arman@gmail.com', '$2y$10$sFg.WpMhrzu6gQeVq4k5V.NSnJSE2J0pgW1DXFf/za5SCNFiwBoaa', 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-02-07 01:29:29', '2021-09-04 21:55:37'),
 (4, 'irfan95', 'Irfan', 'Chowdhury Fahim', '384434q9`', 'irfanchowdhury@gmail.com', '$2y$10$f.m5JjQlDp2hRCF6cAvPreblmJq5ZsAqns1l3GBNgQQ/VGfwhaKdi', 1, 1, 0, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-07-30 12:37:29', '2021-09-04 21:55:34'),
@@ -3145,9 +3145,9 @@ CREATE TABLE `user_billing_addresses` (
 --
 
 INSERT INTO `user_billing_addresses` (`id`, `user_id`, `country`, `address_1`, `address_2`, `city`, `state`, `zip_code`, `is_default`, `created_at`, `updated_at`) VALUES
-(3, 1, 'Ukraine', '46 West Milton Parkway', 'Ad ipsam et dolore a', 'Cillum ut quo corrup', 'Explicabo Maxime id', '52463', 0, '2022-03-14 12:09:38', '2022-03-14 19:31:23'),
-(4, 1, 'Guadeloupe', '96 Second Road', 'Sint laboris quisqua', 'Illum voluptate omn', 'Quis ut obcaecati ma', '51776', 0, '2022-03-14 12:10:04', '2022-03-14 19:31:23'),
-(7, 1, 'Colombia', '21 South White Clarendon Road', 'Dolorem ut et debiti', 'Adipisicing vero seq', 'Aperiam totam except', '10850', 0, '2022-03-14 19:28:10', '2022-03-14 19:31:23');
+(3, 1, 'Ukraine', '46 West Milton Parkway', 'Ad ipsam et dolore a', 'Cillum ut quo corrup', 'Explicabo Maxime id', '52463', 0, '2022-03-14 12:09:38', '2022-03-14 23:11:42'),
+(4, 1, 'Guadeloupe', '96 Second Road', 'Sint laboris quisqua', 'Illum voluptate omn', 'Quis ut obcaecati ma', '51776', 0, '2022-03-14 12:10:04', '2022-03-14 23:11:42'),
+(7, 1, 'Bangladesh', '21 South White Clarendon Road', 'Dolorem ut et debiti', 'Adipisicing vero seq', 'Aperiam totam except', '4330', 1, '2022-03-14 19:28:10', '2022-03-14 23:11:42');
 
 -- --------------------------------------------------------
 
