@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2022 at 08:36 AM
+-- Generation Time: Mar 19, 2022 at 09:18 PM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.26
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -60,6 +60,14 @@ CREATE TABLE `attribute_sets` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `attribute_sets`
+--
+
+INSERT INTO `attribute_sets` (`id`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 1, '2022-03-19 03:18:33', '2022-03-19 03:18:33'),
+(2, 1, '2022-03-19 03:18:49', '2022-03-19 03:18:49');
 
 -- --------------------------------------------------------
 
@@ -1585,7 +1593,7 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_pr
 (16, NULL, 1, 'samsung-75-inc-class-4k-ultra-hd-hdr-smart-qled-tv', '3299.9900', '2799.9900', '', 1, NULL, NULL, '2799.9900', '75ANGUHD', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:08:00', '2022-03-03 01:38:56', NULL),
 (17, 8, 1, 'sony-65-inc-class-4k-uhd-led-android-smart-tv-hdr-bravia', '1398.0000', '1498.0000', '', 1, NULL, NULL, '1498.0000', 'S6C4ULAS', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:13:27', '2022-03-03 01:27:28', NULL),
 (18, NULL, 1, 'apple-mwp22am-a-airpods-pro', '189.9800', '149.9800', '', 1, NULL, NULL, '149.9800', 'B9EAVGRT', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:25:57', '2022-03-03 01:23:26', NULL),
-(19, NULL, 1, 'beats-studio3-wireless-headphones-–-matte-black', '339.0000', '289.0000', '', 1, NULL, NULL, '289.0000', 'KE35VGET', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:32:39', '2022-03-03 01:15:47', NULL),
+(19, NULL, 1, 'beats-studio3-wireless-headphones-–-matte-black', '339.0000', '289.0000', '', 1, NULL, NULL, '289.0000', 'KE35VGET', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:32:39', '2022-03-19 03:14:36', NULL),
 (20, NULL, 1, 'bose-quietcomfort-noise-cancelling-earbuds-–-black', '319.0000', '279.0000', '', 1, NULL, NULL, '279.0000', 'CIKO6AE', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:35:57', '2022-03-03 01:10:26', NULL),
 (21, NULL, 1, 'bose-noise-cancelling-wireless-bluetooth', '479.0000', '439.0000', '', 1, NULL, NULL, '439.0000', 'RO5JK73', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-20 04:39:41', '2022-03-03 01:06:29', NULL),
 (22, NULL, 1, 'google-pixel-buds,-clearly-white', '304.9500', '204.9500', '', 1, '1970-01-01', '1970-01-01', '204.9500', 'HM45UYA', 0, NULL, 1, NULL, 1, '1970-01-01', '1970-01-01', 0, '2022-02-20 04:42:50', '2022-03-03 00:14:31', NULL),
@@ -1790,7 +1798,8 @@ INSERT INTO `product_tag` (`product_id`, `tag_id`) VALUES
 (43, 5),
 (43, 6),
 (44, 5),
-(44, 7);
+(44, 7),
+(19, 7);
 
 -- --------------------------------------------------------
 
@@ -2628,7 +2637,7 @@ CREATE TABLE `setting_newsletters` (
 --
 
 INSERT INTO `setting_newsletters` (`id`, `newsletter`, `mailchimp_api_key`, `mailchimp_list_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '', '2022-02-25 11:37:25', '2022-02-25 11:37:25');
+(1, NULL, '', '', '2022-02-25 11:37:25', '2022-03-19 03:06:35');
 
 -- --------------------------------------------------------
 
@@ -2965,13 +2974,13 @@ CREATE TABLE `tags` (
 --
 
 INSERT INTO `tags` (`id`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'স্মার্টফোন', 1, '2022-02-25 11:58:31', '2022-03-02 07:43:22'),
-(2, 'অ্যান্ড্রয়েড', 1, '2022-02-25 11:58:40', '2022-03-02 07:43:15'),
+(1, 'smartphone', 1, '2022-02-25 11:58:31', '2022-03-19 03:09:05'),
+(2, 'android', 1, '2022-02-25 11:58:40', '2022-03-19 03:08:56'),
 (3, 'আইফোন', 1, '2022-02-25 11:58:49', '2022-03-02 07:43:05'),
 (4, 'ল্যাপটপ', 1, '2022-02-25 11:59:11', '2022-03-02 07:42:58'),
 (5, 'ডেস্কটপ', 1, '2022-02-25 11:59:18', '2022-03-02 07:42:49'),
 (6, 'এইচডি-টিভি', 1, '2022-02-25 11:59:39', '2022-03-02 07:42:40'),
-(7, 'হেডফোন', 1, '2022-02-25 11:59:51', '2022-03-02 07:42:33');
+(7, 'headphone', 1, '2022-02-25 11:59:51', '2022-03-19 03:08:25');
 
 -- --------------------------------------------------------
 
@@ -3198,9 +3207,7 @@ CREATE TABLE `wishlists` (
 --
 
 INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `category_id`, `created_at`, `updated_at`) VALUES
-(2, 1, 3, 1, '2022-03-09 09:32:20', '2022-03-09 09:32:20'),
-(3, 1, 4, 1, '2022-03-12 03:41:14', '2022-03-12 03:41:14'),
-(4, 1, 9, 2, '2022-03-12 03:41:36', '2022-03-12 03:41:36');
+(5, 1, 19, 5, '2022-03-19 03:15:28', '2022-03-19 03:15:28');
 
 --
 -- Indexes for dumped tables
@@ -3767,7 +3774,7 @@ ALTER TABLE `attributes`
 -- AUTO_INCREMENT for table `attribute_sets`
 --
 ALTER TABLE `attribute_sets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `attribute_set_translations`
@@ -3809,13 +3816,13 @@ ALTER TABLE `brand_translations`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `category_translations`
 --
 ALTER TABLE `category_translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `colors`
@@ -4193,7 +4200,7 @@ ALTER TABLE `user_shipping_addresses`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

@@ -372,7 +372,7 @@
                             </div>
 
                             <div class="checkout-actions mar-top-30">
-                                <button class="button lg style1 d-block text-center w-100" disabled title="disabled"  id="orderBtn">{{__('file.Pay Now')}}</button>
+                                <button class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>
@@ -419,29 +419,30 @@ $(function(){
                 $('#totalAmount').val(data.total_amount); //For Form
             }
         });
-    }else{
-        $('#billingCountry').change(function() {
-            var billingCountry = $("#billingCountry").val();
-            var couponCode = $('#couponCode').val();
-            var shippingCost = $("#shippingCost").val();
-            $.ajax({
-                url: "{{ route('cart.country_wise_tax') }}",
-                type: "GET",
-                data: {
-                    billing_country:billingCountry,
-                    coupon_code:couponCode,
-                    shipping_cost:shippingCost,
-                },
-                success: function (data) {
-                    console.log(data);
-                    $('.tax_rate').text(data.tax_rate);
-                    $('#taxId').val(data.tax_id); //For Form
-                    $('.total_amount').text(data.total_amount);
-                    $('#totalAmount').val(data.total_amount); //For Form
-                }
-            })
-        });
     }
+
+    $('#billingCountry').change(function() {
+        var billingCountry = $("#billingCountry").val();
+        var couponCode = $('#couponCode').val();
+        var shippingCost = $("#shippingCost").val();
+        $.ajax({
+            url: "{{ route('cart.country_wise_tax') }}",
+            type: "GET",
+            data: {
+                billing_country:billingCountry,
+                coupon_code:couponCode,
+                shipping_cost:shippingCost,
+            },
+            success: function (data) {
+                console.log(data);
+                $('.tax_rate').text(data.tax_rate);
+                $('#taxId').val(data.tax_id); //For Form
+                $('.total_amount').text(data.total_amount);
+                $('#totalAmount').val(data.total_amount); //For Form
+            }
+        })
+    });
+
 
     //Coupon
     $('#applyCoupon').on("click",function(e){

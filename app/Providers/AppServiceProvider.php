@@ -50,6 +50,15 @@ class AppServiceProvider extends ServiceProvider
         App::setLocale($locale);
 
 
+        //Newslatter Enable-Disable
+        $setting_newsletter = SettingNewsletter::latest()->first();
+        if ($setting_newsletter->newsletter==1) {
+            Session::forget('disable_newslatter');
+        }else {
+            Session::put('disable_newslatter',1);
+        }
+
+
 
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();

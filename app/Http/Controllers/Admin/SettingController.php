@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
 use App\Traits\imageHandleTrait;
+use Illuminate\Support\Facades\Session;
 
 class SettingController extends Controller
 {
@@ -392,8 +393,6 @@ class SettingController extends Controller
             }else {
                 SettingNewsletter::whereId($setting_newsletter->id)->update($data);
             }
-
-            //Default Currency
             $this->dataWriteInENVFile('MAILCHIMP_APIKEY',$request->mailchimp_api_key);
             $this->dataWriteInENVFile('MAILCHIMP_LIST_ID',$request->mailchimp_list_id);
 

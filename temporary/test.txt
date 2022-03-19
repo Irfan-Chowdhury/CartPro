@@ -68,3 +68,30 @@
         //         }
         //     });
         // });
+
+
+
+----------- CartPro ------------
+        'country',
+        'address_1',
+        'address_2',
+        'city',
+        'state',
+        'zip_code',
+        'is_default',
+
+
+---------- Shuddokhamar -----------
+'country',
+'address_1',
+'address_2',
+'city',
+'state',
+'zip_code',
+'flat_number'
+'nearest_landmark'
+'house_no'
+'road_no'
+'sector'
+'area'
+'is_default',
