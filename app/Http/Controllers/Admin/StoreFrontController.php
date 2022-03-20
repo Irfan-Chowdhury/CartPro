@@ -299,13 +299,11 @@ class StoreFrontController extends Controller
 
             if ((!empty($request->storefront_newsletter_image))) {
                 $this->previousImageDeleteFromStorefront('newsletter_background_image');
-
                 StorefrontImage::updateOrCreate(
                         [ 'title' => 'newsletter_background_image', 'type' => 'newletter'],
-                        [ 'image' => $this->imageStore($request->storefront_newsletter_image, $directory,$type='store_front')]
+                        [ 'image' => $this->imageStore($request->storefront_newsletter_image, $directory,$type='newslatter')]
                     );
             }
-
             return response()->json(['success' => __('Data Saved successfully.')]);
         }
     }

@@ -60,7 +60,11 @@
                                                                             <span class="ti-minus"></span>
                                                                         </button>
                                                                     </span>
-                                                                    <input type="text" readonly class="input-number qty_{{$item->rowId}}" value="{{$item->qty}}">
+                                                                    @if (($item->options->manage_stock==1 && $item->options->stock_qty==0) || ($item->options->in_stock==0))
+                                                                        <input type="number" readonly name="qty" class="input-number qty_{{$item->rowId}}" value="{{$item->qty}}" min="1" max="0">
+                                                                    @else
+                                                                        <input type="number" readonly name="qty" class="input-number qty_{{$item->rowId}}" value="{{$item->qty}}" min="1" max="{{$item->options->stock_qty}}">
+                                                                    @endif
                                                                     <span class="input-group-btn">
                                                                         <button type="submit" class="quantity-right-plus quantity_change" data-id="{{$item->rowId}}">
                                                                             <span class="ti-plus"></span>
@@ -100,23 +104,19 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-
-                        <form action="{{route('cart.checkout')}}" method="post">
-                        @csrf
-                            <div class="cart-subtotal">
-                                <div class="total">
-                                    <div class="label">{{__('file.Total')}}</div>
-                                    <div class="price">
-                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                            <span class="total_price">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                        @else
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span>
-                                        @endif
-                                    </div>
+                        <div class="cart-subtotal">
+                            <div class="total">
+                                <div class="label">{{__('file.Total')}}</div>
+                                <div class="price">
+                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                        <span class="total_price">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                    @else
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span>
+                                    @endif
                                 </div>
                             </div>
-                            <button type="submit" class="button lg style1 d-block text-center">@lang('file.Proceed to Checkout')</button>
-                        </form>
+                        </div>
+                        <a class="button lg style1 d-block text-center" href="{{route('cart.checkout')}}">@lang('file.Proceed to Checkout')</a>
                     </div>
                 @endif
             </div>
@@ -132,25 +132,27 @@
     (function ($) {
         "use strict";
 
-        $(document).on('click','.remove_cart_from_details',function(event) {
-            event.preventDefault();
-            var rowId = $(this).data('id');
-            var removeCartItemFromDetails = $(this).closest('tr');
-            $.ajax({
-                url: "{{ route('cart.remove') }}",
-                type: "GET",
-                data: {rowId:rowId},
-                success: function (data) {
-                    if (data.type=='success') {
-                        let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
-                        removeCartItemFromDetails.remove();
-                        $('#'+rowId).remove();
-                        $('.cart_count').text(data.cart_count);
-                        $('.cart_total').text(amountConvertToCurrency.toFixed(2));
-                        $('.total_price').text(amountConvertToCurrency.toFixed(2));
-                    }
+
+        $(".quantity-left-minus").on("click",function(e){
+            $(".quantity-right-plus").prop("disabled",false);
+        });
+        
+        $(".quantity-right-plus").on("click",function(e){
+            var inputNumber = $('.input-number').val();
+            var maxNumber = $('.input-number').attr('max');
+            if (maxNumber==0) {
+                console.log(Number(maxNumber));
+            }else{
+                if ((Number(inputNumber)+1) > Number(maxNumber)) {
+                    $('.input-number').val(Number(maxNumber)-1);
+                    $(this).prop("disabled",true);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Available product is : '+ maxNumber,
+                    });
                 }
-            })
+            }
         });
 
         $('.quantity_change_submit').on("click",function(e){
@@ -169,6 +171,27 @@
                         $('.my_cart_specific_qty_'+rowId).text(data.cartSpecificCount);
                         $('.total_price').text(data.cartTotal);
                         $('.cart_total').text(data.cartTotal);
+                    }
+                }
+            })
+        });
+
+        $(document).on('click','.remove_cart_from_details',function(event) {
+            event.preventDefault();
+            var rowId = $(this).data('id');
+            var removeCartItemFromDetails = $(this).closest('tr');
+            $.ajax({
+                url: "{{ route('cart.remove') }}",
+                type: "GET",
+                data: {rowId:rowId},
+                success: function (data) {
+                    if (data.type=='success') {
+                        let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
+                        removeCartItemFromDetails.remove();
+                        $('#'+rowId).remove();
+                        $('.cart_count').text(data.cart_count);
+                        $('.cart_total').text(amountConvertToCurrency.toFixed(2));
+                        $('.total_price').text(amountConvertToCurrency.toFixed(2));
                     }
                 }
             })

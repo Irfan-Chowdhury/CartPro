@@ -566,7 +566,7 @@
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            @if (($item->product->qty==0) || ($item->product->in_stock==0))
+                                                            @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
                                                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                             @else
                                                                 <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
@@ -611,7 +611,7 @@
 
             $(".quantity-left-minus").on("click",function(e){
                 $(".quantity-right-plus").prop("disabled",false);
-            })
+            });
             $(".quantity-right-plus").on("click",function(e){
                 var inputNumber = $('.input-number').val();
                 var maxNumber = $('.input-number').attr('max');
@@ -628,7 +628,7 @@
                         });
                     }
                 }
-            })
+            });
 
 
             $("#productAddToCartSingle").on("submit",function(e){

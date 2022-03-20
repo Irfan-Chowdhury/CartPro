@@ -111,13 +111,17 @@
                                     <div class="item-options">
                                         <div class="input-qty">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus">
+                                                <button type="button" class="quantity-left-minus decrementProductQty-{{$item->product->id}}">
                                                     <span class="ti-minus"></span>
                                                 </button>
                                             </span>
-                                            <input type="number" name="qty" class="input-number" value="1" min="1">
+                                            @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                <input type="number" name="qty" required class="input-number quantity-{{$item->product->id}}" value="1" min="1" max="0">
+                                            @else
+                                                <input type="number" name="qty" required class="input-number quantity-{{$item->product->id}}" value="1" min="1" max="{{$item->product->qty}}">
+                                            @endif
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus">
+                                                <button type="button" class="quantity-right-plus incrementProductQty-{{$item->product->id}}">
                                                     <span class="ti-plus"></span>
                                                 </button>
                                             </span>
@@ -148,3 +152,34 @@
         </div>
     </div>
     <!--Quick shop modal ends-->
+
+
+@push('scripts')
+    <script type="text/javascript">
+    
+        //Quantity Manage in Modal
+        $(".decrementProductQty-{{$item->product->id}}").on("click",function(e){
+            $(".decrementProductQty-{{$item->product->id}}").prop("disabled",false);
+        });
+        $(".incrementProductQty-{{$item->product->id}}").on("click",function(e){
+            var inputNumber = $('.quantity-{{$item->product->id}}').val();
+            var maxNumber = $('.quantity-{{$item->product->id}}').attr('max');
+            console.log(maxNumber);
+
+            if (maxNumber==0) {
+                console.log(Number(maxNumber));
+            }else{
+                if ((Number(inputNumber)+1) > Number(maxNumber)) {
+                    $('.quantity-{{$item->product->id}}').val(Number(maxNumber)-1);
+                    $(this).prop("disabled",true);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Available product is : '+ maxNumber,
+                    });
+                }
+            }
+        });
+    </script>
+@endpush
+

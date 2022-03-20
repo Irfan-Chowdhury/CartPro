@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2022 at 09:18 PM
+-- Generation Time: Mar 20, 2022 at 11:49 AM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- PHP Version: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -222,14 +222,14 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `slug`, `parent_id`, `image`, `icon`, `top`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'mobile', NULL, 'images/categories/yC9tucZzFA.webp', 'las la-mobile', 1, 1, '2022-02-12 23:38:41', '2022-02-12 23:40:33'),
-(2, 'computers-and-accessories', NULL, 'images/categories/Q1LgGmgWHY.jpg', 'las la-desktop', 1, 1, '2022-02-13 03:27:02', '2022-03-11 12:12:13'),
+(1, 'mobile', NULL, 'images/categories/LQUANnpB58.png', 'las la-mobile', 1, 1, '2022-02-12 23:38:41', '2022-03-19 23:08:57'),
+(2, 'computers-and-accessories', NULL, 'images/categories/DvCxbcTtyF.png', 'las la-desktop', 1, 1, '2022-02-13 03:27:02', '2022-03-19 23:09:59'),
 (3, 'television', NULL, 'images/categories/pn3vq9MsJR.png', 'las la-tv', 1, 1, '2022-02-13 03:34:39', '2022-02-14 04:17:11'),
-(4, 'watch', NULL, 'images/categories/sUyBsGLV0p.png', 'las la-clock', 1, 1, '2022-02-14 00:27:58', '2022-02-14 00:29:59'),
-(5, 'headphone', NULL, 'images/categories/P4BxNp0WCt.webp', 'las la-headphones', 1, 1, '2022-02-14 00:37:23', '2022-02-14 00:38:29'),
-(6, 'clothes', NULL, 'images/categories/qbqbFMnVA7.png', 'las la-tshirt', 1, 1, '2022-02-14 00:50:24', '2022-02-14 00:51:38'),
-(7, 'shoes', NULL, 'images/categories/nZ7ywNMnSV.jpg', 'las la-shoe-prints', 1, 1, '2022-02-14 01:36:13', '2022-02-14 01:44:03'),
-(8, 'furniture', NULL, 'images/categories/39xTzDMwwT.jpg', 'las la-couch', 1, 1, '2022-02-14 02:03:17', '2022-02-14 05:08:25'),
+(4, 'watch', NULL, 'images/categories/V3avktsIxq.jpg', 'las la-clock', 1, 1, '2022-02-14 00:27:58', '2022-03-19 23:10:45'),
+(5, 'headphone', NULL, 'images/categories/XrVPQksQey.png', 'las la-headphones', 1, 1, '2022-02-14 00:37:23', '2022-03-19 23:18:02'),
+(6, 'clothes', NULL, 'images/categories/HZXLvV3Itt.jpg', 'las la-tshirt', 1, 1, '2022-02-14 00:50:24', '2022-03-19 23:28:59'),
+(7, 'shoes', NULL, 'images/categories/W8aentkzuv.jpg', 'las la-shoe-prints', 1, 1, '2022-02-14 01:36:13', '2022-03-19 23:29:35'),
+(8, 'furniture', NULL, 'images/categories/TEtAMta36u.jpg', 'las la-couch', 1, 1, '2022-02-14 02:03:17', '2022-03-19 23:30:14'),
 (9, 'android', 1, 'images/categories/GL500q94w8.png', NULL, 1, 1, '2022-02-14 02:09:17', '2022-02-14 02:15:12'),
 (10, 'iphone', 1, 'images/categories/m7HodRuLNT.jpg', NULL, 1, 1, '2022-02-14 02:27:43', '2022-03-02 03:37:24'),
 (11, 'featured-phone', 1, 'images/categories/dAb7jF7Vgo.png', NULL, 1, 1, '2022-02-14 03:11:50', '2022-02-14 03:12:38'),
@@ -1581,7 +1581,7 @@ INSERT INTO `products` (`id`, `brand_id`, `tax_id`, `slug`, `price`, `special_pr
 (4, 2, 1, 'apple-iphone-11-pro-max-(64gb)-–-silver', '815.0000', '0.0100', '', 1, NULL, NULL, '0.0100', 'S57UK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:36:03', '2022-03-11 13:24:23', NULL),
 (5, 3, 1, 'oneplus-8-pro-onyx-black-android-smartphone', '240.5000', '0.0000', '', 0, NULL, NULL, '0.0000', 'YHE4M7', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 01:41:17', '2022-03-03 03:15:12', NULL),
 (6, 2, 1, 'apple-iphone-xs-max-64gb--white', '560.0000', '0.0000', '', 0, NULL, NULL, '0.0000', 'KLIOLP', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:11:05', '2022-03-03 03:11:51', NULL),
-(7, 1, 1, 'samsung-galaxy-note-10', '590.0000', '500.0000', '', 1, NULL, NULL, '500.0000', 'LKOUHJ', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:18:25', '2022-03-03 02:39:26', NULL),
+(7, 1, 1, 'samsung-galaxy-note-10', '590.0000', '500.0000', '', 1, NULL, NULL, '500.0000', 'LKOUHJ', 1, 5, 1, NULL, 1, NULL, NULL, 0, '2022-02-13 02:18:25', '2022-03-20 00:15:08', NULL),
 (8, 4, 1, 'asus-vivobook-15-thin-and-light-laptop-15.6-inch-fhd-display', '519.0000', '470.0000', '', 1, NULL, NULL, '470.0000', 'SL4JK74', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-14 05:36:08', '2022-03-03 02:28:26', NULL),
 (9, 4, 1, 'asus-vivobook-17.3″-i5-8gb_1tb-17.3″-fhd-display', '589.0000', '549.0000', '', 1, NULL, NULL, '549.0000', 'BE48VGRN', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-14 06:04:57', '2022-03-03 02:23:51', NULL),
 (10, 6, 1, 'apple-macbook-pro-13.3-inch-2.7ghz-dual-core-i5', '1299.0000', '999.0000', '', 1, NULL, NULL, '999.0000', 'NBM59UY', 0, NULL, 1, NULL, 1, NULL, NULL, 0, '2022-02-14 23:40:48', '2022-03-03 02:19:43', NULL),
@@ -2273,11 +2273,11 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (40, 'storefront_call_action_url', 0, NULL, NULL, NULL),
 (41, 'storefront_open_new_window', 0, NULL, NULL, NULL),
 (42, 'storefront_slider_banner_1_image', 0, NULL, NULL, NULL),
-(43, 'storefront_slider_banner_1_call_to_action_url', 0, 'https://www.facebook.com/', NULL, '2022-02-21 15:40:54'),
-(44, 'storefront_slider_banner_1_open_in_new_window', 0, '1', NULL, '2022-02-21 15:40:54'),
+(43, 'storefront_slider_banner_1_call_to_action_url', 0, 'https://www.facebook.com/', NULL, '2022-03-19 23:05:38'),
+(44, 'storefront_slider_banner_1_open_in_new_window', 0, '1', NULL, '2022-03-19 23:05:38'),
 (45, 'storefront_slider_banner_2_image', 0, NULL, NULL, NULL),
-(46, 'storefront_slider_banner_2_call_to_action_url', 0, 'http://localhost/cartpro/product/samsung-galaxy-m02s/20', NULL, '2022-02-21 15:40:54'),
-(47, 'storefront_slider_banner_2_open_in_new_window', 0, '1', NULL, '2022-02-21 15:40:54'),
+(46, 'storefront_slider_banner_2_call_to_action_url', 0, 'http://localhost/cartpro/product/samsung-galaxy-m02s/20', NULL, '2022-03-19 23:05:38'),
+(47, 'storefront_slider_banner_2_open_in_new_window', 0, '1', NULL, '2022-03-19 23:05:38'),
 (48, 'storefront_one_column_banner_enabled', 0, '1', NULL, '2022-02-25 11:27:54'),
 (49, 'storefront_one_column_banner_image', 0, NULL, NULL, NULL),
 (50, 'storefront_one_column_banner_call_to_action_url', 0, 'https://www.facebook.com/', NULL, '2022-02-25 11:27:55'),
@@ -2359,8 +2359,8 @@ INSERT INTO `settings` (`id`, `key`, `is_translatable`, `plain_value`, `created_
 (126, 'storefront_slider_banner_2_title', 1, NULL, NULL, NULL),
 (127, 'storefront_slider_banner_3_image', 0, 'D:\\xampp\\tmp\\phpA703.tmp', NULL, '2022-01-18 03:40:01'),
 (128, 'storefront_slider_banner_3_title', 1, NULL, NULL, NULL),
-(129, 'storefront_slider_banner_3_call_to_action_url', 0, 'http://localhost:8081/CartPro/product/bose-noise-cancelling-wireless-bluetooth/5', NULL, '2022-02-21 15:40:54'),
-(130, 'storefront_slider_banner_3_open_in_new_window', 0, '0', NULL, '2022-02-21 15:40:54'),
+(129, 'storefront_slider_banner_3_call_to_action_url', 0, 'http://localhost:8081/CartPro/product/bose-noise-cancelling-wireless-bluetooth/5', NULL, '2022-03-19 23:05:38'),
+(130, 'storefront_slider_banner_3_open_in_new_window', 0, '0', NULL, '2022-03-19 23:05:38'),
 (131, 'storefront_flash_sale_and_vertical_products_section_enabled', 0, '1', NULL, '2022-02-22 03:02:44'),
 (132, 'storefront_flash_sale_title', 1, NULL, NULL, NULL),
 (133, 'storefront_flash_sale_active_campaign_flash_id', 0, '2', NULL, '2022-02-22 03:02:44'),
@@ -2637,7 +2637,7 @@ CREATE TABLE `setting_newsletters` (
 --
 
 INSERT INTO `setting_newsletters` (`id`, `newsletter`, `mailchimp_api_key`, `mailchimp_list_id`, `created_at`, `updated_at`) VALUES
-(1, NULL, '', '', '2022-02-25 11:37:25', '2022-03-19 03:06:35');
+(1, 1, '', '', '2022-02-25 11:37:25', '2022-03-20 00:02:14');
 
 -- --------------------------------------------------------
 
@@ -2775,7 +2775,7 @@ CREATE TABLE `setting_translations` (
 INSERT INTO `setting_translations` (`id`, `setting_id`, `locale`, `value`, `created_at`, `updated_at`) VALUES
 (30, 1, 'en', 'Welcome to CartPro', '2021-09-04 23:50:08', '2021-09-21 02:34:08'),
 (31, 7, 'en', 'Dewanhat, Chittagong', '2021-09-04 23:50:09', '2021-10-09 01:18:33'),
-(32, 125, 'en', 'CC Camera', '2021-09-05 23:04:39', '2021-10-31 21:28:27'),
+(32, 125, 'en', 'Power Bank', '2021-09-05 23:04:39', '2022-03-19 23:05:38'),
 (33, 126, 'en', 'Samsung A21', '2021-09-06 03:03:01', '2021-10-31 21:28:27'),
 (34, 128, 'en', 'Headphone', '2021-09-06 03:39:58', '2022-02-21 15:34:27'),
 (35, 8, 'en', NULL, '2021-09-13 05:32:13', '2021-09-13 05:32:13'),
@@ -2873,9 +2873,9 @@ CREATE TABLE `sliders` (
 --
 
 INSERT INTO `sliders` (`id`, `slider_slug`, `type`, `category_id`, `url`, `slider_image`, `slider_image_full_width`, `slider_image_secondary`, `target`, `is_active`, `text_alignment`, `text_color`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'আপনার-উন্নত', 'category', 1, '', 'images/sliders/Y6OaZnvCjf.webp', 'images/sliders/full_width/fTPkfLfh9R.webp', 'images/sliders/secondary/Tq0z4vPfJ9.webp', 'new_tab', '1', 'left', '#00ff40', '2022-02-13 03:46:32', '2022-03-09 04:12:15', NULL),
+(1, 'enhance-your', 'category', 1, '', 'images/sliders/x4rIreYZa6.png', 'images/sliders/full_width/RpWYMgYqKE.png', 'images/sliders/secondary/mmnPayNvCD.png', 'new_tab', '1', 'left', '#00ff40', '2022-02-13 03:46:32', '2022-03-19 22:59:46', NULL),
 (2, 'বিশ্বের-বৃহত্তম', 'category', 4, '', 'images/sliders/P4HwhrzWJr.webp', 'images/sliders/full_width/QRNczJfKao.webp', 'images/sliders/secondary/l7cWkOI6fx.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:49:20', '2022-03-09 04:11:55', NULL),
-(3, 'shop-what', 'category', 1, '', 'images/sliders/8a3E2Tuj1F.webp', 'images/sliders/full_width/CSynIH3GZk.webp', 'images/sliders/secondary/hoUe7hUuAK.webp', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:51:04', '2022-03-09 04:12:36', NULL),
+(3, 'shop-what', 'category', 1, '', 'images/sliders/YOoy7zOZnF.jpeg', 'images/sliders/full_width/Gh7rn4rSmK.jpeg', 'images/sliders/secondary/VhM8dBgLqa.jpeg', 'new_tab', '1', 'left', '#000000', '2022-02-21 15:51:04', '2022-03-19 22:56:47', NULL),
 (4, 'test', 'category', 1, '', 'images/sliders/5EQfGBuEkE.png', NULL, 'images/sliders/secondary/JbZjhArYT3.png', '', '1', '', NULL, '2022-02-27 06:13:49', '2022-02-28 01:55:19', '2022-02-28 01:55:19'),
 (5, 'trete', 'category', 5, NULL, 'images/sliders/WLKcgLn11h.jpg', NULL, 'images/sliders/secondary/T6nksvxqzO.jpg', 'same_tab', '1', 'left', NULL, '2022-02-27 07:35:16', '2022-02-28 01:55:12', '2022-02-28 01:55:12'),
 (6, 'test-45', 'category', 1, '', 'images/sliders/UzBuaHYyvq.jpg', NULL, 'images/sliders/secondary/LlzSkmMfJP.jpg', 'same_tab', '1', 'left', '#00ff40', '2022-02-28 02:31:23', '2022-03-02 22:48:06', '2022-03-02 22:48:06');
@@ -2940,8 +2940,8 @@ CREATE TABLE `storefront_images` (
 INSERT INTO `storefront_images` (`id`, `setting_id`, `title`, `type`, `image`, `created_at`, `updated_at`) VALUES
 (1, NULL, 'favicon_logo', 'logo', '/images/storefront/logo/7GEBNYRRhp.png', '2022-02-21 15:02:46', '2022-02-21 15:02:46'),
 (2, NULL, 'header_logo', 'logo', '/images/storefront/logo/50E8Oj7szt.webp', '2022-02-21 15:07:32', '2022-02-21 15:07:32'),
-(3, 42, 'slider_banner_1', 'slider_banner', '/images/storefront/slider_banners/Nvr10ycbje.jpg', '2022-02-21 15:22:35', '2022-02-21 15:40:54'),
-(4, 45, 'slider_banner_2', 'slider_banner', '/images/storefront/slider_banners/BWF4Zx5IZp.webp', '2022-02-21 15:32:03', '2022-02-21 15:34:27'),
+(3, 42, 'slider_banner_1', 'slider_banner', '/images/storefront/slider_banners/e9OGBqHFpA.jpg', '2022-02-21 15:22:35', '2022-03-19 23:05:38'),
+(4, 45, 'slider_banner_2', 'slider_banner', '/images/storefront/slider_banners/SNIWak7D4E.jpg', '2022-02-21 15:32:03', '2022-03-19 23:05:38'),
 (5, 127, 'slider_banner_3', 'slider_banner', '/images/storefront/slider_banners/Kqyy8ifW7g.webp', '2022-02-21 15:34:27', '2022-02-21 15:34:27'),
 (6, NULL, 'three_column_full_width_banners_image_1', 'three_column_full_width_banners', '/images/storefront/three_column_full_width_banners/PG575eXkUO.png', '2022-02-25 11:06:18', '2022-02-25 11:06:18'),
 (7, NULL, 'three_column_full_width_banners_image_2', 'three_column_full_width_banners', '/images/storefront/three_column_full_width_banners/NcwDRh0vZd.png', '2022-02-25 11:06:18', '2022-02-25 11:06:18'),
@@ -2953,7 +2953,7 @@ INSERT INTO `storefront_images` (`id`, `setting_id`, `title`, `type`, `image`, `
 (13, NULL, 'two_column_banner_image_2', 'two_column_banners', '/images/storefront/two_column_banners/eTG56tfFWR.png', '2022-02-25 11:26:30', '2022-02-25 11:26:30'),
 (14, NULL, 'one_column_banner_image', 'one_column_banner', '/images/storefront/one_column_banner/g5aHstE35F.png', '2022-02-25 11:27:55', '2022-02-25 11:27:55'),
 (15, NULL, 'accepted_payment_method_image', 'payment_method', '/images/storefront/payment_method/ms82rZ9HMJ.webp', '2022-02-25 11:31:33', '2022-02-25 11:34:26'),
-(16, NULL, 'newsletter_background_image', 'newletter', '/images/storefront/newsletter/Gaw0vOxtJj.png', '2022-02-25 11:54:03', '2022-02-25 11:54:03');
+(16, NULL, 'newsletter_background_image', 'newletter', '/images/storefront/newsletter/newslatter.jpg', '2022-02-25 11:54:03', '2022-03-20 03:03:46');
 
 -- --------------------------------------------------------
 
@@ -3201,13 +3201,6 @@ CREATE TABLE `wishlists` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `wishlists`
---
-
-INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `category_id`, `created_at`, `updated_at`) VALUES
-(5, 1, 19, 5, '2022-03-19 03:15:28', '2022-03-19 03:15:28');
 
 --
 -- Indexes for dumped tables
@@ -4200,7 +4193,7 @@ ALTER TABLE `user_shipping_addresses`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

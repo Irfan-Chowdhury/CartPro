@@ -73,6 +73,12 @@ class CartController extends Controller
             $data['options']['product_slug']  = $request->product_slug;
             $data['options']['category_id']  = $request->category_id;
 
+            //new
+            $data['options']['manage_stock']= $product->manage_stock ?? null;
+            $data['options']['stock_qty']= $product->qty ?? null;
+            $data['options']['in_stock']= $product->in_stock ?? 0;
+
+
             $data = Cart::add($data);
 
             $cart_count = Cart::count();
@@ -108,7 +114,6 @@ class CartController extends Controller
         $cart_content  = Cart::content();
         $cart_subtotal = Cart::subtotal();
         $cart_total    = Cart::total();
-
 
         return view('frontend.pages.cart_details',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate'));
     }

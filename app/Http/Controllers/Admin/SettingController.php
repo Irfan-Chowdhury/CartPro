@@ -211,7 +211,6 @@ class SettingController extends Controller
 
     public function currencyStoreOrUpdate(Request $request)
     {
-
         if ($request->ajax()) {
             $validator = Validator::make($request->only('default_currency','currency_format','default_currency_code'),[
                 'default_currency' => 'required',

@@ -249,10 +249,10 @@
 <!--Quick shop modal ends-->
 <!-- Quick Shop Modal starts -->
 
-@if (Session::get('disable_newslatter')!=1)
+@if (Session::get('disable_newslatter')!='yes')
     <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content" style="background-image: url('public/frontend/images/newsletter/newsletter.jpg');background-size: cover;background-position: bottom;">
+            <div class="modal-content" style="background-image: url('{{asset('public/images/storefront/newsletter/newslatter.jpg')}}') ;background-size: cover;background-position: bottom;">
                 <div class="modal-body">
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="las la-times"></i></span>

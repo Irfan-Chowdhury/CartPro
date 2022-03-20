@@ -20,7 +20,9 @@ use App\Models\ProductTranslation;
 use App\Models\Review;
 use App\Models\Setting;
 use App\Models\SettingCurrency;
+use App\Models\SettingNewsletter;
 use App\Models\Slider;
+use App\Models\StorefrontImage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -41,6 +43,10 @@ class HomeController extends Controller
     public function index()
     {
 
+        // $newslatter = StorefrontImage::where('title','newsletter_background_image')->first();
+        // return $newslatter;
+
+
         //We change the Logic of Flash Sale Products Later
 
         if(!Session::get('currentLocal')){
@@ -50,10 +56,6 @@ class HomeController extends Controller
             $locale = Session::get('currentLocal');
         }
         App::setLocale($locale);
-
-
-        // Session::put('disable_newslatter',1); //update it setting
-        // Session::forget('disable_newslatter');
 
         $locale = Session::get('currentLocal');
 

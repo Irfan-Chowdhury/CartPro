@@ -50,16 +50,6 @@ class AppServiceProvider extends ServiceProvider
         App::setLocale($locale);
 
 
-        //Newslatter Enable-Disable
-        $setting_newsletter = SettingNewsletter::latest()->first();
-        if ($setting_newsletter->newsletter==1) {
-            Session::forget('disable_newslatter');
-        }else {
-            Session::put('disable_newslatter',1);
-        }
-
-
-
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();
         $storefront_images = StorefrontImage::select('title','type','image')->get();
@@ -80,6 +70,9 @@ class AppServiceProvider extends ServiceProvider
         $three_column_full_width_banners_image_1  = $empty_image;
         $three_column_full_width_banners_image_2  = $empty_image;
         $three_column_full_width_banners_image_3  = $empty_image;
+
+        // $newsletter_background_image  = $empty_image;
+
 
         $payment_method_image = $empty_image;
 
@@ -182,6 +175,15 @@ class AppServiceProvider extends ServiceProvider
                     $three_column_full_width_banners_image_3 = url('public'.$item->image);
                 }
             }
+
+            //Newsletter Background Image
+            // elseif ($item->title=='newsletter_background_image') {
+            //     if (!file_exists('public'.$item->image)) {
+            //         $newsletter_background_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $newsletter_background_image = 'public'.$item->image;
+            //     }
+            // }
         }
 
         //Appereance-->Storefront --> Setting

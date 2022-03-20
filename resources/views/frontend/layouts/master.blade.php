@@ -9,14 +9,6 @@
         }else {
             $total_wishlist = 0;
         }
-
-
-
-        // if (Illuminate\Support\Facades\Auth::check()) {
-        //     $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();
-        // }else {
-        //     $total_wishlist = 0;
-        // }
 @endphp
 
 
@@ -69,7 +61,6 @@
     <style>
         :root {
             --theme-color: {{$storefront_theme_color ?? "#0071df"}};
-            /* --theme-color: #80ff00; */
         }
     </style>
     <style>
@@ -468,6 +459,7 @@
             });
 
             $('#stripeContent').hide();
+
         })(jQuery);
     </script>
 

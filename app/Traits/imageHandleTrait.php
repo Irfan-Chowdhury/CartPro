@@ -49,6 +49,12 @@ trait imageHandleTrait{
         {
             Image::make($image)->encode('jpg', 60)->fit(570,230)->save($location);
         }
+        elseif($type=='newslatter')
+        {
+            $img      = 'newslatter'. '.' .'jpg';
+            $location = public_path($directory.$img);
+            Image::make($image)->encode('jpg', 60)->fit(850,450)->save($location);
+        }
         else {
             Image::make($image)->encode('jpg', 60)->fit(300,300)->save($location);
         }
