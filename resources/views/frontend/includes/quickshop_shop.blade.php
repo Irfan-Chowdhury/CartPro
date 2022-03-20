@@ -32,7 +32,6 @@
                                 <input type="hidden" name="value_ids" class="value_ids_shop">
 
                                 <div class="item-details">
-                                    {{-- <a class="item-category" href="">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a> --}}
                                     <h3 class="item-name">{{$item->product_name}}</h3>
                                     <div class="d-flex justify-content-between">
                                         <div class="item-brand">Brand: <a href="">{{$item->brand_name}}</a></div>
@@ -117,18 +116,24 @@
 
                                     <div class="item-options">
                                         <div class="input-qty">
+
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus">
+                                                <button type="button" class="quantity-left-minus decrementProductQty-{{$item->id}}">
                                                     <span class="ti-minus"></span>
                                                 </button>
                                             </span>
-                                            <input type="number" name="qty" class="input-number" value="1" min="1">
+                                            @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
+                                                <input type="number" name="qty" required class="input-number quantity-{{$item->id}}" value="1" min="1" max="0">
+                                            @else
+                                                <input type="number" name="qty" required class="input-number quantity-{{$item->id}}" value="1" min="1" max="{{$item->qty}}">
+                                            @endif
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus">
+                                                <button type="button" class="quantity-right-plus incrementProductQty-{{$item->id}}">
                                                     <span class="ti-plus"></span>
                                                 </button>
                                             </span>
                                         </div>
+
                                         @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
                                             <button class="button button-icon style1" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to Cart')</span></span></button>
                                         @else
@@ -155,3 +160,30 @@
         </div>
     </div>
     <!--Quick shop modal ends-->
+
+    
+@push('scripts')
+    <script type="text/javascript">
+        //Quantity Manage
+        $(".decrementProductQty-{{$item->id}}").on("click",function(e){
+            $(".decrementProductQty-{{$item->id}}").prop("disabled",false);
+        });
+        $(".incrementProductQty-{{$item->id}}").on("click",function(e){
+            var inputNumber = $('.quantity-{{$item->id}}').val();
+            var maxNumber = $('.quantity-{{$item->id}}').attr('max');
+            if (maxNumber==0) {
+                console.log(Number(maxNumber));
+            }else{
+                if ((Number(inputNumber)+1) > Number(maxNumber)) {
+                    $('.quantity-{{$item->id}}').val(Number(maxNumber)-1);
+                    $(this).prop("disabled",true);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Available product is : '+ maxNumber,
+                    });
+                }
+            }
+        });
+    </script>
+@endpush

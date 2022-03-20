@@ -28,7 +28,7 @@
     }
 
     if (isMobile) {
-
+        var search = $('#KeyWordHit').clone();
         var lang_opt = $('.language-switcher').clone();
         var currency_opt = $('.currency-switcher').clone();
         var top_menu = $('.header-top-menu').clone();
@@ -39,6 +39,9 @@
         $("#mobile_menu").append(currency_opt);
         $("#mobile_menu").append(social);
         $("#mobile_cat").html(cat);
+        $(".middle-column").html('');
+        $("#header-search").html(search);
+        $('#search_field').css('top','45px');
 
         $(".mega-title").addClass("has-dropdown");
         $(".mega-title ul").addClass("dropdown");

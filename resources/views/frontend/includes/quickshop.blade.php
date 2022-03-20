@@ -156,16 +156,13 @@
 
 @push('scripts')
     <script type="text/javascript">
-    
-        //Quantity Manage in Modal
+        //Quantity Manage
         $(".decrementProductQty-{{$item->product->id}}").on("click",function(e){
             $(".decrementProductQty-{{$item->product->id}}").prop("disabled",false);
         });
         $(".incrementProductQty-{{$item->product->id}}").on("click",function(e){
             var inputNumber = $('.quantity-{{$item->product->id}}').val();
             var maxNumber = $('.quantity-{{$item->product->id}}').attr('max');
-            console.log(maxNumber);
-
             if (maxNumber==0) {
                 console.log(Number(maxNumber));
             }else{

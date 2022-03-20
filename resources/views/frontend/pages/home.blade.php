@@ -1191,7 +1191,7 @@
                                             </div>
                                         @endif
                                         <div class="product-overlay">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                             <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
                                         </div>
                                     </div>
