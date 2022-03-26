@@ -5,14 +5,16 @@
 @section('admin_content')
     <section class="forms">
         <div class="container-fluid">
+            
+            @include('frontend.includes.alert_message')
+            @include('frontend.includes.error_message')
+            
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
                             <h4>{{__('Update Profile')}}</h4>
                         </div>
-
-                        @include('frontend.includes.alert_message')
 
                         <div class="card-body">
                             

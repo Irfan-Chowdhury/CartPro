@@ -146,26 +146,27 @@
         </div>
         @endif
 
-
-        @include('admin.includes.header')
-
         @include('admin.includes.sidebar')
 
 
         <div style="" id="content" class="animate-bottom">
             <div class="page">
-            @yield('admin_content')
+                
+                @include('admin.includes.header')
+                
+                @yield('admin_content')
+                
+                <footer class="main-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p>{{trans('file.Developed')}} {{trans('file.By')}} <a href="https://lion-coders.com" class="external">LionCoders</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
-    <footer class="main-footer">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-12">
-              <p>&copy;  | {{trans('file.Developed')}} {{trans('file.By')}} <a href="https://lion-coders.com" class="external">LionCoders</a></p>
-            </div>
-          </div>
-        </div>
-    </footer>
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->

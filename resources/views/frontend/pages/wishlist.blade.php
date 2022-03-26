@@ -52,7 +52,7 @@
                                                 <td class="cart-product">
                                                     <div class="item-details">
                                                         <a class="remove_wishlist" data-id="{{$item->id}}"><i class="ti-close"></i></a>
-                                                        <img src="{{asset('public/'.$item->product->baseImage->image ?? null)}}" alt="...">
+                                                        <img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image ?? null)}}" alt="...">
                                                         <div class="">
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                 <h3 class="h6">{{$item->product->productTranslation->product_name}}</h3>

@@ -34,11 +34,11 @@
         <div class="row">
             <div class="col-lg-5 col-md-4">
                 <div class="footer-logo">
-                    <a href="#"><img src="{{$header_logo_path}}"></a>
+                    <a href="#"><img class="lazy" data-src="{{$header_logo_path}}"></a>
                 </div>
                 <div class="footer-text">
                     <h5 class="text-grey mb-0">@lang('file.Got Question? Call us') :</h5>
-                    <h4>{{$setting_store->store_email ?? null}}</h4>
+                    <h4>{{$setting_store->store_phone ?? null}}</h4>
                 </div>
                 <div class="footer-text">
                     <h6 class="text-grey mb-0">@lang('file.Contact Info')</h6>
@@ -111,7 +111,7 @@
             </div>
             <div class="col-md-6">
                 <div class="footer-payment-options">
-                    <img src="{{$payment_method_image}}" width="342px" height="30px">
+                    <img class="lazy" data-src="{{$payment_method_image}}" width="342px" height="30px">
                 </div>
             </div>
         </div>
@@ -127,129 +127,8 @@
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div> --}}
 <!-- Cookie consent Ends-->
-<!-- Quick Shop Modal starts -->
-<div class="modal fade quickshop" id="quickshop" tabindex="-1" role="dialog" aria-labelledby="quickshop" aria-hidden="true">
-<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="las la-times"></i></span>
-            </button>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="slider-wrapper">
-                        <div class="slider-for-modal">
-                            <div class="slider-for__item ex1">
-                                <img src="images/products/apple-watch.png" alt="..." />
-                            </div>
-                            <div class="slider-for__item ex1">
-                                <img src="images/products/apple-watch-2.jpg" alt="..." />
-                            </div>
-                            <div class="slider-for__item ex1">
-                                <img src="images/products/apple-watch-3.jpg" alt="..." />
-                            </div>
-                            <div class="slider-for__item ex1">
-                                <img src="images/products/apple-watch-4.jpg" alt="..." />
-                            </div>
-                        </div>
-                        <div class="slider-nav-modal">
-                            <div class="slider-nav__item">
-                                <img src="images/products/apple-watch.png" alt="..." />
-                            </div>
-                            <div class="slider-nav__item">
-                                <img src="images/products/apple-watch-2.jpg" alt="..." />
-                            </div>
-                            <div class="slider-nav__item">
-                                <img src="images/products/apple-watch-3.jpg" alt="..." />
-                            </div>
-                            <div class="slider-nav__item">
-                                <img src="images/products/apple-watch-4.jpg" alt="..." />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="item-details">
-                        <a class="item-category" href="">Electronics</a>
-                        <h3 class="item-name">Samsung Curved Widescreen 4k Ultra HD TV</h3>
-                        <div class="d-flex justify-content-between">
-                            <div class="item-brand">Brand: <a href="">Samsung</a></div>
-                            <div class="item-review">
-                                <ul class="p-0 m-0">
-                                    <li><i class="las la-star"></i></li>
-                                    <li><i class="las la-star"></i></li>
-                                    <li><i class="las la-star"></i></li>
-                                    <li><i class="las la-star"></i></li>
-                                    <li><i class="las la-star-half"></i></li>
-                                </ul>
-                                <span>( 04 )</span>
-                            </div>
-                            <div class="item-sku">SKU: LC123456789</div>
-                        </div>
-                        <hr>
-                        <div class="item-price">$125.30</div>
-                        <hr>
-                        <div class="item-short-description">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc condimentum eros idoni rutrum fermentum. Proin nec felis dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</p>
-                        </div>
-                        <hr>
-                        <div class="item-variant">
-                            <span>Color:</span> <span class="semi-bold">Green</span>
-                            <ul class="product-variant mt-1">
-                                <li class="bg-green selected"></li>
-                                <li class="bg-antique"></li>
-                                <li class="bg-amber"></li>
-                            </ul>
-                        </div>
-                        <div class="item-variant">
-                            <span>Size:</span> <span class="semi-bold">M</span>
-                            <ul class="product-variant size-opt p-0 mt-1">
-                                <li><span>S</span></li>
-                                <li class="selected"><span>M</span></li>
-                                <li><span>L</span></li>
-                                <li><span>XL</span></li>
-                            </ul>
-                        </div>
-                        <div class="item-options">
-                            <form class="mb-3">
-                                <div class="input-qty">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-left-minus">
-                                            <span class="ti-minus"></span>
-                                        </button>
-                                    </span>
-                                    <input type="number" class="input-number" value="1" min="1">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-right-plus">
-                                            <span class="ti-plus"></span>
-                                        </button>
-                                    </span>
-                                </div>
-                                <button class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>Add to cart</span></span></button>
-                            </form>
-                            <button class="button button-icon style4 sm"><span><i class="ti-heart"></i> <span>Add to wishlist</span></span></button>
-                            <button class="button button-icon style4 sm"><span><i class="ti-control-shuffle"></i> <span>Add to compare</span></span></button>
-                        </div>
-                        <hr>
-                        <div class="item-share mt-3"><span>Share</span>
-                            <ul class="footer-social d-inline pad-left-15">
-                                <li><a href="#"><i class="ti-facebook"></i></a></li>
-                                <li><a href="#"><i class="ti-twitter"></i></a></li>
-                                <li><a href="#"><i class="ti-instagram"></i></a></li>
-                                <li><a href="#"><i class="ti-pinterest"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<!--Quick shop modal ends-->
-<!-- Quick Shop Modal starts -->
 
-@if (Session::get('disable_newslatter')!='yes')
+@if (!Cookie::has('newslatter'))
     <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content" style="background-image: url('{{asset('public/images/storefront/newsletter/newslatter.jpg')}}') ;background-size: cover;background-position: bottom;">
@@ -272,7 +151,7 @@
                                 <label class="form-check-label" for="disable-popup">
                                     Got it! Don't show this popup again.
                                 </label>
-                                <input class="form-check-input" type="checkbox" value="1" id="disable_popup">
+                                <input class="form-check-input" id="newslatterPopup" type="checkbox" value="1" id="disable_popup">
                             </div>
                         </div>
                     </div>
@@ -283,3 +162,42 @@
 @endif
 
 <!--Quick shop modal ends-->
+
+@push('scripts')
+    <script>
+        (function ($) {
+            $('#newslatterPopup').change(function() {
+                if(this.checked) {
+                    var newslatter = 'disable';
+                }else{
+                    var newslatter = 'enable';
+                }
+                $.get({
+                    url: "{{route('cartpro.set_cookie')}}",
+                    type: "GET",
+                    data: {newslatter:newslatter},
+                    success: function (data) {
+                        console.log(data);
+                        if (data=='disable') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Newslatter Disabled Successfully'
+                            })
+                        }
+                    }
+                })
+            });
+        })(jQuery);
+    </script>
+@endpush

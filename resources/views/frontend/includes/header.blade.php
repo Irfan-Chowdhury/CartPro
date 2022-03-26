@@ -241,10 +241,7 @@
         <div class="header-mobile collapse" id="mobile-search">
             <div class="container">
                 <div id="header-search" class="d-lg-none">
-                    <form class="header-search" class="d-lg-none">
-                        <input class="" type="text" placeholder="Search Products..." name="search" autofocus>
-                        <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
-                    </form>
+                    
                 </div>
             </div>
         </div>

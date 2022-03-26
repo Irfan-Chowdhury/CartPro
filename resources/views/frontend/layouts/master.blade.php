@@ -20,13 +20,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @yield('meta_info')
+
+    <!-- Document Title -->
+    @if ($setting_store)
+        <title>@yield('title',$setting_store->store_name)</title>
+    @endif
     <!-- Links -->
     <link rel="icon" type="image/png" href="{{asset($favicon_logo_path)}}"/>
 
     <!-- Bootstrap CSS -->
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('public/frontend/css/cartpro-style.css')}}" rel="stylesheet"/>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/cartpro-style.css')}}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/cartpro-style.css')}}"></noscript>
 
     <!-- Plugins CSS -->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}">
@@ -36,27 +45,7 @@
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap"></noscript>
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"></noscript>
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
-
-    @yield('meta_info')
-
-    <!-- Document Title -->
-    @if ($setting_store)
-        <title>@yield('title',$setting_store->store_name)</title>
-    @endif
-
     @yield('extra_css')
-
-    <link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="{{asset('public/frontend/css/bootstrap-colorpicker.css')}}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
     <style>
         :root {
@@ -67,15 +56,6 @@
         #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 40%;width: 40px;}
     </style>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-ZZBZQHXN8Q');
-    </script>
 </head>
 
 <body>
@@ -111,6 +91,8 @@
 
     <!--Plugin js -->
     <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 
     <!-- Sweetalert2 -->
     <script src="{{asset('public/frontend/js/sweetalert2@11.js')}}"></script>
@@ -118,8 +100,6 @@
     <!-- Main js -->
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
 
-    <!--Colorpicker js -->
-    <script src="{{asset('public/frontend/js/bootstrap-colorpicker.js')}}"></script>
     <script src="{{asset('public/js/share.js')}}"></script>
 
     <script>
@@ -143,10 +123,6 @@
 
             });
 
-
-            $('#color-input').colorpicker({
-
-            });
         })(jQuery);
     </script>
 
@@ -460,21 +436,12 @@
 
             $('#stripeContent').hide();
 
+            $('.lazy').Lazy();
+
         })(jQuery);
+        
+        
     </script>
-
-    {{-- @if (\Route::current()->getName() == 'cart.view_details')
-        <script type="text/javascript">
-            // $(document).ready(function() {
-            $("#deleteCart").click(function(){
-            // $("#deleteCart").on("click",function(e){
-                console.log('ok');
-                // var data = $("#deleteCart").val();
-                // console.log(data);
-            });
-
-        </script>
-    @endif --}}
     @stack('scripts')
 </body>
 </html>

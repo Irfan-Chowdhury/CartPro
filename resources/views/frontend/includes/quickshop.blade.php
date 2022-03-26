@@ -12,7 +12,7 @@
                                 <div class="slider-for-modal">
                                     @forelse ($item->additionalImage as $value)
                                         <div class="slider-for__item ex1">
-                                            <img class="lazy" src="{{asset('public/'.$value->image)}}" alt="..." />
+                                            <img class="lazy" data-src="{{asset('public/'.$value->image)}}" alt="..." />
                                         </div>
                                     @empty
                                     @endforelse
@@ -154,15 +154,18 @@
     <!--Quick shop modal ends-->
 
 
+
 @push('scripts')
     <script type="text/javascript">
-        //Quantity Manage
+        //Quantity Manage in Modal
         $(".decrementProductQty-{{$item->product->id}}").on("click",function(e){
             $(".decrementProductQty-{{$item->product->id}}").prop("disabled",false);
         });
         $(".incrementProductQty-{{$item->product->id}}").on("click",function(e){
             var inputNumber = $('.quantity-{{$item->product->id}}').val();
             var maxNumber = $('.quantity-{{$item->product->id}}').attr('max');
+            console.log(maxNumber);
+
             if (maxNumber==0) {
                 console.log(Number(maxNumber));
             }else{

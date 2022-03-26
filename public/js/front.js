@@ -21,16 +21,6 @@ $(document).ready(function () {
     }
 
 
-    $(document).scroll(function() {
-        var y = $(this).scrollTop();
-        if (y > 65) {
-            $('nav.side-navbar').css("top","0");
-        } else {
-            $('nav.side-navbar').css("top","65px");
-        }
-    });
-
-
     // ------------------------------------------------------- //
     // Side Navbar Functionality
     // ------------------------------------------------------ //
@@ -85,16 +75,6 @@ $(document).ready(function () {
             $(this).siblings('.label-material').removeClass('active');
         }
     });
-
-    // ------------------------------------------------------- //
-    // Jquery Progress Circle
-    // ------------------------------------------------------ //
-    var progress_circle = $("#progress-circle").gmpc({
-        color: brandPrimary,
-        line_width: 5,
-        percent: 80
-    });
-    progress_circle.gmpc('animate', 80, 3000);
 
     // ------------------------------------------------------- //
     // External links to new window

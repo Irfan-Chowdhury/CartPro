@@ -1,30 +1,18 @@
-<header class="header">
+<header class="container-fluid">
     <nav class="navbar">
-      <div class="container-fluid">
         <div class="navbar-holder d-flex align-items-center justify-content-between">
 
           <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars"> </i></a>
 
-          <span class="brand-big" id="site_logo_main">
-                @if(isset($setting_store->admin_logo) && $setting_store->admin_logo)
-                    <img src="{{asset('public/'.$setting_store->admin_logo)}}" width="150">
-                    &nbsp; &nbsp;
-                @else
-                <img src="https://dummyimage.com/150x150/12787d/ffffff&text=Logo" width="150">
-                    &nbsp; &nbsp;
-                @endif
-            </span>
-
-
           <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
             <li class="nav-item">
-                <a class="dropdown-toggle dropdown-header-name" style="padding-right: 10px" href="{{route('cartpro.home')}}" target="_blank"><i class="fa fa-globe"></i> <span>View Website</span> </a>
+                <a class="dropdown-header-name" style="padding-right: 10px" href="{{route('cartpro.home')}}" target="_blank"><i class="dripicons-preview"></i> <span>View Website</span> </a>
             </li>
 
             <li class="nav-item">
                 <a>
-                    <i class="fa fa-shopping-cart"></i>
+                    <i class="dripicons-cart"></i>
                     <span class="badge badge-defaultr bg-danger" style="width:25px"><span class="text-light"> @if($orders) {{$orders->where('order_status','pending')->count()}} @endif</span></span>
                 </a>
             </li>
@@ -59,6 +47,12 @@
                     @endforeach
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url('/documentation')}}" target="_blank" data-toggle="tooltip"
+                   title="{{__('Help')}}">
+                    <i class="dripicons-information"></i>
+                </a>
+            </li>
 
             <li class="nav-item">
             <a rel="nofollow" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item">
@@ -89,6 +83,5 @@
             </li>
           </ul>
         </div>
-      </div>
     </nav>
   </header>

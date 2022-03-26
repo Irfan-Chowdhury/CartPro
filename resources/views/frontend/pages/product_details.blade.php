@@ -38,7 +38,7 @@
                              @if ($product->baseImage)
                                 <div class="slider-nav__item">
                                     @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
-                                        <img src="{{asset('public/'.$product->baseImage->image)}}">
+                                        <img class="lazy" data-src="{{asset('public/'.$product->baseImage->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
                                     @endif
@@ -47,7 +47,7 @@
                             @forelse ($product->additionalImage as $value)
                                 <div class="slider-nav__item">
                                     @if (isset($value->image_small) && Illuminate\Support\Facades\File::exists(public_path($value->image_small)))
-                                        <img src="{{asset('public/'.$value->image_small)}}">
+                                        <img class="lazy" data-src="{{asset('public/'.$value->image_small)}}">
                                     @else
                                         <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
                                     @endif
@@ -60,7 +60,7 @@
                             @if ($product->baseImage)
                                 <div class="slider-for__item ex1">
                                     @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
-                                        <img src="{{asset('public/'.$product->baseImage->image)}}">
+                                        <img class="lazy" data-src="{{asset('public/'.$product->baseImage->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
                                     @endif
@@ -69,7 +69,7 @@
                             @forelse ($product->additionalImage as $value)
                                 <div class="slider-for__item ex1">
                                     @if (isset($value->image) && Illuminate\Support\Facades\File::exists(public_path($value->image)))
-                                        <img src="{{asset('public/'.$value->image)}}">
+                                        <img class="lazy" data-src="{{asset('public/'.$value->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
                                     @endif
@@ -348,9 +348,9 @@
                                         <div class="col-md-2">
                                             <div class="reviewer-img">
                                                 @if ($item->image==null)
-                                                    <img src="{{asset('public/images/user_default_image.jpg')}}">
+                                                    <img class="lazy" data-src="{{asset('public/images/user_default_image.jpg')}}">
                                                 @else
-                                                    <img src="{{asset('public/'.$item->image)}}">
+                                                    <img class="lazy" data-src="{{asset('public/'.$item->image)}}">
                                                 @endif
 
                                             </div>
@@ -495,7 +495,7 @@
                                                 <div class="single-product-item">
                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                         @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                            <img src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                            <img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}">
                                                         @else
                                                             <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
                                                         @endif

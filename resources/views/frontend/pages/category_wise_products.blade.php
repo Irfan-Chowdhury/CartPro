@@ -192,9 +192,9 @@
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
                                                         @if ($item->productBaseImage!=NULL && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                         @else
-                                                            <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
                                                         @endif
 
                                                         @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
@@ -318,9 +318,9 @@
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
                                                         @if ($item->image!=NULL)
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category->id)}}"><img src="{{asset('public/'.$item->image)}}"></a>
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->image)}}"></a>
                                                         @else
-                                                            <img src="{{asset(url('public/images/empty.jpg'))}}" alt="...">
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category->id)}}"><img src="{{asset(url('public/images/empty.jpg'))}}" alt="..."></a>
                                                         @endif
 
                                                         @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))

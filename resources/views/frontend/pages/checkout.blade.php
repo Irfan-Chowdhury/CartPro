@@ -206,7 +206,7 @@
                                                         <td class="cart-product">
                                                             <div class="item-details">
                                                                 {{-- <a class="remove_cart_from_details" data-id="{{$item->rowId}}"><i class="ti-close"></i></a> --}}
-                                                                <img src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
+                                                                <img class="lazy" data-src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
                                                                 <div class="">
                                                                     <h3 class="h6">{{$item->name}}</h3>
                                                                 </div>
@@ -336,7 +336,7 @@
                                     @if (isset($paypal) && $paypal->status==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id='paypal' value="paypal">
-                                            <span class="card-options"><img src="{{asset('public/frontend/images/payment_gateway_logo/paypal.jpg')}}" alt="..."></span>
+                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/paypal.jpg')}}" alt="..."></span>
                                             <span class="sm-heading">{{__('file.Paypal')}}</span>
                                         </label>
                                     @endif
@@ -344,7 +344,7 @@
                                     @if (isset($stripe) && $stripe->status==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id='stripe' value="stripe">
-                                            <span class="card-options"><img src="{{asset('public/frontend/images/payment_gateway_logo/stripe.png')}}" alt="..."></span>
+                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/stripe.png')}}" alt="..."></span>
                                             <span class="sm-heading">{{__('file.Stripe')}}</span>
                                         </label>
                                     @endif
@@ -352,7 +352,7 @@
                                     @if (env('SSL_COMMERZ_STATUS')==1)
                                         <label class="custom-checkbox">
                                             <input type="radio" name="payment_type" id='sslcommerz' value="sslcommerz">
-                                            <span class="card-options"><img src="{{asset('public/frontend/images/payment_gateway_logo/ssl_commerz.png')}}" alt="..."></span>
+                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/ssl_commerz.png')}}" alt="..."></span>
                                             <span class="sm-heading">{{__('file.SSL Commerz')}}</span>
                                         </label>
                                     @endif

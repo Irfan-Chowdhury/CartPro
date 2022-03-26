@@ -124,9 +124,9 @@
                                 <a href="{{url('category')}}/{{$item->slug}}">
                                     <div class="category-container">
                                         @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                            <img class="lazy" src="{{asset('public/'.$item->image)}}">
+                                            <img class="lazy" data-src="{{asset('public/'.$item->image)}}">
                                         @else
-                                            <img class="lazy" src="https://dummyimage.com/100x100/12787d/ffffff&text=Top-Category" alt="...">
+                                            <img class="lazy" data-src="https://dummyimage.com/100x100/12787d/ffffff&text=Top-Category" alt="...">
                                         @endif
 
                                         <div class="category-name">
@@ -150,13 +150,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_slider_banner_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_full_width_banners_image_1)}}" alt=""></a>
+                    <a href="{{$settings_new['storefront_slider_banner_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_full_width_banners_image_1)}}" alt=""></a>
                 </div>
                 <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_slider_banner_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_full_width_banners_image_2)}}" alt=""></a>
+                    <a href="{{$settings_new['storefront_slider_banner_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_full_width_banners_image_2)}}" alt=""></a>
                 </div>
                 <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_slider_banner_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_full_width_banners_image_3)}}" alt=""></a>
+                    <a href="{{$settings_new['storefront_slider_banner_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_slider_banner_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_full_width_banners_image_3)}}" alt=""></a>
                 </div>
             </div>
         </div>
@@ -176,7 +176,7 @@
                         @foreach ($settings as $setting)
                             @if ($setting->key =='storefront_product_tabs_1_section_tab_1_title'|| $setting->key =='storefront_product_tabs_1_section_tab_2_title' || $setting->key =='storefront_product_tabs_1_section_tab_3_title' || $setting->key =='storefront_product_tabs_1_section_tab_4_title')
                                 <li class="nav-item">
-                                    <a @if($i==0) class="nav-link active" @else class="nav-link" @endif id="all-tab" data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{{$setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null}}</a>
+                                    <a @if($i==0) class="nav-link active" @else class="nav-link" @endif data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{{$setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null}}</a>
                                 </li>
                                 @php $i++ ; @endphp
                             @endif
@@ -209,9 +209,9 @@
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
                                                                 @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
@@ -234,22 +234,18 @@
 
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <div class="rating-summary">
-                                                                            <div class="rating-result" title="60%">
-                                                                                <ul class="product-rating">
-                                                                                    @php
-                                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                                <li><i class="las la-star"></i></li>
-                                                                                    @php
-                                                                                            }else { @endphp
-                                                                                                <li><i class="lar la-star"></i></li>
-                                                                                    @php        }
-                                                                                        }
-                                                                                    @endphp
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                        <li><i class="las la-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="lar la-star"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
                                                                         <div class="product-price">
                                                                             @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                                 <span class="promo-price">
@@ -313,9 +309,9 @@
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
                                                                 @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
@@ -338,22 +334,18 @@
 
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <div class="rating-summary">
-                                                                            <div class="rating-result" title="60%">
-                                                                                <ul class="product-rating">
-                                                                                    @php
-                                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                                <li><i class="las la-star"></i></li>
-                                                                                    @php
-                                                                                            }else { @endphp
-                                                                                                <li><i class="lar la-star"></i></li>
-                                                                                    @php        }
-                                                                                        }
-                                                                                    @endphp
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                        <li><i class="las la-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="lar la-star"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
                                                                         <div class="product-price">
                                                                             @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                                 <span class="promo-price">
@@ -417,9 +409,9 @@
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
 
                                                             @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
@@ -440,22 +432,18 @@
                                                             </a>
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <div>
-                                                                    <div class="rating-summary">
-                                                                        <div class="rating-result" title="60%">
-                                                                            <ul class="product-rating">
-                                                                                @php
-                                                                                    for ($i=1; $i <=5 ; $i++){
-                                                                                        if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                            <li><i class="las la-star"></i></li>
-                                                                                @php
-                                                                                        }else { @endphp
-                                                                                            <li><i class="lar la-star"></i></li>
-                                                                                @php        }
-                                                                                    }
-                                                                                @endphp
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
+                                                                    <ul class="product-rating">
+                                                                        @php
+                                                                            for ($i=1; $i <=5 ; $i++){
+                                                                                if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                    <li><i class="las la-star"></i></li>
+                                                                        @php
+                                                                                }else { @endphp
+                                                                                    <li><i class="lar la-star"></i></li>
+                                                                        @php        }
+                                                                            }
+                                                                        @endphp
+                                                                    </ul>
                                                                     <div class="product-price">
                                                                         @if ($item->product->special_price>0)
                                                                             <span class="promo-price">
@@ -519,9 +507,9 @@
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
 
                                                             @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
@@ -543,22 +531,18 @@
                                                             </a>
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <div>
-                                                                    <div class="rating-summary">
-                                                                        <div class="rating-result" title="60%">
-                                                                            <ul class="product-rating">
-                                                                                @php
-                                                                                    for ($i=1; $i <=5 ; $i++){
-                                                                                        if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                            <li><i class="las la-star"></i></li>
-                                                                                @php
-                                                                                        }else { @endphp
-                                                                                            <li><i class="lar la-star"></i></li>
-                                                                                @php        }
-                                                                                    }
-                                                                                @endphp
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
+                                                                    <ul class="product-rating">
+                                                                        @php
+                                                                            for ($i=1; $i <=5 ; $i++){
+                                                                                if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                    <li><i class="las la-star"></i></li>
+                                                                        @php
+                                                                                }else { @endphp
+                                                                                    <li><i class="lar la-star"></i></li>
+                                                                        @php        }
+                                                                            }
+                                                                        @endphp
+                                                                    </ul>
                                                                     <div class="product-price">
                                                                         @if ($item->product->special_price>0)
                                                                             <span class="promo-price">
@@ -646,13 +630,13 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_banners_image_1)}}" alt=""></a>
+                <a href="{{$settings_new['storefront_three_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_1)}}" alt=""></a>
             </div>
             <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_banners_image_2)}}" alt=""></a>
+                <a href="{{$settings_new['storefront_three_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_2)}}" alt=""></a>
             </div>
             <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($three_column_banners_image_3)}}" alt=""></a>
+                <a href="{{$settings_new['storefront_three_column_banners_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_3)}}" alt=""></a>
             </div>
         </div>
     </div>
@@ -673,7 +657,7 @@
                             {{$storefront_flash_sale_title}}
                         </h3>
                     </div>
-                    <div class="deals-slider-wrapper swiper-container">
+                    <div class="deals-slider-wrapper swiper-container mb-3">
                         <div class="swiper-wrapper">
                             @if ($flash_sales)
                                 @forelse ($flash_sales->flashSaleProducts as $item)
@@ -691,9 +675,9 @@
                                                 <div class="single-product-wrapper deals">
                                                     <div class="single-product-item">
                                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
                                                         @else
-                                                            <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=Best-Deals">
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=Best-Deals"></a>
                                                         @endif
 
                                                         <div class="product-overlay">
@@ -711,22 +695,18 @@
                                                         </a>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            @php
-                                                                                for ($i=1; $i <=5 ; $i++){
-                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                        <li><i class="las la-star"></i></li>
-                                                                            @php
-                                                                                    }else { @endphp
-                                                                                        <li><i class="lar la-star"></i></li>
-                                                                            @php        }
-                                                                                }
-                                                                            @endphp
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
+                                                                <ul class="product-rating">
+                                                                    @php
+                                                                        for ($i=1; $i <=5 ; $i++){
+                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                <li><i class="las la-star"></i></li>
+                                                                    @php
+                                                                            }else { @endphp
+                                                                                <li><i class="lar la-star"></i></li>
+                                                                    @php        }
+                                                                        }
+                                                                    @endphp
+                                                                </ul>
                                                                 <div class="product-price">
                                                                     {{-- @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                         <span class="promo-price">
@@ -846,9 +826,9 @@
                                                             <div class="single-product-item">
 
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_small)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image_small)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_small)}}"></a>
                                                                 @else
-                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
                                                             </div>
@@ -858,22 +838,18 @@
                                                                 </a>
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <div class="rating-summary">
-                                                                            <div class="rating-result" title="60%">
-                                                                                <ul class="product-rating">
-                                                                                    @php
-                                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                                <li><i class="las la-star"></i></li>
-                                                                                    @php
-                                                                                            }else { @endphp
-                                                                                                <li><i class="lar la-star"></i></li>
-                                                                                    @php        }
-                                                                                        }
-                                                                                    @endphp
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                        <li><i class="las la-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="lar la-star"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
                                                                         <div class="product-price">
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
@@ -946,9 +922,9 @@
                                                         <div class="single-product-wrapper list">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                                 @else
-                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
 
@@ -959,22 +935,18 @@
                                                                 </a>
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <div class="rating-summary">
-                                                                            <div class="rating-result" title="60%">
-                                                                                <ul class="product-rating">
-                                                                                    @php
-                                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                                <li><i class="las la-star"></i></li>
-                                                                                    @php
-                                                                                            }else { @endphp
-                                                                                                <li><i class="lar la-star"></i></li>
-                                                                                    @php        }
-                                                                                        }
-                                                                                    @endphp
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                        <li><i class="las la-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="lar la-star"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
                                                                         <div class="product-price">
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
@@ -1047,9 +1019,9 @@
                                                         <div class="single-product-wrapper list">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="lazy" src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                                 @else
-                                                                    <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
                                                             </div>
@@ -1059,22 +1031,18 @@
                                                                 </a>
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <div class="rating-summary">
-                                                                            <div class="rating-result" title="60%">
-                                                                                <ul class="product-rating">
-                                                                                    @php
-                                                                                        for ($i=1; $i <=5 ; $i++){
-                                                                                            if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                                                <li><i class="las la-star"></i></li>
-                                                                                    @php
-                                                                                            }else { @endphp
-                                                                                                <li><i class="lar la-star"></i></li>
-                                                                                    @php        }
-                                                                                        }
-                                                                                    @endphp
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                                        <ul class="product-rating">
+                                                                            @php
+                                                                                for ($i=1; $i <=5 ; $i++){
+                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                        <li><i class="las la-star"></i></li>
+                                                                            @php
+                                                                                    }else { @endphp
+                                                                                        <li><i class="lar la-star"></i></li>
+                                                                            @php        }
+                                                                                }
+                                                                            @endphp
+                                                                        </ul>
                                                                         <div class="product-price">
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
@@ -1143,10 +1111,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <a href="{{$settings_new['storefront_two_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($two_column_banner_image_1)}}" alt=""></a>
+                    <a href="{{$settings_new['storefront_two_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_1)}}" alt=""></a>
                 </div>
                 <div class="col-sm-6">
-                    <a href="{{$settings_new['storefront_two_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($two_column_banner_image_2)}}" alt=""></a>
+                    <a href="{{$settings_new['storefront_two_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_2)}}" alt=""></a>
                 </div>
             </div>
         </div>
@@ -1179,9 +1147,9 @@
                                     <div class="single-product-item">
                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
-                                            <img class="lazy" src="{{asset('public/'.$item->product->baseImage->image_medium)}}">
+                                            <img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}">
                                         @else
-                                            <img class="lazy" src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                            <img class="lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
                                         @endif
                                         </a>
 
@@ -1191,7 +1159,7 @@
                                             </div>
                                         @endif
                                         <div class="product-overlay">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                             <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
                                         </div>
                                     </div>
@@ -1204,22 +1172,18 @@
                                         </a>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <div class="rating-summary">
-                                                    <div class="rating-result" title="60%">
-                                                        <ul class="product-rating">
-                                                            @php
-                                                                for ($i=1; $i <=5 ; $i++){
-                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
-                                                                        <li><i class="las la-star"></i></li>
-                                                            @php
-                                                                    }else { @endphp
-                                                                        <li><i class="lar la-star"></i></li>
-                                                            @php        }
-                                                                }
-                                                            @endphp
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                <ul class="product-rating">
+                                                    @php
+                                                        for ($i=1; $i <=5 ; $i++){
+                                                            if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                <li><i class="las la-star"></i></li>
+                                                    @php
+                                                            }else { @endphp
+                                                                <li><i class="lar la-star"></i></li>
+                                                    @php        }
+                                                        }
+                                                    @endphp
+                                                </ul>
                                                 <div class="product-price">
                                                     @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                         <span class="old-price">
@@ -1279,7 +1243,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <a href="{{$settings_new['storefront_one_column_banner_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_one_column_banner_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img src="{{asset($one_column_banner_image)}}" alt=""></a>
+                <a href="{{$settings_new['storefront_one_column_banner_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_one_column_banner_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($one_column_banner_image)}}" alt=""></a>
             </div>
         </div>
     </div>
@@ -1298,9 +1262,9 @@
                             <div class="swiper-slide">
                                 <a class="brand-wrapper" href="{{route('cartpro.brand.products',$brand->slug)}}">
                                     @if($brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
-                                        <img class="lazy" src="{{asset('public/'.$brand->brand_logo)}}" width="150px">
+                                        <img class="swiper-lazy" data-src="{{asset('public/'.$brand->brand_logo)}}" width="150px">
                                     @else
-                                        <img class="lazy" src="https://dummyimage.com/100x100/12787d/ffffff&text=Brand-Logo">
+                                        <img class="swiper-lazy" data-src="https://dummyimage.com/100x100/12787d/ffffff&text=Brand-Logo">
                                     @endif
                                 </a>
                             </div>

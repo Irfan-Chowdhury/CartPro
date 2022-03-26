@@ -67,14 +67,8 @@ DefaultAuth::routes();
 |--------------------------------------------------------------------------
 */
 
-//New Format Start
-
 Route::get('/documentation',function(){
-    if (env('USER_VERIFIED')==1) {
-        return File::get(public_path() . '/documentation/index.html');
-    }else {
-        return view('404_error');
-    }
+    return File::get(public_path() . '/documentation/index.html');
 });
 
 Route::get('/login',[Auth\LoginController::class,'showCustomerLoginForm'])->name('customer_login_form');
@@ -89,6 +83,8 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
     Route::get('/keyword_hit',[HomeController::class,'test'])->name('cartpro.keyword_hit');
+    //Set Cookie
+    Route::get('/set_cookie',[HomeController::class,'setCookie'])->name('cartpro.set_cookie');
 
     //Brand and Brand Wise Products
     Route::get('/brands',[BrandProductController::class,'brands'])->name('cartpro.brands');

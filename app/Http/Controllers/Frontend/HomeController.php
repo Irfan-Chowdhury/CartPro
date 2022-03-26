@@ -35,6 +35,7 @@ use App\Traits\ENVFilePutContent;
 use App\Traits\FlashSaleProductsIds;
 use Illuminate\Support\Facades\File;
 use Harimayco\Menu\Models\Menus;
+use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller
 {
@@ -468,5 +469,15 @@ class HomeController extends Controller
         $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE',$this->ChangeCurrencyRate());
 
         return redirect()->back();
+    }
+    
+    public function setCookie(Request $request)
+    {
+        if ($request->newslatter=='disable') {
+            Cookie::queue('newslatter', $request->newslatter, 60); //key, value, minute
+            return response()->json('disable');
+        }elseif($request->newslatter=='enable') {
+            Cookie::queue(Cookie::forget('newslatter'));
+        }
     }
 }

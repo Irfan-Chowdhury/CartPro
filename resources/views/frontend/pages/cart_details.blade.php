@@ -48,7 +48,7 @@
                                                 <td class="cart-product">
                                                     <div class="item-details">
                                                         <a class="remove_cart_from_details" data-id="{{$item->rowId}}" title="Remove this item"><i class="ti-close"></i></a>
-                                                        <img src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
+                                                        <img class="lazy" data-src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
                                                         <div class="">
                                                             <a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">
                                                                 <h3 class="h6">{{$item->name}}</h3>

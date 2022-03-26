@@ -45,9 +45,9 @@
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
                                                         @if (isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="{{asset('public/'.$item->image)}}"></a>
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img class="lazy" data-src="{{asset('public/'.$item->image)}}"></a>
                                                         @else
-                                                            <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
                                                         @endif
 
                                                         @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
@@ -57,7 +57,7 @@
                                                         @endif
 
                                                         <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                             @if (($item->qty!=0) || ($item->in_stock!=0))
                                                                 <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" class="ti-heart"  data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category_ids[$item->id]->category_id}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
 `                                                           @else
@@ -146,35 +146,13 @@
 
 @push('scripts')
     <script type="text/javascript">
-        $('.attribute_value_productTab1').on("click",function(e){
-            e.preventDefault();
-            $(this).addClass('selected');
+            $('.attribute_value_productTab1').on("click",function(e){
+                e.preventDefault();
+                $(this).addClass('selected');
 
-            var selectedVal = $(this).data('value_id');
-            values.push(selectedVal);
-            $('.value_ids_tag').val(values);
-        });
-
-        //Quantity Manage
-        $(".decrementProductQty-{{$item->id}}").on("click",function(e){
-            $(".decrementProductQty-{{$item->id}}").prop("disabled",false);
-        });
-        $(".incrementProductQty-{{$item->id}}").on("click",function(e){
-            var inputNumber = $('.quantity-{{$item->id}}').val();
-            var maxNumber = $('.quantity-{{$item->id}}').attr('max');
-            if (maxNumber==0) {
-                console.log(Number(maxNumber));
-            }else{
-                if ((Number(inputNumber)+1) > Number(maxNumber)) {
-                    $('.quantity-{{$item->id}}').val(Number(maxNumber)-1);
-                    $(this).prop("disabled",true);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Available product is : '+ maxNumber,
-                    });
-                }
-            }
-        });
+                var selectedVal = $(this).data('value_id');
+                values.push(selectedVal);
+                $('.value_ids_tag').val(values);
+            });
     </script>
 @endpush

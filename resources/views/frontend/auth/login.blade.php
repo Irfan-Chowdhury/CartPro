@@ -56,10 +56,6 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="d-flex justify-content-between">
-                                    <div class="form-group">
-                                        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                                        <label for="remember"> Remember Me</label>
-                                    </div>
                                     <a href="{{ route('customer.password.request') }}" tabindex="5" class="forgot-password theme-color">@lang('file.Forgot Password')</a>
                                 </div>
                             </div>

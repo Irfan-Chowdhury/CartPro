@@ -46,9 +46,9 @@
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
                                                         @if (isset($item->image_medium) && Illuminate\Support\Facades\File::exists(public_path($item->image_medium)))
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="{{asset('public/'.$item->image_medium)}}"></a>
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img class="lazy" data-src="{{asset('public/'.$item->image_medium)}}"></a>
                                                         @else
-                                                            <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
+                                                            <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
                                                         @endif
 
                                                         @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))

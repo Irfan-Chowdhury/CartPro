@@ -24,38 +24,48 @@ class ProfileController extends Controller
 
     public function profileUpdate(Request $request)
     {
-        $user_id =  auth()->user()->id;
-
-            // $validator = Validator::make($request->all(),[
-            //     'first_name' => 'required|string',
-            //     'last_name'  => 'required|string',
-            //     'username'   => 'required|string',
-            //     'email'      => 'required|string',
-            //     'phone'      => 'required',
-            //     'image'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-            // ]);
-            // if ($validator->fails()){
-            //     session()->flash('alert_type','danger');
-            //     session()->flash('alert_message','Something Error !!!');
-            //     return redirect()->back()->withErrors($validator)->withInput();
-            // }
-
-
+        $user_id = auth()->user()->id;
         $user = User::find($user_id);
 
-        $user->first_name = $request->first_name;
-        $user->last_name  = $request->last_name;
-        $user->username  = $request->username;
-        $user->email      = $request->email;
-        $user->phone      = $request->phone;
-        $image       = $request->file('image');
-        if ($image) {
-            if ($user->image) {
-                $this->previousImageDelete($user->image);
+        if (!$request->password) {
+            $validator = Validator::make($request->all(),[
+                'first_name' => 'required|string',
+                'last_name'  => 'required|string',
+                'username'   => 'required|string|unique:users,username,'.$user_id,
+                'email'      => 'required|string|unique:users,email,'.$user_id,
+                'phone'      => 'required',
+                'image'   => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+            ]);
+            if ($validator->fails()){
+                session()->flash('alert_type','danger');
+                session()->flash('alert_message','Something Error !!!');
+                return redirect()->back()->withErrors($validator)->withInput();
             }
-            $user->image = $this->imageStore($image, $directory='images/admin/', $type='admin');
+
+            $user->first_name = $request->first_name;
+            $user->last_name  = $request->last_name;
+            $user->username  = $request->username;
+            $user->email      = $request->email;
+            $user->phone      = $request->phone;
+            $image       = $request->file('image');
+            if ($image) {
+                if ($user->image) {
+                    $this->previousImageDelete($user->image);
+                }
+                $user->image = $this->imageStore($image, $directory='images/admin/', $type='admin');
+            }
+        }else {
+            $validator = Validator::make($request->only('password','password_confirmation'),[
+                'password'   => 'required|string|confirmed',
+                'password_confirmation' => 'required',
+            ]);
+            if ($validator->fails()){
+                session()->flash('alert_type','danger');
+                session()->flash('alert_message','Something Error !!!');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            $user->password   = Hash::make($request->password);
         }
-        $user->password   = Hash::make($request->password);
         $user->update();
 
         session()->flash('alert_type','success');

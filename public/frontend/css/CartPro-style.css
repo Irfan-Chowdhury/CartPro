@@ -589,17 +589,12 @@ a.underline:after {
 }
 
 .header-top-right ul li {
-    background: #fff;
-	display: inline-block;
+	display: inline-block
 }
 
 .header-top-right>ul>li>a {
 	display: block;
 	padding: 0 15px 0 10px
-}
-
-.header-top-right>ul>li:last-child>a {
-	border-right: none;
 }
 
 .header-top-menu li {
@@ -637,14 +632,20 @@ a.underline:after {
 	visibility: visible
 }
 
+.dropdown-toggle::after,
 .has-dropdown:after {
 	content: '\e64b';
 	font-family: themify;
 	font-size: 8px;
 	margin-left: 5px;
-	position: absolute;
-    right: 0;
+    position: absolute;
     top: 0;
+    right: 0;
+}
+
+.dropdown-toggle::after {
+    border: none;
+    position: relative;
 }
 
 .header-middle {
@@ -788,7 +789,6 @@ a.underline:after {
 .body__overlay {
 	backface-visibility: hidden;
 	background-color: rgba(0, 0, 0, .6);
-	cursor: url(../../images/icons/close-20.png) 25 25, pointer;
 	height: 100%;
 	left: 0;
 	opacity: 0;
@@ -1968,7 +1968,7 @@ li.wishlist__menu {
 
 .single-product-wrapper.deals {
 	border: 1px solid #e5e8ec;
-	margin: 0 1px;
+	margin: 0 1px 5px;
 	display: flex;
 	padding: 15px;
 	text-align: left
@@ -2295,13 +2295,6 @@ span.promo-price {
 		grid-gap: 15px;
 		padding: 15px
 	}
-	.main-menu ul li a {
-        font-size: 14px;
-    }
-    
-    .main-menu ul li i {
-        margin-right: 10px;
-    }
 }
 
 @media all and (max-width:600px) {
@@ -2527,6 +2520,7 @@ span.promo-price {
 
 .deals-button-next,
 .deals-button-prev {
+    background: #FFF;
 	width: 40px;
 	height: 40px;
 	border: 1px solid #e5e8ec;
@@ -2591,6 +2585,11 @@ span.promo-price {
 	cursor: pointer;
 	position: absolute;
 	z-index: 99
+}
+
+.list-button-next:hover,
+.list-button-prev:hover {
+	color: #021523;
 }
 
 .list-button-next {
@@ -2705,6 +2704,10 @@ span.promo-price {
 	margin-bottom: 30px
 }
 
+.sidebar-widget .collapse {
+	padding-left: 10px;
+}
+
 .sidebar-widget ul li {
 	list-style: none;
 }
@@ -2720,8 +2723,8 @@ span.promo-price {
 
 .sidebar-title h2[aria-expanded=true]:after {
 	color: #999;
-	content: "\f107";
-	font-family: 'Line Awesome Free';
+	content: '\e64b';
+    font-family: themify;
 	font-size: 14px;
 	position: absolute;
 	right: 5px;
@@ -2729,8 +2732,8 @@ span.promo-price {
 
 .sidebar-title h2[aria-expanded=false]:after {
 	color: #999;
-	content: "\f107";
-	font-family: 'Line Awesome Free';
+	content: '\e648';
+    font-family: themify;
 	font-size: 14px;
 	position: absolute;
 	right: 5px;
@@ -2868,14 +2871,12 @@ span.promo-price {
 	vertical-align: middle
 }
 
-.products-header-right .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
-	width: auto
+.products-header .btn {
+	font-size: 13px;
 }
 
-.products-header-right .bootstrap-select .btn-light {
-	color: #212529;
-	background-color: transparent;
-	border-color: #e5e8ec
+.products-header .btn:focus{
+	border: none;
 }
 
 .shop-item-filter-list {
@@ -3903,6 +3904,7 @@ input[type=number] {
 .countdown-deals .cdown span {
 	background-color: #e5e8ec;
 	border-radius: 3px;
+	color: #021523;
 	display: block;
 	font-size: 20px;
 	height: 50px;
@@ -4008,13 +4010,13 @@ input[type=number] {
 	background: 0 0;
 	font-size: 40px;
 	position: absolute;
-	right: 20px;
+	right: 1%;
 	top: 0
 }
 
 .newsletter-modal .modal-body {
 	padding: 5%
-}
+} 
 
 .newsletter-modal .newsletter .btn-search {
 	right: 7px
@@ -4156,11 +4158,6 @@ input[type=number] {
 		display: block;
 		text-align: left
 	}
-	.has-dropdown::after {
-		position: absolute;
-		right: 0;
-		top: 0
-	}
 	.main-menu #mobile-nav ul li .dropdown {
 		border: none;
 		box-shadow: none;
@@ -4256,6 +4253,12 @@ input[type=number] {
 	.footer-payment-options {
 		margin-top: 20px
 	}
+	.newsletter-modal h3 {
+    	font-size: 22px;
+    } 
+    .newsletter-modal p {
+    	font-size: 13px;
+    } 
 }
 
 @media all and (max-width:675px) {
@@ -4284,6 +4287,9 @@ input[type=number] {
 	.single-product-wrapper {
 		padding: 15px 5px 0
 	}
+	.single-product-wrapper.deals {
+	    display: block;
+    }
 	.product-details-tab.nav-tabs .nav-link {
 		font-size: 15px;
 		margin: 0 10px
@@ -4322,4 +4328,3 @@ input[type=number] {
 		width: 100%
 	}
 }
-

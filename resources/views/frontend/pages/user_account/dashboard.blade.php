@@ -29,15 +29,15 @@
 
                 <div class="col-md-9 tabs style1">
                     <div class="row">
-                        
+
                         <!-- Tab -->
                         @include('frontend.pages.user_account.tab_common')
 
                         <div class="col-md-12 mar-top-30">
                             <div class="user-dashboard-tab__content tab-content">
                                 <div class="tab-pane fade mt-3 show active" id="dashboard" role="tabpanel">
-                                    <p>Hello <strong>{{Auth::user()->first_name}}</strong>,</p>
-                                    <p>From your account dashboard you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details</a>.</p>
+                                    <p>Hello <strong>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</strong>,</p>
+                                    <p>From your account dashboard you can easily check &amp; view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
                                 </div>
                             </div>
                         </div>

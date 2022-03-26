@@ -28,20 +28,20 @@
     }
 
     if (isMobile) {
-        var search = $('#KeyWordHit').clone();
+
         var lang_opt = $('.language-switcher').clone();
         var currency_opt = $('.currency-switcher').clone();
         var top_menu = $('.header-top-menu').clone();
         var social = $('.header-top-social').clone();
+        var search = $('#KeyWordHit').clone();
         var cat = $('#cat_menu').clone();
         $("#mobile_menu").append(top_menu);
         $("#mobile_menu").append(lang_opt);
         $("#mobile_menu").append(currency_opt);
         $("#mobile_menu").append(social);
         $("#mobile_cat").html(cat);
-        $(".middle-column").html('');
+        $(".header-middle .middle-column").html('');
         $("#header-search").html(search);
-        $('#search_field').css('top','45px');
 
         $(".mega-title").addClass("has-dropdown");
         $(".mega-title ul").addClass("dropdown");
@@ -197,8 +197,8 @@
             spaceBetween: 30,
             simulateTouch: true,
             navigation: {
-                nextEl: '.category-button-next.v1',
-                prevEl: '.category-button-prev.v1',
+                nextEl: '.category-button-next',
+                prevEl: '.category-button-prev',
             },
             // Responsive breakpoints
             breakpoints: {
@@ -229,7 +229,7 @@
 
         //Product carousel 1
         var swiper = new Swiper('.product-slider-wrapper', {
-
+            lazy: true,
             slidesPerView: 5,
             spaceBetween: 0,
             simulateTouch: true,
@@ -259,9 +259,10 @@
             }
         });
 
-        $('#all-tab, #new-tab, #best-tab').on('click', function(){
+        $('#lionTab a').on('click', function(){
             setTimeout(function() {
                 var swiper = new Swiper('.product-slider-wrapper', {
+                    lazy:true,
                     slidesPerView: 5,
                     autoplay: 0,
                     spaceBetween: 0,
@@ -291,25 +292,8 @@
 
                     }
                 });
-            }, 500);
+            }, 700);
         })
-
-        //Single Product carousel
-        // var swiper = new Swiper('.single-product-slider', {
-        //     navigation: {
-        //         nextEl: '.swiper-button-next',
-        //         prevEl: '.swiper-button-prev',
-        //     },
-        // });
-        // var swiper = new Swiper('.single-product-slider', {
-        //     slidesPerView: 1,
-        //     loop: true,
-        //     spaceBetween: 20,
-        //     navigation: {
-        //         nextEl: '.single-product-button.swiper-button-next',
-        //         prevEl: '.single-product-button.swiper-button-prev',
-        //     },
-        // });
 
         //Lists Slider
         var swiper = new Swiper('.list-slider-wrapper-1', {
@@ -320,6 +304,7 @@
                 nextEl: '.list-slider-1-arrow-prev',
                 prevEl: '.list-slider-1-arrow-next',
             },
+            lazy: true,
         });
 
         var swiper = new Swiper('.list-slider-wrapper-2', {
@@ -330,6 +315,7 @@
                 nextEl: '.list-slider-2-arrow-prev',
                 prevEl: '.list-slider-2-arrow-next',
             },
+            lazy: true,
         });
 
         var swiper = new Swiper('.list-slider-wrapper-3', {
@@ -340,10 +326,12 @@
                 nextEl: '.list-slider-3-arrow-prev',
                 prevEl: '.list-slider-3-arrow-next',
             },
+            lazy: true,
         });
 
         //Deals Slider
         var swiper = new Swiper('.deals-slider-wrapper', {
+            lazy: true,
             slidesPerView: 2,
             loop: true,
             spaceBetween: 30,
@@ -370,7 +358,7 @@
 
         //Brands carousel
         var swiper = new Swiper('.brand-slider-wrapper', {
-
+            lazy: true,
             slidesPerView: 5,
             spaceBetween: 30,
             simulateTouch: true,
@@ -406,7 +394,7 @@
 
             }
         });
-
+        
         /*------------------------------------------
                          Product quantity
         --------------------------------------------*/
@@ -424,25 +412,6 @@
                 $(this).parent().siblings("input.input-number").val(quantity - 1);
             }
         });
-
-
-        /*------------------------
-             price range slider
-        --------------------------*/
-        // if ($('#slider-range').length) {
-        //     $("#slider-range").slider({
-        //         range: true,
-        //         min: 0,
-        //         max: 500,
-        //         values: [75, 300],
-        //         slide: function(event, ui) {
-        //             $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-        //         }
-        //     });
-        //     $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-        //         " - $" + $("#slider-range").slider("values", 1));
-        // }
-
 
 
         /*------------------------
@@ -482,27 +451,6 @@
     /*---------------------------------------
         Slick slider with zoom
     -----------------------------------------*/
-    var myModalEl = document.getElementById('quickshop')
-    myModalEl.addEventListener('shown.bs.modal', function (event) {
-        $('.slider-for-modal').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            fade: true,
-            asNavFor: '.slider-nav-modal',
-            nextArrow: '<div class="slick-next"><i class="ion-ios-arrow-right"></i></div>',
-            prevArrow: '<div class="slick-prev"><i class="ion-ios-arrow-left"></i></div>',
-        });
-        $('.slider-nav-modal').slick({
-            centerMode: true,
-            centerPadding: '30px',
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            asNavFor: '.slider-for-modal',
-            dots: false,
-            focusOnSelect: true,
-            arrows: false,
-        });
-    })
 
     // SLICK
     $('.slider-for').slick({

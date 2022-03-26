@@ -1,5 +1,5 @@
     <!-- Quick Shop Modal starts -->
-    <div class="modal fade quickshop" id="id_{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->slug}}" aria-hidden="true">
+    <div class="modal fade quickshop" id="{{$item->slug}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->slug}}" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -118,17 +118,13 @@
                                     <div class="item-options">
                                         <div class="input-qty">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus decrementProductQty-{{$item->id}}">
+                                                <button type="button" class="quantity-left-minus">
                                                     <span class="ti-minus"></span>
                                                 </button>
                                             </span>
-                                            @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                <input type="number" name="qty" required class="input-number quantity-{{$item->id}}" value="1" min="1" max="0">
-                                            @else
-                                                <input type="number" name="qty" required class="input-number quantity-{{$item->id}}" value="1" min="1" max="{{$item->qty}}">
-                                            @endif
+                                            <input type="number" name="qty" class="input-number" value="1" min="1">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus incrementProductQty-{{$item->id}}">
+                                                <button type="button" class="quantity-right-plus">
                                                     <span class="ti-plus"></span>
                                                 </button>
                                             </span>

@@ -238,7 +238,7 @@ class ProductController extends Controller
                 $productTranslation->product_id  = $product->id;
                 $productTranslation->local        = Session::get('currentLocal');
                 $productTranslation->product_name = htmlspecialchars_decode($request->product_name);
-                $productTranslation->description  = htmlspecialchars_decode($request->description); //$request->description;
+                $productTranslation->description  = htmlspecialchars_decode($request->description);;
                 $productTranslation->short_description  = $request->short_description;
                 $productTranslation->save();
 
