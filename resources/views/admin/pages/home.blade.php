@@ -36,9 +36,13 @@
                         </div>
                         <div>
                             <span class="mb-2">
-                                {{count($orders)}}
+                                @if($orders)
+                                    {{$orders->where('order_status','pending')->count()}}
+                                @else
+                                    0
+                                @endif
                             </span>
-                            <h1 class="card-title" style="color: #ff8952">@lang('file.Total Orders')</h1>
+                            <h1 class="card-title" style="color: #ff8952">@lang('file.Total Pending Orders')</h1>
                         </div>
                     </div>
                 </div>
@@ -66,14 +70,14 @@
                         </div>
                         <div>
                             <span class="mb-2">
-                                {{count($customers)}}
+                                {{$total_customers}}
                             </span>
                             <h1 class="card-title" style="color: #297ff9">@lang('file.Total Register Customers')</h1>
                         </div>
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -82,7 +86,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -111,6 +115,11 @@
                                     </td>
                                 </tr>
                             @empty
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h4><i>No order found</i></h4>
+                                    </div>
+                                </div>
                             @endforelse
                         </tbody>
                         </table>

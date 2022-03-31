@@ -32,7 +32,7 @@
 <div class="footer-wrapper">
     <div class="container">
         <div class="row">
-            <div class="col-lg-5 col-md-4">
+            <div class="col-lg-4 col-md-4">
                 <div class="footer-logo">
                     <a href="#"><img class="lazy" data-src="{{$header_logo_path}}"></a>
                 </div>
@@ -42,8 +42,8 @@
                 </div>
                 <div class="footer-text">
                     <h6 class="text-grey mb-0">@lang('file.Contact Info')</h6>
-                    <p><span><i class="las la-envelope"></i> &nbsp; {{$setting_store->store_email ?? null}}</span></p>
-                    <p><span><i class="las la-map-marker"></i> &nbsp; {{$storefront_address}}</span></p>
+                    <p class="mb-1"><i class="las la-envelope"></i> &nbsp; <span>{{$setting_store->store_email ?? null}}</span></p>
+                    <p class="mb-1"><i class="las la-map-marker"></i> &nbsp; <span>{{$storefront_address}}</span></p>
                 </div>
                 <ul class="footer-social mt-3 p-0">
                     @if ($storefront_facebook_link!=null)
@@ -60,7 +60,7 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-7 col-md-8">
+            <div class="col-lg-8 col-md-8">
                 <div class="row">
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
@@ -70,7 +70,7 @@
                                     @if ($footer_menu_one)
                                         @forelse($footer_menu_one->items as $value)
                                             @if ($value->locale==$locale)
-                                                <li><a class="" href="">{{$value->label}}</a></li>
+                                                <li><a class="" href="{{$value->link}}">{{$value->label}}</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -85,7 +85,9 @@
                             <ul class="footer-menu">
                                 @if ($footer_menu_two)
                                     @forelse($footer_menu_two->items as $value)
-                                        <li><a class="" href="">{{$value->label}}</a></li>
+                                        @if ($value->locale==$locale)
+                                        <li><a class="" href="{{$value->link}}">{{$value->label}}</a></li>
+                                        @endif
                                     @empty
                                     @endforelse
                                 @endif
@@ -137,7 +139,7 @@
                         <span aria-hidden="true"><i class="las la-times"></i></span>
                     </button>
                     <div class="row">
-                        <div class="col-lg-7">
+                        <div class="col-lg-8">
                             <h3 class="h2 semi-bold">@lang('file.Subscribe and get notification about discounts')</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
                             <form class="newsletter" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
@@ -147,11 +149,11 @@
                                 <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button> <br>
                             </form>
 
-                            <div class="form-check">
-                                <label class="form-check-label" for="disable-popup">
+                            <div class="form-check custom-control custom-checkbox">
+                                <input class="custom-control-input" id="newslatterPopup" type="checkbox" value="1"> 
+                                <label class="custom-control-label" for="newslatterPopup">
                                     Got it! Don't show this popup again.
                                 </label>
-                                <input class="form-check-input" id="newslatterPopup" type="checkbox" value="1" id="disable_popup">
                             </div>
                         </div>
                     </div>
@@ -169,6 +171,12 @@
             $('#newslatterPopup').change(function() {
                 if(this.checked) {
                     var newslatter = 'disable';
+                    setTimeout(function() { 
+                        $('#newsletter-modal,.modal-backdrop').removeClass('show');
+                        $('#newsletter-modal,.modal-backdrop').css('display','none');
+                        $('body').removeClass('modal-open');
+                        $('body').css('overflow-y','scroll');
+                    }, 700);
                 }else{
                     var newslatter = 'enable';
                 }
@@ -192,7 +200,7 @@
                             })
                             Toast.fire({
                                 icon: 'success',
-                                title: 'Newslatter Disabled Successfully'
+                                title: 'Newsletter disabled successfully'
                             })
                         }
                     }

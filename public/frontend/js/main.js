@@ -65,6 +65,7 @@
         });
 
         var shop_filters = $('.sidebar_filters').clone();
+        $('.sidebar_filters').html('');
         $('.shop__filters').html(shop_filters);
 
         $(".filter-icon").on("click", function() {

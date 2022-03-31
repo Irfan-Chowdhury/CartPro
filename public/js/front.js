@@ -44,12 +44,12 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Login  form validation
     // ------------------------------------------------------ //
-    $('#login-form').validate({
-        messages: {
-            loginUsername: 'please enter your username',
-            loginPassword: 'please enter your password'
-        }
-    });
+    // $('#login-form').validate({
+    //     messages: {
+    //         loginUsername: 'please enter your username',
+    //         loginPassword: 'please enter your password'
+    //     }
+    // });
 
     // ------------------------------------------------------- //
     // Material Inputs

@@ -144,8 +144,8 @@
 
                     <div class="products-header">
                         <ul class="nav shop-item-filter-list">
-                            <li><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
-                            <li><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
+                            <li class="d-none d-md-block d-lg-block"><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
+                            <li class="d-none d-md-block d-lg-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
                             <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> Filters</a></li>
                         </ul>
                         <!-- shop-item-filter-list start -->
@@ -289,13 +289,11 @@
                                                         </div>
 
                                                         @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                            <button disabled class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Out of Stock"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
+                                                            <button disabled class="button style1 sm d-block w-100 mt-3 mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Out of Stock')}}"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @else
-                                                            <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
-                                                            <div class="d-flex justify-content-between">
-                                                                <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
-                                                            </div>
+                                                            <button class="button style1 sm d-block w-100 mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to Cart')}}"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @endif
+                                                        <a class="button style1 sm d-block align-items-center @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to wishlist')}}"><span class="ti-heart"></span> {{__('file.Add to wishlist')}}</a>
                                                     </div>
                                                 </div>
                                             </div>

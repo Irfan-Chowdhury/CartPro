@@ -23,23 +23,26 @@
         <div class="shop-wrapper">
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-3">
-                        <div class="sidebar-widget sidebar-category-list">
-                            <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
-                                <h5>@lang('file.Browse Categories')</h5>
-                                <ul>
-                                    @forelse ($categories->where('parent_id',NULL) as $category)
-                                        <li class="">
-                                            <a href="{{route('cartpro.category_wise_products',$category->slug)}}">
-                                                {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}
-                                            </a>
-                                        </li>
-                                    @empty
-                                        <p>@lang('file.No Products Found')</p>
-                                    @endforelse
-
-                                </ul>
+                        <div class="sidebar_filters">
+                            <div class="sidebar-widget sidebar-category-list">
+                                <div class="sidebar-title">
+                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Browse Categories')</h2>
+                                </div>
+                                <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
+                                    <ul>
+                                        @forelse ($categories->where('parent_id',NULL) as $category)
+                                            <li class="">
+                                                <a href="{{route('cartpro.category_wise_products',$category->slug)}}">
+                                                    {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}
+                                                </a>
+                                            </li>
+                                        @empty
+                                            <p>@lang('file.No Products Found')</p>
+                                        @endforelse
+    
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -204,11 +207,11 @@
                                                             @endif
                                                         </div>
                                                         @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                            <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i>{{__('file.Add to cart')}}</button>
+                                                            <button class="button style1 sm d-block w-100 mt-3 mb-3" disabled title="{{__('file.Out of Stock')}}" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i>{{__('file.Add to cart')}}</button>
                                                         @else
-                                                            <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Cart"><i class="las la-cart-plus"></i>{{__('file.Add to cart')}}</button>
+                                                            <button class="button style1 sm d-block w-100 mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to cart')}}"><i class="las la-cart-plus"></i>{{__('file.Add to cart')}}</button>
                                                         @endif
-                                                        <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                        <a class="button style1 sm d-block align-items-center @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to wishlist')}}"><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth"></span>{{__('file.Add to wishlist')}}</a>
                                                     </div>
                                                 </div>
                                             </div>

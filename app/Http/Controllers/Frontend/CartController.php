@@ -27,6 +27,22 @@ class CartController extends Controller
     public function productAddToCart(Request $request)
     {
         if ($request->ajax()) {
+            
+             //New
+            $cart_content = Cart::content();
+            $request_qty = $request->qty;
+            $rowId = null;
+
+            if ($cart_content) {
+                foreach ($cart_content as $key => $value) {
+                    if ($value->id == $request->product_id) {
+                        $request_qty += $value->qty;
+                        $rowId = $value->rowId;
+                        break;
+                    }
+                }
+            }
+            
             $attribute_name_arr = $request->attribute_name;
             $value_ids = array();
             $value_ids = explode(",",$request->value_ids);
@@ -43,14 +59,14 @@ class CartController extends Controller
                         ])
                         ->find($request->product_id);
 
-            if (($product->manage_stock==1) && ($product->qty==0 || $request->qty > $product->qty)) {
+            if (($product->manage_stock==1) && ($product->qty==0 || $request_qty > $product->qty)) {
                 return response()->json(['type'=>'quantity_limit','product_quantity'=>$product->qty]);
             }
 
             $data = [];
             $data['id']     = $product->id;
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
-            $data['qty']    = $request->qty;
+            $data['qty']    = $request_qty;
             $data['tax']    = 0;
 
             if (isset($request->flash_sale) && $request->flash_sale==1) {
@@ -79,7 +95,11 @@ class CartController extends Controller
             $data['options']['in_stock']= $product->in_stock ?? 0;
 
 
-            $data = Cart::add($data);
+            if ($rowId) {
+                Cart::update($rowId, $data);
+            }else {
+                Cart::add($data);
+            }
 
             $cart_count = Cart::count();
             $cart_total = implode(explode(',',Cart::total()));

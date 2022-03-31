@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use App\User;
 use Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -39,9 +40,9 @@ class AdminController extends Controller
         App::setLocale(Session::get('currentLocal'));
         $orders = Order::get();
         $products = Product::where('is_active',1)->get();
-        $customers = Customer::all();
+        $total_customers = User::where('user_type',0)->get()->count();
 
-        return view('admin.pages.home',compact('orders','products','customers'));
+        return view('admin.pages.home',compact('orders','products','total_customers'));
     }
 
     protected function readFileEnglish(){

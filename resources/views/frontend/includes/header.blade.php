@@ -8,10 +8,18 @@
                 <div class="d-lg-flex d-xl-flex justify-content-between">
                     <div class="header-top-left d-none d-lg-flex d-xl-flex">
                         <ul class="header-top-social menu">
+                            @if(isset($storefront_facebook_link))
                             <li><a href="{{$storefront_facebook_link}}"><i class="ti-facebook"></i></a></li>
+                            @endif
+                            @if(isset($storefront_twitter_link))
                             <li><a href="{{$storefront_twitter_link}}"><i class="ti-instagram"></i></a></li>
+                            @endif
+                            @if(isset($storefront_instagram_link))
                             <li><a href="{{$storefront_instagram_link}}"><i class="ti-twitter"></i></a></li>
+                            @endif
+                            @if(isset($storefront_youtube_link))
                             <li><a href="{{$storefront_youtube_link}}"><i class="ti-youtube"></i></a></li>
+                            @endif
                         </ul>
                     </div>
                     <div class="header-top-middle d-none d-lg-flex d-xl-flex">
@@ -169,13 +177,6 @@
                                                 <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
                                                 <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
                                                 <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
-
-                                                @if ($settings_new['storefront_terms_and_condition_page']->page!=NULL)
-                                                    <li class="{{$last_word==$settings_new['storefront_terms_and_condition_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_terms_and_condition_page']->page->slug)}}">{{$settings_new['storefront_terms_and_condition_page']->page->pageTranslation->page_name}}</a></li>
-                                                @endif
-                                                @if ($settings_new['storefront_privacy_policy_page']->page!=NULL)
-                                                    <li class="{{$last_word==$settings_new['storefront_privacy_policy_page']->page->slug ? 'active' : ''}}"><a href="{{route('page.Show',$settings_new['storefront_privacy_policy_page']->page->slug)}}">{{$settings_new['storefront_privacy_policy_page']->page->pageTranslation->page_name}}</a></li>
-                                                @endif
 
                                                 @if ($menu!=NULL)
                                                     @forelse ($menu->items as $menu_item)

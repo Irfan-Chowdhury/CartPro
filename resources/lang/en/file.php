@@ -846,6 +846,7 @@ return array (
   'Total Amount' => 'Total Amount',
   'Total Item' => 'Total Item',
   'Total Orders' => 'Total Orders',
+  'Total Pending Orders' => 'Total Pending Orders',
   'Total Products' => 'Total Products',
   'Total Quantity' => 'Total Quantity',
   'Total Register Customers' => 'Total Customers',

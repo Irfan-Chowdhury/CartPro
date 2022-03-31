@@ -49,28 +49,13 @@
 
 
     <!-- Google fonts - Roboto -->
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-    <noscript><link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-
-
-    <!-- jQuery Circle-->
-    <link rel="preload" href="{{ asset('public/css/grasp_mobile_progress_circle-1.0.0.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/css/grasp_mobile_progress_circle-1.0.0.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
     <!-- Custom Scrollbar-->
     <link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
-
-    <!-- date range preload-->
-    <link rel="preload" href="{{ asset('public/vendor/daterange/css/daterangepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/daterange/css/daterangepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-
-
-    <!-- dropzone css -->
-    <link rel="preload" href="{{ asset('public/vendor/dropzone/dropzone.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/dropzone/dropzone.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
     <!-- table sorter preload-->
 
@@ -185,20 +170,12 @@
     <script type="text/javascript" src="{{ asset('public/vendor/popper.js/umd/popper.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/bootstrap/js/bootstrap-select.min.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('public/js/grasp_mobile_progress_circle-1.0.0.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/chart.js/Chart.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('public/js/charts-custom.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/js/front.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/daterange/js/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/daterange/js/knockout-3.4.2.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/daterange/js/daterangepicker.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/vendor/tinymce/js/tinymce/tinymce.min.js') }}"></script>
 
-    <!-- dropzone js -->
-    <script type="text/javascript" src="{{ asset('public/vendor/dropzone/dropzone.js') }}"></script>
     <!-- table sorter js-->
 
     <script type="text/javascript" src="{{ asset('public/vendor/datatable/pdfmake.min.js') }}"></script>

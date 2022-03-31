@@ -142,7 +142,7 @@
 
                             <div class="custom-control custom-checkbox mt-4 mb-3" data-bs-toggle="collapse" href="#shipping_address_collapse" role="button" aria-expanded="false" aria-controls="shipping_address_collapse">
                                 <input type="checkbox" class="custom-control-input" id="shipping_address_check" name="shipping_address_check" value="1">
-                                <label class="label custom-control-label" for="shipping_address">@lang('file.Ship to a different address')</label>
+                                <label class="label custom-control-label" for="shipping_address_check">@lang('file.Ship to a different address')</label>
                             </div>
                             <div class="collapse" id="shipping_address_collapse">
                                 <div class="row">
@@ -256,7 +256,7 @@
 
                                     @if (isset($setting_free_shipping) && $setting_free_shipping->shipping_status==1)
                                         <div class="custom-control custom-radio mt-3">
-                                            <input type="radio" data-shipping_type='free' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_free_shipping->minimum_amount ?? 0}}">
+                                            <input type="radio" id="customRadio1" data-shipping_type='free' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_free_shipping->minimum_amount ?? 0}}">
                                             <label class="custom-control-label" for="customRadio1">{{$setting_free_shipping->label ?? null}}
                                                 <span class="price">
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -271,7 +271,7 @@
 
                                     @if (isset($setting_local_pickup) && $setting_local_pickup->pickup_status==1)
                                         <div class="custom-control custom-radio mt-3">
-                                            <input type="radio" data-shipping_type='local_pickup' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_local_pickup->cost ?? null}}">
+                                            <input type="radio" id="customRadio2" data-shipping_type='local_pickup' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_local_pickup->cost ?? null}}">
                                             <label class="custom-control-label" for="customRadio2">{{$setting_local_pickup->label ?? null}}
                                                 <span class="price">
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -286,7 +286,7 @@
 
                                     @if (isset($setting_flat_rate) && $setting_flat_rate->flat_status==1)
                                         <div class="custom-control custom-radio mt-3">
-                                            <input type="radio" data-shipping_type='flat_rate' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_flat_rate->cost ?? null}}">
+                                            <input type="radio" id="customRadio3" data-shipping_type='flat_rate' name="shipping_cost" class="custom-control-input shippingCharge" value="{{$setting_flat_rate->cost ?? null}}">
                                             <label class="custom-control-label" for="customRadio3">{{$setting_flat_rate->label ?? null}}
                                                 <span class="price">
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -358,7 +358,7 @@
                                     @endif
                                     <div class="custom-control custom-checkbox text-center mt-5 mb-5">
                                         <input type="checkbox" class="custom-control-input" id="acceptTerms">
-                                        <label class="custom-control-label" for="accept_terms">I've read and accecpt the <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
+                                        <label class="custom-control-label" for="acceptTerms">I've read and accecpt the <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
                                     </div>
                                 </div>
                             </div>
