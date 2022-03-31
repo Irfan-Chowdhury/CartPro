@@ -93,7 +93,7 @@
 
     <!--Plugin js -->
     <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
-    
+
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 
     <!-- Sweetalert2 -->
@@ -441,8 +441,14 @@
             $('.lazy').Lazy();
 
         })(jQuery);
-        
-        
+    </script>
+    <script>
+        function isNumberKey(evt){
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
     </script>
     @stack('scripts')
 </body>

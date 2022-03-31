@@ -29,8 +29,9 @@ class UserBillingAddressController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if ($request->has('is_default')) {
-            UserBillingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
+        $billing_address = UserBillingAddress::where('user_id',Auth::user()->id);
+        if($billing_address->exists()){
+            $billing_address->update(['is_default'=>0]);
         }
 
         $userBillingAddress            = new UserBillingAddress;
@@ -41,7 +42,7 @@ class UserBillingAddressController extends Controller
         $userBillingAddress->city      = $request->city;
         $userBillingAddress->state     = $request->state;
         $userBillingAddress->zip_code  = $request->zip_code;
-        $userBillingAddress->is_default= $request->has('is_default');
+        $userBillingAddress->is_default= 1;
         $userBillingAddress->save();
 
         session()->flash('success_message','Data Added Successfully');

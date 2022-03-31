@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">@lang('file.Create Billing Address')</h5>
+            <h5 class="modal-title" id="exampleModalLabel">@lang('file.Create Billing Address')</h5> &nbsp; <small><i>[Your last record act as a default billing address]</i></small>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -45,11 +45,6 @@
                         <div class="col-md-6">
                             <input class="form-control" type="text" name="zip_code" placeholder="@lang('file.Postcode / Zip')">
                         </div>
-                        <div class="col-md-6 mt-3">
-                            <input class="form-check-input" type="radio" name="is_default" value="1">
-                            <label class="form-check-label">@lang('file.Default')</label>
-                        </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">

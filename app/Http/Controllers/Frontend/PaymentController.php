@@ -64,7 +64,7 @@ class PaymentController extends Controller
             'billing_phone'      => 'required|numeric',
             'billing_email'      => 'required|regex:/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/',
             'shipping_phone'=> 'nullable|numeric',
-            'shipping_email'=> 'nullable|email',
+            'shipping_email'=> 'nullable||regex:/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/',
         ]);
         if($validator->fails()){
             return redirect()->back()->withErrors($validator)->withInput();

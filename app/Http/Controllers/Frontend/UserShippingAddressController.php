@@ -29,8 +29,9 @@ class UserShippingAddressController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if ($request->has('is_default')) {
-            UserShippingAddress::where('user_id',Auth::user()->id)->update(['is_default'=>0]);
+        $shipping_address = UserShippingAddress::where('user_id',Auth::user()->id);
+        if($shipping_address->exists()){
+            $shipping_address->update(['is_default'=>0]);
         }
 
         $userShippingAddress            = new UserShippingAddress;
@@ -41,7 +42,7 @@ class UserShippingAddressController extends Controller
         $userShippingAddress->city      = $request->city;
         $userShippingAddress->state     = $request->state;
         $userShippingAddress->zip_code  = $request->zip_code;
-        $userShippingAddress->is_default= $request->has('is_default');
+        $userShippingAddress->is_default= 1;
         $userShippingAddress->save();
 
         session()->flash('success_message','Data Added Successfully');

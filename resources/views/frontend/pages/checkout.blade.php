@@ -23,9 +23,54 @@
     <section class="content-wrapper mt-0 mb-5">
         <div class="container">
             <div class="row">
+
                 <div class="col-12">
                     <h1 class="page-title h2 text-center uppercase mt-1 mb-5">@lang('file.Checkout')</h1>
+                    @if (!Auth::check())
+                        <div class="col-md-6 offset-md-3 col-sm-12 text-right mar-bot-20">
+                            <div class="alert alert-secondary text-center res-box" role="alert">
+                                <div class="alert-icon"><i class="ion-android-favorite-outline mr-2"></i> <span>@lang('file.Register Customer') ? </span>
+                                    <a target="__blank" href="" class="semi-bold theme-color" data-bs-toggle="modal" data-bs-target="#exampleModal">@lang('file.Click here to login')</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="login-form" action="{{route('customer.login')}}" method="post">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ route('customer.password.request') }}" tabindex="5" class="forgot-password theme-color">@lang('file.Forgot Password')</a>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4 mb-1">
+                                    <button type="submit" class="button style1 d-block text-center w-100">{{__('file.Log In')}}</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
 
                 <!-- Alert Message -->
                 <div class="d-flex justify-content-center d-none" id="alert_div">
@@ -45,6 +90,7 @@
                     </div>
                 </div>
             @endif
+
 
             <!-- Error Message -->
                 @include('frontend.includes.error_message')
@@ -205,21 +251,30 @@
                                                     <tr id="{{$item->rowId}}">
                                                         <td class="cart-product">
                                                             <div class="item-details">
-                                                                {{-- <a class="remove_cart_from_details" data-id="{{$item->rowId}}"><i class="ti-close"></i></a> --}}
                                                                 <img class="lazy" data-src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
-                                                                <div class="">
+                                                                <div>
                                                                     <h3 class="h6">{{$item->name}}</h3>
+                                                                    <div class="input-qty">
+                                                                        <input type="text" class="input-number" value="{{$item->qty}}">
+                                                                        X
+                                                                        <span class="amount">&nbsp;
+                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                                <span>{{$item->price  * $CHANGE_CURRENCY_RATE}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                            @else
+                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span>{{$item->price * $CHANGE_CURRENCY_RATE}}</span>
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="cart-amount-mobile">@lang('file.Total') <span class="amount">$70.00</span></div>
                                                         </td>
                                                         <td class="cart-product-subtotal"><span class="amount">
                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                <span class="subtotal_{{$item->rowId}}">{{$item->subtotal  * $CHANGE_CURRENCY_RATE}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                <span class="subtotal_{{$item->rowId}}"> {{ number_format((float)$item->subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
                                                             @else
-                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="subtotal_{{$item->rowId}}">{{$item->subtotal * $CHANGE_CURRENCY_RATE}}</span>
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="subtotal_{{$item->rowId}}">{{ number_format((float)$item->subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                                                             @endif
-                                                        </span></td>
+                                                        </td>
                                                     </tr>
                                                 @empty
                                                 @endforelse
@@ -387,15 +442,6 @@
 
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
-<script>
-    function isNumberKey(evt){
-        var charCode = (evt.which) ? evt.which : evt.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    }
-</script>
 
 <script>
 $(function(){

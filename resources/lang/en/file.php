@@ -783,7 +783,7 @@ return array (
   'Subscribe' => 'Subscribe',
   'Subscribe and get notification about discounts' => 'Subscribe and get notification about discounts',
   'Subscribe to our Newsletter' => 'Subscribe to our Newsletter',
-  'Subscribe to our newsletter & get notification about discounts' => 
+  'Subscribe to our newsletter & get notification about discounts' =>
   array (
     '' => 'Subscribe to our newsletter & get notification about discounts.',
   ),
@@ -982,4 +982,6 @@ return array (
   'top' => 'Top',
   'welcome' => 'Welcome',
   'yearly report' => 'Yearly Report',
+  'Register Customer'=>'Register Customer',
+  'Click here to login'=>'Click here to login',
 );
