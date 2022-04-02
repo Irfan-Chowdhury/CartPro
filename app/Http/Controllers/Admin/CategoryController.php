@@ -11,10 +11,12 @@ use App\Traits\ActiveInactiveTrait;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use App\Interfaces\CategoryInterface;
+use App\Models\Category;
+use App\Traits\TranslationTrait;
 
 class CategoryController extends Controller
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, TranslationTrait;
 
     protected $category;
     public function __construct(CategoryInterface $category){
@@ -23,11 +25,59 @@ class CategoryController extends Controller
 
     public function index()
     {
+        //--------- Test  -----------
+        $categories = Category::with('categoryTranslations')
+            ->get();
+
+        $data = [];
+        foreach ($categories as $key => $value) {
+            $data[$key]['slug']  = $value->slug;
+            $data[$key]['local'] = $this->translations($value->categoryTranslations)->local;
+            $data[$key]['category_name'] = $this->translations($value->categoryTranslations)->category_name;
+        }
+
+        return $data;
+
+        // return $this->translations($category->categoryTranslation);
+
+        // foreach ($category->categoryTranslation as $key => $value) {
+        //     if ($value->local==$local) {
+        //         $translation_data = $value;
+
+        //     }
+        // }
+        // return 'NONE';
+
+        //Trait
+        // namespace App\Trait;
+        // trait Residence{
+        // }
+
+        // //Class
+        // namespace App\Controller;
+        // use App\Trait\Residence;
+        // Class TraitClassForBlade{
+        //     use Residence;
+        // }
+
+        // //Blade
+        // @inject('Residence','App\Controller\TraitClassForBlade')
+
+        // @foreach($residence->country as $country)
+        // @endforeach
+
+
+
+
+        //--------- Test  -----------
+
         App::setLocale(Session::get('currentLocal'));
 
         if (auth()->user()->can('category-view'))
         {
             $categories = $this->category->getAll();
+
+
 
             //Check Later
             if (request()->ajax())

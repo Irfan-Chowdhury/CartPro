@@ -19,9 +19,14 @@ class Category extends Model
         'slug', 'parent', 'description','description_position','image','top','is_active','icon','parent_id'
     ];
 
-    public function categoryTranslation()
+    public function categoryTranslations()
     {
-    	 return $this->hasMany(CategoryTranslation::class,'category_id');  //Remove Later
+        $locale = Session::get('currentLocal');
+    	return $this->hasMany(CategoryTranslation::class,'category_id')
+                ->where('local',$locale)
+                ->orWhere('local','en')
+                ->orderBy('local','ASC')
+                ->select('category_id','local','category_name');  //Remove Later
     }
 
     public function catTranslation()
