@@ -1370,21 +1370,6 @@
             values.push(selectedVal);
             $('.value_ids_trending').val(values);
         });
-
-        $('#KeyWordHit').on("submit",function(e){
-            e.preventDefault();
-            var searchText = $('#searchText').val();
-            console.log(searchText);
-            $.ajax({
-                url: "{{route('cartpro.keyword_hit')}}",
-                method: "GET",
-                data: {searchText:searchText},
-                success: function (data) {
-                    console.log(data);
-                }
-            });
-        });
-
     </script>
 @endpush
 

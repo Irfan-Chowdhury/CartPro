@@ -71,11 +71,11 @@ Route::get('/documentation',function(){
     return File::get(public_path() . '/documentation/index.html');
 });
 
-Route::get('/login',[Auth\LoginController::class,'showCustomerLoginForm'])->name('customer_login_form');
+Route::get('/login',[Auth\LoginController::class,'showCustomerLoginForm'])->name('customer_login_form')->middleware('XSS');
 Route::post('/customer/login', [Auth\LoginController::class,'customerLogin'])->name('customer.login')->middleware('XSS');
 Route::post('/customer/register', [Frontend\RegisterController::class,'customerRegister'])->name('customer.register')->middleware('XSS');
-Route::get('/password/reset', [Auth\ForgotPasswordController::class,'showLinkRequestForm'])->name('customer.password.request');
-Route::post('/password/email', [Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset', [Auth\ForgotPasswordController::class,'showLinkRequestForm'])->name('customer.password.request')->middleware('XSS');;
+Route::post('/password/email', [Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email')->middleware('XSS'); //Here
 
 Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
@@ -83,6 +83,8 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
     Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
     Route::get('/keyword_hit',[HomeController::class,'test'])->name('cartpro.keyword_hit');
+
+    Route::post('/search-product',[HomeController::class,'searchProduct'])->name('cartpro.search_product');
     //Set Cookie
     Route::get('/set_cookie',[HomeController::class,'setCookie'])->name('cartpro.set_cookie');
 
@@ -227,6 +229,7 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
 
 
 });
+
 //New Format End
 
 
@@ -238,13 +241,13 @@ Route::group(['namespace'=>'Frontend','middleware'=>'XSS'], function (){
 */
 
 
-Route::get('/admin',[Auth\LoginController::class,'showAdminLoginForm'])->name('admin');
-Route::get('/admin/home',[AdminController::class,'index']);
+Route::get('/admin',[Auth\LoginController::class,'showAdminLoginForm'])->name('admin')->middleware('XSS');
+Route::get('/admin/home',[AdminController::class,'index'])->middleware('XSS');
 Route::post('/admin/login',[LoginController::class,'login'])->name('admin.login')->middleware('XSS');
 Route::get('/admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('admin_check');
-Route::get('admin/dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');
-Route::get('/admin/logout',[AdminController::class,'Logout'])->name('admin.logout');
-Route::get('/admin/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
+Route::get('admin/dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart')->middleware('XSS');
+Route::get('/admin/logout',[AdminController::class,'Logout'])->name('admin.logout')->middleware('XSS');
+Route::get('/admin/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics')->middleware('XSS');
 
 // Route::group(['prefix' => 'admin','middleware'=>['admin_check','middleware'=>'XSS']], function () {
 Route::group(['prefix' => 'admin','middleware'=>['admin_check','XSS','set_locale']], function () {

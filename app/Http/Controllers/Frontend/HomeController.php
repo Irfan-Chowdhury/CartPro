@@ -433,13 +433,22 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
+    public function searchProduct(Request $request)
+    {
+        $product_translation = ProductTranslation::with('product','categoryProducts')->where('product_name',$request->search);
+        if ($product_translation->exists()) {
+            $slug        = $product_translation->first()->product->slug;
+            $category_id = $product_translation->first()->categoryProducts[0]->category_id;
+            return redirect('product/'.$slug.'/'.$category_id);
+        }else {
+            return view('frontend.includes.prodcut_not_found');
+        }
+
+        return redirect('product/oneplus-8-pro-onyx-black-android-smartphone/1');
+    }
+
     public function test(Request $request)
     {
-        // KeywordHit::updatetOrCreate(
-        //     ['keyword' =>  request('searchText')],
-        //     ['hit' =>   DB::raw('hit+1')]
-        // );
-
         if ($request->ajax()) {
             $dataCheck = KeywordHit::where('keyword',$request->searchText);
             if ($dataCheck->exists()) {
@@ -470,11 +479,11 @@ class HomeController extends Controller
 
         return redirect()->back();
     }
-    
+
     public function setCookie(Request $request)
     {
         if ($request->newslatter=='disable') {
-            Cookie::queue('newslatter', $request->newslatter, 60); //key, value, minute
+            Cookie::queue('newslatter', $request->newslatter, 60 * 8760); //key, value, minute
             return response()->json('disable');
         }elseif($request->newslatter=='enable') {
             Cookie::queue(Cookie::forget('newslatter'));

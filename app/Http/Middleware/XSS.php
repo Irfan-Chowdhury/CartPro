@@ -19,7 +19,8 @@ class XSS
         $input = $request->all();
 
 		array_walk_recursive($input, function(&$input) {
-			$input = htmlspecialchars($input);
+			// $input = htmlspecialchars($input);
+			$input = strip_tags($input);
 		});
 		$request->merge($input);
 		return $next($request);

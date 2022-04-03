@@ -133,6 +133,7 @@
             "use strict";
 
             $(document).ready(function() {
+
                 $('#newsletter-modal').modal('toggle');
                 @if(session()->has('type'))
                     const Toast = Swal.mixin({
