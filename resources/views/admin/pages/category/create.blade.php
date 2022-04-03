@@ -10,6 +10,9 @@
         </div>
             <div class="modal-body">
 
+                <div class="container-fluid"><span id="error_message"></span></div>
+
+
                 <form method="post" id="submitForm" action="{{route('admin.category.store')}}" enctype="multipart/form-data">
                     @csrf
 
@@ -40,7 +43,7 @@
 
                         <div class="col-md-6 form-group mt-3">
                             <label for="">{{__('file.Icon')}}</label>
-                            <input type="text" name="category_icon" id="cateogry_icon" class="form-control" placeholder="las la-table">
+                            <input type="text" name="icon" id="cateogry_icon" class="form-control" placeholder="las la-table">
                         </div>
 
                         <div class="col-md-6 form-group">

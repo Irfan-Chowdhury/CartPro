@@ -3,14 +3,12 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{__('file.Edit Category')}}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">{{__('file.Edit Category')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
             <div class="modal-body">
-
-                <div class="container-fluid"><span id="error_message_edit"></span></div>
 
                 <form method="post" id="updateForm" enctype="multipart/form-data">
                     @csrf
@@ -41,7 +39,7 @@
 
                         <div class="col-md-6 form-group mt-3">
                             <label for="">{{__('file.Icon')}}</label>
-                            <input type="text" name="icon" id="cateogry_icon_edit" class="form-control" placeholder="las la-table">
+                            <input type="text" name="category_icon" id="cateogry_icon_edit" class="form-control" placeholder="las la-table">
                         </div>
 
                         <div class="col-md-6 form-group">

@@ -208,40 +208,36 @@
                         cache: false,
                         processData: false,
                         dataType: "json",
-                        error: function(response){
-                            console.log(response)
-                            var dataKeys   = Object.keys(response.responseJSON.errors);
-                            var dataValues = Object.values(response.responseJSON.errors);
-                            let html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < dataValues.length; count++) {
-                                html += '<p>' + dataValues[count] + '</p>';
+                        success: function (data) {
+                            console.log(data);
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
                             }
-                            html += '</div>';
-                            $('#error_message').fadeIn("slow");
-                            $('#error_message').html(html);
-                            setTimeout(function() {
-                                $('#error_message').fadeOut("slow");
-                            }, 3000);
-                            $('#submitButton').text('Save');
-                        },
-                        success: function (response) {
-                            console.log(response)
-                            $('#category_list-table').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $("#formModal").modal('hide');
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(response.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                            $('#submitButton').text('Save');
+                            else if(data.success){
+                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#submitForm')[0].reset();
+                                $("#formModal").modal('hide');
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                                $('#submitButton').text('Save');
+                            }
                         }
                     });
                 });
 
                 $(document).on('click', '.edit', function () {
+
                     var id = $(this).data("id");
                     $('#alert_message').html('');
+
                     $.ajax({
                         url: "{{ route('admin.category.edit') }}",
                         type: "GET",
@@ -287,22 +283,6 @@
                         cache: false,
                         processData: false,
                         dataType: "json",
-                        error: function(response){
-                            console.log(response.responseJSON.errors)
-                            var dataKeys   = Object.keys(response.responseJSON.errors);
-                            var dataValues = Object.values(response.responseJSON.errors);
-                            let html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < dataValues.length; count++) {
-                                html += '<p>' + dataValues[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#error_message_edit').fadeIn("slow");
-                            $('#error_message_edit').html(html);
-                            setTimeout(function() {
-                                $('#error_message_edit').fadeOut("slow");
-                            }, 3000);
-                            $('#UpdateButton').text('Update');
-                        },
                         success: function (data) {
                             console.log(data);
                             let html = '';
