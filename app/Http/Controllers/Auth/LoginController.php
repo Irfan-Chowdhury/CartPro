@@ -87,7 +87,6 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-
         if ($this->attemptLogin($request)) {
             if ((auth()->user()->user_type == 0)){
                 return redirect()->route('user_account');

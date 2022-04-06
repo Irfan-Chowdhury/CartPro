@@ -21,6 +21,7 @@
         		    <th scope="col">{{trans('file.Customer Name')}}</th>
                     <th scope="col">{{trans('file.Customer Email')}}</th>
         		    <th scope="col">{{trans('file.Total')}}</th>
+        		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.Created')}}</th>
         		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
@@ -95,6 +96,10 @@
                             {
                                 data: 'total',
                                 name: 'total',
+                            },
+                            {
+                                data: 'order_status',
+                                name: 'order_status',
                             },
                             {
                                 data: 'created_at',

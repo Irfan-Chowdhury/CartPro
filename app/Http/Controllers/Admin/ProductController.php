@@ -28,17 +28,18 @@ use App\Traits\FormatNumberTrait;
 use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
 use Exception;
-use App\Interfaces\BrandInterface;
+use App\Services\BrandService;
 use App\Traits\imageHandleTrait;
 
 class ProductController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait, imageHandleTrait;
 
-    protected $brand;
-    public function __construct(BrandInterface $brand){
-        $this->brand = $brand;
+    protected $brandService;
+    public function __construct(BrandService $brandService){
+        $this->brandService = $brandService;
     }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -135,7 +136,7 @@ class ProductController extends Controller
         $local = Session::get('currentLocal');
         App::setLocale($local);
 
-        $brands = $this->brand->getAll();
+        $brands = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
 
         $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)

@@ -340,7 +340,7 @@
                 <div class="tab-pane fade" id="comments" role="tabpanel">
                     <div class="row">
                         <div class="col-md-6">
-                            <h3 class="h5"> {{count($reviews)}} reviews for White Striped top</h3>
+                            <h3 class="h5"> {{count($reviews)}} reviews</h3>
                             <div class="item-reviews">
 
                                 @foreach ($reviews as $item)
@@ -378,8 +378,8 @@
 
                         <div class="col-md-6">
                             <div class="comment-respond">
-                                <h3 class="h5">Write your Review</h3>
-                                <span>Your email address will not be published. Required fields are marked with *</span>
+                                <h3 class="h5">@lang('file.Write your Review')</h3>
+                                <span>@lang('file.Your email address will not be published. Required fields are marked with') *</span>
 
                                 <form action="{{route('review.store')}}" method="post" class="row contact-form mar-top-20">
                                     @csrf
@@ -389,7 +389,7 @@
                                     <div class="col-sm-12">
                                         <label >Your Rating</label>
                                         <ul class="product-rating">
-                                            @php
+                                            {{-- @php
                                                 for ($i=1; $i <=5 ; $i++){
                                                     if ($i<=$product->rating){  @endphp
                                                         <li><i class="las la-star"></i></li>
@@ -398,17 +398,22 @@
                                                         <li><i class="lar la-star"></i></li>
                                             @php        }
                                                 }
-                                            @endphp
+                                            @endphp --}}
+                                            <li><i class="lar la-star" id="star_1"></i></li>
+                                            <li><i class="lar la-star" id="star_2"></i></li>
+                                            <li><i class="lar la-star" id="star_3"></i></li>
+                                            <li><i class="lar la-star" id="star_4"></i></li>
+                                            <li><i class="lar la-star" id="star_5"></i></li>
                                         </ul>
                                     </div>
                                     <div class="col-sm-12 text-area">
                                         <textarea id="comment" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Your Review....*" name="comment" required></textarea>
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="author" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Name*" name="author" type="text" required>
+                                        <input id="author" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Name*" name="author" type="text" required @auth value="{{auth()->user()->first_name.' '.auth()->user()->last_name}}" @endauth >
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="subject" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Email*" name="email" type="email" required>
+                                        <input id="subject" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Email*" name="email" type="email" @auth value="{{auth()->user()->email}}" @endauth required>
                                     </div>
 
                                     @if(!$user_and_product_exists)
@@ -419,9 +424,15 @@
                                         </svg>
                                         <div class="m-3 alert alert-danger d-flex align-items-center" role="alert">
                                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                                            <div>
-                                                {{__('file.Please login first and buy this product')}}
-                                            </div>
+                                            @if (Auth::check())
+                                                {{__('file.You have to buy this product first')}}
+                                            @else
+                                                <div>
+                                                    {{__('file.Please login first and buy this product')}}
+                                                </div>
+                                            @endif
+
+
                                         </div>
                                     @else
                                         @foreach ($reviews as $item)
@@ -448,7 +459,7 @@
                                                                       @else
                                                                         @foreach ($reviews as $item)
                                                                             @if ($item->userId==Auth::user()->id)
-                                                                                disabled title="Out of stock"
+                                                                                disabled title=""
                                                                                 @break
                                                                             @endif
                                                                         @endforeach
@@ -707,44 +718,44 @@
             });
 
             $('#star_1').on('click',function(){
-                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_1').removeClass('lar la-star').addClass('las la-star');
                 $('#rating').val(1);
 
-                $('#star_2').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_2').removeClass('las la-star').addClass('lar la-star');
+                $('#star_3').removeClass('las la-star').addClass('lar la-star');
+                $('#star_4').removeClass('las la-star').addClass('lar la-star');
+                $('#star_5').removeClass('las la-star').addClass('lar la-star');
             })
             $('#star_2').on('click',function(){
-                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_1').removeClass('lar la-star').addClass('las la-star');
+                $('#star_2').removeClass('lar la-star').addClass('las la-star');
                 $('#rating').val(2);
-                $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_3').removeClass('las la-star').addClass('lar la-star');
+                $('#star_4').removeClass('las la-star').addClass('lar la-star');
+                $('#star_5').removeClass('las la-star').addClass('lar la-star');
             })
             $('#star_3').on('click',function(){
-                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_1').removeClass('lar la-star').addClass('las la-star');
+                $('#star_2').removeClass('lar la-star').addClass('las la-star');
+                $('#star_3').removeClass('lar la-star').addClass('las la-star');
                 $('#rating').val(3);
-                $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
-                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_4').removeClass('las la-star').addClass('lar la-star');
+                $('#star_5').removeClass('las la-star').addClass('lar la-star');
             })
             $('#star_4').on('click',function(){
-                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_1').removeClass('lar la-star').addClass('las la-star');
+                $('#star_2').removeClass('lar la-star').addClass('las la-star');
+                $('#star_3').removeClass('lar la-star').addClass('las la-star');
+                $('#star_4').removeClass('lar la-star').addClass('las la-star');
                 $('#rating').val(4);
-                $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+                $('#star_5').removeClass('las la-star').addClass('lar la-star');
             })
             $('#star_5').on('click',function(){
-                $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
-                $('#star_5').removeClass('las la-star-outline').addClass('las la-star');
+                $('#star_1').removeClass('lar la-star').addClass('las la-star');
+                $('#star_2').removeClass('lar la-star').addClass('las la-star');
+                $('#star_3').removeClass('lar la-star').addClass('las la-star');
+                $('#star_4').removeClass('lar la-star').addClass('las la-star');
+                $('#star_5').removeClass('lar la-star').addClass('las la-star');
                 $('#rating').val(5);
             })
 

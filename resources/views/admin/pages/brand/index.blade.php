@@ -2,16 +2,12 @@
 @section('title','Admin | Brand')
 @section('admin_content')
 <section>
-    <div class="container-fluid"><span id="success_alert"></span></div>
+
+    <div class="container-fluid"><span id="alert_message"></span></div>
+
     <div class="container-fluid mb-3">
 
-        @include('admin.includes.alert_message')
-        @include('admin.includes.error_message')
-
-
-
         <h4 class="font-weight-bold mt-3">@lang('file.Brand')</h4>
-        <div id="success_alert" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('brand-store'))
@@ -194,10 +190,12 @@
             });
 
             //----------Insert Data----------------------
-            $("#submitForm").on("submit",function(e){
-                // e.preventDefault();
-                // var goalType = $("#brandListTable").val();
+            $("#submitButton").on("click",function(e){
+                $('#submitButton').text('Saving ...');
+            });
 
+            $("#submitForm").on("submit",function(e){
+                e.preventDefault();
                 $.ajax({
                     url: "{{route('admin.brand.store')}}",
                     method: "POST",
@@ -206,84 +204,61 @@
                     cache: false,
                     processData: false,
                     dataType: "json",
+                    error: function(response){
+                        console.log(response)
+                        var dataKeys   = Object.keys(response.responseJSON.errors);
+                        var dataValues = Object.values(response.responseJSON.errors);
+                        let html = '<div class="alert alert-danger">';
+                        for (let count = 0; count < dataValues.length; count++) {
+                            html += '<p>' + dataValues[count] + '</p>';
+                        }
+                        html += '</div>';
+                        $('#error_message').fadeIn("slow");
+                        $('#error_message').html(html);
+                        setTimeout(function() {
+                            $('#error_message').fadeOut("slow");
+                        }, 3000);
+                        $('#submitButton').text('Save');
+                    },
                     success: function (data) {
                         console.log(data);
                         if(data.success){
                             $('#brandListTable').DataTable().ajax.reload();
                             $('#submitForm')[0].reset();
                             $("#formModal").modal('hide');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
+                                $('#alert_message').fadeOut("slow");
                             }, 3000);
                         }
+                        $('#submitButton').text('Save');
                     }
                 });
             });
 
 
             $('#create_record').click(function () {
-                $('modal-title').text('{{__('Add Account')}}');
                 $('#action_button').val('{{trans("file.Add")}}');
                 $('#action').val('{{trans("file.Add")}}');
                 $('#formModal').modal('show');
             });
 
-            $('#sample_form').on('submit', function (event) {
-                event.preventDefault();
-                if ($('#action').val() === '{{trans('file.Add')}}') {
-
-                    $.ajax({
-                        url: "{{route('admin.brand.store')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            console.log(data);
-
-                            // let html = '';
-                            // if (data.errors) {
-                            //     html = '<div class="alert alert-danger">';
-                            //     for (let count = 0; count < data.errors.length; count++) {
-                            //         html += '<p>' + data.errors[count] + '</p>';
-                            //     }
-                            //     html += '</div>';
-                            // }
-                            // if (data.success) {
-                            //     html = '<div class="alert alert-success">' + data.success + '</div>';
-                            //     $('#sample_form')[0].reset();
-                            //     $('#brandListTable').DataTable().ajax.reload();
-                            // }
-                            // $('#brandListTable').html(html).slideDown(300).delay(5000).slideUp(300);
-                        }
-                    })
-                }
-            });
-
-
-
             //---------- Active -------------
             $(document).on("click",".active",function(e){
                 e.preventDefault();
                 var id = $(this).data("id");
-                console.log(id);
-
                 $.ajax({
                     url: "{{route('admin.brand.active')}}",
                     type: "GET",
                     data: {id:id},
                     success: function(data){
-                        console.log(data);
                         if(data.success){
                             $('#brandListTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
+                                $('#alert_message').fadeOut("slow");
                             }, 3000);
                         }
                     }
@@ -301,13 +276,12 @@
                     type: "GET",
                     data: {id:id},
                     success: function(data){
-                        console.log(data);
                         if(data.success){
                             $('#brandListTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
+                                $('#alert_message').fadeOut("slow");
                             }, 3000);
                         }
                     }
@@ -327,7 +301,6 @@
                     let action_type;
 
                     $("#active").on("click",function(){
-                        console.log(idsArray);
                         action_type = "active";
                         $.ajax({
                             url: "{{route('admin.brand.bulk_action')}}",
@@ -338,10 +311,10 @@
                                     $('#bulkConfirmModal').modal('hide');
                                     table.rows('.selected').deselect();
                                     $('#brandListTable').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
+                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                    $('#alert_message').addClass('alert alert-success').html(data.success);
                                     setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
+                                        $('#alert_message').fadeOut("slow");
                                     }, 3000);
                                 }
                             }

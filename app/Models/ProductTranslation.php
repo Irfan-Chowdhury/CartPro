@@ -18,7 +18,7 @@ class ProductTranslation extends Model
     {
     	return $this->belongsTo(Product::class,'product_id','id');
     }
-
+    
     public function categoryProducts()
     {
         return $this->hasMany(CategoryProduct::class,'product_id','product_id');

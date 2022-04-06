@@ -142,14 +142,14 @@
                         <div class="col-lg-8">
                             <h3 class="h2 semi-bold">@lang('file.Subscribe and get notification about discounts')</h3>
                             <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
-                            <form class="newsletter" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
+                            <form class="newsletter mb-3" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
                                 @csrf
                                 <input class="" type="email" placeholder="Enter your email" name="email" required>
                                 <input type="hidden" name="disable_newslatter" value="0" id="disable_popup_newslatter">
-                                <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button> <br>
+                                <button type="submit" class="button style1 btn-search" type="submit">Subscribe</button>
                             </form>
 
-                            <div class="form-check custom-control custom-checkbox">
+                            <div class="form-check custom-control custom-checkbox mt-1">
                                 <input class="custom-control-input" id="newslatterPopup" type="checkbox" value="1"> 
                                 <label class="custom-control-label" for="newslatterPopup">
                                     Got it! Don't show this popup again.

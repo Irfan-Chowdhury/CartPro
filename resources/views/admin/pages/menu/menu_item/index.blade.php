@@ -2,7 +2,7 @@
 
 @section('title','Admin | Menus | Items')
 @section('admin_content')
-    {!! Menu::render($menuId) !!}
+    {!!  htmlspecialchars_decode(Menu::render($menuId)) !!}
 @endsection
 
 

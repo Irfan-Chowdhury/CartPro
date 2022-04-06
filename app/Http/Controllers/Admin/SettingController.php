@@ -793,6 +793,9 @@ class SettingController extends Controller
 
     public function emptyDatabase()
 	{
+        if(!env('USER_VERIFIED')){
+			return redirect()->back()->with('empty_message', 'This feature is disabled for demo !');
+		}
 		DB::statement("SET foreign_key_checks=0");
 		$tables = DB::select('SHOW TABLES');
 		$str = 'Tables_in_' . env('DB_DATABASE');
@@ -802,9 +805,7 @@ class SettingController extends Controller
 				DB::table($table->$str)->truncate();
 			}
 		}
-
 		DB::statement("SET foreign_key_checks=1");
-
 		return redirect()->back()->with('empty_message', 'Database cleared successfully');
 	}
 

@@ -8,7 +8,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <span id="form_result"></span>
+
+                <div class="container-fluid"><span id="error_message"></span></div>
+
                 <form method="post" id="submitForm" class="form-horizontal" action="{{route('admin.brand.store')}}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">

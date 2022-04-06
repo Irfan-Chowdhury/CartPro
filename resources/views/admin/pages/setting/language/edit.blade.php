@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
-                                <input class="form-check-input" type="checkbox" name="default" value="1">
+                                <input class="form-check-input" type="checkbox" name="default" @if($item->default==1) checked @endif value="1">
                                 <label class="form-check-label" for="defaultCheck1">@lang('file.Default Language')</label>
                             </div>
                         </div>

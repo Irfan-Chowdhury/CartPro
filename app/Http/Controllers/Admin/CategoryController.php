@@ -32,8 +32,6 @@ class CategoryController extends Controller
 
     public function store(CategoryStoreRequest $request)
     {
-        // return response()->json(12);
-
         if (auth()->user()->can('category-store')){
             $this->categoryService->storeCategory($request);
             return response()->json(['success' => __('Data Successfully Saved')]);
@@ -77,7 +75,6 @@ class CategoryController extends Controller
                 return $this->categoryService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
             }
         }
-
     }
 }
 

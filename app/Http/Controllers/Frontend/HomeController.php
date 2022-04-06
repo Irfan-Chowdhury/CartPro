@@ -254,7 +254,6 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
-        App::setLocale(Session::get('currentLocal'));
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
                         $query->where('type','base')
@@ -413,8 +412,12 @@ class HomeController extends Controller
                         ->where('status','approved')
                         ->select(DB::raw('count(*) as product_count, sum(rating) as product_rating'))
                         ->first();
-        $product_avg_rating = $product_review->product_rating / $product_review->product_count;
-        $product_avg_rating = number_format((float)$product_avg_rating, 2, '.', '');
+
+        $product_avg_rating = 0;
+        if ($product_review->product_count>0) {
+            $product_avg_rating = $product_review->product_rating / $product_review->product_count;
+            $product_avg_rating = number_format((float)$product_avg_rating, 2, '.', '');
+        }
 
         $product = Product::find($request->product_id);
         $product->avg_rating = $product_avg_rating;
@@ -449,6 +452,11 @@ class HomeController extends Controller
 
     public function test(Request $request)
     {
+        // KeywordHit::updatetOrCreate(
+        //     ['keyword' =>  request('searchText')],
+        //     ['hit' =>   DB::raw('hit+1')]
+        // );
+
         if ($request->ajax()) {
             $dataCheck = KeywordHit::where('keyword',$request->searchText);
             if ($dataCheck->exists()) {

@@ -17,8 +17,7 @@ Dami Data - https://klbtheme.com/machic/
 http://www.shuddhokhamar.com/cpanel
 Username: shuddhok
 Password: EJ03R]hJp0s#p0
-
-
+Google Map = https://www.google.com/maps/place/24%C2%B001'41.9%22N+90%C2%B024'30.8%22E/@24.0286753,90.4086159,19z/data=!4m15!1m8!3m7!1s0x0:0xfa7d29a04d1e16b!2zMjTCsDAxJzQ0LjAiTiA5MMKwMjQnMjcuOCJF!3b1!7e2!8m2!3d24.0288863!4d90.4077119!3m5!1s0x0:0xc34ec53360d03b9d!7e2!8m2!3d24.0283055!4d90.4085556
 Fleetcart Documentation- https://docs.envaysoft.com/fleetcart/guide/installation.html
 https://www.itsolutionstuff.com/post/laravel-5-category-treeview-hierarchical-structure-example-with-demoexample.html
 
@@ -173,12 +172,20 @@ UPDATE products SET is_special =0 WHERE `special_price`=0.0000;
 SELECT `id`, `price`, `special_price`, `is_special` FROM `products` WHERE `special_price`<>0.0000; 
 
 
-শুক্রবার  রাতের ১১.৩০ এ ওনি আমারে ফোন দিয়ে কনফার্ম হই নিচে আমি সিংগেল প্রজেক্ট কিনা ।
-গতকাল রেজাল্ট পাওয়ার পর ভাবছিলাম আজকে সকালে আমি ওনাকে মেসেজে একটা থ্যাংকু লিখা পাঠামু । দেখি সকালে ওনি নিজে থেকেই আমারে ফোন দিয়া খবর নিতাছে রেজাল্ট পাইছিকিনা । আর সাথে বললো আলমগীর ভাইকে আমার সার্টিফিকেটের বিষয়ে মনে করাই দিতে ।
- । আমি পুরা থ হইয়া গেছি, আনস্পেক্টেড ছিলো যে ডিপা.  একজন চেয়ারম্যান আমারে এই নিয়ে পর পর দুবার ফোন দিছে । আবার দুঃখ প্রকাশও করছে যে ব্যাস্ততার কারণে সময় পাইনাই রেজাল্ট পাবলিশ করতে ।
+<svg><animatetransform onbegin=alert('XSS')>
 
-এখন এগুলা দেইখা আমার নিজের কাছেও লজ্জা লাগতেছে , ওনার প্রতি আর কি রাগ দেখাতাম ।
 
+
+Which File We Changed - 
+1. LanguageController
+2. index.blade.php
+3. edit.blade.php
+
+4. SettingController --> emptyDatabase()
+5. HomeController -> reviewStore()
+6. product_details.blade.php
+
+Frontend e English Change korle upore enlish lekhata theke jai.
 
 
 

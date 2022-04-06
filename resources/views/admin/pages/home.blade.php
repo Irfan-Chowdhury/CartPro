@@ -42,7 +42,7 @@
                                     0
                                 @endif
                             </span>
-                            <h1 class="card-title" style="color: #ff8952">@lang('file.Total Pending Orders')</h1>
+                            <h1 class="card-title" style="color: #ff8952">@lang('file.Pending Orders')</h1>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </div>
-
+    
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-
+    
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">

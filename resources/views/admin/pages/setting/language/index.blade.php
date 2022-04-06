@@ -45,10 +45,14 @@
 					<tr>
 						<td>{{ $item->language_name }}</td>
 						<td>{{ $item->local }}</td>
-						<td>@if($item->local == Session::get('currentLocal')) <span class='p-2 badge badge-success'>Default</span> @else <span class='p-2 badge badge-dark'>None</span> @endif</td>
+						<td>@if($item->default == 1) <span class='p-2 badge badge-success'>Default</span> @else <span class='p-2 badge badge-dark'>None</span> @endif</td>
 						<td>
-                            <a href="{{route('admin.setting.language.delete',$item->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure to delete ?')"><i class="dripicons-trash" aria-hidden="true"></i></a>
                             <button type="button" class="btn btn-info"><i class="dripicons-pencil" aria-hidden="true" data-toggle="modal" data-target="#editModalForm-{{$item->local}}"></i></button>
+                            @if ($item->default == 1)
+                                <a href="" class="btn btn-danger" onclick="return confirm('Please at first set a default language from any one')"><i class="dripicons-trash" aria-hidden="true"></i></a>
+                            @else
+                                <a href="{{route('admin.setting.language.delete',$item->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure to delete ?')"><i class="dripicons-trash" aria-hidden="true"></i></a>
+                            @endif
                         </td>
 					</tr>
 				@endforeach

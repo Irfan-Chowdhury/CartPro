@@ -19,6 +19,7 @@
                     <th scope="col">{{trans('file.Order No')}}</th>
         		    <th scope="col">{{trans('file.Transaction Id')}}</th>
                     <th scope="col">{{trans('file.Payment Method')}}</th>
+                    <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Created')}}</th>
         		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
@@ -91,6 +92,10 @@
                         {
                             data: 'payment_method',
                             name: 'payment_method',
+                        },
+                        {
+                            data: 'order_status',
+                            name: 'order_status',
                         },
                         {
                             data: 'created_at',

@@ -13,7 +13,7 @@ class CategoryTranslationRepository implements CategoryTranslationContract
     }
 
     public function getByIdAndLocale($id, $locale){
-        return CategoryTranslation::where('category_id',$id)->where('local', $locale)->first();;
+        return CategoryTranslation::where('category_id',$id)->where('local', $locale)->first();
     }
 
     public function updateOrInsertCategoryTranslation($request){

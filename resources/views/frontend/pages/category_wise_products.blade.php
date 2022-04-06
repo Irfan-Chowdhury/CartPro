@@ -80,7 +80,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
 
                         <!-- Filter By Attribute Value-->
                         @if (count($attribute_values)>0)
@@ -114,7 +114,7 @@
                                 <div><button type="submit" class="mt-2 btn btn-success">{{__('file.Filter')}}</button></div>
                             </form>
                         @endif
-                        
+
                         <!--sidebar-categories-box end-->
 
                         <!-- Tags -->
@@ -337,7 +337,7 @@
                                                             {{$item->product_name ?? null}}
                                                         </a>
                                                         <div class="product-short-description">
-                                                            {!!$item->description ?? null !!}
+                                                            {!! htmlspecialchars_decode($item->description ?? null) !!}
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>

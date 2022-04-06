@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
-use App\User;
 use Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 //Google Analytics
 use Spatie\Analytics\AnalyticsFacade as Analytics;
 use Spatie\Analytics\Period;
+use App\User;
 
 class AdminController extends Controller
 {

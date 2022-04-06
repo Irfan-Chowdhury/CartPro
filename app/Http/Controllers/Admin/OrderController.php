@@ -39,6 +39,10 @@ class OrderController extends Controller
                 }
 
             })
+            ->addColumn('order_status', function ($row)
+            {
+                return ucfirst($row->order_status);
+            })
             ->addColumn('created_at', function ($row)
             {
                 return date('Y-m-d',strtotime($row->created_at));
@@ -67,6 +71,10 @@ class OrderController extends Controller
             return datatables()->of($orders)
             ->setRowId(function ($row){
                 return $row->id;
+            })
+            ->addColumn('order_status', function ($row)
+            {
+                return ucfirst($row->order_status);
             })
             ->addColumn('created_at', function ($row)
             {

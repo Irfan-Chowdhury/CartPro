@@ -7,7 +7,7 @@
             </div>
             <div class="row">
                 @if ($page->pageTranslation)
-                    {!! htmlspecialchars_decode($page->pageTranslation->body ?? $page->pageTranslation->body ?? null) !!}
+                    {!! htmlspecialchars_decode($page->pageTranslation->body ?? null) !!}
                 @else
                     <h1>Empty Data</h1>
                 @endif

@@ -1370,6 +1370,51 @@
             values.push(selectedVal);
             $('.value_ids_trending').val(values);
         });
+
+
+        $('#star_1').on('click',function(){
+            $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+            $('#rating').val(1);
+
+            $('#star_2').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+        })
+        $('#star_2').on('click',function(){
+            $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+            $('#rating').val(2);
+            $('#star_3').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+        })
+        $('#star_3').on('click',function(){
+            $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+            $('#rating').val(3);
+            $('#star_4').removeClass('las la-star').addClass('las la-star-outline');
+            $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+        })
+        $('#star_4').on('click',function(){
+            $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
+            $('#rating').val(4);
+            $('#star_5').removeClass('las la-star').addClass('las la-star-outline');
+        })
+        $('#star_5').on('click',function(){
+            $('#star_1').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_2').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_3').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_4').removeClass('las la-star-outline').addClass('las la-star');
+            $('#star_5').removeClass('las la-star-outline').addClass('las la-star');
+            $('#rating').val(5);
+        })
+
+
     </script>
 @endpush
 

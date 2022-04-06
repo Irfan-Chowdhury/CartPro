@@ -416,6 +416,8 @@
                 image_title: true,
                 /* enable automatic uploads of images represented by blob or data URIs*/
                 automatic_uploads: true,
+                invalid_elements: 'script',
+                entity_encoding : "raw",
                 /*
                     URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
                     images_upload_url: 'postAcceptor.php',

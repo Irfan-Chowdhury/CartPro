@@ -22,7 +22,7 @@
 
               <div class="form-group">
                 <label for="inputEmail3"><b>{{__('file.Body')}} <span class="text-danger">*</span></b></label>
-                <textarea name="body" id="body" class="form-control text-editor"></textarea>
+                <textarea name="body" id="body" class="form-control"></textarea>
             </div>
 
             <br>

@@ -13,7 +13,7 @@
         {{ isset($required) ? 'required' : '' }}>
     @if($errors->has($field))
         @foreach($errors->get($field) as $error)
-            <p class="error-text">{!! $error !!}</p>
+            <p class="error-text">{!! htmlspecialchars_decode($error) !!}</p>
         @endforeach
     @endif
 </div>

@@ -88,16 +88,24 @@ class LanguageController extends Controller
 
     public function update(Request $request)
     {
+        if ($request->default) {
+            Language::where('default',1)->update(['default'=>0]);
+        }
         $language = Language::find($request->id);
-
-        $old_directory = 'resources/lang/'.$language->local;
-        $new_directory = 'resources/lang/'.$request->local;
-        File::copyDirectory($old_directory,$new_directory);
-        File::deleteDirectory($old_directory);
-
+        if ($language->local != $request->local) {
+            $old_directory = 'resources/lang/'.$language->local;
+            $new_directory = 'resources/lang/'.$request->local;
+            File::copyDirectory($old_directory,$new_directory);
+            File::deleteDirectory($old_directory);
+        }
         $language->language_name = htmlspecialchars($request->language_name);
         $language->local         = strtolower(htmlspecialchars(trim($request->local)));
+        $language->default       = $request->default ?? 0;
         $language->update();
+
+
+        Session::put('currentLocal', $language->local);
+        App::setLocale($language->local);
 
         session()->flash('type','success');
         session()->flash('message','Successfully Updated');
@@ -106,10 +114,13 @@ class LanguageController extends Controller
 
     public function defaultChange($id)
     {
+        Language::where('default',1)->update(['default'=>0]);
+        
         $language = Language::find($id);
+        $language->default = 1;
+        $language->update();
 
         Session::put('currentLocal', $language->local);
-
         App::setLocale($language->local);
 
         session()->flash('type','success');

@@ -63,20 +63,11 @@
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
-                        {{-- <form class="header-search" id="KeyWordHit" >
+                        <form class="header-search">
                             @csrf
+
                             <input type="text" list="browsers" id="searchText" placeholder="Search Products" name="search">
-                            <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
-                            <!-- Search Field-->
-                            <div class="row" id="search_field">
-                                <ul id="result">
-                                </ul>
-                            </div>
-                        </form> --}}
-                        <form class="header-search" action="{{route('cartpro.search_product')}}" method="POST">
-                            @csrf
-                            <input type="text" list="browsers" id="searchText" placeholder="Search Products" name="search">
-                            <button class="btn btn-search" type="submit"><i class="ti-search"></i></button>
+                            <span class="btn btn-search"><i class="ti-search"></i></span>
                             <!-- Search Field-->
                             <div class="row" id="search_field">
                                 <ul id="result">
@@ -323,22 +314,3 @@
     </div>
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
-
-
-@push('scripts')
-    {{-- $('#KeyWordHit').on("submit",function(e){
-        e.preventDefault();
-        var searchText = $('#searchText').val();
-        console.log(searchText);
-        $.ajax({
-            url: "{{route('cartpro.keyword_hit')}}",
-            method: "GET",
-            data: {searchText:searchText},
-            success: function (data) {
-                console.log(data);
-            }
-        });
-    }); --}}
-@endpush
-
-

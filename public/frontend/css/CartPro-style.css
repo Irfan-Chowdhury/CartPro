@@ -4247,6 +4247,11 @@ input[type=number] {
 	li.cart__menu .total {
 		display: none
 	}
+	.single-promo-item.style2 {
+    	display: grid;
+    	padding-bottom: 30px;
+        padding-top: 30px;
+    }
 	.newsletter-section {
 		text-align: center
 	}
@@ -4302,7 +4307,7 @@ input[type=number] {
     }
 	.product-details-tab.nav-tabs .nav-link {
 		font-size: 15px;
-		margin: 0 10px
+		margin: 0 15px 0 0;
 	}
 	.product-navigation {
 		position: absolute;

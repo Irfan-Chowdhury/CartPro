@@ -52,7 +52,7 @@ class BrandService
                     return $row->brand_name;
                 })
                 ->addColumn('action', function ($row)
-                {
+                { 
                     $actionBtn = "";
                     if (auth()->user()->can('brand-edit')){
                         $actionBtn .= '<a href="'.route('admin.brand.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
@@ -69,5 +69,68 @@ class BrandService
                 })
                 ->rawColumns(['brand_logo','action'])
                 ->make(true);
+    }
+
+    public function storeBrand($request)
+    {
+        $data = $this->requestHandleData($request, $brand = null);
+        $brand =  $this->brandContract->storeBrand($data);
+
+        $dataTranslation  = [];
+        $dataTranslation['brand_id']   = $brand->id;
+        $dataTranslation['local']         = session('currentLocal');
+        $dataTranslation['brand_name'] = htmlspecialchars_decode($request->brand_name);
+        $this->brandTranslationContract->storeBrandTranslation($dataTranslation);
+    }
+
+    public function findBrand($id)
+    {
+        return $this->brandContract->getById($id);
+    }
+
+    public function findBrandTranslation($brand_id)
+    {
+        $brandTranslation = $this->brandTranslationContract->getByIdAndLocale($brand_id,session('currentLocal'));
+        if (!isset($brandTranslation)) {
+            $brandTranslation =  $this->brandTranslationContract->getByIdAndLocale($brand_id,'en');
+        }
+        return $brandTranslation;
+    }
+
+    public function updateBrand($request)
+    {
+        $brand = $this->findBrand($request->brand_id);
+        $data     = $this->requestHandleData($request, $brand);
+        $this->brandContract->updateBrandById($request->brand_id, $data);
+        $this->brandTranslationContract->updateOrInsertBrandTranslation($request);
+    }
+
+    protected function requestHandleData($request, $brand)
+    {
+        $data              = [];
+        $data['slug']      = $this->slug(htmlspecialchars_decode($request->brand_name));
+        $data['is_active'] = ($request->is_active==true) ? $request->is_active : 0;
+        if ($request->brand_logo) {
+            if ($brand) {
+                $this->previousImageDelete($brand->brand_logo);
+            }
+            $data['brand_logo'] = $this->imageStore($request->brand_logo, $directory='images/brands/', $type='brand');
+        }
+        return $data;
+    }
+
+    public function activeById($id)
+    {
+        return $this->brandContract->active($id);
+    }
+
+    public function inactiveById($id)
+    {
+        return $this->brandContract->inactive($id);
+    }
+
+    public function bulkActionByTypeAndIds($type, $ids)
+    {
+        return $this->brandContract->bulkAction($type, $ids);
     }
 }
