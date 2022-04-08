@@ -438,40 +438,62 @@ class HomeController extends Controller
 
     public function searchProduct(Request $request)
     {
-        $product_translation = ProductTranslation::with('product','categoryProducts')->where('product_name',$request->search);
-        if ($product_translation->exists()) {
-            $slug        = $product_translation->first()->product->slug;
-            $category_id = $product_translation->first()->categoryProducts[0]->category_id;
-            return redirect('product/'.$slug.'/'.$category_id);
+        if (!$request->search) {
+            return redirect()->back();
+        }
+
+        //KyWord Hit
+        $dataCheck = KeywordHit::where('keyword',$request->search);
+        if ($dataCheck->exists()) {
+            $get_data = $dataCheck->first();
+            $increment = $get_data->hit+1;
+            $get_data->update(['hit'=>$increment]);
+        }else {
+            $keyword_hit = new KeywordHit();
+            $keyword_hit->keyword = $request->search;
+            $keyword_hit->hit = 1;
+            $keyword_hit->save();
+        }
+
+        $locale = Session::get('currentLocal');
+        $products = ProductTranslation::with(['product','product.baseImage'=> function($query){
+                    return $query->where('type','base');
+                },
+                'product.categoryProduct','product.additionalImage'])
+                ->where('product_name','LIKE', '%'.$request->search.'%')
+                ->where('local',$locale)
+                ->select('product_id','product_name','local')
+                ->get();
+
+        if($products->count()>0){
+            return view('frontend.pages.search_products',compact('products'));
         }else {
             return view('frontend.includes.prodcut_not_found');
         }
-
-        return redirect('product/oneplus-8-pro-onyx-black-android-smartphone/1');
     }
 
-    public function test(Request $request)
-    {
-        // KeywordHit::updatetOrCreate(
-        //     ['keyword' =>  request('searchText')],
-        //     ['hit' =>   DB::raw('hit+1')]
-        // );
+    // public function test(Request $request)
+    // {
+    //     // KeywordHit::updatetOrCreate(
+    //     //     ['keyword' =>  request('searchText')],
+    //     //     ['hit' =>   DB::raw('hit+1')]
+    //     // );
 
-        if ($request->ajax()) {
-            $dataCheck = KeywordHit::where('keyword',$request->searchText);
-            if ($dataCheck->exists()) {
-                $get_data = $dataCheck->first();
-                $increment = $get_data->hit+1;
-                $get_data->update(['hit'=>$increment]);
-            }else {
-                $keyword_hit = new KeywordHit();
-                $keyword_hit->keyword = $request->searchText;
-                $keyword_hit->hit = 1;
-                $keyword_hit->save();
-            }
-            return response()->json('ok');
-        }
-    }
+    //     if ($request->ajax()) {
+    //         $dataCheck = KeywordHit::where('keyword',$request->searchText);
+    //         if ($dataCheck->exists()) {
+    //             $get_data = $dataCheck->first();
+    //             $increment = $get_data->hit+1;
+    //             $get_data->update(['hit'=>$increment]);
+    //         }else {
+    //             $keyword_hit = new KeywordHit();
+    //             $keyword_hit->keyword = $request->searchText;
+    //             $keyword_hit->hit = 1;
+    //             $keyword_hit->save();
+    //         }
+    //         return response()->json('ok');
+    //     }
+    // }
 
     public function currencyChange($currency_code)
     {

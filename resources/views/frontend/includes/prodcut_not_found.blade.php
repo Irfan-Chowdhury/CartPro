@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','404 | Not Found')
+@section('title','Product Not Found')
 
 @section('frontend_content')
 

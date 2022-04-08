@@ -114,7 +114,8 @@ class UserController extends Controller
                 $user->role    = $request->role;
                 $user->is_active = $request->is_active;
                 if($request->image) {
-                    $user->image = $this->imageSliderStore($request->image, $directory='images/users/');
+                    // $user->image = $this->imageSliderStore($request->image, $directory='images/users/');
+                    $user->image = $this->imageStore($request->image, 'images/users/','user');
                 }
                 $user->save();
 
@@ -168,7 +169,7 @@ class UserController extends Controller
                 $data['is_active']= $request->is_active;
 
                 if($request->image) {
-                    $data['image'] = $this->imageSliderStore($request->image, $directory='images/users/');
+                    $data['image'] = $this->imageStore($request->image, 'images/users/','user');
                 }
                 User::whereId($id)->update($data);
 

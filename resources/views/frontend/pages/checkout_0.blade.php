@@ -97,7 +97,7 @@
             <!-- Error Message -->
 
             <div class="row">
-                <form action="{{route('payment.process')}}" method="POST" novalidate
+                <form action="{{route('payment.process')}}" method="POST"
                     data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" class="validation" id="payment-form">
                     @csrf
                     <input type="hidden" name="shipping_type" id="shippingType">
@@ -426,8 +426,8 @@
                                 @include('frontend.pages.payment_page.stripe_from')
                             </div>
 
-                            <div class="checkout-actions mar-top-30 pay_now_div">
-                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
+                            <div class="checkout-actions mar-top-30">
+                                <button class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>
@@ -543,109 +543,118 @@ $(function(){
     });
 
 
-    //----------- Submit ----------
-    $('input[name="payment_type"]').change(function(){
-        let paymentType = $(this).val();
-        $('#acceptTerms').prop('checked', false);
-        $('#paypal-button-container').empty();
-        $('.pay_now_div').show();
-        $('#orderBtn').prop("disabled",true).prop("title",'Disable');
+    $('#acceptTerms').change(function() {
+        if(this.checked) {
+            $('#orderBtn').prop("disabled",false);
+            $('#orderBtn').prop("title",'Pay Now');
+        }else{
+            $('#orderBtn').prop("disabled",true);
+            $('#orderBtn').prop("title",'Disable');
+        }
+    });
 
-        $('#acceptTerms').change(function() {
-            if(this.checked) {
-                if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
-                    $('#paypal-button-container').empty();
-                    $('.pay_now_div').show();
-                    $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-                }
-                else if (paymentType=='paypal') {
-                    $('.pay_now_div').hide();
-                    var totalAmountP = parseFloat($("input[name=totalAmount]").val()).toFixed(2);
-                    paypal_sdk.Buttons({
-                        createOrder: function(data, actions) {
-                            $.ajax({
-                                url: "{{route('payment.process')}}",
-                                method: "POST",
-                                data: $('#payment-form').serialize(),
-                                success: function (data) {
-                                    var x = 2;
-                                }
-                            });
-                            return actions.order.create({
-                                purchase_units: [{
-                                    amount: {
-                                        value: totalAmountP,
-                                        currency_code: "USD",
-                                    }
-                                }]
-                            });
-                        },
-                        onApprove: function(data, actions) {
-                            return actions.order.capture().then(function(details) {
-                            });
+
+    //----------- Paypal ----------
+
+    $('#paypal').on('click',function(event){
+        console.log(50);
+
+        $('#payNowPaypal').show();
+        $('#stripeContent').hide();
+
+        $('#orderBtn').on('click',function(event){
+
+            var totalAmountP = parseFloat($("input[name=totalAmount]").val()).toFixed(2);
+            paypal_sdk.Buttons({
+                createOrder: function(data, actions) {
+                    $.ajax({
+                        url: "{{route('payment.process')}}",
+                        method: "POST",
+                        data: $('#payment-form').serialize(),
+                        success: function (data) {
+                            var x = 2;
                         }
-                    }).render('#paypal-button-container');
+                    });
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: totalAmountP,
+                                currency_code: "USD",
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                    });
                 }
-            }
+            }).render('#paypal-button-container');
+            $('#orderBtn').addClass('d-none');
         });
     });
-    //----------- Submit ----------
-
 
 
 
     //----------- Stripe ----------
-    // $('#stripe').on('click',function(event){
-    //     $('#payNowPaypal').hide();
-    //     $('#paypal-button-container').hide();
-    //     $('#stripeContent').show();
+    $('#stripe').on('click',function(event){
+        $('#payNowPaypal').hide();
+        $('#paypal-button-container').hide();
+        $('#stripeContent').show();
 
-    //     var $form         = $(".validation");
-    //     $('form.validation').bind('submit', function(e) {
-    //         var $form         = $(".validation"),
-    //             inputVal = ['input[type=email]', 'input[type=password]',
-    //                 'input[type=text]', 'input[type=file]',
-    //                 'textarea'].join(', '),
-    //             $inputs       = $form.find('.required').find(inputVal),
-    //             $errorStatus = $form.find('div.error'),
-    //             valid         = true;
-    //         $errorStatus.addClass('hide');
+        var $form         = $(".validation");
+        $('form.validation').bind('submit', function(e) {
+            var $form         = $(".validation"),
+                inputVal = ['input[type=email]', 'input[type=password]',
+                    'input[type=text]', 'input[type=file]',
+                    'textarea'].join(', '),
+                $inputs       = $form.find('.required').find(inputVal),
+                $errorStatus = $form.find('div.error'),
+                valid         = true;
+            $errorStatus.addClass('hide');
 
-    //         $('.has-error').removeClass('has-error');
-    //         $inputs.each(function(i, el) {
-    //             var $input = $(el);
-    //             if ($input.val() === '') {
-    //                 $input.parent().addClass('has-error');
-    //                 $errorStatus.removeClass('hide');
-    //                 e.preventDefault();
-    //             }
-    //         });
+            $('.has-error').removeClass('has-error');
+            $inputs.each(function(i, el) {
+                var $input = $(el);
+                if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorStatus.removeClass('hide');
+                    e.preventDefault();
+                }
+            });
 
-    //         if (!$form.data('cc-on-file')) {
-    //             e.preventDefault();
-    //             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-    //             Stripe.createToken({
-    //                 number: $('.card-num').val(),
-    //                 cvc: $('.card-cvc').val(),
-    //                 exp_month: $('.card-expiry-month').val(),
-    //                 exp_year: $('.card-expiry-year').val()
-    //             }, stripeHandleResponse);
-    //         }
-    //     });
-    //     function stripeHandleResponse(status, response) {
-    //         if (response.error) {
-    //             $('.error')
-    //                 .removeClass('hide')
-    //                 .find('.alert')
-    //                 .text(response.error.message);
-    //         } else {
-    //             var token = response['id'];
-    //             $form.find('input[type=text]').empty();
-    //             $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-    //             $form.get(0).submit();
-    //         }
-    //     }
-    // });
+            if (!$form.data('cc-on-file')) {
+                e.preventDefault();
+                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                Stripe.createToken({
+                    number: $('.card-num').val(),
+                    cvc: $('.card-cvc').val(),
+                    exp_month: $('.card-expiry-month').val(),
+                    exp_year: $('.card-expiry-year').val()
+                }, stripeHandleResponse);
+            }
+        });
+        function stripeHandleResponse(status, response) {
+            if (response.error) {
+                $('.error')
+                    .removeClass('hide')
+                    .find('.alert')
+                    .text(response.error.message);
+            } else {
+                var token = response['id'];
+                $form.find('input[type=text]').empty();
+                $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+                $form.get(0).submit();
+            }
+        }
+    });
+
+  // //----------- Cash On Delivery ----------
+  $('#cashOnDelivery').on('click',function(event){
+        // $('#stripeContent').hide();
+        $('#stripeContent').empty();
+        $('#paypal-button-container').hide();
+  });
+
 });
 </script>
 @endpush

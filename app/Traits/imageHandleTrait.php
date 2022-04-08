@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 trait imageHandleTrait{
 
-    public function imageStore($image, $directory, $type)
+    public function imageStore($image, $directory, $type) 
     {
         // $img      = Str::random(10). '.' .'webp';
         $img        = Str::random(10). '.' .$image->getClientOriginalExtension();

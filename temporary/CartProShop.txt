@@ -22,6 +22,7 @@ Fleetcart Documentation- https://docs.envaysoft.com/fleetcart/guide/installation
 https://www.itsolutionstuff.com/post/laravel-5-category-treeview-hierarchical-structure-example-with-demoexample.html
 
 
+
 ============= Achille TCHOBO =============
 
 -------------- cPanel -----------------------
@@ -32,7 +33,7 @@ https://cloud-5e5283.managed-vps.net/spanel/login
 
 ----- Software -------
 Site: https://scc.bossactif.com/login
-UserName: 
+UserName:
 Pass: $2y$10$vBJ6x4WycNGxRF8vDSkHv.3w56jUiLAkz31yln4qPIR5IRAUlJqk6
 
 Our Pass [admin]: $2y$10$WcnC16AXG/mNrVBWQGjfoegFO.1wjiIiBv5LxEHR6uQaJYVciYCOa
@@ -50,14 +51,14 @@ User - cedricdesirea : $2y$10$vLH8fxsSTxIDbjstNUZme.XZMaeE9O7bZniOqFgjnslauj9fwl
 
 
 
-1. Admin --> Flash Sale: এটার Price এবং Quantity ব্যাসিসে ক্যালকুলেশন করতে হবে । 
+1. Admin --> Flash Sale: এটার Price এবং Quantity ব্যাসিসে ক্যালকুলেশন করতে হবে ।
 2. Filtering এ  Attribute Value
-3. Admin --> Coupon টা Admin অনুসারে আরো মডিফাই করা লাগবে । 
+3. Admin --> Coupon টা Admin অনুসারে আরো মডিফাই করা লাগবে ।
 4. Translation --> Update টা কাজ করতেছেনা ।
-5. Storefront--> 
-	1. newslater এ  Background Image 
+5. Storefront-->
+	1. newslater এ  Background Image
 	6. Featured Categgory
-	7. Product Tabs Two 
+	7. Product Tabs Two
 
 6. Setting -->
 	1. Maintence Mode
@@ -77,7 +78,7 @@ New Issue
 15. Wishlist timing issue [Solved]
 16. Image Show during new image insert  [brand-->edit, storefront, product-->edit]
 17. Banner Added in new File from old file [Solved]
-18. newslater Popup control from Admin 
+18. newslater Popup control from Admin
 19. Single Anchor in Image [Solved]
 
 ================== In New File =================
@@ -98,24 +99,24 @@ File - RegisterController, UserAccountController, useraccount.blade
 8.Admin Logo [Solved]
 
 ================== In Skype =================
-Image Part - 
+Image Part -
 1. Category Wise Products --> No Results Found [Solved]
 2. Image Sidebar [Unclear]
 3. About us - (Looks Broken) - This is depend on customer's data format because the data by default formated by tinymce editor in code
 4. User Login Page - Center [Solved]
 5. Category Wise products - Icon Issues [Solved]
 
-Written Part - 
+Written Part -
 1. most fields need to be nullable, and all nullable fields need to be removed from registration page
 
 
-================== Change  ================= 
+================== Change  =================
 checkout.blade --> name of shipping to shipping_cost
 
 
 
 //Today Note
-1.Onclick এ ট্যাব এ লোড 
+1.Onclick এ ট্যাব এ লোড
 ২. যেগুলার সাব ক্যাটাগরি আছে ওগুলা উপরে নিয়ে আসা (Done)
 ৩। ব্যানারে লিঙ্ক
 4 . image delete before upate
@@ -130,7 +131,7 @@ checkout.blade --> name of shipping to shipping_cost
     </script>
 @endpush
 
-================== New File Updated  ================= 
+================== New File Updated  =================
 1. AttributeController --> update(),
    attribute.blade.php -> create and edit.blade.php
 
@@ -155,37 +156,48 @@ https://www.youtube.com/playlist?list=PL9fcHFJHtFabrQMoRlfit6kSxXZE5YWU9
 ********************* Check for Translation *******************
 
 
-1.৩টা সাইজে 
-১. Product Details page এর জন্য 
+1.৩টা সাইজে
+১. Product Details page এর জন্য
 ২. Product Listing page (may be shop page)  ??
-3.Search এ ছোট সাইজ 
+3.Search এ ছোট সাইজ
 
 
 master, header এগুলাতে কাজ করেছে তারিক ভাই  ।
 
 
 
-UPDATE products SET is_special = 1 WHERE `special_price`<>0.0000; 
+UPDATE products SET is_special = 1 WHERE `special_price`<>0.0000;
 
-UPDATE products SET is_special =0 WHERE `special_price`=0.0000; 
+UPDATE products SET is_special =0 WHERE `special_price`=0.0000;
 
-SELECT `id`, `price`, `special_price`, `is_special` FROM `products` WHERE `special_price`<>0.0000; 
+SELECT `id`, `price`, `special_price`, `is_special` FROM `products` WHERE `special_price`<>0.0000;
 
 
 <svg><animatetransform onbegin=alert('XSS')>
 
 
 
-Which File We Changed - 
-1. LanguageController
-2. index.blade.php
-3. edit.blade.php
+Which File We Changed -
+1. LanguageController [Done]
+2. index.blade.php [Done]
+3. edit.blade.php [Done]
+4. SettingController --> emptyDatabase() [Done]
+5. HomeController -> reviewStore() [Done]
+6. product_details.blade.php [Done]
 
-4. SettingController --> emptyDatabase()
-5. HomeController -> reviewStore()
-6. product_details.blade.php
+
+7. Admin-->UserAccountController store(), Update();
+8. checkout.blade.php
+9. billing_address/index.blade (delete issue)
+9. shipping_address/index.blade (delete issue)
 
 Frontend e English Change korle upore enlish lekhata theke jai.
+
+
+বর্তমানে আমার লোকাল header ফাইল এবং সার্ভারের header ফাইল দুটার কোডই সেইম আছে চেক করলাম ।
+সমস্যা হলো, লোকাল থেকে  - wishlisht এ ক্লিক করলে wishlisht পেজে নিয়ে যাচ্ছে ।
+কিন্তু সার্ভার থেকে wishlisht এ ক্লিক করলে Cart এর সাইডবারটা ওপেন হচ্ছে ।
+আপনি
 
 
 

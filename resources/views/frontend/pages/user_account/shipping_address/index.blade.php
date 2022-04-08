@@ -98,7 +98,11 @@
                                                 <div class="row">
                                                     <div class="col-sm-6 mr-2 mt-3">
                                                         <button type="submit" class="btn btn-primary">@lang('file.Update')</button>
-                                                        <a href="{{route('shipping_addrees.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger">@lang('file.Delete')</a>
+                                                        @if ($item->is_default == 1)
+                                                            <a href="" class="btn btn-danger" onclick="return confirm('Please at first set a default billing address from any one')">@lang('file.Delete')</a>
+                                                        @else
+                                                            <a href="{{route('shipping_addrees.delete',$item->id)}}" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger">@lang('file.Delete')</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </form>

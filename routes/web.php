@@ -85,7 +85,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
         Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
-        Route::get('/keyword_hit',[HomeController::class,'test'])->name('cartpro.keyword_hit');
+        // Route::get('/keyword_hit',[HomeController::class,'test'])->name('cartpro.keyword_hit');
 
         Route::post('/search-product',[HomeController::class,'searchProduct'])->name('cartpro.search_product');
         //Set Cookie
