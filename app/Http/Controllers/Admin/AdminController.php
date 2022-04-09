@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
@@ -27,6 +28,15 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        $orders = Order::get();
+        $products = Product::where('is_active',1)->get();
+        $total_customers = User::where('user_type',0)->get()->count();
+
+        return view('admin.pages.home',compact('orders','products','total_customers'));
+    }
+
+    protected function readFileEnglish(){
+
         //******* Temporaray For Language Input */
         // $lang_en = $this->readFileEnglish();
         // $lang_other = $this->readFileothers('bn');
@@ -37,15 +47,7 @@ class AdminController extends Controller
         //     echo $val."</br>";
         // }
         //******* Temporaray End*/
-        App::setLocale(Session::get('currentLocal'));
-        $orders = Order::get();
-        $products = Product::where('is_active',1)->get();
-        $total_customers = User::where('user_type',0)->get()->count();
 
-        return view('admin.pages.home',compact('orders','products','total_customers'));
-    }
-
-    protected function readFileEnglish(){
         $lang_en = [];
         $myfile = fopen("temporary/lang_en.txt", "r") or die("Unable to open file!");
         while(!feof($myfile)) {

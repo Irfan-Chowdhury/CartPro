@@ -23,7 +23,7 @@
                                     {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($orders->where('order_status','completed')->sum('total'), 2)}}
                                 @endif
                             </span>
-                            <h1 class="card-title" style="color: #733686">@lang('file.Total Sales')</h1>
+                            <h1 class="card-title" style="color: #733686"> <a href="{{route('admin.reports.sales_report')}}"> @lang('file.Total Sales')</a></h1>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                                     0
                                 @endif
                             </span>
-                            <h1 class="card-title" style="color: #ff8952">@lang('file.Pending Orders')</h1>
+                            <h1 class="card-title" style="color: #ff8952"> <a href="{{route('admin.order.index')}}">@lang('file.Pending Orders')</a> </h1>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                             <span class="mb-2">
                                 {{count($products)}}
                             </span>
-                            <h1 class="card-title" style="color: #00c689">@lang('file.Total Products')</h1>
+                            <h1 class="card-title" style="color: #00c689"><a href="{{route('admin.products.index')}}">@lang('file.Total Products')</a></h1>
                         </div>
                     </div>
                 </div>
@@ -72,12 +72,12 @@
                             <span class="mb-2">
                                 {{$total_customers}}
                             </span>
-                            <h1 class="card-title" style="color: #297ff9">@lang('file.Total Register Customers')</h1>
+                            <h1 class="card-title" style="color: #297ff9"> <a href="{{route('admin.user')}}">@lang('file.Total Register Customers')</a></h1>
                         </div>
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">

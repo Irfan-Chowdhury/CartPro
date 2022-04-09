@@ -9,6 +9,4 @@ interface BrandTranslationContract
     public function getByIdAndLocale($brand_id, $locale);
 
     public function updateOrInsertBrandTranslation($request);
-
-
 }

@@ -186,10 +186,22 @@ Which File We Changed -
 6. product_details.blade.php [Done]
 
 
+
 7. Admin-->UserAccountController store(), Update();
 8. checkout.blade.php
 9. billing_address/index.blade (delete issue)
 9. shipping_address/index.blade (delete issue)
+10. Home Controller -> searchProduct()
+11. AdminController move to Admin Folder
+12. web.php
+13. admin -> home.blade.php (linkup)
+14. admin -> header.blade (linkup icon)
+
+----- Attribute Set Repository ----------
+15. i) Models -> AttributeSet
+    ii) Form Request
+    iii) AttributeSetControllefa-rotate-180
+    iv)
 
 Frontend e English Change korle upore enlish lekhata theke jai.
 

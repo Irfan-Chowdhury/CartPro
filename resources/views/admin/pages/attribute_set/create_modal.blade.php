@@ -1,5 +1,4 @@
 
-
 <!-- Modal -->
 <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -14,6 +13,9 @@
           @csrf
 
             <div class="modal-body">
+
+            <div class="container-fluid"><span id="error_message"></span></div>
+
 
               <div class="form-group">
                 <label>{{__('file.Attribute Set Name')}}</label>

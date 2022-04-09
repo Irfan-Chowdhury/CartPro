@@ -114,8 +114,8 @@
                             <div class="category-button-next"><i class="ti-angle-right"></i></div>
                         </div>
                     </div>
-                </div>
-                <div class="category-slider-wrapper swiper-container">
+                
+                    <div class="category-slider-wrapper swiper-container">
                     <div class="swiper-wrapper">
 
 
@@ -138,6 +138,7 @@
                         @empty
                         @endforelse
                     </div>
+                </div>
                 </div>
             </div>
         </div>

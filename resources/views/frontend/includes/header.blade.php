@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
-                        <form class="header-search" action="{{route('cartpro.search_product')}}" method="POST">
+                        <form id="KeyWordHit" class="header-search" action="{{route('cartpro.search_product')}}" method="POST">
                             @csrf
 
                             <input type="text" list="browsers" id="searchText" placeholder="Search Products" name="search">

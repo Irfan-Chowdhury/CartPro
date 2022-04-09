@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 
 class Attribute extends Model
 {
+
     protected $fillable = [
         'slug',
         'attribute_set_id',

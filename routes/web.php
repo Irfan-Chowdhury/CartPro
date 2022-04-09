@@ -26,7 +26,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LocaleFileController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
@@ -282,12 +282,14 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //Attribute Set
             Route::group(['prefix' => 'attribute-sets'], function () {
                 Route::get('/',[AttributeSetController::class,'index'])->name('admin.attribute_set.index');
+                Route::get('/datatable',[AttributeSetController::class,'datatable'])->name('admin.attribute_set.datatable');
                 Route::post('/store',[AttributeSetController::class,'store'])->name('admin.attribute_set.store');
                 Route::get('/edit',[AttributeSetController::class,'edit'])->name('admin.attribute_set.edit');
                 Route::post('/update',[AttributeSetController::class,'update'])->name('admin.attribute_set.update');
                 Route::get('/active',[AttributeSetController::class,'active'])->name('admin.attribute_set.active');
                 Route::get('/inactive',[AttributeSetController::class,'inactive'])->name('admin.attribute_set.inactive');
                 Route::get('/bulk_action',[AttributeSetController::class,'bulkAction'])->name('admin.attribute_set.bulk_action');
+                Route::get('/destroy',[AttributeSetController::class,'destroy'])->name('admin.attribute_set.destroy');
             });
 
             //Attributes

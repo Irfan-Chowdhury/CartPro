@@ -56,8 +56,8 @@
 
                         <div class="products-header">
                             <ul class="nav shop-item-filter-list">
-                                <li><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
-                                <li><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
+                                <li class="d-none d-md-block"><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
+                                <li class="d-none d-md-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
                                 <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> Filters</a></li>
                             </ul>
                             <div class="dropdown">

@@ -2,9 +2,9 @@
 @section('title','Admin | Attribute Sets')
 @section('admin_content')
 
-
 <section>
     <div class="container-fluid mb-3">
+
 
         <h4 class="font-weight-bold mt-3">@lang('file.Attribute Sets')</h4>
         <div id="success_alert" role="alert"></div>
@@ -85,7 +85,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.attribute_set.index') }}",
+                        url: "{{ route('admin.attribute_set.datatable') }}",
                     },
                     columns: [
                         {
@@ -185,6 +185,10 @@
             });
 
             //----------Insert Data----------------------
+            $("#submitButton").on("click",function(e){
+                $('#submitButton').text('Saving ...');
+            });
+
             $("#submitForm").on("submit",function(e){
                 e.preventDefault();
                 var attributeSetName = $("#attributeSetName").val();
@@ -195,18 +199,30 @@
                     url: "{{route('admin.attribute_set.store')}}",
                     method: "POST",
                     data: $('#submitForm').serialize(),
-                    success: function (data) {
-                        console.log(data);
-                        // if (data.errors) {
-                        //     $("#goalType").addClass('is-invalid');
-                        //     $("#message").html(data.errors) //Check in create modal
-                        // }
-                        if(data.success){
+                    error: function(response){
+                        console.log(response)
+                        var dataKeys   = Object.keys(response.responseJSON.errors);
+                        var dataValues = Object.values(response.responseJSON.errors);
+                        let html = '<div class="alert alert-danger">';
+                        for (let count = 0; count < dataValues.length; count++) {
+                            html += '<p>' + dataValues[count] + '</p>';
+                        }
+                        html += '</div>';
+                        $('#error_message').fadeIn("slow");
+                        $('#error_message').html(html);
+                        setTimeout(function() {
+                            $('#error_message').fadeOut("slow");
+                        }, 3000);
+                        $('#submitButton').text('Save');
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if(response.success){
                             $('#AtttributeSetTable').DataTable().ajax.reload();
                             $('#submitForm')[0].reset();
                             $("#formModal").modal('hide');
                             $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
+                            $('#success_alert').addClass('alert alert-success').html(response.success);
                             setTimeout(function() {
                                 $('#success_alert').fadeOut("slow");
                             }, 3000);
@@ -226,8 +242,10 @@
                     type: "GET",
                     data: {attribute_set_id:rowId},
                     success: function (data) {
+                        console.log(data);
                         $('#AttributeSetIdEdit').val(data.attributeSet.id);
                         $('#attributeSetNameEdit').val(data.attributeSetTranslation.attribute_set_name);
+                        $('#attributeSetTranslationIdEdit').val(data.attributeSetTranslation.id);
                         if (data.attributeSet.is_active == 1) {
                                 $('#isActiveEdit').prop('checked', true);
                         } else {
@@ -240,9 +258,12 @@
 
 
             //---------- Update -------------
+
+            $("#updateButton").on("click",function(e){
+                $('#updateButton').text('Updating ...');
+            });
             $("#updateForm").on("submit",function(e){
                 e.preventDefault();
-
                 $.ajax({
                     url: "{{route('admin.attribute_set.update')}}",
                     method: "POST",
@@ -251,15 +272,25 @@
                     cache: false,
                     processData: false,
                     dataType: "json",
-                    success: function (data) {
-
-                        console.log(data);
-
-                        if (data.error) {
-                            html = '<div class="alert alert-danger">' + data.error + '</div>';
-                            $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
+                    error: function(response){
+                        console.log(response)
+                        var dataKeys   = Object.keys(response.responseJSON.errors);
+                        var dataValues = Object.values(response.responseJSON.errors);
+                        let html = '<div class="alert alert-danger">';
+                        for (let count = 0; count < dataValues.length; count++) {
+                            html += '<p>' + dataValues[count] + '</p>';
                         }
-                        else if(data.success){
+                        html += '</div>';
+                        $('#error_message_edit').fadeIn("slow");
+                        $('#error_message_edit').html(html);
+                        setTimeout(function() {
+                            $('#error_message_edit').fadeOut("slow");
+                        }, 3000);
+                        $('#updateButton').text('Update');
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if(data.success){
                             $('#AtttributeSetTable').DataTable().ajax.reload();
                             $('#updateForm')[0].reset();
                             $("#editFormModal").modal('hide');
@@ -268,6 +299,7 @@
                             setTimeout(function() {
                                 $('#success_alert').fadeOut("slow");
                             }, 3000);
+                            $('#updateButton').text('Update');
                         }
                     }
                 });
@@ -347,10 +379,10 @@
                                     $('#bulkConfirmModal').modal('hide');
                                     table.rows('.selected').deselect();
                                     $('#AtttributeSetTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
+                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                    $('#success_alert').addClass('alert alert-success').html(data.success);
                                     setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
+                                        $('#success_alert').fadeOut("slow");
                                     }, 3000);
                                 }
                             }
@@ -368,14 +400,52 @@
                                     $('#bulkConfirmModal').modal('hide');
                                     table.rows('.selected').deselect();
                                     $('#AtttributeSetTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
+                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                    $('#success_alert').addClass('alert alert-success').html(data.success);
                                     setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
+                                        $('#success_alert').fadeOut("slow");
                                     }, 3000);
                                 }
                             }
                         });
+                    });
+                }
+            });
+
+
+            //---------- Delete -------------
+            $(document).on("click",".delete",function(e){
+                e.preventDefault();
+                var id = $(this).data("id");
+
+                if (!confirm('Are you sure you want to continue?')) {
+                    alert(false);
+                }else{
+                    $.ajax({
+                        url: "{{route('admin.attribute_set.destroy')}}",
+                        type: "GET",
+                        data: {id:id},
+                        success: function(data){
+                            console.log(data);
+                            if(data.success){
+                                $('#AtttributeSetTable').DataTable().ajax.reload();
+                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+
+                                $('#AtttributeSetTable').DataTable().ajax.reload();
+                                $('#updateForm')[0].reset();
+                                $("#editFormModal").modal('hide');
+                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                                $('#updateButton').text('Update');
+                            }
+                        }
                     });
                 }
             });

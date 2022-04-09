@@ -11,9 +11,9 @@
             </li>
 
             <li class="nav-item">
-                <a>
+                <a href="{{route('admin.order.index')}}">
                     <i class="dripicons-cart"></i>
-                    <span class="badge badge-defaultr bg-danger" style="width:25px"><span class="text-light"> @if($orders) {{$orders->where('order_status','pending')->count()}} @else 0 @endif</span></span>
+                    <span class="badge badge-defaultr bg-danger" style="width:25px"><span class="text-light">  @if($orders) {{$orders->where('order_status','pending')->count()}} @else 0 @endif </span></span>
                 </a>
             </li>
 

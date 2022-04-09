@@ -52,7 +52,7 @@ class BrandService
                     return $row->brand_name;
                 })
                 ->addColumn('action', function ($row)
-                { 
+                {
                     $actionBtn = "";
                     if (auth()->user()->can('brand-edit')){
                         $actionBtn .= '<a href="'.route('admin.brand.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
@@ -78,7 +78,7 @@ class BrandService
 
         $dataTranslation  = [];
         $dataTranslation['brand_id']   = $brand->id;
-        $dataTranslation['local']         = session('currentLocal');
+        $dataTranslation['local']      = session('currentLocal');
         $dataTranslation['brand_name'] = htmlspecialchars_decode($request->brand_name);
         $this->brandTranslationContract->storeBrandTranslation($dataTranslation);
     }
