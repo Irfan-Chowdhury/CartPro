@@ -71,16 +71,15 @@ class ProductController extends Controller
                 ->addColumn('image', function ($row)
                 {
                     if (($row->baseImage==null) || ($row->baseImage->type!='base')) {
-                        return '<img src="'.url("public/images/products/empty.jpg").'" alt="" height="50px" width="50px">';
+                        $url = 'https://dummyimage.com/50x50/000/fff';
                     }elseif ($row->baseImage->type=='base') {
-
                         if (!File::exists(public_path($row->baseImage->image_small))) {
                             $url = 'https://dummyimage.com/50x50/000/fff';
                         }else {
                             $url = url("public/".$row->baseImage->image_small);
                         }
-                        return  '<img src="'. $url .'" height="50px" width="50px"/>';
                     }
+                    return '<img src="'. $url .'" height="50px" width="50px"/>';
                 })
                 ->addColumn('product_name', function ($row)
                 {

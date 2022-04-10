@@ -188,12 +188,6 @@ class AppServiceProvider extends ServiceProvider
 
         //Appereance-->Storefront --> Setting
         $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
-        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-                        // ->where('parent_id',NULL)
-                        ->where('is_active',1)
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','ASC')
-                        ->get();
 
         $menus = Menus::with('items')
                 ->where('is_active',1)
@@ -357,7 +351,6 @@ class AppServiceProvider extends ServiceProvider
                     'favicon_logo_path'=>$favicon_logo_path,
                     'header_logo_path'=>$header_logo_path,
                     'settings' => $settings,
-                    'categories'=>$categories,
                     'storefront_theme_color'=>$storefront_theme_color,
                     'menus'=>$menus,
                     'menu'=>$menu,

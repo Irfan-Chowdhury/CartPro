@@ -44,8 +44,11 @@ class HomeController extends Controller
     public function index()
     {
 
-        // $newslatter = StorefrontImage::where('title','newsletter_background_image')->first();
-        // return $newslatter;
+        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+        ->where('is_active',1)
+        ->orderBy('is_active','DESC')
+        ->orderBy('id','ASC')
+        ->get();
 
 
         //We change the Logic of Flash Sale Products Later
@@ -247,7 +250,7 @@ class HomeController extends Controller
                                                 'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
                                                 'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
                                                 'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
-                                                'storefront_vertical_product_2_title','storefront_vertical_product_3_title',
+                                                'storefront_vertical_product_2_title','storefront_vertical_product_3_title','categories',
                                                 'vertical_product_1','vertical_product_2','vertical_product_3','order_details','storefront_top_brands_section_enabled'));
     }
 

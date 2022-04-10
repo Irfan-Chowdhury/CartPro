@@ -79,6 +79,8 @@
 
     <!--Header-->
 
+
+
     @include('frontend.includes.header')
 
     <div class="center loader"></div>

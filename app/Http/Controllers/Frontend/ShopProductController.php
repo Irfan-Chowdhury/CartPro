@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -21,7 +22,6 @@ class ShopProductController extends Controller
     public function index()
     {
         $locale = Session::get('currentLocal');
-        App::setLocale(Session::get('currentLocal'));
 
         $flash_sale_products_ids = $this->getFlashSaleProductIds(Setting::get()); //Change it Later
 
@@ -34,7 +34,7 @@ class ShopProductController extends Controller
                         $join->on('brand_translations.brand_id', '=', 'products.brand_id')
                         ->where('brand_translations.local', '=', $locale);
                     })
-                    ->join('product_images', function ($join) {
+                    ->leftJoin('product_images', function ($join) {
                         $join->on('product_images.product_id', '=', 'products.id')
                         ->where('product_images.type', '=', 'base');
                     })
@@ -60,7 +60,14 @@ class ShopProductController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','flash_sale_products_ids'));
+
+        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','ASC')
+                    ->get();
+
+        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','flash_sale_products_ids','categories'));
     }
 
     public function limitShopProductShow(Request $request)

@@ -206,10 +206,10 @@ Which File We Changed -
 Frontend e English Change korle upore enlish lekhata theke jai.
 
 
-বর্তমানে আমার লোকাল header ফাইল এবং সার্ভারের header ফাইল দুটার কোডই সেইম আছে চেক করলাম ।
-সমস্যা হলো, লোকাল থেকে  - wishlisht এ ক্লিক করলে wishlisht পেজে নিয়ে যাচ্ছে ।
-কিন্তু সার্ভার থেকে wishlisht এ ক্লিক করলে Cart এর সাইডবারটা ওপেন হচ্ছে ।
-আপনি
+New Changes file
+1. shop_products.blade.php
+2. ProductCOntroller
+3. ShopProductController 
 
 
 

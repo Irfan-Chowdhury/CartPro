@@ -40,7 +40,7 @@
                                         @empty
                                             <p>@lang('file.No Products Found')</p>
                                         @endforelse
-    
+
                                     </ul>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="page-title h5 uppercase mb-0"></h1>
                             {{-- $flash_sale_products_ids change it later --}}
-                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products) - count($flash_sale_products_ids)}}</strong> @lang('file.Products Found')</span>
+                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products)}}</strong> @lang('file.Products Found')</span>
                         </div>
 
                         <div class="products-header">

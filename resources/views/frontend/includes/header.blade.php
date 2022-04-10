@@ -125,6 +125,14 @@
                 </div>
             </div>
         </div>
+        @php
+            $categories = \App\Models\Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+                        ->where('is_active',1)
+                        ->orderBy('is_active','DESC')
+                        ->orderBy('id','ASC')
+                        ->get();
+        @endphp
+
         <div class="header-bottom">
             <div class="container">
                 <div class="row">
@@ -178,6 +186,7 @@
                                                 <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
                                                 <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
                                                 <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
+
 
                                                 @if ($menu!=NULL)
                                                     @forelse ($menu->items as $menu_item)
