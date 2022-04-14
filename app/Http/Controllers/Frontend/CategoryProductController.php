@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Traits\ProductPromoBadgeTextTrait;
 
 class CategoryProductController extends Controller
 {
+    use ProductPromoBadgeTextTrait;
+
+
     public function categoryWiseProducts($slug)
     {
 
@@ -181,11 +185,9 @@ class CategoryProductController extends Controller
                         $html .= '<img src="'.url('public/images/empty.jpg').'" alt="...">';
                                 }
 
-                                if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0)){
-                        $html .=    '<div class="product-promo-text style1">
-                                        <span>Stock Out</span>
-                                    </div>';
-                                }
+                        // Product Promo Badge Text
+                        $html .= $this->productPromoBadgeText($item->product->manage_stock, $item->product->qty, $item->product->in_stock, date('Y-m-d'), $item->product->new_to);
+
 
 
                         $html .= '<div class="product-overlay">
@@ -413,12 +415,8 @@ class CategoryProductController extends Controller
                         $html .= '<img src="'.url('public/images/empty.jpg').'" alt="...">';
                                 }
 
-                                if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0)){
-                        $html .=    '<div class="product-promo-text style1">
-                                        <span>Stock Out</span>
-                                    </div>';
-                                }
-
+                        // Product Promo Badge Text
+                        $html .= $this->productPromoBadgeText($item->manage_stock, $item->qty, $item->in_stock, date('Y-m-d'), $item->new_to);
 
                         $html .= '<div class="product-overlay">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';

@@ -121,25 +121,7 @@
                             </div>
                             <hr>
 
-                            @if(isset($flash_sale_product)) <!--New Added-->
-                                <div class="item-price">
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$flash_sale_product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                    @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$flash_sale_product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                    @endif
-                                </div>
-                                <div class="old-price">
-                                    <del>
-                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{ number_format((float)$product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                        @else
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                        @endif
-                                    </del>
-                                </div>
-
-                            @elseif ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
+                            @if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
                                         {{ number_format((float)$product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')

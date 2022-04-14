@@ -4,7 +4,7 @@
 
             <div class="modal-header">
 
-                <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add User')}}</h5>
+                <h5 id="exampleModalLabel" class="modal-title"></h5>
                 <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
 

@@ -209,7 +209,11 @@ Frontend e English Change korle upore enlish lekhata theke jai.
 New Changes file
 1. shop_products.blade.php
 2. ProductCOntroller
-3. ShopProductController 
+3. ShopProductController
+
+DB Change
+1. Attribute_sets -> deleted_at column added
+2. 
 
 
 

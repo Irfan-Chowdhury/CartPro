@@ -50,7 +50,6 @@
                     <div class="col-lg-9">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="page-title h5 uppercase mb-0"></h1>
-                            {{-- $flash_sale_products_ids change it later --}}
                             <span class="d-none d-md-block"><strong class="theme-color">{{count($products)}}</strong> @lang('file.Products Found')</span>
                         </div>
 
@@ -62,7 +61,7 @@
                             </ul>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Show
+                                @lang('file.Show')
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item active limitShopProductShow" data-id="2" href="#" >2</a></li>
@@ -73,7 +72,7 @@
                             </div>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Sort by
+                                @lang('file.Sort by')
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item sortBy" data-condition="latest">{{__('file.Latest')}}</a></li>
@@ -88,7 +87,6 @@
                         <div class="shop-products-wrapper">
                             <div class="product-grid shopProductsField">
                                 @forelse ($products as $item)
-                                    @if (!isset($flash_sale_products_ids[$item->id])) <!--Have to change later-->
                                         <form class="addToCart">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$item->id}}">
@@ -106,11 +104,9 @@
                                                             <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
                                                         @endif
 
-                                                        @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                            <div class="product-promo-text style1">
-                                                                <span>@lang('file.Stock Out')</span>
-                                                            </div>
-                                                        @endif
+                                                        <!-- product-promo-text -->
+                                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->manage_stock, 'qty'=>$item->qty, 'in_stock'=>$item->in_stock, 'in_stock'=>$item->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->new_to])
+                                                        <!--/ product-promo-text -->
 
                                                         <div class="product-overlay">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
@@ -216,7 +212,6 @@
                                                 </div>
                                             </div>
                                         </form>
-                                    @endif
                                 @empty
                                 @endforelse
                             </div>

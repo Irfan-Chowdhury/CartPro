@@ -57,6 +57,8 @@ class PageController extends Controller
                     ->addColumn('action', function ($row)
                     {
                         $actionBtn = "";
+                        $url = url('/');
+                        $actionBtn .= '<a target="_blank" title="View" class="btn btn-success btn-sm" href="'.$url.'/page/'.$row->slug.'"><i class="dripicons-preview"></i></a>&nbsp; ';
                         if (auth()->user()->can('page-edit'))
                         {
                             $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>

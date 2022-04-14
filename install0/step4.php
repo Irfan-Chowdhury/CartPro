@@ -21,7 +21,7 @@ curl_close($ch);
 
 if ($object->codecheck) {
     //write in .env
-    $path = '../../.env';
+    $path = '../.env';
     if (!file_exists($path)) {
         header('location: step3.php?_error=.env file does not exist.');
         exit;

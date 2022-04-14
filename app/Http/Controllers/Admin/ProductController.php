@@ -198,6 +198,12 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        if ($request->new_from > $request->new_to) {
+            session()->flash('type','danger');
+            session()->flash('message','The From date should not be greater then the To date');
+            return redirect()->back();
+        }
+
         $local = Session::get('currentLocal');
 
         if (auth()->user()->can('product-store'))
@@ -400,6 +406,12 @@ class ProductController extends Controller
             session()->flash('type','danger');
             session()->flash('message','Something Wrong');
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        if ($request->new_from > $request->new_to) {
+            session()->flash('type','danger');
+            session()->flash('message','The From date should not be greater then the To date');
+            return redirect()->back();
         }
 
         if (auth()->user()->can('product-edit'))

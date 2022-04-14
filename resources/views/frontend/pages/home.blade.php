@@ -114,7 +114,7 @@
                             <div class="category-button-next"><i class="ti-angle-right"></i></div>
                         </div>
                     </div>
-                
+
                     <div class="category-slider-wrapper swiper-container">
                     <div class="swiper-wrapper">
 
@@ -215,11 +215,9 @@
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
-                                                                @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                    <div class="product-promo-text style1">
-                                                                        <span>@lang('file.Stock Out')</span>
-                                                                    </div>
-                                                                @endif
+                                                                <!-- product-promo-text -->
+                                                                    @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                                <!--/ product-promo-text -->
 
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
@@ -315,11 +313,9 @@
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                                 @endif
 
-                                                                @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                    <div class="product-promo-text style1">
-                                                                        <span>@lang('file.Stock Out')</span>
-                                                                    </div>
-                                                                @endif
+                                                                <!-- product-promo-text -->
+                                                                @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                                <!--/ product-promo-text -->
 
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
@@ -415,11 +411,10 @@
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
 
-                                                            @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                <div class="product-promo-text style1">
-                                                                    <span>@lang('file.Stock Out')</span>
-                                                                </div>
-                                                            @endif
+                                                            <!-- product-promo-text -->
+                                                            @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                            <!--/ product-promo-text -->
+
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
@@ -513,11 +508,9 @@
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
                                                             @endif
 
-                                                            @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                                                <div class="product-promo-text style1">
-                                                                    <span>@lang('file.Stock Out')</span>
-                                                                </div>
-                                                            @endif
+                                                            <!-- product-promo-text -->
+                                                            @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                            <!--/ product-promo-text -->
 
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
@@ -662,7 +655,7 @@
                         <div class="swiper-wrapper">
                             @if ($flash_sales)
                                 @forelse ($flash_sales->flashSaleProducts as $item)
-                                    @if ($item->product->is_active==1)
+                                    @if ($item->price >0 && $item->product->is_active==1)
                                         <div class="swiper-slide">
                                             <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                                 @csrf
@@ -680,6 +673,10 @@
                                                         @else
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=Best-Deals"></a>
                                                         @endif
+
+                                                        <!-- product-promo-text -->
+                                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                        <!--/ product-promo-text -->
 
                                                         <div class="product-overlay">
                                                             {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a> --}}
@@ -1154,11 +1151,10 @@
                                         @endif
                                         </a>
 
-                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
-                                            <div class="product-promo-text style1">
-                                                <span>@lang('file.Stock Out')</span>
-                                            </div>
-                                        @endif
+                                        <!-- product-promo-text -->
+                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                        <!--/ product-promo-text -->
+
                                         <div class="product-overlay">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                             <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>

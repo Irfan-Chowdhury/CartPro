@@ -25,8 +25,6 @@ class FlashSaleController extends Controller
         if (auth()->user()->can('flash_sale-view'))
         {
             $local = Session::get('currentLocal');
-            App::setLocale($local);
-
             $flashSales = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($local){
                 $query->where('local',$local)
                 ->orWhere('local','en')
@@ -35,7 +33,6 @@ class FlashSaleController extends Controller
             ->orderBy('is_active','DESC')
             ->orderBy('id','DESC')
             ->get();
-
 
             if (request()->ajax())
             {
@@ -123,16 +120,17 @@ class FlashSaleController extends Controller
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
 
+
                 $local      = Session::get('currentLocal');
 
-                $product_id = $request->product_id; //Array Data
+                $product_ids = $request->product_id; //Array Data
                 $end_date   = $request->end_date; //Array Data
-                $price      = $request->price; //Array Data
+                $prices      = $request->price; //Array Data
                 $qty        = $request->qty; //Array Data
 
-                $count = count($product_id); // $product_id == $end_date == $price == $qty -  same amount of data
+                $count = count($product_ids); // $product_ids == $end_date == $prices == $qty -  same amount of data
 
-                if ($product_id && $end_date && $price && $qty) {
+                if ($product_ids && $end_date && $prices && $qty) {
 
                     DB::beginTransaction();
                     try {
@@ -150,11 +148,16 @@ class FlashSaleController extends Controller
                         for ($i=0; $i <$count;  $i++) {
                             $flashSaleProduct                = new FlashSaleProduct();
                             $flashSaleProduct->flash_sale_id = $flashSale->id;
-                            $flashSaleProduct->product_id    = $product_id[$i];
+                            $flashSaleProduct->product_id    = $product_ids[$i];
                             $flashSaleProduct->end_date      = date("Y-m-d",strtotime($end_date[$i]));
-                            $flashSaleProduct->price         = $price[$i];
+                            $flashSaleProduct->price         = $prices[$i];
                             $flashSaleProduct->qty           = $qty[$i];
                             $flashSaleProduct->save();
+
+                            DB::table('products')
+                            ->where('id',$product_ids[$i])
+                            ->where('price','>=',$prices[$i])
+                            ->update(['special_price' => $prices[$i]]);
                         }
                         DB::commit();
 
@@ -243,6 +246,11 @@ class FlashSaleController extends Controller
                             'qty'           => $qtys[$i],
                         ]
                     );
+
+                    DB::table('products')
+                        ->where('id',$product_ids[$i])
+                        ->where('price','>=',$prices[$i])
+                        ->update(['special_price' => $prices[$i]]);
                 }
             // }
             // catch (Exception $e)

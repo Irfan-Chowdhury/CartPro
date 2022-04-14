@@ -11,126 +11,100 @@
     <!-- Error Message -->
 
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">@lang('file.Flash Sale') Create</h4>
+        <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('admin.flash_sale.index')}}"><i class="dripicons-arrow-thin-left"></i></a> Create @lang('file.Flash Sale')</h4>
         <div id="success_alert" role="alert"></div>
         <br>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
         <form action="{{route('admin.flash_sale.store')}}" id="submitForm" method="POST">
             @csrf
-            <div class="card">
-                <div class="card-body">
 
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.Products')</a>
-                                <a class="list-group-item list-group-item-action" id="attribute-values" data-toggle="list" href="#values" role="tab" aria-controls="settings">@lang('file.Settings')</a>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label class="text-bold">@lang('file.Campaign Name') <span class="text-danger">*</span></label>
+                                <input type="text" required name="campaign_name" class="form-control @error('campaign_name') is-invalid @enderror" placeholder="{{__('Campaign Name')}}">
+                                @error('campaign_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
+                            <div class="variants">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h5><i class="dripicons-view-apps" aria-hidden="true"></i> @lang('file.Flash Sale Product')</h5>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <label><b>Product Name <span class="text-danger">*</span></b></label>
+                                            <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Product')}}'>
+                                                @forelse ($products as $item)
+                                                    <option value="{{$item->id}}">{{$item->productTranslation->product_name ??$item->productTranslationEnglish->product_name ?? null}}</option>
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                            @error('product_id')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mt-2 form-row">
+                                            <div class="form-group col-md-4">
+                                                <label class="text-bold">@lang('file.End Date') <span class="text-danger">*</span></label>
+                                                <input type="date" required name="end_date[]" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="Date">
+                                                @error('end_date')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="text-bold">@lang('file.Price') <span class="text-danger">*</span></label>
+                                                <input type="text" required name="price[]" class="form-control @error('price') is-invalid @enderror" placeholder="Price">
+                                                @error('price')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="text-bold">@lang('file.Quantity') <span class="text-danger">*</span></label>
+                                                <input type="number" required min="0" name="qty[]" class="form-control @error('qty') is-invalid @enderror" placeholder="Quantity">
+                                                @error('qty')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+
+                            </div>
+                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('file.Add More')</span>
+                            <br><br>
                         </div>
-                        <div class="col-7">
-                            <div class="tab-content" id="nav-tabContent">
-
-                                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
-                                    <div class="card">
-                                        <h4 class="card-header"><b>@lang('file.Products')</b></h4>
-                                        <hr>
-
-                                        <div class="card-body">
-                                            <div class="variants">
-                                                <div class="row">
-                                                    <div class="col-md-1">
-                                                        <h5><i class="fa fa-th" aria-hidden="true"></i></h5>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <h5 for="inputEmail3">@lang('file.Flash Sale Product')</h5>
-                                                    </div>
-
-                                                    <br><br>
-
-                                                    <div class="col-md-12">
-                                                        <div class="form-row">
-                                                            <label><b>Product Name <span class="text-danger">*</span></b></label>
-                                                            <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Product')}}'>
-                                                                @forelse ($products as $item)
-                                                                    <option value="{{$item->id}}">{{$item->productTranslation->product_name ??$item->productTranslationEnglish->product_name ?? null}}</option>
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
-                                                            @error('product_id')
-                                                                <div class="text-danger">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-
-                                                        <div class="mt-2 form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">@lang('file.End Date') <span class="text-danger">*</span></label>
-                                                                <input type="date" required name="end_date[]" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="Date">
-                                                                @error('end_date')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">@lang('file.Price') <span class="text-danger">*</span></label>
-                                                                <input type="text" required name="price[]" class="form-control @error('price') is-invalid @enderror" placeholder="Price">
-                                                                @error('price')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="text-bold">@lang('file.Quantity') <span class="text-danger">*</span></label>
-                                                                <input type="number" required min="0" name="qty[]" class="form-control @error('qty') is-invalid @enderror" placeholder="Quantity">
-                                                                @error('qty')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('file.Add More')</span>
-                                            <br><br>
-                                            <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="text-bold">@lang('file.Status')</span></label>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" checked class="form-check-input" name="is_active" value='1' id="isActive">
+                                    <span>{{__('Active')}}</span>
                                 </div>
-
-                                <div class="tab-pane fade" id="values" role="tabpanel" aria-labelledby="attribute-values">
-                                    <div class="card">
-                                        <h4 class="card-header"><b>@lang('file.Settings')</b></h4>
-                                        <div class="card-body">
-                                                    <div class="form-group">
-                                                        <label class="text-bold">@lang('file.Campaign Name') <span class="text-danger">*</span></label>
-                                                        <input type="text" required name="campaign_name" class="form-control @error('campaign_name') is-invalid @enderror" placeholder="{{__('Campaign Name')}}">
-                                                        @error('campaign_name')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="text-bold">@lang('file.Status')</span></label>
-                                                        <div class="form-group form-check">
-                                                            <input type="checkbox" checked class="form-check-input" name="is_active" value='1' id="isActive">
-                                                            <span>{{__('Active')}}</span>
-                                                        </div>
-                                                    </div>
-                                            <br><br>
-                                            <div class="d-flex justify-content-start">
-                                                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            </div>
+                            <br><br>
+                            <div class="d-flex justify-content-start">
+                                <button type="submit" class="btn btn-success btn-block">{{__('file.Submit')}}</button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+                
         </form>
     </div>
 
@@ -147,20 +121,16 @@
 
             $(document).on('click', '#addMore', function(){
                 var html='';
-                html = '<div class="row mt-5">'+
-                    '<div class="col-md-1">'+
-                        '<h5><i class="fa fa-th" aria-hidden="true"></i></h5>'+
+                html = '<div class="row">'+
+                    '<div class="col-10">'+
+                        '<h5><i class="dripicons-view-apps" aria-hidden="true"></i> @lang("file.Flash Sale Product")</h5>'+
                     '</div>'+
-                    '<div class="col-md-10">'+
-                        '<h5 for="inputEmail3">Flash Sale Product</h5>'+
-                    '</div>'+
-                    '<div class="col-1">'+
+                    '<div class="col-2">'+
                         '<span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>'+
                     '</div>'+
-                    '<br><br>'+
 
                     '<div class="col-md-12">'+
-                        '<div class="form-row">'+
+                        '<div class="form-group">'+
                             '<label><b>Product Name <span class="text-danger">*</span></b></label>'+
                             '<select name="product_id[]" required class="form-control">'+
                                 '<option value="">Select Product</option>'+
@@ -198,7 +168,7 @@
                             '</div>'+
                     ' </div>'+
                     '</div>'+
-                '</div>';
+                '</div><hr>';
 
                 console.log(html);
                 var rand = Math.floor(Math.random() * 90000) + 10000;

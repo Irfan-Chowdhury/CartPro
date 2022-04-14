@@ -5,180 +5,82 @@
 <section>
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3">@lang('file.Create Coupon')</h4>
+        <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('admin.coupon.index')}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Create Coupon')</h4>
         <div id="alert_message" role="alert"></div>
         <br>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
         <form id="submitForm" method="POST">
             @csrf
-
-            <div class="card">
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" href="#general" id="general-settings-general" data-toggle="list" role="tab" aria-controls="home">@lang('file.General')</a>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+        
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Coupon Name') }}<span class="text-danger">*</span></b></label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="coupon_name" id="coupon_name" class="form-control" placeholder="Type Coupon Name" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Code') }} <span class="text-danger">*</span></b></label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Type Coupon Code" >
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Discount Type') }} <span class="text-danger">*</span> </b></label>
+                                        <div class="col-sm-9">
+                                            <select name="discount_type" class="form-control selectpicker" title='{{__('file.Select Coupon')}}'>
+                                                <option value="fixed">{{__('file.Fixed')}}</option>
+                                                {{-- <option value="percent">{{__('file.Percent')}}</option> --}}
+                                            </select>
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Value') }} <span class="text-danger">*</span></b></label>
+                                        <div class="col-sm-9">
+                                            <input type="number" min="0" name="value" class="form-control" placeholder="Type Value">
+                                        </div>
+                                    </div>
+        
+                                </div>
                             </div>
                         </div>
-                        <div class="col-7">
-                            <div class="tab-content" id="nav-tabContent">
-
-                                <div class="tab-pane fade show active" id="general" aria-labelledby="general-settings-general" role="tabpanel">
-                                    <div class="card">
-                                        <h4 class="card-header"><b>@lang('file.General')</b></h4>
-                                        <hr>
-
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-12">
-
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Coupon Name') }}<span class="text-danger">*</span></b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="coupon_name" id="coupon_name" class="form-control" placeholder="Type Coupon Name" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Code') }} <span class="text-danger">*</span></b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Type Coupon Code" >
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Discount Type') }} <span class="text-danger">*</span> </b></label>
-                                                        <div class="col-sm-9">
-                                                            <select name="discount_type" class="form-control selectpicker" title='{{__('file.Select Coupon')}}'>
-                                                                <option value="fixed">{{__('file.Fixed')}}</option>
-                                                                <option value="percent">{{__('file.Percent')}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Value') }} <span class="text-danger">*</span></b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" min="0" name="value" class="form-control" placeholder="Type Value">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Status') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <div class="form-group form-check">
-                                                                <input type="checkbox" checked class="form-check-input" name="is_active" value="1" id="isActive">
-                                                                <span>{{__('file.Enable the coupon')}}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <br><br>
-                                            <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-                                            </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+        
+                                    <div class="form-group">
+                                        <label for="inputEmail3"><b>{{ trans('file.Status') }}</b></label>
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" checked class="form-check-input" name="is_active" value="1" id="isActive">
+                                            <span>{{__('file.Enable the coupon')}}</span>
                                         </div>
                                     </div>
+        
                                 </div>
+                            </div>
 
-                                <!--Recently Hide Bellow the features-->
-                                <div class="tab-pane fade show" id="restriction" aria-labelledby="usage_restriction" role="tabpanel">
-                                    <div class="card">
-                                        <h4 class="card-header"><b>Usage Restrictions</b></h4>
-                                        <hr>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Minimum Spend') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" min="0" name="minimum_spend" class="form-control" placeholder="Type Minimum Spend" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Maximum Spend') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" min="0" name="maximum_spend" class="form-control" placeholder="Type Maximum Spend" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Products') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <select name="product_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Product')}}'>
-                                                                @forelse ($products as $item)
-                                                                    <option value="{{$item->id}}">{{$item->productTranslation->product_name ?? $item->productTranslationEnglish->product_name ?? null}}</option>
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Categories') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                                                @foreach ($categories as $item)
-                                                                    @forelse ($item->categoryTranslation as $key => $value)
-                                                                        @if ($key<1)
-                                                                            @if ($value->local==$locale)
-                                                                                <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                            @elseif($value->local=='en')
-                                                                                <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                            @endif
-                                                                        @endif
-                                                                    @empty
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endforelse
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <br><br>
-                                            <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade show" id="limits" aria-labelledby="usage_limits" role="tabpanel">
-                                    <div class="card">
-                                        <h4 class="card-header"><b>Usage Limits</b></h4>
-                                        <hr>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-12">
-
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Usage Limit Per Coupon') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" min="0" name="usage_limit_per_coupon" class="form-control" placeholder="Type Usage Limit Per Coupon" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Usage Limit Per Customer') }}</b></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" min="0" name="usage_limit_per_customer" class="form-control" placeholder="Type Usage Limit Per Customer" >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <br><br>
-                                            <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-success btn-block">{{__('file.Submit')}}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            
         </form>
     </div>
 

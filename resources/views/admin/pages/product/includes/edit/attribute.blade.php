@@ -61,10 +61,7 @@
             </div>
 
             <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('file.Add New Attribute')</span>
-            <br><br>
-            <div class="form-group row">
-                <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-            </div>
+
         </div>
     </div>
 </div>

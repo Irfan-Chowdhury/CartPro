@@ -32,15 +32,7 @@
                             <input type="text" name="new_to" id="newTo" value="{{$product->new_to}}" class="form-control datepicker">
                         </div>
                     </div>
-
-
-                    <div class="form-group row">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-8">
-                            <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-                        </div>
-                    </div>
-
+                    
                 </div>
             </div>
         </div>

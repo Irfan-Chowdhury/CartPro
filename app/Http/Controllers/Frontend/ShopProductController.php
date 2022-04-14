@@ -9,21 +9,18 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use App\Traits\FlashSaleProductsIds;
+use App\Traits\ProductPromoBadgeTextTrait;
 
 class ShopProductController extends Controller
 {
-    use FlashSaleProductsIds;
+    use ProductPromoBadgeTextTrait;
 
     public function index()
     {
         $locale = Session::get('currentLocal');
-
-        $flash_sale_products_ids = $this->getFlashSaleProductIds(Setting::get()); //Change it Later
 
         $products = DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
@@ -67,7 +64,7 @@ class ShopProductController extends Controller
                     ->orderBy('id','ASC')
                     ->get();
 
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','flash_sale_products_ids','categories'));
+        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','categories'));
     }
 
     public function limitShopProductShow(Request $request)
@@ -106,7 +103,7 @@ class ShopProductController extends Controller
         }
 
 
-        $html = $html = $this->productsShowSortby($category_ids, $products);
+        $html = $html = $this->productsShow($category_ids, $products);
         return response()->json($html);
     }
 
@@ -189,12 +186,12 @@ class ShopProductController extends Controller
             }
         }
 
-        $html = $this->productsShowSortby($category_ids, $products);
+        $html = $this->productsShow($category_ids, $products);
         return response()->json($html);
     }
 
 
-    protected function productsShowSortby($category_ids,$products)
+    protected function productsShow($category_ids,$products)
     {
         $CHANGE_CURRENCY_SYMBOL = env('USER_CHANGE_CURRENCY_SYMBOL');
         if ($CHANGE_CURRENCY_SYMBOL==NULL) {
@@ -224,12 +221,8 @@ class ShopProductController extends Controller
                         $html .= '<img src="'.url('public/images/empty.jpg').'" alt="...">';
                                 }
 
-                                if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0)){
-                        $html .=    '<div class="product-promo-text style1">
-                                        <span>Stock Out</span>
-                                    </div>';
-                                }
-
+                        // Product Promo Badge Text
+                        $html .= $this->productPromoBadgeText($item->manage_stock, $item->qty, $item->in_stock, date('Y-m-d'), $item->new_to);
 
                         $html .= '<div class="product-overlay">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';

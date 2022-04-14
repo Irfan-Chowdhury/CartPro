@@ -4,7 +4,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Page')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
+          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Page')}} | <a class="btn btn-default btn-sm" id="page_url" href="" target="_blank"><i class="dripicons-preview"></i> View Page</a></h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

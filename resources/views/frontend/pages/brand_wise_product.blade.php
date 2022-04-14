@@ -51,11 +51,9 @@
                                                             <a href="{{url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
                                                         @endif
 
-                                                        @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                            <div class="product-promo-text style1">
-                                                                <span>@lang('file.Stock Out')</span>
-                                                            </div>
-                                                        @endif
+                                                        <!-- product-promo-text -->
+                                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->manage_stock, 'qty'=>$item->qty, 'in_stock'=>$item->in_stock, 'in_stock'=>$item->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->new_to])
+                                                        <!--/ product-promo-text -->
 
                                                         <div class="product-overlay">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>

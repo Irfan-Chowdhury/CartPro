@@ -20,65 +20,51 @@
     @include('admin.includes.alert_message')
 
     <div class="container-fluid mb-3">
-        <h3 class="font-weight-bold mt-3">@lang('file.Edit Product')</h3>
+        <h3 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('admin.products.index')}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Edit Product')</h3>
         <div id="success_alert" role="alert"></div>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
         <form action="{{route('admin.products.update',$product->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
+            
+            <div class="row">
+                <div class="col-8">
+                    <!-- General -->
+                        @include('admin.pages.product.includes.edit.general')
+                    <!--/ General -->
+                    
+                    <!-- Images -->
+                        @include('admin.pages.product.includes.edit.image')
+                    <!-- Images -->
+                    
+                    <!-- Price -->
+                        @include('admin.pages.product.includes.edit.price')
+                    <!--/ Price-->
+                    
+                    <!-- Inventory-->
+                        @include('admin.pages.product.includes.edit.inventory')
+                    <!--/ Inventory-->
 
-            <div class="card">
-                <div class="card-body">
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="list-group" id="list-tab" role="tablist">
-                                    <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">{{__('file.General')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-price" data-toggle="list" href="#price" role="tab" aria-controls="settings">{{__('file.Price')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-inventory" data-toggle="list" href="#inventory" role="tab" aria-controls="inventory">{{__('file.Inventory')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-images" data-toggle="list" href="#images" role="tab" aria-controls="images">{{__('file.Images')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-seo" data-toggle="list" href="#seo" role="tab" aria-controls="seo">{{__('file.SEO')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-attribute" data-toggle="list" href="#attribute" role="tab" aria-controls="attribute">{{__('file.Attributes')}}</a>
-                                    <a class="list-group-item list-group-item-action" id="product-additional" data-toggle="list" href="#additional" role="tab" aria-controls="additional">{{__('file.Additional')}}</a>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="tab-content" id="nav-tabContent">
-
-                                    <!-- General -->
-                                    @include('admin.pages.product.includes.edit.general')
-                                    <!--/ General -->
-
-                                    <!-- Price -->
-                                    @include('admin.pages.product.includes.edit.price')
-                                    <!--/ Price-->
-
-                                    <!-- Inventory-->
-                                    @include('admin.pages.product.includes.edit.inventory')
-                                    <!--/ Inventory-->
-
-                                    <!-- Images -->
-                                    @include('admin.pages.product.includes.edit.image')
-                                    <!-- Images -->
-
-                                    <!-- SEO -->
-                                    @include('admin.pages.product.includes.edit.seo')
-                                    <!--/ SEO -->
-
-                                    <!-- Attribute -->
-                                    @include('admin.pages.product.includes.edit.attribute')
-                                    <!--/ Attribute -->
-
-                                    <!-- Additional -->
-                                    @include('admin.pages.product.includes.edit.additional')
-                                    <!--/ Additional -->
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Attribute -->
+                        @include('admin.pages.product.includes.edit.attribute')
+                    <!--/ Attribute -->
+                    
+                    <!-- Additional -->
+                        @include('admin.pages.product.includes.edit.additional')
+                    <!--/ Additional -->
+                    
+                    <!-- SEO -->
+                        @include('admin.pages.product.includes.edit.seo')
+                    <!--/ SEO -->
+                </div>
+                <div class="col-4">
+                    <!-- sidebar -->
+                        @include('admin.pages.product.includes.edit.sidebar')
+                    <!--/ sidebar -->
                 </div>
             </div>
-
+            
         </form>
     </div>
 </section>

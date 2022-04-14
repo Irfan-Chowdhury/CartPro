@@ -28,7 +28,7 @@
                             <label class="col-md-4 col-form-label"><b>{{ trans('file.Status') }}</b></label>
                             <div class="col-md-8 form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="is_active_edit" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">{{ trans('file.Enable the slide') }}</label>
+                                <label class="form-check-label" for="defaultCheck1">{{ trans('file.Enable this menu') }}</label>
                             </div>
                         </div>
 

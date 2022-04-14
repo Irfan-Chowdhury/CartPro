@@ -247,6 +247,7 @@
                         $('#page_id').val(data.page.id);
                         $('#page_translation_id').val(data.page_translation.id);
                         $('#page_name_edit').val(data.page_translation.page_name);
+                        $('#page_url').attr('href',"{{url('/page')}}"+'/'+data.page.slug);
                         tinymce.get('body_edit').setContent(data.page_translation_body);
                         if (data.page.is_active === 1) {
                                 $('#is_active_edit').prop('checked', true);

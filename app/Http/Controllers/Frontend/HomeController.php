@@ -32,14 +32,14 @@ use Illuminate\Support\Facades\Cache;
 use Newsletter;
 use App\Traits\CurrencyConrvertion;
 use App\Traits\ENVFilePutContent;
-use App\Traits\FlashSaleProductsIds;
+use App\Traits\AutoDataUpdateTrait;
 use Illuminate\Support\Facades\File;
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller
 {
-    use CurrencyConrvertion,ENVFilePutContent, FlashSaleProductsIds;
+    use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait;
 
     public function index()
     {
@@ -83,7 +83,6 @@ class HomeController extends Controller
         $storefront_vertical_product_1_title = null;
         $storefront_vertical_product_2_title = null;
         $storefront_vertical_product_3_title = null;
-        $flash_sale_products_ids = [];
         $vertical_product_1 = [];
         $vertical_product_2 = [];
         $vertical_product_3 = [];
@@ -92,14 +91,10 @@ class HomeController extends Controller
         //Settings
         $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
 
-        //Bad Practice but we will change this later.
-        $flash_sale_products_ids = $this->getFlashSaleProductIds($settings);
-
         //CategoryProducts
         $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
                                                 'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
                                                 'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                                                ->whereNotIn('product_id',$flash_sale_products_ids) //new line
                                                 ->get();
 
         //Slider
@@ -237,7 +232,6 @@ class HomeController extends Controller
                 ->get();
 
         $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
-                        ->whereNotIn('product_id',$flash_sale_products_ids) //new line
                         ->select('product_id')
                         ->groupBy('product_id')
                         ->selectRaw('SUM(qty) AS qty_of_sold')
@@ -245,6 +239,9 @@ class HomeController extends Controller
                         ->skip(0)
                         ->take(10)
                         ->get();
+
+        //We will convert it in ExpiryReminder later
+        $this->autoDataUpdate();
 
         return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
                                                 'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
@@ -270,8 +267,6 @@ class HomeController extends Controller
                     ])
                     ->where('slug',$product_slug)
                     ->first();
-
-        $flash_sale_product =  FlashSaleProduct::where('product_id',$product->id)->first() ?? null;
 
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
@@ -317,7 +312,7 @@ class HomeController extends Controller
                             ->get();
 
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products','flash_sale_product'));
+        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
     }
 
     public function dataAjaxSearch(Request $request)

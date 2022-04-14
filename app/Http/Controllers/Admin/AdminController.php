@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Traits\AutoDataUpdateTrait;
 use Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -17,6 +18,7 @@ use App\User;
 
 class AdminController extends Controller
 {
+    use AutoDataUpdateTrait;
         /**
      * Create a new controller instance.
      *
@@ -31,6 +33,9 @@ class AdminController extends Controller
         $orders = Order::get();
         $products = Product::where('is_active',1)->get();
         $total_customers = User::where('user_type',0)->get()->count();
+
+        //We will convert it in ExpiryReminder later
+        $this->autoDataUpdate();
 
         return view('admin.pages.home',compact('orders','products','total_customers'));
     }

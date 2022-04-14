@@ -1,4 +1,3 @@
-<div class="tab-pane fade show" aria-labelledby="product-additional" id="additional" role="tabpanel">
     <div class="card">
         <h4 class="card-header"><b>{{__('file.Additional')}}</b></h4>
         <hr>
@@ -36,16 +35,7 @@
                         </div>
                     </div>
 
-
-                    <div class="form-group row">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-8">
-                            <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
-</div>

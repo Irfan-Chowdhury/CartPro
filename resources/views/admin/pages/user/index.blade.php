@@ -6,7 +6,7 @@
         <div class="container-fluid"><span id="general_result"></span></div>
 
 
-        <div class="container-fluid">
+        <div class="container-fluid mb-3">
 
             @if (auth()->user()->can('user-store'))
                 <button type="button" class="btn btn-info parent_load" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('file.Add User')}}</button>
@@ -204,7 +204,7 @@
 
         $('#create_record').click(function () {
 
-            $('.modal-title').text('{{__('Add Account')}}');
+            $('.modal-title').text('{{__('Add User')}}');
             $('#action_button').val('{{trans("file.Add")}}');
             $('#action').val('{{trans("file.Add")}}');
             $('#formModal').modal('show');
