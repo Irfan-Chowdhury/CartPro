@@ -31,7 +31,7 @@
                             <label>{{__('file.Parent Category')}} </label>
                             <select class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}' name="parent_id">
                                 @foreach($categories as $category)
-                                    <option value="{{$category['id']}}">{{$category['category_name']}}</option>
+                                    <option value="{{$category->id}}">{{$category->category_name}}</option>
                                 @endforeach
                             </select>
                         </div>

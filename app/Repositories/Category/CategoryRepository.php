@@ -26,6 +26,7 @@ class CategoryRepository implements CategoryContract
                 ];
             });
 
+
     }
 
     public function storeCategory($data){

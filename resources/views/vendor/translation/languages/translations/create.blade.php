@@ -1,6 +1,15 @@
-@extends('translation::layout')
+@extends('admin.main')
+@push('css')
+<link rel="stylesheet" href="{{ asset('public/vendor/translation/css/main.css') }}">
+@endpush
+@section('admin_content')
 
-@section('body')
+    <div class="container-fluid mb-3">
+
+        <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('languages.translations.index',Session::get('currentLocal'))}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Add Translation')</h4>
+        <div id="alert_message" role="alert"></div>
+        <br>
+    </div>
 
     <div class="panel w-1/2">
 
@@ -29,11 +38,11 @@
 
                     </div> --}}
 
-                    <div v-show="showAdvancedOptions">
+                    {{-- <div v-show="showAdvancedOptions">
 
                         @include('translation::forms.text', ['field' => 'namespace', 'label' => __('translation::translation.namespace_label'), 'placeholder' => __('translation::translation.namespace_placeholder')])
 
-                    </div>
+                    </div> --}}
 
 
                 </div>
@@ -53,3 +62,6 @@
     </div>
 
 @endsection
+@push('scripts')
+<script src="{{ asset('public/vendor/translation/js/app.js') }}"></script>
+@endpush

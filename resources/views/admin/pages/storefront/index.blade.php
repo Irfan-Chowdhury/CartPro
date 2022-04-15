@@ -20,24 +20,6 @@
 <div class="container-fluid"><span id="alert_message"></span></div>
 <div class="container-fluid mb-3">
 
-
-    <div class="d-flex">
-        <div class="p-2">
-            <h2 class="font-weight-bold mt-3">@lang('file.Storefront')</h2>
-        </div>
-        <div class="ml-auto p-2">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">@lang('file.Dashboard')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('file.Storefront')</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="container">
         <div class="row">
             <div class="col-4">
 
@@ -229,7 +211,6 @@
               </div>
             </div>
           </div>
-    </div>
 </div>
 @endsection
 

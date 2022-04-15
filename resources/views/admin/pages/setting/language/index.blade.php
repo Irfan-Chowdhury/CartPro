@@ -9,27 +9,11 @@
 
     <div class="container-fluid mb-3">
 
-		<div class="d-flex">
-			<div class="p-2">
-				<h2 class="font-weight-bold mt-3">@lang('file.Language')</h2>
-				<div id="success_alert" role="alert"></div>
-        		<br>
-			</div>
-			<div class="ml-auto p-2">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">@lang('file.Dashboard')</a></li>
-						<li class="breadcrumb-item active" aria-current="page">@lang('file.Language')</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-
         @if (auth()->user()->can('locale-store'))
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('Add Language')}}</button>
+            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('Add Language')}}</button>
         @endif
-    </div>
-    <div class="table-responsive">
+    
+        <div class="table-responsive">
     	<table id="menu_table" class="table ">
     	    <thead>
         	   <tr>
@@ -59,6 +43,7 @@
 			</tbody>
 
     	</table>
+    </div>
     </div>
 </section>
 

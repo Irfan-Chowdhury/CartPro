@@ -2,11 +2,6 @@
 @section('title','Admin | Category')
 @section('admin_content')
 <section>
-@php
-    use Stichoza\GoogleTranslate\GoogleTranslate;
-    $local = Session::get('currentLocal');
-    $tr    = new GoogleTranslate($local);
-@endphp
 
         <div class="container-fluid"><span id="alert_message"></span></div>
 

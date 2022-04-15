@@ -23,7 +23,7 @@ class CategoryController extends Controller
         if (auth()->user()->can('category-view')){
             $categories =  $this->categoryService->getAllCategories();
             if (request()->ajax()){
-                return $this->categoryService->dataTable($categories);
+                return $this->categoryService->dataTable();
             }
             return view('admin.pages.category.index',compact('categories'));
         }

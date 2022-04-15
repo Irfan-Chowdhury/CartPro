@@ -1,5 +1,8 @@
-@extends('translation::layout')
-@section('body')
+@extends('admin.main')
+@push('css')
+<link rel="stylesheet" href="{{ asset('public/vendor/translation/css/main.css') }}">
+@endpush
+@section('admin_content')
 
 
     <form action="{{ route('languages.translations.index', ['language' => $language]) }}" method="get">
@@ -130,3 +133,7 @@
     </script>
 
 @endsection
+
+@push('scripts')
+<script src="{{ asset('public/vendor/translation/js/app.js') }}"></script>
+@endpush

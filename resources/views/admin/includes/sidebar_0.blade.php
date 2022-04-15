@@ -52,6 +52,48 @@
         @can('coupon')
         <li><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('file.Coupons')}}</span></a></li>
         @endcan
+        @can('page')
+        <li><a href="{{route('admin.page.index')}}"><i class="fa fa-file-text"></i><span>{{trans('file.Pages')}}</span></a></li>
+        @endcan
+        @can('menu')
+        <li><a href="{{route('admin.menu')}}"><i class="dripicons-list"></i><span>{{trans('file.Menus')}}</span></a></li>
+        @endcan
+
+        @can('users_and_roles')
+        <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-user-circle"></i><span>{{__('file.Users and Roles')}}</span></a>
+            <ul id="user" class="collapse list-unstyled">
+            @can('user')
+                <li id="navigation-menu"><a href="{{route('admin.user')}}">{{__('file.Users')}}</a></li>
+            @endcan
+            @can('role')
+                <li id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('file.Roles')}}</a></li>
+            @endcan
+            </ul>
+        </li>
+        @endcan
+
+        <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-globe"></i><span>{{__('file.Localization')}}</span></a>
+            <ul id="localization" class="collapse list-unstyled">
+                <li><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
+                <li><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
+                <li><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
+            </ul>
+        </li>
+
+        @can('appearance')
+        <li><a href="#menu" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-paint-brush"></i><span>{{trans('file.Appearance')}}</span></a>
+            <ul id="menu" class="collapse list-unstyled">
+                @can('store_front')
+                    <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('file.Store Front')}}</a></li>
+                @endcan
+                {{-- @can('slider') --}}
+                    <li><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
+                {{-- @endcan --}}
+                <li><a href="{{route('admin.color.index')}}"><span>{{__('file.Color')}}</span></a></li>
+            </ul>
+        </li>
+        @endcan
+
         <li><a href="#report" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a>
             <ul id="report" class="collapse list-unstyled">
                 <li><a href="{{route('admin.reports.coupon')}}">@lang('file.Coupon Report')</a></li>
@@ -66,49 +108,9 @@
             </ul>
         </li>
 
-        @can('appearance')
-        <li><a href="#menu" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-store"></i><span>{{trans('file.Online Store')}}</span></a>
-            <ul id="menu" class="collapse list-unstyled">
-                @can('page')
-                <li><a href="{{route('admin.page.index')}}">{{trans('file.Pages')}}</a></li>
-                @endcan
-                @can('menu')
-                <li><a href="{{route('admin.menu')}}">{{trans('file.Menus')}}</a></li>
-                @endcan
-                @can('store_front')
-                    <li id="navigation-menu"><a href="{{route('admin.storefront')}}">{{__('file.Store Front')}}</a></li>
-                @endcan
-                {{-- @can('slider') --}}
-                    <li><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
-                {{-- @endcan --}}
-            </ul>
-        </li>
-        @endcan
-        
-        <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-web"></i><span>{{__('file.Localization')}}</span></a>
-            <ul id="localization" class="collapse list-unstyled">
-                <li><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
-                <li><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
-                <li><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
-            </ul>
-        </li>
-        
-        @can('users_and_roles')
-        <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>{{__('file.Users and Roles')}}</span></a>
-            <ul id="user" class="collapse list-unstyled">
-            @can('user')
-                <li id="navigation-menu"><a href="{{route('admin.user')}}">{{__('file.Users')}}</a></li>
-            @endcan
-            @can('role')
-                <li id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('file.Roles')}}</a></li>
-            @endcan
-            </ul>
-        </li>
-        @endcan
-
         @can('site-setting')
         <li class="has-dropdown">
-            <a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-toggles"></i><span>{{trans('file.Site Settings')}}</span></a>
+            <a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cogs"></i><span>{{trans('file.Site Settings')}}</span></a>
             <ul id="setting" class="collapse list-unstyled ">
                 @can('setting')
                     <li id="employee_list"><a href="{{route('admin.setting.index')}}">{{__('file.Setting')}}</a></li>

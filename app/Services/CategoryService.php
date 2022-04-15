@@ -22,12 +22,13 @@ class CategoryService
 
     public function getAllCategories()
     {
-        return $this->categoryContract->getAllCategories();
+        $data = $this->categoryContract->getAllCategories();
+        return json_decode(json_encode($data), FALSE);
     }
 
-    public function dataTable($data)
+    public function dataTable()
     {
-        $categories = json_decode(json_encode($data), FALSE);
+        $categories = $this->getAllCategories();
 
         return datatables()->of($categories)
                 ->setRowId(function ($category){

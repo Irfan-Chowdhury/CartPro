@@ -213,7 +213,21 @@ New Changes file
 
 DB Change
 1. Attribute_sets -> deleted_at column added
-2. 
+2.
+
+
+
+public/vendor/translation/css [done]
+resources/views/vendor/translation [done]
+resources/views/admin/includes/sidebar.blade.php [done]
+resources/views/admin/pages/setting/language [done]
+resources/views/admin/pages/setting/index.blade.php [done]
+
+resources/views/admin/pages/storefront/index.blade.php
+
+
+
+
 
 
 
