@@ -40,7 +40,7 @@
 
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
-                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('Attribute Set') <span class="text-danger">*</span></b></label>
+                                                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Attribute Set') <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
                                                             <select name="attribute_set_id" id="attributeSetId" required class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Attribute Set')}}'>
                                                                 @forelse ($attributeSets as $item)
@@ -57,7 +57,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Attribute Name') <span class="text-danger">*</span></b></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" required name="attribute_name" id="navbarText" class="form-control @error('attribute_name') is-invalid @enderror" id="inputEmail3" placeholder="Type Attribute Name" >
+                                                            <input type="text" required name="attribute_name" id="navbarText" class="form-control @error('attribute_name') is-invalid @enderror" id="inputEmail3" placeholder="@lang('file.Attribute Name')" >
                                                             @error('attribute_name')
                                                                 <div class="text-danger">{{ $message }}</div>
                                                             @enderror
@@ -67,7 +67,7 @@
                                                     <div class="form-group row">
                                                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Categories')</b></label>
                                                         <div class="col-sm-8">
-                                                            <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                                                            <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
                                                                 @foreach ($categories as $item)
                                                                     @if ($item->categoryTranslation->count()>0)
                                                                         @foreach ($item->categoryTranslation as $key => $value)
@@ -125,7 +125,7 @@
                                                 <div class="row">
                                                     <div class="col-6 form-group">
                                                         <label>{{__('file.Value Name')}}</label>
-                                                        <input type="text" name="value_name[]" class="form-control" placeholder="{{__('Type Value Name')}}">
+                                                        <input type="text" name="value_name[]" class="form-control" placeholder="{{__('file.Value Name')}}">
                                                     </div>
                                                     <div class="col-2">
                                                         <label>@lang('file.Delete')</label><br>
@@ -133,7 +133,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('Add More')</span>
+                                            <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('file.Add More')</span>
                                             <br><br>
                                             <div class="d-flex justify-content-center">
                                                 <button type="submit" class="btn btn-success">{{__('file.Submit')}}</button>

@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
-                            <input type="text" name="storefront_three_column_full_width_banners_1_call_to_action_url" placeholder="Type Copyright Text" class="form-control"
+                            <input type="text" name="storefront_three_column_full_width_banners_1_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
                                 value="{{$setting[71]->plain_value}}">
                             <br><br>
                             <input type="checkbox" class="m-1" @if($setting[72]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_1_open_in_new_window">
@@ -103,7 +103,7 @@
 
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
-                            <input type="text" name="storefront_three_column_full_width_banners_2_call_to_action_url" placeholder="Type Copyright Text" class="form-control"
+                            <input type="text" name="storefront_three_column_full_width_banners_2_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
                                 value="{{$setting[74]->plain_value}}">
                             <br><br>
                             <input type="checkbox" class="m-1" @if($setting[75]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_2_open_in_new_window">
@@ -138,7 +138,7 @@
 
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
-                            <input type="text" name="storefront_three_column_full_width_banners_3_call_to_action_url" placeholder="Type Copyright Text" class="form-control"
+                            <input type="text" name="storefront_three_column_full_width_banners_3_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
                                 value="{{$setting[77]->plain_value}}">
                             <br><br>
                             <input type="checkbox" class="m-1" @if($setting[78]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_3_open_in_new_window">

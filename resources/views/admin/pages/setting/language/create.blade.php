@@ -18,7 +18,7 @@
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Language Name')</b></label>
                             <div class="col-sm-8">
-                                <input type="text" name="language_name" id="navbarText" class="form-control @error('language_name') is-invalid @enderror" value="{{old('language_name')}}" id="inputEmail3" placeholder="Type Your Language Name" >
+                                <input type="text" name="language_name" id="navbarText" class="form-control @error('language_name') is-invalid @enderror" value="{{old('language_name')}}" id="inputEmail3" placeholder="@lang('file.Type Your Language Name')" >
                                 @error('language_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -28,7 +28,7 @@
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Locale')</b></label>
                             <div class="col-sm-8">
-                                <input type="text" name="local" id="navbarText" class="form-control  @error('local') is-invalid @enderror" value="{{old('local')}}" id="inputEmail3" placeholder="Example: 'en', 'bn', 'fr' etc." >
+                                <input type="text" name="local" id="navbarText" class="form-control  @error('local') is-invalid @enderror" value="{{old('local')}}" id="inputEmail3" placeholder="@lang("file.Example: 'en', 'bn', 'fr' etc")" >
                                 @error('local')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror

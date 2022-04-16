@@ -15,18 +15,18 @@
             <div class="modal-body">
 
               <div class="form-group">
-                <label>{{__('Role Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>
-                <input type="text" name="role_name" id="roleName" class="form-control" placeholder="Type Tag Name" >
+                <label>{{__('file.Role Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>
+                <input type="text" name="role_name" id="roleName" class="form-control" placeholder="{{__('file.Role Name')}}" >
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">
                 <input type="checkbox" checked class="form-check-input" name="is_active" id="isActive" value="1" id="isActive">
-                <label class="form-check-label" for="exampleCheck1">{{__('Active')}}</label>
+                <label class="form-check-label" for="exampleCheck1">{{__('file.Active')}}</label>
               </div>
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">Submit</button>
+                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
             </div>
 
         </form>

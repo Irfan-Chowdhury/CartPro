@@ -221,7 +221,7 @@
 
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                                    <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                                    <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                                 </div>
 
                                                             </div>
@@ -319,7 +319,7 @@
 
                                                                 <div class="product-overlay">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                                    <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                                    <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                                 </div>
 
                                                             </div>
@@ -418,7 +418,7 @@
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
-                                                                <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                                <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
@@ -515,7 +515,7 @@
                                                             <div class="product-overlay">
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span>
                                                                 </a>
-                                                                <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                                <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
@@ -682,7 +682,7 @@
                                                             {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#flash_sale_{{$item->product->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a> --}}
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                             <a>
-                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span>
+                                                                <span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span>
                                                             </a>
 
                                                         </div>
@@ -706,21 +706,6 @@
                                                                     @endphp
                                                                 </ul>
                                                                 <div class="product-price">
-                                                                    {{-- @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
-                                                                        <span class="promo-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                            @else
-                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span>
-                                                                        <span class="old-price">
-                                                                            @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                            @else
-                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                                            @endif
-                                                                        </span> --}}
                                                                     @if ($item->price>0 && $item->price<$item->product->price)
                                                                         <span class="promo-price">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
@@ -753,19 +738,19 @@
                                                             <div class="countdown-deals text-center" data-countdown="{{$item->end_date}}">
                                                                 <div class="cdown day">
                                                                     <span class="time-count">00</span>
-                                                                    <p>Days</p>
+                                                                    <p>@lang('file.Days')</p>
                                                                 </div>
                                                                 <div class="cdown hour">
                                                                     <span class="time-count">00</span>
-                                                                    <p>Hours</p>
+                                                                    <p>@lang('file.Hours')</p>
                                                                 </div>
                                                                 <div class="cdown minutes">
                                                                     <span class="time-count">00</span>
-                                                                    <p>mins</p>
+                                                                    <p>@lang('file.Mins')</p>
                                                                 </div>
                                                                 <div class="cdown second">
                                                                     <span class="time-count">00</span>
-                                                                    <p>secs</p>
+                                                                    <p>@lang('file.Secs')</p>
                                                                 </div>
                                                             </div>
                                                             <!-- countdown end -->
@@ -774,7 +759,7 @@
                                                             <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                         @if ($item->qty>=0)
-                                                            Available: {{$item->qty}}
+                                                            @lang('file.Available') {{$item->qty}}
                                                         @endif
 
                                                     </div>
@@ -1157,7 +1142,7 @@
 
                                         <div class="product-overlay">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#quickshopTrend_{{$item->product->slug}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                            <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                            <a><span class="ti-heart add_to_wishlist" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$item->product->categoryProduct[0]->category_id ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                         </div>
                                     </div>
                                     <div class="product-details">

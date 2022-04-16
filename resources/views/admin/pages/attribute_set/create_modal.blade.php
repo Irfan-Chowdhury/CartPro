@@ -19,7 +19,7 @@
 
               <div class="form-group">
                 <label>{{__('file.Attribute Set Name')}}</label>
-                <input type="text" name="attribute_set_name" id="attributeSetName" required class="form-control" placeholder="Attribute Set Name">
+                <input type="text" name="attribute_set_name" id="attributeSetName" required class="form-control" placeholder="{{__('file.Attribute Set Name')}}">
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">

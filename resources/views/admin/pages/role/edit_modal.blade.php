@@ -16,8 +16,8 @@
             <div class="modal-body">
 
               <div class="form-group">
-                <label>{{__('Role Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>
-                <input type="text" name="role_name" required id="roleNameEdit"  class="form-control" placeholder="Type Tag Name">
+                <label>{{__('file.Role Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>
+                <input type="text" name="role_name" required id="roleNameEdit"  class="form-control" placeholder="{{__('file.Role Name')}}">
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
 

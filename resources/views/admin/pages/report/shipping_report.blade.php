@@ -48,7 +48,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Filter</h4>
+                            <h4 class="card-title">@lang('file.Filter')</h4>
                             <form id="filterForm" method="get">
 
                                 <div class="form-group mt-4">
@@ -80,7 +80,7 @@
                                 <div class="form-group mt-4">
                                     <h5 class="mt-4 card-subtitle mb-2 text-muted">@lang('file.Shipping Method')</h5>
                                     <select name="report_type" class="form-control">
-                                        <option value="">-- Select --</option>
+                                        <option value="">@lang('file.-- Select --')</option>
                                         <option value="Free Shipping">@lang('file.Free Shipping')</option>
                                         <option value="Local Pickup">@lang('file.Local Pickup')</option>
                                         <option value="Flat Rate">@lang('file.Flat Rate')</option>

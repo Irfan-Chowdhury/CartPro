@@ -146,7 +146,7 @@
                         <ul class="nav shop-item-filter-list">
                             <li class="d-none d-md-block d-lg-block"><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
                             <li class="d-none d-md-block d-lg-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
-                            <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> Filters</a></li>
+                            <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> @lang('file.Filters')</a></li>
                         </ul>
                         <!-- shop-item-filter-list start -->
                         <div class="dropdown">
@@ -203,7 +203,7 @@
 
                                                         <div class="product-overlay">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
@@ -298,7 +298,7 @@
                                         </form>
                                     @endif
                                 @empty
-                                    <h2 class="h4">No items found</h2>
+                                    <h2 class="h4">@lang('file.No items found')</h2>
                                 @endforelse
                             @else
                                 @forelse ($products as $item)
@@ -327,7 +327,7 @@
 
                                                         <div class="product-overlay">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
@@ -416,7 +416,7 @@
                                                             <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @endif
                                                         <div class="d-flex justify-content-between">
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>
+                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                         </div>
                                                     </div>
                                                 </div>

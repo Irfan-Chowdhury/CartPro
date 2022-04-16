@@ -23,12 +23,12 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Title') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitleEdit" placeholder="Type Title">
+                            <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitleEdit" placeholder="@lang('file.Title')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitleEdit" placeholder="Type Subtitle">
+                            <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitleEdit" placeholder="@lang('file.Subtitle')">
                         </div>
 
                         <div class="form-group row">
@@ -43,7 +43,7 @@
                             <label class="col-md-4 col-form-label"><b><span id="changeLabelTextByTypeEdit">{{__('file.Category')}}</span> &nbsp;<span class="text-danger">*</span> </b></label>
                             <!--Category-->
                             <div id="dependancyTypeForCategoryEdit" class="col-md-8">
-                                <select name="category_id" id="category_id_edit" class="form-control col-md-12 selectpicker" title='{{__('-- Select Category --')}}' >
+                                <select name="category_id" id="category_id_edit" class="form-control col-md-12 selectpicker" title='{{__('file.-- Select Category --')}}' >
                                     @foreach ($categories as $item)
                                         @forelse ($item->categoryTranslation as $key => $value)
                                             @if ($value->local==$locale)
@@ -52,7 +52,7 @@
                                                 <option value="{{$item->id}}">{{$value->category_name}}</option> @break
                                             @endif
                                         @empty
-                                            <option value="">{{__('NULL')}}</option>
+                                            <option value="">{{__('file.NULL')}}</option>
                                         @endforelse
                                     @endforeach
                                 </select>
@@ -74,7 +74,7 @@
 
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Target')</b></label>
-                            <select name="target" id="targetEdit" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Target')}}'>
+                            <select name="target" id="targetEdit" class="col-md-8 form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Target')}}'>
                                 <option value="same_tab">@lang('file.Same Tab')</option>
                                 <option value="new_tab">@lang('file.New Tab')</option>
                             </select>
@@ -82,7 +82,7 @@
 
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Text Alignment')</b></label>
-                            <select name="text_alignment" id="textAlignment" class="col-md-8 form-control selectpicker" title='{{__('file.Select Target')}}'>
+                            <select name="text_alignment" id="textAlignment" class="col-md-8 form-control selectpicker" title='{{__('file.Select Alignment')}}'>
                                 <option value="left">@lang('file.Left')</option>
                                 <option value="right">@lang('file.Right')</option>
                             </select>

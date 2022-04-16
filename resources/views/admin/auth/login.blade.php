@@ -7,13 +7,13 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    
+
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-    
+
     <link rel="preload" href="https://cartproshop.com/demo/public/vendor/bootstrap/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="https://cartproshop.com/demo/public/vendor/bootstrap/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-    
+
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="{{asset('public/css/style.default.css')}}" id="theme-stylesheet"
           type="text/css">
@@ -72,11 +72,11 @@
                     </div>
                 </form>
                 <!-- This three buttons for demo only-->
-                <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">LogIn as Admin</button>
+                <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">@lang('file.LogIn as Admin')</button>
                 <br><br>
             </div>
             <div class="copyrights text-center">
-                <p>{{ __('Developed by')}} <a href="" class="external">LionCoders</a></p>
+                <p>{{ __('Developed by')}} <a href="" class="external">@lang('file.LionCoders')</a></p>
             </div>
         </div>
     </div>

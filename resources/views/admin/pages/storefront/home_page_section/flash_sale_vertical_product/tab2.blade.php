@@ -2,14 +2,14 @@
 <div class="form-group row">
     <label class="col-sm-4 col-form-label"><b>{{__('file.Title')}}</b></label>
     <div class="col-sm-8">
-        <input type="text" name="storefront_vertical_product_2_title" class="form-control" placeholder="Type Title" value="{{$setting[138]->settingTranslation->value ?? null}}" >
+        <input type="text" name="storefront_vertical_product_2_title" class="form-control" placeholder="{{__('file.Title')}}" value="{{$setting[138]->settingTranslation->value ?? null}}" >
     </div>
 </div>
 <div class="form-group row d-none">
-    <label class="col-sm-4 col-form-label"><b>Type</b></label>
+    <label class="col-sm-4 col-form-label"><b>@lang('file.Type')</b></label>
     <div class="col-sm-8">
         <select name="storefront_vertical_product_2_type" id="storefrontVerticalProduct_2_Type" class="form-control" data-live-search="true" data-live-search-style="begins">
-            <option value="">-- Select Type --</option>
+            <option value="">@lang('file.-- Select Type --')</option>
             <option value="{{__('category_products')}}" selected {{ $setting[139]->plain_value == 'category_products' ? 'selected="selected"' : '' }}>{{__('Category Products')}}</option>
             <option value="{{__('custom_products')}}" {{ $setting[139]->plain_value == 'custom_products' ? 'selected="selected"' : '' }}>{{__('Custom Products')}}</option>
             <option value="{{__('latest_products')}}" {{ $setting[139]->plain_value == 'latest_products' ? 'selected="selected"' : '' }}>{{__('Latest Products')}}</option>
@@ -19,10 +19,10 @@
 </div>
 @if ((!empty($setting[139]->plain_value)) && ($setting[139]->plain_value == 'category_products'))
     <div class="form-group row" id="verticalCategoryFeild_2">
-        <label class="col-sm-4 col-form-label"><b>Category</b></label>
+        <label class="col-sm-4 col-form-label"><b>@lang('file.Category')</b></label>
         <div class="col-sm-8">
-            <select name="storefront_vertical_product_2_category_id" id="storefrontVerticalProduct_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                <option value="NULL">NULL</option>
+            <select name="storefront_vertical_product_2_category_id" id="storefrontVerticalProduct_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
+                <option value="NULL">@lang('file.NULL')</option>
                 @foreach ($categories as $item)
                     <option value="{{$item->id}}" {{ $setting[140]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach
@@ -31,10 +31,10 @@
     </div>
 @else
     <div class="form-group row" id="verticalCategoryFeild_2">
-        <label class="col-sm-4 col-form-label"><b>Category</b></label>
+        <label class="col-sm-4 col-form-label"><b>@lang('file.Category')</b></label>
         <div class="col-sm-8">
-            <select name="storefront_vertical_product_2_category_id" id="storefrontVerticalProduct_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                <option value="NULL">NULL</option>
+            <select name="storefront_vertical_product_2_category_id" id="storefrontVerticalProduct_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
+                <option value="NULL">@lang('file.NULL')</option>
                 @foreach ($categories as $item)
                     <option value="{{$item->id}}" {{ $setting[140]->plain_value == $item->id ? 'selected="selected"' : '' }}>{{$item->catTranslation->category_name ?? null}}</option>
                 @endforeach

@@ -23,7 +23,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Special Price Type')}}</b></label>
                         <div class="col-sm-8">
-                            <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Price Type')}}'>
+                            <select name="special_price_type" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Price Type')}}'>
                                 <option value="Fixed" @if($product->special_price_type=='Fixed') selected @endif>{{__('Fixed')}}</option>
                                 <option value="Parcent" @if($product->special_price_type=='Parcent') selected @endif>{{__('Parcent')}}</option>
                             </select>

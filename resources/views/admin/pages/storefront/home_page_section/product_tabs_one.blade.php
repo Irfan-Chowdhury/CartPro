@@ -19,7 +19,6 @@
                     </div>
 
 
-                    <!-- All 'Type' have been made invisble by using 'd-none' and 'category_product' default selected -->
 
                      <!-- Tab-1 -->
                      @include('admin.pages.storefront.home_page_section.product_tabs_one.tab1')

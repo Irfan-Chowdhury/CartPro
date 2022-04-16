@@ -24,7 +24,9 @@ class AttributeSetStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'attribute_set_name' => 'required|unique:attribute_set_translations,attribute_set_name',
+            // 'attribute_set_name' => 'required|unique:attribute_set_translations,attribute_set_name',
+            'attribute_set_name' => 'required|unique:attribute_set_translations,attribute_set_name,NULL,id,deleted_at,NULL',
+            // name'=>'required|unique:form_types,name,NULL,id,deleted_at,NULL',
         ];
     }
 }

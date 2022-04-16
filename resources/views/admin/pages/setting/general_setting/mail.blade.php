@@ -47,7 +47,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Encryption')</b></label>
                         <div class="col-sm-8">
                             <select name="mail_encryption" class="form-control">
-                                <option value="">-- Select Encryption --</option>
+                                <option value="">@lang('file.-- Select Encryption --')</option>
                                 <option value="Tls" @isset($setting_mail->mail_encryption) {{$setting_mail->mail_encryption=="Tls" ? 'selected':''}} @endisset>Tls</option>
                                 <option value="SSL" @isset($setting_mail->mail_encryption) {{$setting_mail->mail_encryption=="SSL" ? 'selected':''}} @endisset>SSL</option>
                             </select>
@@ -95,7 +95,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Email Order Status')</b></label>
                         <div class="col-sm-8">
                             <select name="mail_order_status" class="form-control">
-                                <option value="">-- Select Status --</option>
+                                <option value="">@lang('file.-- Select Status --')</option>
                                 <option value="canceled" @isset($setting_mail->mail_order_status) {{$setting_mail->mail_order_status=="canceled" ? 'selected':''}} @endisset>{{ucfirst("canceled")}}</option>
                                 <option value="completed" @isset($setting_mail->mail_order_status) {{$setting_mail->mail_order_status=="completed" ? 'selected':''}} @endisset>{{ucfirst("completed")}}</option>
                                 <option value="on_hold" @isset($setting_mail->mail_order_status) {{$setting_mail->mail_order_status=="on_hold" ? 'selected':''}} @endisset>{{ucfirst("on hold")}}</option>

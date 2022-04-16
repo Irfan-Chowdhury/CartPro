@@ -6,7 +6,7 @@
             <div class="col-md-10">
                 <form action="{{route('empty_database')}}" method="get">
                     @csrf
-                    <button type="submit" onclick="return confirm('Are You Sure To Delete ?')" class="btn btn-primary btn-lg">Click here to empty database</button>
+                    <button type="submit" onclick="return confirm('Are You Sure To Delete ?')" class="btn btn-primary btn-lg">@lang('file.Click here to empty database')</button>
                 </form>
             </div>
         </div>

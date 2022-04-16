@@ -22,7 +22,7 @@
                     <li id="brand-list-menu"><a href="{{route('admin.brand')}}">{{__('file.Brand')}}</a></li>
                 @endcan
                 @can('attribute_set')
-                    <li id="brand-list-menu"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute_Set')}}</a></li>
+                    <li id="brand-list-menu"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute Set')}}</a></li>
                 @endcan
                 @can('attribute')
                     <li id="brand-list-menu"><a href="{{route('admin.attribute.index')}}">{{__('file.Attributes')}}</a></li>
@@ -104,7 +104,6 @@
                 <li><a href="{{route('admin.reports.search_report')}}">@lang('file.Search Report')</a></li>
                 <li><a href="{{route('admin.reports.shipping_report')}}">@lang('file.Shipping Report')</a></li>
                 <li><a href="{{route('admin.reports.tax_report')}}">@lang('file.Tax Report')</a></li>
-                {{-- <li><a href="{{route('admin.reports.product_purchase_report')}}">@lang('file.Product Purchase Report')</a></li> --}}
             </ul>
         </li>
 

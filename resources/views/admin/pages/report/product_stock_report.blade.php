@@ -68,7 +68,7 @@
                                 <div class="form-group mt-4">
                                     <h5 class="mt-4 card-subtitle mb-2 text-muted">@lang('file.Stock Availity')</h5>
                                     <select name="stock_availity" class="form-control">
-                                        <option value="">-- Please Select --</option>
+                                        <option value="">@lang('file.-- Select --')</option>
                                         <option value="1">@lang('file.In Stock')</option>
                                         <option value="0">@lang('file.Out of Stock')</option>
                                     </select>

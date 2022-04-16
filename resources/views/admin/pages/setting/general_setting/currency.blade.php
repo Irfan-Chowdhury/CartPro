@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>{{__('file.Default Currency')}}<span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='{{__('Select Currency')}}'>
+                            <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='{{__('file.Select Currency')}}'>
                                 @foreach ($currencies as $currency)
                                     <option value="{{$currency->currency_code}}" @if($setting_currency) {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}} @endif> {{$currency->currency_name}} ({{$currency->currency_code}})</option>
                                 @endforeach
@@ -21,7 +21,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Supported Currencies') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="supported_currencies[]" id="supportedCurrencies" class="form-control selectpicker" multiple="multiple" data-live-search="true" title='{{__('Select Currency')}}'>
+                            <select name="supported_currencies[]" id="supportedCurrencies" class="form-control selectpicker" multiple="multiple" data-live-search="true" title='{{__('file.Select Currency')}}'>
                                 @foreach ($currencies as $currency)
                                        <option value="{{$currency->currency_name}}"
                                             @empty(!$selected_currencies)

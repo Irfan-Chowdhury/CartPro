@@ -13,7 +13,7 @@
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
                                 <input type="checkbox" @if($setting[47]->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_enabled" class="form-check-input">
-                                <label class="p-0 form-check-label" for="exampleCheck1">Enable one column banner section</label>
+                                <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable one column banner section')</label>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
 
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
-                            <input type="text" name="storefront_one_column_banner_call_to_action_url" placeholder="Type Copyright Text" class="form-control"
+                            <input type="text" name="storefront_one_column_banner_call_to_action_url" placeholder="@lang('file.Type URL')" class="form-control"
                                 value="{{$setting[49]->plain_value}}">
                             <br><br>
                             <input type="checkbox" class="m-1" @if($setting[50]->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_open_in_new_window">

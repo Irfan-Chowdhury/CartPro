@@ -6,7 +6,7 @@
 </style>
 @endpush
 <div class="card">
-    <h4 class="card-header"><b>General</b></h4>
+    <h4 class="card-header"><b>@lang('file.General')</b></h4>
     <hr>
     <div class="card-body">
         <div class="row">
@@ -46,7 +46,7 @@
                                 <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
                             </ul>
 
-                            <h6>Custom color</h6>
+                            <h6>@lang('file.Custom color')</h6>
                             <input type="text" id="color-input" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Terms & Condition')</b></label>
                         <div class="col-sm-8">
-                            <select name="storefront_terms_and_condition_page" id="storefront_terms_and_condition_page" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Terms & Condition')}}'>
+                            <select name="storefront_terms_and_condition_page" id="storefront_terms_and_condition_page" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Terms & Condition')}}'>
                                 <option value="{{NULL}}">NONE</option>
                                 @foreach ($pages as $item)
                                     @forelse ($item->pageTranslations as $key => $value)
@@ -106,7 +106,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Address')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_address" id="storefront_address" class="form-control" placeholder="Type Address"
+                            <input type="text" name="storefront_address" id="storefront_address" class="form-control" placeholder="@lang('file.Address')"
                             @forelse ($setting[6]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break

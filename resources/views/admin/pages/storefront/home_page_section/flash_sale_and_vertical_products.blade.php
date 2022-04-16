@@ -24,7 +24,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>{{__('file.Title')}}</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_flash_sale_title" class="form-control" placeholder="Type Title" value="{{$setting[131]->settingTranslation->value ?? null}}">
+                            <input type="text" name="storefront_flash_sale_title" class="form-control" placeholder="{{__('file.Title')}}" value="{{$setting[131]->settingTranslation->value ?? null}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -54,7 +54,7 @@
                     <div class="form-group row mt-5">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">
-                            <button type="submit" class="btn btn-primary save">Save</button>
+                            <button type="submit" class="btn btn-primary save">@lang('file.Save')</button>
                         </div>
                     </div>
                 </form>

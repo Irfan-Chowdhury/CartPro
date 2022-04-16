@@ -16,7 +16,7 @@
 
               <div class="form-group">
                 <label class="text-bold">{{__('file.Page Name')}} &nbsp; <span class="text-danger">*</span></label>
-                <input type="text" name="page_name" id="page_name"  class="form-control" placeholder="Type Page Name" >
+                <input type="text" name="page_name" id="page_name"  class="form-control" placeholder="{{__('file.Page Name')}}" >
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
 

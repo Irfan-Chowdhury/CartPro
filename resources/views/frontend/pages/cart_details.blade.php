@@ -100,7 +100,7 @@
                                 </tbody>
                             </table>
 
-                            <a href="{{route('cartpro.home')}}" class="button style3"><i class="ti-arrow-left"></i> Continue Shopping</a>
+                            <a href="{{route('cartpro.home')}}" class="button style3"><i class="ti-arrow-left"></i> @lang('file.Continue Shopping')</a>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -136,7 +136,7 @@
         $(".quantity-left-minus").on("click",function(e){
             $(".quantity-right-plus").prop("disabled",false);
         });
-        
+
         $(".quantity-right-plus").on("click",function(e){
             var inputNumber = $('.input-number').val();
             var maxNumber = $('.input-number').attr('max');

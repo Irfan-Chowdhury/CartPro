@@ -31,7 +31,7 @@
                     </span>
                 </div>
             </div>
-            <div class="cart-amount-mobile">Total:
+            <div class="cart-amount-mobile">@lang('file.Total')
                 <span class="amount">
                     $90.00
                 </span>

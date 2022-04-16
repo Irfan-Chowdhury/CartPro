@@ -9,7 +9,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Meta Title')}} </b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="meta_title" id="metaTitle" value="{{$product->productTranslation->meta_title ?? $product->productTranslationEnglish->meta_title ?? null}}"  class="form-control" id="inputEmail3" placeholder="Type Meta Title" >
+                            <input type="text" name="meta_title" id="metaTitle" value="{{$product->productTranslation->meta_title ?? $product->productTranslationEnglish->meta_title ?? null}}"  class="form-control" id="inputEmail3" placeholder="@lang('file.Type') @lang('file.Meta Title')" >
                         </div>
                     </div>
 

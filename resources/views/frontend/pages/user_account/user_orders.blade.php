@@ -5,10 +5,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h1 class="page-title">Order History</h1>
+                    <h1 class="page-title">@lang('file.Order History')</h1>
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">Order History</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.Order History')</li>
                     </ul>
                 </div>
             </div>
@@ -46,11 +46,11 @@
                                         <div>
 
                                             @if($item->order_status == 'completed')
-                                                <span class="badge rounded-pill bg-success">Complete</span>
+                                                <span class="badge rounded-pill bg-success">@lang('file.Completed')</span>
                                             @elseif($item->order_status == 'pending')
-                                                <span class="badge rounded-pill bg-primary">Pending</span>
+                                                <span class="badge rounded-pill bg-primary">@lang('file.Pending')</span>
                                             @elseif($item->order_status == 'canceled')
-                                                <span class="badge rounded-pill bg-danger">Canceled</span>
+                                                <span class="badge rounded-pill bg-danger">@lang('file.canceled')</span>
                                             @endif
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@
                         @empty
                             <div class="card text-center">
                                 <div class="card-body">
-                                    <h1>You have no order right now</h1>
+                                    <h1>@lang('file.You have no order right now')</h1>
                                 </div>
                             </div>
                         @endforelse

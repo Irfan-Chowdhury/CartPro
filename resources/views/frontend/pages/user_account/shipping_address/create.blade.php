@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <input class="form-control" type="text" name="address_2" placeholder="@lang('Apartment, suite, unit etc. (optional)')">
+                            <input class="form-control" type="text" name="address_2" placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
                         </div>
                         <div class="col-md-6">
                             <input class="form-control" type="text" name="city" placeholder="@lang('file.City/Town')">

@@ -20,7 +20,7 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>{{ trans('file.Menu Name') }} &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="menu_name" id="menu_name_edit" placeholder="Type Menu Name">
+                            <input type="text" class="col-md-8 form-control" name="menu_name" id="menu_name_edit" placeholder="{{ trans('file.Menu Name') }}">
                         </div>
 
 

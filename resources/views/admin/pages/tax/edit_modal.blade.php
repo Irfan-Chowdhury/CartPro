@@ -23,7 +23,7 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Class') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="tax_class" id="tax_class" placeholder="Type tax class">
+                            <input type="text" class="col-md-8 form-control" name="tax_class" id="tax_class" placeholder="@lang('file.Tax Class')">
                         </div>
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Based On') &nbsp;<span class="text-danger">*</span></b></label>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Name') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="tax_name" id="tax_name" placeholder="Type tax name">
+                            <input type="text" class="col-md-8 form-control" name="tax_name" id="tax_name" placeholder="@lang('file.Tax Name')">
                         </div>
 
                         <div class="form-group row">
@@ -50,22 +50,22 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.State')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="state" id="state" placeholder="Type state">
+                            <input type="text" class="col-md-8 form-control" name="state" id="state" placeholder="@lang('file.State')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.City')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="city" id="city" placeholder="Type city">
+                            <input type="text" class="col-md-8 form-control" name="city" id="city" placeholder="@lang('file.City')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Zip')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="zip" id="zip" placeholder="Type Zip">
+                            <input type="text" class="col-md-8 form-control" name="zip" id="zip" placeholder="@lang('file.Zip')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Rate')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="rate" id="rate" placeholder="Type rate">
+                            <input type="text" class="col-md-8 form-control" name="rate" id="rate" placeholder="@lang('file.Rate')">
                         </div>
 
 
@@ -73,7 +73,7 @@
                             <label class="col-md-4 col-form-label"><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">Enable the slide</label>
+                                <label class="form-check-label" for="defaultCheck1">@lang('file.Enable the Tax')</label>
                             </div>
                         </div>
 

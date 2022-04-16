@@ -5,10 +5,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h1 class="page-title">My Account</h1>
+                    <h1 class="page-title">@lang('file.My Account')</h1>
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">My Account</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.My Account')</li>
                     </ul>
                 </div>
             </div>
@@ -36,8 +36,8 @@
                         <div class="col-md-12 mar-top-30">
                             <div class="user-dashboard-tab__content tab-content">
                                 <div class="tab-pane fade mt-3 show active" id="dashboard" role="tabpanel">
-                                    <p>Hello <strong>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</strong>,</p>
-                                    <p>From your account dashboard you can easily check &amp; view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
+                                    <p>@lang('file.Hello') <strong>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</strong>,</p>
+                                    <p>@lang('file.From your account dashboard you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details.')</p>
                                 </div>
                             </div>
                         </div>

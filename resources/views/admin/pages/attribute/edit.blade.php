@@ -77,7 +77,7 @@
                                             <div class="form-group row">
                                                 <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Categories')</b></label>
                                                 <div class="col-sm-8">
-                                                    <select name="category_id[]" multiple class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                                                    <select name="category_id[]" multiple class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
                                                         @foreach ($categories as $item)
                                                             @if ($item->categoryTranslation->count()>0)
                                                                 @foreach ($item->categoryTranslation as $key => $value)

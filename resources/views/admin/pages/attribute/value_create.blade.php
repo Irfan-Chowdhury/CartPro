@@ -12,17 +12,17 @@
 
                     <div class="modal-body">
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>Value Name</b></label>
+                            <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Value Name')</b></label>
                             <div class="col-sm-8">
-                                <input type="text" name="attribute_value_name" id="navbarText" class="form-control" id="inputEmail3" placeholder="Type Value Name" >
+                                <input type="text" name="attribute_value_name" id="navbarText" class="form-control" id="inputEmail3" placeholder="@lang('file.Value Name')" >
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" name="action_button" id="submitButton" class="btn btn-success">{{__('Submit')}}</button>
+                        <button type="submit" name="action_button" id="submitButton" class="btn btn-success">{{__('file.Submit')}}</button>
                     </div>
                 </form>
-        </div>	
-    </div>	
+        </div>
+    </div>
 </div>

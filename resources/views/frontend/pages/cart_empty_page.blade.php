@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="col-md-8 offset-md-2  error-text text-center">
-                    <h2 class="h1">Your cart is empty. Please add to cart first</h2>
+                    <h2 class="h1">@lang('file.Your cart is empty. Please add to cart first')</h2>
                 </div>
             </div>
         </div>

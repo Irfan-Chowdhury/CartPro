@@ -22,10 +22,6 @@
                             <input type="text" name="category_name" id="category_name" required class="form-control" placeholder="{{__('file.Category Name')}}">
                         </div>
 
-                        <!--<div class="col-md-6 form-group">-->
-                        <!--    <label>{{__('file.Description')}} *</label>-->
-                        <!--    <input type="text" name="description" id="description" required class="form-control" placeholder="{{__('Description Name')}}">-->
-                        <!--</div>-->
 
                         <div class="form-group col-md-6 ">
                             <label>{{__('file.Parent Category')}} </label>

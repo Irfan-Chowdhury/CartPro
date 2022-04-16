@@ -5,10 +5,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h1 class="page-title">Order History</h1>
+                    <h1 class="page-title">@lang('file.Order History')</h1>
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">Order History</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.Order History')</li>
                     </ul>
                 </div>
             </div>

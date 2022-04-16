@@ -19,7 +19,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Inventroy Management')}}</b></label>
                         <div class="col-sm-8">
-                            <select class="form-control selectpicker" name="manage_stock" id="manageStock" data-live-search="true" data-live-search-style="begins" title='{{__('Select Inventory')}}'>
+                            <select class="form-control selectpicker" name="manage_stock" id="manageStock" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Inventory')}}'>
                                 <option value="0" @if($product->manage_stock==0) selected @endif>{{__("file.Don't Track Inventory")}}</option>
                                 <option value="1" @if($product->manage_stock==1) selected @endif>{{__('file.Track Inventory')}}</option>
                             </select>

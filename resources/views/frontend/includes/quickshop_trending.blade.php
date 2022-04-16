@@ -48,7 +48,7 @@
                                             <span>({{round($item->product->avg_rating)}})</span>
                                         </div>
                                         @if ($item->product->sku)
-                                            <div class="item-sku">SKU: {{$item->product->sku ?? null}}</div>
+                                            <div class="item-sku">@lang('file.SKU'): {{$item->product->sku ?? null}}</div>
                                         @endif
                                     </div>
                                     <hr>

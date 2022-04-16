@@ -65,8 +65,7 @@
                 @endif
                 <span> {{auth()->user()->username}}</span>
             </a>
-              {{-- <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{Auth::user()->username}}</span> <i class="fa fa-angle-down"></i>
-              </a> --}}
+             
               <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                 <li>
                     <a href="{{route('admin.profile')}}">

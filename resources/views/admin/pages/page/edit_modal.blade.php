@@ -4,7 +4,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Page')}} | <a class="btn btn-default btn-sm" id="page_url" href="" target="_blank"><i class="dripicons-preview"></i> View Page</a></h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
+          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Page')}} | <a class="btn btn-default btn-sm" id="page_url" href="" target="_blank"><i class="dripicons-preview"></i>@lang('file.View Page')</a></h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -18,7 +18,7 @@
 
               <div class="form-group">
                 <label class="text-bold">{{__('file.Page Name')}} &nbsp; <span class="text-danger">*</span></label>
-                <input type="text" name="page_name" id="page_name_edit"  class="form-control" placeholder="Type Page Name" >
+                <input type="text" name="page_name" id="page_name_edit"  class="form-control" placeholder="{{__('file.Page Name')}}" >
               </div>
 
               <div class="form-group">

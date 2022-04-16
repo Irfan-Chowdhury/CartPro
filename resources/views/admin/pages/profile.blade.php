@@ -5,37 +5,37 @@
 @section('admin_content')
     <section class="forms">
         <div class="container-fluid">
-            
+
             @include('frontend.includes.alert_message')
             @include('frontend.includes.error_message')
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>{{__('Update Profile')}}</h4>
+                            <h4>{{__('file.Update Profile')}}</h4>
                         </div>
 
                         <div class="card-body">
-                            
+
                             @if($user->image)
                                 <img src="{{asset('public/'.$user->image)}}" height="120" width="120">
                             @else
                                 <img src="{{asset('public/images/admin.png')}}" height="120" width="120" >
                             @endif
 
-                            <p class="italic"><small>{{__('The field labels marked with * are required input fields')}}.</small></p>
+                            <p class="italic"><small>{{__('file.The field labels marked with * are required input fields')}}.</small></p>
                             <form method="POST" action="{{route('admin.profile_update')}}" enctype="multipart/form-data">
 
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>{{__('Image')}}</label>
+                                            <label>{{__('file.Image')}}</label>
                                             <input type="file" name="image" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label>{{__('First Name')}} *</label>
+                                            <label>{{__('file.First Name')}} *</label>
                                             <input type="text" name="first_name" value="{{$user->first_name}}" required class="form-control @error('first_name') is-invalid @enderror" />
                                             @error('first_name')
                                                 <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>{{__('Last Name')}} *</label>
+                                            <label>{{__('file.Last Name')}} *</label>
                                             <input type="text" name="last_name" value="{{$user->last_name}}" required class="form-control @error('last_name') is-invalid @enderror" />
                                             @error('last_name')
                                                 <span class="invalid-feedback" role="alert">
@@ -97,23 +97,23 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>{{__('Change Password')}} ({{trans('file.Optional')}})</h4>
+                            <h4>{{__('file.Change Password')}} ({{trans('file.Optional')}})</h4>
                         </div>
 
                         <div class="card-body">
-                            <p class="italic"><small>{{__('The field labels marked with * are required input fields')}}.</small></p>
+                            <p class="italic"><small>{{__('file.The field labels marked with * are required input fields')}}.</small></p>
                             <form method="POST" action="{{route('admin.profile_update')}}" >
                                 @csrf
 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>{{__('New Password')}} *</label>
-                                            <input type="password" name="password" required class="form-control" placeholder="{{__('min:4 characters')}}">
+                                            <label>{{__('file.New Password')}} *</label>
+                                            <input type="password" name="password" required class="form-control" placeholder="{{__('file.min:4 characters')}}">
                                         </div>
 
                                         <div class="form-group">
-                                            <label>{{__('Confirm Password')}} *</label>
+                                            <label>{{__('file.Confirm Password')}} *</label>
                                             <input type="password" name="password_confirmation" id="confirm_pass" required class="form-control" placeholder="{{trans('file.Re-Type')}} {{trans('file.Password')}}">
                                         </div>
                                         <div class="form-group">

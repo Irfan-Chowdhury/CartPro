@@ -24,7 +24,7 @@ class AttributeSetUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'attribute_set_name' => 'required|unique:attribute_set_translations,attribute_set_name,'.$this->attribute_set_translation_id,
+            'attribute_set_name' => 'required|unique:attribute_set_translations,attribute_set_name,'.$this->attribute_set_translation_id.',id,deleted_at,NULL',
         ];
     }
 }

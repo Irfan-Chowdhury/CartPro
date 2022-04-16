@@ -65,7 +65,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('file.Close')</button>
                         </div>
                     </div>
                     </div>
@@ -113,24 +113,24 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="billing_first_name" @auth value="{{auth()->user()->first_name}}" @endauth placeholder="First Name *">
+                                    <input class="form-control" type="text" name="billing_first_name" @auth value="{{auth()->user()->first_name}}" @endauth placeholder="@lang('file.First Name') *">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="billing_last_name" @auth value="{{auth()->user()->last_name}}" @endauth  placeholder="Last Name *">
+                                    <input class="form-control" type="text" name="billing_last_name" @auth value="{{auth()->user()->last_name}}" @endauth  placeholder="@lang('file.Last Name') *">
                                 </div>
 
 
                             <div class="col-sm-6">
-                                <input class="form-control" type="email" name="billing_email" @auth value="{{auth()->user()->email}}" @endauth placeholder="Email *">
+                                <input class="form-control" type="email" name="billing_email" @auth value="{{auth()->user()->email}}" @endauth placeholder="@lang('file.Email') *">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="number" name="billing_phone" @auth value="{{auth()->user()->phone}}" @endauth min='0' onkeypress="return isNumberKey(event)" placeholder="Phone *">
+                                <input class="form-control" type="number" name="billing_phone" @auth value="{{auth()->user()->phone}}" @endauth min='0' onkeypress="return isNumberKey(event)" placeholder="@lang('file.Phone') *">
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group">
                                     <select class="form-control" name="billing_country" id="billingCountry">
-                                        <option value="">* Select Country</option>
+                                        <option value="">* @lang('file.Select Country')</option>
                                         @foreach ($countries as $country)
                                             <option value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
                                         @endforeach
@@ -138,19 +138,19 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="Street Address">
+                                <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="Apartment, suite, unit etc. (optional)">
+                                <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
                             </div>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="City / Town">
+                                <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="State / County">
+                                <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="Postcode / Zip">
+                                <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
                             </div>
                         </div>
 
@@ -158,27 +158,27 @@
                             @if (!Auth::check())
                                 <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
                                     <input type="checkbox" class="custom-control-input" name="billing_create_account_check" id="billing_create_account_check" value="1">
-                                    <label class="label custom-control-label" for="create_account">Create Account</label>
+                                    <label class="label custom-control-label" for="create_account">@lang('file.Create Account')</label>
                                 </div>
                             @endif
 
 
                             <div class="collapse" id="create_account_collapse">
-                                <input class="form-control mt-3 @error('username') is-invalid @enderror" value="{{ old('username') }}" type="text" placeholder="Enter Username" name="username">
+                                <input class="form-control mt-3 @error('username') is-invalid @enderror" value="{{ old('username') }}" type="text" placeholder="@lang('file.Enter Username')" name="username">
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
 
-                                <input class="form-control mt-3 @error('password') is-invalid @enderror" type="password" placeholder="Enter Password" name="password">
+                                <input class="form-control mt-3 @error('password') is-invalid @enderror" type="password" placeholder="@lang('file.Enter Password')" name="password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
 
-                                <input class="form-control mt-3 @error('password_confirmation') is-invalid @enderror" type="password" placeholder="Enter Confirm Password" name="password_confirmation">
+                                <input class="form-control mt-3 @error('password_confirmation') is-invalid @enderror" type="password" placeholder="@lang('file.Enter Confirm Password')" name="password_confirmation">
                                 @error('password_confirmation')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -193,22 +193,22 @@
                             <div class="collapse" id="shipping_address_collapse">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_first_name" placeholder="First Name *">
+                                        <input class="form-control" type="text" name="shipping_first_name" placeholder="@lang('file.First Name') *">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_last_name" placeholder="Last Name *">
+                                        <input class="form-control" type="text" name="shipping_last_name" placeholder="@lang('file.Last Name') *">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_email" placeholder="Email">
+                                        <input class="form-control" type="text" name="shipping_email" placeholder="@lang('file.Email')">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="Phone">
+                                        <input class="form-control" type="text" name="shipping_phone" min='0' onkeypress="return isNumberKey(event)" placeholder="@lang('file.Phone')">
                                     </div>
 
                                     <div class="col-12">
                                         <div class="form-group">
                                             <select class="form-control" name="shipping_country" id="shipping_country">
-                                                <option value="">--Select Country--</option>
+                                                <option value="">@lang('file.Select Country')</option>
                                                 @foreach ($countries as $country)
                                                     <option value="{{$country->country_name}}" @isset($shipping_address) {{$country->country_name==$shipping_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
                                                 @endforeach
@@ -216,19 +216,19 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_address_1" @isset($shipping_address) value="{{$shipping_address->address_1 ?? ''}}" @endisset placeholder="Street Address">
+                                        <input class="form-control" type="text" name="shipping_address_1" @isset($shipping_address) value="{{$shipping_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_address_2" @isset($shipping_address) value="{{$shipping_address->address_2 ?? ''}}" @endisset placeholder="Apartment, suite, unit etc. (optional)">
+                                        <input class="form-control" type="text" name="shipping_address_2" @isset($shipping_address) value="{{$shipping_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="shipping_city" @isset($shipping_address) value="{{$shipping_address->city ?? ''}}" @endisset placeholder="City / Town">
+                                        <input class="form-control" type="text" name="shipping_city" @isset($shipping_address) value="{{$shipping_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_state" @isset($shipping_address) value="{{$shipping_address->state ?? ''}}" @endisset placeholder="State / County">
+                                        <input class="form-control" type="text" name="shipping_state" @isset($shipping_address) value="{{$shipping_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="shipping_zip_code" @isset($shipping_address) value="{{$shipping_address->zip_code ?? ''}}" @endisset placeholder="Postcode / Zip">
+                                        <input class="form-control" type="text" name="shipping_zip_code" @isset($shipping_address) value="{{$shipping_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
                                     </div>
                                 </div>
                             </div>
@@ -297,11 +297,11 @@
                                 </div>
                                 <div class="custom-control custom-checkbox" data-bs-toggle="collapse" href="#apply_coupon_collapse" role="button" aria-expanded="false" aria-controls="apply_coupon_collapse">
                                     <input type="checkbox" class="custom-control-input" id="apply_coupon" name="coupon_checked" value="1">
-                                    <label class="label custom-control-label" for="apply_coupon">I've a coupon</label>
+                                    <label class="label custom-control-label" for="apply_coupon">@lang('I have a coupon')</label>
                                 </div>
                                 <div class="collapse" id="apply_coupon_collapse">
                                     <div class="newsletter" id="applyCoupon">
-                                        <input type="text" placeholder="Enter Coupon Code" name="coupon_code" id="coupon_code">
+                                        <input type="text" placeholder="@lang('file.Enter Coupon Code')" name="coupon_code" id="coupon_code">
                                         <input type="hidden" name="coupon_value" id="coupon_value">
                                         <button class="button style1 btn-search" type="submit">@lang('file.Apply')</button>
                                     </div>
@@ -413,7 +413,7 @@
                                     @endif
                                     <div class="custom-control custom-checkbox text-center mt-5 mb-5">
                                         <input type="checkbox" class="custom-control-input" id="acceptTerms">
-                                        <label class="custom-control-label" for="acceptTerms">I've read and accecpt the <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
+                                        <label class="custom-control-label" for="acceptTerms">@lang('file.I have read and accecpt the') <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
                                     </div>
                                 </div>
                             </div>

@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="form-group mb-3">
                                 <label class="text-bold">@lang('file.Campaign Name') <span class="text-danger">*</span></label>
-                                <input type="text" required name="campaign_name" class="form-control @error('campaign_name') is-invalid @enderror" placeholder="{{__('Campaign Name')}}">
+                                <input type="text" required name="campaign_name" class="form-control @error('campaign_name') is-invalid @enderror" placeholder="@lang('file.Campaign Name')">
                                 @error('campaign_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="">
-                                            <label><b>Product Name <span class="text-danger">*</span></b></label>
+                                            <label><b>@lang('file.Product Name') <span class="text-danger">*</span></b></label>
                                             <select name="product_id[]" required class="form-control @error('product_id') is-invalid @enderror selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Product')}}'>
                                                 @forelse ($products as $item)
                                                     <option value="{{$item->id}}">{{$item->productTranslation->product_name ??$item->productTranslationEnglish->product_name ?? null}}</option>
@@ -56,21 +56,21 @@
                                         <div class="mt-2 form-row">
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.End Date') <span class="text-danger">*</span></label>
-                                                <input type="date" required name="end_date[]" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="Date">
+                                                <input type="date" required name="end_date[]" id="end_date" class="form-control @error('end_date') is-invalid @enderror">
                                                 @error('end_date')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.Price') <span class="text-danger">*</span></label>
-                                                <input type="text" required name="price[]" class="form-control @error('price') is-invalid @enderror" placeholder="Price">
+                                                <input type="text" required name="price[]" class="form-control @error('price') is-invalid @enderror" placeholder="@lang('file.Price')">
                                                 @error('price')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.Quantity') <span class="text-danger">*</span></label>
-                                                <input type="number" required min="0" name="qty[]" class="form-control @error('qty') is-invalid @enderror" placeholder="Quantity">
+                                                <input type="number" required min="0" name="qty[]" class="form-control @error('qty') is-invalid @enderror" placeholder="@lang('file.Quantity')">
                                                 @error('qty')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-                
+
         </form>
     </div>
 

@@ -241,88 +241,10 @@
                         {!! htmlspecialchars_decode($product->productTranslation->description ?? $product->productTranslationDefaultEnglish->description ?? null) !!}
                     </div>
                 </div>
-                <div class="tab-pane fade" id="size" role="tabpanel" aria-labelledby="graphic-design-tab">
-                    <div class="table-content table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="plantmore-product-thumbnail">Size</th>
-                                    <th class="cart-product-name">Bust</th>
-                                    <th class="plantmore-product-price">Waist</th>
-                                    <th class="plantmore-product-quantity">Hips</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">XL</a></td>
-                                    <td class="plantmore-product-name"><a href="#">41-42</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">33-35</span></td>
-                                    <td class="plantmore-product-quantity">
-                                        43-45
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">XL</a></td>
-                                    <td class="plantmore-product-name"><a href="#">41-42</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">33-35</span></td>
-                                    <td class="plantmore-product-quantity">
-                                        43-45
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">XL</a></td>
-                                    <td class="plantmore-product-name"><a href="#">41-42</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">33-35</span></td>
-                                    <td class="plantmore-product-quantity">
-                                        43-45
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="shipping" role="tabpanel">
-                    <p class="mar-bot-30">*Estimated Shipping times throughout North America </p>
-                    <div class="table-content table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="plantmore-product-thumbnail">Shipping Type</th>
-                                    <th class="cart-product-name">Cost</th>
-                                    <th class="plantmore-product-price">Estimated Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">Standard Ground</a></td>
-                                    <td class="plantmore-product-name"><a href="#">Free</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">Product will delivery in 3-5 business days</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">Standard Ground</a></td>
-                                    <td class="plantmore-product-name"><a href="#">Free</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">Product will delivery in 3-5 business days</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="plantmore-product-thumbnail"><a href="#">Standard Ground</a></td>
-                                    <td class="plantmore-product-name"><a href="#">Free</a>
-                                    </td>
-                                    <td class="plantmore-product-price"><span class="amount">Product will delivery in 3-5 business days</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p class="mar-top-30">Exclude all mexico and International orders.Please see contact page for International policies.</p>
-                </div>
                 <div class="tab-pane fade" id="comments" role="tabpanel">
                     <div class="row">
                         <div class="col-md-6">
-                            <h3 class="h5"> {{count($reviews)}} reviews</h3>
+                            <h3 class="h5"> {{count($reviews)}} @lang('file.Reviews')</h3>
                             <div class="item-reviews">
 
                                 @foreach ($reviews as $item)
@@ -369,7 +291,7 @@
                                     <input type="hidden" name="rating" id="rating" value="0">
 
                                     <div class="col-sm-12">
-                                        <label >Your Rating</label>
+                                        <label ></label>
                                         <ul class="product-rating">
                                             {{-- @php
                                                 for ($i=1; $i <=5 ; $i++){
@@ -446,7 +368,7 @@
                                                                             @endif
                                                                         @endforeach
                                                                       @endif
-                                                name="submit" type="submit" id="submit">Submit</button>
+                                                name="submit" type="submit" id="submit">@lang('file.Submit')</button>
                                     </div>
 
                                 </form>

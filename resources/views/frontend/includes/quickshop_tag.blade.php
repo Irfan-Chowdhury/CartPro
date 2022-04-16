@@ -34,7 +34,6 @@
                                 <div class="item-details">
                                     <h3 class="item-name">{{$item->product_name}}</h3>
                                     <div class="d-flex justify-content-between">
-                                        {{-- <div class="item-brand">Brand: <a href="">{{$brand->brand_name}}</a></div> --}}
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
                                                 @php
@@ -51,7 +50,7 @@
                                             <span>( {{round($item->avg_rating)}} )</span>
                                         </div>
                                         @if ($item->sku)
-                                            <div class="item-sku">SKU: {{$item->sku ?? null}}</div>
+                                            <div class="item-sku">@lang('file.SKU'): {{$item->sku ?? null}}</div>
                                         @endif
                                     </div>
                                     <hr>

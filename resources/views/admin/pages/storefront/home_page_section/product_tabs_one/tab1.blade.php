@@ -2,7 +2,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_product_tabs_1_section_tab_1_title" class="form-control" placeholder="Type Title"
+                            <input type="text" name="storefront_product_tabs_1_section_tab_1_title" class="form-control" placeholder="@lang('file.Title')"
                             @forelse ($setting[82]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -18,7 +18,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Type')</b></label>
                         <div class="col-sm-8">
                             <select name="storefront_product_tabs_1_section_tab_1_product_type" id="storefrontProductTabs_1_SectionTab_1_ProductType" class="form-control" data-live-search="true" data-live-search-style="begins">
-                                <option value="">-- Select Type --</option>
+                                <option value="">@lang('file.-- Select Type --')</option>
                                 <option value="{{__('category_products')}}" selected>{{__('Category Products')}}</option>
                             </select>
                         </div>

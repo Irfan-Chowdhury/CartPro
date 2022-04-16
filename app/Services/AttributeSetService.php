@@ -117,6 +117,7 @@ class AttributeSetService
     public function destroy($id)
     {
         $this->attributeSetContract->destroy($id);
+        $this->attributeSetTranslationContract->destroy($id); //attribute_id
     }
 
 }

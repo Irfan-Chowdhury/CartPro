@@ -100,7 +100,7 @@
                                 <div class="form-group mt-4">
                                     <h5 class="mt-4 card-subtitle mb-2 text-muted">@lang('file.Order Status')</h5>
                                     <select name="report_type" class="form-control report_type">
-                                        <option value="">-- Select --</option>
+                                        <option value="">@lang('file.-- Select --')</option>
                                         <option value="completed">@lang('file.Completed')</option>
                                         <option value="pending">@lang('file.Pending')</option>
                                         <option value="processing">@lang('file.Processing')</option>

@@ -9,7 +9,7 @@
                 <div class="col">
                     <ul>
                         <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                        <li class="active">Search Produtcs</li>
+                        <li class="active">@lang('file.Search Produtcs')</li>
                     </ul>
                 </div>
             </div>

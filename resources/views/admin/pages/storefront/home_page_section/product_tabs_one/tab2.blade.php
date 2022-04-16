@@ -3,7 +3,7 @@
     <label class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
     <div class="col-sm-8">
         <!-- DB_ROW_ID-88:  => setting[87] -->
-        <input type="text" name="storefront_product_tabs_1_section_tab_2_title" class="form-control" placeholder="Type Title"
+        <input type="text" name="storefront_product_tabs_1_section_tab_2_title" class="form-control" placeholder="@lang('file.Title')"
         @forelse ($setting[87]->settingTranslations as $key => $item)
             @if ($item->locale==$locale)
                 value="{{$item->value}}" @break
@@ -49,7 +49,7 @@
         <label class="col-sm-4 col-form-label"><b>@lang('file.Category')</b></label>
         <div class="col-sm-8">
             <!-- DB_ROW_ID-90:  => setting[89] -->
-            <select name="storefront_product_tabs_1_section_tab_2_category_id" id="storefrontProductTabs_1_SectionTab_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+            <select name="storefront_product_tabs_1_section_tab_2_category_id" id="storefrontProductTabs_1_SectionTab_2_CategoryId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
                 @foreach ($categories as $item)
                     @forelse ($item->categoryTranslation as $key => $value)
                         @if ($value->local==$locale)

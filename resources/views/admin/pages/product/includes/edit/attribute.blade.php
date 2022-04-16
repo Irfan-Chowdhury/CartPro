@@ -1,6 +1,6 @@
 <div class="tab-pane fade show" aria-labelledby="product-attribute" id="attribute" role="tabpanel">
     <div class="card">
-        <h4 class="card-header"><b>Attributes</b></h4>
+        <h4 class="card-header"><b>@lang('file.Attributes')</b></h4>
         <hr>
         <div class="card-body">
             <div class="variants">
@@ -19,7 +19,7 @@
 
                         <div class="col-6 form-group">
                             <label>{{__("file.Values")}}</label>
-                            <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
+                            <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="@lang('file.Select Value')">
                                 @foreach ($attribute_values as $attributeValue)
                                     @if ($attributeValue->attribute_id == $value->attribute_id)
                                         <option value="{{$attributeValue->id}}" @if($value->attribute_value_id==$attributeValue->id) selected @endif>{{$attributeValue->attrValueTranslation->value_name ?? $attributeValue->attrValueTranslationEnglish->value_name ?? null}}</option>
@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-5 form-group">
                             <label>{{__('file.Atrribute')}}</label>
-                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Attribute')}}'>
+                            <select name="attribute_id[]" id="attributeId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Attribute')}}'>
                                 @forelse ($attributes as $item)
                                     <option value="{{$item->id}}">{{$item->attributeTranslation->attribute_name ?? $item->attributeTranslationEnglish->attribute_name ?? null}}</option>
                                 @empty
@@ -47,7 +47,7 @@
 
                         <div class="col-6 form-group">
                             <label>{{__("file.Values")}}</label>
-                            <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
+                            <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="@lang('file.Select Value')">
 
                             </select>
                         </div>

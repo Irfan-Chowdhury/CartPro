@@ -18,37 +18,37 @@
                         <div class="col-md-6 form-group">
                             <label>{{__('file.First Name')}} *</label>
                             <input type="text" name="first_name" id="first_name" required class="form-control"
-                                   placeholder="{{__('First Name')}}">
+                                   placeholder="{{__('file.First Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Last Name')}} *</label>
                             <input type="text" name="last_name" id="last_name" required class="form-control"
-                                   placeholder="{{__('Last Name')}}">
+                                   placeholder="{{__('file.Last Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Username')}} *</label>
                             <input type="text" name="username" id="username" required class="form-control"
-                                   placeholder="{{__('User Name')}}">
+                                   placeholder="{{__('file.Username')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Phone')}} *</label>
                             <input type="text" name="phone" id="phone" required class="form-control"
-                                   placeholder="{{__('phone')}}">
+                                   placeholder="{{__('file.Phone')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Email')}} *</label>
                             <input type="email" name="email" id="email" required class="form-control"
-                                   placeholder="{{__('email')}}">
+                                   placeholder="{{__('file.Email')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Password')}} *</label>
                             <input type="password" name="password" id="password" class="form-control"
-                                   placeholder="{{__('password')}}">
+                                   placeholder="{{__('file.Password')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Confirm password')}} *</label>
                             <input type="password" name="confirm_password" id="confirm_password" class="form-control"
-                                   placeholder="{{__('Confirm Password')}}">
+                                   placeholder="{{__('file.Confirm Password')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{__('file.Role')}} *</label>

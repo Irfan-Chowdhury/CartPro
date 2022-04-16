@@ -20,7 +20,7 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Class') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="tax_class" placeholder="Type tax class">
+                            <input type="text" class="col-md-8 form-control" name="tax_class" placeholder="@lang('file.Tax Class')">
                         </div>
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Based On') &nbsp;<span class="text-danger">*</span></b></label>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Tax Name') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="tax_name" placeholder="Type tax name">
+                            <input type="text" class="col-md-8 form-control" name="tax_name" placeholder="@lang('file.Tax Name')">
                         </div>
 
                         <div class="form-group row">
@@ -47,22 +47,22 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.State')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="state" placeholder="Type state">
+                            <input type="text" class="col-md-8 form-control" name="state" placeholder="@lang('file.State')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.City')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="city" placeholder="Type city">
+                            <input type="text" class="col-md-8 form-control" name="city" placeholder="@lang('file.City')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Zip')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="zip" placeholder="Type Zip">
+                            <input type="text" class="col-md-8 form-control" name="zip" placeholder="@lang('file.Zip')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Rate')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="rate" placeholder="Type rate">
+                            <input type="text" class="col-md-8 form-control" name="rate" placeholder="@lang('file.Rate')">
                         </div>
 
 
@@ -88,7 +88,7 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
                         <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Save')</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('file.Close')</button>
                     </div>
                 </div>
 

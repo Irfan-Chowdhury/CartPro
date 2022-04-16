@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="text-bold">@lang('file.Brand Name')</label>
-                            <input type="text" name="brand_name" id="brand_name" class="form-control" placeholder="{{__('Brand Name')}}">
+                            <input type="text" name="brand_name" id="brand_name" class="form-control" placeholder="{{__('file.Brand Name')}}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="text-bold">@lang('file.Brand Logo')</label>
@@ -26,7 +26,7 @@
                             <label><b>@lang('file.Status')</b></label>
                             <div class="col-md-8 form-check">
                                 <input class="form-check-input" checked type="checkbox" name="is_active" id="isActive" id="default" value="1" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">Active</label>
+                                <label class="form-check-label" for="defaultCheck1">@lang('file.Active')</label>
                             </div>
                         </div>
                           <div class="col form-group" align="center">

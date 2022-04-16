@@ -57,7 +57,7 @@
                             <ul class="nav shop-item-filter-list">
                                 <li class="d-none d-md-block"><a class="view-grid active"><i class="ti-view-grid"></i></a></li>
                                 <li class="d-none d-md-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
-                                <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> Filters</a></li>
+                                <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> @lang('file.Filters')</a></li>
                             </ul>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -76,8 +76,8 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item sortBy" data-condition="latest">{{__('file.Latest')}}</a></li>
-                                    <li><a class="dropdown-item sortBy" data-condition="low_to_high">Price: Low to High</a></li>
-                                    <li><a class="dropdown-item sortBy" data-condition="high_to_low">Price: High to Low</a></li>
+                                    <li><a class="dropdown-item sortBy" data-condition="low_to_high">@lang('file.Price: Low to High')</a></li>
+                                    <li><a class="dropdown-item sortBy" data-condition="high_to_low">@lang('file.Price: High to Low')</a></li>
                                 </ul>
                             </div>
                         </div>

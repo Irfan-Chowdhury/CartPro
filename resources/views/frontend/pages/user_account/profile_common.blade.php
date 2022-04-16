@@ -7,22 +7,22 @@
                 <img src="{{asset('public/images/user_default_image.jpg')}}" style="width:195px; height:190px" alt="...">
             @endif
 
-            <h4 class="user-name mt-3">Hello! <span>{{Auth::user()->username}}</span></h4>
+            <h4 class="user-name mt-3">@lang('file.Hello')! <span>{{Auth::user()->username}}</span></h4>
         </div>
         <ul class="user-info">
             @if (Auth::user()->first_name && Auth::user()->last_name)
-                <li>Full Name: <span>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</span></li>
+                <li>@lang('file.Full Name') <span>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</span></li>
             @endif
-            <li>User Name: <span>{{Auth::user()->username}}</span></li>
+            <li>@lang('file.User Name') <span>{{Auth::user()->username}}</span></li>
             <li>Email: <span>{{Auth::user()->email}}</span></li>
             @if (Auth::user()->phone)
-                <li>Phone: <span>{{Auth::user()->phone}}</span></li>
+                <li>@lang('file.Phone') <span>{{Auth::user()->phone}}</span></li>
             @endif
             {{-- <li>Country: <span>USA</span></li> --}}
             {{-- <li>Postcode: <span>10000</span></li> --}}
         </ul>
         <button class="button sm d-block w-100 style1 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i class="ti-pencil"></i> Edit Profile
+            <i class="ti-pencil"></i> @lang('file.Edit Profile')
         </button>
     </div>
 </div>
@@ -92,7 +92,7 @@
                     @enderror
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">@lang('file.Save changes')</button>
                 </div>
               </form>
         </div>

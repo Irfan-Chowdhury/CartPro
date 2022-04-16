@@ -16,7 +16,7 @@
 
               <div class="form-group">
                 <label>{{__('file.Tag Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>
-                <input type="text" name="tag_name" id="tagName"  class="form-control" placeholder="Type Tag Name" >
+                <input type="text" name="tag_name" id="tagName"  class="form-control" placeholder="{{__('file.Tag Name')}}" >
                 <small class="form-text text-muted"> <span id="errorMessge"></span></small>
               </div>
               <div class="form-group form-check">

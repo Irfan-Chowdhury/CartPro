@@ -21,4 +21,8 @@ class AttributeSetTranslationRepository implements AttributeSetTranslationContra
             ['attribute_set_name'=> $request->attribute_set_name]
         );
     }
+
+    public function destroy($attribute_set_id){
+        AttributeSetTranslation::where('attribute_set_id', $attribute_set_id)->delete();
+    }
 }

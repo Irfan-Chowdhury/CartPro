@@ -10,8 +10,8 @@
             <div class="row">
                 <div class="col">
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">Shop Wishlist</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.Shop Wishlist')</li>
                     </ul>
                 </div>
             </div>
@@ -23,7 +23,7 @@
     <section class="wishlist-section">
         <div class="container">
             <div class="row">
-                <h1 class="page-title h2 text-center uppercase mt-1 mb-5">Wishlist</h1>
+                <h1 class="page-title h2 text-center uppercase mt-1 mb-5">@lang('file.Wishlist')</h1>
             </div>
             <div class="row mb-5">
                 <div class="col-lg-12">
@@ -31,8 +31,8 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th class="text-center">Price</th>
+                                    <th>@lang('file.Product')</th>
+                                    <th class="text-center">@lang('file.Price')</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -91,7 +91,7 @@
                             </tbody>
                         </table>
 
-                        <a href="shop-fullwidth.html" class="button style3"><i class="ti-arrow-left"></i> Continue Shopping</a>
+                        <a href="shop-fullwidth.html" class="button style3"><i class="ti-arrow-left"></i> @lang('file.Continue Shopping')</a>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
                 @if ($page->pageTranslation)
                     {!! htmlspecialchars_decode($page->pageTranslation->body ?? null) !!}
                 @else
-                    <h1>Empty Data</h1>
+                    <h1>@lang('file.Empty Data')</h1>
                 @endif
             </div>
         </div>

@@ -18,11 +18,11 @@
               <div class="form-group">
                 <label class="text-bold">{{__('file.Rating')}} &nbsp; <span class="text-danger">*</span></label>
                 <select name="rating" id="rating" class="from-control selectpicker">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="1">@lang('file.1')</option>
+                    <option value="2">@lang('file.2')</option>
+                    <option value="3">@lang('file.3')</option>
+                    <option value="4">@lang('file.4')</option>
+                    <option value="5">@lang('file.5')</option>
                 </select>
               </div>
 

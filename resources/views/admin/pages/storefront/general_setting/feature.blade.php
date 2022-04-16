@@ -1,5 +1,5 @@
 <div class="card">
-    <h3 class="card-header"><b>{{__('Features')}}</b></h3>
+    <h3 class="card-header"><b>{{__('file.Features')}}</b></h3>
     <hr>
     <div class="card-body">
         <div class="row">
@@ -26,7 +26,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_1_title"  class="form-control" id="inputEmail3" placeholder="Type Title"
+                            <input type="text" name="storefront_feature_1_title"  class="form-control" id="inputEmail3" placeholder="@lang('file.Title')"
                             @forelse ($setting[19]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -41,7 +41,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_1_subtitle" class="form-control" id="inputEmail3" placeholder="Type Subtitle"
+                            <input type="text" name="storefront_feature_1_subtitle" class="form-control" id="inputEmail3" placeholder="@lang('file.Subtitle')"
                             @forelse ($setting[20]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -56,7 +56,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Icon')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_1_icon" class="form-control" id="inputEmail3" placeholder="Type Icon"
+                            <input type="text" name="storefront_feature_1_icon" class="form-control" id="inputEmail3" placeholder="@lang('file.Icon')"
                             value="{{$setting[21]->plain_value}}">
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_2_title"  class="form-control" id="inputEmail3" placeholder="Type Title"
+                            <input type="text" name="storefront_feature_2_title"  class="form-control" id="inputEmail3" placeholder="@lang('file.Title')"
                             @forelse ($setting[22]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -83,7 +83,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_2_subtitle" class="form-control" id="inputEmail3" placeholder="Type Subtitle"
+                            <input type="text" name="storefront_feature_2_subtitle" class="form-control" id="inputEmail3" placeholder="@lang('file.Subtitle')"
                             @forelse ($setting[23]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -98,7 +98,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Icon')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_2_icon" class="form-control" id="inputEmail3" placeholder="Type Icon"
+                            <input type="text" name="storefront_feature_2_icon" class="form-control" id="inputEmail3" placeholder="@lang('file.Icon')"
                             value="{{$setting[24]->plain_value}}">
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_3_title"  class="form-control" id="inputEmail3" placeholder="Type Title"
+                            <input type="text" name="storefront_feature_3_title"  class="form-control" id="inputEmail3" placeholder="@lang('file.Title')"
                             @forelse ($setting[25]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -127,7 +127,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_3_subtitle" class="form-control" id="inputEmail3" placeholder="Type Subtitle"
+                            <input type="text" name="storefront_feature_3_subtitle" class="form-control" id="inputEmail3" placeholder="@lang('file.Subtitle')"
                             @forelse ($setting[26]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -142,7 +142,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Icon')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_3_icon" class="form-control" id="inputEmail3" placeholder="Type Icon"
+                            <input type="text" name="storefront_feature_3_icon" class="form-control" id="inputEmail3" placeholder="@lang('file.Icon')"
                             value="{{$setting[27]->plain_value}}">
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Title')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_4_title"  class="form-control" id="inputEmail3" placeholder="Type Title"
+                            <input type="text" name="storefront_feature_4_title"  class="form-control" id="inputEmail3" placeholder="@lang('file.Title')"
                             @forelse ($setting[28]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -171,7 +171,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_4_subtitle" class="form-control" id="inputEmail3" placeholder="Type Subtitle"
+                            <input type="text" name="storefront_feature_4_subtitle" class="form-control" id="inputEmail3" placeholder="@lang('file.Subtitle')"
                             @forelse ($setting[29]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
@@ -186,7 +186,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Icon')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_feature_4_icon" class="form-control" id="inputEmail3" placeholder="Type Icon"
+                            <input type="text" name="storefront_feature_4_icon" class="form-control" id="inputEmail3" placeholder="@lang('file.Icon')"
                             value="{{$setting[30]->plain_value}}">
                         </div>
                     </div>

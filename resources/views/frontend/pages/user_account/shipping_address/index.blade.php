@@ -5,10 +5,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h1 class="page-title">My Account</h1>
+                    <h1 class="page-title">@lang('file.My Account')</h1>
                     <ul>
-                        <li><a href="home.html">Home</a></li>
-                        <li class="active">My Account</li>
+                        <li><a href="home.html">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.My Account')</li>
                     </ul>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                                                         <input class="form-control" type="text" name="address_1" value="{{$item->address_1}}">
                                                     </div>
                                                     <div class="col-sm-6 mt-3">
-                                                        <label><b>@lang('Apartment, suite, unit etc. (optional)')</b></label>
+                                                        <label><b>@lang('file.Apartment, suite, unit etc. (optional)')</b></label>
                                                         <input class="form-control" type="text" name="address_2" value="{{$item->address_2}}">
                                                     </div>
                                                     <div class="col-sm-6 mt-3">

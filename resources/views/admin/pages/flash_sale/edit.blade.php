@@ -20,7 +20,7 @@
         <form action="{{route('admin.flash_sale.update',$flashSale->id)}}" id="submitForm" method="POST">
             @csrf
             <input type="hidden" name="flash_sale_id" value="{{$flashSale->id}}">
-            
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -30,10 +30,9 @@
 
                                 @if ($flashSale->flashSaleTranslation!=NULL)
                                     <input type="text" required name="campaign_name" class="form-control" value="{{$flashSale->flashSaleTranslation->campaign_name}}">
-                                    {{-- <input type="hidden" name="product_translation_id" value="{{$flashSale->flashSaleTranslation->id}}"> --}}
                                     <input type="hidden" name="flash_sale_translation_id" value="{{$flashSale->flashSaleTranslation->id ??$flashSale->flashSaleTranslationEnglish->id }}">
                                 @else
-                                    <input type="text" required name="campaign_name" class="form-control" placeholder="Campaign Name">
+                                    <input type="text" required name="campaign_name" class="form-control" placeholder="@lang('file.Campaign Name')">
                                 @endif
                             </div>
                             <div class="variants">
@@ -63,21 +62,21 @@
                                         <div class="mt-2 form-row">
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.End Date') <span class="text-danger">*</span></label>
-                                                <input type="date" required name="end_date[]" value="{{$flahSaleProduct->end_date}}" class="form-control @error('end_date') is-invalid @enderror" placeholder="Date">
+                                                <input type="date" required name="end_date[]" value="{{$flahSaleProduct->end_date}}" class="form-control @error('end_date') is-invalid @enderror" >
                                                 @error('end_date')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.Price') <span class="text-danger">*</span></label>
-                                                <input type="text" required name="price[]" value="{{$flahSaleProduct->price}}" class="form-control @error('price') is-invalid @enderror" placeholder="Price">
+                                                <input type="text" required name="price[]" value="{{$flahSaleProduct->price}}" class="form-control @error('price') is-invalid @enderror" placeholder="@lang('file.Price')">
                                                 @error('price')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="text-bold">@lang('file.Quantity') <span class="text-danger">*</span></label>
-                                                <input type="number" required min="0" name="qty[]" value="{{$flahSaleProduct->qty}}" class="form-control @error('qty') is-invalid @enderror" placeholder="Quantity">
+                                                <input type="number" required min="0" name="qty[]" value="{{$flahSaleProduct->qty}}" class="form-control @error('qty') is-invalid @enderror" placeholder="@lang('file.Quantity')">
                                                 @error('qty')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror

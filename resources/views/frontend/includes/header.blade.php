@@ -297,7 +297,7 @@
                             @empty
                             <div class="empty-cart">
                                 <img src="{{asset('public/frontend/images/empty-cart.png')}}">
-                                <h5>Your cart is empty</h5>
+                                <h5>@lang('file.Your cart is empty')</h5>
                             </div>
                             @endforelse
                         </div>
@@ -316,7 +316,7 @@
                     </span>
                 </div>
                 <div class="shopping__btn">
-                    <a class="button style3" href="{{route('cart.view_details')}}">View Cart</a>
+                    <a class="button style3" href="{{route('cart.view_details')}}">{{__('file.View Cart')}}</a>
                     <a class="button style1" href="{{route('cart.checkout')}}">@lang('file.Checkout')</a>
                 </div>
             </div>

@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('fiule.Cost') <span class="text-danger">*</span></b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Cost') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" name="cost" class="form-control" @isset($setting_flat_rate->cost) value="{{$setting_flat_rate->cost}}" @endisset>
                         </div>

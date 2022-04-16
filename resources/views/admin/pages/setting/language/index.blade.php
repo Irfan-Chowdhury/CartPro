@@ -10,9 +10,9 @@
     <div class="container-fluid mb-3">
 
         @if (auth()->user()->can('locale-store'))
-            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('Add Language')}}</button>
+            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('file.Add Language')}}</button>
         @endif
-    
+
         <div class="table-responsive">
     	<table id="menu_table" class="table ">
     	    <thead>
@@ -29,7 +29,7 @@
 					<tr>
 						<td>{{ $item->language_name }}</td>
 						<td>{{ $item->local }}</td>
-						<td>@if($item->default == 1) <span class='p-2 badge badge-success'>Default</span> @else <span class='p-2 badge badge-dark'>None</span> @endif</td>
+						<td>@if($item->default == 1) <span class='p-2 badge badge-success'>{{__('file.Default')}}</span> @else <span class='p-2 badge badge-dark'>@lang('file.None')</span> @endif</td>
 						<td>
                             <button type="button" class="btn btn-info"><i class="dripicons-pencil" aria-hidden="true" data-toggle="modal" data-target="#editModalForm-{{$item->local}}"></i></button>
                             @if ($item->default == 1)

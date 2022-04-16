@@ -11,7 +11,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Supported Countries') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="supported_countries[]" id="supportedCountries" class="form-control selectpicker" multiple="multiple" data-live-search="true" title='{{__('Select Conutry')}}'>
+                            <select name="supported_countries[]" id="supportedCountries" class="form-control selectpicker" multiple="multiple" data-live-search="true" title='{{__('file.Select Conutry')}}'>
                                 @foreach ($countries as $country)
                                        <option value="{{$country->country_name}}"
                                             @empty(!$selected_countries)
@@ -31,7 +31,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Default Country') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="default_country" id="defaultCountry" class="form-control selectpicker" data-live-search="true" title='{{__('Select Conutry')}}'>
+                            <select name="default_country" id="defaultCountry" class="form-control selectpicker" data-live-search="true" title='{{__('file.Select Conutry')}}'>
                                 @foreach ($countries as $country)
                                     <option value="{{$country->country_name}}" @empty(!$setting_general)  {{($country->country_name == $setting_general->default_country) ? "selected" : ''}} @endempty>{{$country->country_name}}</option>
                                 @endforeach
@@ -42,7 +42,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Default Timezone') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="default_timezone" id="defaultTimezone" class="form-control selectpicker" title='{{__('Select Timezone')}}'>
+                            <select name="default_timezone" id="defaultTimezone" class="form-control selectpicker" title='{{__('file.Select Timezone')}}'>
                                 @foreach($zones_array as $zone)
                                     <option value="{{$zone['zone']}}" @empty(!$setting_general) {{($zone['zone'] == $setting_general->default_timezone) ? "selected" : ''}} @endempty>{{$zone['diff_from_GMT'] . ' - ' . $zone['zone']}}</option>
                                 @endforeach
@@ -53,7 +53,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Customer Role') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="customer_role" id="customerRole" class="form-control" title='{{__('Select Role')}}'>
+                            <select name="customer_role" id="customerRole" class="form-control" title='{{__('file.Select Role')}}'>
                                 <option value="customer" @empty(!$setting_general) {{$setting_general->customer_role=="customer" ? "selected" : ''}} @endempty>Customer</option>
                                 <option value="admin" @empty(!$setting_general) {{$setting_general->customer_role=="admin" ? "selected" : ''}} @endempty>Admin</option>
                             </select>
@@ -65,19 +65,19 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="number_format_type"  id="number_format_type" value="2" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="2") checked @endif>
                             <label class="form-check-label" for="number_format_type">
-                                2
+                                @lang('file.2')
                             </label>
                         </div>
                         <div class="form-check ml-3">
                             <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="3" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="3") checked @endif>
                             <label class="form-check-label" for="exampleRadios1">
-                                3
+                                @lang('file.3')
                             </label>
                         </div>
                         <div class="form-check ml-3">
                             <input class="form-check-input" type="radio" name="number_format_type" id="number_format_type" value="4" @if($setting_general && $setting_general->number_format_type!=NULL && $setting_general->number_format_type=="4") checked @endif>
                             <label class="form-check-label" for="exampleRadios1">
-                                4
+                                @lang('file.4')
                             </label>
                         </div>
                     </div>

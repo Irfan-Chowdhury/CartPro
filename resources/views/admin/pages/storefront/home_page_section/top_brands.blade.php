@@ -24,7 +24,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('file.Top Brands')}}</b></label>
                         <div class="col-sm-8">
-                            <select name="storefront_top_brands[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Tag')}}'>
+                            <select name="storefront_top_brands[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Brand')}}'>
                                @forelse ($brands as $item)
                                     <option value="{{$item->id}}"
                                         @foreach($array_brands as $key2 => $value)

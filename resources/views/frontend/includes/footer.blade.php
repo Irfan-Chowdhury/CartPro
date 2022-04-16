@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
-                            <h3>Company</h3>
+                            <h3>@lang('file.Company')</h3>
                             <ul class="footer-menu">
                                 <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
                                 <li><a href="{{route('cartpro.brands')}}">@lang('file.Brands')</a></li>
@@ -141,7 +141,7 @@
                     <div class="row">
                         <div class="col-lg-8">
                             <h3 class="h2 semi-bold">@lang('file.Subscribe and get notification about discounts')</h3>
-                            <p class="lead mb-5">Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.</p>
+                            <p class="lead mb-5">@lang('file.Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.')</p>
                             <form class="newsletter mb-3" id="newsLatterSubmitFormPopUp" action="{{route('cartpro.newslatter_store')}}" method="POST">
                                 @csrf
                                 <input class="" type="email" placeholder="Enter your email" name="email" required>
@@ -150,9 +150,9 @@
                             </form>
 
                             <div class="form-check custom-control custom-checkbox mt-1">
-                                <input class="custom-control-input" id="newslatterPopup" type="checkbox" value="1"> 
+                                <input class="custom-control-input" id="newslatterPopup" type="checkbox" value="1">
                                 <label class="custom-control-label" for="newslatterPopup">
-                                    Got it! Don't show this popup again.
+                                    @lang('file.Got it! Do not show this popup again.')
                                 </label>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
             $('#newslatterPopup').change(function() {
                 if(this.checked) {
                     var newslatter = 'disable';
-                    setTimeout(function() { 
+                    setTimeout(function() {
                         $('#newsletter-modal,.modal-backdrop').removeClass('show');
                         $('#newsletter-modal,.modal-backdrop').css('display','none');
                         $('body').removeClass('modal-open');

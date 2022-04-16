@@ -21,12 +21,12 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Title') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitle" placeholder="Type Title">
+                            <input type="text" class="col-md-8 form-control" name="slider_title" id="sliderTitle" placeholder="@lang('file.Title')">
                         </div>
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Subtitle')</b></label>
-                            <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitle" placeholder="Type Subtitle">
+                            <input type="text" class="col-md-8 form-control" name="slider_subtitle" id="sliderSubtitle" placeholder="@lang('file.Subtitle')">
                         </div>
 
                         <div class="form-group row">
@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b><span id="changeLabelTextByType">{{__('file.Category')}}</span> &nbsp;<span class="text-danger">*</span> </b></label>
                             <div id="dependancyType" class="col-md-8">
-                                <select name="category_id" id="category_id" class="form-control col-md-12 selectpicker" title='{{__('-- Select Category --')}}'>
+                                <select name="category_id" id="category_id" class="form-control col-md-12 selectpicker" title='{{__('file.-- Select Category --')}}'>
                                     @foreach ($categories as $item)
                                         @forelse ($item->categoryTranslation as $key => $value)
                                             @if ($value->local==$locale)
@@ -71,7 +71,7 @@
 
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label"><b>@lang('file.Text Alignment')</b></label>
-                            <select name="text_alignment" class="col-md-8 form-control selectpicker" title='{{__('file.Select Target')}}'>
+                            <select name="text_alignment" class="col-md-8 form-control selectpicker" title='{{__('file.Select Alignment')}}'>
                                 <option value="left">@lang('file.Left')</option>
                                 <option value="right">@lang('file.Right')</option>
                             </select>

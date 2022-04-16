@@ -10,7 +10,7 @@
     <div class="container-fluid"><span id="general_result"></span></div>
     <div class="container-fluid mb-3">
     </div>
-    <h1>Edit</h1>
+    <h1>@lang('file.Edit')</h1>
     <br>
 
     <form method="post"  class="form-horizontal" action="{{route('brand.update',$brand->id)}}" enctype="multipart/form-data">
@@ -38,7 +38,7 @@
                 <label><b>{{__('Status')}}</b></label>
                 <div class="col-md-8 form-check">
                     <input class="form-check-input" type="checkbox" name="is_active" id="isActive" @if($brand->is_active==1) checked value="1" @endif  id="defaultCheck1">
-                    <label class="form-check-label" for="defaultCheck1">Active</label>
+                    <label class="form-check-label" for="defaultCheck1">@lang('file.Active')</label>
                 </div>
             </div>
 
