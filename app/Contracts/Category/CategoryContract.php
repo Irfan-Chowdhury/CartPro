@@ -4,7 +4,7 @@ namespace App\Contracts\Category;
 
 interface CategoryContract
 {
-    public function getAllCategories();
+    public function getAll();
 
     public function storeCategory($data);
 
@@ -15,6 +15,8 @@ interface CategoryContract
     public function active($id);
 
     public function inactive($id);
+
+    public function destroy($id);
 
     public function bulkAction($type, $ids);
 

@@ -435,15 +435,15 @@
                                     $('#success_alert').fadeOut("slow");
                                 }, 3000);
 
-                                $('#AtttributeSetTable').DataTable().ajax.reload();
-                                $('#updateForm')[0].reset();
-                                $("#editFormModal").modal('hide');
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                                $('#updateButton').text('Update');
+                                // $('#AtttributeSetTable').DataTable().ajax.reload();
+                                // $('#updateForm')[0].reset();
+                                // $("#editFormModal").modal('hide');
+                                // $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                // $('#success_alert').addClass('alert alert-success').html(data.success);
+                                // setTimeout(function() {
+                                //     $('#success_alert').fadeOut("slow");
+                                // }, 3000);
+                                // $('#updateButton').text('Update');
                             }
                         }
                     });

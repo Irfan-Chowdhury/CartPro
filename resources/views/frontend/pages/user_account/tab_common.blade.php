@@ -12,6 +12,9 @@
         <li class="nav-item">
             <a class="nav-link {{Request::routeIs('shipping_addrees.index') ? 'active' : ''  }}" href="{{route('shipping_addrees.index')}}">@lang('file.Set Shipping Address')</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('wishlist.index')}}">@lang('file.Wishlist')</a>
+        </li>
         <li>
             <form action="{{route('user_logout')}}" method="post">
                 @csrf

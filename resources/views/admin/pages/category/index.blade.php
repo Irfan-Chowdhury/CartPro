@@ -19,7 +19,7 @@
         </div>
 
         <div class="table-responsive">
-            <table id="category_list-table" class="table ">
+            <table id="dataListTable" class="table ">
                 <thead>
                     <tr>
                         <th class="not-exported"></th>
@@ -47,7 +47,7 @@
 
 
                 $(document).ready(function () {
-                    let table_table = $('#category_list-table').DataTable({
+                    let table_table = $('#dataListTable').DataTable({
                         initComplete: function () {
                             this.api().columns([1]).every(function () {
                                 var column = this;
@@ -221,7 +221,7 @@
                         },
                         success: function (response) {
                             console.log(response)
-                            $('#category_list-table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#submitForm')[0].reset();
                             $("#formModal").modal('hide');
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
@@ -310,7 +310,7 @@
                                 $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
                             }
                             else if(data.success){
-                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#dataListTable').DataTable().ajax.reload();
                                 $('#updateForm')[0].reset();
                                 $("#editModal").modal('hide');
                                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
@@ -338,7 +338,7 @@
                         success: function(data){
                             console.log(data);
                             if(data.success){
-                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#dataListTable').DataTable().ajax.reload();
                                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
                                 $('#alert_message').addClass('alert alert-success').html(data.success);
                                 setTimeout(function() {
@@ -362,7 +362,7 @@
                         success: function(data){
                             console.log(data);
                             if(data.success){
-                                $('#category_list-table').DataTable().ajax.reload();
+                                $('#dataListTable').DataTable().ajax.reload();
                                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
                                 $('#alert_message').addClass('alert alert-success').html(data.success);
                                 setTimeout(function() {
@@ -377,7 +377,7 @@
                     //Bulk Action
                 $("#bulk_action").on("click",function(){
                     var idsArray = [];
-                    let table = $('#category_list-table').DataTable();
+                    let table = $('#dataListTable').DataTable();
                     idsArray = table.rows({selected: true}).ids().toArray();
 
                     if(idsArray.length === 0){
@@ -397,7 +397,7 @@
                                     if(data.success){
                                         $('#bulkConfirmModal').modal('hide');
                                         table.rows('.selected').deselect();
-                                        $('#category_list-table').DataTable().ajax.reload();
+                                        $('#dataListTable').DataTable().ajax.reload();
                                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
                                         $('#alert_message').addClass('alert alert-success').html(data.success);
                                         setTimeout(function() {
@@ -418,7 +418,7 @@
                                     if(data.success){
                                         $('#bulkConfirmModal').modal('hide');
                                         table.rows('.selected').deselect();
-                                        $('#category_list-table').DataTable().ajax.reload();
+                                        $('#dataListTable').DataTable().ajax.reload();
                                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
                                         $('#alert_message').addClass('alert alert-success').html(data.success);
                                         setTimeout(function() {
@@ -427,6 +427,33 @@
                                     }
                                 }
                             });
+                        });
+                    }
+                });
+
+                //---------- Delete -------------
+                $(document).on("click",".delete",function(e){
+                    e.preventDefault();
+                    var id = $(this).data("id");
+
+                    if (!confirm('Are you sure you want to continue?')) {
+                        alert(false);
+                    }else{
+                        $.ajax({
+                            url: "{{route('admin.category.delete')}}",
+                            type: "GET",
+                            data: {id:id},
+                            success: function(data){
+                                console.log(data);
+                                if(data.success){
+                                    $('#dataListTable').DataTable().ajax.reload();
+                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                    $('#alert_message').addClass('alert alert-success').html(data.success);
+                                    setTimeout(function() {
+                                            $('#alert_message').fadeOut("slow");
+                                    }, 3000);
+                                }
+                            }
                         });
                     }
                 });

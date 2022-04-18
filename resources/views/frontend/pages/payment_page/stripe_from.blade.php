@@ -11,7 +11,7 @@
             <div class='form-row row'>
                 <div class='col-xs-12 form-group card required'>
                     <label class='control-label'>@lang('file.Card Number')</label>
-                    <input autocomplete='off' class='form-control card-num' size='20' type='text' required>
+                    <input autocomplete='off' name="card_number" class='form-control card-num' size='20' type='text' required>
                 </div>
             </div>
 
@@ -19,15 +19,15 @@
             <div class='form-row row'>
                 <div class='col-xs-12 col-md-4 form-group cvc required'>
                     <label class='control-label'>CVC</label>
-                    <input autocomplete='off' class='form-control card-cvc' placeholder='e.g 415' size='4' type='text'>
+                    <input autocomplete='off' class='form-control card-cvc' name="card-cvc" placeholder='e.g 415' size='4' type='text'>
                 </div>
                 <div class='col-xs-12 col-md-4 form-group expiration required'>
                     <label class='control-label'>@lang('file.Expiration Month')</label> <input class='form-control card-expiry-month'
-                        placeholder='MM' size='2' type='text'>
+                        placeholder='MM' size='2' type='text' name="card-expiry-month">
                 </div>
                 <div class='col-xs-12 col-md-4 form-group expiration required'>
                     <label class='control-label'>@lang('file.Expiration Year')</label> <input class='form-control card-expiry-year'
-                        placeholder='YYYY' size='4' type='text'>
+                        placeholder='YYYY' size='4' type='text' name="card-expiry-year">
                 </div>
             </div>
             <br><br>
@@ -39,11 +39,11 @@
             </div>
 
             <div class="form-row row">
-                <div class="checkout-actions mar-top-30">
-                    <button class="button lg style1 d-block text-center w-100" type="submit" id="payStripeBtn">{{__('file.Pay Now')}}</button>
+                <div>
+                    {{-- <button class="button lg style1 d-block text-center w-100" type="submit" id="payStripeBtn">{{__('file.Pay Now')}}</button> --}}
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
                 </div>
             </div>
-
         </div>
     </div>
 

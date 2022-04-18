@@ -1,22 +1,23 @@
 @extends('frontend.layouts.master')
-
 @section('extra_css')
-
 @section('frontend_content')
-<!--Breadcrumb Area start-->
-<div class="breadcrumb-section">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <ul>
-                    <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                    <li class="active">@lang('file.Checkout')</li>
-                </ul>
+
+<div class="container">
+
+    <!--Breadcrumb Area start-->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <ul>
+                        <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
+                        <li class="active">@lang('file.Checkout')</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--Breadcrumb Area ends-->
+    <!--Breadcrumb Area ends-->
 
 
     <!-- Content Wrapper -->
@@ -36,6 +37,7 @@
                         </div>
                     @endif
                 </div>
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -91,14 +93,17 @@
                 </div>
             @endif
 
-
             <!-- Error Message -->
-                @include('frontend.includes.error_message')
+            @include('frontend.includes.error_message')
             <!-- Error Message -->
 
             <div class="row">
                 <form action="{{route('payment.process')}}" method="POST" novalidate
-                    data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" class="validation" id="payment-form">
+                    role="form"
+                    class="require-validation"
+                    data-cc-on-file="false"
+                    data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                    id="payment-form">
                     @csrf
                     <input type="hidden" name="shipping_type" id="shippingType">
                     <input type="hidden" name="totalAmount" class="cart_total" id="totalAmount" value="{{$cart_total}}">
@@ -120,40 +125,39 @@
                                 </div>
 
 
-                            <div class="col-sm-6">
-                                <input class="form-control" type="email" name="billing_email" @auth value="{{auth()->user()->email}}" @endauth placeholder="@lang('file.Email') *">
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="number" name="billing_phone" @auth value="{{auth()->user()->phone}}" @endauth min='0' onkeypress="return isNumberKey(event)" placeholder="@lang('file.Phone') *">
-                            </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="email" name="billing_email" @auth value="{{auth()->user()->email}}" @endauth placeholder="@lang('file.Email') *">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="number" name="billing_phone" @auth value="{{auth()->user()->phone}}" @endauth min='0' onkeypress="return isNumberKey(event)" placeholder="@lang('file.Phone') *">
+                                </div>
 
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <select class="form-control" name="billing_country" id="billingCountry">
-                                        <option value="">* @lang('file.Select Country')</option>
-                                        @foreach ($countries as $country)
-                                            <option value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <select class="form-control" name="billing_country" id="billingCountry">
+                                            <option value="">* @lang('file.Select Country')</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
+                                </div>
+                                <div class="col-12">
+                                    <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
+                                </div>
+                                <div class="col-12">
+                                    <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
-                            </div>
-                            <div class="col-12">
-                                <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
-                            </div>
-                            <div class="col-12">
-                                <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
-                            </div>
-                        </div>
-
 
                             @if (!Auth::check())
                                 <div class="custom-control custom-checkbox mt-5" data-bs-toggle="collapse" href="#create_account_collapse" role="button" aria-expanded="false" aria-controls="create_account_collapse">
@@ -161,7 +165,6 @@
                                     <label class="label custom-control-label" for="create_account">@lang('file.Create Account')</label>
                                 </div>
                             @endif
-
 
                             <div class="collapse" id="create_account_collapse">
                                 <input class="form-control mt-3 @error('username') is-invalid @enderror" value="{{ old('username') }}" type="text" placeholder="@lang('file.Enter Username')" name="username">
@@ -190,6 +193,7 @@
                                 <input type="checkbox" class="custom-control-input" id="shipping_address_check" name="shipping_address_check" value="1">
                                 <label class="label custom-control-label" for="shipping_address_check">@lang('file.Ship to a different address')</label>
                             </div>
+
                             <div class="collapse" id="shipping_address_collapse">
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -421,231 +425,244 @@
                             <!--Paypal-->
                             <div id="paypal-button-container"></div>
 
-                            <!--Stripe-->
-                            <div id="stripeContent">
-                                @include('frontend.pages.payment_page.stripe_from')
+                            <div class="mb-3 d-none" id="stripeSection">
+                                <div class='form-row row'>
+                                    <div class='col-xs-12 form-group'>
+                                        <input class='form-control' size='4' type='text' name="card_name" placeholder="@lang('file.Name on Card')">
+                                    </div>
+                                </div>
+
+                                <div class='form-row row'>
+                                    <div class='col-xs-12 form-group'>
+                                        <input autocomplete='off' name="card_number" class='form-control card-number' placeholder="@lang('file.Card Number')" size='20' type='text'>
+                                    </div>
+                                </div>
+
+                                <div class='form-row row'>
+                                    <div class='col-xs-12 col-md-4 form-group cvc'>
+                                        <input autocomplete='off' name="card-cvc" class='form-control card-cvc' size='4' type='text' placeholder="CVC (ex. 311)">
+                                    </div>
+                                    <div class='col-xs-12 col-md-4 form-group expiration'>
+                                        <input class='form-control card-expiry-month' name="card-expiry-month" size='2' type='text' placeholder="Expiration Month (MM)">
+                                    </div>
+                                    <div class='col-xs-12 col-md-4 form-group expiration'>
+                                        <input class='form-control card-expiry-year' name="card-expiry-year" placeholder='Expiration Year (YYYY)' size='4' type='text'>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="checkout-actions mar-top-30 pay_now_div">
-                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
+                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled  title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>
+
                 </form>
             </div>
+
         </div>
     </section>
+</div>
 @endsection
 
 @push('scripts')
-<script src="https://www.paypal.com/sdk/js?client-id={{env('PAYPAL_SANDBOX_CLIENT_ID')}}&currency=USD" data-namespace="paypal_sdk"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+    <script src="https://www.paypal.com/sdk/js?client-id={{env('PAYPAL_SANDBOX_CLIENT_ID')}}&currency=USD" data-namespace="paypal_sdk"></script>
 
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
-<script>
-$(function(){
 
-    var billingCountry = $("#billingCountry").val();
-    if (billingCountry) {
-        var couponCode   = $('#couponCode').val();
-        var shippingCost = $("#shippingCost").val();
-        $.ajax({
-            url: "{{ route('cart.country_wise_tax') }}",
-            type: "GET",
-            data: {
-                billing_country:billingCountry,
-                coupon_code:couponCode,
-                shipping_cost:shippingCost,
-            },
-            success: function (data) {
-                $('.tax_rate').text(data.tax_rate);
-                $('#taxId').val(data.tax_id); //For Form
-                $('.total_amount').text(data.total_amount);
-                $('#totalAmount').val(data.total_amount); //For Form
+    <script type="text/javascript">
+        $(function(){
+
+            var billingCountry = $("#billingCountry").val();
+            if (billingCountry) {
+                var couponCode   = $('#couponCode').val();
+                var shippingCost = $("#shippingCost").val();
+                $.ajax({
+                    url: "{{ route('cart.country_wise_tax') }}",
+                    type: "GET",
+                    data: {
+                        billing_country:billingCountry,
+                        coupon_code:couponCode,
+                        shipping_cost:shippingCost,
+                    },
+                    success: function (data) {
+                        $('.tax_rate').text(data.tax_rate);
+                        $('#taxId').val(data.tax_id); //For Form
+                        $('.total_amount').text(data.total_amount);
+                        $('#totalAmount').val(data.total_amount); //For Form
+                    }
+                });
             }
-        });
-    }
 
-    $('#billingCountry').change(function() {
-        var billingCountry = $("#billingCountry").val();
-        var couponCode = $('#couponCode').val();
-        var shippingCost = $("#shippingCost").val();
-        $.ajax({
-            url: "{{ route('cart.country_wise_tax') }}",
-            type: "GET",
-            data: {
-                billing_country:billingCountry,
-                coupon_code:couponCode,
-                shipping_cost:shippingCost,
-            },
-            success: function (data) {
-                console.log(data);
-                $('.tax_rate').text(data.tax_rate);
-                $('#taxId').val(data.tax_id); //For Form
-                $('.total_amount').text(data.total_amount);
-                $('#totalAmount').val(data.total_amount); //For Form
-            }
-        })
-    });
+            $('#billingCountry').change(function() {
+                var billingCountry = $("#billingCountry").val();
+                var couponCode = $('#couponCode').val();
+                var shippingCost = $("#shippingCost").val();
+                $.ajax({
+                    url: "{{ route('cart.country_wise_tax') }}",
+                    type: "GET",
+                    data: {
+                        billing_country:billingCountry,
+                        coupon_code:couponCode,
+                        shipping_cost:shippingCost,
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        $('.tax_rate').text(data.tax_rate);
+                        $('#taxId').val(data.tax_id); //For Form
+                        $('.total_amount').text(data.total_amount);
+                        $('#totalAmount').val(data.total_amount); //For Form
+                    }
+                })
+            });
 
 
-    //Coupon
-    $('#applyCoupon').on("click",function(e){
-        e.preventDefault();
-        var taxId = $('#taxId').val();
-        var shippingCost = $('.shippingCharge:checked').val();
-        var coupon_code = $('#coupon_code').val();
-        $.ajax({
-            url: "{{ route('cart.apply_coupon') }}",
-            type: "GET",
-            data: {tax_id:taxId, coupon_code:coupon_code,shipping_cost:shippingCost},
-            success: function (data) {
-                console.log(data)
-                if (data.type=='success') {
-                    $('.tax_rate').text(data.tax_rate);
-                    $('#taxId').val(data.tax_id); //For Form
-                    $('.total_amount').text(data.total_amount);
-                    $('#totalAmount').val(data.total_amount); //For Form
-                    $('#couponValue').val(data.coupon_value); //For Form
+            //Coupon
+            $('#applyCoupon').on("click",function(e){
+                e.preventDefault();
+                var taxId = $('#taxId').val();
+                var shippingCost = $('.shippingCharge:checked').val();
+                var coupon_code = $('#coupon_code').val();
+                $.ajax({
+                    url: "{{ route('cart.apply_coupon') }}",
+                    type: "GET",
+                    data: {tax_id:taxId, coupon_code:coupon_code,shipping_cost:shippingCost},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.type=='success') {
+                            $('.tax_rate').text(data.tax_rate);
+                            $('#taxId').val(data.tax_id); //For Form
+                            $('.total_amount').text(data.total_amount);
+                            $('#totalAmount').val(data.total_amount); //For Form
+                            $('#couponValue').val(data.coupon_value); //For Form
+                        }
+                    }
+                })
+            });
+
+
+            //Shipping
+            $('.shippingCharge').on("click",function(e){
+                var shippingCost = $(this).val();
+                $('#shippingCost').val(shippingCost);
+
+                var shipping_type = $(this).data('shipping_type');
+                $('#shippingType').val(shipping_type);
+
+                var couponValue = $('#couponValue').val();
+                var taxId = $('#taxId').val();
+
+                $.ajax({
+                    url: "{{ route('cart.shipping_charge') }}",
+                    type: "GET",
+                    data: {shipping_cost:shippingCost,coupon_value:couponValue,tax_id:taxId},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.type=='success') {
+                            $('#couponValue').val(data.coupon_value); //For Form
+                            $('.tax_rate').text(data.tax_rate);
+                            $('#taxId').val(data.tax_id); //For Form
+                            $('.total_amount').text(data.total_amount);
+                            $('#totalAmount').val(data.total_amount); //For Form
+                        }
+                    }
+                })
+            });
+
+
+            //----------- Submit ----------
+            $('input[name="payment_type"]').change(function(){
+                let paymentType = $(this).val();
+                $('#acceptTerms').prop('checked', false);
+                $('#paypal-button-container').empty();
+                $('.pay_now_div').show();
+                $('#orderBtn').prop("disabled",true).prop("title",'Disable');
+
+                if (paymentType!='stripe'){
+                    $('#stripeSection').addClass('d-none');
                 }
-            }
-        })
-    });
 
+                $('#acceptTerms').change(function() {
+                    if(this.checked) {
+                        if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
+                            $("#payment-form").unbind();
+                            $('#stripeSection').addClass('d-none');
+                            $('#paypal-button-container').empty();
+                            $('.pay_now_div').show();
+                            $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
+                        }
+                        else if (paymentType=='paypal') {
+                            $("#payment-form").unbind();
+                            $('#stripeSection').addClass('d-none');
+                            $('.pay_now_div').hide();
+                            var totalAmountP = parseFloat($("input[name=totalAmount]").val()).toFixed(2);
+                            paypal_sdk.Buttons({
+                                createOrder: function(data, actions) {
+                                    $.ajax({
+                                        url: "{{route('payment.process')}}",
+                                        method: "POST",
+                                        data: $('#payment-form').serialize(),
+                                        success: function (data) {
+                                            var x = 2;
+                                        }
+                                    });
+                                    return actions.order.create({
+                                        purchase_units: [{
+                                            amount: {
+                                                value: totalAmountP,
+                                                currency_code: "USD",
+                                            }
+                                        }]
+                                    });
+                                },
+                                onApprove: function(data, actions) {
+                                    return actions.order.capture().then(function(details) {
+                                    });
+                                }
+                            }).render('#paypal-button-container');
+                        }
+                        else if (paymentType=='stripe') {
+                            $('#stripeSection').removeClass('d-none');
+                            $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
 
-    //Shipping
-    $('.shippingCharge').on("click",function(e){
-        var shippingCost = $(this).val();
-        $('#shippingCost').val(shippingCost);
-
-        var shipping_type = $(this).data('shipping_type');
-        $('#shippingType').val(shipping_type);
-
-        var couponValue = $('#couponValue').val();
-        var taxId = $('#taxId').val();
-
-        $.ajax({
-            url: "{{ route('cart.shipping_charge') }}",
-            type: "GET",
-            data: {shipping_cost:shippingCost,coupon_value:couponValue,tax_id:taxId},
-            success: function (data) {
-                console.log(data)
-                if (data.type=='success') {
-                    $('#couponValue').val(data.coupon_value); //For Form
-                    $('.tax_rate').text(data.tax_rate);
-                    $('#taxId').val(data.tax_id); //For Form
-                    $('.total_amount').text(data.total_amount);
-                    $('#totalAmount').val(data.total_amount); //For Form
-                }
-            }
-        })
-    });
-
-
-    //----------- Submit ----------
-    $('input[name="payment_type"]').change(function(){
-        let paymentType = $(this).val();
-        $('#acceptTerms').prop('checked', false);
-        $('#paypal-button-container').empty();
-        $('.pay_now_div').show();
-        $('#orderBtn').prop("disabled",true).prop("title",'Disable');
-
-        $('#acceptTerms').change(function() {
-            if(this.checked) {
-                if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
-                    $('#paypal-button-container').empty();
-                    $('.pay_now_div').show();
-                    $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-                }
-                else if (paymentType=='paypal') {
-                    $('.pay_now_div').hide();
-                    var totalAmountP = parseFloat($("input[name=totalAmount]").val()).toFixed(2);
-                    paypal_sdk.Buttons({
-                        createOrder: function(data, actions) {
-                            $.ajax({
-                                url: "{{route('payment.process')}}",
-                                method: "POST",
-                                data: $('#payment-form').serialize(),
-                                success: function (data) {
-                                    var x = 2;
+                            var $form         = $(".require-validation");
+                            $('form').bind('submit', function(e) {
+                                if (!$form.data('cc-on-file')) {
+                                    e.preventDefault();
+                                    Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                                    Stripe.createToken({
+                                    number: $('.card-number').val(),
+                                    cvc: $('.card-cvc').val(),
+                                    exp_month: $('.card-expiry-month').val(),
+                                    exp_year: $('.card-expiry-year').val()
+                                }, stripeResponseHandler);
                                 }
                             });
-                            return actions.order.create({
-                                purchase_units: [{
-                                    amount: {
-                                        value: totalAmountP,
-                                        currency_code: "USD",
-                                    }
-                                }]
-                            });
-                        },
-                        onApprove: function(data, actions) {
-                            return actions.order.capture().then(function(details) {
-                            });
+
+                            function stripeResponseHandler(status, response) {
+                                if (response.error) {
+                                    $('.error')
+                                        .removeClass('hide')
+                                        .find('.alert')
+                                        .text(response.error.message);
+                                } else {
+                                    // token contains id, last4, and card type
+                                    var token = response['id'];
+                                    // insert the token into the form so it gets submitted to the server
+                                    $form.find('input[type=text]').empty();
+                                    $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+                                    $form.get(0).submit();
+                                }
+                            }
                         }
-                    }).render('#paypal-button-container');
-                }
-            }
+                    }
+                });
+            });
         });
-    });
-    //----------- Submit ----------
-
-
-
-
-    //----------- Stripe ----------
-    // $('#stripe').on('click',function(event){
-    //     $('#payNowPaypal').hide();
-    //     $('#paypal-button-container').hide();
-    //     $('#stripeContent').show();
-
-    //     var $form         = $(".validation");
-    //     $('form.validation').bind('submit', function(e) {
-    //         var $form         = $(".validation"),
-    //             inputVal = ['input[type=email]', 'input[type=password]',
-    //                 'input[type=text]', 'input[type=file]',
-    //                 'textarea'].join(', '),
-    //             $inputs       = $form.find('.required').find(inputVal),
-    //             $errorStatus = $form.find('div.error'),
-    //             valid         = true;
-    //         $errorStatus.addClass('hide');
-
-    //         $('.has-error').removeClass('has-error');
-    //         $inputs.each(function(i, el) {
-    //             var $input = $(el);
-    //             if ($input.val() === '') {
-    //                 $input.parent().addClass('has-error');
-    //                 $errorStatus.removeClass('hide');
-    //                 e.preventDefault();
-    //             }
-    //         });
-
-    //         if (!$form.data('cc-on-file')) {
-    //             e.preventDefault();
-    //             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-    //             Stripe.createToken({
-    //                 number: $('.card-num').val(),
-    //                 cvc: $('.card-cvc').val(),
-    //                 exp_month: $('.card-expiry-month').val(),
-    //                 exp_year: $('.card-expiry-year').val()
-    //             }, stripeHandleResponse);
-    //         }
-    //     });
-    //     function stripeHandleResponse(status, response) {
-    //         if (response.error) {
-    //             $('.error')
-    //                 .removeClass('hide')
-    //                 .find('.alert')
-    //                 .text(response.error.message);
-    //         } else {
-    //             var token = response['id'];
-    //             $form.find('input[type=text]').empty();
-    //             $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-    //             $form.get(0).submit();
-    //         }
-    //     }
-    // });
-});
-</script>
+    </script>
 @endpush

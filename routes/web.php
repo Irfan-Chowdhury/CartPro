@@ -258,13 +258,10 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/edit',[CategoryController::class,'edit'])->name('admin.category.edit');
                 Route::post('updateCategory',[CategoryController::class,'categoryUpdate'])->name('category_list.update'); //Remove Later
                 Route::post('update',[CategoryController::class,'update'])->name('admin.category.update');
-                Route::get('/{id}/delete',[CategoryController::class,'destroy'])->name('category_list.destroy'); //Remove Later
-                Route::get('/delete/{id}',[CategoryController::class,'delete'])->name('admin.category.delete');
-                Route::post('/massdelete',[CategoryController::class,'delete_by_selection'])->name('bulk_delete_categories');
-                Route::get('/{id}/{status}',[CategoryController::class,'status'])->name('category.status');
                 Route::get('/active',[CategoryController::class,'active'])->name('admin.category.active');
                 Route::get('/inactive',[CategoryController::class,'inactive'])->name('admin.category.inactive');
                 Route::get('/bulk_action',[CategoryController::class,'bulkAction'])->name('admin.category.bulk_action');
+                Route::get('/delete',[CategoryController::class,'delete'])->name('admin.category.delete');
             });
 
             //brand

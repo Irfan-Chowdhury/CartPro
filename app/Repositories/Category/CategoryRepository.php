@@ -10,7 +10,7 @@ class CategoryRepository implements CategoryContract
 {
     use ActiveInactiveTrait;
 
-    public function getAllCategories()
+    public function getAll()
     {
         return Category::with(['catTranslation','parentCategory.catTranslation'])
             ->orderBy('is_active','DESC')
@@ -21,7 +21,7 @@ class CategoryRepository implements CategoryContract
                     'id'=>$category->id,
                     'image'=>$category->image,
                     'is_active'=>$category->is_active,
-                    'category_name'=>$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null,
+                    'category_name'=> $category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null,
                     'parent_category_name'=> ($category->parentCategory!=NULL) ? ($category->parentCategory->catTranslation->category_name ?? $category->parentCategory->categoryTranslationDefaultEnglish->category_name) : 'NONE',
                 ];
             });
@@ -51,10 +51,16 @@ class CategoryRepository implements CategoryContract
         return $this->inactiveData($this->getById($id));
     }
 
+    public function destroy($id){
+        $this->getById($id)->delete();
+    }
+
     public function bulkAction($type, $ids)
     {
         return $this->bulkActionData($type, Category::whereIn('id',$ids));
     }
+
+
 }
 
 

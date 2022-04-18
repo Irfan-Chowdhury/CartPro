@@ -22,7 +22,7 @@ class CategoryService
 
     public function getAllCategories()
     {
-        $data = $this->categoryContract->getAllCategories();
+        $data = $this->categoryContract->getAll();
         return json_decode(json_encode($data), FALSE);
     }
 
@@ -68,10 +68,12 @@ class CategoryService
                     }
                     if (auth()->user()->can('category-action')){
                         if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                        &nbsp; ';
                     }
                     return $actionBtn;
                 })
@@ -141,9 +143,17 @@ class CategoryService
         return $this->categoryContract->inactive($id);
     }
 
+    public function destroy($id)
+    {
+        $this->categoryContract->destroy($id);
+        return response()->json(['success' => 'Data Deleted Successfully']);
+    }
+
     public function bulkActionByTypeAndIds($type, $ids)
     {
         return $this->categoryContract->bulkAction($type, $ids);
     }
+
+
 }
 ?>

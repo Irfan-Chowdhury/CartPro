@@ -7,6 +7,7 @@ use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -73,6 +74,15 @@ class CategoryController extends Controller
         if (auth()->user()->can('category-action')){
             if ($request->ajax()) {
                 return $this->categoryService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
+            }
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        if (auth()->user()->can('category-action')){
+            if ($request->ajax()) {
+                return $this->categoryService->destroy($request->id);
             }
         }
     }
