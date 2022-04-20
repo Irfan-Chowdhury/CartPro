@@ -41,6 +41,7 @@
     @endsection
 
     @push('scripts')
+
         <script type="text/javascript">
             (function ($) {
                 "use strict";
@@ -374,7 +375,7 @@
                 });
 
 
-                    //Bulk Action
+                //Bulk Action
                 $("#bulk_action").on("click",function(){
                     var idsArray = [];
                     let table = $('#dataListTable').DataTable();
@@ -428,14 +429,35 @@
                                 }
                             });
                         });
+
+                        //Delete
+                        $("#delete").on("click",function(){
+                            $.ajax({
+                                url: "{{route('admin.category.bulk_delete')}}",
+                                method: "GET",
+                                data: {idsArray:idsArray},
+                                success: function (data) {
+                                    console.log(data);
+                                    if(data.success){
+                                        $('#bulkConfirmModal').modal('hide');
+                                        table.rows('.selected').deselect();
+                                        $('#dataListTable').DataTable().ajax.reload();
+                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                        $('#alert_message').addClass('alert alert-success').html(data.success);
+                                        setTimeout(function() {
+                                            $('#alert_message').fadeOut("slow");
+                                        }, 3000);
+                                    }
+                                }
+                            });
+                        });
                     }
                 });
 
-                //---------- Delete -------------
                 $(document).on("click",".delete",function(e){
                     e.preventDefault();
-                    var id = $(this).data("id");
-
+                    let id = $(this).data("id");
+                    
                     if (!confirm('Are you sure you want to continue?')) {
                         alert(false);
                     }else{
@@ -458,7 +480,10 @@
                     }
                 });
 
-
             })(jQuery);
         </script>
+
+        <!---------- Delete ------------- >
+        {{-- @include('admin.includes.delete_js',['route_name'=>'admin.category.delete']) --}}
+
     @endpush

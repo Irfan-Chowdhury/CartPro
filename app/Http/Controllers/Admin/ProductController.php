@@ -610,10 +610,10 @@ class ProductController extends Controller
         // $onlySoftDeleted = Model::onlyTrashed()->get();
 
         $product = Product::find($id);
-        $this->deleteWithImage($product, $image_path=null);
+        $this->deleteWithFile($product);
 
         $product_images = ProductImage::where('product_id',$id);
-        $this->deleteWithMultipleImages($product_images);
+        $this->deleteMultipleDataWithImages($product_images);
 
         session()->flash('type','success');
         session()->flash('message','Data Deleted Successfully.');

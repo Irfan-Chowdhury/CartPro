@@ -26,7 +26,7 @@ class CategoryUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name' => 'required|unique:category_translations,category_name,'.$this->category_translation_id,
+            'category_name' => 'required|unique:category_translations,category_name,'.$this->category_translation_id.',id,deleted_at,NULL',
         ];
 
         // Request::get('category_translation_id')

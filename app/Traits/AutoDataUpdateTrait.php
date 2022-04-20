@@ -9,6 +9,8 @@ trait AutoDataUpdateTrait{
 
     public function autoDataUpdate()
     {
+        // Flash Sale Part
+
         $flashSales = FlashSale::get();
         if ($flashSales) {
             $flash_sale_products = FlashSaleProduct::whereIn('flash_sale_id',$flashSales->pluck('id'))->get();

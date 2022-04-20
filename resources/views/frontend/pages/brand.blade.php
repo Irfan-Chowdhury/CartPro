@@ -30,7 +30,7 @@
                                 @if (isset($brand->brand_logo) && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
                                     <img src="{{asset('public/'.$brand->brand_logo)}}">
                                 @else
-                                    <img src="https://dummyimage.com/620x150/12787d/ffffff&text=CartPro">
+                                    <img src="https://dummyimage.com/620x150/e5e8ec/e5e8ec&text=CartPro">
                                 @endif
                             </a>
                         </div>

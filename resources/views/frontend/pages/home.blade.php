@@ -16,7 +16,7 @@
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
                                             <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
                                         @else
-                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/12787d/ffffff&text=Slider'); background-size: cover; background-position: center;">
+                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
                                                 <div>
@@ -39,7 +39,7 @@
                                         @if($slider_banners[$key]['image']!==null && Illuminate\Support\Facades\File::exists(public_path($slider_banners[$key]['image'])))
                                             <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
                                         @else
-                                            <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/12787d/ffffff&text=Slider-Banner');background-size:cover;background-position: center;">
+                                            <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/e5e8ec/e5e8ec&text=Slider-Banner');background-size:cover;background-position: center;">
                                         @endif
                                         <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
                                     </div></a>
@@ -57,7 +57,7 @@
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
                                             <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
                                         @else
-                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/12787d/ffffff&text=Slider'); background-size: cover; background-position: center;">
+                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
                                                 <div>
@@ -86,7 +86,7 @@
                                 @if($slider_banners[$key]['image']!==null && Illuminate\Support\Facades\File::exists(public_path($slider_banners[$key]['image'])))
                                     <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
                                 @else
-                                    <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/12787d/ffffff&text=Slider-Banner');background-size:cover;background-position: center;">
+                                    <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/e5e8ec/e5e8ec&text=Slider-Banner');background-size:cover;background-position: center;">
                                 @endif
                                     <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
                                 </div></a>
@@ -126,7 +126,7 @@
                                         @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
                                             <img class="lazy" data-src="{{asset('public/'.$item->image)}}">
                                         @else
-                                            <img class="lazy" data-src="https://dummyimage.com/100x100/12787d/ffffff&text=Top-Category" alt="...">
+                                            <img class="lazy" data-src="https://dummyimage.com/100x100/e5e8ec/e5e8ec&text=Top-Category" alt="...">
                                         @endif
 
                                         <div class="category-name">
@@ -212,7 +212,7 @@
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
 
                                                                 <!-- product-promo-text -->
@@ -310,7 +310,7 @@
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
 
                                                                 <!-- product-promo-text -->
@@ -408,7 +408,7 @@
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                             @endif
 
                                                             <!-- product-promo-text -->
@@ -505,7 +505,7 @@
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
                                                             @else
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                             @endif
 
                                                             <!-- product-promo-text -->
@@ -671,7 +671,7 @@
                                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
                                                         @else
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=Best-Deals"></a>
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=Best-Deals"></a>
                                                         @endif
 
                                                         <!-- product-promo-text -->
@@ -811,7 +811,7 @@
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_small)))
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_small)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
 
                                                             </div>
@@ -907,7 +907,7 @@
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
 
 
@@ -1004,7 +1004,7 @@
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                                 @else
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
 
                                                             </div>
@@ -1132,7 +1132,7 @@
                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
                                             <img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}">
                                         @else
-                                            <img class="lazy" data-src="https://dummyimage.com/375x375/12787d/ffffff&text=CartPro">
+                                            <img class="lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro">
                                         @endif
                                         </a>
 
@@ -1246,7 +1246,7 @@
                                     @if($brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
                                         <img class="swiper-lazy" data-src="{{asset('public/'.$brand->brand_logo)}}" width="150px">
                                     @else
-                                        <img class="swiper-lazy" data-src="https://dummyimage.com/100x100/12787d/ffffff&text=Brand-Logo">
+                                        <img class="swiper-lazy" data-src="https://dummyimage.com/100x100/e5e8ec/e5e8ec&text=Brand-Logo">
                                     @endif
                                 </a>
                             </div>

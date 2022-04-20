@@ -7,7 +7,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="active" class="btn btn-success text-center">@lang('file.Active')</button>
-                <button type="button" id="inactive" class="btn btn-danger text-center">@lang('file.Inactive')</button>
+                <button type="button" id="inactive" class="btn btn-warning text-center">@lang('file.Inactive')</button>
+                <button type="button" id="delete" class="btn btn-danger text-center">@lang('file.Delete')</button>
             </div>
         </div>
     </div>

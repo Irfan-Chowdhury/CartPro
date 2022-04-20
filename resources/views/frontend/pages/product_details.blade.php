@@ -40,7 +40,7 @@
                                     @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
                                         <img src="{{asset('public/'.$product->baseImage->image)}}">
                                     @else
-                                        <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
+                                        <img src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @endif
@@ -49,7 +49,7 @@
                                     @if (isset($value->image_small) && Illuminate\Support\Facades\File::exists(public_path($value->image_small)))
                                         <img src="{{asset('public/'.$value->image_small)}}">
                                     @else
-                                        <img src="https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro">
+                                        <img src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @empty
@@ -62,7 +62,7 @@
                                     @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
                                         <img class="lazy" data-src="{{asset('public/'.$product->baseImage->image)}}">
                                     @else
-                                        <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
+                                        <img src="https://dummyimage.com/518x518/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @endif
@@ -71,7 +71,7 @@
                                     @if (isset($value->image) && Illuminate\Support\Facades\File::exists(public_path($value->image)))
                                         <img class="lazy" data-src="{{asset('public/'.$value->image)}}">
                                     @else
-                                        <img src="https://dummyimage.com/518x518/12787d/ffffff&text=CartPro">
+                                        <img src="https://dummyimage.com/518x518/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @empty
@@ -412,7 +412,7 @@
                                                         @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
                                                             <img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}">
                                                         @else
-                                                            <img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro">
+                                                            <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro">
                                                         @endif
                                                     </a>
 

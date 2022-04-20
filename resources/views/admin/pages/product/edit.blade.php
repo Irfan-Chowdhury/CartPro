@@ -27,21 +27,21 @@
     <div class="container-fluid">
         <form action="{{route('admin.products.update',$product->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
             <div class="row">
                 <div class="col-8">
                     <!-- General -->
                         @include('admin.pages.product.includes.edit.general')
                     <!--/ General -->
-                    
+
                     <!-- Images -->
                         @include('admin.pages.product.includes.edit.image')
                     <!-- Images -->
-                    
+
                     <!-- Price -->
                         @include('admin.pages.product.includes.edit.price')
                     <!--/ Price-->
-                    
+
                     <!-- Inventory-->
                         @include('admin.pages.product.includes.edit.inventory')
                     <!--/ Inventory-->
@@ -49,11 +49,11 @@
                     <!-- Attribute -->
                         @include('admin.pages.product.includes.edit.attribute')
                     <!--/ Attribute -->
-                    
+
                     <!-- Additional -->
                         @include('admin.pages.product.includes.edit.additional')
                     <!--/ Additional -->
-                    
+
                     <!-- SEO -->
                         @include('admin.pages.product.includes.edit.seo')
                     <!--/ SEO -->
@@ -64,7 +64,7 @@
                     <!--/ sidebar -->
                 </div>
             </div>
-            
+
         </form>
     </div>
 </section>
@@ -134,11 +134,12 @@
                     },
 
                     plugins: [
-                        'advlist autolink lists link image charmap print preview anchor textcolor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table contextmenu paste code wordcount'
+                        'advlist autolink lists link image charmap anchor textcolor',
+                        'searchreplace',
+                        'insertdatetime media table paste wordcount'
                     ],
-                    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist | removeformat',
+                    menubar: '',
+                    toolbar: 'insertfile | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | forecolor backcolor | table | removeformat',
                     branding: false
                 });
 

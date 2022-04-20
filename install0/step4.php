@@ -86,21 +86,25 @@ if ($object->codecheck) {
             <hr>
             <div class="content pad-top-bot-50">
             <p>
-                    <h5><strong class="theme-color">Congratulations!</strong>
-                    You have successfully installed CartPro!</h5><br>
-                    Admin login here -  <strong><a target="__blank" href="<?php echo '../admin'; ?>">Login</a></strong>
-                    <br>
-                    Username: <strong>admin</strong><br>
-                    Password: <strong>admin</strong><br><br>
+                <h5><strong class="theme-color">Congratulations!</strong>
+                You have successfully installed CartPro!</h5><br>
+                Admin login here -  <strong><a target="__blank" href="<?php echo '../admin'; ?>">Login</a></strong>
+                <br>
+                Username: <strong>admin</strong><br>
+                Password: <strong>admin</strong><br><br>
 
-                    User login here -  <strong><a target="__blank" href="<?php echo '../login'; ?>">Login</a></strong>
-                    <br>
-                    Username: <strong>user</strong><br>
-                    Password: <strong>user</strong><br><br>
+                <!-- User login here -  <strong><a target="__blank" href="<?php echo '../login'; ?>">Login</a></strong>
+                <br>
+                Username: <strong>user</strong><br>
+                Password: <strong>user</strong><br><br> -->
 
-                    After login, go to Settings to change other Configurations.
-                </p>
-                <strong>Note: </strong><i>If 'install' folder exists in your project folder, please delete it ('install' folder)</i>.
+                After login, go to Settings to change other Configurations.
+
+                <div class="content text-center">
+                    <a href="<?php echo '../'; ?>" class="btn btn-primary">Go To Home</a>
+                </div>
+            </p>
+            <strong>Note: </strong><i>If 'install' folder exists in your project folder, please delete it ('install' folder)</i>.
             </div>
             <hr>
             <footer>Copyright &copy; lionCoders. All Rights Reserved.</footer>

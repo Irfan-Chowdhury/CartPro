@@ -599,6 +599,7 @@ return array (
   'POS Setting' => 'POS Setting',
   'Packing' => 'Packing',
   'Page Name' => 'Page Name',
+  'Page Not Found' => 'Page Not Found',
   'Page View Statistics' => 'Page View Statistics',
   'Pages' => 'Pages',
   'Paid' => 'Paid',

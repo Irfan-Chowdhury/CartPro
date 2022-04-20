@@ -11,14 +11,20 @@ class Category extends Model
 {
      use Notifiable, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'slug', 'parent', 'description','description_position','image','top','is_active','icon','parent_id'
     ];
+    protected $dates = ['deleted_at'];
+
 
     public function categoryTranslation()
     {
-        $locale = Session::get('currentLocal');
-    	return $this->hasMany(CategoryTranslation::class,'category_id'); //Remove Later
+    	 return $this->hasMany(CategoryTranslation::class,'category_id');  //Remove Later
     }
 
     public function catTranslation()

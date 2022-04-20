@@ -17,11 +17,12 @@ class PageController extends Controller
         }else {
             $locale = Session::get('currentLocal');
         }
-        App::setLocale($locale);
-
         $page =  Page::with('pageTranslation')->where('slug',$page_slug)->first();
-
-        return view('frontend.pages.page',compact('page'));
+        if ($page) {
+            return view('frontend.pages.page',compact('page'));
+        }else {
+            return view('frontend.includes.page_not_found',compact('page'));
+        }
     }
 
     public function aboutUs()

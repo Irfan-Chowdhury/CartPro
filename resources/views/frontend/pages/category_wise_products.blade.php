@@ -194,7 +194,7 @@
                                                         @if ($item->productBaseImage!=NULL && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
                                                         @else
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro"></a>
                                                         @endif
 
                                                         <!-- product-promo-text -->

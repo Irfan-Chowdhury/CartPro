@@ -220,6 +220,11 @@ https://www.itsolutionstuff.com/post/laravel-57-stripe-payment-gateway-integrati
 
 Card Id : 4242424242424242
 
+Working: 
+Done: 1,2,3,4,8
+Pending: 5,6,7,9
+
+
 
 
 

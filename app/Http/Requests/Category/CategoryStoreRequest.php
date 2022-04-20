@@ -24,7 +24,7 @@ class CategoryStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name' => 'required|unique:category_translations,category_name',
+            'category_name' => 'required|unique:category_translations,category_name,NULL,id,deleted_at,NULL',
         ];
     }
 }

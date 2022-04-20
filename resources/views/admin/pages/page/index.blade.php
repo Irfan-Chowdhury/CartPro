@@ -465,11 +465,12 @@
                 },
 
                 plugins: [
-                    'advlist autolink lists link image charmap print preview anchor textcolor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table contextmenu paste code wordcount'
+                    'advlist autolink lists link image charmap anchor textcolor',
+                    'searchreplace',
+                    'insertdatetime media table paste wordcount'
                 ],
-                toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist | removeformat',
+                menubar: '',
+                toolbar: 'insertfile | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | forecolor backcolor | table | removeformat',
                 branding: false
             });
 

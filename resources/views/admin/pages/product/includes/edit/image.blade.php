@@ -11,7 +11,14 @@
                         <div class="col-sm-8">
                             <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror" onchange="showImage(this,'item_photo')">
                             @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))
-                                <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
+                                @if(isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
+                                    <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
+                                @else
+                                    <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150"> &nbsp; &nbsp;
+                                @endif
+                            @else
+                                <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150">
+                                    &nbsp; &nbsp;
                             @endif
                             @error('base_image')
                                 <div class="text-danger">{{ $message }}</div>
@@ -25,8 +32,14 @@
                             <input type="file" name="additional_images[]" multiple id="multipleImages" class="form-control @error('additional_images') is-invalid @enderror">
                             @if($product->additionalImage!==null)
                                 @foreach ($product->additionalImage as $item)
-                                    <img src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
+                                    @if(isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
+                                        <img src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
+                                    @else
+                                        <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150"> &nbsp; &nbsp;
+                                    @endif
                                 @endforeach
+                            @else
+                                <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150"> &nbsp; &nbsp;
                             @endif
                             @error('additional_images')
                                 <div class="text-danger">{{ $message }}</div>

@@ -38,21 +38,21 @@
     <div class="container-fluid">
         <form action="{{route('admin.products.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
             <div class="row">
                 <div class="col-8">
                     <!-- General -->
                         @include('admin.pages.product.includes.create.general')
                     <!--/ General -->
-                    
+
                     <!-- Images -->
                         @include('admin.pages.product.includes.create.image')
                     <!-- Images -->
-                    
+
                     <!-- Price -->
                         @include('admin.pages.product.includes.create.price')
                     <!--/ Price-->
-                    
+
                     <!-- Inventory-->
                         @include('admin.pages.product.includes.create.inventory')
                     <!--/ Inventory-->
@@ -60,11 +60,11 @@
                     <!-- Attribute -->
                         @include('admin.pages.product.includes.create.attribute')
                     <!--/ Attribute -->
-                    
+
                     <!-- Additional -->
                         @include('admin.pages.product.includes.create.additional')
                     <!--/ Additional -->
-                    
+
                     <!-- SEO -->
                         @include('admin.pages.product.includes.create.seo')
                     <!--/ SEO -->
@@ -145,11 +145,12 @@
                     },
 
                     plugins: [
-                        'advlist autolink lists link image charmap print preview anchor textcolor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table contextmenu paste code wordcount'
+                        'advlist autolink lists link image charmap anchor textcolor',
+                        'searchreplace',
+                        'insertdatetime media table paste wordcount'
                     ],
-                    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist | removeformat',
+                    menubar: '',
+                    toolbar: 'insertfile | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | forecolor backcolor | table | removeformat',
                     branding: false
                 });
 

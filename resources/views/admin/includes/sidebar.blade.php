@@ -1,11 +1,11 @@
 <!-- Sidebar-->
 <nav class="side-navbar">
     <span class="brand-big" id="site_logo_main">
-        @if(isset($setting_store->admin_logo) && $setting_store->admin_logo)
+        @if(isset($setting_store->admin_logo) && Illuminate\Support\Facades\File::exists(public_path($setting_store->admin_logo)))
             <img src="{{asset('public/'.$setting_store->admin_logo)}}" width="150">
             &nbsp; &nbsp;
         @else
-        <img src="https://dummyimage.com/150x150/12787d/ffffff&text=Logo" width="150">
+        <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Dashboard Logo" width="150">
             &nbsp; &nbsp;
         @endif
     </span>
@@ -84,7 +84,7 @@
             </ul>
         </li>
         @endcan
-        
+
         <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-web"></i><span>{{__('file.Localization')}}</span></a>
             <ul id="localization" class="collapse list-unstyled">
                 <li><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
@@ -92,7 +92,7 @@
                 <li><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
             </ul>
         </li>
-        
+
         @can('users_and_roles')
         <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>{{__('file.Users and Roles')}}</span></a>
             <ul id="user" class="collapse list-unstyled">

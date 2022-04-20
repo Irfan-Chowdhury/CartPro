@@ -70,7 +70,7 @@
                                     @if ($footer_menu_one)
                                         @forelse($footer_menu_one->items as $value)
                                             @if ($value->locale==$locale)
-                                                <li><a class="" href="{{$value->link}}">{{$value->label}}</a></li>
+                                            <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -86,7 +86,7 @@
                                 @if ($footer_menu_two)
                                     @forelse($footer_menu_two->items as $value)
                                         @if ($value->locale==$locale)
-                                        <li><a class="" href="{{$value->link}}">{{$value->label}}</a></li>
+                                        <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
                                         @endif
                                     @empty
                                     @endforelse

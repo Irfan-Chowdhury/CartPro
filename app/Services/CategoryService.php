@@ -22,7 +22,7 @@ class CategoryService
 
     public function getAllCategories()
     {
-        $data = $this->categoryContract->getAll();
+        $data = $this->categoryContract->getAllCategories();
         return json_decode(json_encode($data), FALSE);
     }
 
@@ -143,15 +143,21 @@ class CategoryService
         return $this->categoryContract->inactive($id);
     }
 
-    public function destroy($id)
-    {
-        $this->categoryContract->destroy($id);
+    public function destroy($category_id){
+        $this->categoryContract->destroy($category_id);
+        $this->categoryTranslationContract->destroy($category_id);
         return response()->json(['success' => 'Data Deleted Successfully']);
     }
 
     public function bulkActionByTypeAndIds($type, $ids)
     {
         return $this->categoryContract->bulkAction($type, $ids);
+    }
+
+    public function bulkDestroy($category_ids){
+        $this->categoryContract->bulkDestroyByIds($category_ids);
+        $this->categoryTranslationContract->bulkDestroyByIds($category_ids);
+        return response()->json(['success' => 'Data Deleted Successfully']);
     }
 
 

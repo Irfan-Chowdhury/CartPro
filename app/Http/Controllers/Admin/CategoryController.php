@@ -7,12 +7,9 @@ use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
-use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-
-    //in blade - category_icon --> icon || Ajax
 
     private $categoryService;
     public function __construct(CategoryService $categoryService){
@@ -78,11 +75,18 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete(Request $request)
-    {
+    public function delete(Request $request){
         if (auth()->user()->can('category-action')){
             if ($request->ajax()) {
                 return $this->categoryService->destroy($request->id);
+            }
+        }
+    }
+
+    public function bulkDelete(Request $request){
+        if (auth()->user()->can('category-action')){
+            if ($request->ajax()) {
+                return $this->categoryService->bulkDestroy($request->idsArray);
             }
         }
     }

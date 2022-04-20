@@ -262,6 +262,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/inactive',[CategoryController::class,'inactive'])->name('admin.category.inactive');
                 Route::get('/bulk_action',[CategoryController::class,'bulkAction'])->name('admin.category.bulk_action');
                 Route::get('/delete',[CategoryController::class,'delete'])->name('admin.category.delete');
+                Route::get('/bulk_delete',[CategoryController::class,'bulkDelete'])->name('admin.category.bulk_delete');
             });
 
             //brand

@@ -40,7 +40,7 @@
                                                     @if (isset($item->product->baseImage->image_medium) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
                                                         <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
                                                     @else
-                                                        <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img src="https://dummyimage.com/221x221/12787d/ffffff&text=CartPro"></a>
+                                                        <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro"></a>
                                                     @endif
 
                                                     @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
