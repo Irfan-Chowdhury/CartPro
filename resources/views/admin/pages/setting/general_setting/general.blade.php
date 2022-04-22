@@ -42,7 +42,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Default Timezone') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <select name="default_timezone" id="defaultTimezone" class="form-control selectpicker" title='{{__('file.Select Timezone')}}'>
+                            <select name="default_timezone" id="defaultTimezone" class="form-control selectpicker" data-live-search="true" title='{{__('file.Select Timezone')}}'>
                                 @foreach($zones_array as $zone)
                                     <option value="{{$zone['zone']}}" @empty(!$setting_general) {{($zone['zone'] == $setting_general->default_timezone) ? "selected" : ''}} @endempty>{{$zone['diff_from_GMT'] . ' - ' . $zone['zone']}}</option>
                                 @endforeach

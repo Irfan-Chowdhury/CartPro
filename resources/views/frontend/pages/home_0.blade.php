@@ -100,7 +100,7 @@
 </div>
 
 @if ($top_categories_section_enabled==1)
-    <section class="category-tab-section pt-0">
+    <section class="category-tab-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -618,21 +618,25 @@
 @endif
 
 
-<!--Two Coloumn Banner --->
-@if ($two_column_banner_enabled==1)
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6">
-                    <a href="{{$settings_new['storefront_two_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_1)}}" alt=""></a>
-                </div>
-                <div class="col-sm-6">
-                    <a href="{{$settings_new['storefront_two_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_2)}}" alt=""></a>
-                </div>
+<!--Three Coloumn Banner --->
+@if ($three_column_banner_enabled==1)
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{$settings_new['storefront_three_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_1)}}" alt=""></a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{$settings_new['storefront_three_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_2)}}" alt=""></a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{$settings_new['storefront_three_column_banners_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_3)}}" alt=""></a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endif
+
 
 <!--Flash Sale And Vertical Products Start-->
 @if ($flash_sale_and_vertical_products_section_enabled==1)
@@ -1084,23 +1088,20 @@
 @endif
 <!--Flash Sale And Vertical Products End-->
 
-<!--Three Coloumn Banner --->
-@if ($three_column_banner_enabled==1)
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_1)}}" alt=""></a>
-            </div>
-            <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_2)}}" alt=""></a>
-            </div>
-            <div class="col-sm-4">
-                <a href="{{$settings_new['storefront_three_column_banners_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_3)}}" alt=""></a>
+<!--Two Coloumn Banner --->
+@if ($two_column_banner_enabled==1)
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="{{$settings_new['storefront_two_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_1)}}" alt=""></a>
+                </div>
+                <div class="col-sm-6">
+                    <a href="{{$settings_new['storefront_two_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_two_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($two_column_banner_image_2)}}" alt=""></a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 @endif
 
 <!-- Trending Start-->

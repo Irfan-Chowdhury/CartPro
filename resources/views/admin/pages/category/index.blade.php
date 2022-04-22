@@ -326,164 +326,126 @@
                 });
 
 
-                //---------- Active -------------
-                $(document).on("click",".active",function(e){
-                    e.preventDefault();
-                    var categoryId = $(this).data("id");
-                    console.log(categoryId);
-
-                    $.ajax({
-                        url: "{{route('admin.category.active')}}",
-                        type: "GET",
-                        data: {id:categoryId},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#dataListTable').DataTable().ajax.reload();
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-                //---------- Inactive -------------
-                $(document).on("click",".inactive",function(e){
-                    e.preventDefault();
-                    var categoryId = $(this).data("id");
-                    console.log(categoryId);
-
-                    $.ajax({
-                        url: "{{route('admin.category.inactive')}}",
-                        type: "GET",
-                        data: {id:categoryId},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#dataListTable').DataTable().ajax.reload();
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-
                 //Bulk Action
-                $("#bulk_action").on("click",function(){
-                    var idsArray = [];
-                    let table = $('#dataListTable').DataTable();
-                    idsArray = table.rows({selected: true}).ids().toArray();
+                // $("#bulk_action").on("click",function(){
+                //     var idsArray = [];
+                //     let table = $('#dataListTable').DataTable();
+                //     idsArray = table.rows({selected: true}).ids().toArray();
 
-                    if(idsArray.length === 0){
-                        alert("Please Select at least one checkbox.");
-                    }else{
-                        $('#bulkConfirmModal').modal('show');
-                        let action_type;
+                //     if(idsArray.length === 0){
+                //         alert("Please Select at least one checkbox.");
+                //     }else{
+                //         $('#bulkConfirmModal').modal('show');
+                //         let action_type;
 
-                        $("#active").on("click",function(){
-                            console.log(idsArray);
-                            action_type = "active";
-                            $.ajax({
-                                url: "{{route('admin.category.bulk_action')}}",
-                                method: "GET",
-                                data: {idsArray:idsArray,action_type:action_type},
-                                success: function (data) {
-                                    if(data.success){
-                                        $('#bulkConfirmModal').modal('hide');
-                                        table.rows('.selected').deselect();
-                                        $('#dataListTable').DataTable().ajax.reload();
-                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                        $('#alert_message').addClass('alert alert-success').html(data.success);
-                                        setTimeout(function() {
-                                            $('#alert_message').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                }
-                            });
-                        });
-                        $("#inactive").on("click",function(){
-                            action_type = "inactive";
-                            console.log(idsArray);
-                            $.ajax({
-                                url: "{{route('admin.category.bulk_action')}}",
-                                method: "GET",
-                                data: {idsArray:idsArray,action_type:action_type},
-                                success: function (data) {
-                                    if(data.success){
-                                        $('#bulkConfirmModal').modal('hide');
-                                        table.rows('.selected').deselect();
-                                        $('#dataListTable').DataTable().ajax.reload();
-                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                        $('#alert_message').addClass('alert alert-success').html(data.success);
-                                        setTimeout(function() {
-                                            $('#alert_message').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                }
-                            });
-                        });
+                //         $("#active").on("click",function(){
+                //             console.log(idsArray);
+                //             action_type = "active";
+                //             $.ajax({
+                //                 url: "{{route('admin.category.bulk_action')}}",
+                //                 method: "GET",
+                //                 data: {idsArray:idsArray,action_type:action_type},
+                //                 success: function (data) {
+                //                     if(data.success){
+                //                         $('#bulkConfirmModal').modal('hide');
+                //                         table.rows('.selected').deselect();
+                //                         $('#dataListTable').DataTable().ajax.reload();
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
+                //                     else if (data.disabled_demo) {
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-danger').html(data.disabled_demo);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
 
-                        //Delete
-                        $("#delete").on("click",function(){
-                            $.ajax({
-                                url: "{{route('admin.category.bulk_delete')}}",
-                                method: "GET",
-                                data: {idsArray:idsArray},
-                                success: function (data) {
-                                    console.log(data);
-                                    if(data.success){
-                                        $('#bulkConfirmModal').modal('hide');
-                                        table.rows('.selected').deselect();
-                                        $('#dataListTable').DataTable().ajax.reload();
-                                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                        $('#alert_message').addClass('alert alert-success').html(data.success);
-                                        setTimeout(function() {
-                                            $('#alert_message').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                }
-                            });
-                        });
-                    }
-                });
+                //                 }
+                //             });
+                //         });
+                //         $("#inactive").on("click",function(){
+                //             action_type = "inactive";
+                //             console.log(idsArray);
+                //             $.ajax({
+                //                 url: "{{route('admin.category.bulk_action')}}",
+                //                 method: "GET",
+                //                 data: {idsArray:idsArray,action_type:action_type},
+                //                 success: function (data) {
+                //                     if(data.success){
+                //                         $('#bulkConfirmModal').modal('hide');
+                //                         table.rows('.selected').deselect();
+                //                         $('#dataListTable').DataTable().ajax.reload();
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
+                //                     else if (data.disabled_demo) {
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-danger').html(data.disabled_demo);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
+                //                 }
+                //             });
+                //         });
 
-                $(document).on("click",".delete",function(e){
-                    e.preventDefault();
-                    let id = $(this).data("id");
-                    
-                    if (!confirm('Are you sure you want to continue?')) {
-                        alert(false);
-                    }else{
-                        $.ajax({
-                            url: "{{route('admin.category.delete')}}",
-                            type: "GET",
-                            data: {id:id},
-                            success: function(data){
-                                console.log(data);
-                                if(data.success){
-                                    $('#dataListTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                            $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    }
-                });
+                //         //Bulk Delete
+                //         $("#bulkDelete").on("click",function(){
+                //             $.ajax({
+                //                 url: "{{route('admin.category.bulk_delete')}}",
+                //                 method: "GET",
+                //                 data: {idsArray:idsArray},
+                //                 success: function (data) {
+                //                     console.log(data);
+                //                     if(data.success){
+                //                         $('#bulkConfirmModal').modal('hide');
+                //                         table.rows('.selected').deselect();
+                //                         $('#dataListTable').DataTable().ajax.reload();
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
+                //                     else if (data.disabled_demo) {
+                //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                         $('#alert_message').addClass('alert alert-danger').html(data.disabled_demo);
+                //                         setTimeout(function() {
+                //                             $('#alert_message').fadeOut("slow");
+                //                         }, 3000);
+                //                     }
+                //                 }
+                //             });
+                //         });
+                //     }
+                // });
+
+                //---------- Active ------------
+                @include('admin.includes.common_js.active_js',['route_name'=>'admin.category.active'])
+
+                //---------- Inactive ------------
+                @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.category.inactive'])
+
+                //---------- Delete ------------
+                @include('admin.includes.common_js.delete_js',['route_name'=>'admin.category.delete'])
+
+                //---------- Bulk Action ------------
+                @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.category.bulk_action', 'route_name_bulk_delete'=>'admin.category.bulk_delete'])
 
             })(jQuery);
         </script>
 
         <!---------- Delete ------------- >
         {{-- @include('admin.includes.delete_js',['route_name'=>'admin.category.delete']) --}}
+
+
+
 
     @endpush

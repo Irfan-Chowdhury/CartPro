@@ -156,10 +156,15 @@ class SettingController extends Controller
             SettingGeneral::whereId($setting_general->id)->update($data);
         }
 
+
+        //Manual
         $path = '.env';
         $searchArray = array('FORMAT_NUMBER=' . env('FORMAT_NUMBER'));
 		$replaceArray= array('FORMAT_NUMBER=' . $request->number_format_type);
 		file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
+
+
+        $this->dataWriteInENVFile('APP_TIMEZONE',$request->default_timezone);
 
         return response()->json(['success' => __('Data Added successfully.')]);
     }

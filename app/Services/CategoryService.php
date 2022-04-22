@@ -135,31 +135,43 @@ class CategoryService
 
     public function activeById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+        }
         return $this->categoryContract->active($id);
     }
 
     public function inactiveById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+        }
         return $this->categoryContract->inactive($id);
     }
 
     public function destroy($category_id){
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+        }
         $this->categoryContract->destroy($category_id);
         $this->categoryTranslationContract->destroy($category_id);
         return response()->json(['success' => 'Data Deleted Successfully']);
     }
 
-    public function bulkActionByTypeAndIds($type, $ids)
-    {
+    public function bulkActionByTypeAndIds($type, $ids){
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+        }
         return $this->categoryContract->bulkAction($type, $ids);
     }
 
     public function bulkDestroy($category_ids){
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+        }
         $this->categoryContract->bulkDestroyByIds($category_ids);
         $this->categoryTranslationContract->bulkDestroyByIds($category_ids);
         return response()->json(['success' => 'Data Deleted Successfully']);
     }
-
-
 }
 ?>

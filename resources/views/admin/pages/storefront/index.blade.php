@@ -1,6 +1,7 @@
 @extends('admin.main')
 
 @section('title','Admin | Storefront')
+
 @section('admin_content')
 
 <style>

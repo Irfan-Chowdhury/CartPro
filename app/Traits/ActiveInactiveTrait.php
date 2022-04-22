@@ -23,8 +23,8 @@ trait ActiveInactiveTrait{
 
     public function bulkActionData($action_type,$Model)
     {
-        $data = $Model;
 
+        $data = $Model;
         if ($action_type=='active'){
             $data->update(['is_active'=>1]);
             return response()->json(['success' => 'Data Active Successfully']);
