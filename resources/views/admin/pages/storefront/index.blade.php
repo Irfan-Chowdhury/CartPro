@@ -40,6 +40,7 @@
                             <a class="list-group-item list-group-item-action" id="social-settings-social" data-toggle="list" href="#social_settings" role="tab" aria-controls="social">@lang('file.Social Links')</a>
                             <a class="list-group-item list-group-item-action" id="feature-settings-feature" data-toggle="list" href="#feature" role="tab" aria-controls="settings">@lang('file.Features')</a>
                             <a class="list-group-item list-group-item-action" id="logo-settings-logo" data-toggle="list" href="#logo" role="tab" aria-controls="profile">@lang('file.Logo')</a>
+                            <a class="list-group-item list-group-item-action" id="topbanner-settings-topbanner" data-toggle="list" href="#top_banner" role="tab" aria-controls="profile">@lang('file.Top Banner')</a>
                             <a class="list-group-item list-group-item-action" id="footer-settings-footer" data-toggle="list" href="#footer" role="tab" aria-controls="footer">@lang('file.Footer')</a>
                             <a class="list-group-item list-group-item-action" id="newsletter-settings-newsletter" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">@lang('file.Newsletter')</a>
                         </div>
@@ -112,6 +113,12 @@
                     <!-- DB_ROW_ID-[35-] => setting[34-] -->
                     <div class="tab-pane fade" aria-labelledby="logo-settings-logo" id="logo" role="tabpanel">
                         @include('admin.pages.storefront.general_setting.logo')
+                    </div>
+
+                    <!-- Top Banner -->
+                    <!-- DB_ROW_ID-[35-] => setting[34-] -->
+                    <div class="tab-pane fade" aria-labelledby="topbanner-settings-topbanner" id="top_banner" role="tabpanel">
+                        @include('admin.pages.storefront.general_setting.top-banner')
                     </div>
 
 
@@ -401,6 +408,40 @@
                 e.preventDefault();
                 $.ajax({
                     url: "{{route('admin.storefront.logo.store')}}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        let html = '';
+                        if (data.errors) {
+                            html = '<div class="alert alert-danger">';
+                            for (var count = 0; count < data.errors.length; count++) {
+                                html += '<p>' + data.errors[count] + '</p>';
+                            }
+                            html += '</div>';
+                        }
+                        else if(data.success){
+                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                        }
+                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                        $('#alert_message').html(html);
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
+                        $('.save').text('Save');
+                    }
+                });
+            });
+
+            //Banner
+            $('#topbarBannerSubmit').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{route('admin.storefront.topBanner.store')}}",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -907,10 +948,5 @@
                 obj.readAsDataURL(data.files[0]);
             }
         }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
-    <script>
-        $('.colorpicker').colorpicker();
     </script>
 @endpush

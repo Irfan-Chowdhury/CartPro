@@ -130,7 +130,7 @@
 </div> --}}
 <!-- Cookie consent Ends-->
 
-@if (!Cookie::has('newslatter'))
+@if (!Cookie::has('newslatter') && env('NEWSLATTER_POPUP_ENABLED'))
     <div class="modal fade newsletter-modal" id="newsletter-modal" tabindex="-1" role="dialog" aria-labelledby="newsletter-modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content" style="background-image: url('{{asset('public/images/storefront/newsletter/newslatter.jpg')}}') ;background-size: cover;background-position: bottom;">

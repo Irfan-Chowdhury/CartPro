@@ -21,7 +21,7 @@
 
                     <!-- Background - 1 -->
                     <!-- DB_ROW_ID-70:  => setting[69] -->
-                    <h5 class="text-bold">{{__('file.Background')}}</h5><br>
+                    {{-- <h5 class="text-bold">{{__('file.Background')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
                             @forelse ($storefront_images as $key=> $item)
@@ -41,8 +41,7 @@
                             <br><br>
                             <input type="file" name="storefront_three_column_full_width_banners_background_image" class="form-control" onchange="showImage(this,'storefrontThreeColumnFullWidthBannersBackgroundImage')">
                         </div>
-                    </div>
-
+                    </div> --}}
 
                     <!-- Banners - 1 -->
                     <!-- DB_ROW_ID-71-73:  => setting[70-72] -->

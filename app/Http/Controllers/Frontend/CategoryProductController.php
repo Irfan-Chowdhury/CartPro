@@ -21,7 +21,6 @@ class CategoryProductController extends Controller
 
     public function categoryWiseProducts($slug)
     {
-
         $setting = Setting::where('key','storefront_footer_tag_id')->first();
         $footer_tag_ids = json_decode($setting->plain_value);
         $tags = Tag::with('tagTranslations','tagTranslationEnglish')
@@ -34,10 +33,32 @@ class CategoryProductController extends Controller
 
         $locale  = Session::get('currentLocal');
 
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
-                            'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')
-                    ->where('slug',$slug)
-                    ->first();
+        // $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
+        //                     'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')
+        //                 ->where('slug',$slug)
+        //                 ->first();
+
+        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
+                            'categoryProduct.product.productTranslation',
+                            'categoryProduct.product.productTranslationEnglish',
+                            'categoryProduct.product.baseImage',
+                            'categoryProduct.product.additionalImage',
+                            'child.catTranslation','child.categoryTranslationDefaultEnglish')
+                        ->where('slug',$slug)
+                        ->first();
+
+
+        $product_count =0;
+        if ($category->categoryProduct) {
+            foreach ($category->categoryProduct as $item) {
+                if ($item->product) {
+                    $product_count++;
+                }
+            }
+        }
+
+        // return $product_count;
+
 
         $attribute_values =  DB::table('attribute_category')
                                 ->join('attribute_translations', function ($join) use ($locale) {
@@ -52,7 +73,7 @@ class CategoryProductController extends Controller
                                 ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
                                 ->get();
 
-        return view('frontend.pages.category_wise_products',compact('category','attribute_values','tags'));
+        return view('frontend.pages.category_wise_products',compact('category','attribute_values','tags','product_count'));
     }
 
     public function categoryProductsFilterByAttributeValue(Request $request)

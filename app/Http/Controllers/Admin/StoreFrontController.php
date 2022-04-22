@@ -14,6 +14,7 @@ use App\Models\Tag;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\FlashSale;
+use App\Traits\ENVFilePutContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,7 @@ use function GuzzleHttp\json_decode;
 
 class StoreFrontController extends Controller
 {
-    use imageHandleTrait;
+    use imageHandleTrait, ENVFilePutContent;
 
     public function index()
     {
@@ -200,13 +201,14 @@ class StoreFrontController extends Controller
             'image_favicon_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             'image_header_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
             'image_mail_logo'    => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
-            // 'image_topbar_logo'  => 'image|max:10240|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails())
         {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
+
+
 
         $directory  ='/images/storefront/logo/';
 
@@ -232,7 +234,13 @@ class StoreFrontController extends Controller
                     [ 'image' => $this->imageStore($request->image_mail_logo,$directory,$type='store_front')]
                 );
         }
+        return response()->json(['success' => __('Data Saved successfully.')]);
 
+    }
+
+    public function topBannerStore(Request $request)
+    {
+        $directory  ='/images/storefront/logo/';
         if ($request->title_topbar_logo=="topbar_logo" && (!empty($request->image_topbar_logo))) {
             $this->previousImageDeleteFromStorefront('topbar_logo');
             StorefrontImage::updateOrCreate(
@@ -240,7 +248,14 @@ class StoreFrontController extends Controller
                     [ 'image' => $this->imageStore($request->image_topbar_logo,$directory,$type='topbar_logo')]
                 );
         }
+
+        $topbar_enabled_value = null;
+        if ($request->storefront_topbar_banner_enabled) {
+            $topbar_enabled_value = 1;
+        }
+        $this->dataWriteInENVFile('TOPBAR_BANNER_ENABLED',$topbar_enabled_value);
         return response()->json(['success' => __('Data Saved successfully.')]);
+
     }
 
     public function footerStore(Request $request)

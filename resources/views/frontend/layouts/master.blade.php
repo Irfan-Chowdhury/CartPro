@@ -134,6 +134,10 @@
         (function ($) {
             "use strict";
 
+            $('#bannerSlideUp').on('click', function(){
+                $('#top_banner').slideUp();
+            })
+
             $(document).ready(function() {
                 $('#newsletter-modal').modal('toggle');
                 @if(session()->has('type'))

@@ -18,6 +18,16 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Newslatter Popup')</b></label>
+                        <div class="col-sm-8">
+                            <div class="form-check mt-1">
+                                <input type="checkbox" value="1" {{env('NEWSLATTER_POPUP_ENABLED')!=null ? 'checked':''}} name="storefront_newslatter_popup_enabled" class="form-check-input">
+                                <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable Popup')</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Mailchimp API Key')</b></label>
                         <div class="col-sm-8">
                             <input type="text" name="mailchimp_api_key" class="form-control" @isset($setting_newsletter->mailchimp_api_key) value="{{$setting_newsletter->mailchimp_api_key}}" @endisset>

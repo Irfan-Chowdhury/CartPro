@@ -510,11 +510,19 @@ class HomeController extends Controller
 
     public function setCookie(Request $request)
     {
+        //Top Banner
+        if ($request->cookie_type=='top_banner') {
+            Cookie::queue('top_banner', 'top_banner', 60 * 8760); //key, value, minute
+            return response()->json('disable');
+        }
+
+        //Newlatter
         if ($request->newslatter=='disable') {
             Cookie::queue('newslatter', $request->newslatter, 60 * 8760); //key, value, minute
             return response()->json('disable');
         }elseif($request->newslatter=='enable') {
             Cookie::queue(Cookie::forget('newslatter'));
         }
+
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories\Category;
 
 use App\Contracts\Category\CategoryContract;
 use App\Models\Category;
+use App\Models\CategoryProduct;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\DeleteWithFileTrait;
 
@@ -64,6 +65,8 @@ class CategoryRepository implements CategoryContract
     public function bulkDestroyByIds($ids)
     {
         $this->deleteMultipleDataWithImages(Category::whereIn('id',$ids));
+
+        // CategoryProduct::where('category_id','3')->where('product_id','44')->delete();
     }
 }
 

@@ -135,10 +135,8 @@
                 <div class="col-lg-9">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="page-title h5 uppercase mb-0">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</h1>
-                        @if (!isset($products))
-                            <span class="d-none d-md-block"><strong class="theme-color">{{$category->categoryProduct->count() ?? 0}}</strong> products found</span>
-                        @else
-                            <span class="d-none d-md-block"><strong class="theme-color">{{count($products)}}</strong> @lang('file.Products Found')</span>
+                        @if ($category)
+                            <span class="d-none d-md-block"><strong class="theme-color">{{$product_count}}</strong> @lang('file.Products Found')</span>
                         @endif
                     </div>
 
@@ -178,7 +176,7 @@
                     <!--Shop product wrapper starts-->
                     <div class="shop-products-wrapper">
                         <div class="product-grid categoryWiseProductField">
-                            @if (!isset($products))
+                            @if ($category->categoryProduct)
                                 @forelse ($category->categoryProduct as $item)
                                     @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
                                         <form class="addToCart">
@@ -191,8 +189,8 @@
                                             <div class="product-grid-item">
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
-                                                        @if ($item->productBaseImage!=NULL && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                        @if ($item->productBaseImage!=NULL && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image)))
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image)}}"></a>
                                                         @else
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro"></a>
                                                         @endif
@@ -208,10 +206,10 @@
                                                     </div>
                                                     <div class="product-details">
                                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $category->id)}}">
-                                                            {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                            {{$item->product->productTranslation->product_name ?? $item->product->productTranslationEnglish->product_name ?? null}}
                                                         </a>
                                                         <div class="product-short-description">
-                                                            {{$item->productTranslation->short_description ?? $item->productTranslationDefaultEnglish->short_description ?? null}}
+                                                            {{$item->product->productTranslation->short_description ?? $item->product->productTranslationEnglish->short_description ?? null}}
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>
@@ -292,132 +290,6 @@
                                                             <button class="button style1 sm d-block w-100 mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to Cart')}}"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @endif
                                                         <a class="button style1 sm d-block align-items-center @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to wishlist')}}"><span class="ti-heart"></span> {{__('file.Add to wishlist')}}</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    @endif
-                                @empty
-                                    <h2 class="h4">@lang('file.No items found')</h2>
-                                @endforelse
-                            @else
-                                @forelse ($products as $item)
-                                    @if ($item->is_active==1) <!--Change in query later-->
-                                        <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{$item->id}}">
-                                            <input type="hidden" name="product_slug" value="{{$item->slug}}">
-                                            <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
-                                            <input type="hidden" name="qty" value="1">
-
-                                            <div class="product-grid-item">
-                                                <div class="single-product-wrapper">
-                                                    <div class="single-product-item">
-                                                        @if ($item->image!=NULL)
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->image)}}"></a>
-                                                        @else
-                                                            <a href="{{url('product/'.$item->slug.'/'. $category->id)}}"><img src="{{asset(url('public/images/empty.jpg'))}}" alt="..."></a>
-                                                        @endif
-
-                                                        @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                            <div class="product-promo-text style1">
-                                                                <span>@lang('file.Stock Out')</span>
-                                                            </div>
-                                                        @endif
-
-                                                        <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#{{$item->slug ?? null}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->id}}" data-product_slug="{{$item->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-details">
-                                                        <a class="product-name" href="{{url('product/'.$item->slug.'/'. $category->id)}}">
-                                                            {{$item->product_name ?? null}}
-                                                        </a>
-                                                        <div class="product-short-description">
-                                                            {!! htmlspecialchars_decode($item->description ?? null) !!}
-                                                        </div>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="rating-summary">
-                                                                    <div class="rating-result" title="60%">
-                                                                        <ul class="product-rating">
-                                                                            @php
-                                                                                for ($i=1; $i <=5 ; $i++){
-                                                                                    if ($i<= round($item->avg_rating)){  @endphp
-                                                                                        <li><i class="las la-star"></i></li>
-                                                                            @php
-                                                                                    }else { @endphp
-                                                                                        <li><i class="lar la-star"></i></li>
-                                                                            @php        }
-                                                                                }
-                                                                            @endphp
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-price">
-                                                                    @if ($item->special_price!=NULL && $item->special_price>0 && $item->special_price < $item->price)
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            <span class="promo-price">{{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '')}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
-                                                                            <span class="old-price">{{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
-                                                                        @else
-                                                                            <span class="promo-price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '')}} </span>
-                                                                            <span class="old-price"> @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        @endif
-                                                                    @else
-                                                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            <span class="price">{{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
-                                                                        @else
-                                                                            <span class="price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}</span>
-                                                                        @endif
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                                    <button class="button style2 sm" disabled type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                @else
-                                                                    <button class="button style2 sm" type="submit" title="Add To Cart" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-options">
-                                                        <div class="product-price mt-2">
-                                                            @if ($item->special_price!=NULL && $item->special_price>0 && $item->special_price<$item->price)
-                                                                <span class="promo-price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                    @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->special_price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
-                                                                <span class="old-price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                    @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
-                                                            @else
-                                                                <span class="price">
-                                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                                    @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price, env('FORMAT_NUMBER'), '.', '') }}
-                                                                    @endif
-                                                                </span>
-                                                            @endif
-                                                        </div>
-
-                                                        @if (($item->manage_stock==1 && $item->qty==0) || ($item->in_stock==0))
-                                                            <button disabled  class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
-                                                        @else
-                                                            <button class="button style1 sm d-flex align-items-center justify-content-center mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to cart"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
-                                                        @endif
-                                                        <div class="d-flex justify-content-between">
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

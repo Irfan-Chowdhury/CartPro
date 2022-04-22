@@ -392,6 +392,13 @@ class SettingController extends Controller
             }else {
                 SettingNewsletter::whereId($setting_newsletter->id)->update($data);
             }
+
+            $newslatter_popup_enabled = null;
+            if ($request->storefront_newslatter_popup_enabled) {
+                $newslatter_popup_enabled = 1;
+            }
+            $this->dataWriteInENVFile('NEWSLATTER_POPUP_ENABLED',$newslatter_popup_enabled);
+
             $this->dataWriteInENVFile('MAILCHIMP_APIKEY',$request->mailchimp_api_key);
             $this->dataWriteInENVFile('MAILCHIMP_LIST_ID',$request->mailchimp_list_id);
 

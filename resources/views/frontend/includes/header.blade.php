@@ -1,8 +1,12 @@
     <!--Header Area starts-->
     <header>
-        <div class="d-flex justify-content-center"  style="padding:0px;background-color:#111111">
-            <img src="{{asset($topbar_logo_path)}}" alt="">
-        </div>
+        @if (!Cookie::has('top_banner') && env('TOPBAR_BANNER_ENABLED'))
+            <div id="top_banner" class="text-center" style="background-color:#e5e8ec">
+                <img src="{{asset($topbar_logo_path)}}" alt="">
+                <a class="button sm" id="bannerSlideUp"><i class="las la-times"></i></a>
+            </div>
+        @endif
+
         <div id="header-top" class="header-top">
             <div class="container">
                 <div class="d-lg-flex d-xl-flex justify-content-between">
@@ -324,3 +328,36 @@
     </div>
     <!-- Offset Wrapper ends -->
     <!-- Header Area  ends -->
+
+@push('scripts')
+    <script>
+        $('#top_banner').on("click",function(e){
+            console.log(1);
+            $.get({
+                url: "{{route('cartpro.set_cookie')}}",
+                type: "GET",
+                data: {cookie_type:'top_banner'},
+                success: function (data) {
+                    console.log(data);
+                    if (data=='disable') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Banner disabled successfully'
+                        })
+                    }
+                }
+            })
+        });
+    </script>
+@endpush

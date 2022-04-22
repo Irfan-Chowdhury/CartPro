@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CategoryProduct extends Model
 {
+    use SoftDeletes;
     protected $table = 'category_product';
 
 
@@ -39,7 +40,7 @@ class CategoryProduct extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Product
+    | Product Related
     |--------------------------------------------------------------------------
     */
 
@@ -48,25 +49,25 @@ class CategoryProduct extends Model
         return $this->belongsTo('App\Models\Product');
     }
 
-    public function productTranslation()
+    public function productTranslation() //remove
     {
     	$locale = Session::get('currentLocal');
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }
 
-    public function productTranslationDefaultEnglish()
+    public function productTranslationDefaultEnglish() //remove
     {
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                         ->where('local','en');
     }
 
-    public function productBaseImage()
+    public function productBaseImage() //remove
     {
         return $this->hasOne(ProductImage::class,'product_id','product_id');
     }
 
-    public function additionalImage()
+    public function additionalImage() //remove
     {
         return $this->hasMany(ProductImage::class,'product_id','product_id');
     }

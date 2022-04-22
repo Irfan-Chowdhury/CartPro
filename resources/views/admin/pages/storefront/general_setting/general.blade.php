@@ -131,23 +131,8 @@
     </div>
 </div>
 @push('scripts')
-<script src="http://demo.lion-coders.com/soft/sarchholm/js/bootstrap-colorpicker.js"></script>
-<script>
-    (function ($) {
-        "use strict";
-
-        $('.color-change').click(function() {
-
-            var color = $(this).data('color');
-            $('#color-input').val(color);
-
-        });
-
-        $('#color-input').colorpicker({
-
-        });
-
-    })(jQuery);
-
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+    <script>
+        $('#color-input').colorpicker();
+    </script>
 @endpush

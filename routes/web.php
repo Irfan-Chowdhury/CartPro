@@ -453,6 +453,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/social_link/store',[StoreFrontController::class,'socialLinkStore'])->name('admin.storefront.social_link.store');
                 Route::post('/feature/store',[StoreFrontController::class,'featureStore'])->name('admin.storefront.feature.store');
                 Route::post('/logo/store',[StoreFrontController::class,'logoStore'])->name('admin.storefront.logo.store');
+                Route::post('/topBanner/store',[StoreFrontController::class,'topBannerStore'])->name('admin.storefront.topBanner.store');
                 Route::post('/footer/store',[StoreFrontController::class,'footerStore'])->name('admin.storefront.footer.store');
                 Route::post('/newletter/store',[StoreFrontController::class,'newletterStore'])->name('admin.storefront.newletter.store');
                 Route::post('/product_page/store',[StoreFrontController::class,'productPageStore'])->name('admin.storefront.product_page.store');
