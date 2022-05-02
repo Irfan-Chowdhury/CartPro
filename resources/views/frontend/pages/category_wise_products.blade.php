@@ -40,11 +40,33 @@
                             <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
                                 <ul>
                                     @forelse ($category->child as $item)
-                                        <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">({{$item->categoryProduct->count()}})</span>
+                                        <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">
+
+                                            @php $count =0; @endphp
+                                            @forelse ($item->categoryProduct as $childCategoryProduct)
+                                                @if ($childCategoryProduct->product)
+                                                    @php $count++; @endphp
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                            ({{$count}})
+
+                                        </span>
                                             @if ($item->child)
                                                 @forelse ($item->child as $value)
                                                     <ul>
-                                                        <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">({{count($value->categoryProduct)}})</span></a></li>
+                                                        <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">
+
+                                                            @php $count =0; @endphp
+                                                            @forelse ($value->categoryProduct as $childCategoryProduct)
+                                                                @if ($childCategoryProduct->product)
+                                                                    @php $count++; @endphp
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
+                                                            ({{$count}})
+
+                                                        </span></a></li>
                                                     </ul>
                                                 @empty
                                                 @endforelse
@@ -92,21 +114,19 @@
                                 @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
                                     <div class="sidebar-widget filters">
                                         <div class="sidebar-title">
-                                            <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By Size') {{$key}}</h2>
+                                            <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
                                         </div>
                                         <div class="filter-area collapse show" id="collapseSize">
                                             <div class="size-checkbox">
-                                                {{-- <form id="filterByAttributeValue" action="{{route('cartpro.category.price_range')}}" method="get"> --}}
-                                                    <ul class="filter-opt size pt-2">
-                                                        @foreach ($attribute_values->where('attribute_name',$key) as $value)
+                                                <ul class="filter-opt size pt-2">
+                                                    @foreach ($attribute_values->where('attribute_name',$key) as $value)
                                                         <li>
                                                             <div class="custom-control custom-checkbox">
                                                                 <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
                                                             </div>
                                                         </li>
-                                                        @endforeach
-                                                    </ul>
-                                                {{-- </form> --}}
+                                                    @endforeach
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +138,7 @@
                         <!--sidebar-categories-box end-->
 
                         <!-- Tags -->
-                        <div class="sidebar-widget filters">
+                        {{-- <div class="sidebar-widget filters">
                             <div class="sidebar-title">
                                 <h2 data-bs-toggle="collapse" aria-expanded="true">@lang('file.Tags')</h2>
                             </div>
@@ -127,7 +147,7 @@
                                     <div class="col-md-4"><a href="{{route('tag_wise_products',$item->slug)}}">{{$item->tagTranslations->tag_name ?? $item->tagTranslationEnglish->tag_name ?? null}}</a></div>
                                 @endforeach
                             </div>
-                        </div>
+                        </div> --}}
                         <br><br>
 
                     </div>

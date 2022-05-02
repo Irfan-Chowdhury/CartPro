@@ -117,6 +117,23 @@
                             @endforelse >
                         </div>
                     </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Shop Page')</b></label>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="checkbox" name="storefront_shop_page_enabled" @if($setting[150]->plain_value==1) checked  @endif value="1">
+                            <label class="form-check-label">@lang('file.Enable') @lang('file.Shop Page')</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Brand Page')</b></label>
+                        <div class="form-check ml-3">
+                            <input class="form-check-input" type="checkbox" name="storefront_brand_page_enabled" @if($setting[151]->plain_value==1) checked @endif value="1">
+                            <label class="form-check-label">@lang('file.Enable') @lang('file.Brand Page')</label>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">

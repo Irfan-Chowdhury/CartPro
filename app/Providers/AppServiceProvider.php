@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\CurrencyRate;
+use App\Models\FooterDescription;
 use App\Models\Language;
 use App\Models\Order;
 use App\Models\Page;
@@ -11,11 +12,13 @@ use App\Models\Setting;
 use App\Models\SettingNewsletter;
 use App\Models\SettingStore;
 use App\Models\StorefrontImage;
+use App\Models\Tag;
 use App\Models\Wishlist;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Harimayco\Menu\Models\Menus;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Google\Service\Compute\Tags;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -212,6 +215,9 @@ class AppServiceProvider extends ServiceProvider
         $top_categories_section_enabled = null;
         $terms_and_condition_page_id = null;
         $terms_and_condition_page_slug = null;
+        $storefront_shop_page_enabled = null;
+        $storefront_brand_page_enabled = null;
+
 
         foreach ($settings as $key => $item) {
             if ($item->key=='storefront_theme_color' && $item->plain_value!=NULL) {
@@ -301,6 +307,31 @@ class AppServiceProvider extends ServiceProvider
             elseif ($item->key=='storefront_terms_and_condition_page' && $item->plain_value!=NULL) {
                 $terms_and_condition_page_id = $item->plain_value;
             }
+
+            // Footer Tags
+            elseif ($item->key=='storefront_footer_tag_id' && $item->plain_value!=NULL) {
+                $footer_tag_ids = json_decode($item->plain_value);
+            }
+
+            // Shop Page Enabled
+            elseif ($item->key=='storefront_shop_page_enabled' && $item->plain_value!=NULL) {
+                $storefront_shop_page_enabled = $item->plain_value;
+            }
+
+            // Brand Page Enabled
+            elseif ($item->key=='storefront_brand_page_enabled' && $item->plain_value!=NULL) {
+                $storefront_brand_page_enabled = $item->plain_value;
+            }
+        }
+
+        $tags = [];
+        if ($footer_tag_ids) {
+            $tags = Tag::with('tagTranslations','tagTranslationEnglish')
+                ->whereIn('id',$footer_tag_ids)
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get();
         }
 
         if ($terms_and_condition_page_id!=null) {
@@ -343,7 +374,6 @@ class AppServiceProvider extends ServiceProvider
             ->whatsapp()
             ->reddit()
             ->getRawLinks();
-
 
         View::share(['languages'=>$languages,
                     'currency_codes'=>$currency_codes,
@@ -395,6 +425,9 @@ class AppServiceProvider extends ServiceProvider
                     'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,
                     'top_categories_section_enabled'=> $top_categories_section_enabled,
                     'terms_and_condition_page_slug'=> $terms_and_condition_page_slug,
+                    'tags'=> $tags,
+                    'storefront_shop_page_enabled'=> $storefront_shop_page_enabled,
+                    'storefront_brand_page_enabled'=> $storefront_brand_page_enabled,
             ]);
 
             $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);

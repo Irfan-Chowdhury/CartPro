@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('title','Shop')
+@section('title','Daily Deals')
 
 @section('frontend_content')
     <!--Breadcrumb Area start-->
@@ -9,7 +9,7 @@
                 <div class="col">
                     <ul>
                         <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                        <li class="active">@lang('file.Shop')</li>
+                        <li class="active">@lang('file.Daily Deals')</li>
                     </ul>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                                 <li class="d-none d-md-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
                                 <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> @lang('file.Filters')</a></li>
                             </ul>
-                            <div class="dropdown">
+                            {{-- <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 @lang('file.Show')
                                 </button>
@@ -109,7 +109,7 @@
                                     <li><a class="dropdown-item sortBy" data-condition="low_to_high">@lang('file.Price: Low to High')</a></li>
                                     <li><a class="dropdown-item sortBy" data-condition="high_to_low">@lang('file.Price: High to Low')</a></li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
 
 

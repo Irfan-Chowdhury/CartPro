@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ProductPromoBadgeTextTrait;
 
-class ShopProductController extends Controller
+class DailyDealsController extends Controller
 {
     use ProductPromoBadgeTextTrait;
 
@@ -38,6 +38,7 @@ class ShopProductController extends Controller
                     })
                     ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                     ->where('is_active',1)
+                    ->where('special_price','>','price')
                     ->orderBy('products.id','ASC')
                     ->get();
 
@@ -81,7 +82,7 @@ class ShopProductController extends Controller
         //         ->get();
 
         // return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','categories','attribute_with_values' ,'attribute_values'));
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','categories','attribute_with_values'));
+        return view('frontend.pages.daily_deals_products',compact('products','product_images','category_ids','product_attr_val','categories','attribute_with_values'));
     }
 
     public function limitShopProductShow(Request $request)

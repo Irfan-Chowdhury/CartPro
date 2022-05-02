@@ -27,8 +27,8 @@ class CartController extends Controller
     public function productAddToCart(Request $request)
     {
         if ($request->ajax()) {
-            
-             //New
+
+            //New
             $cart_content = Cart::content();
             $request_qty = $request->qty;
             $rowId = null;
@@ -42,7 +42,7 @@ class CartController extends Controller
                     }
                 }
             }
-            
+
             $attribute_name_arr = $request->attribute_name;
             $value_ids = array();
             $value_ids = explode(",",$request->value_ids);
@@ -88,8 +88,7 @@ class CartController extends Controller
 
             $data['options']['product_slug']  = $request->product_slug;
             $data['options']['category_id']  = $request->category_id;
-
-            //new
+            $data['options']['brand_id']= $product->brand_id ?? null;
             $data['options']['manage_stock']= $product->manage_stock ?? null;
             $data['options']['stock_qty']= $product->qty ?? null;
             $data['options']['in_stock']= $product->in_stock ?? 0;

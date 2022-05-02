@@ -47,7 +47,6 @@ class CategoryProductController extends Controller
                         ->where('slug',$slug)
                         ->first();
 
-
         $product_count =0;
         if ($category->categoryProduct) {
             foreach ($category->categoryProduct as $item) {
@@ -56,8 +55,6 @@ class CategoryProductController extends Controller
                 }
             }
         }
-
-        // return $product_count;
 
 
         $attribute_values =  DB::table('attribute_category')
@@ -73,7 +70,7 @@ class CategoryProductController extends Controller
                                 ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
                                 ->get();
 
-        return view('frontend.pages.category_wise_products',compact('category','attribute_values','tags','product_count'));
+        return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
     }
 
     public function categoryProductsFilterByAttributeValue(Request $request)

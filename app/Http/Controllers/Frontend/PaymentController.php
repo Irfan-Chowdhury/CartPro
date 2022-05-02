@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
 use Stripe;
+use Illuminate\Support\Facades\Redirect;
+use Paystack;
 
 class PaymentController extends Controller
 {
@@ -54,6 +56,8 @@ class PaymentController extends Controller
         // DB::commit();
         // return response()->json($order);
     }
+
+
 
     public function paymentProcees(Request $request)
     {
@@ -113,6 +117,9 @@ class PaymentController extends Controller
             $this->stripe($request);
             $this->reduceProductQuantity($order_id);
             return $this->destroyOthers();
+        }elseif ($request->payment_type=='paystack'){
+            $this->reduceProductQuantity($order_id);
+            return $this->redirectToGateway();
         }
     }
 
@@ -199,6 +206,8 @@ class PaymentController extends Controller
             $order_detail = new OrderDetail();
             $order_detail->order_id   = $order->id;
             $order_detail->product_id = $row->id;
+            $order_detail->category_id= $row->options->category_id;
+            $order_detail->brand_id   = $row->options->brand_id;
             $order_detail->image      = $row->options->image;
             $order_detail->options    = $row->options;
             $order_detail->price      = $row->price;
@@ -448,6 +457,28 @@ class PaymentController extends Controller
         } else {
             echo "Invalid Data";
         }
+    }
+
+
+    /*
+    |------------------------------------------------------------
+    |Paystack
+    |------------------------------------------------------------
+    */
+    protected function redirectToGateway()
+    {
+        try{
+            return Paystack::getAuthorizationUrl()->redirectNow();
+        }catch(\Exception $e) {
+            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+        }
+    }
+
+    public function handleGatewayCallback()
+    {
+        return $this->destroyOthers();
+        // $paymentDetails = Paystack::getPaymentData();
+        // dd($paymentDetails);
     }
 
 

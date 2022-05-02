@@ -27,6 +27,8 @@ class Category extends Model
     	 return $this->hasMany(CategoryTranslation::class,'category_id');  //Remove Later
     }
 
+    
+
     public function catTranslation()
     {
         $locale = Session::get('currentLocal');

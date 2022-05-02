@@ -50,6 +50,11 @@ class CurrencySeeder extends Seeder
 				'currency_name' => 'United States Dollar',
 				'currency_code' => 'USD',
 			),
+			array(
+				'id' => 6,
+				'currency_name' => 'United States Dollar',
+				'currency_code' => 'USD',
+			),
 
         );
 

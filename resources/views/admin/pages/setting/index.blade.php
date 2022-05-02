@@ -108,6 +108,8 @@
                             <a class="list-group-item list-group-item-action" id="strip-payment_methods" data-toggle="list" href="#strip" role="tab" aria-controls="strip">@lang('file.Strip')</a>
                             <a class="list-group-item list-group-item-action" id="sslcommerz-payment_methods" data-toggle="list" href="#sslcommerz" role="tab" aria-controls="sslcommerz">@lang('file.SSL Commerz')</a>
                             <a class="list-group-item list-group-item-action" id="cash_on_delivery-payment_methods" data-toggle="list" href="#cash_on_delivery" role="tab" aria-controls="cash_on_delivery">@lang('file.Cash On Delivery')</a>
+                            <a class="list-group-item list-group-item-action" id="razorpay-payment_methods" data-toggle="list" href="#razorpay" role="tab" aria-controls="razorpay">@lang('file.Razorpay')</a>
+                            <a class="list-group-item list-group-item-action" id="paystack-payment_methods" data-toggle="list" href="#paystack" role="tab" aria-controls="paystack">@lang('file.Paystack')</a>
                         </div>
                     </div>
                 </div>
@@ -235,6 +237,16 @@
                     <!-- Check / Money Order  -->
                     <div class="tab-pane fade" id="check_money_order" role="tabpanel" aria-labelledby="check_money_order-payment_methods">
                         @include('admin.pages.setting.payment_method.check_money_order')
+                    </div>
+
+                    <!-- Razorpay  -->
+                    <div class="tab-pane fade" id="razorpay" role="tabpanel" aria-labelledby="razorpay-payment_methods">
+                        @include('admin.pages.setting.payment_method.razorpay')
+                    </div>
+
+                    <!-- Paystack  -->
+                    <div class="tab-pane fade" id="paystack" role="tabpanel" aria-labelledby="paystack-payment_methods">
+                        @include('admin.pages.setting.payment_method.paystack')
                     </div>
               </div>
             </div>
@@ -1058,6 +1070,116 @@
                         }
                     });
                 });
+
+                //Razorpay
+                $('#razorpaySubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.razorpay.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+                //Paystack
+                $('#paystackSubmit').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{{route('admin.setting.paystack.store_or_update')}}",
+                        method: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (data) {
+                            let html = '';
+                            if (data.errors) {
+                                html = '<div class="alert alert-danger">';
+                                for (let count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '</p>';
+                                }
+                                html += '</div>';
+                                $('#alert_message').fadeIn("slow");
+                                $('#alert_message').html(html);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.success){
+                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                                $('#alert_message').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#alert_message').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    });
+                });
+
+
+
+                // $('#razorpaySubmit').on('submit', function (e) {
+                //     e.preventDefault();
+                //     $.ajax({
+                //         url: "{{route('admin.setting.razorpay.store_or_update')}}",
+                //         method: "POST",
+                //         data: new FormData(this),
+                //         contentType: false,
+                //         cache: false,
+                //         processData: false,
+                //         dataType: "json",
+                //         success: function (data) {
+                //             let html = '';
+                //             if (data.errors) {
+                //                 html = '<div class="alert alert-danger">';
+                //                 for (let count = 0; count < data.errors.length; count++) {
+                //                     html += '<p>' + data.errors[count] + '</p>';
+                //                 }
+                //                 html += '</div>';
+                //                 $('#alert_message').fadeIn("slow");
+                //                 $('#alert_message').html(html);
+                //                 setTimeout(function() {
+                //                     $('#alert_message').fadeOut("slow");
+                //                 }, 3000);
+                //             }
+                //             else if(data.success){
+                //                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                //                 $('#alert_message').addClass('alert alert-success').html(data.success);
+                //                 setTimeout(function() {
+                //                     $('#alert_message').fadeOut("slow");
+                //                 }, 3000);
+                //             }
+                //         }
+                //     });
+                // });
 
 
             // $('#supportedCurrencies').change(function (e) {

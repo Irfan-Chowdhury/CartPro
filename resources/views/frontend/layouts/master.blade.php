@@ -34,53 +34,66 @@
     <!-- Bootstrap CSS -->
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- style CSS -->
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/cartpro-style.css')}}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/cartpro-style.css')}}"></noscript>
+    <link href="{{asset('public/frontend/css/cartpro-style.css')}}" rel="stylesheet">
 
     <!-- Plugins CSS -->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}"></noscript>
 
     <!-- google fonts-->
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap"></noscript>
 
     @yield('extra_css')
 
     <style>
-        :root {
-            --theme-color: {{$storefront_theme_color ?? "#0071df"}};
-        }
+        :root {--theme-color: {{$storefront_theme_color ?? "#0071df"}};--navbg-color:{{$storefront_navbg_color ?? "#FFF"}};--menu-text-color:{{$storefront_menu_text_color ?? "#021523"}};--menu-text-hover-color:{{$storefront_menu_text_hover_color ?? ""}}}
     </style>
+
+    @if (!env('USER_VERIFIED')==1)
     <style>
         #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 45%;width: 40px;}
     </style>
+    @endif
 
 </head>
 
 <body>
+    @if (!env('USER_VERIFIED')==1)
     <div id="demo">
-        <h6>Colorways</h6>
-        <ul id="switcher">
-            <li class="color-change" data-color="#0071df" style="background-color:#0071df"></li>
-            <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
-            <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
-            <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
-            <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
-            <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
-            <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
-            <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
+        <h6>Theme Colors</h6>
+        <ul id="switcher" class="p-0">
+            <li class="color-change-theme" data-color="#0071df" style="background-color:#0071df"></li>
+            <li class="color-change-theme" data-color="#f51e46" style="background-color:#f51e46"></li>
+            <li class="color-change-theme" data-color="#fa9928" style="background-color:#fa9928"></li>
+            <li class="color-change-theme" data-color="#fd6602" style="background-color:#fd6602"></li>
+            <li class="color-change-theme" data-color="#59b210" style="background-color:#59b210"></li>
+            <li class="color-change-theme" data-color="#ff749f" style="background-color:#ff749f"></li>
+            <li class="color-change-theme" data-color="#f8008c" style="background-color:#f8008c"></li>
+            <li class="color-change-theme" data-color="#6453f7" style="background-color:#6453f7"></li>
         </ul>
-        @if (env('USER_VERIFIED')==1)
-            <div class="demo-btn"><i class="las la-cog"></i></div>
-        @endif
+        <h6>Nav Background Color</h6>
+        <ul id="switcher" class="p-0">
+            <li class="color-change-navbg" data-color="#0071df" style="background-color:#0071df"></li>
+            <li class="color-change-navbg" data-color="#f51e46" style="background-color:#f51e46"></li>
+            <li class="color-change-navbg" data-color="#fa9928" style="background-color:#fa9928"></li>
+            <li class="color-change-navbg" data-color="#fd6602" style="background-color:#fd6602"></li>
+            <li class="color-change-navbg" data-color="#59b210" style="background-color:#59b210"></li>
+            <li class="color-change-navbg" data-color="#ff749f" style="background-color:#ff749f"></li>
+            <li class="color-change-navbg" data-color="#f8008c" style="background-color:#f8008c"></li>
+            <li class="color-change-navbg" data-color="#6453f7" style="background-color:#6453f7"></li>
+            <li class="color-change-navbg" data-color="#FFF" style="background-color:#FFF;border:1px solid #666"></li>
+        </ul>
+        <h6>Nav Text Color</h6>
+        <ul id="switcher" class="p-0">
+            <li class="color-change-navtext" data-color="#FFF" data-hover-color="#e5e8ec" style="background-color:#FFF;border:1px solid #666"></li>
+            <li class="color-change-navtext" data-color="#021523" data-hover-color="#666" style="background-color:#021523"></li>
+        </ul>
+        <div class="demo-btn"><i class="las la-cog"></i></div>
     </div>
-
+    @endif
 
     <!--Header-->
-
-
-
     @include('frontend.includes.header')
 
     <div class="center loader"></div>
@@ -106,13 +119,14 @@
 
     <script src="{{asset('public/js/share.js')}}"></script>
 
+    @if (!env('USER_VERIFIED')==1)
     <script>
         (function ($) {
             "use strict";
             $('.demo-btn').on('click', function(){
                 $('#demo').toggleClass('open');
 
-                $('.color-change').click(function() {
+                $('.color-change-theme').click(function() {
 
                     var color = $(this).data('color');
                     $('#color-input').val(color);
@@ -120,15 +134,29 @@
 
                 });
 
-                $('#color-input').on('change',function() {
-                    var color = $(this).val();
-                    $('body').css('--theme-color', color);
+                $('.color-change-navbg').click(function() {
+
+                    var color = $(this).data('color');
+                    $('#color-input').val(color);
+                    $('body').css('--navbg-color', color);
+
+                });
+
+                $('.color-change-navtext').click(function() {
+
+                    var color = $(this).data('color');
+                    var hover = $(this).data('hover-color');
+                    $('#color-input').val(color);
+                    $('body').css('--menu-text-color', color);
+                    $('body').css('--menu-text-hover-color', hover);
+
                 });
 
             });
 
         })(jQuery);
     </script>
+    @endif
 
     <script>
         (function ($) {
@@ -444,7 +472,10 @@
 
             $('#stripeContent').hide();
 
-            $('.lazy').Lazy();
+            $(window).on('load',function(){
+
+                $('.lazy').Lazy();
+            });
 
         })(jQuery);
     </script>

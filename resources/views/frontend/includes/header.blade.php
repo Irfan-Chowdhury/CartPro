@@ -37,14 +37,14 @@
                     <div class="header-top-right">
                         <ul>
                             <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[$locale]->language_name}}</a>
-                                <ul class="dropdown">
+                                <ul class="dropdown p-0">
                                     @foreach ($languages as $item)
                                         <li><a href="{{route('cartpro.default_language_change',$item->id)}}" {{$item->local==Session::get('currentLocal') ? 'selected': ''}}>{{$item->language_name}}</a></li>
                                     @endforeach
                                 </ul>
                             </li>
                             <li class="has-dropdown"><a href="#"><i class="las la-money-bill"></i>&nbsp; @if(Session::has('currency_code')) {{Session::get('currency_code')}} @else {{env('DEFAULT_CURRENCY_CODE')}} @endif</a>
-                                <ul class="dropdown">
+                                <ul class="dropdown p-0">
                                     @foreach ($currency_codes as $item)
                                         <li><a href="{{route('cartpro.currency_change',$item->currency_code)}}" {{$item->currency_code==Session::get('currency_code') ? 'selected': ''}}>{{$item->currency_code}}</a></li>
                                     @endforeach
@@ -81,7 +81,7 @@
                         </form>
                     </div>
                     <div class="col-lg-3 col-5">
-                        <ul class="offset-menu-wrapper">
+                        <ul class="offset-menu-wrapper p-0">
                             <li class="d-lg-none">
                                 <a><i class="las la-search" data-bs-toggle="collapse" href="#mobile-search" role="button" aria-expanded="false" aria-controls="mobile-search"></i></a>
                             </li>
@@ -142,9 +142,9 @@
                 <div class="row">
                     <div class="col-xl-3 col-md-4 d-none d-lg-flex d-xl-flex">
                         <div class="category-list">
-                            <ul>
+                            <ul class="pl-0">
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i>{{__('file.Shop By Category')}}</a>
-                                    <ul id="cat_menu" class="dropdown">
+                                    <ul id="cat_menu" class="dropdown p-0">
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
                                                 <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
@@ -180,7 +180,7 @@
 
                                     <div class="tab-content" id="menu_tab_content">
                                         <div class="tab-pane fade show active" id="mobile_menu" role="tabpanel" aria-labelledby="menu-tab">
-                                            <ul>
+                                            <ul class="pl-0">
                                                 @php
                                                     $str = url()->current();
                                                     $data = explode("/",$str);
@@ -188,8 +188,14 @@
                                                 @endphp
 
                                                 <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
-                                                <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
-                                                <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
+
+                                                @if ($storefront_shop_page_enabled)
+                                                    <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
+                                                @endif
+
+                                                @if ($storefront_brand_page_enabled)
+                                                    <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
+                                                @endif
 
 
                                                 @if ($menu!=NULL)
@@ -240,6 +246,7 @@
                                                     @empty
                                                     @endforelse
                                                 @endif
+                                                <li class="deal-menu-item"><a href="{{route('cartpro.daily_deals')}}"><i class="las la-tag d-none d-md-inline-block"></i> @lang('file.Daily Deals')</a></li>
                                             </ul>
                                         </div>
                                         <div class="tab-pane fade" id="mobile_cat" role="tabpanel" aria-labelledby="category-tab">

@@ -27,7 +27,7 @@ class CurrencyRateController extends Controller
                 return $row->currency_symbol ?? "";
             })
             ->addColumn('currency_rate', function ($row){
-                return number_format($row->currency_rate, env('FORMAT_NUMBER'), '.', '');
+                return number_format((float)$row->currency_rate, env('FORMAT_NUMBER'), '.', '');
             })
             ->addColumn('action', function ($row)
             {

@@ -14,6 +14,7 @@ use App\Models\Tag;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\FlashSale;
+use App\Models\FooterDescription;
 use App\Traits\ENVFilePutContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -97,15 +98,21 @@ class StoreFrontController extends Controller
 
         $flash_sales = FlashSale::with('flashSaleTranslation')->where('is_active',1)->get();
 
+        $footer_description = FooterDescription::where('locale',$locale)->first();
+        if (!$footer_description) {
+            $footer_description = FooterDescription::where('locale','en')->first();
+        }
+
 
 
         return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
-                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flash_sales'));
+                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flash_sales','footer_description'));
 
     }
 
     public function generalStore(Request $request)
     {
+
         $locale = Session::get('currentLocal');
 
         if ($request->ajax()) {
@@ -119,6 +126,12 @@ class StoreFrontController extends Controller
                 }
                 else{
                     Setting::where('key',$key)->update(['plain_value'=>$value]);
+                }
+                if (!$request->storefront_shop_page_enabled) {
+                    Setting::where('key','storefront_shop_page_enabled')->update(['plain_value' => 0]);
+                }
+                if (!$request->storefront_brand_page_enabled) {
+                    Setting::where('key','storefront_brand_page_enabled')->update(['plain_value' => 0]);
                 }
             }
 
@@ -293,6 +306,13 @@ class StoreFrontController extends Controller
                     Setting::where('key',$key)->update(['plain_value'=>$value]);
                 }
             }
+
+
+            // FooterDescription::
+            FooterDescription::updateOrCreate(
+                ['locale'     => $locale],
+                ['description'=> htmlspecialchars_decode($request->description), 'is_active'=> $request->is_active ?? 0 ]
+            );
 
             return response()->json(['success'=>'Data Saved Successfully']);
         }

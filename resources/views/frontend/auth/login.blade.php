@@ -65,10 +65,10 @@
                         </form>
                         <div class="social-profile-login text-center mb-5">
                             <h5>Or Login with</h5>
-                            <ul class="footer-social mar-top-20 pad-left-15">
-                                <li><a href="{{route('login.google')}}"><i class="ti-google"></i></a></li>
-                                <li><a href="{{route('login.facebook')}}"><i class="ti-facebook"></i></a></li>
-                                <li><a href="{{route('login.github')}}"><i class="ti-github"></i></a></li>
+                            <ul class="footer-social login-social mar-top-20 pad-left-15">
+                                <li><a class="google" href="{{route('login.google')}}"><i class="lab la-google"></i></a></li>
+                                <li><a class="facebook" href="{{route('login.facebook')}}"><i class="lab la-facebook-f"></i></a></li>
+                                <!--<li><a href="{{route('login.github')}}"><i class="ti-github"></i></a></li>-->
                             </ul>
                         </div>
                     </div>

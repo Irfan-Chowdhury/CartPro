@@ -22,11 +22,13 @@
     <section class="shop-cart-section pt-0 mb-5">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 text-center">
                     @if (count($cart_content)>0)
-                        <h1 class="page-title h2 text-center uppercase mt-1 mb-5">{{__('file.Your Cart')}}</h1>
+                        <h1 class="page-title h2 mt-1 mb-5">{{__('file.Your Cart')}}</h1>
                     @else
-                        <h1 class="page-title h2 text-center uppercase mt-1 mb-5">{{__('file.Your Cart is Currently empty')}}</h1>
+                        <img src="{{asset('public/frontend/images/empty-cart.png')}}" alt="Empty cart"/>
+                        <h1 class="page-title h2 mt-1 mb-5">{{__('file.Your cart is currently empty')}}</h1>
+                        <a class="button style1" href="{{url('/')}}">{{ __('Continue Shopping') }}</a>
                     @endif
 
                 </div>

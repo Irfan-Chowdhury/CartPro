@@ -27,7 +27,7 @@
                 <ul>
                     <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
                     <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name}}</a> </li>
-                    <li><p>{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</p></li>
+                    <li>{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</li>
                 </ul>
             </div>
 
@@ -113,7 +113,7 @@
                                             }
                                         @endphp
                                     </ul>
-                                    <span>( {{round($product->avg_rating)}} )</span>
+                                    <span>( @lang('file.Reviews'): {{count($reviews)}} )</span>
                                 </div>
                                 @if ($product->sku)
                                     <div class="item-sku">@lang('file.SKU') : {{$product->sku}}</div>
@@ -219,11 +219,11 @@
     </section>
     <!--Product details section ends-->
     <!--content wrapper section starts-->
-    <section class="content-wrapper-section no-pad-top no-pad-bot">
+    <section class="content-wrapper-section pt-0 pb-0">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 tabs style2">
-                    <ul class="nav nav-tabs mar-top-30 product-details-tab" id="lionTab" role="tablist">
+                    <ul class="nav nav-tabs mar-top-30 product-details-tab justify-content-center" id="lionTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="true">@lang('file.Description')</a>
                         </li>
@@ -383,7 +383,7 @@
     </section>
 
     <!-- Realated Product area starts-->
-    <section class="product-tab-section">
+    <section class="product-tab-section mb-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">

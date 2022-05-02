@@ -681,6 +681,54 @@ class SettingController extends Controller
         }
     }
 
+    public function razorpayStoreOrUpdate(Request $request)
+    {
+        if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors' => ['This is disabled for demo']]);
+            }
+            $validator = Validator::make($request->only('razorpay_key','razorpay_secret'),[
+                'razorpay_key' => 'required',
+                'razorpay_secret' => 'required',
+            ]);
+
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
+            $this->dataWriteInENVFile('RAZORPAY_STATUS',$request->status);
+            $this->dataWriteInENVFile('RAZORPAY_KEY',$request->razorpay_key);
+            $this->dataWriteInENVFile('RAZORPAY_SECRET',$request->razorpay_secret);
+
+            return response()->json(['success' => __('Data Added successfully.')]);
+        }
+    }
+
+    public function paystackStoreOrUpdate(Request $request)
+    {
+        if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors' => ['This is disabled for demo']]);
+            }
+            $validator = Validator::make($request->only('paystack_public_key','paystack_secret_key','merchant_email'),[
+                'paystack_public_key' => 'required',
+                'paystack_secret_key' => 'required',
+                'merchant_email'      => 'required',
+            ]);
+
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
+
+            $this->dataWriteInENVFile('PAYSTACK_STATUS',$request->PAYSTACK_STATUS);
+            $this->dataWriteInENVFile('PAYSTACK_PUBLIC_KEY',$request->paystack_public_key);
+            $this->dataWriteInENVFile('PAYSTACK_SECRET_KEY',$request->paystack_secret_key);
+            $this->dataWriteInENVFile('MERCHANT_EMAIL',$request->merchant_email);
+
+            return response()->json(['success' => __('Data Added successfully.')]);
+        }
+    }
+
     public function paytmStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {

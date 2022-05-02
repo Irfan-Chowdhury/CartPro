@@ -171,6 +171,7 @@ return [
             Spatie\Permission\PermissionServiceProvider::class,
             Harimayco\Menu\MenuServiceProvider::class,
             Jorenvh\Share\Providers\ShareServiceProvider::class,
+            Unicodeveloper\Paystack\PaystackServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -239,6 +240,7 @@ return [
         'Menu' => Harimayco\Menu\Facades\Menu::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
         'Share' => Jorenvh\Share\ShareFacade::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
     ],
 
 ];

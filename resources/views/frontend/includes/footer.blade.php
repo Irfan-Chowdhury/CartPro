@@ -1,3 +1,20 @@
+<!-- Footer Description -->
+@if (Request::routeIs('cartpro.home'))
+    @php
+        $footer_description = App\Models\FooterDescription::where('locale',Session::get('currentLocal'))->first();
+        if (!$footer_description) {
+            $footer_description = App\Models\FooterDescription::where('locale','en')->first();
+        }
+    @endphp
+    @if ($footer_description && $footer_description->is_active==1)
+    <section class="mb-3">
+        <div class="container">
+            {!! htmlspecialchars_decode($footer_description->description ?? null) !!}
+        </div>
+    </section>
+    @endif
+@endif
+
 @if ($setting_newslatter && $setting_newslatter->newsletter==1)
 <div class="newsletter-section">
     <div class="container">
@@ -66,7 +83,7 @@
                         <div class="footer-widget style1">
                             <h3>{{$footer_menu_one_title}}</h3>
                             <div class="d-flex justify-content-between">
-                                <ul class="footer-menu">
+                                <ul class="footer-menu p-0">
                                     @if ($footer_menu_one)
                                         @forelse($footer_menu_one->items as $value)
                                             @if ($value->locale==$locale)
@@ -82,7 +99,7 @@
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
                             <h3>{{$footer_menu_title_two}}</h3>
-                            <ul class="footer-menu">
+                            <ul class="footer-menu p-0">
                                 @if ($footer_menu_two)
                                     @forelse($footer_menu_two->items as $value)
                                         @if ($value->locale==$locale)
@@ -97,7 +114,7 @@
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
                             <h3>@lang('file.Company')</h3>
-                            <ul class="footer-menu">
+                            <ul class="footer-menu p-0">
                                 <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
                                 <li><a href="{{route('cartpro.brands')}}">@lang('file.Brands')</a></li>
                                 <li><a href="{{route('cartpro.shop')}}">@lang('file.Shop')</a></li>
@@ -107,7 +124,17 @@
                 </div>
             </div>
         </div>
-        <div class="row footer-bottom">
+
+
+        <!-- Footer Tags -->
+        <hr>
+        <div class="mt-3 mb-3">
+            @foreach ($tags as $item)
+                <div class="item-tags"><a href="{{route('tag_wise_products',$item->slug)}}">{{$item->tagTranslations->tag_name ?? $item->tagTranslationEnglish->tag_name ?? null}}</a></div>
+            @endforeach
+        </div>
+
+        <div class="row footer-bottom mt-0">
             <div class="col-md-6">
                 <p>{!! html_entity_decode($storefront_copyright_text) !!}</p>
             </div>

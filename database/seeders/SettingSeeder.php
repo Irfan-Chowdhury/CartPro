@@ -804,6 +804,27 @@ class SettingSeeder extends Seeder
                 'key' => 'store_front_slider_format',
                 'is_translatable' => 0,
             ),
+
+            //Top Categories Section Enabled
+            array(
+                'id' => 150,
+                'key' => 'storefront_top_categories_section_enabled',
+                'is_translatable' => 0,
+            ),
+
+            //Shop Page Enabled
+            array(
+                'id' => 151,
+                'key' => 'storefront_shop_page_enabled',
+                'is_translatable' => 0,
+            ),
+
+            //Brand Page Enabled
+            array(
+                'id' => 152,
+                'key' => 'storefront_brand_page_enabled',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

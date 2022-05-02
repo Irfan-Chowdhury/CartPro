@@ -35,6 +35,7 @@ use App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\BrandProductController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryProductController;
+use App\Http\Controllers\Frontend\DailyDealsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController AS FrontendPageController;
 use App\Http\Controllers\Frontend\UserAccountController;
@@ -74,6 +75,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     | User Section
     |--------------------------------------------------------------------------
     */
+
     Route::get('/login',[Auth\LoginController::class,'showCustomerLoginForm'])->name('customer_login_form');
     Route::post('/customer/login', [Auth\LoginController::class,'customerLogin'])->name('customer.login');
     Route::post('/customer/register', [Frontend\RegisterController::class,'customerRegister'])->name('customer.register');
@@ -81,6 +83,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::post('/password/email', [Auth\ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email'); //Here
 
     Route::group(['namespace'=>'Frontend'], function (){
+
         Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
         Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
         Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
@@ -99,6 +102,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/shop',[ShopProductController::class,'index'])->name('cartpro.shop');
         Route::get('limit_shop_products_show',[ShopProductController::class,'limitShopProductShow'])->name('cartpro.limit_shop_product_show');
         Route::get('/shop_products_show_sortby',[ShopProductController::class,'shopProductsShowSortby'])->name('cartpro.shop_products_show_sortby');
+
+         //Daily Deals Products
+         Route::get('/daily-deals',[DailyDealsController::class,'index'])->name('cartpro.daily_deals');
 
 
         Route::get('product/{product_slug}/{category_id}',[HomeController::class,'product_details'])->name('cartpro.product_details');
@@ -182,15 +188,24 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::post('/review/store',[HomeController::class,'reviewStore'])->name('review.store');
 
 
-        //SSL Commerze (New)
+
+        /*
+        |------------------------------------------------------------
+        |Payment
+        |------------------------------------------------------------
+        */
+        //Payment For All
         Route::post('/payment/process',[Frontend\PaymentController::class,'paymentProcees'])->name('payment.process');
+
+
+        // SSLCOMMERZ
         Route::post('/success', [Frontend\PaymentController::class, 'success']);
         Route::post('/fail', [Frontend\PaymentController::class, 'fail']);
         Route::post('/cancel', [Frontend\PaymentController::class, 'cancel']);
         Route::post('/ipn', [Frontend\PaymentController::class, 'ipn']);
 
-        Route::post('/payment/process/paypal-success',[Frontend\PaymentController::class,'paymentProceesPaypalSucccess'])->name('payment.process.paypal.done');
 
+        Route::post('/payment/process/paypal-success',[Frontend\PaymentController::class,'paymentProceesPaypalSucccess'])->name('payment.process.paypal.done');
 
 
         // SSLCOMMERZ Start Default
@@ -201,9 +216,11 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
         //SSLCOMMERZ END
 
-
         //Paypal
         Route::post('/paypal/create',[Frontend\PaymentController::class,'PaypalCreate']);
+
+        //Paystack
+        Route::get('/payment/callback', [Frontend\PaymentController::class,'handleGatewayCallback']);
 
 
 
@@ -535,6 +552,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/cash_on_delivery/store',[SettingController::class,'cashonDeliveryStoreOrUpdate'])->name('admin.setting.cash_on_delivery.store_or_update');
                 Route::post('/bank_transfer/store',[SettingController::class,'bankTransferStoreOrUpdate'])->name('admin.setting.bank_transfer.store_or_update');
                 Route::post('/check_money_order/store',[SettingController::class,'cehckMoneyOrderStoreOrUpdate'])->name('admin.setting.check_money_order.store_or_update');
+                Route::post('/razorpay/store',[SettingController::class,'razorpayStoreOrUpdate'])->name('admin.setting.razorpay.store_or_update');
+                Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
 
                 Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
 

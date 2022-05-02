@@ -10,6 +10,7 @@ use App\Models\CategoryProduct;
 use App\Models\CurrencyRate;
 use App\Models\FlashSale;
 use App\Models\FlashSaleProduct;
+use App\Models\FooterDescription;
 use App\Models\KeywordHit;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
@@ -23,6 +24,7 @@ use App\Models\SettingCurrency;
 use App\Models\SettingNewsletter;
 use App\Models\Slider;
 use App\Models\StorefrontImage;
+use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -43,7 +45,6 @@ class HomeController extends Controller
 
     public function index()
     {
-
         $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
         ->where('is_active',1)
         ->orderBy('is_active','DESC')
@@ -216,6 +217,7 @@ class HomeController extends Controller
             }
         }
 
+
         //Change this later.
         if ($active_campaign_flash_id) {
             $flash_sales = FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
@@ -297,11 +299,14 @@ class HomeController extends Controller
         $reviews = DB::table('reviews')
             ->join('users','users.id','reviews.user_id')
             ->where('product_id',$product->id)
-            ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.created_at')
+            ->where('status','approved')
+            ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
             ->get();
         if (empty($reviews)) {
             $reviews =[];
         }
+
+        // return $reviews;
 
 
         //Related Products

@@ -88,6 +88,21 @@
                     <br><br>
 
 
+                    <div class="form-group">
+                        <label for="inputEmail3"><b>{{__('file.Description')}}</b></label>
+                        <textarea name="description" class="form-control text-editor">@if($footer_description) {{$footer_description->description}} @endif</textarea>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <div class="form-check mt-1">
+                                <input type="checkbox" @if(isset($footer_description) && $footer_description->is_active==1) checked @endif value="1"  name="is_active" class="form-check-input"><b>@lang('file.Enable in footer')</b>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                    <br>
+
+
                     <div class="form-group row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">

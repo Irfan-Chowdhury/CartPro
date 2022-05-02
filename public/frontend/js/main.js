@@ -459,8 +459,8 @@
         slidesToScroll: 1,
         fade: true,
         asNavFor: '.slider-nav',
-        nextArrow: '<div class="slick-next"><i class="ion-ios-arrow-right"></i></div>',
-        prevArrow: '<div class="slick-prev"><i class="ion-ios-arrow-left"></i></div>',
+        nextArrow: '<div class="slick-next"><i class="las la-angle-right"></i></div>',
+        prevArrow: '<div class="slick-prev"><i class="las la-angle-left"></i></div>',
     });
     $('.slider-nav').slick({
         slidesToShow: 4,

@@ -112,6 +112,17 @@
                     <input type="hidden" name="coupon_code_temp" id="couponCode">
                     <input type="hidden" name="coupon_value_temp" id="couponValue">
 
+
+                    <!-- Paystack -->
+                    <input type="hidden" name="email" id="emailPaystack" @auth value="{{auth()->user()->email}}" @endauth>
+                    <input type="hidden" name="orderID" value="345">
+                    <input type="hidden" name="amount" id="totalAmountPaystack" class="cart_total" value="{{$cart_total}}">
+                    <input type="hidden" name="quantity" value="{{Cart::count()}}">
+                    <input type="hidden" name="currency" value="NGN">
+                    <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
+                    <!--/ Paystack -->
+
+
                     <div class="row">
                         <div class="col-md-6 mar-top-30">
                             <h3 class="section-title">@lang('file.Billing Details')</h3>
@@ -385,36 +396,54 @@
                                 <hr>
                                 <div class="payment-options">
 
-                                    @if (isset($cash_on_delivery) && $cash_on_delivery->status==1)
-                                        <label class="custom-checkbox">
-                                            <input type="radio" name="payment_type" id="cashOnDelivery" value="cash_on_delivery">
-                                            <span class="sm-heading">@lang('file.Cash On Delivery')</span>
-                                        </label>
-                                    @endif
+                                    <div>
+                                        @if (isset($cash_on_delivery) && $cash_on_delivery->status==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id="cashOnDelivery" value="cash_on_delivery">
+                                                <span class="sm-heading">@lang('file.Cash On Delivery')</span>
+                                            </label>
+                                        @endif
 
-                                    @if (isset($paypal) && $paypal->status==1)
-                                        <label class="custom-checkbox">
-                                            <input type="radio" name="payment_type" id='paypal' value="paypal">
-                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/paypal.jpg')}}" alt="..."></span>
-                                            <span class="sm-heading">{{__('file.Paypal')}}</span>
-                                        </label>
-                                    @endif
+                                        @if (isset($paypal) && $paypal->status==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id='paypal' value="paypal">
+                                                <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/paypal.jpg')}}" alt="..."></span>
+                                                <span class="sm-heading">{{__('file.Paypal')}}</span>
+                                            </label>
+                                        @endif
 
-                                    @if (isset($stripe) && $stripe->status==1)
-                                        <label class="custom-checkbox">
-                                            <input type="radio" name="payment_type" id='stripe' value="stripe">
-                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/stripe.png')}}" alt="..."></span>
-                                            <span class="sm-heading">{{__('file.Stripe')}}</span>
-                                        </label>
-                                    @endif
+                                        @if (isset($stripe) && $stripe->status==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id='stripe' value="stripe">
+                                                <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/stripe.png')}}" alt="..."></span>
+                                                <span class="sm-heading">{{__('file.Stripe')}}</span>
+                                            </label>
+                                        @endif
 
-                                    @if (env('SSL_COMMERZ_STATUS')==1)
-                                        <label class="custom-checkbox">
-                                            <input type="radio" name="payment_type" id='sslcommerz' value="sslcommerz">
-                                            <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/ssl_commerz.png')}}" alt="..."></span>
-                                            <span class="sm-heading">{{__('file.SSL Commerz')}}</span>
-                                        </label>
-                                    @endif
+                                        @if (env('SSL_COMMERZ_STATUS')==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id='sslcommerz' value="sslcommerz">
+                                                <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/ssl_commerz.png')}}" alt="..."></span>
+                                                <span class="sm-heading">{{__('file.SSL Commerz')}}</span>
+                                            </label>
+                                        @endif
+                                    </div>
+                                    <div class="mt-2">
+                                        @if (env('RAZORPAY_STATUS')==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id='razorpay' value="razorpay">
+                                                <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/razorpay.png')}}"></span>
+                                                <span class="sm-heading">{{__('file.Razorpay')}}</span>
+                                            </label>
+                                        @endif
+                                        @if (env('PAYSTACK_STATUS')==1)
+                                            <label class="custom-checkbox">
+                                                <input type="radio" name="payment_type" id='paystack' value="paystack">
+                                                <span class="card-options"><img class="lazy" data-src="{{asset('public/frontend/images/payment_gateway_logo/paystack.png')}}"></span>
+                                                <span class="sm-heading">{{__('file.Paystack')}}</span>
+                                            </label>
+                                        @endif
+                                    </div>
                                     <div class="custom-control custom-checkbox text-center mt-5 mb-5">
                                         <input type="checkbox" class="custom-control-input" id="acceptTerms">
                                         <label class="custom-control-label" for="acceptTerms">@lang('file.I have read and accecpt the') <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
@@ -452,7 +481,7 @@
                             </div>
 
                             <div class="checkout-actions mar-top-30 pay_now_div">
-                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled  title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
+                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>
@@ -472,11 +501,12 @@
 
     <script src="https://www.paypal.com/sdk/js?client-id={{env('PAYPAL_SANDBOX_CLIENT_ID')}}&currency=USD" data-namespace="paypal_sdk"></script>
 
-
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
     <script type="text/javascript">
         $(function(){
+
 
             var billingCountry = $("#billingCountry").val();
             if (billingCountry) {
@@ -495,6 +525,8 @@
                         $('#taxId').val(data.tax_id); //For Form
                         $('.total_amount').text(data.total_amount);
                         $('#totalAmount').val(data.total_amount); //For Form
+
+                        $('#totalAmountPaystack').val(data.total_amount); //For Paystack
                     }
                 });
             }
@@ -517,6 +549,9 @@
                         $('#taxId').val(data.tax_id); //For Form
                         $('.total_amount').text(data.total_amount);
                         $('#totalAmount').val(data.total_amount); //For Form
+
+                        $('#totalAmountPaystack').val(data.total_amount); //For Paystack
+
                     }
                 })
             });
@@ -540,6 +575,8 @@
                             $('.total_amount').text(data.total_amount);
                             $('#totalAmount').val(data.total_amount); //For Form
                             $('#couponValue').val(data.coupon_value); //For Form
+
+                            $('#totalAmountPaystack').val(data.total_amount); //For Paystack
                         }
                     }
                 })
@@ -569,15 +606,20 @@
                             $('#taxId').val(data.tax_id); //For Form
                             $('.total_amount').text(data.total_amount);
                             $('#totalAmount').val(data.total_amount); //For Form
+
+                            $('#totalAmountPaystack').val(data.total_amount); //For Paystack
+
                         }
                     }
                 })
             });
 
 
+            let paymentType;
             //----------- Submit ----------
             $('input[name="payment_type"]').change(function(){
-                let paymentType = $(this).val();
+                paymentType = $(this).val();
+
                 $('#acceptTerms').prop('checked', false);
                 $('#paypal-button-container').empty();
                 $('.pay_now_div').show();
@@ -660,9 +702,52 @@
                                 }
                             }
                         }
+                        else if (paymentType=='razorpay' || paymentType=='paystack'){
+                            $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
+                        }
                     }
                 });
             });
+
+            $('#orderBtn').on("click",function(e){
+                if (paymentType=='razorpay'){
+                    e.preventDefault();
+                    $('totalAmount').val();
+                        var options = {
+                                        "key": "{{env('RAZORPAY_KEY')}}",
+                                        "amount": $('#totalAmount').val()*100,
+                                        "currency": "INR",
+                                        // "name": "Acme Corp",
+                                        // "description": "Test Transaction",
+                                        // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
+                                        // "handler": function (response){
+                                        //     alert(response.razorpay_payment_id);
+                                        //     alert(response.razorpay_order_id);
+                                        //     alert(response.razorpay_signature)
+                                        // },
+                                        // "prefill": {
+                                        //     "name": "Gaurav Kumar",
+                                        //     "email": "gaurav.kumar@example.com",
+                                        //     "contact": "9999988999"
+                                        // },
+                                        // "notes": {
+                                        //     "address": "Razorpay Corporate Office"
+                                        // },
+                                        // "theme": {
+                                        //     "color": "#3399cc"
+                                        // }
+                                    };
+                                    var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+            });
+
+            //-- For Paystack ------
+            $('input[name="billing_email"]').keyup(function(){
+                var billing_email = $('input[name="billing_email"]').val();
+                 $('#emailPaystack').val(billing_email);
+            });
+
         });
     </script>
 @endpush
