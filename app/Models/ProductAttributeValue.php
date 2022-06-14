@@ -28,6 +28,7 @@ class ProductAttributeValue extends Model
 
 
 
+    //Frontend/HomeController index()
     public function attrValueTranslation()
     {
         $locale = Session::get('currentLocal');

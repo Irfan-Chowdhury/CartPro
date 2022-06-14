@@ -63,27 +63,7 @@ class ShopProductController extends Controller
             }
         }
 
-        $attribute_values =  DB::table('attribute_category')
-                            ->join('attribute_translations', function ($join) use ($locale) {
-                                $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                                ->where('attribute_translations.locale', '=', $locale);
-                            })
-                            // ->join('attribute_value_translations', function ($join) use ($locale) {
-                            //     $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                            //     ->where('attribute_value_translations.local', '=', $locale);
-                            // })
-                            // ->groupBy('attribute_id')
-                            // ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
-                            ->get();
-
-
-
-        // $attribute_values = Product::with('productAttributeValues.attrValueTranslation','brandTranslation')
-        //                 ->orderBy('id','DESC')
-        //                 ->get();
-
-        // return $attribute_values;
-
+        $attribute_values = ProductAttributeValue::with('attributeTranslation.attributeValueTranslation')->select('attribute_id')->distinct()->get();
 
         $categories = Cache::remember('categories', 300, function () {
             return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
@@ -93,12 +73,11 @@ class ShopProductController extends Controller
                     ->get();
         });
 
-        // Filter By Attribute
-        // $attribute_with_values = Cache::remember('attribute_with_values', 300, function () {
-        //     return ProductAttributeValue::with('attributeTranslation','attributeValueTranslations')->get()->keyBy('attribute_id');
-        // });
+        $product_attr_val = Product::with('productAttributeValues','brandTranslation')
+                        ->orderBy('id','DESC')
+                        ->get();
 
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values'));
+        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values','product_attr_val'));
     }
 
     public function limitShopProductShow(Request $request)
@@ -265,6 +244,62 @@ class ShopProductController extends Controller
             }
         }
 
+
+        //Attribute Related
+        $value_ids = array();
+        if ($request->attribute_value_ids) {
+            $value_ids = explode(",",$request->attribute_value_ids);
+
+            $products = $products->toArray();
+
+            $product_attribute_value =  DB::table('product_attribute_value')
+                                        ->select('product_id','attribute_value_id')
+                                        ->get()
+                                        ->groupBy('product_id')
+                                        ->toArray();
+
+            for ($key=0; $key < count($products); $key++) {
+                if (array_key_exists($products[$key]->id,$product_attribute_value)){
+                    if(count($value_ids)>1) {
+                        foreach ($value_ids as $val_id) {
+                            $find_match = 0;
+                            foreach ($product_attribute_value[$products[$key]->id] as $p_a_v) {
+                                if ($p_a_v->attribute_value_id == $val_id) {
+                                    $find_match = 1;
+                                    break;
+                                }
+                                else {
+                                    $find_match = 0;
+                                }
+                            }
+                            if($find_match == 0) {
+                                array_splice($products, $key, 1);
+                                $key--;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        $find_match = 0;
+                        foreach ($product_attribute_value[$products[$key]->id] as $p_a_v) {
+                            if ($p_a_v->attribute_value_id == $value_ids[0]) {
+                                $find_match = 1;
+                                break;
+                            }
+                        }
+                        if($find_match == 0) {
+                            array_splice($products, $key, 1);
+                            $key--;
+                        }
+                    }
+                }
+                else{
+                    array_splice($products, $key, 1);
+                    $key--;
+                }
+            }
+        }
+
         $html = $this->productsShow($category_ids, $products);
         return response()->json($html);
 
@@ -305,7 +340,7 @@ class ShopProductController extends Controller
                         $html .= $this->productPromoBadgeText($item->manage_stock, $item->qty, $item->in_stock, date('Y-m-d'), $item->new_to);
 
                         $html .= '<div class="product-overlay">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
+                                    <a href="" data-bs-toggle="modal" data-bs-target="#id_'.$item->id.'"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>';
                                     if(Auth::check()){
                                         $html .=  '<a><span class="ti-heart add_to_wishlist" data-product_id="'.$item->id.'" data-product_slug="'.$item->slug.'" data-category_id="'.$category_ids[$item->id]->category_id.'" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to wishlist"></span></a>';
                                     }else{
@@ -315,7 +350,7 @@ class ShopProductController extends Controller
                             $html .='</div>
                             </div>
                             <div class="product-details">
-                                <a class="product-name" href="">
+                                <a class="product-name" href="'.url('product/'.$item->slug.'/'. $category_ids[$item->id]->category_id).'">
                                     '.$item->product_name.'
                                 </a>
                                 <div class="product-short-description">

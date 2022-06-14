@@ -68,31 +68,29 @@
                                 </div>
 
                                 <!-- Filter By Attribute Value-->
-                                {{-- @if (count($attribute_values)>0)
-                                    @csrf
-                                    <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
-                                    @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
-                                        <div class="sidebar-widget filters">
-                                            <div class="sidebar-title">
-                                                <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
-                                            </div>
-                                            <div class="filter-area collapse show" id="collapseSize">
-                                                <div class="size-checkbox">
-                                                    <ul class="filter-opt size pt-2">
-                                                        @foreach ($attribute_values->where('attribute_name',$key) as $value)
-                                                            <li>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
+                                <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
+                                @forelse ($attribute_values as $item)
+                                    <div class="sidebar-widget filters">
+                                        <div class="sidebar-title">
+                                            <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$item->attributeTranslation->attribute_name}}</h2>
+                                        </div>
+                                        <div class="filter-area collapse show" id="collapseSize">
+                                            <div class="size-checkbox">
+                                                <ul class="filter-opt size pt-2">
+                                                    @forelse ($item->attributeTranslation->attributeValueTranslation as $value)
+                                                        <li>
+                                                            <div class="custom-control custom-checkbox">
+                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
+                                                            </div>
+                                                        </li>
+                                                    @empty
+                                                    @endforelse
+                                                </ul>
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif --}}
-
+                                    </div>
+                                @empty
+                                @endforelse
                                 <div><button type="submit" class="mt-2 btn btn-success">{{__('Filter')}}</button></div>
                             </form>
                         </div>
@@ -357,14 +355,23 @@
             });
         });
 
+        let attribute_values = [];
+        $('.attribute_value').on('click',function(e){
+            $(this).addClass('text-primary');
+            var selectedVal = $(this).data('attribute_value_id');
+            attribute_values.push(selectedVal);
+            $('#attribute_value_ids').val(attribute_values);
+        });
+        
+
         $('.attribute_value_productTab1').on("click",function(e){
             e.preventDefault();
             $(this).addClass('selected');
-
             var selectedVal = $(this).data('value_id');
             values.push(selectedVal);
             $('.value_ids_shop').val(values);
         });
+
     </script>
 @endpush
 

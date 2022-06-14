@@ -59,4 +59,6 @@ class Attribute extends Model
     {
         return $this->belongsToMany(Category::class); //db: attribute_category
     }
+
+
 }
