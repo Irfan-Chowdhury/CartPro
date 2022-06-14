@@ -117,6 +117,7 @@
         <li class="has-dropdown">
             <a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-toggles"></i><span>{{trans('file.Site Settings')}}</span></a>
             <ul id="setting" class="collapse list-unstyled ">
+                <li id="employee_list"><a href="{{route('admin.currency.index')}}">{{__('file.Currency')}}</a></li>
                 @can('setting')
                     <li id="employee_list"><a href="{{route('admin.setting.index')}}">{{__('file.Setting')}}</a></li>
                 @endcan

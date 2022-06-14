@@ -8,6 +8,7 @@ use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
 use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
+use App\Contracts\Currency\CurrencyContract;
 use App\Repositories\AttributeSet\AttributeSetRepository;
 use App\Repositories\AttributeSet\AttributeSetTranslationRepository;
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +16,7 @@ use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandTranslationRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
+use App\Repositories\Currency\CurrencyRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,9 @@ class RepositoryServiceProvider extends ServiceProvider
         //Attribute Set
         $this->app->bind(AttributeSetContract::class, AttributeSetRepository::class);
         $this->app->bind(AttributeSetTranslationContract::class, AttributeSetTranslationRepository::class);
+
+        //Currency
+        $this->app->bind(CurrencyContract::class, CurrencyRepository::class);
     }
 }
 

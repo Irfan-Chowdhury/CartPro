@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\FaqTypeController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\CurrencyController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth;
@@ -316,6 +317,16 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/inactive',[AttributeSetController::class,'inactive'])->name('admin.attribute_set.inactive');
                 Route::get('/bulk_action',[AttributeSetController::class,'bulkAction'])->name('admin.attribute_set.bulk_action');
                 Route::get('/destroy',[AttributeSetController::class,'destroy'])->name('admin.attribute_set.destroy');
+            });
+
+            //Currency
+            Route::group(['prefix' => 'currencies'], function () {
+                Route::get('/',[CurrencyController::class,'index'])->name('admin.currency.index');
+                Route::get('/datatable',[CurrencyController::class,'dataTable'])->name('admin.currency.datatable');
+                Route::post('/store',[CurrencyController::class,'store'])->name('admin.currency.store');
+                Route::get('/edit',[CurrencyController::class,'edit'])->name('admin.currency.edit');
+                Route::post('/update',[CurrencyController::class,'update'])->name('admin.currency.update');
+                Route::get('/destroy',[CurrencyController::class,'destroy'])->name('admin.currency.destroy');
             });
 
             //Attributes

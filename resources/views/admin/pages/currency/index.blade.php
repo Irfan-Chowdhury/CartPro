@@ -1,42 +1,41 @@
 @extends('admin.main')
-@section('title','Admin | Attribute Sets')
+@section('title','Admin | Currency')
 @section('admin_content')
 
 <section>
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">@lang('file.Attribute Sets')</h4>
+        <h4 class="font-weight-bold mt-3">@lang('file.Currency')</h4>
         <div id="alert_message" role="alert"></div>
         <br>
 
-        @if (auth()->user()->can('attribute_set-store'))
+        {{-- @if (auth()->user()->can('attribute_set-store')) --}}
             <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-                <i class="fa fa-plus"></i> @lang('file.Add Attribute Set')
+                <i class="fa fa-plus"></i> @lang('file.Add Currency')
             </button>
-        @endif
-        @if (auth()->user()->can('attribute_set-action'))
-            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+        {{-- @endif --}}
+        {{-- @if (auth()->user()->can('attribute_set-action')) --}}
+            {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
                 <i class="fa fa-minus-circle"></i> @lang('file.Bulk Action')
-            </button>
-        @endif
+            </button> --}}
+        {{-- @endif --}}
     </div>
     <div class="table-responsive">
     	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{trans('file.Attribute Set Name')}}</th>
-        		    <th scope="col">{{trans('file.Status')}}</th>
-        		    <th scope="col">{{trans('file.action')}}</th>
+        		    <th scope="col">{{trans('file.Currency Name')}}</th>
+        		    <th scope="col">{{trans('file.Currency Code')}}</th>
+        		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
     </div>
-
 </section>
 
-@include('admin.pages.attribute_set.create_modal')
-@include('admin.pages.attribute_set.edit_modal')
-@include('admin.includes.confirm_modal')
+    @include('admin.pages.currency.create_modal')
+    @include('admin.pages.currency.edit_modal')
+    {{-- @include('admin.includes.confirm_modal') --}}
 
 @endsection
 
@@ -46,7 +45,6 @@
             "use strict";
 
             $(document).ready(function () {
-
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -83,7 +81,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.attribute_set.datatable') }}",
+                        url: "{{ route('admin.currency.datatable') }}",
                     },
                     columns: [
                         {
@@ -92,19 +90,12 @@
                             searchable: false
                         },
                         {
-                            data: 'attribute_set_name',
-                            name: 'attribute_set_name',
+                            data: 'currency_name',
+                            name: 'currency_name',
                         },
                         {
-                            data: 'is_active',
-                            name: 'is_active',
-                            render:function (data) {
-                                if (data == 1) {
-                                    return "<span class='p-2 badge badge-success'>Active</span>";
-                                }else{
-                                    return "<span class='p-2 badge badge-danger'>Inactive</span>";
-                                }
-                            }
+                            data: 'currency_code',
+                            name: 'currency_code',
                         },
                         {
                             data: 'action',
@@ -126,7 +117,6 @@
                     'columnDefs': [
                         {
                             "orderable": false,
-                            // 'targets': [0, 3],
                             'targets': [0],
                         },
                         {
@@ -180,7 +170,9 @@
                     ],
                 });
                 new $.fn.dataTable.FixedHeader(table);
+
             });
+
 
             //----------Insert Data----------------------
             $("#submitButton").on("click",function(e){
@@ -189,12 +181,16 @@
 
             $("#submitForm").on("submit",function(e){
                 e.preventDefault();
-                var attributeSetName = $("#attributeSetName").val();
-                var isActive         = $("#isActive").val();
+                var currencyName = $("#currencyName").val();
+                var currencyCode = $("#currencyCode").val();
                 $.ajax({
-                    url: "{{route('admin.attribute_set.store')}}",
+                    url: "{{route('admin.currency.store')}}",
                     method: "POST",
-                    data: $('#submitForm').serialize(),
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
                     error: function(response){
                         console.log(response)
                         var dataKeys   = Object.keys(response.responseJSON.errors);
@@ -204,10 +200,10 @@
                             html += '<p>' + dataValues[count] + '</p>';
                         }
                         html += '</div>';
-                        $('#error_message').fadeIn("slow");
-                        $('#error_message').html(html);
+                        $('#errorMessage').fadeIn("slow");
+                        $('#errorMessage').html(html);
                         setTimeout(function() {
-                            $('#error_message').fadeOut("slow");
+                            $('#errorMessage').fadeOut("slow");
                         }, 3000);
                         $('#submitButton').text('Save');
                     },
@@ -224,10 +220,10 @@
                         setTimeout(function() {
                             $('#alert_message').fadeOut("slow");
                         }, 3000);
+                        $('#submitButton').text('Save');
                     }
                 });
             });
-
 
             //---------- Show data by id-------------
             $(document).on('click', '.edit', function () {
@@ -235,19 +231,14 @@
                 $('#alert_message').html('');
 
                 $.ajax({
-                    url: "{{route('admin.attribute_set.edit')}}",
+                    url: "{{route('admin.currency.edit')}}",
                     type: "GET",
-                    data: {attribute_set_id:rowId},
+                    data: {currency_id:rowId},
                     success: function (data) {
                         console.log(data);
-                        $('#AttributeSetIdEdit').val(data.attributeSet.id);
-                        $('#attributeSetNameEdit').val(data.attributeSetTranslation.attribute_set_name);
-                        $('#attributeSetTranslationIdEdit').val(data.attributeSetTranslation.id);
-                        if (data.attributeSet.is_active == 1) {
-                                $('#isActiveEdit').prop('checked', true);
-                        } else {
-                            $('#isActiveEdit').prop('checked', false);
-                        }
+                        $('#currencyId').val(data.id);
+                        $('#currencyName').val(data.currency_name);
+                        $('#currencyCode').val(data.currency_code);
                         $('#editFormModal').modal('show');
                     }
                 })
@@ -255,14 +246,14 @@
 
 
             //---------- Update -------------
-
             $("#updateButton").on("click",function(e){
                 $('#updateButton').text('Updating ...');
             });
+
             $("#updateForm").on("submit",function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "{{route('admin.attribute_set.update')}}",
+                    url: "{{route('admin.currency.update')}}",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -278,10 +269,10 @@
                             html += '<p>' + dataValues[count] + '</p>';
                         }
                         html += '</div>';
-                        $('#error_message_edit').fadeIn("slow");
-                        $('#error_message_edit').html(html);
+                        $('#errorMessageEdit').fadeIn("slow");
+                        $('#errorMessageEdit').html(html);
                         setTimeout(function() {
-                            $('#error_message_edit').fadeOut("slow");
+                            $('#errorMessageEdit').fadeOut("slow");
                         }, 3000);
                         $('#updateButton').text('Update');
                     },
@@ -304,17 +295,12 @@
                 });
             });
 
-            //---------- Active ------------
-            @include('admin.includes.common_js.active_js',['route_name'=>'admin.attribute_set.active'])
-
-            //---------- Inactive ------------
-            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.attribute_set.inactive'])
-
             //---------- Delete ------------
-            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.attribute_set.destroy'])
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.currency.destroy'])
 
-            //---------- Bulk Action ------------
-            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.attribute_set.bulk_action'])
+            // //---------- Bulk Action Delete ------------
+
+
 
         })(jQuery);
     </script>
