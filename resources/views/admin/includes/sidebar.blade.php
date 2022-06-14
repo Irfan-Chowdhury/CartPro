@@ -85,6 +85,13 @@
         </li>
         @endcan
 
+        <li><a href="#faq" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-sticky-note"></i><span>{{trans('file.FAQ Setting')}}</span></a>
+            <ul id="faq" class="collapse list-unstyled">
+                <li><a href="{{route('admin.faq_type.index')}}">{{__('file.Type')}}</a></li>
+                <li><a href="{{route('admin.faq.index')}}"><span>{{__('file.FAQ Set')}}</span></a></li>
+            </ul>
+        </li>
+
         <li><a href="#localization" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-web"></i><span>{{__('file.Localization')}}</span></a>
             <ul id="localization" class="collapse list-unstyled">
                 <li><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>

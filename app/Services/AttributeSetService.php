@@ -49,8 +49,8 @@ class AttributeSetService
                         $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                     }
                 }
-                $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
-                            &nbsp; ';
+                // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                //             &nbsp; ';
                 return $actionBtn;
             })
             ->rawColumns(['action'])
@@ -61,14 +61,18 @@ class AttributeSetService
     public function storeAttributeSet($request)
     {
         if (request()->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['demo' => 'Disabled for demo !']);
+            }
             $data              = $this->requestHandleData($request);
-            $attribute_set     =  $this->attributeSetContract->storeAttributeSet($data);
+            $attribute_set     = $this->attributeSetContract->storeAttributeSet($data);
 
             $dataTranslation                       = [];
             $dataTranslation['attribute_set_id']   = $attribute_set->id;
             $dataTranslation['locale']             = session('currentLocal');
             $dataTranslation['attribute_set_name'] = $request->attribute_set_name;
             $this->attributeSetTranslationContract->storeAttributeSetTranslation($dataTranslation);
+            return response()->json(['success' => __('Data Successfully Saved')]);
         }
     }
 
@@ -88,9 +92,14 @@ class AttributeSetService
 
     public function updateAttributeSet($request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
+
         $data = $this->requestHandleData($request);
         $this->attributeSetContract->updateAttributeSetById($request->attribute_set_id, $data);
         $this->attributeSetTranslationContract->updateOrInsertAttributeSetTranslation($request);
+        return response()->json(['success' => 'Data Updated Successfully']);
     }
 
     protected function requestHandleData($request){
@@ -101,23 +110,36 @@ class AttributeSetService
 
     public function activeById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->attributeSetContract->active($id);
     }
 
     public function inactiveById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->attributeSetContract->inactive($id);
     }
 
     public function bulkActionByTypeAndIds($type, $ids)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->attributeSetContract->bulkAction($type, $ids);
     }
 
     public function destroy($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         $this->attributeSetContract->destroy($id);
         $this->attributeSetTranslationContract->destroy($id); //attribute_id
+        return response()->json(['success' => 'Data Deleted Successfully']);
     }
 
 }

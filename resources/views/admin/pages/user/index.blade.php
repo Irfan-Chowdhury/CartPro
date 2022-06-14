@@ -328,10 +328,18 @@
                 console.log(data);
                 if(data.success){
                     $('#user_list_table').DataTable().ajax.reload();
-                    $('#form_result').fadeIn("slow"); //Check in top in this blade
-                    $('#form_result').addClass('alert alert-success').html(data.success);
+                    $('#general_result').fadeIn("slow"); //Check in top in this blade
+                    $('#general_result').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
-                        $('#form_result').fadeOut("slow");
+                        $('#general_result').fadeOut("slow");
+                    }, 3000);
+                }
+                else if(data.errors){
+                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#general_result').fadeIn("slow");
+                    $('#general_result').addClass('alert alert-danger').html(data.errors);
+                    setTimeout(function() {
+                        $('#general_result').fadeOut("slow");
                     }, 3000);
                 }
             }
@@ -352,10 +360,18 @@
                 console.log(data);
                 if(data.success){
                     $('#user_list_table').DataTable().ajax.reload();
-                    $('#form_result').fadeIn("slow"); //Check in top in this blade
-                    $('#form_result').addClass('alert alert-success').html(data.success);
+                    $('#general_result').fadeIn("slow"); //Check in top in this blade
+                    $('#general_result').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
-                        $('#form_result').fadeOut("slow");
+                        $('#general_result').fadeOut("slow");
+                    }, 3000);
+                }
+                else if(data.errors){
+                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#general_result').fadeIn("slow");
+                    $('#general_result').addClass('alert alert-danger').html(data.errors);
+                    setTimeout(function() {
+                        $('#general_result').fadeOut("slow");
                     }, 3000);
                 }
             }
@@ -387,10 +403,18 @@
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
                             $('#user_list_table').DataTable().ajax.reload();
-                            $('#form_result').fadeIn("slow"); //Check in top in this blade
-                            $('#form_result').addClass('alert alert-success').html(data.success);
+                            $('#general_result').fadeIn("slow"); //Check in top in this blade
+                            $('#general_result').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#form_result').fadeOut("slow");
+                                $('#general_result').fadeOut("slow");
+                            }, 3000);
+                        }
+                        else if(data.errors){
+                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#general_result').fadeIn("slow");
+                            $('#general_result').addClass('alert alert-danger').html(data.errors);
+                            setTimeout(function() {
+                                $('#general_result').fadeOut("slow");
                             }, 3000);
                         }
                     }
@@ -408,10 +432,18 @@
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
                             $('#user_list_table').DataTable().ajax.reload();
-                            $('#form_result').fadeIn("slow"); //Check in top in this blade
-                            $('#form_result').addClass('alert alert-success').html(data.success);
+                            $('#general_result').fadeIn("slow"); //Check in top in this blade
+                            $('#general_result').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
-                                $('#form_result').fadeOut("slow");
+                                $('#general_result').fadeOut("slow");
+                            }, 3000);
+                        }
+                        else if(data.errors){
+                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#general_result').fadeIn("slow");
+                            $('#general_result').addClass('alert alert-danger').html(data.errors);
+                            setTimeout(function() {
+                                $('#general_result').fadeOut("slow");
                             }, 3000);
                         }
                     }

@@ -8,12 +8,12 @@ use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ProductPromoBadgeTextTrait;
+use Illuminate\Support\Facades\Cache;
 
 class DailyDealsController extends Controller
 {
@@ -23,7 +23,8 @@ class DailyDealsController extends Controller
     {
         $locale = Session::get('currentLocal');
 
-        $products = DB::table('products')
+        $products = Cache::remember('products_deals', 300, function () use ($locale){
+            return DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
                         $join->on('product_translations.product_id', '=', 'products.id')
                         ->where('product_translations.local', '=', $locale);
@@ -41,10 +42,16 @@ class DailyDealsController extends Controller
                     ->where('special_price','>','price')
                     ->orderBy('products.id','ASC')
                     ->get();
+         });
 
-        $product_images = ProductImage::select('product_id','image','type')->get();
+         $product_images = Cache::remember('product_images_deals', 300, function (){
+             return ProductImage::select('product_id','image','type')->get();
+         });
 
-        $category_product =  CategoryProduct::get();
+         $category_product = Cache::remember('category_product_deals', 300, function (){
+             return CategoryProduct::get();
+         });
+
         $category_ids = [];
         foreach ($products as $key => $item) {
             foreach ($category_product as $key => $value) {
@@ -55,19 +62,24 @@ class DailyDealsController extends Controller
             }
         }
 
-        $product_attr_val = Product::with('productAttributeValues','brandTranslation')
+        $product_attr_val = Cache::remember('product_attr_val_deals', 300, function (){
+            return  Product::with('productAttributeValues','brandTranslation')
                     ->orderBy('id','DESC')
                     ->get();
+        });
 
-
-        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+        $categories = Cache::remember('categories_deals', 300, function (){
+            return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
                     ->get();
+        });
 
-        // Filter By Attribute
-        $attribute_with_values = ProductAttributeValue::with('attributeTranslation','attributeValueTranslations')->get()->keyBy('attribute_id');
+
+        $attribute_with_values = Cache::remember('attribute_with_values_deals', 300, function (){
+            return ProductAttributeValue::with('attributeTranslation','attributeValueTranslations')->get()->keyBy('attribute_id');
+        });
 
         // $attribute_values =  DB::table('attribute_category')
         //         ->join('attribute_translations', function ($join) use ($locale) {

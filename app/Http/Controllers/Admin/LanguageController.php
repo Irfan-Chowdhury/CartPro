@@ -38,6 +38,13 @@ class LanguageController extends Controller
     {
         if (auth()->user()->can('locale-store'))
         {
+            if (env('USER_VERIFIED')!=1) {
+                session()->flash('type','danger');
+                session()->flash('message','Disabled for demo !');
+                return redirect()->back();
+            }
+
+
             $validator = Validator::make($request->only('language_name','local'),[
                 'language_name' => 'required',
                 'local'         => 'required|unique:languages',
@@ -77,6 +84,12 @@ class LanguageController extends Controller
 
     public function delete($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            session()->flash('type','danger');
+            session()->flash('message','Disabled for demo !');
+            return redirect()->back();
+        }
+        
         $language = Language::find($id);
         File::deleteDirectory('resources/lang/'.$language->local);
         $language->delete();
@@ -88,6 +101,13 @@ class LanguageController extends Controller
 
     public function update(Request $request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            session()->flash('type','danger');
+            session()->flash('message','Disabled for demo !');
+            return redirect()->back();
+        }
+
+
         if ($request->default) {
             Language::where('default',1)->update(['default'=>0]);
         }
@@ -115,7 +135,7 @@ class LanguageController extends Controller
     public function defaultChange($id)
     {
         Language::where('default',1)->update(['default'=>0]);
-        
+
         $language = Language::find($id);
         $language->default = 1;
         $language->update();

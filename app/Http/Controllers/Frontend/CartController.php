@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -43,9 +44,13 @@ class CartController extends Controller
                 }
             }
 
-            $attribute_name_arr = $request->attribute_name;
-            $value_ids = array();
-            $value_ids = explode(",",$request->value_ids);
+            $attribute_names = array();
+            $attribute_names = explode(",",$request->attribute_names);
+            $value_ids       = array();
+            $value_ids       = explode(",",$request->value_ids);
+            $value_names     = array();
+            $value_names     = explode(",",$request->value_names);
+
 
             $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                         'baseImage'=> function ($query){
@@ -80,11 +85,18 @@ class CartController extends Controller
             $data['weight'] = 1;
             $data['options']['image'] = $product->baseImage->image;
 
-            if (!empty($attribute_name_arr) && !empty($request->value_ids)) {
-                foreach ($attribute_name_arr as $key => $value) {
-                    $data['options'][$value]= $value_ids[$key];
-                }
+            // if (!empty($attribute_name_arr) && !empty($request->value_ids)) {
+            //     foreach($attribute_name_arr as $key => $value) {
+            //         // $data['options'][$value]= $value_ids[$key];
+            //         $data['options'][$value]= $value_names[$key];
+            //     }
+            // }
+            if ($attribute_names[0]!=NULL && $value_names[0]!=NULL) {
+                for ($i=0; $i < count($attribute_names); $i++) {
+                   $data['options'][$attribute_names[$i]] = $value_names[$i];
+               }
             }
+
 
             $data['options']['product_slug']  = $request->product_slug;
             $data['options']['category_id']  = $request->category_id;
@@ -125,10 +137,17 @@ class CartController extends Controller
         }
         App::setLocale($locale);
 
-        $setting_free_shipping = SettingFreeShipping::latest()->first();
-        $setting_local_pickup = SettingLocalPickup::latest()->first();
-        $setting_flat_rate = SettingFlatRate::latest()->first();
+        $setting_free_shipping = Cache::remember('setting_free_shipping', 300, function () {
+            return SettingFreeShipping::latest()->first();
+        });
 
+        $setting_local_pickup = Cache::remember('setting_local_pickup', 300, function () {
+            return SettingLocalPickup::latest()->first();
+        });
+
+        $setting_flat_rate = Cache::remember('setting_flat_rate', 300, function () {
+            return SettingFlatRate::latest()->first();
+        });
 
         $cart_content  = Cart::content();
         $cart_subtotal = Cart::subtotal();
@@ -205,20 +224,38 @@ class CartController extends Controller
         $cart_subtotal = number_format((float) implode(explode(',',Cart::subtotal())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
         $cart_total = number_format((float) implode(explode(',',Cart::total())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
 
-        $setting_free_shipping = SettingFreeShipping::latest()->first();
-        $setting_local_pickup = SettingLocalPickup::latest()->first();
-        $setting_flat_rate = SettingFlatRate::latest()->first();
-        $countries = Country::all();
 
-        $cash_on_delivery = SettingCashOnDelivery::select('status')->latest()->first();
-        $stripe = SettingStrip::select('status')->latest()->first();
-        $paypal = SettingPaypal::select('status')->latest()->first();
+        $setting_free_shipping = Cache::remember('setting_free_shipping', 300, function () {
+            return SettingFreeShipping::latest()->first();
+        });
+        $setting_local_pickup = Cache::remember('setting_local_pickup', 300, function () {
+            return SettingLocalPickup::latest()->first();
+        });
+        $setting_flat_rate = Cache::remember('setting_flat_rate', 300, function () {
+            return SettingFlatRate::latest()->first();
+        });
+        $countries = Cache::remember('countries', 300, function () {
+            return Country::all();
+        });
+        $cash_on_delivery = Cache::remember('cash_on_delivery', 300, function () {
+            return SettingCashOnDelivery::select('status')->latest()->first();
+        });
+        $stripe = Cache::remember('stripe', 300, function () {
+            return SettingStrip::select('status')->latest()->first();
+        });
+        $paypal = Cache::remember('paypal', 300, function () {
+            return SettingPaypal::select('status')->latest()->first();
+        });
 
         $billing_address = null;
         $shipping_address= null;
         if(Auth::check()){
-            $billing_address = UserBillingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
-            $shipping_address = UserShippingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
+            $billing_address = Cache::remember('billing_address', 300, function () {
+                return UserBillingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
+            });
+            $shipping_address = Cache::remember('shipping_address', 300, function () {
+                return UserShippingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
+            });
         }
 
         return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',

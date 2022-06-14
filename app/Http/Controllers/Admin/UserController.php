@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Str;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use App\Traits\imageHandleTrait;
 use App\Traits\ActiveInactiveTrait;
@@ -88,6 +86,10 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['errors' => ['Disabled for demo !']]);
+        }
+
         $validator =  Validator::make($request->all(),[
                 'password'         => 'min:6',
                 'confirm_password' => 'required_with:password|same:password|min:6',
@@ -142,11 +144,15 @@ class UserController extends Controller
     {
         if (auth()->user()->can('user-edit'))
         {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
+
             $id = $request->hidden_id;
             $validator =  Validator::make($request->all(),
             [
-                'password' => 'nullable|min:6',
-                'confirm_password' => 'nullable|min:6',
+                'password' => 'nullable|min:5',
+                'confirm_password' => 'nullable|min:5',
                 'email'=>'required|email|unique:users,email,'.$id,
                 'username'=>'nullable|string|unique:users,username,'.$id,
             ]);
@@ -163,7 +169,9 @@ class UserController extends Controller
                 $data['last_name'] = htmlspecialchars($request->last_name);
                 $data['phone'] = htmlspecialchars($request->phone);
                 $data['email'] = htmlspecialchars($request->email);
+                if ($request->password) {
                     $data['password'] = Hash::make($request->password);
+                }
                 $data['user_type']= 1;
                 $data['role']     = $request->role;
                 $data['is_active']= $request->is_active;
@@ -183,12 +191,18 @@ class UserController extends Controller
 
     public function active(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->activeData(User::find($request->id));
         }
     }
 
     public function inactive(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => 'Disabled for demo !']);
+            }
             return $this->inactiveData(User::find($request->id));
         }
     }
@@ -196,12 +210,19 @@ class UserController extends Controller
     public function bulkAction(Request $request)
     {
         if ($request->ajax()) {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->bulkActionData($request->action_type, User::whereIn('id',$request->idsArray));
         }
     }
 
     public function destroy($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['errors' => ['Disabled for demo !']]);
+        }
+
         User::whereId($id)->delete();
 
         return response()->json(['success' => __('Data is successfully deleted')]);
@@ -209,6 +230,11 @@ class UserController extends Controller
     }
     function delete_by_selection(Request $request)
     {
+
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['errors' => ['Disabled for demo !']]);
+        }
+
 
         $user_id = $request['UserListIdArray'];
         $users = User::whereIn('id', $user_id);

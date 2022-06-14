@@ -86,6 +86,8 @@
                         <input type="hidden" name="product_slug" value="{{$product->slug}}">
                         <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
                         <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
+                        <input type="hidden" name="value_names" class="value_names" id="value_names">
+                        <input type="hidden" name="attribute_names" class="attribute_names" id="attribute_names">
 
                         @isset($flash_sale_product)
                             <input type="hidden" name="flash_sale" value="1">
@@ -160,7 +162,7 @@
                             @forelse ($attribute as $key => $item)
                                 <div class="item-variant">
                                     <span>{{$item}}:</span>
-                                    <input type="hidden" name="attribute_name[]" class="attribute_name" value="{{$item}}">
+                                    {{-- <input type="hidden" name="attribute_name[]" class="attribute_name" value="{{$item}}"> --}}
                                     <ul class="product-variant size-opt p-0 mt-1">
                                         @forelse ($product->productAttributeValues as $value)
                                             @if ($value->attribute_id == $key)
@@ -575,7 +577,7 @@
                         processData: false,
                         dataType: "json",
                         success: function (data) {
-                            console.log('ok');
+                            console.log(data);
                             if (data.type=='success') {
                                 let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}}
                                 let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";

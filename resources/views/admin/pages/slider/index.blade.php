@@ -54,13 +54,13 @@
     <script>
         (function ($) {
             "use strict";
-    
+
             $('#color-input,#textColor').colorpicker({
-    
+
             });
-    
+
         })(jQuery);
-    
+
     </script>
     <script type="text/javascript">
         (function ($) {
@@ -412,6 +412,14 @@
                                 $('#success_alert').fadeOut("slow");
                             }, 3000);
                         }
+                        else if(data.errors){
+                            $('#slider_table').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow");
+                            $('#success_alert').addClass('alert alert-danger').html(data.errors);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
                     }
                 });
             });
@@ -436,6 +444,14 @@
                                 $('#success_alert').fadeOut("slow");
                             }, 3000);
                         }
+                        else if(data.errors){
+                            $('#slider_table').DataTable().ajax.reload();
+                            $('#success_alert').fadeIn("slow");
+                            $('#success_alert').addClass('alert alert-danger').html(data.errors);
+                            setTimeout(function() {
+                                $('#success_alert').fadeOut("slow");
+                            }, 3000);
+                        }
                     }
                 });
             });
@@ -456,8 +472,16 @@
                             console.log(data);
                             if(data.success){
                                 $('#slider_table').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                $('#success_alert').fadeIn("slow");
                                 $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.errors){
+                                $('#slider_table').DataTable().ajax.reload();
+                                $('#success_alert').fadeIn("slow");
+                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
                                 setTimeout(function() {
                                     $('#success_alert').fadeOut("slow");
                                 }, 3000);
@@ -498,6 +522,16 @@
                                         $('#success_alert').fadeOut("slow");
                                     }, 3000);
                                 }
+                                else if(data.errors){
+                                    $('#bulkConfirmModal').modal('hide');
+                                    table.rows('.selected').deselect();
+                                    $('#slider_table').DataTable().ajax.reload();
+                                    $('#success_alert').fadeIn("slow");
+                                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
+                                    setTimeout(function() {
+                                        $('#success_alert').fadeOut("slow");
+                                    }, 3000);
+                                }
                             }
                         });
                     });
@@ -515,6 +549,16 @@
                                     $('#slider_table').DataTable().ajax.reload();
                                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                     $('#success_alert').addClass('alert alert-success').html(data.success);
+                                    setTimeout(function() {
+                                        $('#success_alert').fadeOut("slow");
+                                    }, 3000);
+                                }
+                                else if(data.errors){
+                                    $('#bulkConfirmModal').modal('hide');
+                                    table.rows('.selected').deselect();
+                                    $('#slider_table').DataTable().ajax.reload();
+                                    $('#success_alert').fadeIn("slow");
+                                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
                                     setTimeout(function() {
                                         $('#success_alert').fadeOut("slow");
                                     }, 3000);

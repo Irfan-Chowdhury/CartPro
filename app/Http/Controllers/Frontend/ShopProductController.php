@@ -8,12 +8,12 @@ use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ProductPromoBadgeTextTrait;
+use Illuminate\Support\Facades\Cache;
 
 class ShopProductController extends Controller
 {
@@ -23,7 +23,8 @@ class ShopProductController extends Controller
     {
         $locale = Session::get('currentLocal');
 
-        $products = DB::table('products')
+        $products = Cache::remember('products', 300, function () use ($locale) {
+            return DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
                         $join->on('product_translations.product_id', '=', 'products.id')
                         ->where('product_translations.local', '=', $locale);
@@ -40,10 +41,18 @@ class ShopProductController extends Controller
                     ->where('is_active',1)
                     ->orderBy('products.id','ASC')
                     ->get();
+        });
 
-        $product_images = ProductImage::select('product_id','image','type')->get();
 
-        $category_product =  CategoryProduct::get();
+        $product_images = Cache::remember('product_images', 300, function () {
+            return ProductImage::select('product_id','image','type')->get();
+        });
+
+
+        $category_product = Cache::remember('category_product', 300, function () {
+            return CategoryProduct::get();
+        });
+
         $category_ids = [];
         foreach ($products as $key => $item) {
             foreach ($category_product as $key => $value) {
@@ -54,34 +63,42 @@ class ShopProductController extends Controller
             }
         }
 
-        $product_attr_val = Product::with('productAttributeValues','brandTranslation')
-                    ->orderBy('id','DESC')
-                    ->get();
+        $attribute_values =  DB::table('attribute_category')
+                            ->join('attribute_translations', function ($join) use ($locale) {
+                                $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
+                                ->where('attribute_translations.locale', '=', $locale);
+                            })
+                            // ->join('attribute_value_translations', function ($join) use ($locale) {
+                            //     $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
+                            //     ->where('attribute_value_translations.local', '=', $locale);
+                            // })
+                            // ->groupBy('attribute_id')
+                            // ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
+                            ->get();
 
 
-        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+
+        // $attribute_values = Product::with('productAttributeValues.attrValueTranslation','brandTranslation')
+        //                 ->orderBy('id','DESC')
+        //                 ->get();
+
+        // return $attribute_values;
+
+
+        $categories = Cache::remember('categories', 300, function () {
+            return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
                     ->get();
+        });
 
         // Filter By Attribute
-        $attribute_with_values = ProductAttributeValue::with('attributeTranslation','attributeValueTranslations')->get()->keyBy('attribute_id');
+        // $attribute_with_values = Cache::remember('attribute_with_values', 300, function () {
+        //     return ProductAttributeValue::with('attributeTranslation','attributeValueTranslations')->get()->keyBy('attribute_id');
+        // });
 
-        // $attribute_values =  DB::table('attribute_category')
-        //         ->join('attribute_translations', function ($join) use ($locale) {
-        //             $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-        //             ->where('attribute_translations.locale', '=', $locale);
-        //         })
-        //         ->join('attribute_value_translations', function ($join) use ($locale) {
-        //             $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-        //             ->where('attribute_value_translations.local', '=', $locale);
-        //         })
-        //         ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
-        //         ->get();
-
-        // return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','categories','attribute_with_values' ,'attribute_values'));
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','product_attr_val','categories','attribute_with_values'));
+        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values'));
     }
 
     public function limitShopProductShow(Request $request)
@@ -205,6 +222,52 @@ class ShopProductController extends Controller
 
         $html = $this->productsShow($category_ids, $products);
         return response()->json($html);
+    }
+
+    public function shopProductsSidebarFilter(Request $request)
+    {
+        $locale = Session::get('currentLocal');
+
+        //Price Related
+        $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
+        $data = explode(" ",$request->amount);
+        $data_amount_first = explode("$",$data[1]);
+        $data_amount_last = explode("$",$data[4]);
+        $min_price =  $data_amount_first[0]/$CHANGE_CURRENCY_RATE;
+        $max_price =  $data_amount_last[0]/$CHANGE_CURRENCY_RATE;
+
+        $products = DB::table('products')
+            ->join('product_translations', function ($join) use ($locale) {
+                $join->on('product_translations.product_id', '=', 'products.id')
+                ->where('product_translations.local', '=', $locale);
+            })
+            ->leftJoin('brand_translations', function ($join) use ($locale) {
+                $join->on('brand_translations.brand_id', '=', 'products.brand_id')
+                ->where('brand_translations.local', '=', $locale);
+            })
+            ->join('product_images', function ($join) {
+                $join->on('product_images.product_id', '=', 'products.id')
+                ->where('product_images.type', '=', 'base');
+            })
+            ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+            ->where('is_active',1)
+            ->whereBetween('products.price', [$min_price, $max_price])
+            ->get();
+
+        $category_product =  CategoryProduct::get();
+        $category_ids = [];
+        foreach ($products as $key => $item) {
+            foreach ($category_product as $key => $value) {
+                if ($item->id==$value->product_id) {
+                    $category_ids[$item->id] = $category_product[$key];
+                    break;
+                }
+            }
+        }
+
+        $html = $this->productsShow($category_ids, $products);
+        return response()->json($html);
+
     }
 
 

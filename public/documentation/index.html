@@ -26,12 +26,13 @@
 
 <body>
 <div id="documenter_sidebar">
-    <img src="public/documentation/assets/images/logo-cartpro.png" style="border: none;margin: 10px 30px -10px;width: 150px">
+    <img src="public/documentation/assets/images/logo-cartpro.webp" style="border: none;margin: 10px 30px -10px;width: 150px">
 
     <ul id="documenter_nav">
         <li><a class="current" href="#documenter_cover">Start</a></li>
         <li><a href="#server_requirement" title="SERVER REQUIREMENTS">Server Requirements</a></li>
         <li><a href="#install" title="INSTALL">Install</a></li>
+        <li><a href="#common_error" title="Common Error">Common Error</a></li>
         <li><a href="#admin_log_in" title="Log In">Log In</a></li>
         <li><a href="#admin_dashboard" title="Admin DASHBOARD">Dashboard</a></li>
         <li><a href="#empty_database" title="Empty Database">Empty Database</a></li>
@@ -208,8 +209,20 @@
             username:<strong>user</strong><br>
             password:<strong>user</strong></p>
         <br>
-
     </section>
+
+    <section id="common_error">
+        <div class="page-header">
+            <h3>Common Errors</h3>
+            <hr class="notop">
+        </div>
+        <p>If you face 500 server error after installing the software please update your php version to 7.4 or later. If you still get 500 server error after updating php version, please open your '.env' file and change the value of 'APP_DEBUG' to true. You'll find '.env' file in the root folder (CartPro) and then go to the page again where you were getting 500 server error. You should see description of actual error now. Please take a screenshot and send it over along with your cpanel access details, so that we can look into it.<p>
+        <ul>
+            <img alt="" src="public/documentation/assets/images/common_error_1.png">
+            <img alt="" src="public/documentation/assets/images/common_error_2.png">
+        </ul>
+    </section>
+
 
     <section id="admin_log_in">
         <div class="page-header">

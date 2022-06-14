@@ -32,8 +32,7 @@ class AttributeSetController extends Controller
     public function store(AttributeSetStoreRequest $request)
     {
         if (auth()->user()->can('attribute_set-store')){
-            $this->attributeSetService->storeAttributeSet($request);
-            return response()->json(['success' => __('Data Successfully Saved')]);
+            return $this->attributeSetService->storeAttributeSet($request);
         }
     }
 
@@ -47,8 +46,7 @@ class AttributeSetController extends Controller
     public function update(AttributeSetUpdateRequest $request)
     {
         if (auth()->user()->can('attribute_set-edit')){
-            $this->attributeSetService->updateAttributeSet($request);
-            return response()->json(['success' => 'Data Updated Successfully']);
+            return $this->attributeSetService->updateAttributeSet($request);
         }
     }
 
@@ -72,8 +70,7 @@ class AttributeSetController extends Controller
 
     public function destroy(Request $request){
         if ($request->ajax()){
-            $this->attributeSetService->destroy($request->id);
-            return response()->json(['success' => 'Data Deleted Successfully']);
+            return $this->attributeSetService->destroy($request->id);
         }
     }
 }

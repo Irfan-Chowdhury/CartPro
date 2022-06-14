@@ -43,6 +43,7 @@
                                         <th class="plantmore-product-price">@lang('file.Unit Price')</th>
                                         <th class="plantmore-product-quantity">@lang('file.Quantity')</th>
                                         <th class="plantmore-product-subtotal">@lang('file.Subtotal')</th>
+                                        <th class="plantmore-product-subtotal">@lang('file.Attribute Details')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,12 +59,9 @@
 
                                         <tr>
                                             <td class="plantmore-product-thumbnail">
-                                                {{-- <a href="#"><img src="images/cart/cart-3-90x90.jpg" alt="..."></a> --}}
-                                                <a href="#"><img src="{{asset('public/'.$item->image)}}" style="width:90px;height:90px"></a>
+                                                <img src="{{asset('public/'.$item->image)}}" style="width:90px;height:90px">
                                             </td>
-                                            <td class="plantmore-product-name"><a href="#">{{$item->product_name}}</a>
-                                                {{-- <p>{{$item->options}}</p> --}}
-                                            </td>
+                                            <td class="plantmore-product-name">{{$item->product_name}}</td>
                                             <td class="plantmore-product-price">
                                                 <span class="amount">
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -87,6 +85,18 @@
                                                     @endif
                                                 </span>
                                             </td>
+                                            <td class="plantmore-product-name">
+                                                @php
+                                                    $attributes = json_decode($item->options);
+                                                @endphp
+                                                @forelse ($attributes as $key => $item)
+                                                    @if ($key!='image' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
+                                                        <p><b>{{$key}}</b> :{{$item}}</p>
+                                                    @endif
+                                                @empty
+                                                    <p>NONE</p>
+                                                @endforelse
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -94,22 +104,25 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><i class="fw-bold">@lang('file.Total Quantity')</i> <b>{{$total_quantity}}</b></td>
-                                        <td><i class="fw-bold">@lang('file.Subtotal')</i>
-                                            <b>
-                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                    {{ number_format((float)$total_subtotal  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                @else
-                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$total_subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                @endif
-                                            </b>
+                                        <td></td>
+                                        <td>
+                                            <p><i class="fw-bold"><b>@lang('file.Total Quantity')</b></i></p>
+                                            <p>{{$total_quantity}}</p>
+                                        </td>
+                                        <td>
+                                            <p><i class="fw-bold"><b>@lang('file.Subtotal')</b></i></p>
+
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                <p>{{ number_format((float)$total_subtotal  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</p>
+                                            @else
+                                                <p>@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$total_subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</p>
+                                            @endif
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-md-8"></div>
@@ -168,7 +181,8 @@
 
                                         <tr>
                                             <th><span contenteditable><h6 class="text-success"><b>@lang('file.Total Amount')</b></h6></span></th>
-                                            <td><h6 class="text-success">
+                                            <td>
+                                                <h6 class="text-success">
                                                     <b>
                                                         <span contenteditable>
                                                             @if(env('CURRENCY_FORMAT')=='suffix')

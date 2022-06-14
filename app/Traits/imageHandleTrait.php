@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 trait imageHandleTrait{
 
-    public function imageStore($image, $directory, $type) 
+    public function imageStore($image, $directory, $type)
     {
         // $img      = Str::random(10). '.' .'webp';
         $img        = Str::random(10). '.' .$image->getClientOriginalExtension();
@@ -54,6 +54,10 @@ trait imageHandleTrait{
             $img      = 'newslatter'. '.' .'jpg';
             $location = public_path($directory.$img);
             Image::make($image)->encode('jpg', 60)->fit(850,450)->save($location);
+        }
+        elseif($type=='about_us')
+        {
+            Image::make($image)->encode('webp', 60)->fit(1920,1240)->save($location);
         }
         else {
             Image::make($image)->encode('jpg', 60)->fit(300,300)->save($location);

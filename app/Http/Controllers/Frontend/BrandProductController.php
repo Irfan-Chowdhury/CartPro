@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\Product;
-use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,7 +15,7 @@ class BrandProductController extends Controller
 {
     public function brands()
     {
-        $brands = Cache::remember('brands', 150, function () {
+        $brands = Cache::remember('brands', 300, function () {
             return Brand::where('is_active',1)
                     ->orderBy('id','DESC')
                     ->get();

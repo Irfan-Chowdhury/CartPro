@@ -31,8 +31,7 @@ class BrandController extends Controller
     public function store(BrandStoreRequest $request)
     {
         if (auth()->user()->can('brand-store')){
-            $this->brandService->storeBrand($request);
-            return response()->json(['success' => __('Data Successfully Saved')]);
+            return $this->brandService->storeBrand($request);
         }
     }
 
@@ -46,10 +45,7 @@ class BrandController extends Controller
     public function brandUpdate(BrandUpdateRequest $request, $id)
     {
         if (auth()->user()->can('brand-edit')){
-            $this->brandService->updateBrand($request);
-            session()->flash('type','success');
-            session()->flash('message','Successfully Updated');
-            return redirect()->back();
+            return $this->brandService->updateBrand($request);
         }
     }
 

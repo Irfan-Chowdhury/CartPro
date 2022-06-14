@@ -44,14 +44,33 @@
                                             <span class="d-block">{{date('d M, Y',strtotime($item->date))}}</span>
                                         </div>
                                         <div>
-
-                                            @if($item->order_status == 'completed')
-                                                <span class="badge rounded-pill bg-success">@lang('file.Completed')</span>
-                                            @elseif($item->order_status == 'pending')
-                                                <span class="badge rounded-pill bg-primary">@lang('file.Pending')</span>
-                                            @elseif($item->order_status == 'canceled')
-                                                <span class="badge rounded-pill bg-danger">@lang('file.canceled')</span>
-                                            @endif
+                                            <strong>Delivery Date</strong>
+                                            <span class="d-block">@if($item->delivery_date){{date('d M, Y',strtotime($item->delivery_date))}}@else NONE @endif</span>
+                                        </div>
+                                        <div>
+                                            <strong>Delivery Time</strong>
+                                            <span class="d-block">{{$item->delivery_time ??'NONE'}}</span>
+                                        </div>
+                                        <div>
+                                            @php
+                                                $bg_color = '';
+                                                if ($item->order_status=='order_placed') {
+                                                    $bg_color = 'primary';
+                                                }else if($item->order_status=='pending'){
+                                                    $bg_color = 'danger';
+                                                }else if($item->order_status=='order_confirmed'){
+                                                    $bg_color = 'secondary';
+                                                }else if($item->order_status=='delivery_scheduled'){
+                                                    $bg_color = 'warning';
+                                                }else if($item->order_status=='delivery_successful'){
+                                                    $bg_color = 'info';
+                                                }else if($item->order_status=='payment_successful'){
+                                                    $bg_color = 'light';
+                                                }else if($item->order_status=='order_completed'){
+                                                    $bg_color = 'success';
+                                                }
+                                            @endphp
+                                            <span class="p-2 badge rounded-pill bg-{{$bg_color}}">{{ucwords(str_replace('_', ' ',$item->order_status))}}</span>
                                         </div>
                                     </div>
                                     <hr class="mt-3 mb-3">

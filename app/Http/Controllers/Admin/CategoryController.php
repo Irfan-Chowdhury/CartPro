@@ -31,8 +31,7 @@ class CategoryController extends Controller
     public function store(CategoryStoreRequest $request)
     {
         if (auth()->user()->can('category-store')){
-            $this->categoryService->storeCategory($request);
-            return response()->json(['success' => __('Data Successfully Saved')]);
+            return $this->categoryService->storeCategory($request);
         }
     }
 
@@ -46,8 +45,7 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request)
     {
         if (auth()->user()->can('category-edit')){
-            $this->categoryService->updateCategory($request);
-            return response()->json(['success' => 'Data Updated Successfully']);
+           return $this->categoryService->updateCategory($request);
         }
     }
 

@@ -3,28 +3,24 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactMail;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\CategoryProduct;
-use App\Models\CurrencyRate;
+use App\Models\FaqType;
 use App\Models\FlashSale;
-use App\Models\FlashSaleProduct;
-use App\Models\FooterDescription;
 use App\Models\KeywordHit;
 use App\Models\Language;
 use App\Models\Newsletter AS DBNewslatter;
 use App\Models\OrderDetail;
-use App\Models\Page;
 use App\Models\Product;
 use App\Models\ProductTranslation;
 use App\Models\Review;
 use App\Models\Setting;
-use App\Models\SettingCurrency;
-use App\Models\SettingNewsletter;
+use App\Models\SettingAboutUs;
+use App\Models\SettingStore;
 use App\Models\Slider;
-use App\Models\StorefrontImage;
-use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -35,9 +31,8 @@ use Newsletter;
 use App\Traits\CurrencyConrvertion;
 use App\Traits\ENVFilePutContent;
 use App\Traits\AutoDataUpdateTrait;
-use Illuminate\Support\Facades\File;
-use Harimayco\Menu\Models\Menus;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -45,24 +40,22 @@ class HomeController extends Controller
 
     public function index()
     {
-        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-        ->where('is_active',1)
-        ->orderBy('is_active','DESC')
-        ->orderBy('id','ASC')
-        ->get();
+        $categories = Cache::remember('categories', 300, function () {
+            return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','ASC')
+                    ->get();
+        });
 
 
         //We change the Logic of Flash Sale Products Later
-
         if(!Session::get('currentLocal')){
             Session::put('currentLocal', 'en');
             $locale = 'en';
         }else {
             $locale = Session::get('currentLocal');
         }
-        App::setLocale($locale);
-
-        $locale = Session::get('currentLocal');
 
         //Storefront Theme Color
         $storefront_theme_color = "#0071df";
@@ -90,16 +83,20 @@ class HomeController extends Controller
 
 
         //Settings
-        $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+        $settings = Cache::remember('settings', 300, function () {
+            return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();;
+        });
 
         //CategoryProducts
-        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
-                                                'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                                                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                                                ->get();
+        $category_products = Cache::remember('category_products', 300, function () {
+            return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+                    'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                    'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+                    ->get();
+        });
 
         //Slider
-        $sliders = Cache::remember('sliders', 150, function () use ($locale) {
+        $sliders = Cache::remember('sliders', 300, function () use ($locale) {
             return Slider::with(['category','sliderTranslation'=> function ($query) use ($locale){
                 $query->where('locale',$locale)
                 ->orWhere('locale','en')
@@ -112,17 +109,16 @@ class HomeController extends Controller
         });
 
         //Slider Banner
-        $slider_banners = $this->getSliderBanner($settings);
+        $slider_banners = Cache::remember('slider_banners', 300, function () use ($settings) {
+            return $this->getSliderBanner($settings);
+        });
 
         foreach ($settings as $key => $setting)
         {
-            //Theme Color
-            if ($setting->key=='storefront_theme_color' && $setting->plain_value!=NULL) {
-                $storefront_theme_color = $setting->plain_value;
-            }
-
-            elseif ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
-                $store_front_slider_format = $setting->plain_value;
+            if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
+                $store_front_slider_format = Cache::remember('store_front_slider_format', 300, function () use($setting) {
+                    return $setting->plain_value;
+                });
             }
 
 
@@ -131,7 +127,7 @@ class HomeController extends Controller
                 if ($settings[$key-1]->plain_value=='category_products') {
                     foreach ($category_products as $key2 => $value) {
                         if ($value->category_id==$setting->plain_value) {
-                            $product_tab_one_section_1[] =$category_products[$key2];
+                            $product_tab_one_section_1[] = $category_products[$key2];
                         }
                     }
                 }
@@ -220,27 +216,35 @@ class HomeController extends Controller
 
         //Change this later.
         if ($active_campaign_flash_id) {
-            $flash_sales = FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
-                                    'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
-                                    'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+            $flash_sales = Cache::remember('flash_sales', 300, function () use ($active_campaign_flash_id) {
+                return FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
+                    'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
+                    'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+            });
         }
 
         $brand_ids = json_decode($storefront_top_brands);
 
-        $brands = Brand::whereIn('id',$brand_ids)
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','DESC')
-                ->get();
+        $brands = Cache::remember('brands', 300, function () use($brand_ids) {
+            return Brand::whereIn('id',$brand_ids)
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC')
+                    ->get();
+        });
 
-        $order_details = OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
-                        ->select('product_id')
-                        ->groupBy('product_id')
-                        ->selectRaw('SUM(qty) AS qty_of_sold')
-                        ->orderBy('qty_of_sold','DESC')
-                        ->skip(0)
-                        ->take(10)
-                        ->get();
+        $order_details = Cache::remember('order_details', 300, function () {
+            return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
+                    ->select('product_id')
+                    ->groupBy('product_id')
+                    ->selectRaw('SUM(qty) AS qty_of_sold')
+                    ->orderBy('qty_of_sold','DESC')
+                    ->skip(0)
+                    ->take(10)
+                    ->get();
+        });
+
+
 
         //We will convert it in ExpiryReminder later
         $this->autoDataUpdate();
@@ -256,27 +260,32 @@ class HomeController extends Controller
 
     public function product_details($product_slug, $category_id)
     {
-        $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
-                    'baseImage'=> function ($query){
-                        $query->where('type','base')
-                            ->first();
-                    },
-                    'additionalImage'=> function ($query){
-                        $query->where('type','additional')
-                            ->get();
-                    },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                    'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
-                    ])
-                    ->where('slug',$product_slug)
-                    ->first();
+        $product = Cache::remember('product', 300, function () use($product_slug) {
+            return Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
+                'baseImage'=> function ($query){
+                    $query->where('type','base')
+                        ->first();
+                },
+                'additionalImage'=> function ($query){
+                    $query->where('type','additional')
+                        ->get();
+                },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
+                ])
+                ->where('slug',$product_slug)
+                ->first();
+        });
+
+
 
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
         }
 
-
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
+        $category = Cache::remember('category', 300, function () use($category_id) {
+            return Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
+        });
 
         $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
         if ($cart) {
@@ -287,21 +296,26 @@ class HomeController extends Controller
 
         //Review Part
         if (Auth::check()) {
-            $user_and_product_exists = DB::table('orders')
-            ->join('order_details','order_details.order_id','orders.id')
-            ->where('orders.user_id',Auth::user()->id)
-            ->where('order_details.product_id',$product->id)
-            ->exists();
+            $user_and_product_exists = Cache::remember('user_and_product_exists', 300, function () use($product) {
+                return  DB::table('orders')
+                        ->join('order_details','order_details.order_id','orders.id')
+                        ->where('orders.user_id',Auth::user()->id)
+                        ->where('order_details.product_id',$product->id)
+                        ->exists();
+            });
         }else {
             $user_and_product_exists = null;
         }
 
-        $reviews = DB::table('reviews')
-            ->join('users','users.id','reviews.user_id')
-            ->where('product_id',$product->id)
-            ->where('status','approved')
-            ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
-            ->get();
+        $reviews = Cache::remember('reviews', 300, function () use($product) {
+            return  DB::table('reviews')
+                    ->join('users','users.id','reviews.user_id')
+                    ->where('product_id',$product->id)
+                    ->where('status','approved')
+                    ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
+                    ->get();
+        });
+
         if (empty($reviews)) {
             $reviews =[];
         }
@@ -310,12 +324,13 @@ class HomeController extends Controller
 
 
         //Related Products
-        $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
-                                'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                            ->where('category_id', $category_id)
-                            ->get();
-
+        $category_products =  Cache::remember('category_products', 300, function () use($category_id) {
+            return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+                        'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+                        'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+                    ->where('category_id', $category_id)
+                    ->get();
+        });
 
         return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
     }
@@ -475,29 +490,6 @@ class HomeController extends Controller
         }
     }
 
-    // public function test(Request $request)
-    // {
-    //     // KeywordHit::updatetOrCreate(
-    //     //     ['keyword' =>  request('searchText')],
-    //     //     ['hit' =>   DB::raw('hit+1')]
-    //     // );
-
-    //     if ($request->ajax()) {
-    //         $dataCheck = KeywordHit::where('keyword',$request->searchText);
-    //         if ($dataCheck->exists()) {
-    //             $get_data = $dataCheck->first();
-    //             $increment = $get_data->hit+1;
-    //             $get_data->update(['hit'=>$increment]);
-    //         }else {
-    //             $keyword_hit = new KeywordHit();
-    //             $keyword_hit->keyword = $request->searchText;
-    //             $keyword_hit->hit = 1;
-    //             $keyword_hit->save();
-    //         }
-    //         return response()->json('ok');
-    //     }
-    // }
-
     public function currencyChange($currency_code)
     {
         // $main_amount = 500;
@@ -528,6 +520,47 @@ class HomeController extends Controller
         }elseif($request->newslatter=='enable') {
             Cookie::queue(Cookie::forget('newslatter'));
         }
+    }
 
+    public function faq()
+    {
+        $faq_types = FaqType::with(['faqTypeTranslation','faqs'=> function($q){
+                        $q->where('is_active',1);
+                    } ,'faqs.faqTranslation','faqs.faqTranslationEnglish'])
+                    ->where('is_active',1)
+                    ->get();
+        return view('frontend.pages.faq',compact('faq_types'));
+    }
+
+    public function contact()
+    {
+        $schedules = [];
+        $data = null;
+        $setting_store = SettingStore::latest()->first();
+        if (!empty($setting_store)) {
+            $data = json_decode($setting_store->schedule);
+        }
+        foreach ($data as $key => $value) {
+            $schedules[] = $value;
+        }
+
+        return view('frontend.pages.contact',compact('schedules'));
+    }
+
+    public function contactMessage()
+    {
+        $data = [];
+        $data['name'] = request('name');
+        $data['email'] = request('email');
+        $data['message'] = request('message');
+        Mail::to('irfanchowdhury80@gmail.com')->send(new ContactMail($data));
+
+        return redirect()->back()->with('success', 'Message sent successfully');
+    }
+
+    public function aboutUs()
+    {
+        $setting_about_us = SettingAboutUs::with('aboutUsTranslation','aboutUsTranslationEnglish')->latest()->first();
+        return view('frontend.pages.about_us',compact('setting_about_us'));
     }
 }

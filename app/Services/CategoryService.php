@@ -72,8 +72,8 @@ class CategoryService
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
-                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
-                        &nbsp; ';
+                        // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                        // &nbsp; ';
                     }
                     return $actionBtn;
                 })
@@ -83,7 +83,10 @@ class CategoryService
 
     public function storeCategory($request)
     {
-        $data = $this->requestHandleData($request, $category = null);
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
+        $data = $this->requestHandleData($request, null);
         $category =  $this->categoryContract->storeCategory($data);
 
         $dataTranslation  = [];
@@ -91,6 +94,7 @@ class CategoryService
         $dataTranslation['local']         = session('currentLocal');
         $dataTranslation['category_name'] = htmlspecialchars_decode($request->category_name);
         $this->categoryTranslationContract->storeCategoryTranslation($dataTranslation);
+        return response()->json(['success' => __('Data Successfully Saved')]);
     }
 
     public function findCategory($id)
@@ -109,10 +113,14 @@ class CategoryService
 
     public function updateCategory($request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         $category = $this->findCategory($request->category_id);
         $data     = $this->requestHandleData($request, $category);
         $this->categoryContract->updateCategoryById($request->category_id, $data);
         $this->categoryTranslationContract->updateOrInsertCategoryTranslation($request);
+        return response()->json(['success' => 'Data Updated Successfully']);
     }
 
 
@@ -136,7 +144,7 @@ class CategoryService
     public function activeById($id)
     {
         if (env('USER_VERIFIED')!=1) {
-            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+            return response()->json(['demo' => 'Disabled for demo !']);
         }
         return $this->categoryContract->active($id);
     }
@@ -144,14 +152,14 @@ class CategoryService
     public function inactiveById($id)
     {
         if (env('USER_VERIFIED')!=1) {
-            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+            return response()->json(['demo' => 'Disabled for demo !']);
         }
         return $this->categoryContract->inactive($id);
     }
 
     public function destroy($category_id){
         if (env('USER_VERIFIED')!=1) {
-            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+            return response()->json(['demo' => 'Disabled for demo !']);
         }
         $this->categoryContract->destroy($category_id);
         $this->categoryTranslationContract->destroy($category_id);
@@ -160,14 +168,14 @@ class CategoryService
 
     public function bulkActionByTypeAndIds($type, $ids){
         if (env('USER_VERIFIED')!=1) {
-            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+            return response()->json(['demo' => 'Disabled for demo !']);
         }
         return $this->categoryContract->bulkAction($type, $ids);
     }
 
     public function bulkDestroy($category_ids){
         if (env('USER_VERIFIED')!=1) {
-            return response()->json(['disabled_demo' => 'Disabled for demo !']);
+            return response()->json(['demo' => 'Disabled for demo !']);
         }
         $this->categoryContract->bulkDestroyByIds($category_ids);
         $this->categoryTranslationContract->bulkDestroyByIds($category_ids);

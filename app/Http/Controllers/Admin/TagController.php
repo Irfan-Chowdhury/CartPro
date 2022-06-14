@@ -19,14 +19,10 @@ class TagController extends Controller
 
     public function index()
     {
-        // return Tag::with('tagTranslations')->where('id',5)->get();
-        // return Tag::with('tagTranslations')->find(5);
-
         if (auth()->user()->can('tag-view'))
         {
             $local = Session::get('currentLocal');
             App::setLocale($local);
-
 
             $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
                 $query->where('local',$local)
@@ -100,6 +96,10 @@ class TagController extends Controller
         {
             if ($request->ajax())
             {
+                if (env('USER_VERIFIED')!=1) {
+                    return response()->json(['errors' => ['Disabled for demo !']]);
+                }
+
                 $tag = new Tag();
                 $tag->slug  = $this->slug($request->tag_name);
                 if ($request->is_active==1) {
@@ -144,6 +144,10 @@ class TagController extends Controller
 
         if (auth()->user()->can('tag-edit'))
         {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
+
             $tag = Tag::find($request->tag_id);
             $tag->slug  = $this->slug($request->tag_name);
             if ($request->is_active==1) {
@@ -171,12 +175,18 @@ class TagController extends Controller
 
     public function active(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->activeData(Tag::find($request->id));
         }
     }
 
     public function inactive(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->inactiveData(Tag::find($request->id));
         }
     }

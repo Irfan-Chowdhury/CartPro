@@ -825,6 +825,20 @@ class SettingSeeder extends Seeder
                 'key' => 'storefront_brand_page_enabled',
                 'is_translatable' => 0,
             ),
+
+            //Theme background Color
+            array(
+                'id' => 153,
+                'key' => 'storefront_navbar_background_color',
+                'is_translatable' => 0,
+            ),
+
+            //Theme background Color
+            array(
+                'id' => 154,
+                'key' => 'storefront_nav_text_color',
+                'is_translatable' => 0,
+            ),
         );
 
         Setting::insert($settings);

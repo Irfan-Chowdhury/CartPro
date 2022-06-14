@@ -49,7 +49,8 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="general-settings" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.General')</a>
-                            <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">@lang('file.Store')</a>
+                            <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">@lang('file.Store-Contact')</a>
+                            <a class="list-group-item list-group-item-action" id="about-us-settings" data-toggle="list" href="#about-us" role="tab" aria-controls="social">@lang('file.About Us')</a>
                             <a class="list-group-item list-group-item-action" id="currency-settings" data-toggle="list" href="#currency" role="tab" aria-controls="settings">@lang('file.Currency')</a>
                             <a class="list-group-item list-group-item-action" id="mail-settings" data-toggle="list" href="#mail" role="tab" aria-controls="mail">@lang('file.Mail')</a>
                             <a class="list-group-item list-group-item-action" id="newsletter-settings" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">@lang('file.Newsletter')</a>
@@ -133,9 +134,14 @@
                         @include('admin.pages.setting.general_setting.maintenance')
                     </div>
 
-                    <!-- Maintenance -->
+                    <!-- Stor-Contact -->
                     <div class="tab-pane fade" id="store" role="tabpanel" aria-labelledby="store-settings">
                         @include('admin.pages.setting.general_setting.store')
+                    </div>
+
+                    <!-- About Us -->
+                    <div class="tab-pane fade" id="about-us" role="tabpanel" aria-labelledby="about-us-settings">
+                        @include('admin.pages.setting.general_setting.about_us')
                     </div>
 
                     <!-- Currency -->
@@ -264,50 +270,19 @@
 
                 //General
                 $('#generalSubmit').on('submit', function (e) {
-                    e.preventDefault();
-
-                    $.ajax({
-                        url: "{{route('admin.setting.general.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            console.log(data);
-
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.general.store_or_update'])
                 });
 
                 //Store
                 $('#storeSubmit').on('submit', function (e) {
-                    e.preventDefault();
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.store.store_or_update'])
+                });
 
+                //About Us
+                $('#aboutUsSubmit').on('submit', function (e) {
+                    e.preventDefault();
                     $.ajax({
-                        url: "{{route('admin.setting.store.store_or_update')}}",
+                        url: "{{route('admin.setting.about_us.store_or_update')}}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -316,7 +291,6 @@
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-
                             let html = '';
                             if (data.errors) {
                                 html = '<div class="alert alert-danger">';
@@ -340,6 +314,7 @@
                         }
                     });
                 });
+
 
                 //Currency - exchange rate service
                 $('#exchangeRateService').change(function() {
@@ -524,53 +499,13 @@
 
                 //Mail Submit
                 $('#mailSubmit').on('submit', function (e) {
-                    e.preventDefault();
-
-                    $.ajax({
-                        url: "{{route('admin.setting.mail.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.mail.store_or_update'])
                 });
 
 
-                //newletter Submit
+                //Newletter Submit
                 $('#newletterSubmit').on('submit', function (e) {
-                    e.preventDefault();
-
-                    $.ajax({
-                        url: "{{route('admin.setting.newsletter.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.newsletter.store_or_update'])
                 });
 
 
@@ -601,373 +536,73 @@
 
                 //Facebook
                 $('#facebookSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.facebook.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.facebook.store_or_update'])
                 });
 
                 //Google
                 $('#googleSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.google.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.google.store_or_update'])
                 });
 
                 //Google
                 $('#githubSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.github.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.github.store_or_update'])
                 });
 
 
                 //free Shipping Submit
                 $('#freeShippingSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.free_shipping.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.free_shipping.store_or_update'])
                 });
 
                 //local pickup Submit
                 $('#localPickupSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.local_pickup.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.local_pickup.store_or_update'])
                 });
 
 
                 //Flat Rate
                 $('#flatRateSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.flat_rate.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.flat_rate.store_or_update'])
                 });
 
                 //Paypal
                 $('#paypalSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.paypal.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.paypal.store_or_update'])
                 });
 
                 //Strip
                 $('#stripSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.strip.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.strip.store_or_update'])
                 });
 
                 //SSL Commerz
                 $('#sslComerzSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.sslcommerz.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.sslcommerz.store_or_update'])
                 });
+
+
+                //Cash On Delivery
+                $('#cashOnDeliverySubmit').on('submit', function (e) {
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.cash_on_delivery.store_or_update'])
+                });
+
+                //Razorpay
+                $('#razorpaySubmit').on('submit', function (e) {
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.razorpay.store_or_update'])
+                });
+
+                //Paystack
+                $("#paystackSubmit").on('submit', function (e) {
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.paystack.store_or_update'])
+                });
+
 
                 //Paytm
                 $('#paytmSubmit').on('submit', function (e) {
                     e.preventDefault();
                     $.ajax({
                         url: "{{route('admin.setting.paytm.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-
-                //Cash On Delivery
-                $('#cashOnDeliverySubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.cash_on_delivery.store_or_update')}}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -1070,116 +705,6 @@
                         }
                     });
                 });
-
-                //Razorpay
-                $('#razorpaySubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.razorpay.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-
-                //Paystack
-                $('#paystackSubmit').on('submit', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: "{{route('admin.setting.paystack.store_or_update')}}",
-                        method: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function (data) {
-                            let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#alert_message').fadeIn("slow");
-                                $('#alert_message').html(html);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.success){
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-
-
-                // $('#razorpaySubmit').on('submit', function (e) {
-                //     e.preventDefault();
-                //     $.ajax({
-                //         url: "{{route('admin.setting.razorpay.store_or_update')}}",
-                //         method: "POST",
-                //         data: new FormData(this),
-                //         contentType: false,
-                //         cache: false,
-                //         processData: false,
-                //         dataType: "json",
-                //         success: function (data) {
-                //             let html = '';
-                //             if (data.errors) {
-                //                 html = '<div class="alert alert-danger">';
-                //                 for (let count = 0; count < data.errors.length; count++) {
-                //                     html += '<p>' + data.errors[count] + '</p>';
-                //                 }
-                //                 html += '</div>';
-                //                 $('#alert_message').fadeIn("slow");
-                //                 $('#alert_message').html(html);
-                //                 setTimeout(function() {
-                //                     $('#alert_message').fadeOut("slow");
-                //                 }, 3000);
-                //             }
-                //             else if(data.success){
-                //                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                //                 $('#alert_message').addClass('alert alert-success').html(data.success);
-                //                 setTimeout(function() {
-                //                     $('#alert_message').fadeOut("slow");
-                //                 }, 3000);
-                //             }
-                //         }
-                //     });
-                // });
 
 
             // $('#supportedCurrencies').change(function (e) {

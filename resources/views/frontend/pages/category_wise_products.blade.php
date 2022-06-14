@@ -25,131 +25,114 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="sidebar_filters">
+                    <div class="sidebar_filters mb-5">
 
-                        <!--sidebar-categories-box start-->
-                        <div class="sidebar-widget sidebar-category-list">
-                            @if ($category->child->count()!=0)
-                            <div class="sidebar-title">
-                                <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Categories')</h2>
-                            </div>
-                            @endif
+                        <form id="sidebarFilter">
 
-                            @if($category->child)
-                            <!-- category-sub-menu start -->
-                            <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
-                                <ul>
-                                    @forelse ($category->child as $item)
-                                        <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">
+                            <!--sidebar-categories-box start-->
+                            <div class="sidebar-widget sidebar-category-list">
+                                @if ($category->child->count()!=0)
+                                <div class="sidebar-title">
+                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Categories')</h2>
+                                </div>
+                                @endif
 
-                                            @php $count =0; @endphp
-                                            @forelse ($item->categoryProduct as $childCategoryProduct)
-                                                @if ($childCategoryProduct->product)
-                                                    @php $count++; @endphp
-                                                @endif
-                                            @empty
-                                            @endforelse
-                                            ({{$count}})
+                                @if($category->child)
+                                <!-- category-sub-menu start -->
+                                <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
+                                    <ul>
+                                        @forelse ($category->child as $item)
+                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">
 
-                                        </span>
-                                            @if ($item->child)
-                                                @forelse ($item->child as $value)
-                                                    <ul>
-                                                        <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">
-
-                                                            @php $count =0; @endphp
-                                                            @forelse ($value->categoryProduct as $childCategoryProduct)
-                                                                @if ($childCategoryProduct->product)
-                                                                    @php $count++; @endphp
-                                                                @endif
-                                                            @empty
-                                                            @endforelse
-                                                            ({{$count}})
-
-                                                        </span></a></li>
-                                                    </ul>
+                                                @php $count =0; @endphp
+                                                @forelse ($item->categoryProduct as $childCategoryProduct)
+                                                    @if ($childCategoryProduct->product)
+                                                        @php $count++; @endphp
+                                                    @endif
                                                 @empty
                                                 @endforelse
-                                            @endif
-                                        </li>
-                                    @empty
-                                    @endforelse
-                                </ul>
+                                                ({{$count}})
+
+                                            </span>
+                                                @if ($item->child)
+                                                    @forelse ($item->child as $value)
+                                                        <ul>
+                                                            <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">
+                                                                @php $count =0; @endphp
+                                                                @forelse ($value->categoryProduct as $childCategoryProduct)
+                                                                    @if ($childCategoryProduct->product)
+                                                                        @php $count++; @endphp
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                                ({{$count}})
+                                                            </span></a></li>
+                                                        </ul>
+                                                    @empty
+                                                    @endforelse
+                                                @endif
+                                            </li>
+                                        @empty
+                                        @endforelse
+                                    </ul>
+                                </div>
+                                <!-- category-sub-menu end -->
+                                @endif
                             </div>
-                            <!-- category-sub-menu end -->
-                            @endif
-
-                        </div>
-                        <!--sidebar-categores-box end  -->
+                            <!--sidebar-categores-box end  -->
 
 
-                        <!--sidebar-categores-box start  -->
-                        <!-- Filter By Price -->
-                        <div class="sidebar-widget filters">
-                            <div class="sidebar-title">
-                                <h2 data-bs-toggle="collapse" href="#collapsePrice" aria-expanded="true">@lang('file.Filter By Price')</h2>
-                            </div>
-                            <div class="filter-area collapse show" id="collapsePrice">
-                                <form id="priceRange" action="{{route('cartpro.category.price_range')}}" method="get">
-                                    <div id="slider-range" class="price-range mar-bot-20"></div>
-                                    <div class="d-flex justify-content-center">
-                                        <div><input type="text" id="amount" name="amount"></div>
-                                        <div><input type="hidden" name="category_slug" value="{{$category->slug ?? null}}"></div>
-                                        <div>
-                                            <button type="submit" class="mt-2 btn btn-success">{{__('file.Filter')}}</button>
+                            <!--sidebar-categores-box start  -->
+                            <!-- Filter By Price -->
+                            <div class="sidebar-widget filters">
+                                <div class="sidebar-title">
+                                    <h2 data-bs-toggle="collapse" href="#collapsePrice" aria-expanded="true">@lang('file.Filter By Price')</h2>
+                                </div>
+                                <div class="filter-area collapse show" id="collapsePrice">
+                                    {{-- <form id="priceRange" action="{{route('cartpro.category.price_range')}}" method="get"> --}}
+                                        <div id="slider-range" class="price-range mar-bot-20"></div>
+                                        <div class="d-flex justify-content-center">
+                                            <div><input type="text" id="amount" name="amount"></div>
+                                            <div><input type="hidden" name="category_slug" value="{{$category->slug ?? null}}"></div>
                                         </div>
-                                    </div>
-                                </form>
+                                    {{-- </form> --}}
+                                </div>
                             </div>
-                        </div>
 
 
-                        <!-- Filter By Attribute Value-->
-                        @if (count($attribute_values)>0)
-                            <form id="filterByAttributeValue">
-                                @csrf
-                                <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
-                                <div><input type="hidden" name="category_slug" value="{{$category->slug}}"></div>
+                            <!-- Filter By Attribute Value-->
+                            @if (count($attribute_values)>0)
+                                {{-- <form id="filterByAttributeValue"> --}}
+                                    {{-- @csrf --}}
+                                    <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
+                                    <div><input type="hidden" name="category_slug" value="{{$category->slug}}"></div>
 
-                                @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
-                                    <div class="sidebar-widget filters">
-                                        <div class="sidebar-title">
-                                            <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
-                                        </div>
-                                        <div class="filter-area collapse show" id="collapseSize">
-                                            <div class="size-checkbox">
-                                                <ul class="filter-opt size pt-2">
-                                                    @foreach ($attribute_values->where('attribute_name',$key) as $value)
-                                                        <li>
-                                                            <div class="custom-control custom-checkbox">
-                                                                <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
-                                                            </div>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
+                                    @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
+                                        <div class="sidebar-widget filters">
+                                            <div class="sidebar-title">
+                                                <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
+                                            </div>
+                                            <div class="filter-area collapse show" id="collapseSize">
+                                                <div class="size-checkbox">
+                                                    <ul class="filter-opt size pt-2">
+                                                        @foreach ($attribute_values->where('attribute_name',$key) as $value)
+                                                            <li>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                                <div><button type="submit" class="mt-2 btn btn-success">{{__('file.Filter')}}</button></div>
-                            </form>
-                        @endif
+                                    @endforeach
+                                {{-- </form> --}}
+                            @endif
 
-                        <!--sidebar-categories-box end-->
-
-                        <!-- Tags -->
-                        {{-- <div class="sidebar-widget filters">
-                            <div class="sidebar-title">
-                                <h2 data-bs-toggle="collapse" aria-expanded="true">@lang('file.Tags')</h2>
-                            </div>
-                            <div class="row">
-                                @foreach ($tags as $item)
-                                    <div class="col-md-4"><a href="{{route('tag_wise_products',$item->slug)}}">{{$item->tagTranslations->tag_name ?? $item->tagTranslationEnglish->tag_name ?? null}}</a></div>
-                                @endforeach
-                            </div>
-                        </div> --}}
-                        <br><br>
-
+                            <!--sidebar-categories-box end-->
+                            <div><button type="submit" class="mt-2 btn btn-success">{{__('Filter')}}</button></div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -430,6 +413,22 @@
                     }
                 }
             });
+        });
+
+        //New
+        $('#sidebarFilter').on('submit',function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: "GET",
+                url: "{{route('cartpro.category.sidebar_filter')}}",
+                data: form.serialize(),
+                success: function(data){
+                    console.log(data);
+                    $('.categoryWiseProductField').empty().html(data);
+                }
+            });
+            console.log(form);
         });
     </script>
 

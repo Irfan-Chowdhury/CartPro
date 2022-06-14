@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\AttributeValue;
-use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
@@ -27,7 +26,6 @@ use Str;
 use App\Traits\FormatNumberTrait;
 use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
-use Exception;
 use App\Services\BrandService;
 use App\Traits\imageHandleTrait;
 
@@ -109,7 +107,7 @@ class ProductController extends Controller
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>  &nbsp';
                         }
                     }
-                        $actionBtn .= '<a  onclick="return confirm(\'Are you sure to delete ?\')" href="'.route('admin.products.delete', $row->id) .'" class="delete btn btn-danger btn-sm" title="Delete"><i class="dripicons-trash"></i></a>';
+                        // $actionBtn .= '<a  onclick="return confirm(\'Are you sure to delete ?\')" href="'.route('admin.products.delete', $row->id) .'" class="delete btn btn-danger btn-sm" title="Delete"><i class="dripicons-trash"></i></a>';
 
                     return $actionBtn;
                 })
@@ -182,6 +180,12 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            session()->flash('type','danger');
+            session()->flash('message','Disabled for demo !');
+            return redirect()->back();
+        }
+
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|unique:product_translations',
             'description' => 'required',
@@ -391,6 +395,12 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            session()->flash('type','danger');
+            session()->flash('message','Disabled for demo !');
+            return redirect()->back();
+        }
+
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|max:255|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
@@ -563,12 +573,18 @@ class ProductController extends Controller
 
     public function active(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->activeData(Product::find($request->id));
         }
     }
 
     public function inactive(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->inactiveData(Product::find($request->id));
         }
     }
@@ -576,6 +592,9 @@ class ProductController extends Controller
     public function bulkAction(Request $request)
     {
         if ($request->ajax()) {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->bulkActionData($request->action_type, Product::whereIn('id',$request->idsArray));
         }
     }

@@ -7,7 +7,7 @@
 
 
         <h4 class="font-weight-bold mt-3">@lang('file.Attribute Sets')</h4>
-        <div id="success_alert" role="alert"></div>
+        <div id="alert_message" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('attribute_set-store'))
@@ -22,7 +22,7 @@
         @endif
     </div>
     <div class="table-responsive">
-    	<table id="AtttributeSetTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -55,7 +55,7 @@
                     }
                 });
 
-                let table = $('#AtttributeSetTable').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -193,8 +193,6 @@
                 e.preventDefault();
                 var attributeSetName = $("#attributeSetName").val();
                 var isActive         = $("#isActive").val();
-                console.log(attributeSetName);
-
                 $.ajax({
                     url: "{{route('admin.attribute_set.store')}}",
                     method: "POST",
@@ -216,17 +214,18 @@
                         $('#submitButton').text('Save');
                     },
                     success: function (response) {
-                        console.log(response);
-                        if(response.success){
-                            $('#AtttributeSetTable').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $("#formModal").modal('hide');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(response.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
+                        $('#dataListTable').DataTable().ajax.reload();
+                        $('#submitForm')[0].reset();
+                        $("#formModal").modal('hide');
+                        $('#alert_message').fadeIn("slow");
+                        if (response.demo) {
+                            $('#alert_message').addClass('alert alert-danger').html(response.demo);
+                        }else{
+                            $('#alert_message').addClass('alert alert-success').html(response.success);
                         }
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
                     }
                 });
             });
@@ -235,7 +234,7 @@
             //---------- Show data by id-------------
             $(document).on('click', '.edit', function () {
                 var rowId = $(this).data("id");
-                $('#success_alert').html('');
+                $('#alert_message').html('');
 
                 $.ajax({
                     url: "{{route('admin.attribute_set.edit')}}",
@@ -290,167 +289,35 @@
                     },
                     success: function (data) {
                         console.log(data);
-                        if(data.success){
-                            $('#AtttributeSetTable').DataTable().ajax.reload();
-                            $('#updateForm')[0].reset();
-                            $("#editFormModal").modal('hide');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                            $('#updateButton').text('Update');
+                        $('#dataListTable').DataTable().ajax.reload();
+                        $('#updateForm')[0].reset();
+                        $("#editFormModal").modal('hide');
+                        $('#alert_message').fadeIn("slow");
+                        if (data.demo) {
+                            $('#alert_message').addClass('alert alert-danger').html(data.demo);
+                        }else{
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
                         }
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
+                        $('#updateButton').text('Update');
                     }
                 });
             });
 
-            //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var attributeSetId = $(this).data("id");
-                var element = this;
-                console.log(attributeSetId);
+            //---------- Active ------------
+            @include('admin.includes.common_js.active_js',['route_name'=>'admin.attribute_set.active'])
 
-                $.ajax({
-                    url: "{{route('admin.attribute_set.active')}}",
-                    type: "GET",
-                    data: {id:attributeSetId},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#AtttributeSetTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            //---------- Inactive ------------
+            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.attribute_set.inactive'])
 
-            //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var attributeSetId = $(this).data("id");
-                var element = this;
-                console.log(attributeSetId);
+            //---------- Delete ------------
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.attribute_set.destroy'])
 
-                $.ajax({
-                    url: "{{route('admin.attribute_set.inactive')}}",
-                    type: "GET",
-                    data: {id:attributeSetId},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#AtttributeSetTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#AtttributeSetTable').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
-
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
-
-                    $("#active").on("click",function(){
-                        console.log(idsArray);
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.attribute_set.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#AtttributeSetTable').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        console.log(idsArray);
-                        $.ajax({
-                            url: "{{route('admin.attribute_set.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#AtttributeSetTable').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
-
-
-            //---------- Delete -------------
-            $(document).on("click",".delete",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                if (!confirm('Are you sure you want to continue?')) {
-                    alert(false);
-                }else{
-                    $.ajax({
-                        url: "{{route('admin.attribute_set.destroy')}}",
-                        type: "GET",
-                        data: {id:id},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#AtttributeSetTable').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-
-                                $('#AtttributeSetTable').DataTable().ajax.reload();
-                                $('#updateForm')[0].reset();
-                                $("#editFormModal").modal('hide');
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                                $('#updateButton').text('Update');
-                            }
-                        }
-                    });
-                }
-            });
-
-
+            //---------- Bulk Action ------------
+            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.attribute_set.bulk_action'])
+            
         })(jQuery);
     </script>
 @endpush

@@ -27,6 +27,8 @@ use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LocaleFileController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\FAQController;
+use App\Http\Controllers\Admin\FaqTypeController;
 use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +47,7 @@ use App\Http\Controllers\Frontend\SslCommerzPaymentController;
 use App\Http\Controllers\Frontend\TagProductController;
 use App\Http\Controllers\Frontend\UserBillingAddressController;
 use App\Http\Controllers\Frontend\UserShippingAddressController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 
@@ -61,7 +64,10 @@ use Illuminate\Support\Facades\File;
 
 DefaultAuth::routes();
 
-
+Route::get('/optimize', function() {
+    $exitCode = Artisan::call('optimize:clear');
+    return '<h1>Reoptimized class loader</h1>';
+});
 
 
 Route::get('/documentation',function(){
@@ -85,6 +91,14 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::group(['namespace'=>'Frontend'], function (){
 
         Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
+        //FAQ
+        Route::get('/faq',[HomeController::class,'faq'])->name('cartpro.faq');
+        //Contact
+        Route::get('/contact',[HomeController::class,'contact'])->name('cartpro.contact');
+        Route::post('/contact-message',[HomeController::class,'contactMessage'])->name('cartpro.contact.message');
+        //About Us
+        Route::get('/about-us',[HomeController::class,'aboutUs'])->name('cartpro.about_us');
+
         Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
         Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
@@ -102,6 +116,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/shop',[ShopProductController::class,'index'])->name('cartpro.shop');
         Route::get('limit_shop_products_show',[ShopProductController::class,'limitShopProductShow'])->name('cartpro.limit_shop_product_show');
         Route::get('/shop_products_show_sortby',[ShopProductController::class,'shopProductsShowSortby'])->name('cartpro.shop_products_show_sortby');
+        Route::get('/shop/sidebar_filter',[ShopProductController::class,'shopProductsSidebarFilter'])->name('cartpro.shop_sidebar_filter');
 
          //Daily Deals Products
          Route::get('/daily-deals',[DailyDealsController::class,'index'])->name('cartpro.daily_deals');
@@ -116,6 +131,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/category_sortby_condition',[CategoryProductController::class,'categoryWiseConditionProducts'])->name('cartpro.category_wise_products_condition');
         Route::get('/category_price_range/',[CategoryProductController::class,'categoryWisePriceRangeProducts'])->name('cartpro.category.price_range');
         Route::get('/category_filter_by_attribute_value/',[CategoryProductController::class,'categoryProductsFilterByAttributeValue'])->name('cartpro.category.filter_by_attribute_value');
+        Route::get('/sidebar_filter/',[CategoryProductController::class,'categoryWiseSidebarFilter'])->name('cartpro.category.sidebar_filter');
 
 
         Route::get('/tag/{slug}',[TagProductController::class,'tagWiseProducts'])->name('tag_wise_products');
@@ -236,14 +252,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/login/github', [Auth\LoginController::class, 'redirectToGithub'])->name('login.github');
         Route::get('/login/github/callback', [Auth\LoginController::class, 'handleGithubCallback']);
 
-
         //Socolite Tutorial
         //https://www.youtube.com/watch?v=jIckLu1cKew
-
     });
-
-    //New Format End
-
 
 
     /*
@@ -356,7 +367,10 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::group(['prefix' => 'order'], function () {
                 Route::get('/',[OrderController::class,'index'])->name('admin.order.index');
                 Route::get('/details/{id}',[OrderController::class,'orderDetails'])->name('admin.order.details');
-                Route::get('/status',[OrderController::class,'orderStatus'])->name('admin.order.status');
+                Route::get('/status',[OrderController::class,'orderStatus'])->name('admin.order.status'); //Will be removed later
+                Route::get('/{order_id}/{status}',[OrderController::class,'orderStatusChange'])->name('admin.order.status_change');
+                Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');
+                Route::post('/delivery-time',[OrderController::class,'orderDeliveryTime'])->name('admin.order.delivery_time');
             });
 
         Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
@@ -554,7 +568,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/check_money_order/store',[SettingController::class,'cehckMoneyOrderStoreOrUpdate'])->name('admin.setting.check_money_order.store_or_update');
                 Route::post('/razorpay/store',[SettingController::class,'razorpayStoreOrUpdate'])->name('admin.setting.razorpay.store_or_update');
                 Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
-
+                Route::post('/about_us',[SettingController::class,'aboutUsStoreOrUpdate'])->name('admin.setting.about_us.store_or_update');
                 Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
 
                 Route::group(['prefix' => 'language'], function () {
@@ -569,6 +583,29 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');
 
             Route::get('/delete',[SliderController::class,'delete'])->name('cartpro.delete');
+
+            //FAQ
+            Route::prefix('faq')->group(function () {
+                Route::prefix('type')->group(function () {
+                    Route::get('/index',[FaqTypeController::class,'index'])->name('admin.faq_type.index');
+                    Route::post('/store',[FaqTypeController::class,'store'])->name('admin.faq_type.store');
+                    Route::get('/edit',[FaqTypeController::class,'edit'])->name('admin.faq_type.edit');
+                    Route::post('/update',[FaqTypeController::class,'update'])->name('admin.faq_type.update');
+                    Route::get('/active',[FaqTypeController::class,'active'])->name('admin.faq_type.active');
+                    Route::get('/inactive',[FaqTypeController::class,'inactive'])->name('admin.faq_type.inactive');
+                    Route::get('/delete',[FaqTypeController::class,'delete'])->name('admin.faq_type.delete');
+                    Route::get('/bulk_action',[FaqTypeController::class,'bulkAction'])->name('admin.faq_type.bulk_action');
+                });
+
+                Route::get('/index',[FAQController::class,'index'])->name('admin.faq.index');
+                Route::post('/store',[FAQController::class,'store'])->name('admin.faq.store');
+                Route::get('/edit',[FAQController::class,'edit'])->name('admin.faq.edit');
+                Route::post('/update',[FAQController::class,'update'])->name('admin.faq.update');
+                Route::get('/active',[FAQController::class,'active'])->name('admin.faq.active');
+                Route::get('/inactive',[FAQController::class,'inactive'])->name('admin.faq.inactive');
+                Route::get('/delete',[FAQController::class,'delete'])->name('admin.faq.delete');
+                Route::get('/bulk_action',[FAQController::class,'bulkAction'])->name('admin.faq.bulk_action');
+            });
         });
     });
 });

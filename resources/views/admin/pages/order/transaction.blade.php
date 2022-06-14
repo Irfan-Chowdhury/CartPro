@@ -21,7 +21,6 @@
                     <th scope="col">{{trans('file.Payment Method')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Created')}}</th>
-        		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -100,11 +99,7 @@
                         {
                             data: 'created_at',
                             name: 'created_at',
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                        },
+                        }
                     ],
 
                     "order": [],
@@ -176,7 +171,7 @@
                 new $.fn.dataTable.FixedHeader(table);
             });
 
-            
+
         })(jQuery);
     </script>
 @endpush

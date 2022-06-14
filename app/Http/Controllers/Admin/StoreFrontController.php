@@ -112,6 +112,9 @@ class StoreFrontController extends Controller
 
     public function generalStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
 
         $locale = Session::get('currentLocal');
 
@@ -141,11 +144,15 @@ class StoreFrontController extends Controller
 
     public function menuStore(Request $request)
     {
-        $locale = Session::get('currentLocal');
 
         if ($request->ajax()) {
+            $locale = Session::get('currentLocal');
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             foreach ($request->all() as $key => $value) {
-                if ($key === 'storefront_navbar_text' || $key ==='storefront_footer_menu_title_one' || $key ==='storefront_footer_menu_title_two') {
+                if ($key === 'storefront_navbar_text' || $key ==='storefront_footer_menu_title_one' || $key ==='storefront_footer_menu_title_two' || $key ==='storefront_footer_menu_title_three') {
                     $setting = Setting::where('key',$key)->first();
                     SettingTranslation::UpdateOrCreate(
                         ['setting_id'=>$setting->id, 'locale' => $locale],
@@ -164,6 +171,9 @@ class StoreFrontController extends Controller
     public function socialLinkStore(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
             foreach ($request->all() as $key => $value) {
                 Setting::where('key',$key)->update(['plain_value'=>$value]);
             }
@@ -177,6 +187,10 @@ class StoreFrontController extends Controller
         $locale = Session::get('currentLocal');
 
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             foreach ($request->all() as $key => $value) {
                 if (
                         $key === 'storefront_feature_1_title' || $key ==='storefront_feature_1_subtitle' ||
@@ -209,6 +223,9 @@ class StoreFrontController extends Controller
 
     public function logoStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
 
         $validator = Validator::make($request->all(),[
             'image_favicon_logo' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
@@ -253,6 +270,10 @@ class StoreFrontController extends Controller
 
     public function topBannerStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $directory  ='/images/storefront/logo/';
         if ($request->title_topbar_logo=="topbar_logo" && (!empty($request->image_topbar_logo))) {
             $this->previousImageDeleteFromStorefront('topbar_logo');
@@ -273,6 +294,10 @@ class StoreFrontController extends Controller
 
     public function footerStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_payment_method_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
         ]);
@@ -320,6 +345,10 @@ class StoreFrontController extends Controller
 
     public function newletterStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_newsletter_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
         ]);
@@ -346,6 +375,10 @@ class StoreFrontController extends Controller
 
     public function productPageStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_product_page_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
         ]);
@@ -383,6 +416,9 @@ class StoreFrontController extends Controller
 
     public function sliderBannersStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
 
         $locale = Session::get('currentLocal');
 
@@ -470,6 +506,10 @@ class StoreFrontController extends Controller
 
     public function oneColumnBannerStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_one_column_banner_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
         ]);
@@ -509,6 +549,10 @@ class StoreFrontController extends Controller
 
     public function twoColumnBannersStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_two_column_banner_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
             'storefront_two_column_banner_image_2' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
@@ -561,6 +605,10 @@ class StoreFrontController extends Controller
 
     public function threeColumnBannersStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_three_column_banners_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
             'storefront_three_column_banners_image_2' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
@@ -621,6 +669,10 @@ class StoreFrontController extends Controller
 
     public function threeColumnFllWidthBannersStore(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->all(),[
             'storefront_three_column_full_width_banners_background_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
             'storefront_three_column_full_width_banners_image_1' => 'image|max:10240|mimes:jpeg,png,jpg,gif',
@@ -691,6 +743,11 @@ class StoreFrontController extends Controller
     public function topBrandsStore(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             if($request->storefront_top_brands_section_enabled){
                 Setting::where('key','storefront_top_brands_section_enabled')->update(['plain_value'=>1]);
             }else{
@@ -708,6 +765,9 @@ class StoreFrontController extends Controller
     public function topCategoriesStore(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
             if($request->storefront_top_categories_section_enabled){
                 Setting::where('key','storefront_top_categories_section_enabled')->update(['plain_value'=>1]);
             }else{
@@ -722,6 +782,9 @@ class StoreFrontController extends Controller
     {
         if ($request->ajax()) {
 
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
 
             if(empty($request->storefront_product_tabs_1_section_enabled)){
                 Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
@@ -749,6 +812,10 @@ class StoreFrontController extends Controller
     public function productTabsTwoStore(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             if(empty($request->storefront_product_tabs_2_section_enabled)){
                 Setting::where('key','storefront_product_tabs_2_section_enabled')->update(['plain_value'=>0]);
             }
@@ -775,6 +842,10 @@ class StoreFrontController extends Controller
     public function flashSaleAndVerticalProductsStore(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             if(empty($request->storefront_flash_sale_and_vertical_products_section_enabled)){
                 Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
             }

@@ -15,7 +15,7 @@ class PermissionController extends Controller
     public function rolePermission($id)
     {
         App::setLocale(Session::get('currentLocal'));
-        
+
         if (auth()->user()->can('set_permission'))
         {
             $role = Role::find($id);

@@ -225,8 +225,12 @@
                             $('#dataListTable').DataTable().ajax.reload();
                             $('#submitForm')[0].reset();
                             $("#formModal").modal('hide');
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(response.success);
+                            $('#alert_message').fadeIn("slow");
+                            if (response.demo) {
+                                $('#alert_message').addClass('alert alert-danger').html(response.demo);
+                            }else{
+                                $('#alert_message').addClass('alert alert-success').html(response.success);
+                            }
                             setTimeout(function() {
                                 $('#alert_message').fadeOut("slow");
                             }, 3000);
@@ -302,25 +306,19 @@
                         success: function (data) {
                             console.log(data);
                             let html = '';
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">';
-                                for (let count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
-                                }
-                                html += '</div>';
-                                $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
-                            }
-                            else if(data.success){
-                                $('#dataListTable').DataTable().ajax.reload();
-                                $('#updateForm')[0].reset();
-                                $("#editModal").modal('hide');
-                                $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#dataListTable').DataTable().ajax.reload();
+                            $('#updateForm')[0].reset();
+                            $("#editModal").modal('hide');
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            if (data.demo) {
+                                $('#alert_message').addClass('alert alert-danger').html(data.demo);
+                            }else{
                                 $('#alert_message').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#alert_message').fadeOut("slow");
-                                }, 3000);
-                                $('#UpdateButton').text('Update');
                             }
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                            $('#UpdateButton').text('Update');
                         }
                     });
                 });

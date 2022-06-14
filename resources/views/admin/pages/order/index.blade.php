@@ -18,12 +18,13 @@
         	   <tr>
         		    <th class="not-exported"></th>
                     <th scope="col">{{trans('file.Order No')}}</th>
+                    <th scope="col">{{trans('file.Status')}}</th>
+                    <th scope="col">{{trans('file.Delivery Date')}}</th>
+                    <th scope="col">{{trans('file.Delivery Time')}}</th>
         		    <th scope="col">{{trans('file.Customer Name')}}</th>
                     <th scope="col">{{trans('file.Customer Email')}}</th>
         		    <th scope="col">{{trans('file.Total')}}</th>
-        		    <th scope="col">{{trans('file.Status')}}</th>
         		    <th scope="col">{{trans('file.Created')}}</th>
-        		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -82,8 +83,20 @@
                                 searchable: false
                             },
                             {
-                                data: 'id',
-                                name: 'id',
+                                data: 'order_id',
+                                name: 'order_id',
+                            },
+                            {
+                                data: 'order_status',
+                                name: 'order_status',
+                            },
+                            {
+                                data: 'delivery_date',
+                                name: 'delivery_date',
+                            },
+                            {
+                                data: 'delivery_time',
+                                name: 'delivery_time',
                             },
                             {
                                 data: 'customer_name',
@@ -98,16 +111,8 @@
                                 name: 'total',
                             },
                             {
-                                data: 'order_status',
-                                name: 'order_status',
-                            },
-                            {
                                 data: 'created_at',
                                 name: 'created_at',
-                            },
-                            {
-                                data: 'action',
-                                name: 'action',
                             },
                         ],
 
@@ -179,6 +184,60 @@
                     });
                     new $.fn.dataTable.FixedHeader(table);
                 });
+
+                $(document).on('click', '.date_field', function () {
+                    $(".update_btn").attr("hidden",true);
+                    $(this).siblings('.update_btn').removeAttr('hidden');;
+                });
+
+                $(document).on('click', '.update_btn', function () {
+                    var rowId = $(this).data("id");
+                    var date  = $(this).siblings('.date_field').val();
+                    console.log(date);
+                    $.ajax({
+                        url: "{{route('admin.order.order_date')}}",
+                        type: "POST",
+                        data: {id:rowId,date:date},
+                        success: function (data) {
+                            if(data.success){
+                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    })
+                });
+
+                $(document).on('click', '.time_field', function () {
+                    $(".update_time_btn").attr("hidden",true);
+                    $(this).siblings('.update_time_btn').removeAttr('hidden');;
+                });
+
+                $(document).on('click', '.update_time_btn', function () {
+                    var rowId = $(this).data("id");
+                    var time  = $(this).siblings('.time_field').val();
+                    $.ajax({
+                        url: "{{route('admin.order.delivery_time')}}",
+                        type: "POST",
+                        data: {id:rowId,time:time},
+                        success: function (data) {
+                            if(data.success){
+                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                            }
+                        }
+                    })
+                });
+
+                $('.date_field').datepicker().on('changeDate', function (ev) {
+                    $('.date_field').Close();
+                });
+
             })(jQuery);
     </script>
 @endpush

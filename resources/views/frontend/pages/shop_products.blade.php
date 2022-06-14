@@ -1,6 +1,11 @@
 @extends('frontend.layouts.master')
 @section('title','Shop')
 
+@section('extra_css')
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/jquery-ui-min.css')}}">
+<noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/jquery-ui-min.css')}}"></noscript>
+@endsection
+
 @section('frontend_content')
     <!--Breadcrumb Area start-->
     <div class="breadcrumb-section">
@@ -25,9 +30,10 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="sidebar_filters">
+
                             <div class="sidebar-widget sidebar-category-list">
                                 <div class="sidebar-title">
-                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Browse Categories')</h2>
+                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true"><b>@lang('file.Browse Categories')</b></h2>
                                 </div>
                                 <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
                                     <ul>
@@ -45,35 +51,50 @@
                                 </div>
                             </div>
 
-                            <!-- Filter By Attribute Value-->
-                            {{-- @if ($attribute_with_values)
-                                <form id="filterByAttributeValue">
+                            <form id="sidebarFilter">
+
+                                <!-- Filter By Price -->
+                                <div class="sidebar-widget filters">
+                                    <div class="sidebar-title">
+                                        <h2 data-bs-toggle="collapse" href="#collapsePrice" aria-expanded="true"><b>@lang('file.Filter By Price')</b></h2>
+                                    </div>
+                                    <div class="filter-area collapse show" id="collapsePrice">
+                                        <div id="slider-range" class="price-range mar-bot-20"></div>
+                                        <div class="d-flex justify-content-center">
+                                            <div><input type="text" id="amount" name="amount"></div>
+                                            <div><input type="hidden" name="category_slug" value="{{$category->slug ?? null}}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Filter By Attribute Value-->
+                                {{-- @if (count($attribute_values)>0)
                                     @csrf
-                                    @foreach ($attribute_with_values as $key => $item)
+                                    <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
+                                    @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
                                         <div class="sidebar-widget filters">
                                             <div class="sidebar-title">
-                                                <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$item->attributeTranslation->attribute_name ?? null}}</h2>
+                                                <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
                                             </div>
                                             <div class="filter-area collapse show" id="collapseSize">
                                                 <div class="size-checkbox">
                                                     <ul class="filter-opt size pt-2">
-                                                        @if ($item->attributeValueTranslations->isNotEmpty())
-                                                            @foreach ($item->attributeValueTranslations as $value)
-                                                                <li>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <label class="custom-control-label attribute_value" data-attribute_value_id="" data-attribute_value_name="{{$value->attribute_value_id}}" data-attribute_value_name="{{$item->attributeTranslation->attribute_name}}" for="size-s" ><span class="size-block">{{$value->attribute_name}}</span></label>
-                                                                    </div>
-                                                                </li>
-                                                            @endforeach
-                                                        @endif
+                                                        @foreach ($attribute_values->where('attribute_name',$key) as $value)
+                                                            <li>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
-                                    <div><button type="submit" class="mt-2 btn btn-success">{{__('file.Filter')}}</button></div>
-                                </form>
-                            @endif --}}
+                                @endif --}}
+
+                                <div><button type="submit" class="mt-2 btn btn-success">{{__('Filter')}}</button></div>
+                            </form>
                         </div>
                     </div>
 
@@ -261,7 +282,42 @@
 @endsection
 
 @push('scripts')
+    <script src="{{asset('public/frontend/js/jquery-ui.min.js')}}"></script>
     <script type="text/javascript">
+
+        /*------------------------
+             price range slider
+        --------------------------*/
+        let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
+        if ($('#slider-range').length) {
+            $("#slider-range").slider({
+                range: true,
+                min: 0 * {{$CHANGE_CURRENCY_RATE}},
+                max: 10000 * {{$CHANGE_CURRENCY_RATE}},
+                values: [0 * {{$CHANGE_CURRENCY_RATE}}, 5000 * {{$CHANGE_CURRENCY_RATE}}],
+                slide: function(event, ui) {
+                    $("#amount").val(moneySymbol+' '+ + ui.values[0] + " - "+moneySymbol+' ' + ui.values[1]);
+                }
+            });
+            $("#amount").val(moneySymbol+' '+ $("#slider-range").slider("values", 0) +
+                " - "+moneySymbol+' '+ $("#slider-range").slider("values", 1));
+        }
+
+        $('#sidebarFilter').on('submit',function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: "GET",
+                url: "{{route('cartpro.shop_sidebar_filter')}}",
+                data: form.serialize(),
+                success: function(data){
+                    console.log(data);
+                    $('.shopProductsField').empty().html(data);
+                }
+            });
+            console.log(form);
+        });
+
 
         //Limit Product Show
         $(document).on('click','.limitShopProductShow',function(event) {

@@ -16,8 +16,8 @@ $(document).on("click",".delete",function(e){
                     $('#dataListTable').DataTable().ajax.reload();
                     $('#alert_message').addClass('alert alert-success').html(data.success);
                 }
-                else if (data.disabled_demo) {
-                    $('#alert_message').addClass('alert alert-danger').html(data.disabled_demo);
+                else if (data.demo) {
+                    $('#alert_message').addClass('alert alert-danger').html(data.demo);
                 }
                 setTimeout(function() {
                     $('#alert_message').fadeOut("slow");

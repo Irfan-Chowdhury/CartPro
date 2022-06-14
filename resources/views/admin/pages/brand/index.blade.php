@@ -23,7 +23,7 @@
 
     </div>
     <div class="table-responsive">
-    	<table id="brandListTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -56,7 +56,7 @@
                     }
                 });
 
-                let table = $('#brandListTable').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -221,22 +221,22 @@
                         $('#submitButton').text('Save');
                     },
                     success: function (data) {
-                        console.log(data);
-                        if(data.success){
-                            $('#brandListTable').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $("#formModal").modal('hide');
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                        $('#dataListTable').DataTable().ajax.reload();
+                        $('#submitForm')[0].reset();
+                        $("#formModal").modal('hide');
+                        $('#alert_message').fadeIn("slow");
+                        if (data.demo) {
+                            $('#alert_message').addClass('alert alert-danger').html(data.demo);
+                        }else{
                             $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
                         }
+                        setTimeout(function() {
+                            $('#alert_message').fadeOut("slow");
+                        }, 3000);
                         $('#submitButton').text('Save');
                     }
                 });
             });
-
 
             $('#create_record').click(function () {
                 $('#action_button').val('{{trans("file.Add")}}');
@@ -244,105 +244,14 @@
                 $('#formModal').modal('show');
             });
 
-            //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-                $.ajax({
-                    url: "{{route('admin.brand.active')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        if(data.success){
-                            $('#brandListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            //---------- Active ------------
+            @include('admin.includes.common_js.active_js',['route_name'=>'admin.brand.active'])
 
-            //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-                console.log(id);
+            //---------- Inactive ------------
+            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.brand.inactive'])
 
-                $.ajax({
-                    url: "{{route('admin.brand.inactive')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        if(data.success){
-                            $('#brandListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#brandListTable').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
-
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
-
-                    $("#active").on("click",function(){
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.brand.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#brandListTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        console.log(idsArray);
-                        $.ajax({
-                            url: "{{route('admin.brand.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#brandListTable').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
+            //---------- Bulk Action ------------
+            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.brand.bulk_action'])
 
         })(jQuery);
     </script>

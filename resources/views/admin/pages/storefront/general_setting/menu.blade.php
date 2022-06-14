@@ -118,6 +118,43 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Footer Menu Three -->
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Footer Menu Title Three')</b></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="storefront_footer_menu_title_three" id="storefront_footer_menu_title_three" class="form-control"  placeholder="@lang('file.Type Footer Menu Title')"
+                            @forelse ($setting[154]->settingTranslations as $key => $item)
+                                @if ($item->locale==$locale)
+                                    value="{{$item->value}}" @break
+                                @elseif($item->locale=='en')
+                                    value="{{$item->value}}" @break
+                                @endif
+                            @empty
+                            @endforelse >
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Footer Menu Three')</b></label>
+                        <div class="col-sm-8">
+                            <select name="storefront_footer_menu_three" id="storefront_footer_menu_three" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Footer Three')}}'>
+                                @foreach ($menus as $item)
+                                    @forelse ($item->menuTranslations as $key => $value)
+                                        @if ($value->locale==$locale)
+                                            <option value="{{$item->id}}" {{ $item->id == $setting[155]->plain_value ? 'selected="selected"' : '' }}>{{$value->menu_name}}</option> @break
+                                        @elseif($value->locale=='en')
+                                            <option value="{{$item->id}}" {{ $item->id == $setting[155]->plain_value ? 'selected="selected"' : '' }}>{{$value->menu_name}}</option> @break
+                                        @endif
+                                    @empty
+                                        <option value="">{{__('NULL')}}</option>
+                                    @endforelse
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
                     <div class="form-group row">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">

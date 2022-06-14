@@ -28,6 +28,12 @@
                     <tr>
                         <th>{{__('file.Order Status')}}</th>
                         <td>
+                            {{ucwords(str_replace('_', ' ',$order->order_status))}}
+                        </td>
+                    </tr>
+                    {{-- <tr>
+                        <th>{{__('file.Order Status')}}</th>
+                        <td>
                             <select name="order_status">
                                 <option value="canceled" @if($order->order_status=='canceled') selected @endif class="orderStatus">{{ucfirst('canceled')}}</option>
                                 <option value="completed" @if($order->order_status=='completed') selected @endif class="orderStatus">{{ucfirst('completed')}}</option>
@@ -38,7 +44,7 @@
                                 <option value="refunded" @if($order->order_status=='refunded') selected @endif class="orderStatus">{{ucfirst('refunded')}}</option>
                             </select>
                         </td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <th>{{__('file.Shipping Method')}}</th>
                         <td>{{$order->shipping_method}}</td>
@@ -114,6 +120,11 @@
                         <th>{{__('file.Product')}}</th>
                         <th>{{__('file.Unit Price')}}</th>
                         <th>{{__('file.Quantity')}}</th>
+                        <th>@lang('file.Attribute Details')</th>
+                        <th>@lang('file.Tax')</th>
+                        <th>@lang('file.Shipping Cost')</th>
+                        <th>@lang('file.Discount')</th>
+                        <th class="text-success">@lang('file.Total Amount')</th>
                     </tr>
 
                     @forelse ($order->orderDetails as $item)
@@ -121,6 +132,58 @@
                             <td>{{$item->product->productTranslation->product_name}}</td>
                             <td>{{$item->subtotal}}</td>
                             <td>{{$item->qty}}</td>
+                            <td>
+                                @php
+                                    $attributes = json_decode($item->options);
+                                @endphp
+                                @forelse ($attributes as $key => $item)
+                                    @if ($key!='image' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
+                                        <p><i><b>{{$key}}</b> :{{$item}}</i></p>
+                                    @endif
+                                @empty
+                                    <p>NONE</p>
+                                @endforelse
+                            </td>
+                            <td>
+                                <span>
+                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                        {{ number_format((float)$order->tax  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                    @else
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->tax * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                    @endif
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                        {{ number_format((float)$order->shipping_cost  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                    @else
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->shipping_cost * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                    @endif
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                        {{ number_format((float)$order->discount  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                    @else
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->discount * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                    @endif
+                                </span>
+                            </td>
+                            <td>
+                                <h6 class="text-success">
+                                    <b>
+                                        <span>
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                {{ number_format((float)$order->total  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                            @else
+                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                            @endif
+                                        </span>
+                                    </b>
+                                </h6>
+                            </td>
                         </tr>
                     @empty
                     @endforelse
@@ -159,7 +222,7 @@
                 });
             });
 
-            
+
         })(jQuery);
     </script>
 @endpush

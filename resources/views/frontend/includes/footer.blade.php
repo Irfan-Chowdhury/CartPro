@@ -111,13 +111,19 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
-                            <h3>@lang('file.Company')</h3>
+                            <h3>{{$footer_menu_title_three}}</h3>
                             <ul class="footer-menu p-0">
-                                <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                                <li><a href="{{route('cartpro.brands')}}">@lang('file.Brands')</a></li>
-                                <li><a href="{{route('cartpro.shop')}}">@lang('file.Shop')</a></li>
+                                @if ($footer_menu_three)
+                                    @forelse($footer_menu_three->items as $value)
+                                        @if ($value->locale==$locale)
+                                        <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
+                                        @endif
+                                    @empty
+                                    @endforelse
+                                @endif
                             </ul>
                         </div>
                     </div>

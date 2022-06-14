@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\ProductAttributeValue;
 use App\Models\Setting;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -13,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ProductPromoBadgeTextTrait;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryProductController extends Controller
 {
@@ -21,31 +21,33 @@ class CategoryProductController extends Controller
 
     public function categoryWiseProducts($slug)
     {
-        $setting = Setting::where('key','storefront_footer_tag_id')->first();
-        $footer_tag_ids = json_decode($setting->plain_value);
-        $tags = Tag::with('tagTranslations','tagTranslationEnglish')
-                ->whereIn('id',$footer_tag_ids)
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','DESC')
-                ->get();
+        $setting = Cache::remember('setting', 300, function () {
+            return Setting::where('key','storefront_footer_tag_id')->first();
+        });
 
+        $footer_tag_ids = json_decode($setting->plain_value);
+
+        $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
+            return Tag::with('tagTranslations','tagTranslationEnglish')
+                    ->whereIn('id',$footer_tag_ids)
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC')
+                    ->get();
+        });
 
         $locale  = Session::get('currentLocal');
 
-        // $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
-        //                     'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')
-        //                 ->where('slug',$slug)
-        //                 ->first();
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
-                            'categoryProduct.product.productTranslation',
-                            'categoryProduct.product.productTranslationEnglish',
-                            'categoryProduct.product.baseImage',
-                            'categoryProduct.product.additionalImage',
-                            'child.catTranslation','child.categoryTranslationDefaultEnglish')
-                        ->where('slug',$slug)
-                        ->first();
+                'categoryProduct.product.productTranslation',
+                'categoryProduct.product.productTranslationEnglish',
+                'categoryProduct.product.baseImage',
+                'categoryProduct.product.additionalImage',
+                'child.catTranslation','child.categoryTranslationDefaultEnglish')
+                ->where('slug',$slug)
+                ->first();
+
 
         $product_count =0;
         if ($category->categoryProduct) {
@@ -56,19 +58,20 @@ class CategoryProductController extends Controller
             }
         }
 
-
-        $attribute_values =  DB::table('attribute_category')
-                                ->join('attribute_translations', function ($join) use ($locale) {
-                                    $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                                    ->where('attribute_translations.locale', '=', $locale);
-                                })
-                                ->join('attribute_value_translations', function ($join) use ($locale) {
-                                    $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                                    ->where('attribute_value_translations.local', '=', $locale);
-                                })
-                                ->where('category_id',$category->id)
-                                ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
-                                ->get();
+        $attribute_values = Cache::remember('attribute_values', 300, function () use ($locale, $category) {
+            return DB::table('attribute_category')
+                    ->join('attribute_translations', function ($join) use ($locale) {
+                        $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
+                        ->where('attribute_translations.locale', '=', $locale);
+                    })
+                    ->join('attribute_value_translations', function ($join) use ($locale) {
+                        $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
+                        ->where('attribute_value_translations.local', '=', $locale);
+                    })
+                    ->where('category_id',$category->id)
+                    ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
+                    ->get();
+        });
 
         return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
     }
@@ -161,6 +164,106 @@ class CategoryProductController extends Controller
         }
 
         $html = $this->shortedProductShow($category,$products);
+        return response()->json($html);
+    }
+
+    public function categoryWiseSidebarFilter(Request $request)
+    {
+        $locale = Session::get('currentLocal');
+        //Price Related
+        $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
+        $data_amount = explode(" ",$request->amount);
+        $data_amount_first = explode("$",$data_amount[1]);
+        $data_amount_last = explode("$",$data_amount[4]);
+        $min_price =  $data_amount_first[0]/$CHANGE_CURRENCY_RATE;
+        $max_price =  $data_amount_last[0]/$CHANGE_CURRENCY_RATE;
+
+        //Weight Related
+        // $data_weight = explode(" ",$request->weight);
+        // $min_weight =  $data_weight[0];
+        // $max_weight =  $data_weight[2];
+
+        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
+                            'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')
+                    ->where('slug',$request->category_slug)
+                    ->first();
+
+        $products =  DB::table('products')
+                    ->join('product_translations', function ($join) use ($locale) {
+                        $join->on('product_translations.product_id', '=', 'products.id')
+                        ->where('product_translations.local', '=', $locale);
+                    })
+                    ->join('category_product', function ($join) use ($category) {
+                        $join->on('category_product.product_id', '=', 'products.id')
+                        ->where('category_product.category_id', '=', $category->id);
+                    })
+                    ->join('product_images', function ($join) {
+                        $join->on('product_images.product_id', '=', 'products.id')
+                        ->where('product_images.type', '=', 'base');
+                    })
+                    ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
+                    ->whereBetween('products.price', [$min_price, $max_price])
+                    // ->whereBetween('products.weight', [$min_weight, $max_weight])
+                    // ->where('products.weight','!=',NULL)
+                    ->get();
+
+
+        //Attribute Related
+        $value_ids = array();
+        if ($request->attribute_value_ids) {
+            $value_ids = explode(",",$request->attribute_value_ids);
+
+            $products = $products->toArray();
+
+            $product_attribute_value =  DB::table('product_attribute_value')
+                                        ->select('product_id','attribute_value_id')
+                                        ->get()
+                                        ->groupBy('product_id')
+                                        ->toArray();
+
+            for ($key=0; $key < count($products); $key++) {
+                if (array_key_exists($products[$key]->id,$product_attribute_value)){
+                    if(count($value_ids)>1) {
+                        foreach ($value_ids as $val_id) {
+                            $find_match = 0;
+                            foreach ($product_attribute_value[$products[$key]->id] as $p_a_v) {
+                                if ($p_a_v->attribute_value_id == $val_id) {
+                                    $find_match = 1;
+                                    break;
+                                }
+                                else {
+                                    $find_match = 0;
+                                }
+                            }
+                            if($find_match == 0) {
+                                array_splice($products, $key, 1);
+                                $key--;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        $find_match = 0;
+                        foreach ($product_attribute_value[$products[$key]->id] as $p_a_v) {
+                            if ($p_a_v->attribute_value_id == $value_ids[0]) {
+                                $find_match = 1;
+                                break;
+                            }
+                        }
+                        if($find_match == 0) {
+                            array_splice($products, $key, 1);
+                            $key--;
+                        }
+                    }
+                }
+                else{
+                    array_splice($products, $key, 1);
+                    $key--;
+                }
+            }
+        }
+        
+        $html = $this->shortedProductShow($category, $products);
         return response()->json($html);
     }
 
@@ -363,7 +466,6 @@ class CategoryProductController extends Controller
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
 
         $data = explode(" ",$request->amount);
-
         $data_amount_first = explode("$",$data[1]); //previous 0
         $data_amount_last = explode("$",$data[4]); //previous 2
 
@@ -398,9 +500,7 @@ class CategoryProductController extends Controller
         $html = $this->shortedProductShow($category,$products);
 
         return response()->json($html);
-
-
-        return view('frontend.pages.category_wise_products',compact('category','products'));
+        // return view('frontend.pages.category_wise_products',compact('category','products'));
     }
 
 

@@ -47,13 +47,13 @@
     @yield('extra_css')
 
     <style>
-        :root {--theme-color: {{$storefront_theme_color ?? "#0071df"}};--navbg-color:{{$storefront_navbg_color ?? "#FFF"}};--menu-text-color:{{$storefront_menu_text_color ?? "#021523"}};--menu-text-hover-color:{{$storefront_menu_text_hover_color ?? ""}}}
+        :root {--theme-color: {{$storefront_theme_color ?? "#0071df"}};--navbg-color:{{$storefront_navbg_color ?? "#FFF"}};--menu-text-color:{{$storefront_menu_text_color ?? "#59b210"}};--menu-text-hover-color:{{$storefront_menu_text_hover_color ?? ""}}}
     </style>
 
     @if (!env('USER_VERIFIED')==1)
-    <style>
-        #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 45%;width: 40px;}
-    </style>
+        <style>
+            #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 45%;width: 40px;}
+        </style>
     @endif
 
 </head>
@@ -162,6 +162,10 @@
         (function ($) {
             "use strict";
 
+            let values         = [];
+            let valueNames     = [];
+            let attributeNames = [];
+
             $('#bannerSlideUp').on('click', function(){
                 $('#top_banner').slideUp();
             })
@@ -203,8 +207,6 @@
                 $('.product-grid').removeClass('list-view');
                 $('.view-list').removeClass('active');
             });
-
-            let values = [];
 
             $(document).on('submit','.addToCart',function(e) {
                 e.preventDefault();
@@ -413,9 +415,14 @@
                 e.preventDefault();
                 $(this).addClass('selected');
                 var selectedVal = $(this).data('value_id');
+                var selectedName = $(this).data('value_name');
+                var selectedAttributeName = $(this).data('attribute_name');
                 values.push(selectedVal);
+                valueNames.push(selectedName);
+                attributeNames.push(selectedAttributeName);
                 $('#value_ids').val(values);
-
+                $('#value_names').val(valueNames);
+                $('#attribute_names').val(attributeNames);
             });
 
             $('#disable_popup').on("click",function (e) {

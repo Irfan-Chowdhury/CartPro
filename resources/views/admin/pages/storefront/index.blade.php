@@ -263,666 +263,148 @@
                 }
             });
 
+
+            //General Submit
             $('#generalSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.general.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#alert_message').fadeIn("slow");
-                            $('#error_message').html(html);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.success){
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        $('.save').text('Save');
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.general.store'])
             });
+
+            // $('#generalSubmit').on('submit', function (e) {
+            //     e.preventDefault();
+            //     $.ajax({
+            //         url: "{{route('admin.storefront.general.store')}}",
+            //         method: "POST",
+            //         data: new FormData(this),
+            //         contentType: false,
+            //         cache: false,
+            //         processData: false,
+            //         dataType: "json",
+            //         success: function (data) {
+            //             console.log(data);
+            //             let html = '';
+            //             if (data.errors) {
+            //                 html = '<div class="alert alert-danger">';
+            //                 for (let count = 0; count < data.errors.length; count++) {
+            //                     html += '<p>' + data.errors[count] + '</p>';
+            //                 }
+            //                 html += '</div>';
+            //                 $('#alert_message').fadeIn("slow");
+            //                 $('#error_message').html(html);
+            //                 setTimeout(function() {
+            //                     $('#alert_message').fadeOut("slow");
+            //                 }, 3000);
+            //             }
+            //             else if(data.success){
+            //                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                 $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                 setTimeout(function() {
+            //                     $('#alert_message').fadeOut("slow");
+            //                 }, 3000);
+            //             }
+            //             $('.save').text('Save');
+            //         }
+            //     });
+            // });
 
             //Menus
             $('#menuSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.menu.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#alert_message').fadeIn("slow");
-                            $('#error_message').html(html);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.success){
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        $('.save').text('Save');
-
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.menu.store'])
             });
 
             //Social Links
             $('#socialLinkSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.social_link.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#alert_message').fadeIn("slow");
-                            $('#error_message').html(html);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.success){
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        $('.save').text('Save');
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.menu.store'])
             });
 
             //Features
             $('#featureSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.feature.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if(data.success){
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        $('.save').text('Save');
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.feature.store'])
             });
 
 
             //Logo
             $('#logoSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.logo.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                        $('.save').text('Save');
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.logo.store'])
             });
 
             //Banner
             $('#topbarBannerSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.topBanner.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                        $('.save').text('Save');
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.topBanner.store'])
             });
 
             //Footer
             $('#footerSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.footer.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.footer.store'])
             });
 
 
             //Newsletter
             $('#newsletterSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.newletter.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.newletter.store'])
             });
 
 
             //Product Page
             $('#productPageSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.product_page.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.product_page.store'])
             });
 
 
             //Slider Banner
             $('#sliderBannerSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.slider_banners.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.slider_banners.store'])
             });
 
 
             //One Coulunm Banner
             $('#oneColumnBannerSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.one_column_banner.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.one_column_banner.store'])
             });
 
 
             //Two Coulunm Banner
             $('#twoColumnBannersSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.two_column_banners.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.two_column_banners.store'])
             });
 
 
             //Three Coulunm Banner
             $('#threeColumnBannersSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.three_column_banners.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.three_column_banners.store'])
             });
 
 
             //Three Coulunm Full Width Banner
             $('#threeColumnFullWidthBannersSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.three_column_full_width_banners.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.three_column_full_width_banners.store'])
             });
 
 
             //Top Brand
             $('#topBrandsSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.top_brands.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.top_brands.store'])
             });
 
             //Top Categories
             $('#topCategoriesSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.top_categories.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.top_categories.store'])
             });
 
             //Top Flash Sale and Verticle Products
             $('#flashSaleAndVerticalProducts').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.flash_sale_and_vertical_products.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.flash_sale_and_vertical_products.store'])
             });
 
 
             //Product Tabs One
             $('#productTabsOneSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.product_tab_one.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.product_tab_one.store'])
             });
 
 
             //Product Tabs Two
             $('#productTabsTwoSubmit').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.storefront.product_tab_two.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                        }
-                        else if(data.success){
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
-                        }
-                        $('.save').text('Save');
-                        $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                        $('#alert_message').html(html);
-                        setTimeout(function() {
-                            $('#alert_message').fadeOut("slow");
-                        }, 3000);
-                    }
-                });
+                @include('admin.includes.common_js.storefront_submit_js',['route_name'=>'admin.storefront.product_tab_two.store'])
             });
 
             //Image Show Before Upload End

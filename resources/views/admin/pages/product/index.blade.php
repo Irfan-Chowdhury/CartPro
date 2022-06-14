@@ -218,6 +218,14 @@
                                     $('#success_alert').fadeOut("slow");
                                 }, 3000);
                             }
+                            else if(data.errors){
+                                $('#productTable').DataTable().ajax.reload();
+                                $('#success_alert').fadeIn("slow");
+                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                            }
                         }
                     });
                 });
@@ -238,6 +246,14 @@
                                 $('#productTable').DataTable().ajax.reload();
                                 $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                 $('#success_alert').addClass('alert alert-success').html(data.success);
+                                setTimeout(function() {
+                                    $('#success_alert').fadeOut("slow");
+                                }, 3000);
+                            }
+                            else if(data.errors){
+                                $('#productTable').DataTable().ajax.reload();
+                                $('#success_alert').fadeIn("slow");
+                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
                                 setTimeout(function() {
                                     $('#success_alert').fadeOut("slow");
                                 }, 3000);
@@ -270,8 +286,16 @@
                                         $('#bulkConfirmModal').modal('hide');
                                         table.rows('.selected').deselect();
                                         $('#productTable').DataTable().ajax.reload();
-                                        $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                                        $('#success_alert').fadeIn("slow");
                                         $('#success_alert').addClass('alert alert-success').html(data.success);
+                                        setTimeout(function() {
+                                            $('#success_alert').fadeOut("slow");
+                                        }, 3000);
+                                    }
+                                    else if(data.errors){
+                                        $('#productTable').DataTable().ajax.reload();
+                                        $('#success_alert').fadeIn("slow");
+                                        $('#success_alert').addClass('alert alert-danger').html(data.errors);
                                         setTimeout(function() {
                                             $('#success_alert').fadeOut("slow");
                                         }, 3000);
@@ -294,6 +318,14 @@
                                         $('#productTable').DataTable().ajax.reload();
                                         $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                         $('#success_alert').addClass('alert alert-success').html(data.success);
+                                        setTimeout(function() {
+                                            $('#success_alert').fadeOut("slow");
+                                        }, 3000);
+                                    }
+                                    else if(data.errors){
+                                        $('#productTable').DataTable().ajax.reload();
+                                        $('#success_alert').fadeIn("slow");
+                                        $('#success_alert').addClass('alert alert-danger').html(data.errors);
                                         setTimeout(function() {
                                             $('#success_alert').fadeOut("slow");
                                         }, 3000);

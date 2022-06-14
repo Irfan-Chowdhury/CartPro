@@ -2,13 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
 use App\Models\CurrencyRate;
-use App\Models\FooterDescription;
 use App\Models\Language;
 use App\Models\Order;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Models\SettingAboutUs;
 use App\Models\SettingNewsletter;
 use App\Models\SettingStore;
 use App\Models\StorefrontImage;
@@ -18,11 +17,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Harimayco\Menu\Models\Menus;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Google\Service\Compute\Tags;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
-use phpDocumentor\Reflection\Types\Null_;
 use Share;
 
 class AppServiceProvider extends ServiceProvider
@@ -55,7 +53,11 @@ class AppServiceProvider extends ServiceProvider
 
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();
-        $storefront_images = StorefrontImage::select('title','type','image')->get();
+
+        $storefront_images = Cache::remember('storefront_images', 300, function (){
+            return  StorefrontImage::select('title','type','image')->get();
+        });
+
         $empty_image = 'public/images/empty.jpg';
         $favicon_logo_path = $empty_image;
         $header_logo_path  = $empty_image;
@@ -73,9 +75,6 @@ class AppServiceProvider extends ServiceProvider
         $three_column_full_width_banners_image_1  = $empty_image;
         $three_column_full_width_banners_image_2  = $empty_image;
         $three_column_full_width_banners_image_3  = $empty_image;
-
-        // $newsletter_background_image  = $empty_image;
-
 
         $payment_method_image = $empty_image;
 
@@ -190,18 +189,26 @@ class AppServiceProvider extends ServiceProvider
         }
 
         //Appereance-->Storefront --> Setting
-        $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
+        $settings = Cache::remember('settings', 300, function (){
+            return Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
+        });
 
-        $menus = Menus::with('items')
-                ->where('is_active',1)
-                ->get();
+        $menus = Cache::remember('menus', 300, function (){
+            return Menus::with('items')
+                    ->where('is_active',1)
+                    ->get();
+        });
 
         $storefront_theme_color = "#0071df";
+        $storefront_navbg_color = null;
+        $storefront_menu_text_color = null;
         $menu = null;
         $footer_menu_one = null;
         $footer_menu_two = null;
+        $footer_menu_three = null;
         $footer_menu_one_title = null;
         $footer_menu_title_two = null;
+        $footer_menu_title_three = null;
         $storefront_address = null;
         $storefront_facebook_link = null;
         $storefront_twitter_link = null;
@@ -222,6 +229,12 @@ class AppServiceProvider extends ServiceProvider
         foreach ($settings as $key => $item) {
             if ($item->key=='storefront_theme_color' && $item->plain_value!=NULL) {
                 $storefront_theme_color = $item->plain_value;
+            }
+            else if ($item->key=='storefront_navbar_background_color' && $item->plain_value!=NULL) {
+                $storefront_navbg_color = $item->plain_value;
+            }
+            else if ($item->key=='storefront_nav_text_color' && $item->plain_value!=NULL) {
+                $storefront_menu_text_color = $item->plain_value;
             }
             elseif ($item->key=='storefront_primary_menu' && $item->plain_value!=NULL) {
                 foreach ($menus as $key2 => $value) {
@@ -249,6 +262,16 @@ class AppServiceProvider extends ServiceProvider
                 foreach ($menus as $key2 => $value) {
                     if ($value->id==$item->plain_value) {
                         $footer_menu_two = $menus[$key2];
+                    }
+                }
+            }
+            elseif ($item->key=='storefront_footer_menu_title_three' && $item->plain_value==NULL) {
+                $footer_menu_title_three = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
+            }
+            elseif ($item->key=='storefront_footer_menu_three' && $item->plain_value!=NULL) {
+                foreach ($menus as $key2 => $value) {
+                    if ($value->id==$item->plain_value) {
+                        $footer_menu_three = $menus[$key2];
                     }
                 }
             }
@@ -326,12 +349,14 @@ class AppServiceProvider extends ServiceProvider
 
         $tags = [];
         if ($footer_tag_ids) {
-            $tags = Tag::with('tagTranslations','tagTranslationEnglish')
-                ->whereIn('id',$footer_tag_ids)
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','DESC')
-                ->get();
+            $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
+                return Tag::with('tagTranslations','tagTranslationEnglish')
+                        ->whereIn('id',$footer_tag_ids)
+                        ->where('is_active',1)
+                        ->orderBy('is_active','DESC')
+                        ->orderBy('id','DESC')
+                        ->get();
+            });
         }
 
         if ($terms_and_condition_page_id!=null) {
@@ -382,12 +407,16 @@ class AppServiceProvider extends ServiceProvider
                     'header_logo_path'=>$header_logo_path,
                     'settings' => $settings,
                     'storefront_theme_color'=>$storefront_theme_color,
+                    'storefront_navbg_color'=>$storefront_navbg_color,
+                    'storefront_menu_text_color'=>$storefront_menu_text_color,
                     'menus'=>$menus,
                     'menu'=>$menu,
                     'footer_menu_one'=>$footer_menu_one,
                     'footer_menu_two'=>$footer_menu_two,
+                    'footer_menu_three'=>$footer_menu_three,
                     'footer_menu_one_title'=>$footer_menu_one_title,
                     'footer_menu_title_two'=>$footer_menu_title_two,
+                    'footer_menu_title_three'=>$footer_menu_title_three,
                     'storefront_address'=>$storefront_address,
                     'cart_count'=>$cart_count,
                     'cart_subtotal'=>$cart_subtotal,

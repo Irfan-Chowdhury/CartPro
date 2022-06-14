@@ -127,6 +127,10 @@ class SliderController extends Controller
     {
         if ($request->ajax()) {
 
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
+
             $validator = Validator::make($request->only('slider_title','type','slider_image'),[
                 'slider_title'  => 'required|unique:slider_translations,slider_title',
                 'type'          => 'required',
@@ -206,6 +210,10 @@ class SliderController extends Controller
     {
         if ($request->ajax()) {
 
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
+
             $validator = Validator::make($request->only('slider_title','type','slider_image'),[
                 'slider_title'  => 'required|unique:slider_translations,slider_title,'.$request->slider_Translation_id,
                 'type'          => 'required',
@@ -277,12 +285,18 @@ class SliderController extends Controller
 
     public function active(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->activeData(Slider::find($request->id));
         }
     }
 
     public function inactive(Request $request){
         if ($request->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->inactiveData(Slider::find($request->id));
         }
     }
@@ -290,6 +304,9 @@ class SliderController extends Controller
     public function bulkAction(Request $request)
     {
         if ($request->ajax()) {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             return $this->bulkActionData($request->action_type, Slider::whereIn('id',$request->idsArray));
         }
     }
@@ -297,11 +314,15 @@ class SliderController extends Controller
     public function delete(Request $request)
     {
         if ($request->ajax()) {
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['errors' => ['Disabled for demo !']]);
+            }
             $slider = Slider::find($request->slider_id);
             $this->deleteWithImage($slider, $slider->slider_image); //half width
             $this->deleteWithImage($slider, $slider->slider_image_full_width);
             $this->deleteWithImage($slider, $slider->slider_image_secondary);
+
+            return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);
         }
-        return response()->json(['success' => '<p><b>Data Deleted Successfully.</b></p>']);
     }
 }

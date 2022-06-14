@@ -29,7 +29,7 @@ class UserAccountController extends Controller
         $locale = Session::get('currentLocal');
         $orders = DB::table('orders')
             ->where('user_id',Auth::user()->id)
-            ->select('orders.id','orders.total','orders.date','orders.order_status')
+            ->select('id','total','date','order_status','delivery_date','delivery_time')
             ->orderBy('id','DESC')
             ->get();
         return view('frontend.pages.user_account.user_orders',compact('orders'));

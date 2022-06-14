@@ -47,9 +47,51 @@
                             </ul>
 
                             <h6>@lang('file.Custom color')</h6>
-                            <input type="text" id="color-input" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                            <input type="text" id="color-input-theme" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
+
+
+                    <!-- storefront_navbar_background_color -->
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Nav Background Color')</b></label>
+                        <div class="col-sm-6">
+                            <h6>color Presets</h6>
+                            <ul id="switcher">
+                                <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
+                                <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
+                                <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
+                                <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
+                                <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
+                                <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
+                                <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
+                                <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
+                            </ul>
+                            <h6>@lang('file.Custom color')</h6>
+                            <input type="text" id="color-input-navbar" name="storefront_navbar_background_color" class="form-control colorpicker-element" value="{{$setting[152]->plain_value != NULL ? $setting[152]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                        </div>
+                    </div>
+
+                    <!-- storefront_navbar_background_color -->
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Nav Text Color')</b></label>
+                        <div class="col-sm-6">
+                            <h6>color Presets</h6>
+                            <ul id="switcher">
+                                <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
+                                <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
+                                <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
+                                <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
+                                <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
+                                <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
+                                <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
+                                <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
+                            </ul>
+                            <h6>@lang('file.Custom color')</h6>
+                            <input type="text" id="color-input-text" name="storefront_nav_text_color" class="form-control colorpicker-element" value="{{$setting[152]->plain_value != NULL ? $setting[152]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                        </div>
+                    </div>
+
 
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Slider Format')</b> <span class="text-danger"></span></label>
@@ -150,6 +192,8 @@
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
     <script>
-        $('#color-input').colorpicker();
+        $('#color-input-theme').colorpicker();
+        $('#color-input-navbar').colorpicker();
+        $('#color-input-text').colorpicker();
     </script>
 @endpush

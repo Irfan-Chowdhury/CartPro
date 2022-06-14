@@ -28,12 +28,19 @@ class CreateOrdersTable extends Migration
             $table->string('billing_zip_code');
             $table->string('shipping_method')->nullable();
             $table->string('shipping_cost')->nullable();
-            $table->string('payment_method')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
-            $table->string('discount')->nullable();
+            $table->string('payment_id')->nullable();
+            $table->decimal('discount')->nullable();
             $table->decimal('total')->nullable();
-            // $table->string('currency')->nullable();
-            // $table->string('currency_rate')->nullable();
+            $table->decimal('currency_base_total')->nullable();
+            $table->string('currency_symbol')->nullable();
+            $table->string('order_status')->nullable();
+            // $table->string('delivery_date')->nullable();
+            // $table->string('delivery_time')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->string('date')->nullable();
+            $table->integer('tax_id')->nullable();
+            $table->decimal('tax')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

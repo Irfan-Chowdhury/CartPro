@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Country;
 use App\Models\CurrencyRate;
+use App\Models\SettingAboutUs;
+use App\Models\SettingAboutUsTranslation;
 use App\Models\SettingBankTransfer;
 use App\Models\SettingCashOnDelivery;
 use App\Models\SettingCheckMoneyOrder;
@@ -59,10 +61,24 @@ class SettingController extends Controller
         }
 
 
+        // $setting_store = SettingStore::latest()->first();
+        // if (empty($setting_store)) {
+        //     $setting_store = [];
+        // }
+
+        //---- Store-Contact ---
+        $schedules = [];
+        $data = null;
         $setting_store = SettingStore::latest()->first();
-        if (empty($setting_store)) {
-            $setting_store = [];
+        if (!empty($setting_store)) {
+            $data = json_decode($setting_store->schedule);
+            if ($data) {
+                foreach ($data as $key => $value) {
+                    $schedules[] = $value;
+                }
+            }
         }
+
 
         //Currency
         $currencies = Currency::all();
@@ -117,14 +133,21 @@ class SettingController extends Controller
         $setting_bank_transfer  = SettingBankTransfer::latest()->first();
         $setting_check_money_order  = SettingCheckMoneyOrder::latest()->first();
 
+        $setting_about_us = SettingAboutUs::with('aboutUsTranslation','aboutUsTranslationEnglish')->latest()->first();
+
+
         return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','selected_countries','setting_store','selected_currencies',
                     'setting_currency','setting_sms','setting_mail','setting_newsletter','setting_custom_css_js','setting_facebook','setting_google',
                     'setting_free_shipping','setting_local_pickup','setting_flat_rate','setting_paypal','setting_strip','setting_paytm',
-                    'setting_cash_on_delivery','setting_bank_transfer','setting_check_money_order'));
+                    'setting_cash_on_delivery','setting_bank_transfer','setting_check_money_order','schedules','setting_about_us'));
     }
 
     public function generalStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('supported_countries','default_country','default_timezone','customer_role'),[
             'supported_countries' => 'required',
             'default_country'     => 'required',
@@ -171,6 +194,10 @@ class SettingController extends Controller
 
     public function storeStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('store_name','store_email','store_phone','admin_logo'),[
             'store_name' => 'required',
             'store_email'=> 'required',
@@ -196,6 +223,8 @@ class SettingController extends Controller
         $data['store_zip']     = $request->store_zip;
         $data['hide_store_phone'] = $request->hide_store_phone;
         $data['hide_store_email'] = $request->hide_store_email;
+        $data['get_in_touch'] = $request->get_in_touch;
+        $data['schedule'] =  $request->schedule;
 
         $admin_logo   = $request->file('admin_logo');
 
@@ -214,9 +243,54 @@ class SettingController extends Controller
         return response()->json(['success' => __('Data Added successfully.')]);
     }
 
+    public function aboutUsStoreOrUpdate(Request $request)
+    {
+        if ($request->ajax()) {
+            $about_us = SettingAboutUs::latest()->first();
+            if (!$about_us) {
+                $setting_about = SettingAboutUs::create([
+                    'status'=>$request->input('status',0),
+                    'image'=> $this->imageStore($request->image, $directory='images/about_us/', $type='about_us'),
+                ]);
+                SettingAboutUsTranslation::create([
+                    'setting_about_us_id' => $setting_about->id,
+                    'locale' => Session::get('currentLocal'),
+                    'title' => $request->title,
+                    'description' => $request->description,
+                ]);
+
+            }else {
+
+                $setting_about = SettingAboutUs::find($about_us->id);
+                $setting_about->status = $request->input('status',0);
+                if($request->image){
+                    $setting_about->image = $this->imageStore($request->image, $directory='images/about_us/', $type='about_us');
+                }
+                $setting_about->update();
+
+                SettingAboutUsTranslation::updateOrCreate(
+                    [
+                        'setting_about_us_id' => $setting_about->id,
+                        'locale' => Session::get('currentLocal'),
+                    ],
+                    [
+                        'title' => $request->title,
+                        'description' => $request->description,
+                    ]
+                );
+            }
+        }
+        return response()->json(['success' => __('Data Added successfully.')]);
+    }
+
     public function currencyStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $validator = Validator::make($request->only('default_currency','currency_format','default_currency_code'),[
                 'default_currency' => 'required',
                 'default_currency_code' => 'required',
@@ -292,6 +366,10 @@ class SettingController extends Controller
 
     public function smsStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('sms_from'),[
             'sms_from' => 'required',
         ]);
@@ -347,6 +425,11 @@ class SettingController extends Controller
     public function mailStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $data = [];
             $data['mail_address']  = $request->mail_address;
             $data['mail_name']     = $request->mail_name;
@@ -385,6 +468,11 @@ class SettingController extends Controller
     public function newsletterStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $data = [];
             $data['newsletter']        = $request->newsletter;
             $data['mailchimp_api_key'] = $request->mailchimp_api_key;
@@ -415,6 +503,11 @@ class SettingController extends Controller
     public function customCssJsStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $data = [];
             $data['header'] = $request->header;
             $data['footer'] = $request->footer;
@@ -432,6 +525,10 @@ class SettingController extends Controller
 
     public function facebookStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('app_id','app_secret'),[
             'app_id' => 'required',
             'app_secret' => 'required',
@@ -465,6 +562,10 @@ class SettingController extends Controller
 
     public function googleStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('client_id','client_secret'),[
             'client_id' => 'required',
             'client_secret' => 'required',
@@ -500,6 +601,10 @@ class SettingController extends Controller
     {
         if ($request->ajax()) {
 
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $this->dataWriteInENVFile('GITHUB_CLIENT_ID',$request->github_client_id);
             $this->dataWriteInENVFile('GITHUB_CLIENT_SECRET',$request->github_client_secret);
 
@@ -510,6 +615,10 @@ class SettingController extends Controller
 
     public function freeShippingStoreOrUpdate(Request $request)
     {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
         $validator = Validator::make($request->only('label'),[
             'label' => 'required',
         ]);
@@ -538,6 +647,12 @@ class SettingController extends Controller
 
     public function localPickupStoreOrUpdate(Request $request)
     {
+
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
+
         $validator = Validator::make($request->only('label','cost'),[
             'label' => 'required',
             'cost' => 'required',
@@ -568,6 +683,11 @@ class SettingController extends Controller
     public function flatRateStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $validator = Validator::make($request->only('label','cost'),[
                 'label' => 'required',
                 'cost' => 'required',
@@ -598,6 +718,11 @@ class SettingController extends Controller
     public function paypalStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $validator = Validator::make($request->only('label','description','client_id','secret'),[
                 'label' => 'required',
                 'description' => 'required',
@@ -636,6 +761,11 @@ class SettingController extends Controller
     public function stripStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $validator = Validator::make($request->only('label','description','publishable_key','secret_key'),[
                 'label' => 'required',
                 'description' => 'required',
@@ -673,6 +803,11 @@ class SettingController extends Controller
     public function sslcommerzStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $this->dataWriteInENVFile('SSL_COMMERZ_STATUS',$request->status);
             $this->dataWriteInENVFile('STORE_ID',$request->store_id);
             $this->dataWriteInENVFile('STORE_PASSWORD',$request->store_password);
@@ -684,6 +819,7 @@ class SettingController extends Controller
     public function razorpayStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+
             if (!env('USER_VERIFIED')) {
                 return response()->json(['errors' => ['This is disabled for demo']]);
             }
@@ -720,7 +856,7 @@ class SettingController extends Controller
                 return response()->json(['errors' => $validator->errors()->all()]);
             }
 
-            $this->dataWriteInENVFile('PAYSTACK_STATUS',$request->PAYSTACK_STATUS);
+            $this->dataWriteInENVFile('PAYSTACK_STATUS',$request->status);
             $this->dataWriteInENVFile('PAYSTACK_PUBLIC_KEY',$request->paystack_public_key);
             $this->dataWriteInENVFile('PAYSTACK_SECRET_KEY',$request->paystack_secret_key);
             $this->dataWriteInENVFile('MERCHANT_EMAIL',$request->merchant_email);
@@ -732,6 +868,10 @@ class SettingController extends Controller
     public function paytmStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
+
             $validator = Validator::make($request->only('label','description','merchant_id','merchant_key'),[
                 'label' => 'required',
                 'description' => 'required',
@@ -765,6 +905,9 @@ class SettingController extends Controller
     public function cashonDeliveryStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
             $validator = Validator::make($request->only('label','description'),[
                 'label' => 'required',
                 'description' => 'required',
@@ -793,6 +936,9 @@ class SettingController extends Controller
     public function bankTransferStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
             $validator = Validator::make($request->only('label','description','instruction'),[
                 'label' => 'required',
                 'description' => 'required',
@@ -823,6 +969,9 @@ class SettingController extends Controller
     public function cehckMoneyOrderStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
+            if (!env('USER_VERIFIED')) {
+                return response()->json(['errors'=>['This is disabled for demo']]);
+            }
             $validator = Validator::make($request->only('label','description','instruction'),[
                 'label' => 'required',
                 'description' => 'required',

@@ -73,14 +73,18 @@ class BrandService
 
     public function storeBrand($request)
     {
-        $data = $this->requestHandleData($request, $brand = null);
-        $brand =  $this->brandContract->storeBrand($data);
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
+        $data  = $this->requestHandleData($request, $brand = null);
+        $brand = $this->brandContract->storeBrand($data);
 
         $dataTranslation  = [];
         $dataTranslation['brand_id']   = $brand->id;
         $dataTranslation['local']      = session('currentLocal');
         $dataTranslation['brand_name'] = htmlspecialchars_decode($request->brand_name);
         $this->brandTranslationContract->storeBrandTranslation($dataTranslation);
+        return response()->json(['success' => __('Data Successfully Saved')]);
     }
 
     public function findBrand($id)
@@ -99,17 +103,26 @@ class BrandService
 
     public function updateBrand($request)
     {
+        if (env('USER_VERIFIED')!=1) {
+            session()->flash('type','danger');
+            session()->flash('message','Disabled for demo !');
+            return redirect()->back();
+        }
         $brand = $this->findBrand($request->brand_id);
         $data     = $this->requestHandleData($request, $brand);
         $this->brandContract->updateBrandById($request->brand_id, $data);
         $this->brandTranslationContract->updateOrInsertBrandTranslation($request);
+
+        session()->flash('type','success');
+        session()->flash('message','Successfully Updated');
+        return redirect()->back();
     }
 
     protected function requestHandleData($request, $brand)
     {
         $data              = [];
         $data['slug']      = $this->slug(htmlspecialchars_decode($request->brand_name));
-        $data['is_active'] = ($request->is_active==true) ? $request->is_active : 0;
+        $data['is_active'] = ($request->is_active==true) ? 1 : 0;
         if ($request->brand_logo) {
             if ($brand) {
                 $this->previousImageDelete($brand->brand_logo);
@@ -121,16 +134,25 @@ class BrandService
 
     public function activeById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->brandContract->active($id);
     }
 
     public function inactiveById($id)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->brandContract->inactive($id);
     }
 
     public function bulkActionByTypeAndIds($type, $ids)
     {
+        if (env('USER_VERIFIED')!=1) {
+            return response()->json(['demo' => 'Disabled for demo !']);
+        }
         return $this->brandContract->bulkAction($type, $ids);
     }
 }

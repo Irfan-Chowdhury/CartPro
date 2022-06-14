@@ -24,7 +24,7 @@
 
     </div>
     <div class="table-responsive">
-    	<table id="dataTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -57,7 +57,7 @@
             }
         });
 
-        let table = $('#dataTable').DataTable({
+        let table = $('#dataListTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -209,10 +209,10 @@
                     $('#error_message').html(html).slideDown(300).delay(5000).slideUp(300);
                 }
                 else if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#submitForm')[0].reset();
                     $("#formModal").modal('hide');
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
+                    $('#success_alert').fadeIn("slow");
                     $('#success_alert').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
@@ -273,7 +273,7 @@
                     $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
                 }
                 else if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#updateForm')[0].reset();
                     $("#EditFormModal").modal('hide');
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
@@ -302,9 +302,17 @@
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }
+				else if(data.errors){
+                    $('#dataListTable').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow");
+                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
@@ -327,9 +335,17 @@
 			success: function(data){
 				console.log(data);
 				if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                     $('#success_alert').addClass('alert alert-success').html(data.success);
+                    setTimeout(function() {
+                        $('#success_alert').fadeOut("slow");
+                    }, 3000);
+                }
+                else if(data.errors){
+                    $('#dataListTable').DataTable().ajax.reload();
+                    $('#success_alert').fadeIn("slow");
+                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
                     setTimeout(function() {
                         $('#success_alert').fadeOut("slow");
                     }, 3000);
@@ -341,7 +357,7 @@
     //Bulk Action
     $("#bulk_action").on("click",function(){
         var idsArray = [];
-        let table = $('#dataTable').DataTable();
+        let table = $('#dataListTable').DataTable();
         idsArray = table.rows({selected: true}).ids().toArray();
 
         if(idsArray.length === 0){
@@ -361,7 +377,7 @@
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#dataTable').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
                             $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -382,7 +398,7 @@
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#dataTable').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
                             $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
