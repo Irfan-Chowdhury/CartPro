@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\Contracts\Currency\CurrencyContract;
-use App\Models\SettingCurrency;
 
 class CurrencyService
 {
@@ -15,16 +14,19 @@ class CurrencyService
         return $this->currencyContract->getAll();
     }
 
+    protected function supportedCurrencies()
+    {
+        $setting_currency = $this->currencyContract->supportedCurrencies();
+        $supported_currencies = array();
+        $supported_currencies = explode(",",$setting_currency->supported_currency);
+        return $supported_currencies;
+    }
+
     public function dataTable()
     {
-
         if (request()->ajax()){
             $currencies = $this->currencyContract->getAll();
-
-            $setting_currency = $this->currencyContract->supportedCurrencies();
-            $supported_currencies = array();
-            $supported_currencies = explode(",",$setting_currency->supported_currency);
-
+            $supported_currencies = $this->supportedCurrencies();
 
             return datatables()->of($currencies)
                 ->setRowId(function ($row){
@@ -105,9 +107,26 @@ class CurrencyService
         }
     }
 
-    
+    public function bulkDestroy($idsArray)
+    {
+        if (request()->ajax()){
+            if (env('USER_VERIFIED')!=1) {
+                return response()->json(['demo' => 'Disabled for demo !']);
+            }
+            $supported_currencies_name = $this->supportedCurrencies();
+            $data_ids = $this->currencyContract->getCurrencyIdsByName($supported_currencies_name);
+            $currency_ids = json_decode($data_ids);
+            $ids = [];
 
-
+            foreach ($idsArray as $value) {
+                if (!in_array($value, $currency_ids)){
+                    $ids[] = $value;
+                }
+            }
+            $this->currencyContract->bulkDelete($ids);
+            return response()->json(['success' => 'Data Deleted Successfully']);
+        }
+    }
 }
 
 

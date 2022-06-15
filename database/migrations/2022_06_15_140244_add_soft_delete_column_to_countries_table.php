@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeleteToCurrenciesTable extends Migration
+class AddSoftDeleteColumnToCountriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class AddSoftDeleteToCurrenciesTable extends Migration
      */
     public function up()
     {
-        //php artisan make:migration add_soft_delete_to_currencies_table --table=currencies
-
-        Schema::table('currencies', function (Blueprint $table) {
+        Schema::table('countries', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -27,7 +25,7 @@ class AddSoftDeleteToCurrenciesTable extends Migration
      */
     public function down()
     {
-        Schema::table('currencies', function (Blueprint $table) {
+        Schema::table('countries', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

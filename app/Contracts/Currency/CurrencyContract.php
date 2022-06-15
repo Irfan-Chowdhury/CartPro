@@ -14,7 +14,12 @@ interface CurrencyContract
 
     public function delete($id);
 
+    public function bulkDelete($ids);
+
     public function supportedCurrencies();
+
+    public function getCurrencyIdsByName($supported_currencies_name);
+
 }
 
 ?>

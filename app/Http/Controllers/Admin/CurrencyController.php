@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Currency\CurrencyStoreRequest;
 use App\Http\Requests\Currency\CurrencyUpdateRequest;
-use App\Models\Currency;
-use App\Models\SettingCurrency;
 use App\Services\CurrencyService;
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 
 class CurrencyController extends Controller
 {
@@ -42,5 +39,9 @@ class CurrencyController extends Controller
 
     public function destroy(Request $request){
         return $this->currencyService->destroy($request->id);
+    }
+
+    public function bulkActionDelete(Request $request){
+        return $this->currencyService->bulkDestroy($request->idsArray);
     }
 }

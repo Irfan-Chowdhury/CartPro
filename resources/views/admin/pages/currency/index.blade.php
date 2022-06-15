@@ -14,9 +14,9 @@
             </button>
         {{-- @endif --}}
         {{-- @if (auth()->user()->can('attribute_set-action')) --}}
-            {{-- <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_action">
+            <button type="button" class="btn btn-danger" name="bulk_delete" id="bulkDelete">
                 <i class="fa fa-minus-circle"></i> @lang('file.Bulk Action')
-            </button> --}}
+            </button>
         {{-- @endif --}}
     </div>
     <div class="table-responsive">
@@ -35,7 +35,7 @@
 
     @include('admin.pages.currency.create_modal')
     @include('admin.pages.currency.edit_modal')
-    {{-- @include('admin.includes.confirm_modal') --}}
+    @include('admin.includes.confirm_delete_modal')
 
 @endsection
 
@@ -299,6 +299,7 @@
             @include('admin.includes.common_js.delete_js',['route_name'=>'admin.currency.destroy'])
 
             // //---------- Bulk Action Delete ------------
+            @include('admin.includes.common_js.bulk_delete_js',['route_name_bulk_delete'=>'admin.currency.bulk_action_delete'])
 
 
 

@@ -43,18 +43,14 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $validator = $this->validateLogin($request);
+        $this->validateLogin($request);
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
 
-
-        if ($this->attemptLogin($request))
-        {
+        if ($this->attemptLogin($request)){
             if (auth()->user()->user_type==1){
                 Session::put('currentLocal', 'en');
                 return redirect()->intended(route('admin.dashboard'));

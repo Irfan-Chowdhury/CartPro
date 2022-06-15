@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LocaleFileController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\FaqTypeController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -327,6 +328,18 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/edit',[CurrencyController::class,'edit'])->name('admin.currency.edit');
                 Route::post('/update',[CurrencyController::class,'update'])->name('admin.currency.update');
                 Route::get('/destroy',[CurrencyController::class,'destroy'])->name('admin.currency.destroy');
+                Route::get('/bulk_action_delete',[CurrencyController::class,'bulkActionDelete'])->name('admin.currency.bulk_action_delete');
+            });
+
+            //Country
+            Route::group(['prefix' => 'countries'], function () {
+                Route::get('/',[CountryController::class,'index'])->name('admin.country.index');
+                Route::get('/datatable',[CountryController::class,'dataTable'])->name('admin.country.datatable');
+                Route::post('/store',[CountryController::class,'store'])->name('admin.country.store');
+                Route::get('/edit',[CountryController::class,'edit'])->name('admin.country.edit');
+                Route::post('/update',[CountryController::class,'update'])->name('admin.country.update');
+                Route::get('/destroy',[CountryController::class,'destroy'])->name('admin.country.destroy');
+                Route::get('/bulk_action_delete',[CountryController::class,'bulkActionDelete'])->name('admin.country.bulk_action_delete');
             });
 
             //Attributes

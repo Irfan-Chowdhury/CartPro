@@ -28,8 +28,16 @@ class CurrencyRepository implements CurrencyContract
         $this->getById($id)->delete();
     }
 
+    public function bulkDelete($ids){
+        Currency::whereIn('id',$ids)->delete();
+    }
+
     public function supportedCurrencies(){
         return SettingCurrency::select('supported_currency')->latest()->first();
+    }
+
+    public function getCurrencyIdsByName($supported_currencies_name){
+        return Currency::whereIn('currency_name',$supported_currencies_name)->get()->pluck('id');
     }
 
 }
