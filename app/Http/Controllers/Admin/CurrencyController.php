@@ -16,7 +16,9 @@ class CurrencyController extends Controller
     }
 
     public function index(){
-        return view('admin.pages.currency.index');
+        if (auth()->user()->can('currency-view')){
+            return view('admin.pages.currency.index');
+        }
     }
 
     public function dataTable(){
@@ -24,7 +26,9 @@ class CurrencyController extends Controller
     }
 
     public function store(CurrencyStoreRequest $request){
-        return $this->currencyService->storeCurrency($request);
+        if (auth()->user()->can('currency-store')){
+            return $this->currencyService->storeCurrency($request);
+        }
     }
 
     public function edit(Request $request){
@@ -33,14 +37,20 @@ class CurrencyController extends Controller
     }
 
     public function update(CurrencyUpdateRequest $request){
-        return $this->currencyService->updateCurrency($request);
+        if (auth()->user()->can('currency-edit')){
+            return $this->currencyService->updateCurrency($request);
+        }
     }
 
     public function destroy(Request $request){
-        return $this->currencyService->destroy($request->id);
+        if (auth()->user()->can('currency-action')){
+            return $this->currencyService->destroy($request->id);
+        }
     }
 
     public function bulkActionDelete(Request $request){
-        return $this->currencyService->bulkDestroy($request->idsArray);
+        if (auth()->user()->can('currency-action')){
+            return $this->currencyService->bulkDestroy($request->idsArray);
+        }
     }
 }

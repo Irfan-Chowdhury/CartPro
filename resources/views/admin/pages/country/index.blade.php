@@ -8,16 +8,16 @@
         <div id="alert_message" role="alert"></div>
         <br>
 
-        {{-- @if (auth()->user()->can('attribute_set-store')) --}}
+        @if (auth()->user()->can('country-store'))
             <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
                 <i class="fa fa-plus"></i> @lang('file.Add Country')
             </button>
-        {{-- @endif --}}
-        {{-- @if (auth()->user()->can('attribute_set-action')) --}}
+        @endif
+        @if (auth()->user()->can('country-action'))
             <button type="button" class="btn btn-danger" name="bulk_delete" id="bulkDelete">
                 <i class="fa fa-minus-circle"></i> @lang('file.Bulk Action')
             </button>
-        {{-- @endif --}}
+        @endif
     </div>
     <div class="table-responsive">
     	<table id="dataListTable" class="table ">

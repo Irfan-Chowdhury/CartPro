@@ -16,7 +16,10 @@ class CountryController extends Controller
     }
 
     public function index(){
-        return view('admin.pages.country.index');
+        if (auth()->user()->can('country-view')){
+            return view('admin.pages.country.index');
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function dataTable(){
@@ -24,7 +27,9 @@ class CountryController extends Controller
     }
 
     public function store(CountryStoreRequest $request){
-        return $this->countryService->storeCountry($request);
+        if (auth()->user()->can('country-store')){
+            return $this->countryService->storeCountry($request);
+        }
     }
 
     public function edit(Request $request){
@@ -33,14 +38,20 @@ class CountryController extends Controller
     }
 
     public function update(CountryUpdateRequest $request){
-        return $this->countryService->updateCountry($request);
+        if (auth()->user()->can('country-edit')){
+            return $this->countryService->updateCountry($request);
+        }
     }
 
     public function destroy(Request $request){
-        return $this->countryService->destroy($request->id);
+        if (auth()->user()->can('country-action')){
+            return $this->countryService->destroy($request->id);
+        }
     }
 
     public function bulkActionDelete(Request $request){
-        return $this->countryService->bulkDestroy($request->idsArray);
+        if (auth()->user()->can('country-action')){
+            return $this->countryService->bulkDestroy($request->idsArray);
+        }
     }
 }

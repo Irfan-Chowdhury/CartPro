@@ -41,19 +41,21 @@ class CountryService
                 })
                 ->addColumn('action', function ($row) use($supported_countries)
                 {
-                    $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                        &nbsp; ';
+                    $actionBtn = '';
+                    if (auth()->user()->can('country-action')){
+                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                            &nbsp; ';
 
-                    if (in_array($row->country_name, $supported_countries)){
-                        $disabled_check = 'disabled';
-                        $title = 'This is in Supported Country';
-                    }else {
-                        $disabled_check = null;
-                        $title = 'Delete';
+                        if (in_array($row->country_name, $supported_countries)){
+                            $disabled_check = 'disabled';
+                            $title = 'This is in Supported Country';
+                        }else {
+                            $disabled_check = null;
+                            $title = 'Delete';
+                        }
+                        $actionBtn .= '<button type="button" '.$disabled_check.' title="'.$title.'" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                            &nbsp; ';
                     }
-
-                    $actionBtn .= '<button type="button" '.$disabled_check.' title="'.$title.'" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
-                        &nbsp; ';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

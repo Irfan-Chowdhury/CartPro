@@ -1,8 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Contracts\Permission;
 
 class PermissionSeeder extends Seeder
 {
@@ -427,6 +428,56 @@ class PermissionSeeder extends Seeder
 				'id' => 82,
 				'guard_name' => 'web',
 				'name' => 'users_and_roles'
+			),
+            array(
+				'id' => 83,
+				'guard_name' => 'web',
+				'name' => 'country'
+			),
+            array(
+				'id' => 84,
+				'guard_name' => 'web',
+				'name' => 'country-view'
+			),
+            array(
+				'id' => 85,
+				'guard_name' => 'web',
+				'name' => 'country-store'
+			),
+            array(
+				'id' => 86,
+				'guard_name' => 'web',
+				'name' => 'country-edit'
+			),
+            array(
+				'id' => 87,
+				'guard_name' => 'web',
+				'name' => 'country-action'
+			),
+            array(
+				'id' => 88,
+				'guard_name' => 'web',
+				'name' => 'currency'
+			),
+            array(
+				'id' => 89,
+				'guard_name' => 'web',
+				'name' => 'currency-view'
+			),
+            array(
+				'id' => 90,
+				'guard_name' => 'web',
+				'name' => 'currency-store'
+			),
+            array(
+				'id' => 91,
+				'guard_name' => 'web',
+				'name' => 'currency-edit'
+			),
+            array(
+				'id' => 92,
+				'guard_name' => 'web',
+				'name' => 'currency-action'
 			),
         );
 

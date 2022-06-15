@@ -508,6 +508,62 @@
                                             checked: ($.inArray('setting', result) >= 0) ? true : false,
                                         },
                                         {
+                                            id: 'country',
+                                            text: '{{__('Country')}}',
+                                            expanded: true,
+                                            checked: ($.inArray('country', result) >= 0) ? true : false,
+                                            items: [
+                                                {
+                                                    id: 'country-view',
+                                                    text: '{{__('Country View')}}',
+                                                    checked: ($.inArray('country-view', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'country-store',
+                                                    text: '{{__('Country Store')}}',
+                                                    checked: ($.inArray('country-store', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'country-edit',
+                                                    text: '{{__('Country Edit')}}',
+                                                    checked: ($.inArray('country-edit', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'country-action',
+                                                    text: '{{__('Country Action')}}',
+                                                    checked: ($.inArray('country-action', result) >= 0) ? true : false,
+                                                },
+                                            ]
+                                        },
+                                        {
+                                            id: 'currency',
+                                            text: '{{__('Currency')}}',
+                                            expanded: true,
+                                            checked: ($.inArray('currency', result) >= 0) ? true : false,
+                                            items: [
+                                                {
+                                                    id: 'currency-view',
+                                                    text: '{{__('Currency View')}}',
+                                                    checked: ($.inArray('currency-view', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'currency-store',
+                                                    text: '{{__('Currency Store')}}',
+                                                    checked: ($.inArray('currency-store', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'currency-edit',
+                                                    text: '{{__('Currency Edit')}}',
+                                                    checked: ($.inArray('currency-edit', result) >= 0) ? true : false,
+                                                },
+                                                {
+                                                    id: 'currency-action',
+                                                    text: '{{__('Currency Action')}}',
+                                                    checked: ($.inArray('currency-action', result) >= 0) ? true : false,
+                                                },
+                                            ]
+                                        },
+                                        {
                                             id: 'locale',
                                             text: '{{__('Locale')}}',
                                             expanded: true,
