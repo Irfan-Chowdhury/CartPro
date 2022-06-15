@@ -8,6 +8,7 @@ use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
 use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
+use App\Contracts\Country\CountryContract;
 use App\Contracts\Currency\CurrencyContract;
 use App\Repositories\AttributeSet\AttributeSetRepository;
 use App\Repositories\AttributeSet\AttributeSetTranslationRepository;
@@ -16,6 +17,7 @@ use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandTranslationRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
+use App\Repositories\Country\CountryRepository;
 use App\Repositories\Currency\CurrencyRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -41,6 +43,9 @@ class RepositoryServiceProvider extends ServiceProvider
 
         //Currency
         $this->app->bind(CurrencyContract::class, CurrencyRepository::class);
+
+        //County
+        $this->app->bind(CountryContract::class, CountryRepository::class);
     }
 }
 

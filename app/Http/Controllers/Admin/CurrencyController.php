@@ -27,7 +27,6 @@ class CurrencyController extends Controller
         return $this->currencyService->storeCurrency($request);
     }
 
-
     public function edit(Request $request){
         $data = $this->currencyService->findCurrency($request->currency_id);
         return response()->json($data);

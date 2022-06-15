@@ -1,16 +1,16 @@
 @extends('admin.main')
-@section('title','Admin | Currency')
+@section('title','Admin | Country')
 @section('admin_content')
 
 <section>
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">@lang('file.Currency')</h4>
+        <h4 class="font-weight-bold mt-3">@lang('file.Country')</h4>
         <div id="alert_message" role="alert"></div>
         <br>
 
         {{-- @if (auth()->user()->can('attribute_set-store')) --}}
             <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-                <i class="fa fa-plus"></i> @lang('file.Add Currency')
+                <i class="fa fa-plus"></i> @lang('file.Add Country')
             </button>
         {{-- @endif --}}
         {{-- @if (auth()->user()->can('attribute_set-action')) --}}
@@ -24,8 +24,8 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-        		    <th scope="col">{{trans('file.Currency Name')}}</th>
-        		    <th scope="col">{{trans('file.Currency Code')}}</th>
+        		    <th scope="col">{{trans('file.Country Name')}}</th>
+        		    <th scope="col">{{trans('file.Country Code')}}</th>
         		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
@@ -33,8 +33,8 @@
     </div>
 </section>
 
-    @include('admin.pages.currency.create_modal')
-    @include('admin.pages.currency.edit_modal')
+    @include('admin.pages.country.create_modal')
+    @include('admin.pages.country.edit_modal')
     @include('admin.includes.confirm_delete_modal')
 
 @endsection
@@ -81,7 +81,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.currency.datatable') }}",
+                        url: "{{ route('admin.country.datatable') }}",
                     },
                     columns: [
                         {
@@ -90,12 +90,12 @@
                             searchable: false
                         },
                         {
-                            data: 'currency_name',
-                            name: 'currency_name',
+                            data: 'country_name',
+                            name: 'country_name',
                         },
                         {
-                            data: 'currency_code',
-                            name: 'currency_code',
+                            data: 'country_code',
+                            name: 'country_code',
                         },
                         {
                             data: 'action',
@@ -170,7 +170,6 @@
                     ],
                 });
                 new $.fn.dataTable.FixedHeader(table);
-
             });
 
 
@@ -182,7 +181,7 @@
             $("#submitForm").on("submit",function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "{{route('admin.currency.store')}}",
+                    url: "{{route('admin.country.store')}}",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -229,14 +228,14 @@
                 $('#alert_message').html('');
 
                 $.ajax({
-                    url: "{{route('admin.currency.edit')}}",
+                    url: "{{route('admin.country.edit')}}",
                     type: "GET",
-                    data: {currency_id:rowId},
+                    data: {country_id:rowId},
                     success: function (data) {
                         console.log(data);
-                        $('#currencyId').val(data.id);
-                        $('#currencyName').val(data.currency_name);
-                        $('#currencyCode').val(data.currency_code);
+                        $('#countryId').val(data.id);
+                        $('#countryName').val(data.country_name);
+                        $('#countryCode').val(data.country_code);
                         $('#editFormModal').modal('show');
                     }
                 })
@@ -251,7 +250,7 @@
             $("#updateForm").on("submit",function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "{{route('admin.currency.update')}}",
+                    url: "{{route('admin.country.update')}}",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -294,10 +293,10 @@
             });
 
             //---------- Delete ------------
-            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.currency.destroy'])
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.country.destroy'])
 
             // //---------- Bulk Action Delete ------------
-            @include('admin.includes.common_js.bulk_delete_js',['route_name_bulk_delete'=>'admin.currency.bulk_action_delete'])
+            @include('admin.includes.common_js.bulk_delete_js',['route_name_bulk_delete'=>'admin.country.bulk_action_delete'])
 
 
 

@@ -1,51 +1,52 @@
 <?php
 namespace App\Services;
 
-use App\Contracts\Currency\CurrencyContract;
+use App\Contracts\Country\CountryContract;
+use App\Models\SettingGeneral;
 
-class CurrencyService
+class CountryService
 {
-    private $currencyContract;
-    public function __construct(CurrencyContract $currencyContract){
-        $this->currencyContract = $currencyContract;
+    private $countryContract;
+    public function __construct(CountryContract $countryContract){
+        $this->countryContract = $countryContract;
     }
 
-    public function getAllCurrency(){
-        return $this->currencyContract->getAll();
+    public function getAllCountry(){
+        return $this->countryContract->getAll();
     }
 
-    protected function supportedCurrencies()
+    protected function supportedCountries()
     {
-        $setting_currency = $this->currencyContract->supportedCurrencies();
-        $supported_currencies = array();
-        $supported_currencies = explode(",",$setting_currency->supported_currency);
-        return $supported_currencies;
+        $setting_country = $this->countryContract->supportedCountries();
+        $supported_countries = array();
+        $supported_countries = explode(",",$setting_country->supported_countries);
+        return $supported_countries;
     }
 
     public function dataTable()
     {
         if (request()->ajax()){
-            $currencies = $this->currencyContract->getAll();
-            $supported_currencies = $this->supportedCurrencies();
+            $currencies = $this->countryContract->getAll();
+            $supported_countries = $this->supportedCountries();
 
             return datatables()->of($currencies)
                 ->setRowId(function ($row){
                     return $row->id;
                 })
-                ->addColumn('currency_name', function ($row){
-                    return $row->currency_name ?? "";
+                ->addColumn('country_name', function ($row){
+                    return $row->country_name ?? "";
                 })
-                ->addColumn('currency_code', function ($row){
-                    return $row->currency_code ?? "";
+                ->addColumn('country_code', function ($row){
+                    return $row->country_code ?? "";
                 })
-                ->addColumn('action', function ($row) use($supported_currencies)
+                ->addColumn('action', function ($row) use($supported_countries)
                 {
                     $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                         &nbsp; ';
 
-                    if (in_array($row->currency_name, $supported_currencies)){
+                    if (in_array($row->country_name, $supported_countries)){
                         $disabled_check = 'disabled';
-                        $title = 'This is in Supported Currency';
+                        $title = 'This is in Supported Country';
                     }else {
                         $disabled_check = null;
                         $title = 'Delete';
@@ -63,36 +64,35 @@ class CurrencyService
     protected function requestHandleData($request)
     {
         $data = [];
-        $data['currency_name'] = $request->currency_name;
-        $data['currency_code'] = $request->currency_code;
+        $data['country_name'] = $request->country_name;
+        $data['country_code'] = $request->country_code;
         return $data;
     }
 
-
-    public function storeCurrency($request)
+    public function storeCountry($request)
     {
         if (request()->ajax()){
             if (env('USER_VERIFIED')!=1) {
                 return response()->json(['demo' => 'Disabled for demo !']);
             }
             $data  = $this->requestHandleData($request);
-            $this->currencyContract->storeData($data);
+            $this->countryContract->storeData($data);
             return response()->json(['success' => __('Data Successfully Saved')]);
         }
     }
 
-    public function findCurrency($id){
-        return $this->currencyContract->getById($id);
+    public function findCountry($id){
+        return $this->countryContract->getById($id);
     }
 
-    public function updateCurrency($request)
+    public function updateCountry($request)
     {
         if (request()->ajax()){
             if (env('USER_VERIFIED')!=1) {
                 return response()->json(['demo' => 'Disabled for demo !']);
             }
             $data  = $this->requestHandleData($request);
-            $this->currencyContract->updateDataById($request->currency_id, $data);
+            $this->countryContract->updateDataById($request->country_id, $data);
             return response()->json(['success' => 'Data Updated Successfully']);
         }
     }
@@ -103,7 +103,7 @@ class CurrencyService
             if (env('USER_VERIFIED')!=1) {
                 return response()->json(['demo' => 'Disabled for demo !']);
             }
-            $this->currencyContract->delete($id);
+            $this->countryContract->delete($id);
             return response()->json(['success' => 'Data Deleted Successfully']);
         }
     }
@@ -114,20 +114,21 @@ class CurrencyService
             if (env('USER_VERIFIED')!=1) {
                 return response()->json(['demo' => 'Disabled for demo !']);
             }
-            $supported_currencies_name = $this->supportedCurrencies();
-            $data_ids = $this->currencyContract->getCurrencyIdsByName($supported_currencies_name);
-            $currency_ids = json_decode($data_ids);
+            $supported_country_name = $this->supportedCountries();
+            $data_ids = $this->countryContract->getCountryIdsByName($supported_country_name);
+            $counties_ids = json_decode($data_ids);
             $ids = [];
 
             foreach ($idsArray as $value) {
-                if (!in_array($value, $currency_ids)){
+                if (!in_array($value, $counties_ids)){
                     $ids[] = $value;
                 }
             }
-            $this->currencyContract->bulkDelete($ids);
+            $this->countryContract->bulkDelete($ids);
             return response()->json(['success' => 'Data Deleted Successfully']);
         }
     }
+
 }
 
 
