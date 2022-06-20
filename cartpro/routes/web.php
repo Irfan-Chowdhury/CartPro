@@ -365,11 +365,13 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //Tags
             Route::group(['prefix' => 'tags'], function () {
                 Route::get('/',[TagController::class,'index'])->name('admin.tag.index');
+                Route::get('/datatable',[TagController::class,'dataTable'])->name('admin.tag.datatable');
                 Route::post('/store',[TagController::class,'store'])->name('admin.tag.store');
                 Route::get('/edit',[TagController::class,'edit'])->name('admin.tag.edit');
                 Route::post('/update',[TagController::class,'update'])->name('admin.tag.update');
                 Route::get('/active',[TagController::class,'active'])->name('admin.tag.active');
                 Route::get('/inactive',[TagController::class,'inactive'])->name('admin.tag.inactive');
+                Route::get('/destroy',[TagController::class,'destroy'])->name('admin.tag.destroy');
                 Route::get('/bulk_action',[TagController::class,'bulkAction'])->name('admin.tag.bulk_action');
             });
 

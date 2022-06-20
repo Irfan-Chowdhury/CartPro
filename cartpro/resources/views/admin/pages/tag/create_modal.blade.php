@@ -13,6 +13,8 @@
           @csrf
 
             <div class="modal-body">
+                <div class="container-fluid"><span id="errorMessage"></span></div>
+
 
               <div class="form-group">
                 <label>{{__('file.Tag Name')}} &nbsp; <span class="text-bold text-danger">*</span></label>

@@ -35,11 +35,11 @@
 
                             <div class="col-sm-12">
                                 <label class="text-black text-left">@lang('file.Order ID') <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" name="order_id" placeholder="Found in your order confirmation email">
+                                <input class="form-control" type="text" required name="order_id" placeholder="Found in your order confirmation email">
                             </div>
                             <div class="col-sm-12 mt-3">
                                 <label class="text-black text-left">@lang('file.Email') <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" name="email" placeholder="email you used during checkout">
+                                <input class="form-control" type="text" required name="email" placeholder="email you used during checkout">
                             </div>
                             <div class="col-sm-12 mt-3">
                                 <button type="submit" class="button style1">@lang('file.Track')</button>

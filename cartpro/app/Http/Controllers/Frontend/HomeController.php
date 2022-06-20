@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ContactMail;
+use App\Mail\OrderMail;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -41,6 +42,18 @@ class HomeController extends Controller
 
     public function index()
     {
+        //Mail
+        // $data_mail = [];
+        // $data_mail['fullname'] = 'Irfan Chowdhury';
+        // $data_mail['email'] = 'iranchowdhury80@gmail.com';
+        // $data_mail['order_id'] = 1995;
+        // $data_mail['message'] = 'Thanks for shopping. Your order id is ';
+        // Mail::to($data_mail['email'])->send(new OrderMail($data_mail));
+
+        // return 'check mail';
+
+
+
         $categories = Cache::remember('categories', 300, function () {
             return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)
@@ -446,6 +459,7 @@ class HomeController extends Controller
 
         return view('frontend.pages.order_tracking.order_page',compact('order'));
     }
+
     public function orderTrackingFindDetails($order_id)
     {
         $locale = Session::get('currentLocal');
@@ -560,6 +574,7 @@ class HomeController extends Controller
         $data = null;
         $setting_store = SettingStore::latest()->first();
         if (!empty($setting_store)) {
+            // return $setting_store->store_email;
             $data = json_decode($setting_store->schedule);
         }
         foreach ($data as $key => $value) {
@@ -571,11 +586,17 @@ class HomeController extends Controller
 
     public function contactMessage()
     {
+        $setting_store = SettingStore::latest()->first();
+        $store_email = null;
+        if (!empty($setting_store)) {
+            $store_email = $setting_store->store_email;
+        }
+
         $data = [];
         $data['name'] = request('name');
         $data['email'] = request('email');
         $data['message'] = request('message');
-        Mail::to('irfanchowdhury80@gmail.com')->send(new ContactMail($data));
+        Mail::to($store_email)->send(new ContactMail($data));
 
         return redirect()->back()->with('success', 'Message sent successfully');
     }

@@ -10,6 +10,8 @@ use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
 use App\Contracts\Country\CountryContract;
 use App\Contracts\Currency\CurrencyContract;
+use App\Contracts\Tag\TagContract;
+use App\Contracts\Tag\TagTranslationContract;
 use App\Repositories\AttributeSet\AttributeSetRepository;
 use App\Repositories\AttributeSet\AttributeSetTranslationRepository;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +21,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
 use App\Repositories\Country\CountryRepository;
 use App\Repositories\Currency\CurrencyRepository;
+use App\Repositories\Tag\TagRepository;
+use App\Repositories\Tag\TagTranslationRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -40,6 +44,10 @@ class RepositoryServiceProvider extends ServiceProvider
         //Attribute Set
         $this->app->bind(AttributeSetContract::class, AttributeSetRepository::class);
         $this->app->bind(AttributeSetTranslationContract::class, AttributeSetTranslationRepository::class);
+
+        //Tag Set
+        $this->app->bind(TagContract::class, TagRepository::class);
+        $this->app->bind(TagTranslationContract::class, TagTranslationRepository::class);
 
         //Currency
         $this->app->bind(CurrencyContract::class, CurrencyRepository::class);

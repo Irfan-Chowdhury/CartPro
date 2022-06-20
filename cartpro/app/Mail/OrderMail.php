@@ -3,19 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Mailable
+class OrderMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public $data;
     // public function __construct($data)
     public function __construct(array $data)
@@ -30,7 +24,6 @@ class ContactMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.contact-mail');
-        // return $this->view('view.contact-mail');
+        return $this->markdown('mail.order-mail');
     }
 }

@@ -1,10 +1,11 @@
 
 <!-- Modal -->
-<div class="modal fade" id="EditFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Tag')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="error_message_edit"></span>
+          <h5 class="modal-title" id="modalTitle">{{__('file.Edit Tag')}}</h5> &nbsp;&nbsp;&nbsp;&nbsp; <span id="errorMessageEdit"></span>
+
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -28,7 +29,7 @@
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Update')</button>
+                <button type="submit" name="action_button" id="updateButton" class="btn btn-primary">@lang('file.Update')</button>
             </div>
 
         </form>
