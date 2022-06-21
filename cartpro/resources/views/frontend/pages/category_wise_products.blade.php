@@ -104,8 +104,8 @@
                             @if (count($attribute_values)>0)
                                 {{-- <form id="filterByAttributeValue"> --}}
                                     {{-- @csrf --}}
-                                    <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
-                                    <div><input type="hidden" name="category_slug" value="{{$category->slug}}"></div>
+                                    <input type="hidden" name="attribute_value_ids" id="value_ids">
+                                    <input type="hidden" name="category_slug" value="{{$category->slug}}">
 
                                     @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
                                         <div class="sidebar-widget filters">
@@ -118,7 +118,7 @@
                                                         @foreach ($attribute_values->where('attribute_name',$key) as $value)
                                                             <li>
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <label class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
+                                                                    <label class="custom-control-label attribute_value" data-attribute_name="{{$key}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
                                                                 </div>
                                                             </li>
                                                         @endforeach
@@ -323,14 +323,14 @@
     <script src="{{asset('public/frontend/js/jquery-ui.min.js')}}"></script>
     <script type="text/javascript">
 
-        $('.attribute_value_productTab1').on("click",function(e){
-            e.preventDefault();
-            $(this).addClass('selected');
+        // $('.attribute_value_productTab1').on("click",function(e){
+        //     e.preventDefault();
+        //     $(this).addClass('selected');
 
-            var selectedVal = $(this).data('value_id');
-            values.push(selectedVal);
-            $('.value_ids_productTab1').val(values);
-        });
+        //     var selectedVal = $(this).data('value_id');
+        //     values.push(selectedVal);
+        //     $('.value_ids_productTab1').val(values);
+        // });
 
         //Limit Category Product Show
         $(document).on('click','.limitCategoryProductShow',function(event) {
@@ -378,42 +378,43 @@
             });
         });
 
-        let attribute_values = [];
-        $('.attribute_value').on('click',function(e){
-            $(this).addClass('text-primary');
+        // let attribute_values = [];
+        // $('.attribute_value').on('click',function(e){
+        //     e.preventDefault();
+        //     console.log(123)
 
-            var selectedVal = $(this).data('attribute_value_id');
+        //     $(this).addClass('text-primary');
+        //     var selectedVal = $(this).data('attribute_value_id');
+        //     attribute_values.push(selectedVal);
+        //     $('#attribute_value_ids').val(attribute_values);
+        // });
 
-            attribute_values.push(selectedVal);
-            $('#attribute_value_ids').val(attribute_values);
-        });
+        // $('#filterByAttributeValue').on('submit',function(e) {
+        //     e.preventDefault();
+        //     var form = $(this);
 
-        $('#filterByAttributeValue').on('submit',function(e) {
-            e.preventDefault();
-            var form = $(this);
+        //     var attribute_value_ids = $('.attribute_value_ids').val();
+        //     attribute_values.splice(0, attribute_values.length)
 
-            var attribute_value_ids = $('.attribute_value_ids').val();
-            attribute_values.splice(0, attribute_values.length)
-
-            $.ajax({
-                url: "{{route('cartpro.category.filter_by_attribute_value')}}",
-                type: "GET",
-                data: form.serialize(),
-                success: function(data){
-                    console.log(data);
-                    if(data.type=='error'){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Please select at least one',
-                        });
-                    }else{
-                        $('.categoryWiseProductField').empty();
-                        $('.categoryWiseProductField').html(data);
-                        $('.attribute_value').removeClass('text-primary');
-                    }
-                }
-            });
-        });
+        //     $.ajax({
+        //         url: "{{route('cartpro.category.filter_by_attribute_value')}}",
+        //         type: "GET",
+        //         data: form.serialize(),
+        //         success: function(data){
+        //             console.log(data);
+        //             if(data.type=='error'){
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Please select at least one',
+        //                 });
+        //             }else{
+        //                 $('.categoryWiseProductField').empty();
+        //                 $('.categoryWiseProductField').html(data);
+        //                 $('.attribute_value').removeClass('text-primary');
+        //             }
+        //         }
+        //     });
+        // });
 
         //New
         $('#sidebarFilter').on('submit',function (e) {
@@ -428,7 +429,7 @@
                     $('.categoryWiseProductField').empty().html(data);
                 }
             });
-            console.log(form);
+            // console.log(form);
         });
     </script>
 

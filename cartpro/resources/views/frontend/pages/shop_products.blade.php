@@ -68,7 +68,7 @@
                                 </div>
 
                                 <!-- Filter By Attribute Value-->
-                                <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="attribute_value_ids">
+                                <input type="hidden" name="attribute_value_ids" class="attribute_value_ids" id="value_ids">
                                 @forelse ($attribute_values as $item)
                                     <div class="sidebar-widget filters">
                                         <div class="sidebar-title">
@@ -80,7 +80,7 @@
                                                     @forelse ($item->attributeTranslation->attributeValueTranslation as $value)
                                                         <li>
                                                             <div class="custom-control custom-checkbox">
-                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_value_id="{{$value->attribute_value_id}}" data-attribute_value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
+                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$item->attributeTranslation->attribute_name}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
                                                             </div>
                                                         </li>
                                                     @empty
@@ -355,13 +355,13 @@
             });
         });
 
-        let attribute_values = [];
-        $('.attribute_value').on('click',function(e){
-            $(this).addClass('text-primary');
-            var selectedVal = $(this).data('attribute_value_id');
-            attribute_values.push(selectedVal);
-            $('#attribute_value_ids').val(attribute_values);
-        });
+        // let attribute_values = [];
+        // $('.attribute_value').on('click',function(e){
+        //     $(this).addClass('text-primary');
+        //     var selectedVal = $(this).data('attribute_value_id');
+        //     attribute_values.push(selectedVal);
+        //     $('#attribute_value_ids').val(attribute_values);
+        // });
         
 
         $('.attribute_value_productTab1').on("click",function(e){

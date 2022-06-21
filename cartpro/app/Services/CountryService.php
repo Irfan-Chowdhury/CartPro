@@ -19,17 +19,19 @@ class CountryService
     {
         $setting_country = $this->countryContract->supportedCountries();
         $supported_countries = array();
-        $supported_countries = explode(",",$setting_country->supported_countries);
+        if ($setting_country) {
+            $supported_countries = explode(",",$setting_country->supported_countries);
+        }
         return $supported_countries;
     }
 
     public function dataTable()
     {
         if (request()->ajax()){
-            $currencies = $this->countryContract->getAll();
+            $countries = $this->countryContract->getAll();
             $supported_countries = $this->supportedCountries();
 
-            return datatables()->of($currencies)
+            return datatables()->of($countries)
                 ->setRowId(function ($row){
                     return $row->id;
                 })

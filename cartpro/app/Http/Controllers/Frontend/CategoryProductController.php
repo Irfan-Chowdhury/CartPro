@@ -213,6 +213,8 @@ class CategoryProductController extends Controller
         if ($request->attribute_value_ids) {
             $value_ids = explode(",",$request->attribute_value_ids);
 
+            return response()->json($request->attribute_value_ids);
+
             $products = $products->toArray();
 
             $product_attribute_value =  DB::table('product_attribute_value')
