@@ -52,6 +52,7 @@ $("#bulk_action").on("click",function(){
                 method: "GET",
                 data: {idsArray:idsArray,action_type:action_type},
                 success: function (data) {
+                    console.log(data);
                     if(data.success){
                         $('#bulkConfirmModal').modal('hide');
                         table.rows('.selected').deselect();
@@ -74,12 +75,13 @@ $("#bulk_action").on("click",function(){
             });
         });
 
-        @if (isset($route_name_bulk_delete))
+        {{-- @if (isset($route_name_bulk_delete)) --}}
             $("#bulkDelete").on("click",function(){
+                action_type = "delete";
                 $.ajax({
-                    url: "{{route($route_name_bulk_delete)}}",
+                    url: route_name_bulk_active_inactive,
                     method: "GET",
-                    data: {idsArray:idsArray},
+                    data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         console.log(data);
                         if(data.success){
@@ -104,7 +106,7 @@ $("#bulk_action").on("click",function(){
                     }
                 });
             });
-        @endif
+        {{-- @endif --}}
 
     }
 });

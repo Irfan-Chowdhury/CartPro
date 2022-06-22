@@ -9,6 +9,7 @@ $(document).on("click",".inactive",function(e){
         type: "GET",
         data: {id:id},
         success: function(data){
+            console.log(data);
             if (data.demo) {
                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
                 $('#alert_message').addClass('alert alert-danger').html(data.demo);

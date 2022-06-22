@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Library\SslCommerz\SslCommerzNotification;
+use App\Mail\OrderMail;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\FlashSaleProduct;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
+use Illuminate\Support\Facades\Mail;
 use Stripe;
 use Illuminate\Support\Facades\Redirect;
 use Paystack;
@@ -104,6 +106,7 @@ class PaymentController extends Controller
         }
 
         $order_id = $this->orderStore($request);
+
 
         if ($request->payment_type=='sslcommerz'){
             $this->SSLCommerz($request, $order_id);
@@ -218,7 +221,19 @@ class PaymentController extends Controller
             $order_detail->subtotal   = $row->subtotal;
             $order_detail->save();
         }
-        return $order->id;
+
+        $order_id = $order->id;
+
+        //Mail
+        $data_mail = [];
+        $data_mail['fullname'] = $request->billing_first_name.' '.$request->billing_last_name;
+        $data_mail['email'] = $request->billing_email;
+        $data_mail['order_id'] = $order_id;
+        $data_mail['message'] = 'Thanks for shopping. Your order id is ';
+        Mail::to($data_mail['email'])->send(new OrderMail($data_mail));
+
+
+        return $order_id;
     }
 
     protected function reduceProductQuantity($order_id){

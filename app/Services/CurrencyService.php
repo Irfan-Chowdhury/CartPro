@@ -18,7 +18,9 @@ class CurrencyService
     {
         $setting_currency = $this->currencyContract->supportedCurrencies();
         $supported_currencies = array();
-        $supported_currencies = explode(",",$setting_currency->supported_currency);
+        if ($setting_currency) {
+            $supported_currencies = explode(",",$setting_currency->supported_currency);
+        }
         return $supported_currencies;
     }
 

@@ -36,6 +36,7 @@
                     </div>
                     <div class="header-top-right">
                         <ul>
+                            <li><a href="{{route('cartpro.order_tracking')}}">{{'Order Tracking'}}</a></li>
                             <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[$locale]->language_name}}</a>
                                 <ul class="dropdown p-0">
                                     @foreach ($languages as $item)

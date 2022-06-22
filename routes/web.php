@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\FaqTypeController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\ShippingLocationController;
 use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth;
@@ -93,6 +94,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::group(['namespace'=>'Frontend'], function (){
 
         Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
+
         //FAQ
         Route::get('/faq',[HomeController::class,'faq'])->name('cartpro.faq');
         //Contact
@@ -101,6 +103,10 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         //About Us
         Route::get('/about-us',[HomeController::class,'aboutUs'])->name('cartpro.about_us');
 
+        //Order Tracking
+        Route::get('/order-tracking',[HomeController::class,'orderTracking'])->name('cartpro.order_tracking');
+        Route::post('/order-tracking-find',[HomeController::class,'orderTrackingFind'])->name('cartpro.order_tracking_find');
+        Route::get('/order-tracking-find-details/{order_id}',[HomeController::class,'orderTrackingFindDetails'])->name('cartpro.order_tracking_find_details');
         Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
         Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
@@ -295,7 +301,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/bulk_delete',[CategoryController::class,'bulkDelete'])->name('admin.category.bulk_delete');
             });
 
-            //brand
+            //brands
             Route::group(['prefix' => '/brands'], function () {
                 Route::get('/',[BrandController::class,'index'])->name('admin.brand');
                 Route::post('/store',[BrandController::class,'store'])->name('admin.brand.store');
@@ -320,28 +326,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/destroy',[AttributeSetController::class,'destroy'])->name('admin.attribute_set.destroy');
             });
 
-            //Currency
-            Route::group(['prefix' => 'currencies'], function () {
-                Route::get('/',[CurrencyController::class,'index'])->name('admin.currency.index');
-                Route::get('/datatable',[CurrencyController::class,'dataTable'])->name('admin.currency.datatable');
-                Route::post('/store',[CurrencyController::class,'store'])->name('admin.currency.store');
-                Route::get('/edit',[CurrencyController::class,'edit'])->name('admin.currency.edit');
-                Route::post('/update',[CurrencyController::class,'update'])->name('admin.currency.update');
-                Route::get('/destroy',[CurrencyController::class,'destroy'])->name('admin.currency.destroy');
-                Route::get('/bulk_action_delete',[CurrencyController::class,'bulkActionDelete'])->name('admin.currency.bulk_action_delete');
-            });
-
-            //Country
-            Route::group(['prefix' => 'countries'], function () {
-                Route::get('/',[CountryController::class,'index'])->name('admin.country.index');
-                Route::get('/datatable',[CountryController::class,'dataTable'])->name('admin.country.datatable');
-                Route::post('/store',[CountryController::class,'store'])->name('admin.country.store');
-                Route::get('/edit',[CountryController::class,'edit'])->name('admin.country.edit');
-                Route::post('/update',[CountryController::class,'update'])->name('admin.country.update');
-                Route::get('/destroy',[CountryController::class,'destroy'])->name('admin.country.destroy');
-                Route::get('/bulk_action_delete',[CountryController::class,'bulkActionDelete'])->name('admin.country.bulk_action_delete');
-            });
-
             //Attributes
             Route::group(['prefix' => 'attributes'], function () {
                 Route::get('/',[AttributeController::class,'index'])->name('admin.attribute.index');
@@ -360,11 +344,13 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //Tags
             Route::group(['prefix' => 'tags'], function () {
                 Route::get('/',[TagController::class,'index'])->name('admin.tag.index');
+                Route::get('/datatable',[TagController::class,'dataTable'])->name('admin.tag.datatable');
                 Route::post('/store',[TagController::class,'store'])->name('admin.tag.store');
                 Route::get('/edit',[TagController::class,'edit'])->name('admin.tag.edit');
                 Route::post('/update',[TagController::class,'update'])->name('admin.tag.update');
                 Route::get('/active',[TagController::class,'active'])->name('admin.tag.active');
                 Route::get('/inactive',[TagController::class,'inactive'])->name('admin.tag.inactive');
+                Route::get('/destroy',[TagController::class,'destroy'])->name('admin.tag.destroy');
                 Route::get('/bulk_action',[TagController::class,'bulkAction'])->name('admin.tag.bulk_action');
             });
 
@@ -381,6 +367,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/delete/{id}',[ProductController::class,'delete'])->name('admin.products.delete');
             });
 
+            //Review
             Route::prefix('review')->group(function () {
                 Route::get('/',[ReviewController::class,'index'])->name('admin.review.index');
                 Route::get('/edit',[ReviewController::class,'edit'])->name('admin.review.edit');
@@ -396,8 +383,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');
                 Route::post('/delivery-time',[OrderController::class,'orderDeliveryTime'])->name('admin.order.delivery_time');
             });
-
-        Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
+            Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
 
             //Flash Sale
             Route::group(['prefix' => 'flash-sales'], function () {
@@ -424,20 +410,113 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             });
 
+            Route::group(['prefix' => 'online-store'], function () {
+
+                //Pages
+                Route::group(['prefix' => 'pages'], function () {
+                    Route::get('/',[PageController::class,'index'])->name('admin.page.index');
+                    Route::get('/create',[PageController::class,'create'])->name('admin.page.create');
+                    Route::post('/store',[PageController::class,'store'])->name('admin.page.store');
+                    Route::get('/edit',[PageController::class,'edit'])->name('admin.page.edit');
+                    Route::post('/update',[PageController::class,'update'])->name('admin.page.update');
+                    Route::get('/active',[PageController::class,'active'])->name('admin.page.active');
+                    Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive');
+                    Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
+                });
+
+                //--Menus--
+                Route::group(['prefix' => 'menu'], function () {
+                    Route::get('/',[MenuController::class,'index'])->name('admin.menu');
+                    Route::post('/store',[MenuController::class,'store'])->name('admin.menu.store');
+                    Route::get('/edit-test',[MenuController::class,'edit'])->name('admin.menu.edit');
+                    Route::post('/update-test',[MenuController::class,'update'])->name('admin.menu.update');
+                    Route::get('/active-test',[MenuController::class,'active'])->name('admin.menu.active');
+                    Route::get('/inactive-test',[MenuController::class,'inactive'])->name('admin.menu.inactive');
+                    Route::get('test/bulk_action',[MenuController::class,'bulkAction'])->name('admin.menu.bulk_action');
+                    //--Menus Items--
+                    Route::get('/{menuId}/items',[MenuItemController::class,'index'])->name('admin.menu.menu_item');
+                    Route::get('/items/data-fetch-by-type',[MenuItemController::class,'dataFetchByType'])->name('admin.menu.menu_item.data-fetch-by-type');
+                    Route::post('/items/store',[MenuItemController::class,'store'])->name('admin.menu.menu_item.store');
+                    Route::get('/edit',[MenuItemController::class,'edit'])->name('admin.menu.menu_item.edit');
+                    Route::post('/update',[MenuItemController::class,'update'])->name('admin.menu.menu_item.update');
+                    Route::get('/active',[MenuItemController::class,'active'])->name('admin.menu.menu_item.active');
+                    Route::get('/inactive',[MenuItemController::class,'inactive'])->name('admin.menu.menu_item.inactive');
+                    Route::get('/items/delete/{id}',[MenuItemController::class,'delete'])->name('admin.menu.menu_item.delete'); //Not Deleted
+                    Route::get('/bulk_action',[MenuItemController::class,'bulkAction'])->name('admin.menu.menu_item.bulk_action');
+                });
+
+                //Store Front
+                Route::group(['prefix' => 'storefront'], function () {
+                    Route::get('/',[StoreFrontController::class,'index'])->name('admin.storefront');
+                    Route::post('/general/store',[StoreFrontController::class,'generalStore'])->name('admin.storefront.general.store');
+                    Route::post('/menu/store',[StoreFrontController::class,'menuStore'])->name('admin.storefront.menu.store');
+                    Route::post('/social_link/store',[StoreFrontController::class,'socialLinkStore'])->name('admin.storefront.social_link.store');
+                    Route::post('/feature/store',[StoreFrontController::class,'featureStore'])->name('admin.storefront.feature.store');
+                    Route::post('/logo/store',[StoreFrontController::class,'logoStore'])->name('admin.storefront.logo.store');
+                    Route::post('/topBanner/store',[StoreFrontController::class,'topBannerStore'])->name('admin.storefront.topBanner.store');
+                    Route::post('/footer/store',[StoreFrontController::class,'footerStore'])->name('admin.storefront.footer.store');
+                    Route::post('/newletter/store',[StoreFrontController::class,'newletterStore'])->name('admin.storefront.newletter.store');
+                    Route::post('/product_page/store',[StoreFrontController::class,'productPageStore'])->name('admin.storefront.product_page.store');
+                    Route::post('/slider_banners/store',[StoreFrontController::class,'sliderBannersStore'])->name('admin.storefront.slider_banners.store');
+                    Route::post('/one_column_banner/store',[StoreFrontController::class,'oneColumnBannerStore'])->name('admin.storefront.one_column_banner.store');
+                    Route::post('/two_column_banners/store',[StoreFrontController::class,'twoColumnBannersStore'])->name('admin.storefront.two_column_banners.store');
+                    Route::post('/three_column_banners/store',[StoreFrontController::class,'threeColumnBannersStore'])->name('admin.storefront.three_column_banners.store');
+                    Route::post('/three_column_full_width_banners/store',[StoreFrontController::class,'threeColumnFllWidthBannersStore'])->name('admin.storefront.three_column_full_width_banners.store');
+                    Route::post('/top_brands/store',[StoreFrontController::class,'topBrandsStore'])->name('admin.storefront.top_brands.store');
+                    Route::post('/top_categories/store',[StoreFrontController::class,'topCategoriesStore'])->name('admin.storefront.top_categories.store');
+                    Route::post('/flash_sale_and_vertical_products/store',[StoreFrontController::class,'flashSaleAndVerticalProductsStore'])->name('admin.storefront.flash_sale_and_vertical_products.store');
+                    Route::post('/product_tab_one/store',[StoreFrontController::class,'productTabsOneStore'])->name('admin.storefront.product_tab_one.store');
+                    Route::post('/product_tab_two/store',[StoreFrontController::class,'productTabsTwoStore'])->name('admin.storefront.product_tab_two.store');
+                });
+
+                //--Slider--
+                Route::group(['prefix' => 'slider'], function () {
+                    Route::get('/',[SliderController::class,'index'])->name('admin.slider');
+                    Route::get('/data-fetch-by-type',[SliderController::class,'dataFetchByType'])->name('admin.slider.data-fetch-by-type');
+                    Route::post('/store',[SliderController::class,'store'])->name('admin.slider.store');
+                    Route::get('/edit',[SliderController::class,'edit'])->name('admin.slider.edit');
+                    Route::post('/update',[SliderController::class,'update'])->name('admin.slider.update');
+                    Route::get('/active',[SliderController::class,'active'])->name('admin.slider.active');
+                    Route::get('/inactive',[SliderController::class,'inactive'])->name('admin.slider.inactive');
+                    Route::get('test/bulk_action',[SliderController::class,'bulkAction'])->name('admin.slider.bulk_action');
+                });
+            });
+
             //Pages
-            Route::group(['prefix' => 'pages'], function () {
-                Route::get('/',[PageController::class,'index'])->name('admin.page.index');
-                Route::get('/create',[PageController::class,'create'])->name('admin.page.create');
-                Route::post('/store',[PageController::class,'store'])->name('admin.page.store');
-                Route::get('/edit',[PageController::class,'edit'])->name('admin.page.edit');
-                Route::post('/update',[PageController::class,'update'])->name('admin.page.update');
-                Route::get('/active',[PageController::class,'active'])->name('admin.page.active');
-                Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive');
-                Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
+            // Route::group(['prefix' => 'pages'], function () {
+            //     Route::get('/',[PageController::class,'index'])->name('admin.page.index');
+            //     Route::get('/create',[PageController::class,'create'])->name('admin.page.create');
+            //     Route::post('/store',[PageController::class,'store'])->name('admin.page.store');
+            //     Route::get('/edit',[PageController::class,'edit'])->name('admin.page.edit');
+            //     Route::post('/update',[PageController::class,'update'])->name('admin.page.update');
+            //     Route::get('/active',[PageController::class,'active'])->name('admin.page.active');
+            //     Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive');
+            //     Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
+            // });
+
+
+
+            Route::group(['prefix' => 'localization'], function () {
+                //Taxes
+                Route::group(['prefix' => 'taxes'], function () {
+                    Route::get('/',[TaxController::class,'index'])->name('admin.tax.index');
+                    Route::post('/store',[TaxController::class,'store'])->name('admin.tax.store');
+                    Route::get('/edit',[TaxController::class,'edit'])->name('admin.tax.edit');
+                    Route::post('/update',[TaxController::class,'update'])->name('admin.tax.update');
+                    Route::get('/active',[TaxController::class,'active'])->name('admin.tax.active');
+                    Route::get('/inactive',[TaxController::class,'inactive'])->name('admin.tax.inactive');
+                    Route::get('/bulk_action',[TaxController::class,'bulkAction'])->name('admin.tax.bulk_action');
+                });
+                //Currency Rates
+                Route::group(['prefix' => 'currency_rates'], function () {
+                    Route::get('/',[CurrencyRateController::class,'index'])->name('admin.currency_rate.index');
+                    Route::get('/edit',[CurrencyRateController::class,'edit'])->name('admin.currency_rate.edit');
+                    Route::post('/update',[CurrencyRateController::class,'update'])->name('admin.currency_rate.update');
+                });
             });
 
 
-            //user
+            //User
             Route::get('/user',[UserController::class,'index'])->name('admin.user');
             Route::post('/insertUser',[UserController::class,'store'])->name('user.store');
             Route::post('/updateUser',[UserController::class,'update'])->name('user_list.update');
@@ -446,22 +525,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::get('/user/inactive',[UserController::class,'inactive'])->name('admin.user.inactive');
             Route::get('/user/bulk_action',[UserController::class,'bulkAction'])->name('admin.user.bulk_action');
 
-            Route::group(['prefix' => 'taxes'], function () {
-                Route::get('/',[TaxController::class,'index'])->name('admin.tax.index');
-                Route::post('/store',[TaxController::class,'store'])->name('admin.tax.store');
-                Route::get('/edit',[TaxController::class,'edit'])->name('admin.tax.edit');
-                Route::post('/update',[TaxController::class,'update'])->name('admin.tax.update');
-                Route::get('/active',[TaxController::class,'active'])->name('admin.tax.active');
-                Route::get('/inactive',[TaxController::class,'inactive'])->name('admin.tax.inactive');
-                Route::get('/bulk_action',[TaxController::class,'bulkAction'])->name('admin.tax.bulk_action');
-            });
-
-            Route::group(['prefix' => 'currency_rates'], function () {
-                Route::get('/',[CurrencyRateController::class,'index'])->name('admin.currency_rate.index');
-                Route::get('/edit',[CurrencyRateController::class,'edit'])->name('admin.currency_rate.edit');
-                Route::post('/update',[CurrencyRateController::class,'update'])->name('admin.currency_rate.update');
-            });
-
+            
+            //Roles
             Route::group(['prefix' => 'roles'], function () {
                 Route::get('/',[RoleController::class,'index'])->name('admin.role.index');
                 Route::post('/store',[RoleController::class,'store'])->name('admin.role.store');
@@ -475,65 +540,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/role-permission/{id}',[PermissionController::class,'rolePermission'])->name('admin.rolePermission');
                 Route::get('roles/permission_details/{id}',[PermissionController::class,'permissionDetails'])->name('permissionDetails');
                 Route::post('roles/permission',[PermissionController::class,'set_permission'])->name('set_permission');
-            });
-
-            //--Menus--
-            Route::group(['prefix' => 'menu'], function () {
-
-                Route::get('/',[MenuController::class,'index'])->name('admin.menu');
-                Route::post('/store',[MenuController::class,'store'])->name('admin.menu.store');
-                Route::get('/edit-test',[MenuController::class,'edit'])->name('admin.menu.edit');
-                Route::post('/update-test',[MenuController::class,'update'])->name('admin.menu.update');
-                Route::get('/active-test',[MenuController::class,'active'])->name('admin.menu.active');
-                Route::get('/inactive-test',[MenuController::class,'inactive'])->name('admin.menu.inactive');
-                Route::get('test/bulk_action',[MenuController::class,'bulkAction'])->name('admin.menu.bulk_action');
-
-                //--Menus Items--
-                Route::get('/{menuId}/items',[MenuItemController::class,'index'])->name('admin.menu.menu_item');
-                Route::get('/items/data-fetch-by-type',[MenuItemController::class,'dataFetchByType'])->name('admin.menu.menu_item.data-fetch-by-type');
-                Route::post('/items/store',[MenuItemController::class,'store'])->name('admin.menu.menu_item.store');
-                Route::get('/edit',[MenuItemController::class,'edit'])->name('admin.menu.menu_item.edit');
-                Route::post('/update',[MenuItemController::class,'update'])->name('admin.menu.menu_item.update');
-                Route::get('/active',[MenuItemController::class,'active'])->name('admin.menu.menu_item.active');
-                Route::get('/inactive',[MenuItemController::class,'inactive'])->name('admin.menu.menu_item.inactive');
-                Route::get('/items/delete/{id}',[MenuItemController::class,'delete'])->name('admin.menu.menu_item.delete'); //Not Deleted
-                Route::get('/bulk_action',[MenuItemController::class,'bulkAction'])->name('admin.menu.menu_item.bulk_action');
-            });
-
-            //Store Front
-            Route::group(['prefix' => 'storefront'], function () {
-                Route::get('/',[StoreFrontController::class,'index'])->name('admin.storefront');
-                Route::post('/general/store',[StoreFrontController::class,'generalStore'])->name('admin.storefront.general.store');
-                Route::post('/menu/store',[StoreFrontController::class,'menuStore'])->name('admin.storefront.menu.store');
-                Route::post('/social_link/store',[StoreFrontController::class,'socialLinkStore'])->name('admin.storefront.social_link.store');
-                Route::post('/feature/store',[StoreFrontController::class,'featureStore'])->name('admin.storefront.feature.store');
-                Route::post('/logo/store',[StoreFrontController::class,'logoStore'])->name('admin.storefront.logo.store');
-                Route::post('/topBanner/store',[StoreFrontController::class,'topBannerStore'])->name('admin.storefront.topBanner.store');
-                Route::post('/footer/store',[StoreFrontController::class,'footerStore'])->name('admin.storefront.footer.store');
-                Route::post('/newletter/store',[StoreFrontController::class,'newletterStore'])->name('admin.storefront.newletter.store');
-                Route::post('/product_page/store',[StoreFrontController::class,'productPageStore'])->name('admin.storefront.product_page.store');
-                Route::post('/slider_banners/store',[StoreFrontController::class,'sliderBannersStore'])->name('admin.storefront.slider_banners.store');
-                Route::post('/one_column_banner/store',[StoreFrontController::class,'oneColumnBannerStore'])->name('admin.storefront.one_column_banner.store');
-                Route::post('/two_column_banners/store',[StoreFrontController::class,'twoColumnBannersStore'])->name('admin.storefront.two_column_banners.store');
-                Route::post('/three_column_banners/store',[StoreFrontController::class,'threeColumnBannersStore'])->name('admin.storefront.three_column_banners.store');
-                Route::post('/three_column_full_width_banners/store',[StoreFrontController::class,'threeColumnFllWidthBannersStore'])->name('admin.storefront.three_column_full_width_banners.store');
-                Route::post('/top_brands/store',[StoreFrontController::class,'topBrandsStore'])->name('admin.storefront.top_brands.store');
-                Route::post('/top_categories/store',[StoreFrontController::class,'topCategoriesStore'])->name('admin.storefront.top_categories.store');
-                Route::post('/flash_sale_and_vertical_products/store',[StoreFrontController::class,'flashSaleAndVerticalProductsStore'])->name('admin.storefront.flash_sale_and_vertical_products.store');
-                Route::post('/product_tab_one/store',[StoreFrontController::class,'productTabsOneStore'])->name('admin.storefront.product_tab_one.store');
-                Route::post('/product_tab_two/store',[StoreFrontController::class,'productTabsTwoStore'])->name('admin.storefront.product_tab_two.store');
-            });
-
-            //--SLider--
-            Route::group(['prefix' => 'slider'], function () {
-                Route::get('/',[SliderController::class,'index'])->name('admin.slider');
-                Route::get('/data-fetch-by-type',[SliderController::class,'dataFetchByType'])->name('admin.slider.data-fetch-by-type');
-                Route::post('/store',[SliderController::class,'store'])->name('admin.slider.store');
-                Route::get('/edit',[SliderController::class,'edit'])->name('admin.slider.edit');
-                Route::post('/update',[SliderController::class,'update'])->name('admin.slider.update');
-                Route::get('/active',[SliderController::class,'active'])->name('admin.slider.active');
-                Route::get('/inactive',[SliderController::class,'inactive'])->name('admin.slider.inactive');
-                Route::get('test/bulk_action',[SliderController::class,'bulkAction'])->name('admin.slider.bulk_action');
             });
 
             //Color
@@ -569,31 +575,56 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             Route::group(['prefix' => 'setting'], function () {
 
-                Route::get('/',[SettingController::class,'index'])->name('admin.setting.index');
-                Route::post('/general/store',[SettingController::class,'generalStoreOrUpdate'])->name('admin.setting.general.store_or_update');
-                Route::post('/store_store',[SettingController::class,'storeStoreOrUpdate'])->name('admin.setting.store.store_or_update');
-                Route::post('/currency/store',[SettingController::class,'currencyStoreOrUpdate'])->name('admin.setting.currency.store_or_update');
-                Route::post('/sms/store',[SettingController::class,'smsStoreOrUpdate'])->name('admin.setting.sms.store_or_update');
-                Route::post('/mail/store',[SettingController::class,'mailStoreOrUpdate'])->name('admin.setting.mail.store_or_update');
-                Route::post('/newsletter/store',[SettingController::class,'newsletterStoreOrUpdate'])->name('admin.setting.newsletter.store_or_update');
-                Route::post('/custom_css_js/store',[SettingController::class,'customCssJsStoreOrUpdate'])->name('admin.setting.custom_css_js.store_or_update');
-                Route::post('/facebook/store',[SettingController::class,'facebookStoreOrUpdate'])->name('admin.setting.facebook.store_or_update');
-                Route::post('/google/store',[SettingController::class,'googleStoreOrUpdate'])->name('admin.setting.google.store_or_update');
-                Route::post('/github/store',[SettingController::class,'githubStoreOrUpdate'])->name('admin.setting.github.store_or_update');
-                Route::post('/free_shipping/store',[SettingController::class,'freeShippingStoreOrUpdate'])->name('admin.setting.free_shipping.store_or_update');
-                Route::post('/local_pickup/store',[SettingController::class,'localPickupStoreOrUpdate'])->name('admin.setting.local_pickup.store_or_update');
-                Route::post('/flat_rate/store',[SettingController::class,'flatRateStoreOrUpdate'])->name('admin.setting.flat_rate.store_or_update');
-                Route::post('/paypal/store',[SettingController::class,'paypalStoreOrUpdate'])->name('admin.setting.paypal.store_or_update');
-                Route::post('/strip/store',[SettingController::class,'stripStoreOrUpdate'])->name('admin.setting.strip.store_or_update');
-                Route::post('/paytm/store',[SettingController::class,'paytmStoreOrUpdate'])->name('admin.setting.paytm.store_or_update');
-                Route::post('/sslcommerz/store',[SettingController::class,'sslcommerzStoreOrUpdate'])->name('admin.setting.sslcommerz.store_or_update');
-                Route::post('/cash_on_delivery/store',[SettingController::class,'cashonDeliveryStoreOrUpdate'])->name('admin.setting.cash_on_delivery.store_or_update');
-                Route::post('/bank_transfer/store',[SettingController::class,'bankTransferStoreOrUpdate'])->name('admin.setting.bank_transfer.store_or_update');
-                Route::post('/check_money_order/store',[SettingController::class,'cehckMoneyOrderStoreOrUpdate'])->name('admin.setting.check_money_order.store_or_update');
-                Route::post('/razorpay/store',[SettingController::class,'razorpayStoreOrUpdate'])->name('admin.setting.razorpay.store_or_update');
-                Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
-                Route::post('/about_us',[SettingController::class,'aboutUsStoreOrUpdate'])->name('admin.setting.about_us.store_or_update');
-                Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
+                //Country
+                Route::group(['prefix' => 'countries'], function () {
+                    Route::get('/',[CountryController::class,'index'])->name('admin.country.index');
+                    Route::get('/datatable',[CountryController::class,'dataTable'])->name('admin.country.datatable');
+                    Route::post('/store',[CountryController::class,'store'])->name('admin.country.store');
+                    Route::get('/edit',[CountryController::class,'edit'])->name('admin.country.edit');
+                    Route::post('/update',[CountryController::class,'update'])->name('admin.country.update');
+                    Route::get('/destroy',[CountryController::class,'destroy'])->name('admin.country.destroy');
+                    Route::get('/bulk_action_delete',[CountryController::class,'bulkActionDelete'])->name('admin.country.bulk_action_delete');
+                });
+
+                //Currency
+                Route::group(['prefix' => 'currencies'], function () {
+                    Route::get('/',[CurrencyController::class,'index'])->name('admin.currency.index');
+                    Route::get('/datatable',[CurrencyController::class,'dataTable'])->name('admin.currency.datatable');
+                    Route::post('/store',[CurrencyController::class,'store'])->name('admin.currency.store');
+                    Route::get('/edit',[CurrencyController::class,'edit'])->name('admin.currency.edit');
+                    Route::post('/update',[CurrencyController::class,'update'])->name('admin.currency.update');
+                    Route::get('/destroy',[CurrencyController::class,'destroy'])->name('admin.currency.destroy');
+                    Route::get('/bulk_action_delete',[CurrencyController::class,'bulkActionDelete'])->name('admin.currency.bulk_action_delete');
+                });
+
+                //Other
+                Route::group(['prefix' => 'others'], function () {
+                    Route::get('/',[SettingController::class,'index'])->name('admin.setting.index');
+                    Route::post('/general/store',[SettingController::class,'generalStoreOrUpdate'])->name('admin.setting.general.store_or_update');
+                    Route::post('/store_store',[SettingController::class,'storeStoreOrUpdate'])->name('admin.setting.store.store_or_update');
+                    Route::post('/currency/store',[SettingController::class,'currencyStoreOrUpdate'])->name('admin.setting.currency.store_or_update');
+                    Route::post('/sms/store',[SettingController::class,'smsStoreOrUpdate'])->name('admin.setting.sms.store_or_update');
+                    Route::post('/mail/store',[SettingController::class,'mailStoreOrUpdate'])->name('admin.setting.mail.store_or_update');
+                    Route::post('/newsletter/store',[SettingController::class,'newsletterStoreOrUpdate'])->name('admin.setting.newsletter.store_or_update');
+                    Route::post('/custom_css_js/store',[SettingController::class,'customCssJsStoreOrUpdate'])->name('admin.setting.custom_css_js.store_or_update');
+                    Route::post('/facebook/store',[SettingController::class,'facebookStoreOrUpdate'])->name('admin.setting.facebook.store_or_update');
+                    Route::post('/google/store',[SettingController::class,'googleStoreOrUpdate'])->name('admin.setting.google.store_or_update');
+                    Route::post('/github/store',[SettingController::class,'githubStoreOrUpdate'])->name('admin.setting.github.store_or_update');
+                    Route::post('/free_shipping/store',[SettingController::class,'freeShippingStoreOrUpdate'])->name('admin.setting.free_shipping.store_or_update');
+                    Route::post('/local_pickup/store',[SettingController::class,'localPickupStoreOrUpdate'])->name('admin.setting.local_pickup.store_or_update');
+                    Route::post('/flat_rate/store',[SettingController::class,'flatRateStoreOrUpdate'])->name('admin.setting.flat_rate.store_or_update');
+                    Route::post('/paypal/store',[SettingController::class,'paypalStoreOrUpdate'])->name('admin.setting.paypal.store_or_update');
+                    Route::post('/strip/store',[SettingController::class,'stripStoreOrUpdate'])->name('admin.setting.strip.store_or_update');
+                    Route::post('/paytm/store',[SettingController::class,'paytmStoreOrUpdate'])->name('admin.setting.paytm.store_or_update');
+                    Route::post('/sslcommerz/store',[SettingController::class,'sslcommerzStoreOrUpdate'])->name('admin.setting.sslcommerz.store_or_update');
+                    Route::post('/cash_on_delivery/store',[SettingController::class,'cashonDeliveryStoreOrUpdate'])->name('admin.setting.cash_on_delivery.store_or_update');
+                    Route::post('/bank_transfer/store',[SettingController::class,'bankTransferStoreOrUpdate'])->name('admin.setting.bank_transfer.store_or_update');
+                    Route::post('/check_money_order/store',[SettingController::class,'cehckMoneyOrderStoreOrUpdate'])->name('admin.setting.check_money_order.store_or_update');
+                    Route::post('/razorpay/store',[SettingController::class,'razorpayStoreOrUpdate'])->name('admin.setting.razorpay.store_or_update');
+                    Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
+                    Route::post('/about_us',[SettingController::class,'aboutUsStoreOrUpdate'])->name('admin.setting.about_us.store_or_update');
+                    Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
+                });
 
                 Route::group(['prefix' => 'language'], function () {
                     Route::get('/',[LanguageController::class,'index'])->name('admin.setting.language');
@@ -602,6 +633,14 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::get('/delete/{id}',[LanguageController::class,'delete'])->name('admin.setting.language.delete');
                     Route::get('/defaultChange/{id}',[LanguageController::class,'defaultChange'])->name('admin.setting.language.defaultChange');
                 });
+
+
+                Route::group(['prefix' => 'shipping'], function () {
+                    Route::group(['prefix' => 'location'], function () {
+                        Route::get('/',[ShippingLocationController::class,'index'])->name('admin.shipping.location.index');
+                    });
+                });
+
             });
 
             Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');

@@ -3,14 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Session;
 
 class Tag extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'slug',
         'is_active'
     ];
+
+    protected $dates = ['deleted_at'];
+
 
     public function tagTranslation()  //Remove Later
     {
@@ -30,36 +36,6 @@ class Tag extends Model
         $locale = Session::get('currentLocal');
         return $this->hasOne(TagTranslation::class,'tag_id')
                     ->where('local',$locale);
-
-        //****************** Test  *******************
-
-        // $locale = 'kl';
-        // return  $this->hasOne(TagTranslation::class,'tag_id')
-        //               ->where('local', $locale ?? 'en')
-        //               ->select('tag_id','tag_name','local');  //??
-
-                    //   $this->hasOne(TagTranslation::class,'tag_id')
-                    //   ->where('local','bn')
-                    //   ->select('tag_id','tag_name','local');
-
-        // $query->hasOne(TagTranslation::class,'tag_id')
-        //             ->where('local','en');
-
-                // ->when(isset($locale), function ($query) use ($locale) {
-                //     $query->where('local', 'nn');
-                // })
-                // ->when(isset($locale), function ($query) use ($locale) {
-                //     $query->where('local', 'en');
-                // });
-
-        // if ($data) {
-        //     return 'ok';
-        // }
-        // else {
-        //     return $this->tagTranslationEnglish();
-        // }
-
-
     }
 
     public function tagTranslationEnglish()

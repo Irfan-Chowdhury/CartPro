@@ -19,12 +19,71 @@ class ShopProductController extends Controller
 {
     use ProductPromoBadgeTextTrait;
 
+    // public function index()
+    // {
+    //     $locale = Session::get('currentLocal');
+
+    //     $products = Cache::remember('products', 300, function () use ($locale) {
+    //         return DB::table('products')
+    //                 ->join('product_translations', function ($join) use ($locale) {
+    //                     $join->on('product_translations.product_id', '=', 'products.id')
+    //                     ->where('product_translations.local', '=', $locale);
+    //                 })
+    //                 ->leftJoin('brand_translations', function ($join) use ($locale) {
+    //                     $join->on('brand_translations.brand_id', '=', 'products.brand_id')
+    //                     ->where('brand_translations.local', '=', $locale);
+    //                 })
+    //                 ->leftJoin('product_images', function ($join) {
+    //                     $join->on('product_images.product_id', '=', 'products.id')
+    //                     ->where('product_images.type', '=', 'base');
+    //                 })
+    //                 ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
+    //                 ->where('is_active',1)
+    //                 ->orderBy('products.id','ASC')
+    //                 ->get();
+    //     });
+
+
+    //     $product_images = Cache::remember('product_images', 300, function () {
+    //         return ProductImage::select('product_id','image','type')->get();
+    //     });
+
+
+    //     $category_product = Cache::remember('category_product', 300, function () {
+    //         return CategoryProduct::get();
+    //     });
+
+    //     $category_ids = [];
+    //     foreach ($products as $key => $item) {
+    //         foreach ($category_product as $key => $value) {
+    //             if ($item->id==$value->product_id) {
+    //                 $category_ids[$item->id] = $category_product[$key];
+    //                 break;
+    //             }
+    //         }
+    //     }
+
+    //     $attribute_values = ProductAttributeValue::with('attributeTranslation.attributeValueTranslation')->select('attribute_id')->distinct()->get();
+
+    //     $categories = Cache::remember('categories', 300, function () {
+    //         return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+    //                 ->where('is_active',1)
+    //                 ->orderBy('is_active','DESC')
+    //                 ->orderBy('id','ASC')
+    //                 ->get();
+    //     });
+
+    //     $product_attr_val = Product::with('productAttributeValues','brandTranslation')
+    //                     ->orderBy('id','DESC')
+    //                     ->get();
+
+    //     return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values','product_attr_val'));
+    // }
     public function index()
     {
         $locale = Session::get('currentLocal');
 
-        $products = Cache::remember('products', 300, function () use ($locale) {
-            return DB::table('products')
+        $products = DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
                         $join->on('product_translations.product_id', '=', 'products.id')
                         ->where('product_translations.local', '=', $locale);
@@ -41,17 +100,10 @@ class ShopProductController extends Controller
                     ->where('is_active',1)
                     ->orderBy('products.id','ASC')
                     ->get();
-        });
 
+        $product_images = ProductImage::select('product_id','image','type')->get();
 
-        $product_images = Cache::remember('product_images', 300, function () {
-            return ProductImage::select('product_id','image','type')->get();
-        });
-
-
-        $category_product = Cache::remember('category_product', 300, function () {
-            return CategoryProduct::get();
-        });
+        $category_product = CategoryProduct::get();
 
         $category_ids = [];
         foreach ($products as $key => $item) {
@@ -65,13 +117,11 @@ class ShopProductController extends Controller
 
         $attribute_values = ProductAttributeValue::with('attributeTranslation.attributeValueTranslation')->select('attribute_id')->distinct()->get();
 
-        $categories = Cache::remember('categories', 300, function () {
-            return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
                     ->get();
-        });
 
         $product_attr_val = Product::with('productAttributeValues','brandTranslation')
                         ->orderBy('id','DESC')

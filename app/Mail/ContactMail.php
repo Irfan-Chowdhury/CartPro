@@ -31,7 +31,6 @@ class ContactMail extends Mailable
     public function build()
     {
         return $this->markdown('mail.contact-mail');
-
         // return $this->view('view.contact-mail');
     }
 }

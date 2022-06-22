@@ -7,7 +7,7 @@
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">{{__('file.Tags')}}</h4>
-        <div id="success_alert" role="alert"></div>
+        <div id="alert_message" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('tag-store'))
@@ -38,8 +38,8 @@
 </section>
 
 
-@include('admin.pages.tag.form_modal')
-@include('admin.pages.tag.edit_form_modal')
+@include('admin.pages.tag.create_modal')
+@include('admin.pages.tag.edit_modal')
 @include('admin.includes.confirm_modal')
 
 @endsection
@@ -87,7 +87,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('admin.tag.index') }}",
+                url: "{{ route('admin.tag.datatable') }}",
             },
             columns: [
                 {
@@ -186,54 +186,24 @@
         new $.fn.dataTable.FixedHeader(table);
     });
 
+
     //----------Insert Data----------------------
-    $("#submitForm").on("submit",function(e){
-        e.preventDefault();
-        var tagName  = $("#tagName").val();
-        var isActive = $("#isActive").val();
+    @include('admin.includes.common_js.submit_button_click_js')
 
-        $.ajax({
-            url: "{{route('admin.tag.store')}}",
-            method: "POST",
-            data: $('#submitForm').serialize(),
-            success: function (data) {
-                console.log(data);
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (var count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#error_message').html(html).slideDown(300).delay(5000).slideUp(300);
-                }
-                else if(data.success){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#submitForm')[0].reset();
-                    $("#formModal").modal('hide');
-                    $('#success_alert').fadeIn("slow");
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
+    @include('admin.includes.common_js.submit_form_js',['route_name'=>'admin.tag.store'])
 
 
     //---------- Edit -------------
     $(document).on('click', '.edit', function () {
         var rowId = $(this).data("id");
-        $('#success_alert').html('');
-        // console.log(rowId);
+        $('#errorMessageEdit').html('');
 
         $.ajax({
             url: "{{route('admin.tag.edit')}}",
             type: "GET",
             data: {tag_id:rowId},
             success: function (data) {
+                console.log(data);
                 $('#tagIdEdit').val(data.tag.id);
                 $('#tagNameEdit').val(data.tag_translation.tag_name);
                 $('#tagTranslationId').val(data.tag_translation.id);
@@ -242,174 +212,35 @@
                 } else {
                     $('#isActiveEdit').prop('checked', false);
                 }
-                $('#EditFormModal').modal('show');
+                $('#editFormModal').modal('show');
             }
         })
     });
 
 
     //---------- Update -------------
-    $("#updateForm").on("submit",function(e){
-        e.preventDefault();
+    @include('admin.includes.common_js.update_button_click_js')
 
-        $.ajax({
-            url: "{{route('admin.tag.update')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-
-                console.log(data);
-
-                if (data.errors) {
-                    var html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#error_message_edit').html(html).slideDown(300).delay(5000).slideUp(300);
-                }
-                else if(data.success){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#updateForm')[0].reset();
-                    $("#EditFormModal").modal('hide');
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
+    @include('admin.includes.common_js.update_form_js',['route_name'=>'admin.tag.update'])
 
 
+    //---------- Active ------------
+    @include('admin.includes.common_js.active_js',['route_name'=>'admin.tag.active'])
 
-    //---------- Active -------------
-	$(document).on("click",".active",function(e){
-		e.preventDefault();
-		var rowId = $(this).data("id");
-		var element = this;
-		console.log(rowId);
 
-		$.ajax({
-			url: "{{route('admin.tag.active')}}",
-			type: "GET",
-			data: {id:rowId},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-				else if(data.errors){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow");
-                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
+    //---------- Inactive ------------
+    @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.tag.inactive'])
 
-	//---------- Inactive -------------
-	$(document).on("click",".inactive",function(e){
-		e.preventDefault();
-		var rowId = $(this).data("id");
-		var element = this;
-		console.log(rowId);
+    //---------- Delete ------------
+    @include('admin.includes.common_js.delete_js',['route_name'=>'admin.tag.destroy'])
 
-		$.ajax({
-			url: "{{route('admin.tag.inactive')}}",
-			type: "GET",
-			data: {id:rowId},
-			success: function(data){
-				console.log(data);
-				if(data.success){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-                else if(data.errors){
-                    $('#dataListTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow");
-                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-			}
-		});
-	});
+    //---------- Bulk Action ------------
+    @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.tag.bulk_action'])
+
+
 
     //Bulk Action
-    $("#bulk_action").on("click",function(){
-        var idsArray = [];
-        let table = $('#dataListTable').DataTable();
-        idsArray = table.rows({selected: true}).ids().toArray();
 
-        if(idsArray.length === 0){
-            alert("Please Select at least one checkbox.");
-        }else{
-            $('#bulkConfirmModal').modal('show');
-            let action_type;
-
-            $("#active").on("click",function(){
-                console.log(idsArray);
-                action_type = "active";
-                $.ajax({
-                    url: "{{route('admin.tag.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-            $("#inactive").on("click",function(){
-                action_type = "inactive";
-                console.log(idsArray);
-                $.ajax({
-                    url: "{{route('admin.tag.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-        }
-    });
 
 })(jQuery);
     </script>

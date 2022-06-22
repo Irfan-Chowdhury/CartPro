@@ -162,10 +162,6 @@
         (function ($) {
             "use strict";
 
-            let values         = [];
-            let valueNames     = [];
-            let attributeNames = [];
-
             $('#bannerSlideUp').on('click', function(){
                 $('#top_banner').slideUp();
             })
@@ -411,15 +407,44 @@
                 });
             });
 
+
+            let values         = [];
+            let valueNames     = [];
+            let attributeNames = [];
+
             $('.attribute_value').on("click",function(e){
                 e.preventDefault();
-                $(this).addClass('selected');
+
                 var selectedVal = $(this).data('value_id');
                 var selectedName = $(this).data('value_name');
                 var selectedAttributeName = $(this).data('attribute_name');
-                values.push(selectedVal);
-                valueNames.push(selectedName);
-                attributeNames.push(selectedAttributeName);
+
+                if ($(this).hasClass('select')) {
+                    $(this).removeClass('text-primary');
+                    $(this).removeClass('select').addClass('deselect');
+                    for( var i = 0; i < values.length; i++){ 
+                        if (values[i] === selectedVal) { 
+                            values.splice(i, 1); 
+                        }
+                    }
+                    for( var i = 0; i < valueNames.length; i++){ 
+                        if (valueNames[i] === selectedName) { 
+                            valueNames.splice(i, 1); 
+                        }
+                    }
+                    for( var i = 0; i < attributeNames.length; i++){ 
+                        if (attributeNames[i] === selectedAttributeName) { 
+                            attributeNames.splice(i, 1); 
+                        }
+                    }
+                } else {
+                    $(this).removeClass('deselect').addClass('select');
+                    $(this).addClass('text-primary');
+                    values.push(selectedVal);
+                    valueNames.push(selectedName);
+                    attributeNames.push(selectedAttributeName);
+                }
+
                 $('#value_ids').val(values);
                 $('#value_names').val(valueNames);
                 $('#attribute_names').val(attributeNames);

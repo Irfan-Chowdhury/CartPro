@@ -99,7 +99,7 @@
     <!-- Color Picker CSS -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-    
+
     @stack('css')
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
@@ -136,11 +136,11 @@
 
         <div style="" id="content" class="animate-bottom">
             <div class="page">
-                
+
                 @include('admin.includes.header')
-                
+
                 @yield('admin_content')
-                
+
                 <footer class="main-footer">
                     <div class="container-fluid">
                         <div class="row">
@@ -196,6 +196,18 @@
     <script type="text/javascript" src="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
 
     <script type="text/javascript">
+
+        // $("ul#setting").siblings('a').attr('aria-expanded','true');
+        // $("ul#setting").addClass("show");
+        // $("ul#setting #setting-country").addClass("active");
+
+        // $("ul#setting #setting-currency").addClass("active");
+        // $("ul#setting #setting-language").addClass("active");
+        // $("ul#setting #setting-other-setting").addClass("active");
+
+
+
+
         if ($(window).outerWidth() > 1199) {
             $('nav.side-navbar').removeClass('shrink');
         }
