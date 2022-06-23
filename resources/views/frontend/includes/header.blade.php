@@ -202,37 +202,41 @@
                                                 @if ($menu!=NULL)
                                                     @forelse ($menu->items as $menu_item)
                                                         @if ($menu_item->child->isNotEmpty())
-                                                            <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
-                                                                <ul class="dropdown">
-                                                                    @foreach($menu_item->child as $child)
-                                                                        <!--Extra-->
-                                                                        @if ($child->child->isNotEmpty())
-                                                                            @if ($child->locale==$locale)
-                                                                                @if(strpos($menu_item->link, 'https://') !== false)
-                                                                                    <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
-                                                                                @else
-                                                                                    <li class="has-dropdown"><a href="{{route('page.Show',$child->link)}}">{{$child->label}}</a></li>
+                                                                @if(strpos($menu_item->link, 'http://') !== false || strpos($menu_item->link, 'https://') !== false)
+                                                                    <li class="has-dropdown"><a href="{{$menu_item->link}}">{{$menu_item->label}}</a>
+                                                                @else
+                                                                    <li class="has-dropdown"><a href="{{route('page.Show',$menu_item->link)}}">{{$menu_item->label}}</a></li>
+                                                                @endif
+                                                                    <ul class="dropdown">
+                                                                        @foreach($menu_item->child as $child)
+                                                                            <!--Extra-->
+                                                                            @if ($child->child->isNotEmpty())
+                                                                                @if ($child->locale==$locale)
+                                                                                    @if(strpos($child->link, 'http://') !== false || strpos($child->link, 'https://') !== false)
+                                                                                        <li class="has-dropdown"><a href="{{$child->link}}">{{$child->label}}</a>
+                                                                                    @else
+                                                                                        <li class="has-dropdown"><a href="{{route('page.Show',$child->link)}}">{{$child->label}}</a></li>
+                                                                                    @endif
                                                                                 @endif
-                                                                            @endif
-                                                                                    <ul class="dropdown">
-                                                                                        @foreach($child->child as $sub_child)
-                                                                                            @if ($sub_child->locale==$locale)
-                                                                                                @if(strpos($sub_child->link, 'https://') !== false)
-                                                                                                    <li><a href="{{$sub_child->link}}">{{$sub_child->label}}</a></li>
-                                                                                                @else
-                                                                                                    <li><a href="{{route('page.Show',$sub_child->link)}}">{{$sub_child->label}}</a></li>
+                                                                                        <ul class="dropdown">
+                                                                                            @foreach($child->child as $sub_child)
+                                                                                                @if ($sub_child->locale==$locale)
+                                                                                                    @if(strpos($menu_item->link, 'http://') !== false || strpos($sub_child->link, 'https://') !== false)
+                                                                                                        <li><a href="{{$sub_child->link}}">{{$sub_child->label}}</a></li>
+                                                                                                    @else
+                                                                                                        <li><a href="{{route('page.Show',$sub_child->link)}}">{{$sub_child->label}}</a></li>
+                                                                                                    @endif
                                                                                                 @endif
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </ul>
-                                                                                </li>
-                                                                        @else
-                                                                            <li><a href="{{$child->link}}">{{$child->label}}</a></li>
-                                                                        @endif
-                                                                        <!--Extra End-->
-                                                                    @endforeach
-                                                                </ul>
-                                                            </li>
+                                                                                            @endforeach
+                                                                                        </ul>
+                                                                                    </li>
+                                                                            @else
+                                                                                <li><a href="{{$child->link}}">{{$child->label}}</a></li>
+                                                                            @endif
+                                                                            <!--Extra End-->
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </li>
                                                         @else
                                                             @if ($menu_item->locale==$locale)
                                                                 @if(strpos($menu_item->link, 'https://') !== false)

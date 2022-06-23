@@ -12,11 +12,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Traits\ProductPromoBadgeTextTrait;
+use App\Traits\TranslationTrait;
 use Illuminate\Support\Facades\Cache;
 
 class CategoryProductController extends Controller
 {
-    use ProductPromoBadgeTextTrait;
+    use ProductPromoBadgeTextTrait, TranslationTrait;
+
+    public function allCategogry()
+    {
+        // $categories = Category::with('catTranslation','categoryTranslationDefaultEnglish')
+        //             ->where('is_active',1)
+        //             ->get();
+
+        return view('frontend.pages.category');
+    }
 
 
     public function categoryWiseProducts($slug)

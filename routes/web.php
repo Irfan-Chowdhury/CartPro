@@ -134,6 +134,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('data_ajax_search',[HomeController::class,'dataAjaxSearch'])->name('cartpro.data_ajax_search');
 
         //Category Wise Products
+        Route::get('/all-categories',[CategoryProductController::class,'allCategogry'])->name('cartpro.all_categorgies');
         Route::get('/category/{slug}',[CategoryProductController::class,'categoryWiseProducts'])->name('cartpro.category_wise_products');
         Route::get('limit_category_products_show',[CategoryProductController::class,'limitCategoryProductShow'])->name('cartpro.limit_category_product_show');
         Route::get('/category_sortby_condition',[CategoryProductController::class,'categoryWiseConditionProducts'])->name('cartpro.category_wise_products_condition');
@@ -273,19 +274,25 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
 
     Route::get('/admin',[Auth\LoginController::class,'showAdminLoginForm'])->name('admin');
-    Route::get('/admin/home',[AdminController::class,'index']);
     Route::post('/admin/login',[LoginController::class,'login'])->name('admin.login');
-    Route::get('/admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('admin_check');
-    Route::get('admin/dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');
-    Route::get('/admin/logout',[AdminController::class,'Logout'])->name('admin.logout');
-    Route::get('/admin/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
 
     Route::group(['prefix' => 'admin','middleware'=>'admin_check'], function () {
         Route::group(['namespace'=>'Admin'], function () {
 
+            //Admin Dashboard
+            Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
+            Route::get('dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');
+            Route::get('/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
+            Route::get('/logout',[AdminController::class,'Logout'])->name('admin.logout');
+
+
+
             //Admin Profile
-            Route::get('/profile',[ProfileController::class,'index'])->name('admin.profile');
-            Route::post('/profile/update',[ProfileController::class,'profileUpdate'])->name('admin.profile_update');
+            Route::group(['prefix' => 'profile'], function () {
+                Route::get('/',[ProfileController::class,'index'])->name('admin.profile');
+                Route::post('/update',[ProfileController::class,'profileUpdate'])->name('admin.profile_update');
+
+            });
 
             //--Category--
             Route::group(['prefix' => '/categories'], function () {
@@ -525,7 +532,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::get('/user/inactive',[UserController::class,'inactive'])->name('admin.user.inactive');
             Route::get('/user/bulk_action',[UserController::class,'bulkAction'])->name('admin.user.bulk_action');
 
-            
+
             //Roles
             Route::group(['prefix' => 'roles'], function () {
                 Route::get('/',[RoleController::class,'index'])->name('admin.role.index');

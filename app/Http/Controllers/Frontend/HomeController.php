@@ -40,6 +40,7 @@ class HomeController extends Controller
 {
     use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait;
 
+
     public function index()
     {
         //Mail
