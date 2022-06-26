@@ -52,7 +52,6 @@ class AppServiceProvider extends ServiceProvider
             Session::put('currentLocal', $currentLocale);
         }
 
-
         $locale = Session::get('currentLocal');
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();

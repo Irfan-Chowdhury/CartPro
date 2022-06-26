@@ -35,7 +35,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Theme Color')</b></label>
                         <div class="col-sm-6">
                             <h6>color Presets</h6>
-                            <ul id="switcher">
+                            <ul id="switcher" class="theme-color-switcher">
                                 <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
                                 <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
                                 <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
@@ -57,7 +57,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Nav Background Color')</b></label>
                         <div class="col-sm-6">
                             <h6>color Presets</h6>
-                            <ul id="switcher">
+                            <ul id="switcher" class="nav-color-switcher">
                                 <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
                                 <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
                                 <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
@@ -77,18 +77,12 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Nav Text Color')</b></label>
                         <div class="col-sm-6">
                             <h6>color Presets</h6>
-                            <ul id="switcher">
-                                <li class="color-change" data-color="#6449e7" style="background-color:#6449e7"></li>
-                                <li class="color-change" data-color="#f51e46" style="background-color:#f51e46"></li>
-                                <li class="color-change" data-color="#fa9928" style="background-color:#fa9928"></li>
-                                <li class="color-change" data-color="#fd6602" style="background-color:#fd6602"></li>
-                                <li class="color-change" data-color="#59b210" style="background-color:#59b210"></li>
-                                <li class="color-change" data-color="#ff749f" style="background-color:#ff749f"></li>
-                                <li class="color-change" data-color="#f8008c" style="background-color:#f8008c"></li>
-                                <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
+                            <ul id="switcher" class="p-0">
+                                <li class="color-change-navtext" data-color="#FFF" data-hover-color="#e5e8ec" style="background-color:#FFF;border:1px solid #666"></li>
+                                <li class="color-change-navtext" data-color="#021523" data-hover-color="#666" style="background-color:#021523"></li>
                             </ul>
                             <h6>@lang('file.Custom color')</h6>
-                            <input type="text" id="color-input-text" name="storefront_nav_text_color" class="form-control colorpicker-element" value="{{$setting[152]->plain_value != NULL ? $setting[152]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                            <input type="text" readonly id="color-input-text" name="storefront_nav_text_color" class="form-control colorpicker-element" value="{{$setting[153]->plain_value != NULL ? $setting[153]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
 
@@ -190,10 +184,24 @@
     </div>
 </div>
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script>
     <script>
-        $('#color-input-theme').colorpicker();
-        $('#color-input-navbar').colorpicker();
-        $('#color-input-text').colorpicker();
+        $('#color-input-theme').colorpicker({});
+        $('#color-input-navbar').colorpicker({});
+
+        $('.theme-color-switcher .color-change').click(function() {
+            var color = $(this).data('color');
+            $('#color-input-theme').val(color);
+        });
+
+        $('.nav-color-switcher .color-change').click(function() {
+            var color = $(this).data('color');
+            $('#color-input-navbar').val(color);
+        });
+
+        $('.color-change-navtext').click(function() {
+            var color = $(this).data('color');
+            $('#color-input-text').val(color);
+        });
     </script>
 @endpush

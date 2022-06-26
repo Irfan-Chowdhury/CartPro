@@ -12,13 +12,15 @@ class ProductTranslation extends Model
         'product_name',
         'description',
         'short_description',
+        'meta_title',
+        'meta_description',
     ];
 
     public function product()
     {
     	return $this->belongsTo(Product::class,'product_id','id');
     }
-    
+
     public function categoryProducts()
     {
         return $this->hasMany(CategoryProduct::class,'product_id','product_id');

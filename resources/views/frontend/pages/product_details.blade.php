@@ -2,8 +2,8 @@
 
 @section('meta_info')
     <meta product="og:site_name" content="CartPro">
-    <meta product="og:title" content="{{$product->productTranslation->product_name ?? null}}">
-    <meta product="og:description" content="{{$product->productTranslation->description ?? null}}">
+    <meta product="og:title" content="{{$product->productTranslation->meta_title ?? null}}">
+    <meta product="og:description" content="{{$product->productTranslation->meta_description ?? null}}">
     <meta product="og:url" content="{{url('product/'.$product->slug.'/'. $category->id)}}">
     <meta product="og:type" content="Product">
 

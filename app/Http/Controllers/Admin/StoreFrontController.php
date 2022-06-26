@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\imageHandleTrait;
+use Illuminate\Support\Facades\Artisan;
 
 use function GuzzleHttp\json_decode;
 
@@ -138,6 +139,7 @@ class StoreFrontController extends Controller
                 }
             }
 
+            Artisan::call('optimize:clear');
             return response()->json(['success'=>'Data Saved Successfully']);
         }
     }

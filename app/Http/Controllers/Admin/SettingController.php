@@ -186,7 +186,6 @@ class SettingController extends Controller
 		$replaceArray= array('FORMAT_NUMBER=' . $request->number_format_type);
 		file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
 
-
         $this->dataWriteInENVFile('APP_TIMEZONE',$request->default_timezone);
 
         return response()->json(['success' => __('Data Added successfully.')]);

@@ -16,7 +16,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('file.Meta Description')}} </b></label>
                         <div class="col-sm-8">
-                            <textarea name="meta_description" id="meta_description" value="{{$product->productTranslation->meta_description ?? $product->productTranslationEnglish->meta_description ?? null}}" class="form-control" rows="5"></textarea>
+                            <textarea name="meta_description" id="meta_description" class="form-control" rows="5">{{$product->productTranslation->meta_description ?? $product->productTranslationEnglish->meta_description ?? null}}</textarea>
                             @error('meta_description')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

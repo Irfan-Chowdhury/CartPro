@@ -249,7 +249,9 @@ class ProductController extends Controller
                 $productTranslation->local        = Session::get('currentLocal');
                 $productTranslation->product_name = htmlspecialchars_decode($request->product_name);
                 $productTranslation->description  = htmlspecialchars_decode($request->description);;
-                $productTranslation->short_description  = $request->short_description;
+                $productTranslation->short_description = $request->short_description;
+                $productTranslation->meta_title    = $request->meta_title;
+                $productTranslation->meta_description  = $request->meta_description;
                 $productTranslation->save();
 
                 //----------------- Base Image --------------
@@ -474,6 +476,8 @@ class ProductController extends Controller
                     'product_name'      => htmlspecialchars_decode($request->product_name),
                     'description'       => htmlspecialchars_decode($request->description),
                     'short_description' => $request->short_description,
+                    'meta_title'      => htmlspecialchars_decode($request->meta_title),
+                    'meta_description'=> htmlspecialchars_decode($request->meta_description),
                 ]
             );
 

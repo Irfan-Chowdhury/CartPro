@@ -137,7 +137,6 @@ class LanguageController extends Controller
         // $language->update();
 
         $language = Language::find($id);
-
         Session::put('currentLocal', $language->local);
         App::setLocale($language->local);
 
