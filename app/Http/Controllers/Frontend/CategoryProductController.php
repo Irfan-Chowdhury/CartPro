@@ -21,11 +21,12 @@ class CategoryProductController extends Controller
 
     public function allCategogry()
     {
-        // $categories = Category::with('catTranslation','categoryTranslationDefaultEnglish')
-        //             ->where('is_active',1)
-        //             ->get();
-
-        return view('frontend.pages.category');
+        $categories = Category::with('categoryTranslation','child.categoryTranslation')
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','ASC')
+                    ->get();
+        return view('frontend.pages.category',compact('categories'));
     }
 
 

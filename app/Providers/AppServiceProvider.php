@@ -42,15 +42,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
-            $locale = 'en';
+
+        $default_language = Language::where('default', '=', 1)->first();
+        if(Session::get('currentLocal')){
+            $currentLocale = Session::get('currentLocal');
+            Session::put('currentLocal', $currentLocale);
         }else {
-            $locale = Session::get('currentLocal');
+            $currentLocale = $default_language->local ?? 'en';
+            Session::put('currentLocal', $currentLocale);
         }
-        App::setLocale($locale);
 
 
+        $locale = Session::get('currentLocal');
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();
 

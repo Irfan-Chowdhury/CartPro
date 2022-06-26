@@ -43,17 +43,8 @@ class HomeController extends Controller
 
     public function index()
     {
+
         //Mail
-        // $data_mail = [];
-        // $data_mail['fullname'] = 'Irfan Chowdhury';
-        // $data_mail['email'] = 'iranchowdhury80@gmail.com';
-        // $data_mail['order_id'] = 1995;
-        // $data_mail['message'] = 'Thanks for shopping. Your order id is ';
-        // Mail::to($data_mail['email'])->send(new OrderMail($data_mail));
-
-        // return 'check mail';
-
-
 
         $categories = Cache::remember('categories', 300, function () {
             return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])

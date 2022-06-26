@@ -1,11 +1,11 @@
 @php
-    if(!Illuminate\Support\Facades\Session::get('currentLocal')){
-        Illuminate\Support\Facades\Session::put('currentLocal', 'en');
-        $locale = 'en';
-    }else {
-        $locale = Illuminate\Support\Facades\Session::get('currentLocal');
-    }
-    Illuminate\Support\Facades\App::setLocale($locale);
+    // if(!Illuminate\Support\Facades\Session::get('currentLocal')){
+    //     Illuminate\Support\Facades\Session::put('currentLocal', 'en');
+    //     $locale = 'en';
+    // }else {
+    //     $locale = Illuminate\Support\Facades\Session::get('currentLocal');
+    // }
+    // Illuminate\Support\Facades\App::setLocale($locale);
 @endphp
 
 <!DOCTYPE html>

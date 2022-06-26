@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CategoryProduct;
 use App\Models\Customer;
+use App\Models\Language;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;

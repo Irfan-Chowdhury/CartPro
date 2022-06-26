@@ -52,7 +52,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)){
             if (auth()->user()->user_type==1){
-                Session::put('currentLocal', 'en');
+                // Session::put('currentLocal', 'en');
                 return redirect()->intended(route('admin.dashboard'));
             }
             else {

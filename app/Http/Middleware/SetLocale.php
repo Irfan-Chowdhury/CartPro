@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -19,13 +20,25 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
-            $locale = 'en';
+        $default_language = Language::where('default', '=', 1)->first();
+        if(Session::get('currentLocal')){
+            $currentLocale = Session::get('currentLocal');
+            Session::put('currentLocal', $currentLocale);
         }else {
-            $locale = Session::get('currentLocal');
+            $currentLocale = $default_language->local ?? 'en';
+            Session::put('currentLocal', $currentLocale);
         }
-        App::setLocale($locale);
+        App::setLocale($currentLocale);
+
+
+        //====== Previous COde ==========
+        // if(!Session::get('currentLocal')){
+        //     $locale = 'en';
+        //     Session::put('currentLocal', $locale);
+        // }else {
+        //     $locale = Session::get('currentLocal');
+        // }
+        // App::setLocale($locale);
 
         return $next($request);
     }

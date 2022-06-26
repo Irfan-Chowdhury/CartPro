@@ -28,7 +28,7 @@
 				@foreach ($languages as $key=> $item)
 					<tr>
 						<td>{{ $item->language_name }}</td>
-						<td>{{ $item->local }}</td>
+						<td>@if($item->local == Session::get('currentLocal')) <span class='p-2 badge badge-success'>{{$item->local}}</span> @else {{$item->local}} @endif</td>
 						<td>@if($item->default == 1) <span class='p-2 badge badge-success'>{{__('file.Default')}}</span> @else <span class='p-2 badge badge-dark'>@lang('file.None')</span> @endif</td>
 						<td>
                             <button type="button" class="btn btn-info"><i class="dripicons-pencil" aria-hidden="true" data-toggle="modal" data-target="#editModalForm-{{$item->local}}"></i></button>

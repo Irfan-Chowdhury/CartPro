@@ -25,10 +25,7 @@ class LanguageController extends Controller
     {
         if (auth()->user()->can('locale-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
-
             $languages = Language::orderBy('language_name','ASC')->get();
-
             return view('admin.pages.setting.language.index',compact('languages'));
         }
         return abort('403', __('You are not authorized'));
@@ -89,7 +86,7 @@ class LanguageController extends Controller
             session()->flash('message','Disabled for demo !');
             return redirect()->back();
         }
-        
+
         $language = Language::find($id);
         File::deleteDirectory('resources/lang/'.$language->local);
         $language->delete();
@@ -134,11 +131,12 @@ class LanguageController extends Controller
 
     public function defaultChange($id)
     {
-        Language::where('default',1)->update(['default'=>0]);
+        // Language::where('default',1)->update(['default'=>0]);
+        // $language = Language::find($id);
+        // $language->default = 1;
+        // $language->update();
 
         $language = Language::find($id);
-        $language->default = 1;
-        $language->update();
 
         Session::put('currentLocal', $language->local);
         App::setLocale($language->local);

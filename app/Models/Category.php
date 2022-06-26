@@ -22,12 +22,13 @@ class Category extends Model
     protected $dates = ['deleted_at'];
 
 
+    //CategoryProductController - index
     public function categoryTranslation()
     {
     	 return $this->hasMany(CategoryTranslation::class,'category_id');  //Remove Later
     }
 
-    
+
 
     public function catTranslation()
     {
