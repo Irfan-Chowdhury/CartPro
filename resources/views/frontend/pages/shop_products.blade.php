@@ -80,7 +80,7 @@
                                                     @forelse ($item->attributeTranslation->attributeValueTranslation as $value)
                                                         <li>
                                                             <div class="custom-control custom-checkbox">
-                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$item->attributeTranslation->attribute_name}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
+                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$item->attributeTranslation->attribute_name}}" id="valueId_{{$value->attribute_value_id}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
                                                             </div>
                                                         </li>
                                                     @empty
@@ -362,7 +362,7 @@
         //     attribute_values.push(selectedVal);
         //     $('#attribute_value_ids').val(attribute_values);
         // });
-        
+
 
         $('.attribute_value_productTab1').on("click",function(e){
             e.preventDefault();

@@ -415,36 +415,47 @@
             $('.attribute_value').on("click",function(e){
                 e.preventDefault();
 
-                var selectedVal = $(this).data('value_id');
-                var selectedName = $(this).data('value_name');
-                var selectedAttributeName = $(this).data('attribute_name');
+                let selectedVal = $(this).data('value_id');
+                let selectedName = $(this).data('value_name');
+                let selectedAttributeName = $(this).data('attribute_name');
 
+                //If want to deselect which is selected previously
                 if ($(this).hasClass('select')) {
                     $(this).removeClass('text-primary');
                     $(this).removeClass('select').addClass('deselect');
-                    for( var i = 0; i < values.length; i++){ 
-                        if (values[i] === selectedVal) { 
-                            values.splice(i, 1); 
+                    for( var i = 0; i < values.length; i++){
+                        if (values[i] === selectedVal) {
+                            values.splice(i, 1);
                         }
                     }
-                    for( var i = 0; i < valueNames.length; i++){ 
-                        if (valueNames[i] === selectedName) { 
-                            valueNames.splice(i, 1); 
+                    for( var i = 0; i < valueNames.length; i++){
+                        if (valueNames[i] === selectedName) {
+                            valueNames.splice(i, 1);
                         }
                     }
-                    for( var i = 0; i < attributeNames.length; i++){ 
-                        if (attributeNames[i] === selectedAttributeName) { 
-                            attributeNames.splice(i, 1); 
+                    for( var i = 0; i < attributeNames.length; i++){
+                        if (attributeNames[i] === selectedAttributeName) {
+                            attributeNames.splice(i, 1);
                         }
                     }
+                    //If want to select new
                 } else {
+                    // First check is this Attribute Name exists or not in Array of attributeNames,
+                    if(attributeNames.indexOf(selectedAttributeName) !== -1){ // if yes then
+                        let index = attributeNames.indexOf(selectedAttributeName); //pick the attribute index number,
+                        let valueId = values[index]; // pick the valueId from the values[index number],
+                        // console.log('Exists | Exists - '+index + ' | ValueId: '+values[index]);
+                        values.splice(index, 1);
+                        valueNames.splice(index, 1);
+                        attributeNames.splice(index, 1);
+                        $('#valueId_'+valueId).removeClass('select').removeClass('text-primary');
+                    }
                     $(this).removeClass('deselect').addClass('select');
                     $(this).addClass('text-primary');
                     values.push(selectedVal);
                     valueNames.push(selectedName);
                     attributeNames.push(selectedAttributeName);
                 }
-
                 $('#value_ids').val(values);
                 $('#value_names').val(valueNames);
                 $('#attribute_names').val(attributeNames);

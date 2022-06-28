@@ -136,6 +136,22 @@
                         ->orderBy('is_active','DESC')
                         ->orderBy('id','ASC')
                         ->get();
+
+            $category_product_count = [];
+            foreach ($categories as $category) {
+                $product_count = 0;
+                if ($category->categoryProduct) {
+                    foreach ($category->categoryProduct as $item) {
+                        if ($item->product) {
+                            $product_count++;
+                        }
+                    }
+                }
+                $category_product_count[$category->id] = $product_count;
+            }
+
+
+
         @endphp
 
         <div class="header-bottom">
@@ -148,15 +164,15 @@
                                     <ul id="cat_menu" class="dropdown p-0">
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
+                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a>
                                                     <ul class="dropdown">
                                                         @foreach ($category->child as $item)
-                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
                                             @else
-                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a></li>
+                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -189,6 +205,8 @@
                                                 @endphp
 
                                                 <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{route('cartpro.home')}}">{{__('file.Home')}}</a></li>
+
+                                                <li class="{{ Request::is('all-categories') ? 'active' : '' }}"><a href="{{route('cartpro.all_categorgies')}}">{{__('file.All Categories')}}</a></li>
 
                                                 @if ($storefront_shop_page_enabled)
                                                     <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>

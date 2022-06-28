@@ -26,26 +26,92 @@ class CategoryProductController extends Controller
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
                     ->get();
-        return view('frontend.pages.category',compact('categories'));
+
+        $category_product_count = [];
+        foreach ($categories as $category) {
+            $product_count = 0;
+            if ($category->categoryProduct) {
+                foreach ($category->categoryProduct as $item) {
+                    if ($item->product) {
+                        $product_count++;
+                    }
+                }
+            }
+            $category_product_count[$category->id] = $product_count;
+        }
+
+        return view('frontend.pages.category',compact('categories','category_product_count'));
     }
 
 
+    // public function categoryWiseProducts($slug)
+    // {
+    //     $setting = Cache::remember('setting', 300, function () {
+    //         return Setting::where('key','storefront_footer_tag_id')->first();
+    //     });
+
+    //     $footer_tag_ids = json_decode($setting->plain_value);
+
+    //     $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
+    //         return Tag::with('tagTranslations','tagTranslationEnglish')
+    //                 ->whereIn('id',$footer_tag_ids)
+    //                 ->where('is_active',1)
+    //                 ->orderBy('is_active','DESC')
+    //                 ->orderBy('id','DESC')
+    //                 ->get();
+    //     });
+
+    //     $locale  = Session::get('currentLocal');
+
+
+    //     $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
+    //             'categoryProduct.product.productTranslation',
+    //             'categoryProduct.product.productTranslationEnglish',
+    //             'categoryProduct.product.baseImage',
+    //             'categoryProduct.product.additionalImage',
+    //             'child.catTranslation','child.categoryTranslationDefaultEnglish')
+    //             ->where('slug',$slug)
+    //             ->first();
+
+
+    //     $product_count = 0;
+    //     if ($category->categoryProduct) {
+    //         foreach ($category->categoryProduct as $item) {
+    //             if ($item->product) {
+    //                 $product_count++;
+    //             }
+    //         }
+    //     }
+
+    //     $attribute_values = Cache::remember('attribute_values', 300, function () use ($locale, $category) {
+    //         return DB::table('attribute_category')
+    //                 ->join('attribute_translations', function ($join) use ($locale) {
+    //                     $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
+    //                     ->where('attribute_translations.locale', '=', $locale);
+    //                 })
+    //                 ->join('attribute_value_translations', function ($join) use ($locale) {
+    //                     $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
+    //                     ->where('attribute_value_translations.local', '=', $locale);
+    //                 })
+    //                 ->where('category_id',$category->id)
+    //                 ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
+    //                 ->get();
+    //     });
+
+    //     return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
+    // }
     public function categoryWiseProducts($slug)
     {
-        $setting = Cache::remember('setting', 300, function () {
-            return Setting::where('key','storefront_footer_tag_id')->first();
-        });
+        $setting = Setting::where('key','storefront_footer_tag_id')->first();
 
         $footer_tag_ids = json_decode($setting->plain_value);
 
-        $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
-            return Tag::with('tagTranslations','tagTranslationEnglish')
+        $tags = Tag::with('tagTranslations','tagTranslationEnglish')
                     ->whereIn('id',$footer_tag_ids)
                     ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','DESC')
                     ->get();
-        });
 
         $locale  = Session::get('currentLocal');
 
@@ -60,7 +126,7 @@ class CategoryProductController extends Controller
                 ->first();
 
 
-        $product_count =0;
+        $product_count = 0;
         if ($category->categoryProduct) {
             foreach ($category->categoryProduct as $item) {
                 if ($item->product) {
@@ -69,8 +135,7 @@ class CategoryProductController extends Controller
             }
         }
 
-        $attribute_values = Cache::remember('attribute_values', 300, function () use ($locale, $category) {
-            return DB::table('attribute_category')
+        $attribute_values = DB::table('attribute_category')
                     ->join('attribute_translations', function ($join) use ($locale) {
                         $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
                         ->where('attribute_translations.locale', '=', $locale);
@@ -82,7 +147,6 @@ class CategoryProductController extends Controller
                     ->where('category_id',$category->id)
                     ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
                     ->get();
-        });
 
         return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
     }

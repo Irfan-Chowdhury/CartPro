@@ -52,9 +52,11 @@ class Category extends Model
     {
         return $this->belongsTo(self::class,'parent_id');
     }
+
     public function child()
     {
-        return $this->hasMany(self::class,'parent_id');
+        return $this->hasMany(self::class,'parent_id')
+        ->where('is_active',1);
     }
 
     public function categoryProduct()

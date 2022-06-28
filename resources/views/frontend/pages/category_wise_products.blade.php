@@ -33,7 +33,7 @@
                             <div class="sidebar-widget sidebar-category-list">
                                 @if ($category->child->count()!=0)
                                 <div class="sidebar-title">
-                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Categories')</h2>
+                                    <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Other Categories')</h2>
                                 </div>
                                 @endif
 
@@ -116,7 +116,7 @@
                                                     @foreach ($attribute_values->where('attribute_name',$key) as $value)
                                                         <li>
                                                             <div class="custom-control custom-checkbox">
-                                                                <label class="custom-control-label attribute_value" data-attribute_name="{{$key}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
+                                                                <label class="custom-control-label attribute_value" data-attribute_name="{{$key}}" id="valueId_{{$value->attribute_value_id}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attribute_value_name}}" for="size-s"><span class="size-block">{{$value->attribute_value_name}}</span></label>
                                                             </div>
                                                         </li>
                                                     @endforeach
