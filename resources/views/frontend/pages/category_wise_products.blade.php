@@ -375,43 +375,6 @@
             });
         });
 
-        // let attribute_values = [];
-        // $('.attribute_value').on('click',function(e){
-        //     e.preventDefault();
-        //     console.log(123)
-
-        //     $(this).addClass('text-primary');
-        //     var selectedVal = $(this).data('attribute_value_id');
-        //     attribute_values.push(selectedVal);
-        //     $('#attribute_value_ids').val(attribute_values);
-        // });
-
-        // $('#filterByAttributeValue').on('submit',function(e) {
-        //     e.preventDefault();
-        //     var form = $(this);
-
-        //     var attribute_value_ids = $('.attribute_value_ids').val();
-        //     attribute_values.splice(0, attribute_values.length)
-
-        //     $.ajax({
-        //         url: "{{route('cartpro.category.filter_by_attribute_value')}}",
-        //         type: "GET",
-        //         data: form.serialize(),
-        //         success: function(data){
-        //             console.log(data);
-        //             if(data.type=='error'){
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: 'Please select at least one',
-        //                 });
-        //             }else{
-        //                 $('.categoryWiseProductField').empty();
-        //                 $('.categoryWiseProductField').html(data);
-        //                 $('.attribute_value').removeClass('text-primary');
-        //             }
-        //         }
-        //     });
-        // });
 
         //New
         $('#sidebarFilter').on('submit',function (e) {
@@ -426,7 +389,6 @@
                     $('.categoryWiseProductField').empty().html(data);
                 }
             });
-            // console.log(form);
         });
     </script>
 

@@ -288,7 +288,7 @@ class CategoryProductController extends Controller
         if ($request->attribute_value_ids) {
             $value_ids = explode(",",$request->attribute_value_ids);
 
-            return response()->json($request->attribute_value_ids);
+            // return response()->json($request->attribute_value_ids);
 
             $products = $products->toArray();
 
@@ -623,7 +623,7 @@ class CategoryProductController extends Controller
                         $html .='</div>
                             </div>
                             <div class="product-details">
-                                <a class="product-name" href="">
+                                <a class="product-name" href="'.url('product/'.$item->slug.'/'. $category->id).'">
                                     '.$item->product_name.'
                                 </a>
                                 <div class="product-short-description">

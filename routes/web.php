@@ -68,8 +68,8 @@ use Illuminate\Support\Facades\File;
 DefaultAuth::routes();
 
 Route::get('/optimize', function() {
-    $exitCode = Artisan::call('optimize:clear');
-    return '<h1>Reoptimized class loader</h1>';
+    Artisan::call('optimize:clear');
+    return redirect()->back();
 });
 
 

@@ -25,8 +25,11 @@
         <div class="container">
                 @forelse ($categories->where('parent_id',NULL) as $item)
                     <div class="row mt-5">
-                        <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="{{asset('public/'.$item->image)}}" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
-                    </h4>
+                        @if (isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
+                            <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="{{asset('public/'.$item->image)}}" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
+                        @else
+                            <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
+                        @endif
                         <hr>
                         <div class="row">
                             @forelse ($item->child as $value)
