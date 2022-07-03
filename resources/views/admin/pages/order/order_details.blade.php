@@ -3,197 +3,252 @@
 @section('admin_content')
 
 <section>
-    <div class="container-fluid"><span id="general_result"></span></div>
-    <div class="container-fluid mb-3">
-        <h3 class="font-weight-bold mt-3">{{__('file.Show Order')}}</h3>
-        <div id="success_alert" role="alert"></div>
-        <br>
-    </div>
 
 
-    <div class="container">
 
-        <input type="hidden" name="order_id" id="order_id" value="{{$order->id}}">
+    <div class="container-fluid">
 
-        <h4 class="ml-3">{{__('file.Order & Account Information')}}</h4>
-        <hr>
-        <div class="row ml-1">
-            <div class="col-md-6">
-                <h4>{{__('file.Order Information')}}</h4>
-                <table>
-                    <tr>
-                        <th>{{__('file.Order Date')}}</th>
-                        <td>{{date('d M, Y',strtotime($order->created_at))}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Order Status')}}</th>
-                        <td>
-                            {{ucwords(str_replace('_', ' ',$order->order_status))}}
-                        </td>
-                    </tr>
-                    {{-- <tr>
-                        <th>{{__('file.Order Status')}}</th>
-                        <td>
-                            <select name="order_status">
-                                <option value="canceled" @if($order->order_status=='canceled') selected @endif class="orderStatus">{{ucfirst('canceled')}}</option>
-                                <option value="completed" @if($order->order_status=='completed') selected @endif class="orderStatus">{{ucfirst('completed')}}</option>
-                                <option value="onhold" @if($order->order_status=='onhold') selected @endif class="orderStatus">{{ucfirst('onhold')}}</option>
-                                <option value="pending" @if($order->order_status=='pending') selected @endif class="orderStatus">{{ucfirst('pending')}}</option>
-                                <option value="pending_payment" @if($order->order_status=='pending_payment') selected @endif class="orderStatus">{{ucfirst('pending_payment')}}</option>
-                                <option value="proccessing" @if($order->order_status=='proccessing') selected @endif class="orderStatus">{{ucfirst('proccessing')}}</option>
-                                <option value="refunded" @if($order->order_status=='refunded') selected @endif class="orderStatus">{{ucfirst('refunded')}}</option>
-                            </select>
-                        </td>
-                    </tr> --}}
-                    <tr>
-                        <th>{{__('file.Shipping Method')}}</th>
-                        <td>{{$order->shipping_method}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Payment Method')}}</th>
-                        <td>{{$order->payment_method}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Currency')}}</th>
-                        <td>{{env('DEFAULT_CURRENCY_CODE')}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Currency Rate')}}</th>
-                        <td>{{number_format((float)$currency_rate, env('FORMAT_NUMBER'), '.', '')}} </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-6">
-                <h4>{{__('file.Order Information')}}</h4>
-                <table>
-                    <tr>
-                        <th>{{__('file.Customer Name')}}</th>
-                        <td>{{$order->billing_first_name}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Customer Email')}}</th>
-                        <td>{{$order->billing_email}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Customer Phone')}}</th>
-                        <td>{{$order->billing_phone}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{__('file.Customer Group')}} (Pending)</th>
-                        <td>Irfan</td>
-                    </tr>
-                </table>
+        <div class="container-fluid mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="font-weight-bold mt-3"> #{{$order->id}} <small>{{__('file.Order Details')}}</small></h3>
+                </div>
             </div>
         </div>
 
 
-        <br><br>
-        <h4 class="ml-3">{{__('file.Address Information')}}</h4>
-        <hr>
         <div class="row ml-1">
-            <div class="col-md-6">
-                <h4>{{__('file.Billing Address')}}</h4><br>
-                <span>{{$order->billing_address_1 ?? null}}</span> <br>
-                <span>{{$order->billing_city ?? null}}</span><br>
-                <span>{{$order->billing_state ?? null}}</span><br>
-                <span>{{$order->billing_zip_code ?? null}}</span><br>
-                <span>{{$order->billing_country ?? null}}</span>
-            </div>
-            <div class="col-md-6">
-                <h4>{{__('file.Shipping Address')}}</h4><br>
-                <span>{{$order->shippingDetails->shipping_address_1 ?? null}}</span> <br>
-                <span>{{$order->shippingDetails->shipping_city ?? null}}</span><br>
-                <span>{{$order->shippingDetails->shipping_state ?? null}}</span><br>
-                <span>{{$order->shippingDetails->shipping_zip_code ?? null}}</span><br>
-                <span>{{$order->shippingDetails->shipping_country ?? null}}</span>
-            </div>
-        </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="ml-3">{{__('file.Items Ordered')}} ({{$order->orderDetails->count()}})</h4>
+                        <hr>
+                        <div class="row">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{{__('file.Product')}}</th>
+                                        <th>{{__('file.Unit Price')}}</th>
+                                        <th>{{__('file.Quantity')}}</th>
+                                        <th>{{__('file.Total Unite Price')}}</th>
+                                        <th>@lang('file.Attributes')</th>
 
-
-        <br><br>
-        <h4 class="ml-3">{{__('file.Items Ordered')}}</h4>
-        <hr>
-        <div class="row ml-1">
-            <div class="col-md-12">
-                <table>
-                    <tr>
-                        <th>{{__('file.Product')}}</th>
-                        <th>{{__('file.Unit Price')}}</th>
-                        <th>{{__('file.Quantity')}}</th>
-                        <th>@lang('file.Attribute Details')</th>
-                        <th>@lang('file.Tax')</th>
-                        <th>@lang('file.Shipping Cost')</th>
-                        <th>@lang('file.Discount')</th>
-                        <th class="text-success">@lang('file.Total Amount')</th>
-                    </tr>
-
-                    @forelse ($order->orderDetails as $item)
-                        <tr>
-                            <td>{{$item->product->productTranslation->product_name}}</td>
-                            <td>{{$item->subtotal}}</td>
-                            <td>{{$item->qty}}</td>
-                            <td>
-                                @php
-                                    $attributes = json_decode($item->options);
-                                @endphp
-                                @forelse ($attributes as $key => $item)
-                                    @if ($key!='image' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
-                                        <p><i><b>{{$key}}</b> :{{$item}}</i></p>
-                                    @endif
+                                    </tr>
+                                </thead>
+                                @forelse ($order->orderDetails as $item)
+                                    <tr>
+                                        <td>{{$item->product->productTranslation->product_name}}</td>
+                                        <td>
+                                            <span>
+                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                    {{ number_format((float)$item->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                @else
+                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                @endif
+                                            </span>
+                                        </td>
+                                        <td>{{$item->qty}}</td>
+                                        <td>
+                                            <span>
+                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                    {{ number_format((float)$item->subtotal  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                @else
+                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                @endif
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $attributes = json_decode($item->options);
+                                            @endphp
+                                            @forelse ($attributes as $key => $item)
+                                                @if ($key!='image' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
+                                                    <p><i><b>{{$key}}</b> :{{$item}}</i></p>
+                                                @endif
+                                            @empty
+                                                <p>NONE</p>
+                                            @endforelse
+                                        </td>
+                                    </tr>
                                 @empty
-                                    <p>NONE</p>
                                 @endforelse
-                            </td>
-                            <td>
-                                <span>
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$order->tax  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                    @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->tax * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                <span>
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$order->shipping_cost  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                    @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->shipping_cost * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                <span>
-                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$order->discount  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                    @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->discount * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                <h6 class="text-success">
-                                    <b>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td><strong>@lang('file.Total Quantity')</strong> : {{$order->orderDetails->sum('qty')}}</td>
+                                    <td><strong>@lang('file.Subtotal')</strong> :
                                         <span>
                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                {{ number_format((float)$order->total  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                {{ number_format((float)$order->orderDetails->sum('subtotal')  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                             @else
-                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->orderDetails->sum('subtotal') * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                             @endif
                                         </span>
-                                    </b>
-                                </h6>
-                            </td>
-                        </tr>
-                    @empty
-                    @endforelse
-                </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="d-flex flex-row-reverse">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <tr>
+                                            <th><span contenteditable>@lang('file.Subtotal')</span></th>
+                                            <td>
+                                                <span contenteditable>
+                                                    <span>
+                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                            {{ number_format((float)$order->orderDetails->sum('subtotal')  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                        @else
+                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->orderDetails->sum('subtotal') * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                        @endif
+                                                    </span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span contenteditable>@lang('file.Tax')</span></th>
+                                            <td>
+                                                <span contenteditable>
+                                                    <span>
+                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                            {{ number_format((float)$order->tax  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                        @else
+                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->tax * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                        @endif
+                                                    </span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span contenteditable>@lang('file.Shipping Cost')</span></th>
+                                            <td>
+                                                <span contenteditable>
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        {{ number_format((float)$order->shipping_cost  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                    @else
+                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->shipping_cost * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                    @endif
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span contenteditable>@lang('file.Discount')</span></th>
+                                            <td>
+                                                <span contenteditable>
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        {{ number_format((float)$order->discount  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                    @else
+                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->discount * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                    @endif
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span contenteditable><h6 class="text-danger"><b>@lang('file.Total Amount')</b></h6></span></th>
+                                            <td>
+                                                <h6 class="text-danger">
+                                                    <b>
+                                                        <span contenteditable>
+                                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                                {{ number_format((float)$order->total  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                            @else
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$order->total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                            @endif
+                                                        </span>
+                                                    </b>
+                                                </h6>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>{{__('file.Order Information')}}</h4>
+                                <hr>
+                                <span class="mt-2"><strong>@lang('file.Order Date') :</strong> {{date('d M, Y',strtotime($order->created_at))}}</span><br>
+                                <span class="mt-2"><strong>{{__('file.Order Status')}} : </strong>
+                                    @php
+                                        $btn_color = '';
+                                        if ($order->order_status=='order_placed') {
+                                            $badge_color = 'badge badge-primary';
+                                        }else if($order->order_status=='pending'){
+                                            $badge_color = 'badge badge-danger';
+                                        }else if($order->order_status=='order_confirmed'){
+                                            $badge_color = 'badge badge-secondary';
+                                        }else if($order->order_status=='delivery_scheduled'){
+                                            $badge_color = 'badge badge-warning';
+                                        }else if($order->order_status=='delivery_successful'){
+                                            $badge_color = 'badge badge-info';
+                                        }else if($order->order_status=='payment_successful'){
+                                            $badge_color = 'badge badge-light';
+                                        }else if($order->order_status=='order_completed'){
+                                            $badge_color = 'badge badge-success';
+                                        }
+                                    @endphp
+                                    <span class="{{$badge_color}} p-1"> {{ucwords(str_replace('_', ' ',$order->order_status))}} </span>
+                                </span>
+                                <span class="mt-2"><strong>{{__('file.Shipping Method')}} : </strong>{{ucwords(str_replace('_', ' ',$order->shipping_method))}}</span><br>
+                                <span class="mt-2"><strong>{{__('file.Payment Method')}} : </strong> {{ucwords(str_replace('_', ' ',$order->payment_method))}}</span><br>
+                                <span class="mt-2"><strong>{{__('file.Currency')}} : </strong> {{env('DEFAULT_CURRENCY_CODE')}}</span><br>
+                                <span class="mt-2"><strong>{{__('file.Currency Rate')}} : </strong> {{number_format((float)$currency_rate, env('FORMAT_NUMBER'), '.', '')}}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>{{__('file.Customer Information')}}</h4>
+                                <hr>
+                                <span class="mt-2"><strong>@lang('file.Name') :</strong> {{$order->billing_first_name.' '.$order->billing_last_name ?? null}}</span> <br>
+                                <span class="mt-2"><strong>@lang('file.Email') :</strong>{{$order->billing_email ?? null}}</span><br>
+                                <span class="mt-2"><strong>@lang('file.Phone') :</strong> {{$order->billing_phone ?? null}}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>{{__('file.Billing Address')}}</h4>
+                                <hr>
+                                <span>{{$order->billing_address_1 ?? null}}</span> <br>
+                                <span>{{$order->billing_city ?? null}}</span><br>
+                                <span>{{$order->billing_state ?? null}}</span><br>
+                                <span>{{$order->billing_zip_code ?? null}}</span><br>
+                                <span>{{$order->billing_country ?? null}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>{{__('file.Shipping Address')}}</h4>
+                                <hr>
+                                <span>{{$order->shippingDetails->shipping_address_1 ?? null}}</span> <br>
+                                <span>{{$order->shippingDetails->shipping_city ?? null}}</span><br>
+                                <span>{{$order->shippingDetails->shipping_state ?? null}}</span><br>
+                                <span>{{$order->shippingDetails->shipping_zip_code ?? null}}</span><br>
+                                <span>{{$order->shippingDetails->shipping_country ?? null}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="table-responsive">
-
     </div>
 </section>
 @endsection

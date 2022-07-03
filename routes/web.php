@@ -414,7 +414,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/active',[CouponController::class,'active'])->name('admin.coupon.active');
                 Route::get('/inactive',[CouponController::class,'inactive'])->name('admin.coupon.inactive');
                 Route::get('/bulk_action',[CouponController::class,'bulkAction'])->name('admin.coupon.bulk_action');
-
             });
 
             Route::group(['prefix' => 'online-store'], function () {

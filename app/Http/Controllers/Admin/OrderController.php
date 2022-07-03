@@ -24,7 +24,7 @@ class OrderController extends Controller
             })
             ->addColumn('order_id', function ($row)
             {
-                return '<a href="'.route('admin.order.details', $row->id).'">'.$row->id.'</i></a>';
+                return '#<a href="'.route('admin.order.details', $row->id).'">'.$row->id.'</i></a>';
             })
             ->addColumn('order_status', function ($row)
             {
@@ -45,7 +45,7 @@ class OrderController extends Controller
                     $btn_color = 'success';
                 }
                 return '<div class="btn-group dropright">
-                        <button type="button" class="btn btn-'.$btn_color.'">'.ucwords(str_replace('_', ' ',$row->order_status)  ).'</button>
+                        <button type="button" class="btn btn-'.$btn_color.'">'.ucwords(str_replace('_', ' ',$row->order_status)).'</button>
                         <button type="button" class="btn btn-'.$btn_color.' dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="'.route('admin.order.status_change',['order_id'=>$row->id,'status'=>'order_placed']).'">Order Placed</a>
@@ -126,7 +126,7 @@ class OrderController extends Controller
         }
         return view('admin.pages.order.transaction');
     }
-    
+
     public function orderStatusChange($order_id, $status)
     {
         Order::where('id',$order_id)->update(['order_status'=>$status]);
