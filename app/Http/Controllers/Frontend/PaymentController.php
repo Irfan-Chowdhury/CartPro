@@ -63,6 +63,8 @@ class PaymentController extends Controller
 
     public function paymentProcees(Request $request)
     {
+        // return $request->all();
+
         $validator = Validator::make($request->all(),[
             'billing_first_name' => 'required|string',
             'billing_last_name'  => 'required|string',
@@ -107,6 +109,19 @@ class PaymentController extends Controller
 
         $order_id = $this->orderStore($request);
 
+        if (isset($request->coupon_code)) {
+            DB::table('coupons')
+                ->where('coupon_code',$request->coupon_code)
+                ->where('limit_qty','>',0)
+                ->orWhere('limit_qty','!=',NULL)
+                ->update(['limit_qty' => DB::raw('limit_qty - 1')]);
+
+            $coupon = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
+            if ($coupon && $coupon->is_limit && $coupon->limit_qty==0) {
+                $coupon->update(['value'=>0.00]);
+            }
+        }
+
 
         if ($request->payment_type=='sslcommerz'){
             $this->SSLCommerz($request, $order_id);
@@ -139,7 +154,8 @@ class PaymentController extends Controller
     }
 
 
-    protected function orderStore($request){
+    protected function orderStore($request)
+    {
         $order = new Order();
         $order->user_id = Auth::user()->id ?? null;
         $order->billing_first_name = $request->billing_first_name;
@@ -221,7 +237,6 @@ class PaymentController extends Controller
             $order_detail->subtotal   = $row->subtotal;
             $order_detail->save();
         }
-
         $order_id = $order->id;
 
         //Mail

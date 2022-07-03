@@ -8,8 +8,21 @@ use Illuminate\Support\Facades\Session;
 class Coupon extends Model
 {
     protected $fillable = [
-        'slug', 'coupon_code', 'value', 'discount_type', 'free_shipping', 'minimum_spend', 'maximum_spend', 'usage_limit_per_coupon',
-        'usage_limit_per_customer', 'used', 'is_active', 'start_date', 'end_date',
+        'slug',
+        'coupon_code',
+        'value',
+        'discount_type',
+        'limit_qty',
+        'free_shipping',
+        'minimum_spend',
+        'maximum_spend',
+        'usage_limit_per_coupon',
+        'usage_limit_per_customer',
+        'start_date',
+        'end_date',
+        'is_expire',
+        'is_limit',
+        'is_active',
     ];
 
     //old

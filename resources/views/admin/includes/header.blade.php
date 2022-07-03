@@ -47,6 +47,7 @@
                     @endforeach
                 </div>
             </li>
+            
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/documentation')}}" target="_blank" data-toggle="tooltip"
                    title="{{__('Help')}}">

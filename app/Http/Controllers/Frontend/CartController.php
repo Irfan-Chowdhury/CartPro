@@ -16,6 +16,7 @@ use App\Models\Tax;
 use App\Models\UserBillingAddress;
 use App\Models\UserShippingAddress;
 use App\Models\Wishlist;
+use App\Traits\CouponTrait;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\App;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
+    use CouponTrait;
+
     public function productAddToCart(Request $request)
     {
         if ($request->ajax()) {
@@ -216,7 +219,14 @@ class CartController extends Controller
         }else {
             $locale = Session::get('currentLocal');
         }
-        App::setLocale($locale);
+
+        $coupons = Coupon::get();
+        foreach ($coupons as $value) {
+            if (isset($value->limit_qty)) {
+                $this->limitCouponOfDateCheck($value);
+            }
+        }
+
 
         $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
 
@@ -268,9 +278,9 @@ class CartController extends Controller
 
             //Coupon
             if ($request->coupon_code!=NULL) {
-                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->first();
+                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
                 if ($coupon) {
-                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->first()->value;
+                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first()->value;
                 }
             }else {
                 $coupon_value = 0;
@@ -311,9 +321,9 @@ class CartController extends Controller
 
             //Coupon
             if ($request->coupon_code!=NULL) {
-                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->first();
+                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
                 if ($coupon) {
-                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->first()->value;
+                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first()->value;
                 }
             }else {
                 $coupon_value = 0;

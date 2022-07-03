@@ -11,16 +11,16 @@
     </div>
 
     <div class="container-fluid">
-        <form id="submitForm" method="POST">
+        <form id="submitForm" action="{{route('admin.coupon.store')}}" method="POST">
             @csrf
-            
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-        
+
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Coupon Name') }}<span class="text-danger">*</span></b></label>
                                         <div class="col-sm-9">
@@ -33,7 +33,7 @@
                                             <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Type Coupon Code" >
                                         </div>
                                     </div>
-        
+
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Discount Type') }} <span class="text-danger">*</span> </b></label>
                                         <div class="col-sm-9">
@@ -43,14 +43,46 @@
                                             </select>
                                         </div>
                                     </div>
-        
+
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Value') }} <span class="text-danger">*</span></b></label>
                                         <div class="col-sm-9">
                                             <input type="number" min="0" name="value" class="form-control" placeholder="Type Value">
                                         </div>
                                     </div>
-        
+
+
+                                    <input type="checkbox" name="is_expire" value="1" data-toggle="collapse" data-target="#isExpire" aria-expanded="false" aria-controls="isExpire"> <strong>@lang('file.Enable Expiry Date')</strong>
+                                    <div class="collapse" id="isExpire">
+                                        <div class="card card-body">
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Start Date') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" min="0" name="start_date" class="form-control" placeholder="Start Date">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.End Date') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" min="0" name="end_date" class="form-control" placeholder="End Date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <input class="mt-3" type="checkbox" name="is_limit" value="1 " data-toggle="collapse" data-target="#isLimit" aria-expanded="false" aria-controls="isLimit"> <strong>@lang('file.Enable Usage Limit Per Coupon')</strong>
+                                    <div class="collapse" id="isLimit">
+                                        <div class="card card-body">
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Usage Limit Per Coupon') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" min="0" name="limit_qty" class="form-control" placeholder="Limit Quantity">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -61,7 +93,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-        
+
                                     <div class="form-group">
                                         <label for="inputEmail3"><b>{{ trans('file.Status') }}</b></label>
                                         <div class="form-group form-check">
@@ -69,7 +101,7 @@
                                             <span>{{__('file.Enable the coupon')}}</span>
                                         </div>
                                     </div>
-        
+
                                 </div>
                             </div>
 
@@ -80,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
 
@@ -122,7 +154,7 @@
                             console.log(data);
                             let html = '';
                             if (data.errors) {
-                                html = '<div class="alert alert-danger">';
+                                html += '<div class="alert alert-danger">';
                                 for (let count = 0; count < data.errors.length; count++) {
                                     html += '<p>' + data.errors[count] + '</p>';
                                 }
@@ -133,7 +165,8 @@
                                 }, 3000);
                             }
                             else if (data.error) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                let html = '';
+                                html += '<div class="alert alert-danger">' + data.error + '</div>';
                                 $('#alert_message').html(html);
                                 setTimeout(function() {
                                     $('#alert_message').fadeOut("slow");

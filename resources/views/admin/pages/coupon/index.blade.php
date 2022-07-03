@@ -31,6 +31,7 @@
                     <th scope="col">{{trans('file.Coupon Name')}}</th>
                      <th scope="col">{{trans('file.Code')}}</th>
                     <th scope="col">{{trans('file.Discount')}}</th>
+                    <th scope="col">{{trans('file.Usage Limit Coupon')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Action')}}</th>
                 </tr>
@@ -99,6 +100,10 @@
                         {
                             data: 'discount',
                             name: 'discount',
+                        },
+                        {
+                            data: 'limit_qty',
+                            name: 'limit_qty',
                         },
                         {
                             data: 'is_active',

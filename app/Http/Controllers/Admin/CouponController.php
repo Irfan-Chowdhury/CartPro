@@ -10,6 +10,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\CouponTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\App;
 
 class CouponController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait;
+    use ActiveInactiveTrait, SlugTrait, CouponTrait;
 
     public function index()
     {
@@ -65,6 +66,15 @@ class CouponController extends Controller
 
                     }else {
                         return number_format((float)$row->value, env('FORMAT_NUMBER'), '.', '').' %';
+                    }
+                })
+                ->addColumn('limit_qty', function ($row)
+                {
+                    if (isset($row->limit_qty)) {
+                        $this->limitCouponOfDateCheck($row);
+                        return $row->limit_qty;
+                    }else {
+                        return 'Unlimited';
                     }
                 })
                 ->addColumn('action', function ($row)
@@ -124,10 +134,25 @@ class CouponController extends Controller
             'discount_type' => 'required',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()){
             return response()->json(['errors' => $validator->errors()->all()]);
         }
+
+        if ($request->is_expire) {
+            if (!$request->start_date || !$request->end_date) {
+                return response()->json(['error' => 'Start Date or End Date is empty. Please fillup first.']);
+            }
+            else if ($request->start_date > $request->end_date) {
+                return response()->json(['error' => 'Start date can not greater than End date']);
+            }
+        }
+
+        if ($request->is_limit) {
+            if (!$request->limit_qty) {
+                return response()->json(['error' => 'Please fillup Limit Quantity.']);
+            }
+        }
+
 
         $locale = Session::get('currentLocal');
 
@@ -141,12 +166,16 @@ class CouponController extends Controller
             $coupon->free_shipping = $request->free_shipping ?? 0;
             $coupon->minimum_spend = number_format((float)$request->minimum_spend, env('FORMAT_NUMBER'), '.', '');
             $coupon->maximum_spend = number_format((float)$request->maximum_spend, env('FORMAT_NUMBER'), '.', '');
-            // $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon ?? 0;
-            // $coupon->usage_limit_per_customer = $request->usage_limit_per_customer  ?? 0;
-            $coupon->used          = $request->used ?? 0;
+
+            $coupon->is_expire     = $request->is_expire ?? 0;
+            $coupon->start_date    = $request->is_expire ? date('Y-m-d',strtotime($request->start_date)) : NULL;
+            $coupon->end_date      = $request->is_expire ? date('Y-m-d',strtotime($request->end_date)) : NULL;
+
+            $coupon->is_limit      = $request->is_limit ?? 0;
+            $coupon->limit_qty     = $request->is_limit ? $request->limit_qty : null;
+
             $coupon->is_active     = $request->is_active ?? 0;
-            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date)) ?? NULL;
-            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date)) ?? NULL;
+
             $coupon_translation  = new CouponTranslation();
             $coupon_translation->locale      = $locale;
             $coupon_translation->coupon_name = $request->coupon_name;
@@ -200,7 +229,15 @@ class CouponController extends Controller
             }])
             ->where('is_active',1)
             ->get();
+
         $coupon = Coupon::with('couponTranslation','couponTranslationEnglish')->find($id);
+        $this->limitCouponOfDateCheck($coupon);
+
+        //
+        // $current_date = date('Y-m-d');
+        // if (isset($coupon->end_date) && ($current_date > $coupon->end_date)) {
+        //     $coupon->update(['limit_qty'=>0]);
+        // }
 
         return view('admin.pages.coupon.edit',compact('products','categories','locale','coupon'));
     }
@@ -221,24 +258,43 @@ class CouponController extends Controller
 
         $locale = Session::get('currentLocal');
 
+
+        if ($request->is_expire) {
+            if (!$request->start_date || !$request->end_date) {
+                return response()->json(['error' => 'Start Date or End Date is empty. Please fillup first.']);
+            }
+            else if ($request->start_date > $request->end_date) {
+                return response()->json(['error' => 'Start date can not greater than End date']);
+            }
+        }
+
+        if ($request->is_limit) {
+            if (!$request->limit_qty) {
+                return response()->json(['error' => 'Please fillup Limit Quantity.']);
+            }
+        }
+
+
         if (auth()->user()->can('coupon-edit'))
         {
             $coupon = Coupon::find($request->coupon_id);
             $coupon->slug          = $this->slug($request->coupon_name);
             $coupon->coupon_code   = $request->coupon_code;
             $coupon->value         = number_format((float)$request->value, env('FORMAT_NUMBER'), '.', '');
-
             $coupon->discount_type = $request->discount_type;
             $coupon->free_shipping = $request->free_shipping ?? 0;
             $coupon->minimum_spend = number_format((float)$request->minimum_spend, env('FORMAT_NUMBER'), '.', '');
             $coupon->maximum_spend = number_format((float)$request->maximum_spend, env('FORMAT_NUMBER'), '.', '');
 
-            // $coupon->usage_limit_per_coupon = $request->usage_limit_per_coupon  ?? NULL;
-            // $coupon->usage_limit_per_customer = $request->usage_limit_per_customer  ?? NULL;
-            $coupon->used          = $request->used ?? 0;
+            $coupon->is_expire     = $request->is_expire ?? 0;
+            $coupon->start_date    = $request->is_expire ? date('Y-m-d',strtotime($request->start_date)) : NULL;
+            $coupon->end_date      = $request->is_expire ? date('Y-m-d',strtotime($request->end_date)) : NULL;
+
+            $coupon->is_limit      = $request->is_limit ?? 0;
+            $coupon->limit_qty     = $request->is_limit ? $request->limit_qty : null;
+
             $coupon->is_active     = $request->is_active ?? 0;
-            $coupon->start_date    = date('Y-m-d',strtotime($request->start_date)) ?? NULL;
-            $coupon->end_date      = date('Y-m-d',strtotime($request->end_date)) ?? NULL;
+
 
 
             DB::beginTransaction();

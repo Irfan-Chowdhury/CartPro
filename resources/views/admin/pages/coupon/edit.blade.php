@@ -52,6 +52,37 @@
                                         </div>
                                     </div>
 
+                                    <input type="checkbox" name="is_expire" value="1" {{$coupon->is_expire ? 'checked':''}} data-toggle="collapse" data-target="#isExpire" aria-expanded="false" aria-controls="isExpire"> <strong>@lang('file.Enable Expiry Date')</strong>
+                                    <div class="collapse {{$coupon->is_expire ? 'show':''}}" id="isExpire">
+                                        <div class="card card-body">
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Start Date') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" min="0" name="start_date" class="form-control" placeholder="Start Date" value="{{$coupon->start_date}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.End Date') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" min="0" name="end_date" class="form-control" placeholder="End Date" value="{{$coupon->end_date}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <input class="mt-3" type="checkbox" name="is_limit" {{$coupon->is_limit ? 'checked':''}} value="1 " data-toggle="collapse" data-target="#isLimit" aria-expanded="false" aria-controls="isLimit"> <strong>@lang('file.Enable Usage Limit Per Coupon')</strong>
+                                    <div class="collapse {{$coupon->is_limit ? 'show':''}}" id="isLimit">
+                                        <div class="card card-body">
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Usage Limit Per Coupon') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" min="0" name="limit_qty" class="form-control" placeholder="Limit Quantity" value="{{$coupon->limit_qty}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -81,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
 
@@ -121,7 +152,7 @@
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-
+                            
                             let html = '';
                             if (data.errors) {
                                 html = '<div class="alert alert-danger">';
