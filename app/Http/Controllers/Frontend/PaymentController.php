@@ -123,10 +123,7 @@ class PaymentController extends Controller
 
         if ($request->payment_type=='sslcommerz'){
             $this->SSLCommerz($request, $order_id);
-        }elseif ($request->payment_type=='paypal'){
-            $this->reduceProductQuantity($order_id);
-            return $this->destroyOthers();
-        }elseif ($request->payment_type=='cash_on_delivery'){
+        }elseif ($request->payment_type=='cash_on_delivery' || $request->payment_type=='paypal'){
             $this->reduceProductQuantity($order_id);
             return $this->destroyOthers();
         }elseif ($request->payment_type=='stripe'){

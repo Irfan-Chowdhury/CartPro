@@ -268,7 +268,7 @@ class CartController extends Controller
             });
         }
 
-        return view('frontend.pages.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',
+        return view('frontend.pages.checkout_page.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',
                                             'cash_on_delivery','stripe','paypal','billing_address','shipping_address'));
     }
 
