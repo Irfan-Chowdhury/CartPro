@@ -10,14 +10,12 @@
         <h4 class="font-weight-bold mt-3">{{__('Orders')}}</h4>
         <div id="success_alert" role="alert"></div>
         <br>
-
     </div>
     <div class="table-responsive">
     	<table id="orderTable" class="table ">
     	    <thead>
         	   <tr>
-        		    <th class="not-exported"></th>
-                    <th scope="col">{{trans('file.Order No')}}</th>
+                    <th scope="col">{{trans('file.Reference No')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Delivery Date')}}</th>
                     <th scope="col">{{trans('file.Delivery Time')}}</th>
@@ -27,6 +25,18 @@
         		    <th scope="col">{{trans('file.Created')}}</th>
         	   </tr>
     	  	</thead>
+              <tfoot>
+                <tr>
+                    <th>{{trans('file.Total')}}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
     	</table>
     </div>
 </section>
@@ -45,27 +55,6 @@
                         }
                     });
                     let table = $('#orderTable').DataTable({
-                        initComplete: function () {
-                            this.api().columns([1]).every(function () {
-                                var column = this;
-                                var select = $('<select><option value=""></option></select>')
-                                    .appendTo($(column.footer()).empty())
-                                    .on('change', function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                        );
-
-                                        column
-                                            .search(val ? '^' + val + '$' : '', true, false)
-                                            .draw();
-                                    });
-
-                                column.data().unique().sort().each(function (d, j) {
-                                    select.append('<option value="' + d + '">' + d + '</option>');
-                                    $('select').selectpicker('refresh');
-                                });
-                            });
-                        },
                         responsive: true,
                         fixedHeader: {
                             header: true,
@@ -78,13 +67,8 @@
                         },
                         columns: [
                             {
-                                data: null,
-                                orderable: false,
-                                searchable: false
-                            },
-                            {
-                                data: 'order_id',
-                                name: 'order_id',
+                                data: 'reference_no',
+                                name: 'reference_no',
                             },
                             {
                                 data: 'order_status',
@@ -129,23 +113,8 @@
                         'columnDefs': [
                             {
                                 "orderable": false,
-                                // 'targets': [0, 3],
                                 'targets': [0],
                             },
-                            {
-                                'render': function (data, type, row, meta) {
-                                    if (type === 'display') {
-                                        data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
-                                    }
-
-                                    return data;
-                                },
-                                'checkboxes': {
-                                    'selectRow': true,
-                                    'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                                },
-                                'targets': [0]
-                            }
                         ],
                         'select': {style: 'multi', selector: 'td:first-child'},
                         'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -181,13 +150,33 @@
                                 columns: ':gt(0)'
                             },
                         ],
+                        drawCallback: function () {
+                            var api = this.api();
+                            // for (let i = 7; i <8; i++) {
+                            //     datatable_sum(api, i);
+                            // }
+                            datatable_sum(api, 6);
+                        }
+
                     });
                     new $.fn.dataTable.FixedHeader(table);
                 });
 
+                function datatable_sum(dt_selector, columnNo) {
+                    var rows = dt_selector.rows().indexes();
+                    var rowsdataCol = dt_selector.cells( rows, columnNo, { page: 'current' } ).data();
+
+                    let total = 0;
+                    for (let i = 0; i < rowsdataCol.length; i++) {
+                        total  += parseFloat(rowsdataCol[i]);
+                    }
+                    var result  = total.toFixed(2);
+                    $(dt_selector.column(columnNo).footer()).html(result);
+                }
+
                 $(document).on('click', '.date_field', function () {
                     $(".update_btn").attr("hidden",true);
-                    $(this).siblings('.update_btn').removeAttr('hidden');;
+                    $(this).siblings('.update_btn').removeAttr('hidden');
                 });
 
                 $(document).on('click', '.update_btn', function () {
@@ -200,6 +189,7 @@
                         data: {id:rowId,date:date},
                         success: function (data) {
                             if(data.success){
+                                $(".update_btn").attr("hidden",true);
                                 $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                 $('#success_alert').addClass('alert alert-success').html(data.success);
                                 setTimeout(function() {
@@ -224,6 +214,7 @@
                         data: {id:rowId,time:time},
                         success: function (data) {
                             if(data.success){
+                                $(".update_time_btn").attr("hidden",true);
                                 $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                 $('#success_alert').addClass('alert alert-success').html(data.success);
                                 setTimeout(function() {

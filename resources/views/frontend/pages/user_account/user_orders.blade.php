@@ -40,7 +40,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <strong>@lang('file.Order ID') : {{$item->id}} </strong>
+                                            <strong>@lang('file.Reference No') : {{$item->reference_no}} </strong>
                                             <span class="d-block">{{date('d M, Y',strtotime($item->date))}}</span>
                                         </div>
                                         <div>
@@ -85,7 +85,7 @@
                                             </h4>
                                         </div>
                                         <div>
-                                            <a class="btn btn-sm btn-success" href="{{route('user.order.history.details',$item->id)}}"><i class="ti-eye"></i></a> &nbsp;&nbsp;
+                                            <a class="btn btn-sm btn-success" href="{{route('user.order.history.details',$item->reference_no)}}"><i class="ti-eye"></i></a> &nbsp;&nbsp;
                                         </div>
                                     </div>
                                 </div>

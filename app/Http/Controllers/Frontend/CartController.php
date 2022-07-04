@@ -320,15 +320,13 @@ class CartController extends Controller
         if ($request->ajax()) {
 
             //Coupon
+            $coupon_value = 0;
             if ($request->coupon_code!=NULL) {
                 $coupon =  Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
                 if ($coupon) {
                     $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first()->value;
                 }
-            }else {
-                $coupon_value = 0;
             }
-
 
             //Shipping Cost
             if ($request->shipping_cost!=NULL) {
@@ -336,7 +334,6 @@ class CartController extends Controller
             }else {
                 $shipping_cost = 0;
             }
-
 
             //Tax
             $tax =  Tax::where('id',$request->tax_id)->first();
@@ -347,6 +344,7 @@ class CartController extends Controller
                 $tax_rate = 0;
                 $tax_id = null;
             }
+
 
             $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
 

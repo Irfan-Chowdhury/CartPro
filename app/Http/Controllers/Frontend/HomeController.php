@@ -445,17 +445,17 @@ class HomeController extends Controller
 
     public function orderTrackingFind(Request $request)
     {
-        $order = Order::where(['id'=>$request->order_id,
+        $order = Order::where(['reference_no'=>$request->reference_no,
                         'billing_email'=>$request->email])
                         ->first();
 
         return view('frontend.pages.order_tracking.order_page',compact('order'));
     }
 
-    public function orderTrackingFindDetails($order_id)
+    public function orderTrackingFindDetails($reference_no)
     {
         $locale = Session::get('currentLocal');
-        $order = Order::find($order_id);
+        $order = Order::where('reference_no',$reference_no)->first();
         $order_details = DB::table('order_details')
                     ->join('orders','orders.id','order_details.order_id')
                     ->join('products','products.id','order_details.product_id')
@@ -465,7 +465,7 @@ class HomeController extends Controller
                     })
                     ->where('user_id',Auth::user()->id)
                     ->select('product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options','order_details.subtotal')
-                    ->where('order_details.order_id',$order_id)
+                    ->where('order_details.order_id',$order->id)
                     ->get();
 
 

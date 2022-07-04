@@ -26,15 +26,15 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <strong>@lang('file.Order ID') : {{$order->id}} </strong>
+                                    <strong>@lang('file.Order Reference No') : {{$order->reference_no}} </strong>
                                     <span class="d-block">{{date('d M, Y',strtotime($order->date))}}</span>
                                 </div>
                                 <div>
-                                    <strong>Delivery Date</strong>
+                                    <strong>@lang('file.Delivery Date')</strong>
                                     <span class="d-block">@if($order->delivery_date){{date('d M, Y',strtotime($order->delivery_date))}}@else NONE @endif</span>
                                 </div>
                                 <div>
-                                    <strong>Delivery Time</strong>
+                                    <strong>@lang('file.Delivery Time')</strong>
                                     <span class="d-block">{{$order->delivery_time ??'NONE'}}</span>
                                 </div>
                                 <div>
@@ -71,7 +71,7 @@
                                     </h4>
                                 </div>
                                 <div>
-                                    <a class="btn btn-sm btn-success" href="{{route('cartpro.order_tracking_find_details',$order->id)}}"><i class="ti-eye"></i></a> &nbsp;&nbsp;
+                                    <a class="btn btn-sm btn-success" href="{{route('cartpro.order_tracking_find_details',$order->reference_no)}}"><i class="ti-eye"></i></a> &nbsp;&nbsp;
                                 </div>
                             </div>
                         </div>

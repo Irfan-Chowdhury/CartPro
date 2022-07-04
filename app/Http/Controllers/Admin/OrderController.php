@@ -22,9 +22,9 @@ class OrderController extends Controller
             ->setRowId(function ($row){
                 return $row->id;
             })
-            ->addColumn('order_id', function ($row)
+            ->addColumn('reference_no', function ($row)
             {
-                return '#<a href="'.route('admin.order.details', $row->id).'">'.$row->id.'</i></a>';
+                return '<a href="'.route('admin.order.details', $row->reference_no).'">#'.$row->reference_no.'</i></a>';
             })
             ->addColumn('order_status', function ($row)
             {
@@ -97,7 +97,7 @@ class OrderController extends Controller
             {
                 return date('Y-m-d',strtotime($row->created_at));
             })
-            ->rawColumns(['order_id','action','order_status','delivery_date','delivery_time'])
+            ->rawColumns(['reference_no','action','order_status','delivery_date','delivery_time'])
             ->make(true);
         }
         return view('admin.pages.order.index');
@@ -113,6 +113,10 @@ class OrderController extends Controller
             ->setRowId(function ($row){
                 return $row->id;
             })
+            ->addColumn('reference_no', function ($row)
+            {
+                return '<a href="'.route('admin.order.details', $row->reference_no).'">#'.$row->reference_no.'</i></a>';
+            })
             ->addColumn('order_status', function ($row)
             {
                 return ucfirst($row->order_status);
@@ -121,7 +125,7 @@ class OrderController extends Controller
             {
                 return date('Y-m-d',strtotime($row->created_at));
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['reference_no','action'])
             ->make(true);
         }
         return view('admin.pages.order.transaction');
@@ -145,23 +149,19 @@ class OrderController extends Controller
     }
 
     public function orderDate(Request $request){
-        if ($request->date) {
-            Order::where('id',$request->id)->update(['delivery_date'=>$request->date]);
-            return response()->json(['success'=>'Delivery date updated successfully']);
-        }
+        Order::where('id',$request->id)->update(['delivery_date'=>$request->date ?? null]);
+        return response()->json(['success'=>'Delivery date updated successfully']);
     }
 
     public function orderDeliveryTime(Request $request){
-        if ($request->time) {
-            Order::where('id',$request->id)->update(['delivery_time'=>$request->time]);
-            return response()->json(['success'=>'Delivery time updated successfully']);
-        }
+        Order::where('id',$request->id)->update(['delivery_time'=>$request->time ?? null]);
+        return response()->json(['success'=>'Delivery time updated successfully']);
     }
 
 
-    public function orderDetails($id)
+    public function orderDetails($reference_no)
     {
-        $order = Order::with('orderDetails.product.productTranslation','shippingDetails')->find($id);
+        $order = Order::with('orderDetails.product.productTranslation','shippingDetails')->where('reference_no',$reference_no)->first();
 
         $currency_rate = 0.00;
         $default_currency_code = env('DEFAULT_CURRENCY_CODE');

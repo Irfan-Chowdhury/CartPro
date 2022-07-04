@@ -97,7 +97,7 @@ return array (
   'Allow customers to subscribe to your newsletter' => 'Allow customers to subscribe to your newsletter',
   'Already have an account' => 'Already have an account',
   'Amount' => 'Amount',
-  'An error occured due to server not being to able to handle your request' =>
+  'An error occured due to server not being to able to handle your request' => 
   array (
     '' => 'An error occured due to server not being to able to handle your request.',
   ),
@@ -112,7 +112,6 @@ return array (
   'Attach Document' => 'Attach Document',
   'Attach File' => 'Attach File',
   'Attendance' => 'Attendance',
-  'Attributes' => 'Attributes',
   'Attribute Details' => 'Attribute Details',
   'Attribute Name' => 'Attribute Name',
   'Attribute Set' => 'Attribute Set',
@@ -120,6 +119,7 @@ return array (
   'Attribute Sets' => 'Attribute Sets',
   'Attribute-Set' => 'Attribute Set',
   'Attribute_Set' => 'Attribute Set',
+  'Attributes' => 'Attributes',
   'Attributes Create' => 'Attributes Create',
   'Attributes Edit' => 'Attributes Edit',
   'Available' => 'Available',
@@ -416,7 +416,7 @@ return array (
   'Finalize Sale' => 'Finalize Sale',
   'Finalize Stock Count' => 'Finalize Stock Count',
   'First Name' => 'First Name',
-  'Fix the errors before you begin' =>
+  'Fix the errors before you begin' => 
   array (
     '' => 'Fix the errors before you begin.',
   ),
@@ -444,7 +444,7 @@ return array (
   'From' => 'From',
   'From Account' => 'From Account',
   'From Warehouse' => 'From Warehouse',
-  'From your account dashboard you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details' =>
+  'From your account dashboard you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details' => 
   array (
     '' => 'From your account dashboard you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details.',
   ),
@@ -465,7 +465,7 @@ return array (
   'Go to Home' => 'Go to Home',
   'Google' => 'Google',
   'Got Question? Call us' => 'Got Question? Call us',
-  'Got it! Do not show this popup again' =>
+  'Got it! Do not show this popup again' => 
   array (
     '' => 'Got it! Do not show this popup again.',
   ),
@@ -617,11 +617,11 @@ return array (
   'Note' => 'Note',
   'Number Format Type' => 'Number Format Type',
   'Number of Product' => 'Number of Product',
-  'Oh snap! We are lost' =>
+  'Oh snap! We are lost' => 
   array (
-    '' =>
+    '' => 
     array (
-      '' =>
+      '' => 
       array (
         '' => 'Oh snap! We are lost...',
       ),
@@ -641,12 +641,14 @@ return array (
   'Order & Customer Information' => 'Order & Customer Information',
   'Order Confirmed' => 'Order Confirmed',
   'Order Date' => 'Order Date',
+  'Order Details' => 'Order Details',
   'Order Discount' => 'Order Discount',
   'Order History' => 'Order History',
   'Order ID' => 'Order ID',
   'Order Information' => 'Order Information',
   'Order No' => 'Order No',
   'Order Notification Settings' => 'Order Notification Settings',
+  'Order Reference No' => 'Order Reference No',
   'Order Status' => 'Order Status',
   'Order Table' => 'Order Table',
   'Order Tax' => 'Order Tax',
@@ -888,7 +890,6 @@ return array (
   'Shop Wishlist' => 'Shop Wishlist',
   'Short Description' => 'Short Description',
   'Show' => 'Show',
-  'Order Details' => 'Order Details',
   'Show display in footer' => 'Show display in footer',
   'Show in Top categories Section' => 'Show in Top categories Section',
   'Show in top categories section' => 'Show in top categories section',
@@ -955,11 +956,11 @@ return array (
   'Subscribe' => 'Subscribe',
   'Subscribe and get notification about discounts' => 'Subscribe and get notification about discounts',
   'Subscribe to our Newsletter' => 'Subscribe to our Newsletter',
-  'Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions' =>
+  'Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions' => 
   array (
     '' => 'Subscribe to our mailing list to receive updates on new arrivals, special offers and our promotions.',
   ),
-  'Subscribe to our newsletter & get notification about discounts' =>
+  'Subscribe to our newsletter & get notification about discounts' => 
   array (
     '' => 'Subscribe to our newsletter & get notification about discounts.',
   ),
@@ -1035,6 +1036,7 @@ return array (
   'Total Quantity' => 'Total Quantity',
   'Total Register Customers' => 'Total Customers',
   'Total Sales' => 'Total Sales',
+  'Total Unite Price' => 'Total Unite Price',
   'Touchscreen keybord' => 'Touchscreen keybord',
   'Track' => 'Track',
   'Track Inventory' => 'Track Inventory',
@@ -1191,11 +1193,9 @@ return array (
   'top' => 'Top',
   'welcome' => 'Welcome',
   'yearly report' => 'Yearly Report',
-  'Total Unite Price' => 'Total Unite Price',
   1 => '1',
   2 => '2',
   3 => '3',
   4 => '4',
   5 => '5',
-
 );

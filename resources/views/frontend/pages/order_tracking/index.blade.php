@@ -34,8 +34,8 @@
                             @csrf
 
                             <div class="col-sm-12">
-                                <label class="text-black text-left">@lang('file.Order ID') <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" required name="order_id" placeholder="Found in your order confirmation email">
+                                <label class="text-black text-left">@lang('file.Order Reference No') <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" required name="reference_no" placeholder="Found in your order confirmation email">
                             </div>
                             <div class="col-sm-12 mt-3">
                                 <label class="text-black text-left">@lang('file.Email') <span class="text-danger">*</span></label>

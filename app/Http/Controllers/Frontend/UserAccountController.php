@@ -29,15 +29,16 @@ class UserAccountController extends Controller
         $locale = Session::get('currentLocal');
         $orders = DB::table('orders')
             ->where('user_id',Auth::user()->id)
-            ->select('id','total','date','order_status','delivery_date','delivery_time')
+            ->select('id','reference_no','total','date','order_status','delivery_date','delivery_time')
             ->orderBy('id','DESC')
             ->get();
         return view('frontend.pages.user_account.user_orders',compact('orders'));
     }
 
-    public function orderHistoryDetails($id)
+    public function orderHistoryDetails($reference_no)
     {
         $locale = Session::get('currentLocal');
+        $order = Order::where('reference_no',$reference_no)->first();
 
         $order_details = DB::table('order_details')
                     ->join('orders','orders.id','order_details.order_id')
@@ -48,12 +49,11 @@ class UserAccountController extends Controller
                     })
                     ->where('user_id',Auth::user()->id)
                     ->select('product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options','order_details.subtotal')
-                    ->where('order_details.order_id',$id)
+                    ->where('order_details.order_id',$order->id)
                     ->get();
 
-        $order = Order::find($id);
 
-        return view('frontend.pages.user_account.user_order_details',compact('order_details','order'));
+        return view('frontend.pages.user_account.user_order_details',compact('order','order_details'));
     }
 
 

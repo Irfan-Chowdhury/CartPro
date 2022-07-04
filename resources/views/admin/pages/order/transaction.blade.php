@@ -16,7 +16,7 @@
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
-                    <th scope="col">{{trans('file.Order No')}}</th>
+                    <th scope="col">{{trans('file.Reference No')}}</th>
         		    <th scope="col">{{trans('file.Transaction Id')}}</th>
                     <th scope="col">{{trans('file.Payment Method')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
@@ -81,8 +81,8 @@
                             searchable: false
                         },
                         {
-                            data: 'id',
-                            name: 'id',
+                            data: 'reference_no',
+                            name: 'reference_no',
                         },
                         {
                             data: 'payment_id',

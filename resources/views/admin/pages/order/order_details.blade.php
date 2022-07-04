@@ -11,7 +11,7 @@
         <div class="container-fluid mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="font-weight-bold mt-3"> #{{$order->id}} <small>{{__('file.Order Details')}}</small></h3>
+                    <h3 class="font-weight-bold mt-3"> #{{$order->reference_no}} <small>{{__('file.Order Details')}}</small></h3>
                 </div>
             </div>
         </div>
@@ -196,6 +196,7 @@
                                     @endphp
                                     <span class="{{$badge_color}} p-1"> {{ucwords(str_replace('_', ' ',$order->order_status))}} </span>
                                 </span>
+                                <span class="mt-2"><strong>{{__('file.Transaction Id')}} : </strong>{{$order->payment_id ?? null}}</span><br>
                                 <span class="mt-2"><strong>{{__('file.Shipping Method')}} : </strong>{{ucwords(str_replace('_', ' ',$order->shipping_method))}}</span><br>
                                 <span class="mt-2"><strong>{{__('file.Payment Method')}} : </strong> {{ucwords(str_replace('_', ' ',$order->payment_method))}}</span><br>
                                 <span class="mt-2"><strong>{{__('file.Currency')}} : </strong> {{env('DEFAULT_CURRENCY_CODE')}}</span><br>

@@ -63,8 +63,6 @@ class PaymentController extends Controller
 
     public function paymentProcees(Request $request)
     {
-        // return $request->all();
-
         $validator = Validator::make($request->all(),[
             'billing_first_name' => 'required|string',
             'billing_last_name'  => 'required|string',
@@ -212,8 +210,13 @@ class PaymentController extends Controller
         $shipping->shipping_city = $request->shipping_city;
         $shipping->shipping_state = $request->shipping_state;
         $shipping->shipping_zip_code = $request->shipping_zip_code;
-
         $order->save();
+
+        //reference_no Added
+        $reference_no = 1000 + $order->id;
+
+        $order_update = Order::whereId($order->id)->update(['reference_no'=> $reference_no]);
+
         if ($request->shipping_address_check==1) { //if selected shipping
             $shipping->order_id = $order->id;
             $shipping->save();
@@ -243,8 +246,9 @@ class PaymentController extends Controller
         $data_mail = [];
         $data_mail['fullname'] = $request->billing_first_name.' '.$request->billing_last_name;
         $data_mail['email'] = $request->billing_email;
-        $data_mail['order_id'] = $order_id;
-        $data_mail['message'] = 'Thanks for shopping. Your order id is ';
+        // $data_mail['order_id'] = $order_id;
+        $data_mail['reference_no'] = $reference_no;
+        $data_mail['message'] = 'Thanks for the shopping. Your order is confirmed. Order reference no is ';
         Mail::to($data_mail['email'])->send(new OrderMail($data_mail));
 
 

@@ -1,7 +1,7 @@
 @component('mail::message')
 
 <p>Dear {{$data['fullname']}} , <br>
-    {{$data['message']}} : <b>{{$data['order_id']}}</b>
+    {{$data['message']}} : <b>{{$data['reference_no']}}</b>
 </p>
 
 <br>

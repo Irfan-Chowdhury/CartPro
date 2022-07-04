@@ -130,7 +130,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <table class="table">
-                                        {{-- <tr>
+                                        <tr>
                                             <th><span contenteditable>@lang('file.Subtotal')</span></th>
                                             <td>
                                                 <span contenteditable>
@@ -141,7 +141,7 @@
                                                     @endif
                                                 </span>
                                             </td>
-                                        </tr> --}}
+                                        </tr>
                                         <tr>
                                             <th><span contenteditable>@lang('file.Tax')</span></th>
                                             <td>

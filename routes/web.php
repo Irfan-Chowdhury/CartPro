@@ -106,7 +106,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         //Order Tracking
         Route::get('/order-tracking',[HomeController::class,'orderTracking'])->name('cartpro.order_tracking');
         Route::post('/order-tracking-find',[HomeController::class,'orderTrackingFind'])->name('cartpro.order_tracking_find');
-        Route::get('/order-tracking-find-details/{order_id}',[HomeController::class,'orderTrackingFindDetails'])->name('cartpro.order_tracking_find_details');
+        Route::get('/order-tracking-find-details/{reference_no}',[HomeController::class,'orderTrackingFindDetails'])->name('cartpro.order_tracking_find_details');
         Route::get('/default_lanuage_change/{id}',[HomeController::class,'defaultLanguageChange'])->name('cartpro.default_language_change');
         Route::get('/currency-change/{currency_code}',[HomeController::class,'currencyChange'])->name('cartpro.currency_change');
 
@@ -192,7 +192,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::post('/update',[UserAccountController::class,'userProfileUpdate'])->name('user_profile_update');
             Route::post('/logout',[UserAccountController::class,'userLogout'])->name('user_logout');
             Route::get('/order/history',[UserAccountController::class,'orderHistory'])->name('user.order.history');
-            Route::get('/order/history/details/{id}',[UserAccountController::class,'orderHistoryDetails'])->name('user.order.history.details');
+            Route::get('/order/history/details/{reference_no}',[UserAccountController::class,'orderHistoryDetails'])->name('user.order.history.details');
 
             //Billing Address
             Route::prefix('billing_addrees')->group(function () {
@@ -384,7 +384,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //Sales
             Route::group(['prefix' => 'order'], function () {
                 Route::get('/',[OrderController::class,'index'])->name('admin.order.index');
-                Route::get('/details/{id}',[OrderController::class,'orderDetails'])->name('admin.order.details');
+                Route::get('/details/{reference_no}',[OrderController::class,'orderDetails'])->name('admin.order.details');
                 Route::get('/status',[OrderController::class,'orderStatus'])->name('admin.order.status'); //Will be removed later
                 Route::get('/{order_id}/{status}',[OrderController::class,'orderStatusChange'])->name('admin.order.status_change');
                 Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');

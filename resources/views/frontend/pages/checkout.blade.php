@@ -315,10 +315,11 @@
                                     <label class="label custom-control-label" for="apply_coupon">@lang('I have a coupon')</label>
                                 </div>
                                 <div class="collapse" id="apply_coupon_collapse">
-                                    <div class="newsletter" id="applyCoupon">
+                                    <div class="newsletter">
                                         <input type="text" placeholder="@lang('file.Enter Coupon Code')" name="coupon_code" id="coupon_code">
+                                        <span class="text-danger" id="invalidCoupon"></span>
                                         <input type="hidden" name="coupon_value" id="coupon_value">
-                                        <button class="button style1 btn-search" type="submit">@lang('file.Apply')</button>
+                                        <button class="button style1 btn-search" id="applyCoupon" type="submit">@lang('file.Apply')</button>
                                     </div>
                                 </div>
                                 <div class="shipping">
@@ -575,8 +576,12 @@
                             $('.total_amount').text(data.total_amount);
                             $('#totalAmount').val(data.total_amount); //For Form
                             $('#couponValue').val(data.coupon_value); //For Form
-
                             $('#totalAmountPaystack').val(data.total_amount); //For Paystack
+                            if(data.coupon_value==0){
+                                $('#invalidCoupon').text('Invalid Coupon !!');
+                            }else{
+                                $('#invalidCoupon').empty();
+                            }
                         }
                     }
                 })
