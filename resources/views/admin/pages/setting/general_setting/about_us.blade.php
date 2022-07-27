@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Title') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="title" @empty(!$setting_about_us) value="{{$setting_about_us->aboutUsTranslation->title}}" @endempty class="form-control">
+                            <input type="text" name="title" @empty(!$setting_about_us) value="{{$setting_about_us->aboutUsTranslation->title ?? null}}" @endempty class="form-control">
                         </div>
                     </div>
 

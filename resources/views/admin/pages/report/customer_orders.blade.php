@@ -8,7 +8,7 @@
     <div class="table-responsive ml-3">
         <div class="row">
             <div class="col-md-8">
-                <table id="datatable1" class="table">
+                <table id="customerOrderTable" class="table">
                     <thead>
                         <tr>
                             <th class="wd-15p">@lang('file.Date')</th>
@@ -52,6 +52,16 @@
                             @endif
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th style="text-align:right">{{trans('file.Total')}} :</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="col-md-4">
@@ -124,24 +134,23 @@
     </div>
 </section>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script>
     $(function(){
       'use strict';
 
-      $('#datatable1').DataTable({
-        responsive: true,
-        language: {
-          searchPlaceholder: 'Search...',
-          sSearch: '',
-          lengthMenu: '_MENU_ items/page',
-        }
-      });
+        $(document).ready(function () {
+            $('#customerOrderTable').DataTable({
+                drawCallback: function () {
+                    var api = this.api();
+                    datatable_sum(api, 5);
+                },
+                @include('admin.includes.common_js.pdf_excel')
+            });
+            @include('admin.includes.common_js.datatable_sum')
+        });
 
-      $('#datatable2').DataTable({
-        bLengthChange: false,
-        searching: false,
-        responsive: true
-      });
 
         // Select2
         $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });

@@ -41,17 +41,10 @@
                             <label class="col-md-4 col-form-label"><b><span id="changeLabelTextByType">{{__('file.Category')}}</span> &nbsp;<span class="text-danger">*</span> </b></label>
                             <div id="dependancyType" class="col-md-8">
                                 <select name="category_id" id="category_id" class="form-control col-md-12 selectpicker" title='{{__('file.-- Select Category --')}}'>
-                                    @foreach ($categories as $item)
-                                        @forelse ($item->categoryTranslation as $key => $value)
-                                            @if ($value->local==$locale)
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
-                                            @elseif($value->local=='en')
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
-                                            @endif
-                                        @empty
-                                            <option value="">{{__('NULL')}}</option>
-                                        @endforelse
-                                    @endforeach
+                                    @forelse ($categories as $item)
+                                        <option value="{{$item->id}}">{{$item->category_name}}</option>
+                                    @empty
+                                    @endforelse
                                 </select>
                             </div>
                         </div>

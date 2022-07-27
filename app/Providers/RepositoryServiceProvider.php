@@ -10,6 +10,8 @@ use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
 use App\Contracts\Country\CountryContract;
 use App\Contracts\Currency\CurrencyContract;
+use App\Contracts\Slider\SliderContract;
+use App\Contracts\Slider\SliderTranslationContract;
 use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
 use App\Repositories\AttributeSet\AttributeSetRepository;
@@ -21,6 +23,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
 use App\Repositories\Country\CountryRepository;
 use App\Repositories\Currency\CurrencyRepository;
+use App\Repositories\Slider\SliderRepository;
+use App\Repositories\Slider\SliderTranslationRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Tag\TagTranslationRepository;
 
@@ -54,6 +58,11 @@ class RepositoryServiceProvider extends ServiceProvider
 
         //County
         $this->app->bind(CountryContract::class, CountryRepository::class);
+
+        //Slider
+        $this->app->bind(SliderContract::class, SliderRepository::class);
+        $this->app->bind(SliderTranslationContract::class, SliderTranslationRepository::class);
+
     }
 }
 

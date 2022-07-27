@@ -78,7 +78,7 @@
                         processing: true,
                         serverSide: true,
                         ajax: {
-                            url: "{{ route('admin.category') }}",
+                            url: "{{ route('admin.category.datatable') }}",
                         },
 
                         columns: [

@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Slider;
 use App\Models\SliderTranslation;
+use App\Services\CategoryService;
+use App\Services\SliderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -22,111 +24,27 @@ class SliderController extends Controller
 {
     use SlugTrait, imageHandleTrait, ActiveInactiveTrait, DeleteWithFileTrait;
 
-    public function index(Request $request)
-    {
-        $locale = Session::get('currentLocal');
-
-        $sliders = Slider::with(['sliderTranslation'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        }])
-        ->orderBy('is_active','DESC')
-        ->orderBy('id','DESC')
-        ->get();
-
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
-
-        if ($request->ajax())
-        {
-            return DataTables::of($sliders)
-            ->setRowId(function ($row)
-            {
-                return $row->id;
-            })
-            ->addColumn('slider_image', function ($row)
-            {
-                if ($row->slider_image_secondary!=NULL && (File::exists(public_path($row->slider_image_secondary)))){
-                    $url = url("public/".$row->slider_image_secondary);
-                    return  '<img src="'. $url .'"/>';
-                }else  {
-                    return '<img src="https://dummyimage.com/50x50/000000/0f6954.png&text=Slider">';
-                }
-            })
-            ->addColumn('slider_title', function ($row) use ($locale)
-            {
-                if ($row->sliderTranslation->isNotEmpty()){
-                    foreach ($row->sliderTranslation as $key => $value){
-                        if ($key<1){
-                            if ($value->locale==$locale){
-                                return $value->slider_title;
-                            }elseif($value->locale=='en'){
-                                return $value->slider_title;
-                            }
-                        }
-                    }
-                }
-                else {
-                    return "NULL";
-                }
-            })
-            ->addColumn('slider_subtitle', function ($row) use ($locale)
-            {
-                if ($row->sliderTranslation->isNotEmpty()){
-                    foreach ($row->sliderTranslation as $key => $value){
-                        if ($key<1){
-                            if ($value->locale==$locale){
-                                return $value->slider_subtitle;
-                            }elseif($value->locale=='en'){
-                                return $value->slider_subtitle;
-                            }
-                        }
-                    }
-                }else {
-                    return "NULL";
-                }
-            })
-            ->addColumn('type', function ($row)
-            {
-                return ucfirst($row->type);
-            })
-            ->addColumn('text_alignment', function ($row)
-            {
-                return ucfirst($row->text_alignment);
-            })
-            ->addColumn('text_color_code', function ($row)
-            {
-                return $row->text_color;
-            })
-            ->addColumn('action', function($row){
-                $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
-                              &nbsp;' ;
-                if ($row->is_active==1) {
-                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
-                }else {
-                    $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
-                }
-                $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
-
-                return $actionBtn;
-            })
-            ->rawColumns(['slider_image','action'])
-            ->make(true);
-        }
-
-        return view('admin.pages.slider.index',compact('categories','sliders','locale'));
+    private $sliderService;
+    private $categoryService;
+    public function __construct(SliderService $sliderService, CategoryService $categoryService){
+        $this->sliderService   = $sliderService;
+        $this->categoryService = $categoryService;
     }
+
+    public function index()
+    {
+        $categories = $this->categoryService->getAllCategories();
+        return view('admin.pages.slider.index',compact('categories'));
+    }
+
+    public function dataTable(){
+        return $this->sliderService->dataTable();
+    }
+
 
     public function store(Request $request)
     {
         if ($request->ajax()) {
-
             if (env('USER_VERIFIED')!=1) {
                 return response()->json(['errors' => ['Disabled for demo !']]);
             }

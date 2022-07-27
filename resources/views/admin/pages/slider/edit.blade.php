@@ -44,17 +44,10 @@
                             <!--Category-->
                             <div id="dependancyTypeForCategoryEdit" class="col-md-8">
                                 <select name="category_id" id="category_id_edit" class="form-control col-md-12 selectpicker" title='{{__('file.-- Select Category --')}}' >
-                                    @foreach ($categories as $item)
-                                        @forelse ($item->categoryTranslation as $key => $value)
-                                            @if ($value->local==$locale)
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
-                                            @elseif($value->local=='en')
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option> @break
-                                            @endif
-                                        @empty
-                                            <option value="">{{__('file.NULL')}}</option>
-                                        @endforelse
-                                    @endforeach
+                                    @forelse ($categories as $item)
+                                        <option value="{{$item->id}}">{{$item->category_name}}</option>
+                                    @empty
+                                    @endforelse
                                 </select>
                             </div>
                             <!--URL-->

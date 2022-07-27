@@ -20,12 +20,13 @@ class CategoryController extends Controller
     {
         if (auth()->user()->can('category-view')){
             $categories =  $this->categoryService->getAllCategories();
-            if (request()->ajax()){
-                return $this->categoryService->dataTable();
-            }
             return view('admin.pages.category.index',compact('categories'));
         }
         return abort('403', __('You are not authorized'));
+    }
+
+    public function dataTable(){
+        return $this->categoryService->dataTable();
     }
 
     public function store(CategoryStoreRequest $request)

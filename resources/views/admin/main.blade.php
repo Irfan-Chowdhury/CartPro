@@ -145,7 +145,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-12">
-                                <p>{{trans('file.Developed')}} {{trans('file.By')}} <a href="https://lion-coders.com" class="external">LionCoders</a></p>
+                                <p>{{trans('file.Developed')}} {{trans('file.By')}} <a href="https://lion-coders.com" class="external">LionCoders</a> || Version - {{env('VERSION')}}</p>
                             </div>
                         </div>
                     </div>
@@ -155,6 +155,8 @@
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://cdn.datatables.net/plug-ins/1.12.1/api/sum().js"></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>
     <script>
         window.dataLayer = window.dataLayer || [];

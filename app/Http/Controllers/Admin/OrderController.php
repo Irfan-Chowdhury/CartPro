@@ -45,8 +45,8 @@ class OrderController extends Controller
                     $btn_color = 'success';
                 }
                 return '<div class="btn-group dropright">
-                        <button type="button" class="btn btn-'.$btn_color.'">'.ucwords(str_replace('_', ' ',$row->order_status)).'</button>
-                        <button type="button" class="btn btn-'.$btn_color.' dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <button type="button" class="btn btn-sm btn-'.$btn_color.'">'.ucwords(str_replace('_', ' ',$row->order_status)).'</button>
+                        <button type="button" class="btn btn-sm btn-'.$btn_color.' dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="'.route('admin.order.status_change',['order_id'=>$row->id,'status'=>'order_placed']).'">Order Placed</a>
                             <a class="dropdown-item" href="'.route('admin.order.status_change',['order_id'=>$row->id,'status'=>'order_confirmed']).'">Order Confirmed</a>
@@ -92,6 +92,14 @@ class OrderController extends Controller
                     return $row->billing_email;
                 }
 
+            })
+            ->addColumn('total', function ($row)
+            {
+                if(env('CURRENCY_FORMAT')=='prefix'){
+                    return env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '');
+                }else{
+                    return number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL');
+                }
             })
             ->addColumn('created_at', function ($row)
             {

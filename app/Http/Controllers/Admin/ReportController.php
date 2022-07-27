@@ -117,9 +117,9 @@ class ReportController extends Controller
                     $html .= '</td></tr>';
             }
         }
-
         return $html;
     }
+    
 
     public function reportcustomerOrders(Request $request)
     {

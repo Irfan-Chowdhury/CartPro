@@ -43,6 +43,9 @@
 @endsection
 
 @push('scripts')
+
+
+
     <script type="text/javascript">
         (function ($) {
             "use strict";
@@ -157,7 +160,6 @@
                             // }
                             datatable_sum(api, 6);
                         }
-
                     });
                     new $.fn.dataTable.FixedHeader(table);
                 });
@@ -166,12 +168,23 @@
                     var rows = dt_selector.rows().indexes();
                     var rowsdataCol = dt_selector.cells( rows, columnNo, { page: 'current' } ).data();
 
-                    let total = 0;
+                    let text, data, total = 0, resultOfFooter;
                     for (let i = 0; i < rowsdataCol.length; i++) {
-                        total  += parseFloat(rowsdataCol[i]);
+                        text = rowsdataCol[i];
+                        data = text.replace("$", "");
+                        // total  += parseFloat(rowsdataCol[i]);
+                        total  += parseFloat(data);
                     }
-                    var result  = total.toFixed(2);
-                    $(dt_selector.column(columnNo).footer()).html(result);
+                    var resultOfSum  = total.toFixed(2);
+
+                    var currencyFormat        = {!! json_encode(env('CURRENCY_FORMAT')) !!};
+                    var defaultCurrencySymbol = {!! json_encode(env('DEFAULT_CURRENCY_SYMBOL')) !!};
+                    if (currencyFormat=='prefix') {
+                        resultOfFooter = defaultCurrencySymbol + resultOfSum;
+                    }else{
+                        resultOfFooter = resultOfSum + defaultCurrencySymbol;
+                    }
+                    $(dt_selector.column(columnNo).footer()).html(resultOfFooter);
                 }
 
                 $(document).on('click', '.date_field', function () {

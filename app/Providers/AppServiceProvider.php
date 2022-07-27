@@ -22,9 +22,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Share;
+use App\Traits\Temporary\SettingHomePageSeoTrait;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use SettingHomePageSeoTrait;
     /**
      * Register any application services.
      *
@@ -404,6 +406,10 @@ class AppServiceProvider extends ServiceProvider
             ->reddit()
             ->getRawLinks();
 
+
+        //Home Page Seo
+        $setting_home_page_seo = $this->settingHomePageSeo();
+
         View::share(['languages'=>$languages,
                     'currency_codes'=>$currency_codes,
                     'storefront_images'=>$storefront_images,
@@ -462,6 +468,7 @@ class AppServiceProvider extends ServiceProvider
                     'tags'=> $tags,
                     'storefront_shop_page_enabled'=> $storefront_shop_page_enabled,
                     'storefront_brand_page_enabled'=> $storefront_brand_page_enabled,
+                    'setting_home_page_seo'=> $setting_home_page_seo,
             ]);
 
             $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);

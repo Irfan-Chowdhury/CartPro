@@ -30,55 +30,58 @@ class CategoryService
     {
         $categories = $this->getAllCategories();
 
-        return datatables()->of($categories)
-                ->setRowId(function ($category){
-                    return $category->id;
-                })
-                ->addColumn('category_image', function ($row){
-                    if ($row->image==null) {
-                        return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
-                    }
-                    else {
-                        if (!File::exists(public_path($row->image))) {
-                            $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category';
-                        }else {
-                            $url = url("public/".$row->image);
+        if (request()->ajax()){
+
+            return datatables()->of($categories)
+                    ->setRowId(function ($category){
+                        return $category->id;
+                    })
+                    ->addColumn('category_image', function ($row){
+                        if ($row->image==null) {
+                            return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
                         }
-                        return  '<img src="'. $url .'" height="50px" width="50px"/>';
-                    }
-                })
-                ->addColumn('category_name', function ($row){
-                    return $row->category_name;
-                })
-                ->addColumn('parent', function ($row){
-                    return $row->parent_category_name;
-                })
-                ->addColumn('is_active', function ($row){
-                    if($row->is_active==1){
-                        return '<span class="p-2 badge badge-success">Active</span>';
-                    }else{
-                        return '<span class="p-2 badge badge-danger">Inactive</span>';
-                    }
-                })
-                ->addColumn('action', function ($row){
-                    $actionBtn = "";
-                    if (auth()->user()->can('category-edit')){
-                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                                        &nbsp; ';
-                    }
-                    if (auth()->user()->can('category-action')){
-                        if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
-                        }else {
-                            $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                        else {
+                            if (!File::exists(public_path($row->image))) {
+                                $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category';
+                            }else {
+                                $url = url("public/".$row->image);
+                            }
+                            return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
-                        // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
-                        // &nbsp; ';
-                    }
-                    return $actionBtn;
-                })
-                ->rawColumns(['is_active','action','category_image'])
-                ->make(true);
+                    })
+                    ->addColumn('category_name', function ($row){
+                        return $row->category_name;
+                    })
+                    ->addColumn('parent', function ($row){
+                        return $row->parent_category_name;
+                    })
+                    ->addColumn('is_active', function ($row){
+                        if($row->is_active==1){
+                            return '<span class="p-2 badge badge-success">Active</span>';
+                        }else{
+                            return '<span class="p-2 badge badge-danger">Inactive</span>';
+                        }
+                    })
+                    ->addColumn('action', function ($row){
+                        $actionBtn = "";
+                        if (auth()->user()->can('category-edit')){
+                            $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                                            &nbsp; ';
+                        }
+                        if (auth()->user()->can('category-action')){
+                            if ($row->is_active==1) {
+                                $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            }else {
+                                $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                            }
+                            // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                            // &nbsp; ';
+                        }
+                        return $actionBtn;
+                    })
+                    ->rawColumns(['is_active','action','category_image'])
+                    ->make(true);
+        }
     }
 
     public function storeCategory($request)

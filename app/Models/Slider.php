@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Session;
 
 class Slider extends Model
 {
@@ -25,7 +26,7 @@ class Slider extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function sliderTranslation()
+    public function sliderTranslation() //Remove Later
     {
     	return $this->hasMany(SliderTranslation::class,'slider_id');
     }
@@ -33,5 +34,15 @@ class Slider extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+
+    //New For Repository
+    public function sliderTranslations()
+    {
+        $locale = Session::get('currentLocal');
+        return $this->hasMany(SliderTranslation::class,'slider_id')
+                    ->where('locale',$locale)
+                    ->orWhere('locale','en');
     }
 }

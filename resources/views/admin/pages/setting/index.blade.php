@@ -49,6 +49,7 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="general-settings" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.General')</a>
+                            <a class="list-group-item list-group-item-action" id="home-page-seo-settings" data-toggle="list" href="#home-page-seo" role="tab" aria-controls="home">@lang('file.Home Page SEO')</a>
                             <a class="list-group-item list-group-item-action" id="store-settings" data-toggle="list" href="#store" role="tab" aria-controls="social">@lang('file.Store-Contact')</a>
                             <a class="list-group-item list-group-item-action" id="about-us-settings" data-toggle="list" href="#about-us" role="tab" aria-controls="social">@lang('file.About Us')</a>
                             <a class="list-group-item list-group-item-action" id="currency-settings" data-toggle="list" href="#currency" role="tab" aria-controls="settings">@lang('file.Currency')</a>
@@ -127,6 +128,11 @@
                     <!-- general -->
                     <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings">
                         @include('admin.pages.setting.general_setting.general')
+                    </div>
+
+                    <!-- home-page-seo -->
+                    <div class="tab-pane fade show" id="home-page-seo" role="tabpanel" aria-labelledby="home-page-seo-settings">
+                        @include('admin.pages.setting.general_setting.home_page_seo')
                     </div>
 
                     <!-- Maintenance -->
@@ -271,6 +277,11 @@
                 //General
                 $('#generalSubmit').on('submit', function (e) {
                     @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.general.store_or_update'])
+                });
+
+                //Home Page Seo
+                $('#homePageSeoSubmit').on('submit', function (e) {
+                    @include('admin.includes.common_js.setting_submit_js',['route_name'=>'admin.setting.home_page_seo.store_or_update'])
                 });
 
                 //Store

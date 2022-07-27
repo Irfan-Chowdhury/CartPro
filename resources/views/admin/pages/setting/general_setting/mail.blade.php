@@ -54,10 +54,12 @@
                         </div>
                     </div>
 
+
+                    {{--
                     <br>
                     <h3 class="text-bold">@lang('file.Customer Notification Settings')</h3>
                     <br>
-
+                    
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Welcome Email')</b></label>
                         <div class="col-sm-8">
@@ -67,7 +69,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <br>
                     <h3 class="text-bold">@lang('file.Order Notification Settings')</h3>
@@ -104,7 +105,7 @@
                                 <option value="refunded" @isset($setting_mail->mail_order_status) {{$setting_mail->mail_order_status=="refunded" ? 'selected':''}} @endisset>{{ucfirst("refunded")}}</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="form-group row">

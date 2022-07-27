@@ -1,4 +1,22 @@
 @extends('frontend.layouts.master')
+
+@section('meta_info')
+
+    @if ($setting_home_page_seo)
+
+    @endif
+    <meta product="og:site_name" content="{{$setting_home_page_seo->meta_site_name}}">
+    <meta product="og:title" content="{{$setting_home_page_seo->meta_title}}">
+    <meta product="og:description" content="{{$setting_home_page_seo->meta_description}}">
+    <meta product="og:url" content="{{$setting_home_page_seo->meta_url}}">
+    <meta product="og:type" content="{{$setting_home_page_seo->meta_type}}">
+    @if ($setting_home_page_seo->meta_image)
+        <meta product="og:image" content="{{asset('public/'.$setting_home_page_seo->meta_image)}}">
+    @endif
+@endsection
+
+
+
 @section('frontend_content')
 
 

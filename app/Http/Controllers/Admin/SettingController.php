@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
+use App\Models\SettingHomePageSeo;
+use App\Models\SettingHomePageSeoTranslation;
 use App\Models\Country;
 use App\Models\CurrencyRate;
 use App\Models\SettingAboutUs;
@@ -30,13 +32,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\SlugTrait;
 use App\Traits\ENVFilePutContent;
 use App\Traits\imageHandleTrait;
+use App\Traits\Temporary\SettingHomePageSeoTrait;
 use Illuminate\Support\Facades\Session;
 
 class SettingController extends Controller
 {
-    use ENVFilePutContent, imageHandleTrait;
+    use SlugTrait, ENVFilePutContent, imageHandleTrait, SettingHomePageSeoTrait;
 
     public function index()
     {
@@ -133,10 +137,12 @@ class SettingController extends Controller
         $setting_bank_transfer  = SettingBankTransfer::latest()->first();
         $setting_check_money_order  = SettingCheckMoneyOrder::latest()->first();
 
-        $setting_about_us = SettingAboutUs::with('aboutUsTranslation','aboutUsTranslationEnglish')->latest()->first();
+        $setting_about_us      = SettingAboutUs::with('aboutUsTranslation','aboutUsTranslationEnglish')->latest()->first();
 
+        //Home Page Seo
+        $setting_home_page_seo = $this->settingHomePageSeo();
 
-        return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','selected_countries','setting_store','selected_currencies',
+        return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','setting_home_page_seo','selected_countries','setting_store','selected_currencies',
                     'setting_currency','setting_sms','setting_mail','setting_newsletter','setting_custom_css_js','setting_facebook','setting_google',
                     'setting_free_shipping','setting_local_pickup','setting_flat_rate','setting_paypal','setting_strip','setting_paytm',
                     'setting_cash_on_delivery','setting_bank_transfer','setting_check_money_order','schedules','setting_about_us'));
@@ -187,6 +193,57 @@ class SettingController extends Controller
 		file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
 
         $this->dataWriteInENVFile('APP_TIMEZONE',$request->default_timezone);
+
+        return response()->json(['success' => __('Data Added successfully.')]);
+    }
+
+    public function homePageSeoStoreOrUpdate(Request $request)
+    {
+        if (!env('USER_VERIFIED')) {
+            return response()->json(['errors'=>['This is disabled for demo']]);
+        }
+
+        $validator = Validator::make($request->only('meta_site_name','meta_title','meta_description','meta_url','meta_type','meta_image'),[
+            'meta_site_name'  => 'required',
+            'meta_title'      => 'required',
+            'meta_description'=> 'required',
+            'meta_url'        => 'required',
+            'meta_type'       => 'required',
+            'meta_image'      => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $setting_home_page_seo = SettingHomePageSeo::latest()->first();
+        if (!$setting_home_page_seo) {
+            $setting_home_page_seo = SettingHomePageSeo::create([
+                'meta_url'   => $request->meta_url,
+                'meta_type'  => $request->meta_type,
+                'meta_image'=> $this->imageStore($request->meta_image, $directory='images/setting_home_page_seo/', null),
+            ]);
+        }else{
+            $setting_home_page_seo->meta_url  = $request->meta_url;
+            $setting_home_page_seo->meta_type = $request->meta_type;
+            if ($request->meta_image) {
+                $this->previousImageDelete($setting_home_page_seo->meta_image);
+                $setting_home_page_seo->meta_image = $this->imageStore($request->meta_image, $directory='images/setting_home_page_seo/', null);
+            }
+            $setting_home_page_seo->update();
+        }
+        SettingHomePageSeoTranslation::updateOrCreate(
+            [
+                'setting_home_page_seo_id' => $setting_home_page_seo->id,
+                'locale' => Session::get('currentLocal'),
+            ],
+            [
+                'meta_site_name' => $request->meta_site_name,
+                'meta_title' => $request->meta_title,
+                'meta_slug'   => $this->slug($request->meta_title),
+                'meta_description' => $request->meta_description,
+            ]
+        );
 
         return response()->json(['success' => __('Data Added successfully.')]);
     }
@@ -436,7 +493,7 @@ class SettingController extends Controller
             $data['mail_port']     = $request->mail_port;
             $data['mail_username'] = $request->mail_username;
             if ($request->mail_password) {
-                $data['mail_password']  = Hash::make($request->mail_password);
+                $data['mail_password']  = $request->mail_password;
             }
             $data['mail_encryption']= $request->mail_encryption;
             $data['welcome_email'] = $request->welcome_email;

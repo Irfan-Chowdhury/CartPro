@@ -8,7 +8,7 @@
     <div class="table-responsive ml-3">
         <div class="row">
             <div class="col-md-8">
-                <table id="datatable1" class="table text-center">
+                <table id="datatable" class="table text-center">
                     <thead>
                         <tr>
                             <th class="wd-15p text-center">@lang('file.Date')</th>
@@ -58,6 +58,16 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>{{trans('file.Total')}} :</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="col-md-4">
@@ -115,24 +125,23 @@
     </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script>
     $(function(){
       'use strict';
 
-      $('#datatable1').DataTable({
-        responsive: true,
-        language: {
-          searchPlaceholder: 'Search...',
-          sSearch: '',
-          lengthMenu: '_MENU_ items/page',
-        }
-      });
-
-      $('#datatable2').DataTable({
-        bLengthChange: false,
-        searching: false,
-        responsive: true
-      });
+      $('#datatable').DataTable({
+            drawCallback: function () {
+                let api = this.api();
+                for (let i = 3; i < 6; i++) {
+                    datatable_sum(api, i);
+                }
+                // var pageTotalColumn3 = api.column(3,{page:'current'}).data().sum();
+                // $(api.column(3).footer()).html('$ ' + pageTotalColumn3);
+            },
+            @include('admin.includes.common_js.pdf_excel')
+        });
+        @include('admin.includes.common_js.datatable_sum')
 
       // Select2
       $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });

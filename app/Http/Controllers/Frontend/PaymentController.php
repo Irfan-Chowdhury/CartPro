@@ -63,6 +63,11 @@ class PaymentController extends Controller
 
     public function paymentProcees(Request $request)
     {
+        if(!env('USER_VERIFIED')){
+            session()->flash('message','Disabled For Demo');
+            return redirect()->back();
+        }
+
         $validator = Validator::make($request->all(),[
             'billing_first_name' => 'required|string',
             'billing_last_name'  => 'required|string',

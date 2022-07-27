@@ -297,6 +297,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //--Category--
             Route::group(['prefix' => '/categories'], function () {
                 Route::get('/',[CategoryController::class,'index'])->name('admin.category');
+                Route::get('/datatable',[CategoryController::class,'dataTable'])->name('admin.category.datatable');
                 Route::post('/store',[CategoryController::class,'store'])->name('admin.category.store');
                 Route::get('/edit',[CategoryController::class,'edit'])->name('admin.category.edit');
                 Route::post('updateCategory',[CategoryController::class,'categoryUpdate'])->name('category_list.update'); //Remove Later
@@ -478,6 +479,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 //--Slider--
                 Route::group(['prefix' => 'slider'], function () {
                     Route::get('/',[SliderController::class,'index'])->name('admin.slider');
+                    Route::get('/datatable',[SliderController::class,'dataTable'])->name('admin.slider.datatable');
                     Route::get('/data-fetch-by-type',[SliderController::class,'dataFetchByType'])->name('admin.slider.data-fetch-by-type');
                     Route::post('/store',[SliderController::class,'store'])->name('admin.slider.store');
                     Route::get('/edit',[SliderController::class,'edit'])->name('admin.slider.edit');
@@ -607,6 +609,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::group(['prefix' => 'others'], function () {
                     Route::get('/',[SettingController::class,'index'])->name('admin.setting.index');
                     Route::post('/general/store',[SettingController::class,'generalStoreOrUpdate'])->name('admin.setting.general.store_or_update');
+                    Route::post('/home-page-seo/store',[SettingController::class,'homePageSeoStoreOrUpdate'])->name('admin.setting.home_page_seo.store_or_update');
                     Route::post('/store_store',[SettingController::class,'storeStoreOrUpdate'])->name('admin.setting.store.store_or_update');
                     Route::post('/currency/store',[SettingController::class,'currencyStoreOrUpdate'])->name('admin.setting.currency.store_or_update');
                     Route::post('/sms/store',[SettingController::class,'smsStoreOrUpdate'])->name('admin.setting.sms.store_or_update');

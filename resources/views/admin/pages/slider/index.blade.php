@@ -104,7 +104,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.slider') }}",
+                        url: "{{ route('admin.slider.datatable') }}",
                     },
 
                     columns: [
