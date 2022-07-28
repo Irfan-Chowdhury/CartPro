@@ -13,16 +13,16 @@
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">@lang('file.Slider')</h4>
-        <div id="success_alert" role="alert"></div>
+        <div id="alert_message" role="alert"></div>
         <br>
 
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('file.Add New Slide')}}</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i>{{__('file.Add New Slide')}}</button>
         <button type="button" class="btn btn-danger" id="bulk_action">
             <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
         </button>
     </div>
     <div class="table-responsive">
-    	<table id="slider_table" class="table">
+    	<table id="dataListTable" class="table">
     	    <thead>
         	   <tr>
                     <th class="not-exported"></th>
@@ -74,7 +74,7 @@
             });
 
             $(document).ready(function () {
-                let table = $('#slider_table').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -268,42 +268,8 @@
 
 
             //----------Insert Data----------------------
-            $("#submitForm").on("submit",function(e){
-                e.preventDefault();
-
-                var formData = new FormData(this); //For Image always use this method
-
-                $.ajax({
-                    url: "{{route('admin.slider.store')}}",
-                    type: "POST",
-                    data: formData,
-                    contentType: false, //That means we send mulitpart/data
-                    processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
-                    success: function(data){
-                        console.log(data);
-                        if (data.errors) {
-                            $("#alertMessage").empty().addClass('alert alert-danger').html(data.errors)
-                            setTimeout(function() {
-                                $('#alertMessage').fadeOut("slow");
-                            }, 3000);
-                            $('#save').text('Save');
-                        }
-                        else if(data.success){
-                            $("#createModalForm").modal('hide');
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $('select').selectpicker('refresh');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                            $("#alertMessage").removeClass('bg-danger text-center text-light p-1');
-                            $('#save').text('Save');
-                        }
-                    }
-                });
-            });
+            @include('admin.includes.common_js.submit_button_click_js')
+            @include('admin.includes.common_js.submit_form_js',['route_name'=>'admin.slider.store'])
 
             // ------------ Edit ------------------
             $(document).on("click",".edit",function(e){
@@ -346,228 +312,23 @@
                             $('#isActiveEdit').attr('checked', false)
                         }
                         $('#targetEdit').selectpicker('val',data.slider.target);
-                        $('#EditformModal').modal('show');
+                        $('#editFormModal').modal('show');
                     }
                 });
             });
 
             //----------Update Data----------------------
-            $("#updatetForm").on("submit",function(e){
-                e.preventDefault();
+            @include('admin.includes.common_js.update_button_click_js')
+            @include('admin.includes.common_js.update_form_js',['route_name'=>'admin.slider.update'])
+            //---------- Active ------------
+            @include('admin.includes.common_js.active_js',['route_name'=>'admin.slider.active'])
+            //---------- Inactive ------------
+            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.slider.inactive'])
+            //---------- Delete ------------
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.slider.destroy'])
+            //---------- Bulk Action ------------
+            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.slider.bulk_action'])
 
-                $("#update").on("click",function(e){
-                    $('#update').text('Updating ...');
-                });
-
-                var formData = new FormData(this); //For Image always use this method
-                $.ajax({
-                    url: "{{route('admin.slider.update')}}",
-                    type: "POST",
-                    data: formData,
-                    contentType: false, //That means we send mulitpart/data
-                    processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
-                    success: function(data){
-                        console.log(data);
-                        if (data.errors) {
-                            $("#alertMessageEdit").empty().addClass('alert alert-danger').html(data.errors)
-                            setTimeout(function() {
-                                $('#alertMessageEdit').fadeOut("slow");
-                            }, 3000);
-                            $('#update').text('Update');
-                        }
-                        else if(data.success){
-                            $("#EditformModal").modal('hide');
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#updatetForm')[0].reset();
-                            $('select').selectpicker('refresh');
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                            $("#alertMessageEdit").empty();
-                            $('#update').text('Update');
-                        }
-                    }
-                });
-            });
-
-
-            //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                $.ajax({
-                    url: "{{route('admin.slider.active')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.errors){
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow");
-                            $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-
-            //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                $.ajax({
-                    url: "{{route('admin.slider.inactive')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.errors){
-                            $('#slider_table').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow");
-                            $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //---------- Delete -------------
-            $(document).on("click",".delete",function(e){
-                e.preventDefault();
-                var slider_id = $(this).data("id");
-
-                if (!confirm('Are you sure you want to continue?')) {
-                    alert(false);
-                }else{
-                    $.ajax({
-                        url: "{{route('cartpro.delete')}}",
-                        type: "GET",
-                        data: {slider_id:slider_id},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#slider_table').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow");
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.errors){
-                                $('#slider_table').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow");
-                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                }
-            });
-
-
-            //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#slider_table').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
-
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
-
-                    $("#active").on("click",function(){
-                        console.log(idsArray);
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.slider.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#slider_table').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                                else if(data.errors){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#slider_table').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow");
-                                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        console.log(idsArray);
-                        $.ajax({
-                            url: "{{route('admin.slider.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#slider_table').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                                else if(data.errors){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#slider_table').DataTable().ajax.reload();
-                                    $('#success_alert').fadeIn("slow");
-                                    $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                    setTimeout(function() {
-                                        $('#success_alert').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
         })(jQuery);
 
         //Image Show Before Upload End

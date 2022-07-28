@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'customer_check' => \App\Http\Middleware\CustomerCheck::class,
         'XSS' => \App\Http\Middleware\XSS::class,
         'set_locale' => \App\Http\Middleware\SetLocale::class,
+        'demo_check' => \App\Http\Middleware\DemoCheck::class,
+        'checkAjax' => \App\Http\Middleware\CheckAjax::class,
     ];
 }

@@ -1,5 +1,5 @@
 <!--Create Modal -->
-<div class="modal fade" id="EditformModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+<div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,10 +8,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div id="alertMessageEdit" role="alert"></div>
+        <div id="errorMessageEdit" role="alert"></div>
 
         <div class="modal-body">
-            <form method="POST" id="updatetForm" action="{{route('admin.slider.store')}}" enctype="multipart/form-data">
+            <form method="POST" id="updateForm" enctype="multipart/form-data">
                 @csrf
 
                 <input type="hidden" name="slider_id" id="sliderId">
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" id="update" class="btn btn-primary">@lang('file.Update')</button>
+                    <button type="submit" id="updateButton" class="btn btn-primary">@lang('file.Update')</button>
                 </div>
             </form>
         </div>

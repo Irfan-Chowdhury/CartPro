@@ -4,15 +4,16 @@ namespace App\Repositories\Slider;
 
 use App\Contracts\Slider\SliderContract;
 use App\Models\Slider;
+use App\Traits\ActiveInactiveTrait;
 use App\Traits\TranslationTrait;
 
 class SliderRepository implements SliderContract
 {
-    use TranslationTrait;
+    use TranslationTrait, ActiveInactiveTrait;
 
     public function getAllSlider()
     {
-        return Slider::with('sliderTranslations')
+        $data = Slider::with('sliderTranslations')
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
@@ -35,5 +36,35 @@ class SliderRepository implements SliderContract
                         'locale'         => $this->translations($slider->sliderTranslations)->locale ?? null,
                     ];
                 });
+
+        return json_decode(json_encode($data), FALSE);
+    }
+
+    public function storeData($data){
+        return Slider::create($data);
+    }
+
+    public function getById($id){
+        return Slider::find($id);
+    }
+
+    public function updateDataById($id, $data){
+        return $this->getById($id)->update($data);
+    }
+
+    public function active($id){
+        return $this->activeData($this->getById($id));
+    }
+
+    public function inactive($id){
+        return $this->inactiveData($this->getById($id));
+    }
+
+    public function destroy($id){
+        $this->getById($id)->delete();
+    }
+
+    public function bulkAction($type, $ids){
+        return $this->bulkActionData($type, Slider::whereIn('id',$ids));
     }
 }

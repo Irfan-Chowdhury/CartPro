@@ -481,12 +481,13 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::get('/',[SliderController::class,'index'])->name('admin.slider');
                     Route::get('/datatable',[SliderController::class,'dataTable'])->name('admin.slider.datatable');
                     Route::get('/data-fetch-by-type',[SliderController::class,'dataFetchByType'])->name('admin.slider.data-fetch-by-type');
-                    Route::post('/store',[SliderController::class,'store'])->name('admin.slider.store');
+                    Route::post('/store',[SliderController::class,'store'])->name('admin.slider.store')->middleware(['demo_check','checkAjax']);
                     Route::get('/edit',[SliderController::class,'edit'])->name('admin.slider.edit');
-                    Route::post('/update',[SliderController::class,'update'])->name('admin.slider.update');
-                    Route::get('/active',[SliderController::class,'active'])->name('admin.slider.active');
-                    Route::get('/inactive',[SliderController::class,'inactive'])->name('admin.slider.inactive');
-                    Route::get('test/bulk_action',[SliderController::class,'bulkAction'])->name('admin.slider.bulk_action');
+                    Route::post('/update',[SliderController::class,'update'])->name('admin.slider.update')->middleware(['demo_check','checkAjax']);
+                    Route::get('/active',[SliderController::class,'active'])->name('admin.slider.active')->middleware('demo_check');
+                    Route::get('/inactive',[SliderController::class,'inactive'])->name('admin.slider.inactive')->middleware('demo_check');
+                    Route::get('/destroy',[SliderController::class,'destroy'])->name('admin.slider.destroy')->middleware('demo_check');
+                    Route::get('test/bulk_action',[SliderController::class,'bulkAction'])->name('admin.slider.bulk_action')->middleware('demo_check');
                 });
             });
 
@@ -654,7 +655,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');
 
-            Route::get('/delete',[SliderController::class,'delete'])->name('cartpro.delete');
 
             //FAQ
             Route::prefix('faq')->group(function () {

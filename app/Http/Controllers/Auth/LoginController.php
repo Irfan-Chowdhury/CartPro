@@ -53,31 +53,30 @@ class LoginController extends Controller
         return view('frontend.auth.login');
     }
 
-    public function login(Request $request)
-    {
-        $this->validateLogin($request);
+    // public function login(Request $request)
+    // {
+    //     $this->validateLogin($request);
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
+    //     if (method_exists($this, 'hasTooManyLoginAttempts') &&
+    //         $this->hasTooManyLoginAttempts($request)) {
+    //         $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
-        }
+    //         return $this->sendLockoutResponse($request);
+    //     }
 
-        if ($this->attemptLogin($request)) {
-            if ((auth()->user()->role == 0)){
-                return redirect()->route('admin.dashboard');
-            }
-        }
+    //     if ($this->attemptLogin($request)) {
+    //         if ((auth()->user()->role == 0)){
+    //             return redirect()->route('admin.dashboard');
+    //         }
+    //     }
 
-        $this->incrementLoginAttempts($request);
+    //     $this->incrementLoginAttempts($request);
 
-        return $this->sendFailedLoginResponse($request);
-    }
+    //     return $this->sendFailedLoginResponse($request);
+    // }
 
     public function customerLogin(Request $request)
     {
-
         $this->validateLogin($request);
 
         if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {

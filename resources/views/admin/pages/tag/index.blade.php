@@ -237,11 +237,6 @@
     //---------- Bulk Action ------------
     @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.tag.bulk_action'])
 
-
-
-    //Bulk Action
-
-
 })(jQuery);
     </script>
 @endpush

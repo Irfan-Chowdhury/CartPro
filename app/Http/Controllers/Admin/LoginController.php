@@ -35,11 +35,6 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function showLoginForm()
-    {
-        return view('admin.auth.login');
-    }
-
 
     public function login(Request $request)
     {
@@ -52,7 +47,6 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)){
             if (auth()->user()->user_type==1){
-                // Session::put('currentLocal', 'en');
                 return redirect()->intended(route('admin.dashboard'));
             }
             else {

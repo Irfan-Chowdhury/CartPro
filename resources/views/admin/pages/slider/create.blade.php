@@ -1,6 +1,6 @@
 
 <!--Create Modal -->
-<div class="modal fade" id="createModalForm" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -9,11 +9,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div id="alertMessage" role="alert"></div>
 
         <div class="modal-body">
             <form method="POST" id="submitForm" enctype="multipart/form-data" action="{{route('admin.slider.store')}}">
                 @csrf
+                <div class="container-fluid"><span id="errorMessage"></span></div>
 
                 <div class="row">
                     <div class="col-md-2"></div>
@@ -51,7 +51,7 @@
 
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Image') &nbsp;<span class="text-danger">*</span></b></label>
-                            <input type="file" class="col-md-8 form-control" required name="slider_image" id="slider_image">
+                            <input type="file" required class="col-md-8 form-control"  name="slider_image" id="slider_image">
                         </div>
 
                         <div class="form-group row">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" id="save" class="btn btn-primary">@lang('file.Save')</button>
+                    <button type="submit" id="submitButton" class="btn btn-primary">@lang('file.Save')</button>
                 </div>
             </form>
         </div>
