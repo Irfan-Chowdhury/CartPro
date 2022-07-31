@@ -2,23 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Slider\SliderStoreRequest;
 use App\Http\Requests\Slider\SliderUpdateRequest;
-use App\Models\Slider;
-use App\Models\SliderTranslation;
 use App\Services\CategoryService;
 use App\Services\SliderService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Session;
 use App\Traits\SlugTrait;
 use App\Traits\imageHandleTrait;
-use Exception;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\DeleteWithFileTrait;
 

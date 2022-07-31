@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeleteToSliderTranslationsTable extends Migration
+class AddSoftDeleteColumnToPageTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class AddSoftDeleteToSliderTranslationsTable extends Migration
      */
     public function up()
     {
-        // php artisan make:migration add_soft_delete_column_to_sliders_table --table=sliderss
-        Schema::table('slider_translations', function (Blueprint $table) {
+        Schema::table('page_translations', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -26,8 +25,8 @@ class AddSoftDeleteToSliderTranslationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('slider_translations', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('page_translations', function (Blueprint $table) {
+            //
         });
     }
 }

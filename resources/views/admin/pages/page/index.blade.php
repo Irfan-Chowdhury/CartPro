@@ -12,7 +12,7 @@
         <br>
 
         @if (auth()->user()->can('page-store'))
-            <button type="button" class="btn btn-info" name="createModal" data-toggle="modal" data-target="#createModal">
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
                 <i class="fa fa-plus"></i> {{__('file.Add Page')}}
             </button>
         @endif
@@ -90,7 +90,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.page.index') }}",
+                        url: "{{ route('admin.page.datatable') }}",
                     },
                     columns: [
                         {
@@ -194,44 +194,8 @@
             });
 
             //----------Insert Data----------------------
-
-            $('#submitForm').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{route('admin.page.store')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#error_message').html(html);
-                            setTimeout(function() {
-                                $('#error_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.success){
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#submitForm')[0].reset();
-                            $("#createModal").modal('hide');
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            @include('admin.includes.common_js.submit_button_click_js')
+            @include('admin.includes.common_js.submit_form_js',['route_name'=>'admin.page.store'])
 
             //---------- Edit -------------
             $(document).on('click', '.edit', function () {
@@ -248,162 +212,37 @@
                         $('#page_translation_id').val(data.page_translation.id);
                         $('#page_name_edit').val(data.page_translation.page_name);
                         $('#page_url').attr('href',"{{url('/page')}}"+'/'+data.page.slug);
+
+                        $('#meta_title_edit').val(data.page_translation.meta_title);
+                        $('#meta_description_edit').val(data.page_translation.meta_description);
+                        $('#meta_url_edit').val(data.page_translation.meta_url);
+                        $('#meta_type_edit').val(data.page_translation.meta_type);
+
+
                         tinymce.get('body_edit').setContent(data.page_translation_body);
                         if (data.page.is_active === 1) {
                                 $('#is_active_edit').prop('checked', true);
                         } else {
                             $('#is_active_edit').prop('checked', false);
                         }
-                        $('#editModal').modal('show');
+                        $('#editFormModal').modal('show');
                     }
                 });
             });
 
             //----------Update Data----------------------
+            @include('admin.includes.common_js.update_button_click_js')
+            @include('admin.includes.common_js.update_form_js',['route_name'=>'admin.page.update'])
+            //---------- Active ------------
+            @include('admin.includes.common_js.active_js',['route_name'=>'admin.page.active'])
+            //---------- Inactive ------------
+            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.page.inactive'])
+            //---------- Delete ------------
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.page.destroy'])
+            //---------- Bulk Action ------------
+            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.page.bulk_action'])
 
-            $('#updateForm').on('submit', function (e) {
-                e.preventDefault();
-                $.post({
-                    url: "{{route('admin.page.update')}}",
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        let html = '';
-                        if (data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for (let count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
-                            }
-                            html += '</div>';
-                            $('#error_message_edit').html(html);
-                            setTimeout(function() {
-                                $('#error_message_edit').fadeOut("slow");
-                            }, 3000);
-                        }
-                        else if(data.success){
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#updateForm')[0].reset();
-                            $("#editModal").modal('hide');
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-
-                });
-            });
-
-
-
-            //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                $.ajax({
-                    url: "{{route('admin.page.active')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
-
-                $.ajax({
-                    url: "{{route('admin.page.inactive')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#dataListTable').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#dataListTable').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
-
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
-
-                    $("#active").on("click",function(){
-                        console.log(idsArray);
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.page.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#dataListTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        $.ajax({
-                            url: "{{route('admin.page.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#dataListTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
-
+            
             //For Editor
             tinymce.init({
                 selector: '.text-editor',

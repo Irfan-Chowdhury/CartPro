@@ -1,6 +1,6 @@
 
 <!-- Modal -->
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -11,6 +11,8 @@
         </div>
         <form method="post" id="submitForm"  class="form-horizontal">
           @csrf
+            <div class="container-fluid"><span id="errorMessage"></span></div>
+
 
             <div class="modal-body">
 
@@ -24,7 +26,24 @@
                     <label for="inputEmail3"><b>{{__('file.Body')}} <span class="text-danger">*</span></b></label>
                     <textarea name="body" id="body" class="form-control text-editor"></textarea>
                 </div>
-                
+
+                <div class="form-group">
+                    <label class="text-bold">{{__('file.Meta Title')}} &nbsp;</label>
+                    <input type="text" name="meta_title" id="meta_title"  class="form-control" placeholder="{{__('file.Meta Title')}}" >
+                </div>
+                <div class="form-group">
+                    <label class="text-bold">{{__('file.Meta Description')}} &nbsp;</label>
+                    <input type="text" name="meta_description" id="meta_description"  class="form-control" placeholder="{{__('file.Meta Description')}}" >
+                </div>
+                <div class="form-group">
+                    <label class="text-bold">{{__('file.Meta URL')}} &nbsp;</label>
+                    <input type="text" name="meta_url" id="meta_url"  class="form-control" placeholder="{{__('file.Meta URL')}}" >
+                </div>
+                <div class="form-group">
+                    <label class="text-bold">{{__('file.Meta Type')}} &nbsp;</label>
+                    <input type="text" name="meta_type" id="meta_type"  class="form-control" placeholder="{{__('file.Meta Type')}}" >
+                </div>
+
                 <br>
                 <div class="form-group form-check">
                     <input type="checkbox" checked class="form-check-input" name="is_active" id="is_active" value="1">

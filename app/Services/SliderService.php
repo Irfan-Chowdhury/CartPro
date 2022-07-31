@@ -23,7 +23,7 @@ class SliderService
     }
 
     public function getAllSlider(){
-        return $this->sliderContract->getAllSlider(); //This is use when we use map()->format
+        return $this->sliderContract->getAllSlider();
     }
 
     public function dataTable()

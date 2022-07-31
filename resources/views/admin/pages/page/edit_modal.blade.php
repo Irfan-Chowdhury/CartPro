@@ -1,6 +1,6 @@
 
 <!-- Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -14,6 +14,8 @@
           <input type="hidden" name="page_id" id="page_id">
           <input type="hidden" name="page_translation_id" id="page_translation_id">
 
+          <div id="errorMessageEdit" role="alert"></div>
+
             <div class="modal-body">
 
               <div class="form-group">
@@ -26,6 +28,24 @@
                 <textarea name="body" id="body_edit" class="form-control text-editor"></textarea>
             </div>
 
+
+            <div class="form-group">
+                <label class="text-bold">{{__('file.Meta Title')}} &nbsp; <span class="text-danger">*</span></label>
+                <input type="text" name="meta_title" id="meta_title_edit"  class="form-control" placeholder="{{__('file.Meta Title')}}" >
+            </div>
+            <div class="form-group">
+                <label class="text-bold">{{__('file.Meta Description')}} &nbsp; <span class="text-danger">*</span></label>
+                <input type="text" name="meta_description" id="meta_description_edit"  class="form-control" placeholder="{{__('file.Meta Description')}}" >
+            </div>
+            <div class="form-group">
+                <label class="text-bold">{{__('file.Meta URL')}} &nbsp; <span class="text-danger">*</span></label>
+                <input type="text" name="meta_url" id="meta_url_edit"  class="form-control" placeholder="{{__('file.Meta URL')}}" >
+            </div>
+            <div class="form-group">
+                <label class="text-bold">{{__('file.Meta Type')}} &nbsp; <span class="text-danger">*</span></label>
+                <input type="text" name="meta_type" id="meta_type_edit"  class="form-control" placeholder="{{__('file.Meta Type')}}" >
+            </div>
+
             <br>
               <div class="form-group form-check">
                 <input type="checkbox" checked class="form-check-input" name="is_active" id="is_active_edit" value="1">
@@ -34,7 +54,7 @@
             </div>
 
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
+                <button type="submit" name="action_button" id="updateButton" class="btn btn-primary">@lang('file.Submit')</button>
             </div>
 
         </form>

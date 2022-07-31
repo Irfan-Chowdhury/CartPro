@@ -422,13 +422,15 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 //Pages
                 Route::group(['prefix' => 'pages'], function () {
                     Route::get('/',[PageController::class,'index'])->name('admin.page.index');
-                    Route::get('/create',[PageController::class,'create'])->name('admin.page.create');
-                    Route::post('/store',[PageController::class,'store'])->name('admin.page.store');
+                    Route::get('/datatable',[PageController::class,'dataTable'])->name('admin.page.datatable')->middleware('checkAjax');
+                    Route::post('/store',[PageController::class,'store'])->name('admin.page.store')->middleware(['demo_check','checkAjax']);
                     Route::get('/edit',[PageController::class,'edit'])->name('admin.page.edit');
-                    Route::post('/update',[PageController::class,'update'])->name('admin.page.update');
-                    Route::get('/active',[PageController::class,'active'])->name('admin.page.active');
-                    Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive');
-                    Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
+                    Route::post('/update',[PageController::class,'update'])->name('admin.page.update')->middleware(['demo_check','checkAjax']);
+                    Route::get('/active',[PageController::class,'active'])->name('admin.page.active')->middleware(['demo_check','checkAjax']);
+                    Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive')->middleware(['demo_check','checkAjax']);
+                    // Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
+                    Route::get('/destroy',[PageController::class,'destroy'])->name('admin.page.destroy')->middleware(['demo_check','checkAjax']);
+                    Route::get('bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action')->middleware(['demo_check','checkAjax']);
                 });
 
                 //--Menus--
@@ -490,20 +492,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::get('test/bulk_action',[SliderController::class,'bulkAction'])->name('admin.slider.bulk_action')->middleware('demo_check');
                 });
             });
-
-            //Pages
-            // Route::group(['prefix' => 'pages'], function () {
-            //     Route::get('/',[PageController::class,'index'])->name('admin.page.index');
-            //     Route::get('/create',[PageController::class,'create'])->name('admin.page.create');
-            //     Route::post('/store',[PageController::class,'store'])->name('admin.page.store');
-            //     Route::get('/edit',[PageController::class,'edit'])->name('admin.page.edit');
-            //     Route::post('/update',[PageController::class,'update'])->name('admin.page.update');
-            //     Route::get('/active',[PageController::class,'active'])->name('admin.page.active');
-            //     Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive');
-            //     Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
-            // });
-
-
 
             Route::group(['prefix' => 'localization'], function () {
                 //Taxes
