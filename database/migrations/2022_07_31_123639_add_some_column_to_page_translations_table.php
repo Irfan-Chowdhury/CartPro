@@ -15,7 +15,7 @@ class AddSomeColumnToPageTranslationsTable extends Migration
     {
         Schema::table('page_translations', function (Blueprint $table) {
             $table->string('meta_title')->nullable()->after('body');
-            $table->string('meta_description')->nullable()->after('meta_title');
+            $table->text('meta_description')->nullable()->after('meta_title');
             $table->string('meta_url')->nullable()->after('meta_description');
             $table->string('meta_type')->nullable()->after('meta_url');
         });

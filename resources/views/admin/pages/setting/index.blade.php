@@ -56,6 +56,7 @@
                             <a class="list-group-item list-group-item-action" id="mail-settings" data-toggle="list" href="#mail" role="tab" aria-controls="mail">@lang('file.Mail')</a>
                             <a class="list-group-item list-group-item-action" id="newsletter-settings" data-toggle="list" href="#newsletter" role="tab" aria-controls="newsletter">@lang('file.Newsletter')</a>
                             <a class="list-group-item list-group-item-action" id="emptyDatabase-settings" data-toggle="list" href="#emptyDatabase" role="tab" aria-controls="emptyDatabase">@lang('file.Empty Database')</a>
+                            <a class="list-group-item list-group-item-action" id="backup-settings" data-toggle="list" href="#backup" role="tab" aria-controls="backup">@lang('file.System Backup')</a>
                         </div>
                     </div>
                 </div>
@@ -175,9 +176,14 @@
                         @include('admin.pages.setting.general_setting.custom_css_jss')
                     </div>
 
-                    <!-- Custom CSS/Js -->
+                    <!-- Empty Database-->
                     <div class="tab-pane fade" id="emptyDatabase" role="tabpanel" aria-labelledby="emptyDatabase-settings">
                         @include('admin.pages.setting.general_setting.empty_database')
+                    </div>
+
+                    <!-- Backup-->
+                    <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-settings">
+                        @include('admin.pages.setting.general_setting.backup')
                     </div>
 
                     <!----------------------------------- Social Login ------------------------------------------>

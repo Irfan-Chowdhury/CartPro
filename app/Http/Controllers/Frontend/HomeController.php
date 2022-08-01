@@ -43,7 +43,6 @@ class HomeController extends Controller
 
     public function index()
     {
-
         $categories = Cache::remember('categories', 300, function () {
             return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)

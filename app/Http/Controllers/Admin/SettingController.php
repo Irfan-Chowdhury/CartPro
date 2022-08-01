@@ -36,7 +36,10 @@ use App\Traits\SlugTrait;
 use App\Traits\ENVFilePutContent;
 use App\Traits\imageHandleTrait;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingController extends Controller
 {
@@ -1073,6 +1076,43 @@ class SettingController extends Controller
 		DB::statement("SET foreign_key_checks=1");
 		return redirect()->back()->with('empty_message', 'Database cleared successfully');
 	}
+
+
+    public function systemBackup(Request $request)
+    {
+
+        if(isset($request->type)){
+            if($request->type=='files'){
+                Artisan::call('backup:run --only-files');
+                $file_name_with_extension = 'backup_files.zip';
+            }else if($request->type=='database'){
+                Artisan::call('backup:run --only-db');
+                $file_name_with_extension = 'backup_database.zip';
+            }else if($request->type=='both'){
+                Artisan::call('backup:run');
+                $file_name_with_extension = 'backup_files_and_database.zip';
+            }
+
+            //find Last file
+            $fileNames = [];
+            $path = storage_path('app/backups/'.env('APP_NAME'));
+            $files = File::allFiles($path);
+            foreach($files as $file) {
+                array_push($fileNames, pathinfo($file)['basename']);
+            }
+
+            //Download the File
+            $file= storage_path('app/backups/'.env('APP_NAME').'/'.end($fileNames));
+            $headers = array(
+                'Content-Type: application/zip',
+            );
+            if (file_exists($file)) {
+                return Response::download($file, $file_name_with_extension, $headers);
+            }else {
+                echo('File not found.');
+            }
+        }
+    }
 
 
 }

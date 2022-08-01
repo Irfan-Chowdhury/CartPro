@@ -38,14 +38,14 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-            return $this->sendLockoutResponse($request);
-        }
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+        $credentials = $request->only('username', 'password');
 
-        if ($this->attemptLogin($request)){
+        if (Auth::attempt($credentials)) {
             if (auth()->user()->user_type==1){
                 return redirect()->intended(route('admin.dashboard'));
             }
@@ -59,5 +59,32 @@ class LoginController extends Controller
             session()->flash('message','Credential does not match');
             return redirect()->back();
         }
+
+
+
+
+
+        // $this->validateLogin($request);
+        // if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
+        //     $this->fireLockoutEvent($request);
+        //     return $this->sendLockoutResponse($request);
+        // }
+
+
+        // if ($this->attemptLogin($request)){
+
+        //     if (auth()->user()->user_type==1){
+        //         return redirect()->intended(route('admin.dashboard'));
+        //     }
+        //     else {
+        //         Auth::logout();
+        //         return abort('403', __('You are not authorized'));
+        //     }
+        // }
+        // else {
+        //     session()->flash('type','danger');
+        //     session()->flash('message','Credential does not match');
+        //     return redirect()->back();
+        // }
     }
 }

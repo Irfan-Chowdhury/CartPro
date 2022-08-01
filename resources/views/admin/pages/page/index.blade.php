@@ -242,7 +242,7 @@
             //---------- Bulk Action ------------
             @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.page.bulk_action'])
 
-            
+
             //For Editor
             tinymce.init({
                 selector: '.text-editor',

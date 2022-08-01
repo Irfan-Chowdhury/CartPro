@@ -52,6 +52,7 @@ use App\Http\Controllers\Frontend\UserBillingAddressController;
 use App\Http\Controllers\Frontend\UserShippingAddressController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 
 /*
@@ -68,6 +69,9 @@ use Illuminate\Support\Facades\File;
 DefaultAuth::routes();
 
 Route::get('/optimize', function() {
+
+    // Storage::disk('google')->put('hello.txt', 'Hello World');
+
     Artisan::call('optimize:clear');
     return redirect()->back();
 });
@@ -622,6 +626,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
                     Route::post('/about_us',[SettingController::class,'aboutUsStoreOrUpdate'])->name('admin.setting.about_us.store_or_update');
                     Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
+                    Route::post('/system-backup', [SettingController::class,'systemBackup'])->name('system.backup');
+
                 });
 
                 Route::group(['prefix' => 'language'], function () {

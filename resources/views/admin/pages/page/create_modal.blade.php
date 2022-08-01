@@ -33,7 +33,8 @@
                 </div>
                 <div class="form-group">
                     <label class="text-bold">{{__('file.Meta Description')}} &nbsp;</label>
-                    <input type="text" name="meta_description" id="meta_description"  class="form-control" placeholder="{{__('file.Meta Description')}}" >
+                    <textarea name="meta_description" id="text" class="form-control" cols="30" rows="5" ></textarea>
+                    <span class="pull-right label label-default" id="count_message"></span>
                 </div>
                 <div class="form-group">
                     <label class="text-bold">{{__('file.Meta URL')}} &nbsp;</label>
@@ -59,3 +60,22 @@
       </div>
     </div>
   </div>
+
+
+  @push('scripts')
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+                var text_max = 160;
+                $('#count_message').html('0 / ' + text_max );
+
+                $('#text').keyup(function() {
+                    var text_length = $('#text').val().length;
+                    var text_remaining = text_max - text_length;
+                    $('#count_message').html(text_length + ' / ' + text_max);
+                });
+
+        })(jQuery);
+    </script>
+@endpush
