@@ -124,6 +124,10 @@
             <div class="col-8">
               <div class="tab-content" id="nav-tabContent">
 
+                    @include('admin.includes.error_message')
+
+
+
                     <!----------------------------------- General Setting ------------------------------------------>
 
                     <!-- general -->

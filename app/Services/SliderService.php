@@ -66,17 +66,23 @@ class SliderService
             {
                 return $row->text_color;
             })
-            ->addColumn('action', function($row){
-                $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
-                              &nbsp;' ;
-                if ($row->is_active==1) {
-                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
-                }else {
-                    $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
+            ->addColumn('action', function($row)
+            {
+                if (auth()->user()->can('slider-edit'))
+                {
+                    $actionBtn    = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></a>
+                    &nbsp;' ;
                 }
 
-                $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
-
+                if (auth()->user()->can('slider-action'))
+                {
+                    if ($row->is_active==1) {
+                        $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+                    }else {
+                        $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
+                    }
+                    $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+                }
                 return $actionBtn;
             })
             ->rawColumns(['slider_image','action'])

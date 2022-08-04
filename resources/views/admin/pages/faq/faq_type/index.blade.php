@@ -7,13 +7,19 @@
     <div class="container-fluid mb-3">
         <h4 class="font-weight-bold mt-3">{{__('FAQ Type')}}</h4>
         <br>
-        <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
-            <i class="fa fa-plus"></i> {{__('file.Add Type')}}
-        </button>
 
-        <button type="button" class="btn btn-danger" id="bulk_action">
-            <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
-        </button>
+        @if (auth()->user()->can('faq-view'))
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
+                <i class="fa fa-plus"></i> {{__('file.Add Type')}}
+            </button>
+        @endif
+
+        @if (auth()->user()->can('faq-action'))
+            <button type="button" class="btn btn-danger" id="bulk_action">
+                <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
+            </button>
+        @endif
+
     </div>
 
     <div class="table-responsive">

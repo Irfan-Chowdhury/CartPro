@@ -10,13 +10,13 @@
         <div id="success_alert" role="alert"></div>
         <br>
 
-        @if (auth()->user()->can('tag-store'))
+        @if (auth()->user()->can('tax-store'))
             <button type="button" class="btn btn-info" name="createModalForm" data-toggle="modal" data-target="#createModalForm">
                 <i class="fa fa-plus"></i> {{__('file.Add Tax')}}
             </button>
         @endif
 
-        @if (auth()->user()->can('tag-action'))
+        @if (auth()->user()->can('tax-action'))
             <button type="button" class="btn btn-danger" id="bulk_action">
                 <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
             </button>

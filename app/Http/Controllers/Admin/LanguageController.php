@@ -23,7 +23,7 @@ class LanguageController extends Controller
 
     public function index(Request $request)
     {
-        if (auth()->user()->can('locale-view'))
+        if (auth()->user()->can('language-view'))
         {
             $languages = Language::orderBy('language_name','ASC')->get();
             return view('admin.pages.setting.language.index',compact('languages'));
@@ -33,7 +33,7 @@ class LanguageController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->can('locale-store'))
+        if (auth()->user()->can('language-store'))
         {
             if (env('USER_VERIFIED')!=1) {
                 session()->flash('type','danger');
@@ -122,7 +122,7 @@ class LanguageController extends Controller
 
 
         Session::put('currentLocal', $language->local);
-        App::setLocale($language->local);
+        App::setlanguage($language->local);
 
         session()->flash('type','success');
         session()->flash('message','Successfully Updated');
@@ -138,7 +138,7 @@ class LanguageController extends Controller
 
         $language = Language::find($id);
         Session::put('currentLocal', $language->local);
-        App::setLocale($language->local);
+        App::setlanguage($language->local);
 
         session()->flash('type','success');
         session()->flash('message','Language Changed Successfully');

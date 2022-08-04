@@ -26,8 +26,12 @@ class SliderController extends Controller
 
     public function index()
     {
-        $categories = $this->categoryService->getAllCategories();
-        return view('admin.pages.slider.index',compact('categories'));
+        if (auth()->user()->can('slider-view'))
+        {
+            $categories = $this->categoryService->getAllCategories();
+            return view('admin.pages.slider.index',compact('categories'));
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function dataTable(){
@@ -37,9 +41,13 @@ class SliderController extends Controller
 
     public function store(SliderStoreRequest $request)
     {
-        if ($request->ajax()) {
-            return $this->sliderService->storeSlider($request);
+        if (auth()->user()->can('slider-store'))
+        {
+            if ($request->ajax()) {
+                return $this->sliderService->storeSlider($request);
+            }
         }
+
     }
 
     public function edit(Request $request)
@@ -55,33 +63,56 @@ class SliderController extends Controller
 
     public function update(SliderUpdateRequest $request)
     {
-        if ($request->ajax()) {
-            return $this->sliderService->updateSlider($request);
+        if (auth()->user()->can('slider-edit'))
+        {
+            if ($request->ajax()) {
+                return $this->sliderService->updateSlider($request);
+            }
         }
+
     }
 
-    public function active(Request $request){
-        if ($request->ajax()){
-            return $this->sliderService->activeById($request->id);
+    public function active(Request $request)
+    {
+        if (auth()->user()->can('slider-action'))
+        {
+            if ($request->ajax()){
+                return $this->sliderService->activeById($request->id);
+            }
         }
+
     }
 
-    public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->sliderService->inactiveById($request->id);
+    public function inactive(Request $request)
+    {
+        if (auth()->user()->can('slider-action'))
+        {
+            if ($request->ajax()){
+                return $this->sliderService->inactiveById($request->id);
+            }
         }
+
     }
 
-    public function destroy(Request $request){
-        if ($request->ajax()){
-            return $this->sliderService->destroy($request->id);
+    public function destroy(Request $request)
+    {
+        if (auth()->user()->can('slider-action'))
+        {
+            if ($request->ajax()){
+                return $this->sliderService->destroy($request->id);
+            }
         }
+
     }
 
     public function bulkAction(Request $request)
     {
-        if ($request->ajax()) {
-            return $this->sliderService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
+        if (auth()->user()->can('slider-action'))
+        {
+            if ($request->ajax()) {
+                return $this->sliderService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
+            }
         }
+
     }
 }

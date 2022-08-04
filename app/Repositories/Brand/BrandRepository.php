@@ -5,10 +5,11 @@ namespace App\Repositories\Brand;
 use App\Contracts\Brand\BrandContract;
 use App\Models\Brand;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\TranslationTrait;
 
 class BrandRepository implements BrandContract
 {
-    use ActiveInactiveTrait;
+    use ActiveInactiveTrait, TranslationTrait;
 
     public function getAllBrands(){
         return Brand::orderBy('is_active','DESC')
@@ -39,6 +40,18 @@ class BrandRepository implements BrandContract
 
     public function bulkAction($type, $ids){
         return $this->bulkActionData($type, Brand::whereIn('id',$ids));
+    }
+
+
+    //Front - HomeController
+    public function getBrandsWhereInIds($ids)
+    {
+        return Brand::whereIn('id',$ids)
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get()
+                ->map->format();
     }
 }
 

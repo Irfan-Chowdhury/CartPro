@@ -16,10 +16,14 @@
         <div id="alert_message" role="alert"></div>
         <br>
 
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i>{{__('file.Add New Slide')}}</button>
-        <button type="button" class="btn btn-danger" id="bulk_action">
-            <i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}
-        </button>
+        @if (auth()->user()->can('slider-store'))
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i>{{__('file.Add New Slide')}}</button>
+        @endif
+
+        @if (auth()->user()->can('slider-action'))
+            <button type="button" class="btn btn-danger" id="bulk_action"><i class="fa fa-minus-circle"></i> {{trans('file.Bulk Action')}}</button>
+        @endif
+        
     </div>
     <div class="table-responsive">
     	<table id="dataListTable" class="table">

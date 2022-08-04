@@ -17,7 +17,7 @@
                             </select>
                         </div>
 
-                        <div class="col-6 form-group">
+                        <div class="col-5 form-group">
                             <label>{{__("file.Values")}}</label>
                             <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="@lang('file.Select Value')">
                                 @foreach ($attribute_values as $attributeValue)
@@ -28,7 +28,7 @@
                             </select>
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-2">
                             <label>@lang('file.Delete')</label><br>
                             <span class="btn btn-default btn-sm del-row"><i class="dripicons-trash"></i></span>
                         </div>

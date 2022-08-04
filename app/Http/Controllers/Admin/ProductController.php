@@ -326,8 +326,69 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+
+        // =============== Test ==================
+
+        //From DB
+        // $attributes =  [];
+        // array_push($attributes,'Color','Size','Others'); //$attributes[0]='color';  $attributes[1]='size';
+        // foreach($attributes as $item){
+        //     $data[$item] = [];
+        //     if($item=='Color'){
+        //         array_push($data[$item],'Black','White','Red');
+        //     }
+        //     else if($item=='Size'){
+        //         array_push($data[$item],'L','M','S');
+        //     }
+        //     else if($item=='Others'){
+        //         array_push($data[$item],'X','Y');
+        //     }
+        // }
+
+
+        //Main Working
+        // $row = [];
+        // foreach($attributes as $key => $item){
+
+        //         if (count($attributes)==1) {
+        //             $row[] = $item;
+        //         }
+
+        //         if (count($attributes)==2) {
+        //             foreach($data[$item] as $value){
+        //                 $row[] = $item.' --- '.$value;
+        //             }
+        //         }
+
+        //         // if (count($attributes)==3) {
+        //         //     foreach($data[$item] as $value2){
+        //         //         return $key;
+        //         //         // foreach($data[$item] as $value3){
+        //         //             // $row[] = $item.' --- '.$value2.' --- '.$value3;
+        //         //             $row[] = $item.' --- '.$value2;
+        //         //         // }
+        //         //     }
+        //         // }
+
+        // }
+
+        //done for 2 attribute
+        // $row = [];
+        // foreach($data as $key => $item){
+        //      foreach($data[$key] as $value){
+        //          $row[] = $key.' --- '.$value;
+        //      }
+        // }
+
+
+
+        // =============== Test ==================
+
+
+
+
+
         $local = Session::get('currentLocal');
-        App::setLocale($local);
 
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){

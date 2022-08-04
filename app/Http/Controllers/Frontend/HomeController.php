@@ -23,6 +23,8 @@ use App\Models\Setting;
 use App\Models\SettingAboutUs;
 use App\Models\SettingStore;
 use App\Models\Slider;
+use App\Services\BrandService;
+use App\Services\SliderService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -39,6 +41,15 @@ use Illuminate\Support\Facades\Mail;
 class HomeController extends Controller
 {
     use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait;
+
+
+    private $sliderService;
+    private $brandService;
+    public function __construct(SliderService $sliderService, BrandService $brandService)
+    {
+        $this->sliderService = $sliderService;
+        $this->brandService  = $brandService;
+    }
 
 
     public function index()
@@ -99,17 +110,10 @@ class HomeController extends Controller
         });
 
         //Slider
-        $sliders = Cache::remember('sliders', 300, function () use ($locale) {
-            return Slider::with(['category','sliderTranslation'=> function ($query) use ($locale){
-                $query->where('locale',$locale)
-                ->orWhere('locale','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC')
-            ->get();
+        $sliders = Cache::remember('sliders', 300, function () {
+            return $this->sliderService->getAllSlider();
         });
+
 
         //Slider Banner
         $slider_banners = Cache::remember('slider_banners', 300, function () use ($settings) {
@@ -227,14 +231,10 @@ class HomeController extends Controller
         }
 
         $brand_ids = json_decode($storefront_top_brands);
-
         $brands = Cache::remember('brands', 300, function () use($brand_ids) {
-            return Brand::whereIn('id',$brand_ids)
-                    ->where('is_active',1)
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','DESC')
-                    ->get();
+            return $this->brandService->getBrandsWhereInIds($brand_ids);
         });
+        
 
         $order_details = Cache::remember('order_details', 300, function () {
             return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')

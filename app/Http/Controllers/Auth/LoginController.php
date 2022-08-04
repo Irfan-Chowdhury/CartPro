@@ -77,25 +77,39 @@ class LoginController extends Controller
 
     public function customerLogin(Request $request)
     {
-        $this->validateLogin($request);
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+        $credentials = $request->only('username', 'password');
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-
-            return $this->sendLockoutResponse($request);
-        }
-
-        if ($this->attemptLogin($request)) {
+        if (Auth::attempt($credentials)) {
             if ((auth()->user()->user_type == 0)){
                 return redirect()->route('user_account');
-            }
-        }else {
-            session()->flash('warning_type','danger');
-            return redirect()->back()->with('message','Credential do not matched !!');
-        }
-        $this->incrementLoginAttempts($request);
 
+            }else {
+                session()->flash('warning_type','danger');
+                return redirect()->back()->with('message','Credential do not matched !!');
+            }
+        }
         return redirect()->back();
+
+
+        // $this->validateLogin($request);
+        // if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
+        //     $this->fireLockoutEvent($request);
+        //     return $this->sendLockoutResponse($request);
+        // }
+        // if ($this->attemptLogin($request)) {
+        //     if ((auth()->user()->user_type == 0)){
+        //         return redirect()->route('user_account');
+        //     }
+        // }else {
+        //     session()->flash('warning_type','danger');
+        //     return redirect()->back()->with('message','Credential do not matched !!');
+        // }
+        // $this->incrementLoginAttempts($request);
+        // return redirect()->back();
     }
 
 

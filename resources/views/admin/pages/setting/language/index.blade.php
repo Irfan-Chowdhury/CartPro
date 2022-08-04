@@ -9,7 +9,7 @@
 
     <div class="container-fluid mb-3">
 
-        @if (auth()->user()->can('locale-store'))
+        @if (auth()->user()->can('language-store'))
             <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#createModalForm"><i class="fa fa-plus"></i>{{__('file.Add Language')}}</button>
         @endif
 

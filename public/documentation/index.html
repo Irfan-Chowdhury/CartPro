@@ -36,6 +36,7 @@
         <li><a href="#admin_log_in" title="Log In">Log In</a></li>
         <li><a href="#admin_dashboard" title="Admin DASHBOARD">Dashboard</a></li>
         <li><a href="#empty_database" title="Empty Database">Empty Database</a></li>
+        <li><a href="#system_backup" title="System Backup">System Backup</a></li>
         <li><a href="#datatable_options" title="Datatable Options">Datatable Options</a></li>
         <li><a href="#category" title="Categories">Categories</a></li>
         <li><a href="#brand" title="Brands">Brands</a></li>
@@ -48,22 +49,24 @@
         <li><a href="#transaction" title="Transaction">Transaction</a></li>
         <li><a href="#flash_sale" title="Flash Sale">Flash Sale</a></li>
         <li><a href="#coupon" title="Coupons">Coupons</a></li>
+        <li><a href="#faq" title="FAQ Setting">FAQ Setting</a></li>
         <li><a href="#page" title="Page">Pages</a></li>
         <li><a href="#menu" title="Menu">Menus</a></li>
+        <li><a href="#slider" title="Slider">Slider</a></li>
+        <li><a href="#storefront" title="Storefront">Storefront</a></li>
         <li><a href="#user" title="Users">Users</a></li>
         <li><a href="#role" title="Roles">Roles</a></li>
         <li><a href="#tax" title="Taxes">Taxes</a></li>
         <li><a href="#translation" title="Translation">Translation</a></li>
         <li><a href="#currency_rates" title="Currency Rates">Currency Rates</a></li>
-        <li><a href="#storefront" title="Storefront">Storefront</a></li>
-        <li><a href="#slider" title="Slider">Slider</a></li>
-        <li><a href="#setting" title="Settings">Settings</a></li>
+        <li><a href="#country" title="Country">Country</a></li>
+        <li><a href="#currency" title="Currency">Currency</a></li>
+        <li><a href="#setting" title="Other Settings">Other Settings</a></li>
         <li><a href="#language" title="Language">Language</a></li>
         <li><a href="#support" title="Support">Support</a></li>
     </ul>
 </div>
 <div id="documenter_content">
-
 
     <div id="the-basics">
         <input class="typeahead form-control" type="text" placeholder="Search">
@@ -118,6 +121,7 @@
                 we do not provide support for installation in server other than Apache and localhost installation. Please follow the installation process,
             below. Do not use php artisan serve command. And lastly we don't provide support in the localhost (except online server).</i></p>
     </section>
+
     <section id="install">
         <div class="page-header">
             <h3>INSTALL</h3>
@@ -223,7 +227,6 @@
         </ul>
     </section>
 
-
     <section id="admin_log_in">
         <div class="page-header">
             <h3>Log In</h3>
@@ -281,6 +284,21 @@
         </p>
         <p>
             <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_2.png">
+        </p>
+    </section>
+
+    <section id="system_backup">
+        <div class="page-header">
+            <h3>System Backup</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            If you want to take a backup of your system you can do it. You can backup only files or database or both. Please follow the screenshoot below.
+            <br>
+            <strong>Note:</strong> This will take some time. Please wait patiently.
+        </p>
+        <p>
+            <img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_91.png">
         </p>
     </section>
 
@@ -680,6 +698,44 @@
         </ul>
     </section>
 
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="page-header">
+            <h3>FAQ Setting</h3>
+            <hr class="notop">
+        </div>
+
+        <!-- Type -->
+        <h4>(Type)</h4>
+        <p><strong>FAQ Setting--> Type</strong></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_93.png"></p>
+        <h4><strong>Create</strong></h4>
+        <p>You can add Type.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_94.png"></p>
+        <ul>
+            <li><b>Type Name</b> (translatable): The name of the Type Name.</li>
+        </ul>
+
+
+        <!-- FAQ -->
+        <h4>(FAQ)</h4>
+        <p><strong>FAQ Setting--> FAQ Set</strong></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_95.png"></p>
+        <h4><strong>Create</strong></h4>
+        <p>You can add Type.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_96.png"></p>
+        <ul>
+            <li><b>FAQ Type</b> You have to select FAQ Type </li>
+            <li><b>Title</b> (translatable): The name of the Title.</li>
+            <li><b>Description</b> (translatable): The name of the Description.</li>
+            <li><b>Active</b> You can enable-disable the checkbox</li>
+        </ul>
+        <br>
+        <h4><strong>Edit</strong></h4>
+        <p>You can edit</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_97.png"></p>
+    </section>
+
     <section id="page">
         <div class="page-header">
             <h3>Pages</h3>
@@ -703,6 +759,10 @@
         <ul>
             <li><b>Page Name: </b>  (translatable) The name of the page.</li>
             <li><b>Body:</b>  (translatable) The content of the page.</li>
+            <li><b>Meta Title:</b>  (translatable) The content of the Meta title.</li>
+            <li><b>Meta Description:</b>  (translatable) The content of the description.</li>
+            <li><b>Meta URL:</b>  The content of the Meta URL.</li>
+            <li><b>Meta Type:</b>  The content of the Meta Type.</li>
             <li><b>Status:</b>Enable the page by checking this checkbox.</li>
         </ul>
 
@@ -720,6 +780,7 @@
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_32_3.png"></p>
     </section>
 
+    <!-- Menu -->
     <section id="menu">
         <div class="page-header">
             <h3>Menus</h3>
@@ -760,7 +821,183 @@
 
     </section>
 
+    <!-- Slider -->
+    <section id="slider">
+        <div class="page-header">
+            <h3>Slider</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Online Store --> Slider </strong><br>
+            You can create multiple sliders for your store, then switch between them anytime you like.
+        </p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_61.png"></p>
 
+        <div class="page-header">
+            <h5><i><b>Add Slider</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p>Navigate to Online Store  > Add Slider to create a new slider</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_62.png"></p>
+        <ul>
+            <li><b>Name</b> (translatable): The name of the slider.</li>
+            <li><b>Category</b>: Type of category.</li>
+            <li><b>Text Alignment</b>: Left or Right of text.</li>
+            <li><b>Text Color</b>: Put Color Code.</li>
+            <li><b>Status:</b> Enable the slider by checking this checkbox. Only enabled slider can be used.</li>
+        </ul>
+        <br>
+
+        <div class="page-header">
+            <h5><i><b>Edit Slider</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p>Navigate to Online Store  > Edit Slider to create a new slider</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_62_2.png"></p>
+    </section>
+
+
+    <!-- Storefront -->
+    <section id="storefront">
+        <div class="page-header">
+            <h3>Storefront</h3>
+            <hr class="notop">
+        </div>
+        <p>
+            <strong>Online Store --> Storefront </strong><br>
+            You can modify data from Storefront. Thee is two section. General Setting Section and Home Page Section. <br>
+
+        </p>
+
+        <div class="page-header">
+            <h5><i><b>1. General</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_43.png"></p>
+        <ul>
+            <li><b>Terms & Conditions Page:</b> Select the terms & conditions page for your store.</li>
+            <li><b>Privacy Policy Page:</b> Select the privacy policy page for your store.</li>
+            <li><b>Slider:</b> Select the slider for your store.</li>
+            <li><b>Footer Address:</b> Fill your store address for the footer of your store.</li>
+        </ul>
+        <br>
+
+
+
+        <div class="page-header">
+            <h5><i><b>2. Menus</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_44.png"></p>
+        <ul>
+            <li><b>Primary Menu:</b> Primary menu of the store.</li>
+            <li><b>Category Menu Title:</b>  (translatable).</li>
+            <li><b>Category Menu:</b> Category menu of the store..</li>
+            <li><b>Footer Menu:</b> Footer menu of the store.</li>
+        </ul>
+        <br>
+
+        <div class="page-header">
+            <h5><i><b>3. Social Links</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p>Social links are shown in the footer of the website.</p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_45.png"></p>
+
+
+        <div class="page-header">
+            <h5><i><b>4. Features</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_46.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>5. Logo</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_47.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>6. Footer</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_48.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>7. Newslatter</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_49.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>8. Product Page</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_50.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>9. Slider Banner</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_51.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>10. One Column Banner</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_52.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>11. Two Colunm Banner</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_53.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>12. Three Colunm Banne</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_54.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>13. Three Colunm Full Width Banner</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_55.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>14. Featured Category</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_56.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>15. Top Brands</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_57.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>16. Flash Sales and Verticle Products</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_58.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>17. Products Tabs One</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_59.png"></p>
+
+        <div class="page-header">
+            <h5><i><b>18. Products Tabs Two</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_60.png"></p>
+    </section>
+
+
+    <!-- User -->
     <section id="user">
         <div class="page-header">
             <h3>Users</h3>
@@ -907,195 +1144,66 @@
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_82.png"></p>
     </section>
 
-
-    <!--Storefront -->
-    <section id="storefront">
+    <!--Country -->
+    <section id="country">
         <div class="page-header">
-            <h3>Storefront</h3>
+            <h3>Country</h3>
             <hr class="notop">
         </div>
-        <p>
-            <strong>Online Store --> Storefront </strong><br>
-            You can modify data from Storefront. Thee is two section. General Setting Section and Home Page Section. <br>
-
-        </p>
-
-        <div class="page-header">
-            <h5><i><b>1. General</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_43.png"></p>
-        <ul>
-            <li><b>Terms & Conditions Page:</b> Select the terms & conditions page for your store.</li>
-            <li><b>Privacy Policy Page:</b> Select the privacy policy page for your store.</li>
-            <li><b>Slider:</b> Select the slider for your store.</li>
-            <li><b>Footer Address:</b> Fill your store address for the footer of your store.</li>
-        </ul>
-        <br>
-
+        <p><strong>Site Settings --> Country </strong><br></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_98.png"></p>
 
 
         <div class="page-header">
-            <h5><i><b>2. Menus</b></i></h5>
+            <h5><b>Add</b></h5>
             <hr class="notop">
         </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_44.png"></p>
-        <ul>
-            <li><b>Primary Menu:</b> Primary menu of the store.</li>
-            <li><b>Category Menu Title:</b>  (translatable).</li>
-            <li><b>Category Menu:</b> Category menu of the store..</li>
-            <li><b>Footer Menu:</b> Footer menu of the store.</li>
-        </ul>
-        <br>
-
-        <div class="page-header">
-            <h5><i><b>3. Social Links</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p>Social links are shown in the footer of the website.</p>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_45.png"></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_99.png"></p>
 
 
         <div class="page-header">
-            <h5><i><b>4. Features</b></i></h5>
+            <h5><b>Edit</b></h5>
             <hr class="notop">
         </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_46.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>5. Logo</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_47.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>6. Footer</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_48.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>7. Newslatter</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_49.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>8. Product Page</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_50.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>9. Slider Banner</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_51.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>10. One Column Banner</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_52.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>11. Two Colunm Banner</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_53.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>12. Three Colunm Banne</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_54.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>13. Three Colunm Full Width Banner</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_55.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>14. Featured Category</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_56.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>15. Top Brands</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_57.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>16. Flash Sales and Verticle Products</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_58.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>17. Products Tabs One</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_59.png"></p>
-
-        <div class="page-header">
-            <h5><i><b>18. Products Tabs Two</b></i></h5>
-            <hr class="notop">
-        </div>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_60.png"></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_100.png"></p>
     </section>
 
-
-    <section id="slider">
+    <!--Country -->
+    <section id="currency">
         <div class="page-header">
-            <h3>Slider</h3>
+            <h3>Currency</h3>
             <hr class="notop">
         </div>
-        <p>
-            <strong>Online Store --> Slider </strong><br>
-            You can create multiple sliders for your store, then switch between them anytime you like.
-        </p>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_61.png"></p>
+        <p><strong>Site Settings --> Currency </strong><br></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_101.png"></p>
+
 
         <div class="page-header">
-            <h5><i><b>Add Slider</b></i></h5>
+            <h5><b>Add</b></h5>
             <hr class="notop">
         </div>
-        <p>Navigate to Online Store  > Add Slider to create a new slider</p>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_62.png"></p>
-        <ul>
-            <li><b>Name</b> (translatable): The name of the slider.</li>
-            <li><b>Category</b>: Type of category.</li>
-            <li><b>Text Alignment</b>: Left or Right of text.</li>
-            <li><b>Text Color</b>: Put Color Code.</li>
-            <li><b>Status:</b> Enable the slider by checking this checkbox. Only enabled slider can be used.</li>
-        </ul>
-        <br>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_102.png"></p>
+
 
         <div class="page-header">
-            <h5><i><b>Edit Slider</b></i></h5>
+            <h5><b>Edit</b></h5>
             <hr class="notop">
         </div>
-        <p>Navigate to Online Store  > Edit Slider to create a new slider</p>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_62_2.png"></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_103.png"></p>
     </section>
-
 
     <!-- Setting -->
     <section id="setting">
         <div class="page-header">
-            <h3>Setting</h3>
+            <h3>Other Setting</h3>
             <hr class="notop">
         </div>
         <p>
-            <strong>Site Settings -->  Setting </strong><br>
-            You can modify data from Setting. There is two section. General Setting Section and Home Page Section. <br>
-
+            <strong>Site Settings --> Other Setting </strong><br>
+            You can modify data from Setting. There is two section. General Setting Section and Home Page Section.<br>
         </p>
         <div class="page-header">
-            <h5><i><b>1. General</b></i></h5>
+            <h5><i><b># General</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_65.png"></p>
@@ -1110,13 +1218,25 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>2. Store</b></i></h5>
+            <h5><i><b># Home Page SEO</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_104.png"></p>
+
+        <div class="page-header">
+            <h5><i><b># Store Contact</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_67.png"></p>
 
         <div class="page-header">
-            <h5><i><b>3. Currency</b></i></h5>
+            <h5><i><b># About Us</b></i></h5>
+            <hr class="notop">
+        </div>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_105.png"></p>
+
+        <div class="page-header">
+            <h5><i><b># Currency</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_68.png"></p>
@@ -1130,7 +1250,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>4. Mail</b></i></h5>
+            <h5><i><b># Mail</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_70.png"></p>
@@ -1145,7 +1265,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>5. Newslatter</b></i></h5>
+            <h5><i><b># Newslatter</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_71.png"></p>
@@ -1158,19 +1278,19 @@
 
 
         <div class="page-header">
-            <h5><i><b>6. Facebook</b></i></h5>
+            <h5><i><b># Facebook</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_73.png"></p>
 
         <div class="page-header">
-            <h5><i><b>7. Google</b></i></h5>
+            <h5><i><b># Google</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_74.png"></p>
 
         <div class="page-header">
-            <h5><i><b>8. Free Shipping</b></i></h5>
+            <h5><i><b># Free Shipping</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_75.png"></p>
@@ -1181,7 +1301,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>9. Local Pickup</b></i></h5>
+            <h5><i><b># Local Pickup</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_76.png"></p>
@@ -1193,7 +1313,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>10. Flat Rate</b></i></h5>
+            <h5><i><b># Flat Rate</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_77.png"></p>
@@ -1205,14 +1325,14 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>11. Empty Database</b></i></h5>
+            <h5><i><b># Empty Database</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_83.png"></p>
         <p>For using DB empty except some table</p>
 
         <div class="page-header">
-            <h5><i><b>12. Paypal</b></i></h5>
+            <h5><i><b># Paypal</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_84.png"></p>
@@ -1225,7 +1345,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>13. Stripe</b></i></h5>
+            <h5><i><b># Stripe</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_85.png"></p>
@@ -1239,7 +1359,7 @@
         <br>
 
         <div class="page-header">
-            <h5><i><b>14. SSL Commerz</b></i></h5>
+            <h5><i><b># SSL Commerz</b></i></h5>
             <hr class="notop">
         </div>
         <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_86.png"></p>
@@ -1251,7 +1371,7 @@
 
         <br>
         <div class="page-header">
-            <h5><i><b>15. Cash On Delivery
+            <h5><i><b># Cash On Delivery
             </b></i></h5>
             <hr class="notop">
         </div>
@@ -1263,6 +1383,7 @@
         </ul>
         <br>
     </section>
+
 
     <section id="language">
         <div class="page-header">

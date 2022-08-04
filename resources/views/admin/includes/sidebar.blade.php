@@ -13,7 +13,7 @@
     <ul id="side-main-menu" class="side-menu list-unstyled">
         <li class="{{Request::is('admin/dashboard') ? 'active' : ''}}"><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{__('file.Dashboard') }}</span></a></li>
         @can('product')
-        <li class="has-dropdown"><a href="#product" aria-expanded=" {{  Request::is('admin/categories') ||
+            <li class="has-dropdown"><a href="#product" aria-expanded=" {{  Request::is('admin/categories') ||
                                                                         Request::is('admin/brands') ||
                                                                         Request::is('admin/brands/brand/*') ||
                                                                         Request::is('admin/attribute-sets') ||
@@ -28,7 +28,7 @@
 
                                                                         ? 'true':'false' }}" data-toggle="collapse"> <i class="fa fa-cube"></i><span>{{__('file.Products')}}</span></a>
 
-            <ul id="product" class="collapse list-unstyled  {{  Request::is('admin/categories') ||
+                <ul id="product" class="collapse list-unstyled  {{  Request::is('admin/categories') ||
                                                                 Request::is('admin/brands') ||
                                                                 Request::is('admin/brands/brand/*') ||
                                                                 Request::is('admin/attribute-sets') ||
@@ -59,32 +59,69 @@
                 @can('catalog')
                     <li id="brand-list-menu" class="{{Request::is('admin/products') || Request::is('admin/products/create') || Request::is('admin/products/edit/*') ? 'active' : ''}}"><a href="{{route('admin.products.index')}}">{{__('file.Catalog')}}</a></li>
                 @endcan
-                <li id="brand-list-menu" class="{{Request::is('admin/review') ? 'active' : ''}}"><a href="{{route('admin.review.index')}}">{{__('file.Reviews')}}</a></li>
+                @can('review-view')
+                    <li id="brand-list-menu" class="{{Request::is('admin/review') ? 'active' : ''}}"><a href="{{route('admin.review.index')}}">{{__('file.Reviews')}}</a></li>
+                @endcan
             </ul>
         </li>
         @endcan
 
-        <li><a href="#sale" aria-expanded=" {{  Request::is('admin/order') ||
-                                                Request::is('admin/order/details/*') ||
-                                                Request::is('admin/transaction')
-                                                ? 'true':'false' }}" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('file.Sales')}}</span></a>
-
-            <ul id="sale" class="collapse list-unstyled {{
-                                                    Request::is('admin/order') ||
+        @can('sale')
+            <li><a href="#sale" aria-expanded=" {{  Request::is('admin/order') ||
                                                     Request::is('admin/order/details/*') ||
                                                     Request::is('admin/transaction')
-                                                    ? 'show':'' }}">
-              <li id="sale-list-menu" class="{{Request::is('admin/order') || Request::is('admin/order/details') ? 'active' : ''}}"><a href="{{route('admin.order.index')}}">{{__('file.Orders')}}</a></li>
-              <li id="sale-list-menu" class="{{Request::is('admin/transaction') ? 'active' : ''}}"><a href="{{route('admin.transaction.index')}}">{{__('file.Transactions')}}</a></li>
-            </ul>
-        </li>
+                                                    ? 'true':'false' }}" data-toggle="collapse"> <i class="fa fa-dollar"></i><span>{{__('file.Sales')}}</span></a>
+
+                <ul id="sale" class="collapse list-unstyled {{
+                                                        Request::is('admin/order') ||
+                                                        Request::is('admin/order/details/*') ||
+                                                        Request::is('admin/transaction')
+                                                        ? 'show':'' }}">
+                @can('order-view')
+                    <li id="sale-list-menu" class="{{Request::is('admin/order') || Request::is('admin/order/details') ? 'active' : ''}}"><a href="{{route('admin.order.index')}}">{{__('file.Orders')}}</a></li>
+                @endcan
+                @can('transaction-view')
+                    <li id="sale-list-menu" class="{{Request::is('admin/transaction') ? 'active' : ''}}"><a href="{{route('admin.transaction.index')}}">{{__('file.Transactions')}}</a></li>
+                @endcan
+                </ul>
+            </li>
+        @endcan
 
         @can('flash_sale')
         <li class="{{Request::is('admin/flash-sales') || Request::is('admin/flash-sales/create') || Request::is('admin/flash-sales/edit/*') ? 'active' : ''}}"><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('file.Flash Sales')}}</span></a></li>
         @endcan
 
         @can('coupon')
-        <li class="{{Request::is('admin/coupons') || Request::is('admin/coupons/create') || Request::is('admin/coupons/edit/*') ? 'active' : ''}}"><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('file.Coupons')}}</span></a></li>
+            <li class="{{Request::is('admin/coupons') || Request::is('admin/coupons/create') || Request::is('admin/coupons/edit/*') ? 'active' : ''}}"><a href="{{route('admin.coupon.index')}}"><i class="fa fa-tags"></i><span>{{__('file.Coupons')}}</span></a></li>
+        @endcan
+
+        @can('faq')
+            <li><a href="#faq" aria-expanded="{{Request::is('admin/faq/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="fa fa-sticky-note"></i><span>{{trans('file.FAQ Setting')}}</span></a>
+                <ul id="faq" class="collapse list-unstyled {{Request::is('admin/faq/*') ? 'show':'' }}">
+                    <li class="{{Route::current()->getName()=='admin.faq_type.index' ? 'active' : ''}}"><a href="{{route('admin.faq_type.index')}}">{{__('file.Type')}}</a></li>
+                    <li class="{{Route::current()->getName()=='admin.faq.index' ? 'active' : ''}}"><a href="{{route('admin.faq.index')}}"><span>{{__('file.FAQ Set')}}</span></a></li>
+                </ul>
+            </li>
+        @endcan
+
+
+        @can('appearance')
+            <li><a href="#menu" aria-expanded=" {{Request::is('admin/online-store/*') ? 'true':'false' }}"  data-toggle="collapse"> <i class="dripicons-store"></i><span>{{trans('file.Online Store')}}</span></a>
+                <ul id="menu" class="collapse list-unstyled {{Request::is('admin/online-store/*') ? 'show':'' }}">
+                    @can('page')
+                        <li class="{{Route::current()->getName()=='admin.page.index' ? 'active' : ''}}"><a href="{{route('admin.page.index')}}">{{trans('file.Pages')}}</a></li>
+                    @endcan
+                    @can('menu')
+                        <li class="{{Route::current()->getName()=='admin.menu' ? 'active' : ''}}"><a href="{{route('admin.menu')}}">{{trans('file.Menus')}}</a></li>
+                    @endcan
+                    @can('slider')
+                        <li class="{{Route::current()->getName()=='admin.slider' ? 'active' : ''}}"><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
+                    @endcan
+                    @can('store_front')
+                        <li class="{{Route::current()->getName()=='admin.storefront' ? 'active' : ''}}"><a href="{{route('admin.storefront')}}">{{__('file.Store Front')}}</a></li>
+                    @endcan
+                </ul>
+            </li>
         @endcan
 
         <li><a href="#report" aria-expanded=" {{Request::is('admin/reports/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{__('file.Reports')}}</span></a>
@@ -101,40 +138,6 @@
             </ul>
         </li>
 
-        @can('appearance')
-        <li><a href="#menu" aria-expanded=" {{Request::is('admin/online-store/*') ? 'true':'false' }}"  data-toggle="collapse"> <i class="dripicons-store"></i><span>{{trans('file.Online Store')}}</span></a>
-            <ul id="menu" class="collapse list-unstyled {{Request::is('admin/online-store/*') ? 'show':'' }}">
-                @can('page')
-                    <li class="{{Route::current()->getName()=='admin.page.index' ? 'active' : ''}}"><a href="{{route('admin.page.index')}}">{{trans('file.Pages')}}</a></li>
-                @endcan
-                @can('menu')
-                    <li class="{{Route::current()->getName()=='admin.menu' ? 'active' : ''}}"><a href="{{route('admin.menu')}}">{{trans('file.Menus')}}</a></li>
-                @endcan
-                @can('store_front')
-                    <li class="{{Route::current()->getName()=='admin.storefront' ? 'active' : ''}}"><a href="{{route('admin.storefront')}}">{{__('file.Store Front')}}</a></li>
-                @endcan
-                {{-- @can('slider') --}}
-                    <li class="{{Route::current()->getName()=='admin.slider' ? 'active' : ''}}"><a href="{{route('admin.slider')}}"><span>{{__('file.Slider')}}</span></a></li>
-                {{-- @endcan --}}
-            </ul>
-        </li>
-        @endcan
-
-        <li><a href="#faq" aria-expanded="{{Request::is('admin/faq/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="fa fa-sticky-note"></i><span>{{trans('file.FAQ Setting')}}</span></a>
-            <ul id="faq" class="collapse list-unstyled {{Request::is('admin/faq/*') ? 'show':'' }}">
-                <li class="{{Route::current()->getName()=='admin.faq_type.index' ? 'active' : ''}}"><a href="{{route('admin.faq_type.index')}}">{{__('file.Type')}}</a></li>
-                <li class="{{Route::current()->getName()=='admin.faq.index' ? 'active' : ''}}"><a href="{{route('admin.faq.index')}}"><span>{{__('file.FAQ Set')}}</span></a></li>
-            </ul>
-        </li>
-
-        <li><a href="#localization" aria-expanded="{{Request::is('admin/localization/*') || Request::is('languages/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-web"></i><span>{{__('file.Localization')}}</span></a>
-            <ul id="localization" class="collapse list-unstyled {{Request::is('admin/localization/*') || Request::is('languages/*') ? 'show':'' }}">
-                <li class="{{Route::current()->getName()=='admin.tax.index' ? 'active' : ''}}"><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
-                <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
-                <li class="{{Route::current()->getName()=='admin.currency_rate.index' ? 'active' : ''}}"><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
-            </ul>
-        </li>
-
         @can('users_and_roles')
         <li><a href="#user" aria-expanded="{{Request::is('admin/user') || Request::is('admin/roles') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>{{__('file.Users and Roles')}}</span></a>
             <ul id="user" class="collapse list-unstyled {{Request::is('admin/user') || Request::is('admin/roles')? 'show':'' }}">
@@ -147,6 +150,23 @@
             </ul>
         </li>
         @endcan
+
+        @can('localization')
+            <li><a href="#localization" aria-expanded="{{Request::is('admin/localization/*') || Request::is('languages/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-web"></i><span>{{__('file.Localization')}}</span></a>
+                <ul id="localization" class="collapse list-unstyled {{Request::is('admin/localization/*') || Request::is('languages/*') ? 'show':'' }}">
+                    @can('tax')
+                        <li class="{{Route::current()->getName()=='admin.tax.index' ? 'active' : ''}}"><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
+                    @endcan
+                    <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
+
+                    @can('currency-rate')
+                        <li class="{{Route::current()->getName()=='admin.currency_rate.index' ? 'active' : ''}}"><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+
+
 
         @can('site-setting')
         <li class="has-dropdown">
@@ -162,7 +182,7 @@
                 @can('setting')
                     <li id="setting-other-setting" class="{{Request::is('admin/setting/others') ? 'active' : ''}}"><a href="{{route('admin.setting.index')}}">{{__('file.Other Setting')}}</a></li>
                 @endcan
-                @can('locale')
+                @can('language')
                     <li id="setting-language" class="{{Request::is('admin/setting/language') ? 'active' : ''}}"><a href="{{route('admin.setting.language')}}">{{__('file.Language')}}</a></li>
                 @endcan
             </ul>

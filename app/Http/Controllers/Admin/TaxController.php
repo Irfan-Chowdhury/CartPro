@@ -20,82 +20,95 @@ class TaxController extends Controller
 
     public function index()
     {
-        $countries = Country::all();
-        $locale = Session::get('currentLocal');
-        // App::setLocale($locale);
-
-        $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','ASC')
-                ->get();
-
-        if (request()->ajax())
+        if (auth()->user()->can('tax-view'))
         {
-            return datatables()->of($taxes)
-            ->setRowId(function ($row){
-                return $row->id;
-            })
-            ->addColumn('tax_name', function ($row)
-            {
-                return $row->taxTranslation->tax_name ?? $row->taxTranslationDefaultEnglish->tax_name ?? null;
-            })
-            ->addColumn('action', function ($row)
-            {
-                $actionBtn = "";
-                    $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                    &nbsp; ';
+            $countries = Country::all();
+            $locale = Session::get('currentLocal');
+            // App::setLocale($locale);
 
-                    if ($row->is_active==1) {
-                        $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
-                    }else {
-                        $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+            $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
+                    ->where('is_active',1)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','ASC')
+                    ->get();
+
+            if (request()->ajax())
+            {
+                return datatables()->of($taxes)
+                ->setRowId(function ($row){
+                    return $row->id;
+                })
+                ->addColumn('tax_name', function ($row)
+                {
+                    return $row->taxTranslation->tax_name ?? $row->taxTranslationDefaultEnglish->tax_name ?? null;
+                })
+                ->addColumn('action', function ($row)
+                {
+                    $actionBtn = "";
+                    if (auth()->user()->can('tax-edit'))
+                    {
+                        $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                        &nbsp; ';
                     }
-                return $actionBtn;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-        }
 
-        return view('admin.pages.tax.index',compact('countries'));
+                    if (auth()->user()->can('tax-action'))
+                    {
+                        if ($row->is_active==1) {
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                        }else {
+                            $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
+                        }
+                    }
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
+            return view('admin.pages.tax.index',compact('countries'));
+        }
+        return abort('403', __('You are not authorized'));
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->only('tax_name','based_on','country','tax_class'),[
-            'tax_class'  => 'required',
-            'based_on'  => 'required',
-            'country'  => 'required',
-            'tax_name'  => 'required|unique:tax_translations,tax_name',
-        ]);
-
-        if ($validator->fails()){
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
-
-        if ($request->ajax())
+        if (auth()->user()->can('tax-store'))
         {
-            $tax = [];
-            $tax['country']  = $request->country;
-            $tax['zip']      = $request->zip;
-            $tax['rate']     = $request->rate;
-            $tax['based_on'] = $request->based_on;
-            $tax['is_active']= $request->is_active;
+            $validator = Validator::make($request->only('tax_name','based_on','country','tax_class'),[
+                'tax_class'  => 'required',
+                'based_on'  => 'required',
+                'country'  => 'required',
+                'tax_name'  => 'required|unique:tax_translations,tax_name',
+            ]);
 
-            $data = Tax::create($tax);
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
+            }
 
-            $taxTranslation  = [];
-            $taxTranslation['tax_id']   = $data->id;
-            $taxTranslation['locale']   = Session::get('currentLocal');
-            $taxTranslation['tax_class']= $request->tax_class;
-            $taxTranslation['tax_name'] = $request->tax_name;
-            $taxTranslation['state']    = $request->state;
-            $taxTranslation['city']     = $request->city;
+            if ($request->ajax())
+            {
+                $tax = [];
+                $tax['country']  = $request->country;
+                $tax['zip']      = $request->zip;
+                $tax['rate']     = $request->rate;
+                $tax['based_on'] = $request->based_on;
+                $tax['is_active']= $request->is_active;
 
-            TaxTranslation::create($taxTranslation);
+                $data = Tax::create($tax);
 
-            return response()->json(['success' => 'Data Saved Successfully']);
+                $taxTranslation  = [];
+                $taxTranslation['tax_id']   = $data->id;
+                $taxTranslation['locale']   = Session::get('currentLocal');
+                $taxTranslation['tax_class']= $request->tax_class;
+                $taxTranslation['tax_name'] = $request->tax_name;
+                $taxTranslation['state']    = $request->state;
+                $taxTranslation['city']     = $request->city;
+
+                TaxTranslation::create($taxTranslation);
+
+                return response()->json(['success' => 'Data Saved Successfully']);
+            }
         }
+
     }
 
     public function edit(Request $request)
@@ -112,73 +125,90 @@ class TaxController extends Controller
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->only('tax_name','based_on','country','tax_class'),[
-            'tax_class'  => 'required',
-            'based_on'  => 'required',
-            'country'  => 'required',
-            'tax_name'  => 'required|unique:tax_translations,tax_name,'.$request->tax_translation_id,
-        ]);
-
-        if ($validator->fails()){
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
-
-        if ($request->ajax())
+        if (auth()->user()->can('tax-edit'))
         {
-            $tax = [];
-            $tax['country']  = $request->country;
-            $tax['zip']      = $request->zip;
-            $tax['rate']     = $request->rate;
-            $tax['based_on'] = $request->based_on;
-            $tax['is_active']= $request->is_active;
+            $validator = Validator::make($request->only('tax_name','based_on','country','tax_class'),[
+                'tax_class'  => 'required',
+                'based_on'  => 'required',
+                'country'  => 'required',
+                'tax_name'  => 'required|unique:tax_translations,tax_name,'.$request->tax_translation_id,
+            ]);
 
-            DB::beginTransaction();
-            try {
-                Tax::find($request->tax_id)->update($tax);
-
-                TaxTranslation::UpdateOrCreate(
-                    [
-                        'tax_id' => $request->tax_id,
-                        'locale' => Session::get('currentLocal')
-                    ],
-                    [
-                        'tax_class' => $request->tax_class,
-                        'tax_name'  => $request->tax_name,
-                        'state'     => $request->state,
-                        'city'      => $request->city,
-                    ],
-                );
-
-                DB::commit();
+            if ($validator->fails()){
+                return response()->json(['errors' => $validator->errors()->all()]);
             }
-            catch (Exception $e)
+
+            if ($request->ajax())
             {
-                DB::rollback();
+                $tax = [];
+                $tax['country']  = $request->country;
+                $tax['zip']      = $request->zip;
+                $tax['rate']     = $request->rate;
+                $tax['based_on'] = $request->based_on;
+                $tax['is_active']= $request->is_active;
 
-                return response()->json(['error' => $e->getMessage()]);
+                DB::beginTransaction();
+                try {
+                    Tax::find($request->tax_id)->update($tax);
+
+                    TaxTranslation::UpdateOrCreate(
+                        [
+                            'tax_id' => $request->tax_id,
+                            'locale' => Session::get('currentLocal')
+                        ],
+                        [
+                            'tax_class' => $request->tax_class,
+                            'tax_name'  => $request->tax_name,
+                            'state'     => $request->state,
+                            'city'      => $request->city,
+                        ],
+                    );
+
+                    DB::commit();
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+
+                    return response()->json(['error' => $e->getMessage()]);
+                }
+
+                return response()->json(['success' => 'Data Updated Successfully']);
             }
-
-            return response()->json(['success' => 'Data Updated Successfully']);
         }
     }
 
 
-    public function active(Request $request){
-        if ($request->ajax()){
-            return $this->activeData(Tax::find($request->id));
+    public function active(Request $request)
+    {
+        if (auth()->user()->can('tax-action'))
+        {
+            if ($request->ajax()){
+                return $this->activeData(Tax::find($request->id));
+            }
         }
+
     }
 
-    public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->inactiveData(Tax::find($request->id));
+    public function inactive(Request $request)
+    {
+        if (auth()->user()->can('tax-action'))
+        {
+            if ($request->ajax()){
+                return $this->inactiveData(Tax::find($request->id));
+            }
         }
+
     }
 
     public function bulkAction(Request $request)
     {
-        if ($request->ajax()) {
-            return $this->bulkActionData($request->action_type, Tax::whereIn('id',$request->idsArray));
+        if (auth()->user()->can('tax-action'))
+        {
+            if ($request->ajax()) {
+                return $this->bulkActionData($request->action_type, Tax::whereIn('id',$request->idsArray));
+            }
         }
+
     }
 }

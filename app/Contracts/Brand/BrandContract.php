@@ -18,4 +18,8 @@ interface BrandContract
 
     public function bulkAction($type, $ids);
 
+
+    //Front - HomeController
+    public function getBrandsWhereInIds($ids);
+
 }

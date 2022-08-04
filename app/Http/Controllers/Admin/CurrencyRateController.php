@@ -5,41 +5,48 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CurrencyRate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
 
 class CurrencyRateController extends Controller
 {
     public function index()
     {
-        if (request()->ajax())
+        if (auth()->user()->can('currency-rate-view'))
         {
-            $currency_rates = CurrencyRate::all();
-
-            return datatables()->of($currency_rates)
-            ->setRowId(function ($row){
-                return $row->id;
-            })
-            ->addColumn('currency_code', function ($row){
-                return $row->currency_code ?? "";
-            })
-            ->addColumn('currency_symbol', function ($row){
-                return $row->currency_symbol ?? "";
-            })
-            ->addColumn('currency_rate', function ($row){
-                return number_format((float)$row->currency_rate, env('FORMAT_NUMBER'), '.', '');
-            })
-            ->addColumn('action', function ($row)
+            if (request()->ajax())
             {
-                $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                    &nbsp; ';
-                return $actionBtn;
-            })
-            ->rawColumns(['action','currency_symbol'])
-            ->make(true);
+                $currency_rates = CurrencyRate::all();
 
+                return datatables()->of($currency_rates)
+                ->setRowId(function ($row){
+                    return $row->id;
+                })
+                ->addColumn('currency_code', function ($row){
+                    return $row->currency_code ?? "";
+                })
+                ->addColumn('currency_symbol', function ($row){
+                    return $row->currency_symbol ?? "";
+                })
+                ->addColumn('currency_rate', function ($row){
+                    return number_format((float)$row->currency_rate, env('FORMAT_NUMBER'), '.', '');
+                })
+                ->addColumn('action', function ($row)
+                {
+                    if (auth()->user()->can('currency-rate-edit'))
+                    {
+                        $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                        &nbsp; ';
+                    }
+
+                    return $actionBtn;
+                })
+                ->rawColumns(['action','currency_symbol'])
+                ->make(true);
+
+            }
+            return view('admin.pages.currency_rate.index');
         }
-        return view('admin.pages.currency_rate.index');
+        return abort('403', __('You are not authorized'));
+
     }
 
     public function edit(Request $request)
@@ -51,13 +58,17 @@ class CurrencyRateController extends Controller
 
     public function update(Request $request)
     {
-        if (request()->ajax()) {
-            $data = CurrencyRate::find($request->id);
-            $data->currency_rate = number_format((float)$request->currency_rate, env('FORMAT_NUMBER'), '.', '');
-            $data->currency_symbol = $request->currency_symbol;
-            $data->update();
+        if (auth()->user()->can('currency-rate-edit'))
+        {
+            if (request()->ajax()) {
+                $data = CurrencyRate::find($request->id);
+                $data->currency_rate = number_format((float)$request->currency_rate, env('FORMAT_NUMBER'), '.', '');
+                $data->currency_symbol = $request->currency_symbol;
+                $data->update();
 
-            return response()->json(['success' => 'Data Updated Successfully']);
+                return response()->json(['success' => 'Data Updated Successfully']);
+            }
         }
+
     }
 }

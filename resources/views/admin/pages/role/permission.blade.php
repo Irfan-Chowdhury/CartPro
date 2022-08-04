@@ -252,18 +252,54 @@
                                                 },
                                             ],
                                         },
+                                        {
+                                            id: 'review',
+                                            text: '{{__('Review')}}',
+                                            expanded: true,
+                                            checked: ($.inArray('review', result) >= 0) ? true : false,
+                                            items: [
+                                                {
+                                                    id: 'review-view',
+                                                    text: '{{__('Review View')}}',
+                                                    checked: ($.inArray('review-view', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'review-store',
+                                                    text: '{{__('Review Store')}}',
+                                                    checked: ($.inArray('review-store', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'review-edit',
+                                                    text: '{{__('Review Edit')}}',
+                                                    checked: ($.inArray('review-edit', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'review-action',
+                                                    text: '{{__('Review Action')}}',
+                                                    checked: ($.inArray('review-action', result) >= 0) ? true : false
+                                                },
+                                            ],
+                                        },
                                     ],
                                 },
-                            ]
-                        });
-
-                        $("#treeview2").empty();
-                        $("#treeview2").kendoTreeView({
-                            checkboxes: {
-                                checkChildren: true
-                            },
-                            check: onCheck,
-                            dataSource: [
+                                {
+                                    id: 'sale',
+                                    text: "{{trans('Sale')}}",
+                                    expanded: true,
+                                    checked: ($.inArray('sale', result) >= 0) ? true : false,
+                                    items: [
+                                        {
+                                            id: 'order-view',
+                                            text: '{{__('Order View')}}',
+                                            checked: ($.inArray('order-view', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'transaction-view',
+                                            text: '{{__('Transaction View')}}',
+                                            checked: ($.inArray('transaction-view', result) >= 0) ? true : false
+                                        },
+                                    ],
+                                },
                                 {
                                     id: 'flash_sale',
                                     text: "{{trans('Flash Sale')}}",
@@ -292,6 +328,16 @@
                                         },
                                     ],
                                 },
+                            ]
+                        });
+
+                        $("#treeview2").empty();
+                        $("#treeview2").kendoTreeView({
+                            checkboxes: {
+                                checkChildren: true
+                            },
+                            check: onCheck,
+                            dataSource: [
                                 {
                                     id: 'coupon',
                                     text: "{{trans('Coupon')}}",
@@ -317,6 +363,34 @@
                                             id: 'coupon-action',
                                             text: '{{__('Coupon Action')}}',
                                             checked: ($.inArray('coupon-action', result) >= 0) ? true : false
+                                        },
+                                    ],
+                                },
+                                {
+                                    id: 'faq',
+                                    text: "{{trans('FAQ')}}",
+                                    expanded: true,
+                                    checked: ($.inArray('faq', result) >= 0) ? true : false,
+                                    items: [
+                                        {
+                                            id: 'faq-view',
+                                            text: '{{__('FAQ View')}}',
+                                            checked: ($.inArray('faq-view', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'faq-store',
+                                            text: '{{__('FAQ Store')}}',
+                                            checked: ($.inArray('faq-store', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'faq-edit',
+                                            text: '{{__('FAQ Edit')}}',
+                                            checked: ($.inArray('faq-edit', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'faq-action',
+                                            text: '{{__('FAQ Action')}}',
+                                            checked: ($.inArray('faq-action', result) >= 0) ? true : false
                                         },
                                     ],
                                 },
@@ -405,6 +479,34 @@
                                     ],
                                 },
                                 {
+                                    id: 'slider',
+                                    text: "{{trans('Slider')}}",
+                                    expanded: true,
+                                    checked: ($.inArray('slider', result) >= 0) ? true : false,
+                                    items: [
+                                        {
+                                            id: 'slider-view',
+                                            text: '{{__('Slider View')}}',
+                                            checked: ($.inArray('slider-view', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'slider-store',
+                                            text: '{{__('Slider Store')}}',
+                                            checked: ($.inArray('slider-store', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'slider-edit',
+                                            text: '{{__('Slider Edit')}}',
+                                            checked: ($.inArray('slider-edit', result) >= 0) ? true : false
+                                        },
+                                        {
+                                            id: 'slider-action',
+                                            text: '{{__('Slider  Action')}}',
+                                            checked: ($.inArray('slider-action', result) >= 0) ? true : false
+                                        },
+                                    ],
+                                },
+                                {
                                     id: 'users_and_roles',
                                     text: "{{trans('User And Role')}}",
                                     expanded: true,
@@ -473,6 +575,66 @@
                                         },
                                     ],
                                 },
+                                {
+                                    id: 'localization',
+                                    text: "{{trans('Localization')}}",
+                                    expanded: true,
+                                    checked: ($.inArray('localization', result) >= 0) ? true : false,
+                                    items: [
+                                        {
+                                            id: 'tax',
+                                            text: "{{trans('Tax')}}",
+                                            expanded: true,
+                                            checked: ($.inArray('tax', result) >= 0) ? true : false,
+                                            items: [
+                                                {
+                                                    id: 'tax-view',
+                                                    text: '{{__('Tax View')}}',
+                                                    checked: ($.inArray('tax-view', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'tax-store',
+                                                    text: '{{__('Tax Store')}}',
+                                                    checked: ($.inArray('tax-store', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'tax-edit',
+                                                    text: '{{__('Tax Edit')}}',
+                                                    checked: ($.inArray('tax-edit', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'tax-action',
+                                                    text: '{{__('Tax  Action')}}',
+                                                    checked: ($.inArray('tax-action', result) >= 0) ? true : false
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            id: 'currency-rate',
+                                            text: "{{trans('Currency Rate')}}",
+                                            expanded: true,
+                                            checked: ($.inArray('currency-rate', result) >= 0) ? true : false,
+                                            items: [
+                                                {
+                                                    id: 'currency-rate-view',
+                                                    text: '{{__('Currency Rate View')}}',
+                                                    checked: ($.inArray('currency-rate-view', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'currency-rate-edit',
+                                                    text: '{{__('Currency Rate Edit')}}',
+                                                    checked: ($.inArray('currency-rate-edit', result) >= 0) ? true : false
+                                                },
+                                                {
+                                                    id: 'currency-rate-action',
+                                                    text: '{{__('Currency Rate Action')}}',
+                                                    checked: ($.inArray('currency-rate-action', result) >= 0) ? true : false
+                                                },
+                                            ],
+                                        },
+                                    ]
+                                },
+
                             ]
                         });
 
@@ -564,30 +726,30 @@
                                             ]
                                         },
                                         {
-                                            id: 'locale',
-                                            text: '{{__('Locale')}}',
+                                            id: 'language',
+                                            text: '{{__('Languages')}}',
                                             expanded: true,
-                                            checked: ($.inArray('locale', result) >= 0) ? true : false,
+                                            checked: ($.inArray('language', result) >= 0) ? true : false,
                                             items: [
                                                 {
-                                                    id: 'locale-view',
-                                                    text: '{{__('Locale View')}}',
-                                                    checked: ($.inArray('locale-view', result) >= 0) ? true : false,
+                                                    id: 'language-view',
+                                                    text: '{{__('Language View')}}',
+                                                    checked: ($.inArray('language-view', result) >= 0) ? true : false,
                                                 },
                                                 {
-                                                    id: 'locale-store',
-                                                    text: '{{__('Locale Store')}}',
-                                                    checked: ($.inArray('locale-store', result) >= 0) ? true : false,
+                                                    id: 'language-store',
+                                                    text: '{{__('Language Store')}}',
+                                                    checked: ($.inArray('language-store', result) >= 0) ? true : false,
                                                 },
                                                 {
-                                                    id: 'locale-edit',
-                                                    text: '{{__('Locale Edit')}}',
-                                                    checked: ($.inArray('locale-edit', result) >= 0) ? true : false,
+                                                    id: 'language-edit',
+                                                    text: '{{__('Language Edit')}}',
+                                                    checked: ($.inArray('language-edit', result) >= 0) ? true : false,
                                                 },
                                                 {
-                                                    id: 'locale-action',
-                                                    text: '{{__('Locale Action')}}',
-                                                    checked: ($.inArray('locale-action', result) >= 0) ? true : false,
+                                                    id: 'language-action',
+                                                    text: '{{__('Language Action')}}',
+                                                    checked: ($.inArray('language-action', result) >= 0) ? true : false,
                                                 },
                                             ]
                                         },

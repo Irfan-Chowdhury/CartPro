@@ -172,6 +172,8 @@ return [
             Harimayco\Menu\MenuServiceProvider::class,
             Jorenvh\Share\Providers\ShareServiceProvider::class,
             Unicodeveloper\Paystack\PaystackServiceProvider::class,
+            // App\Providers\GoogleDriveServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -182,7 +184,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
-        // App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 

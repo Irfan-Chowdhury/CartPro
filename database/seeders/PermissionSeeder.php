@@ -402,33 +402,35 @@ class PermissionSeeder extends Seeder
             array(
 				'id' => 77,
 				'guard_name' => 'web',
-				'name' => 'locale'
+				'name' => 'language'
 			),
             array(
 				'id' => 78,
 				'guard_name' => 'web',
-				'name' => 'locale-view'
+				'name' => 'language-view'
 			),
             array(
 				'id' => 79,
 				'guard_name' => 'web',
-				'name' => 'locale-store'
+				'name' => 'language-store'
 			),
             array(
 				'id' => 80,
 				'guard_name' => 'web',
-				'name' => 'locale-edit'
+				'name' => 'language-edit'
 			),
             array(
 				'id' => 81,
 				'guard_name' => 'web',
-				'name' => 'locale-action'
+				'name' => 'language-action'
 			),
             array(
 				'id' => 82,
 				'guard_name' => 'web',
 				'name' => 'users_and_roles'
 			),
+
+            //Country
             array(
 				'id' => 83,
 				'guard_name' => 'web',
@@ -454,6 +456,8 @@ class PermissionSeeder extends Seeder
 				'guard_name' => 'web',
 				'name' => 'country-action'
 			),
+
+            //Currency
             array(
 				'id' => 88,
 				'guard_name' => 'web',
@@ -479,8 +483,135 @@ class PermissionSeeder extends Seeder
 				'guard_name' => 'web',
 				'name' => 'currency-action'
 			),
+
+            //Review
+            array(
+				'id' => 93,
+				'guard_name' => 'web',
+				'name' => 'review'
+			),
+            array(
+				'id' => 94,
+				'guard_name' => 'web',
+				'name' => 'review-view'
+			),
+            array(
+				'id' => 95,
+				'guard_name' => 'web',
+				'name' => 'review-store'
+			),
+            array(
+				'id' => 96,
+				'guard_name' => 'web',
+				'name' => 'review-edit'
+			),
+            array(
+				'id' => 97,
+				'guard_name' => 'web',
+				'name' => 'review-action'
+			),
+
+            //Sales
+            array(
+				'id' => 98,
+				'guard_name' => 'web',
+				'name' => 'sale'
+			),
+            array(
+				'id' => 99,
+				'guard_name' => 'web',
+				'name' => 'order-view'
+			),
+            array(
+				'id' => 100,
+				'guard_name' => 'web',
+				'name' => 'transaction-view'
+			),
+
+            //FAQ
+            array(
+				'id' => 101,
+				'guard_name' => 'web',
+				'name' => 'faq'
+			),
+            array(
+				'id' => 102,
+				'guard_name' => 'web',
+				'name' => 'faq-view'
+			),
+            array(
+				'id' => 103,
+				'guard_name' => 'web',
+				'name' => 'faq-store'
+			),
+            array(
+				'id' => 104,
+				'guard_name' => 'web',
+				'name' => 'faq-edit'
+			),
+            array(
+				'id' => 105,
+				'guard_name' => 'web',
+				'name' => 'faq-action'
+			),
+
+            //Tax
+            array(
+				'id' => 106,
+				'guard_name' => 'web',
+				'name' => 'localization'
+			),
+            array(
+				'id' => 107,
+				'guard_name' => 'web',
+				'name' => 'tax'
+			),
+            array(
+				'id' => 108,
+				'guard_name' => 'web',
+				'name' => 'tax-view'
+			),
+            array(
+				'id' => 109,
+				'guard_name' => 'web',
+				'name' => 'tax-store'
+			),
+            array(
+				'id' => 110,
+				'guard_name' => 'web',
+				'name' => 'tax-edit'
+			),
+            array(
+				'id' => 111,
+				'guard_name' => 'web',
+				'name' => 'tax-action'
+			),
+
+            //Currency Rates
+            array(
+				'id' => 112,
+				'guard_name' => 'web',
+				'name' => 'currency-rate'
+			),
+            array(
+				'id' => 113,
+				'guard_name' => 'web',
+				'name' => 'currency-rate-view'
+			),
+            array(
+				'id' => 114,
+				'guard_name' => 'web',
+				'name' => 'currency-rate-edit'
+			),
+            array(
+				'id' => 115,
+				'guard_name' => 'web',
+				'name' => 'currency-rate-action'
+			),
         );
 
         DB::table('permissions')->insert($permissions);
     }
+
+    // php artisan db:seed --class=PermissionSeeder
 }

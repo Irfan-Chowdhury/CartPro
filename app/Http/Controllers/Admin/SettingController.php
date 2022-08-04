@@ -1080,7 +1080,6 @@ class SettingController extends Controller
 
     public function systemBackup(Request $request)
     {
-
         if(isset($request->type)){
             if($request->type=='files'){
                 Artisan::call('backup:run --only-files');

@@ -33,7 +33,16 @@
                     <!-- General -->
                         @include('admin.pages.product.includes.edit.general')
                     <!--/ General -->
+                </div>
+                <div class="col-4">
+                    <!-- sidebar -->
+                        @include('admin.pages.product.includes.edit.sidebar')
+                    <!--/ sidebar -->
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-10">
                     <!-- Images -->
                         @include('admin.pages.product.includes.edit.image')
                     <!-- Images -->
@@ -57,11 +66,6 @@
                     <!-- SEO -->
                         @include('admin.pages.product.includes.edit.seo')
                     <!--/ SEO -->
-                </div>
-                <div class="col-4">
-                    <!-- sidebar -->
-                        @include('admin.pages.product.includes.edit.sidebar')
-                    <!--/ sidebar -->
                 </div>
             </div>
 

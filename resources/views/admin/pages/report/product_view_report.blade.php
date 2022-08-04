@@ -8,7 +8,7 @@
     <div class="table-responsive ml-3">
         <div class="row">
             <div class="col-md-8">
-                <table id="datatable1" class="table">
+                <table id="datatable" class="table">
                     <thead>
                         <tr>
                             <th class="wd-15p">@lang('file.Product')</th>
@@ -64,24 +64,14 @@
     </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script>
     $(function(){
       'use strict';
 
-      $('#datatable1').DataTable({
-        responsive: true,
-        language: {
-          searchPlaceholder: 'Search...',
-          sSearch: '',
-          lengthMenu: '_MENU_ items/page',
-        }
-      });
-
-      $('#datatable2').DataTable({
-        bLengthChange: false,
-        searching: false,
-        responsive: true
-      });
+        $('#datatable').DataTable({
+            @include('admin.includes.common_js.pdf_excel')
+        });
 
       // Select2
       $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });

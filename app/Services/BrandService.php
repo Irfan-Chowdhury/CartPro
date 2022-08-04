@@ -155,4 +155,11 @@ class BrandService
         }
         return $this->brandContract->bulkAction($type, $ids);
     }
+
+
+    //Front - HomeController
+    public function getBrandsWhereInIds($ids){
+        return $this->brandContract->getBrandsWhereInIds($ids);
+    }
+
 }

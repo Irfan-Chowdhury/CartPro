@@ -25,7 +25,7 @@
                 @if ($store_front_slider_format == 'full_width')
                     <div class="col-md-12">
                         <div class="banner-slider">
-                            @foreach ($sliders as $item)
+                            {{-- @foreach ($sliders as $item)
                                 @if ($item->sliderTranslation->isNotEmpty())
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
@@ -42,6 +42,27 @@
                                         </div>
                                     </div>
                                 @endif
+                            @endforeach --}}
+                            @foreach ($sliders as $item)
+                                    <div class="item">
+                                        @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
+                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
+                                        @else
+                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
+                                        @endif
+                                            <div class="@if($item->text_alignment=='right') info right @else info @endif" >
+                                                <div>
+                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->slider_title}}</h3>
+                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->slider_subtitle}}</h5>
+                                                </div>
+                                                @if ($item->type=='category')
+                                                    <a class="button style1 md" href="{{route('cartpro.category_wise_products',$item->slider_slug)}}">Read More</a>
+                                                @elseif ($item->type=='url')
+                                                    <a class="button style1 md" href="{{$item->url}}">Read More</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                             @endforeach
                         </div>
                     </div>
@@ -66,7 +87,7 @@
                     {{-- Half Width --}}
                     <div class="col-md-8">
                         <div class="banner-slider">
-                            @foreach ($sliders as $item)
+                            {{-- @foreach ($sliders as $item)
                                 @if ($item->sliderTranslation->isNotEmpty())
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
@@ -90,6 +111,29 @@
                                         </div>
                                     </div>
                                 @endif
+                            @endforeach --}}
+                            @foreach ($sliders as $item)
+                                    <div class="item">
+                                        @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
+                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
+                                        @else
+                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
+                                        @endif
+                                            <div class="@if($item->text_alignment=='right') info right @else info @endif" >
+                                                <div>
+                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->slider_title}}</h3>
+                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->slider_subtitle}}</h5>
+
+                                                    @if ($item->type=='category')
+                                                        <a class="button style1 md" href="{{route('cartpro.category_wise_products',$item->slider_slug)}}">Read More</a>
+                                                    @elseif ($item->type=='url')
+                                                        <a class="button style1 md" href="{{$item->url}}">Read More</a>
+                                                    @endif
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             @endforeach
                         </div>
                     </div>

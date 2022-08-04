@@ -52,7 +52,6 @@ use App\Http\Controllers\Frontend\UserBillingAddressController;
 use App\Http\Controllers\Frontend\UserShippingAddressController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 
 /*
@@ -626,7 +625,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::post('/paystack/store',[SettingController::class,'paystackStoreOrUpdate'])->name('admin.setting.paystack.store_or_update');
                     Route::post('/about_us',[SettingController::class,'aboutUsStoreOrUpdate'])->name('admin.setting.about_us.store_or_update');
                     Route::get('/empty_database', [SettingController::class,'emptyDatabase'])->name('empty_database');
-                    Route::post('/system-backup', [SettingController::class,'systemBackup'])->name('system.backup');
+                    Route::post('/system-backup', [SettingController::class,'systemBackup'])->name('system.backup')->middleware(['demo_check']);
 
                 });
 
