@@ -102,6 +102,10 @@ return array (
   array (
     '' => 'An error occured due to server not being to able to handle your request.',
   ),
+  'And if you download only files, please extract the vendor' => 
+  array (
+    'zip file before using the backup' => 'And if you download only files, please extract the vendor.zip file before using the backup',
+  ),
   'Apartment, suite, unit etc. (optional)' => 'Apartment, suite, unit etc. (optional)',
   'App ID' => 'App ID',
   'App Secret' => 'App Secret',

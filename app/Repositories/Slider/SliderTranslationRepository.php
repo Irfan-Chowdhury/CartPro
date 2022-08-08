@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Slider;
 
-use App\Contracts\Slider\sliderTranslationContract;
+use App\Contracts\Slider\SliderTranslationContract;
 use App\Models\SliderTranslation;
 use App\Traits\ActiveInactiveTrait;
 
