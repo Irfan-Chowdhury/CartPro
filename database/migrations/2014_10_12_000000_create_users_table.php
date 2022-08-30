@@ -21,7 +21,8 @@ class CreateUsersTable extends Migration
             $table->double('phone');
             $table->string('email')->unique();
             $table->string('password');
-            $table->unsignedBigInteger('role_id');
+            $table->tinyInteger('user_type');
+            $table->integer('role');
             $table->string('image')->nullable();
             $table->rememberToken();
             $table->datetime('last_login_at')->nullable();
@@ -29,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('is_active')->nullable();
             $table->timestamps();
 
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('role')->references('id')->on('roles')->onDelete('cascade');
 
         });
     }

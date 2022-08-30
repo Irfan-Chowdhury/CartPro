@@ -35,8 +35,6 @@ class CreateOrdersTable extends Migration
             $table->decimal('currency_base_total')->nullable();
             $table->string('currency_symbol')->nullable();
             $table->string('order_status')->nullable();
-            // $table->string('delivery_date')->nullable();
-            // $table->string('delivery_time')->nullable();
             $table->string('payment_status')->nullable();
             $table->string('date')->nullable();
             $table->integer('tax_id')->nullable();

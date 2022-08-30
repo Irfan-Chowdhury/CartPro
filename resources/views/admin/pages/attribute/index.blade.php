@@ -23,7 +23,7 @@
     </div>
 
     <div class="table-responsive">
-    	<table id="AtttributeTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -57,7 +57,7 @@
                     }
                 });
 
-                let table = $('#AtttributeTable').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -86,7 +86,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.attribute.index') }}",
+                        url: "{{ route('admin.attribute.datatable') }}",
                     },
                     columns: [
                         {
@@ -193,112 +193,72 @@
                 new $.fn.dataTable.FixedHeader(table);
             });
 
-            //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var attributeId = $(this).data("id");
-                var element = this;
-                console.log(attributeId);
 
-                $.ajax({
-                    url: "{{route('admin.attribute.active')}}",
-                    type: "GET",
-                    data: {id:attributeId},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#AtttributeTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-
-            //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var attributeId = $(this).data("id");
-                var element = this;
-                console.log(attributeId);
-
-                $.ajax({
-                    url: "{{route('admin.attribute.inactive')}}",
-                    type: "GET",
-                    data: {id:attributeId},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#AtttributeTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            //---------- Active ------------
+            @include('admin.includes.common_js.active_js',['route_name'=>'admin.attribute.active'])
+            //---------- Inactive ------------
+            @include('admin.includes.common_js.inactive_js',['route_name'=>'admin.attribute.inactive'])
+            //---------- Delete ------------
+            @include('admin.includes.common_js.delete_js',['route_name'=>'admin.attribute.destroy'])
+            //---------- Bulk Action ------------
+            @include('admin.includes.common_js.bulk_action_js',['route_name_bulk_active_inactive'=>'admin.attribute.bulk_action'])
 
             //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#AtttributeTable').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
+            // $("#bulk_action").on("click",function(){
+            //     var idsArray = [];
+            //     let table = $('#dataListTable').DataTable();
+            //     idsArray = table.rows({selected: true}).ids().toArray();
 
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
+            //     if(idsArray.length === 0){
+            //         alert("Please Select at least one checkbox.");
+            //     }else{
+            //         $('#bulkConfirmModal').modal('show');
+            //         let action_type;
 
-                    $("#active").on("click",function(){
-                        console.log(idsArray);
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.attribute.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#AtttributeTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        console.log(idsArray);
-                        $.ajax({
-                            url: "{{route('admin.attribute.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#AtttributeTable').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
+            //         $("#active").on("click",function(){
+            //             console.log(idsArray);
+            //             action_type = "active";
+            //             $.ajax({
+            //                 url: "{{route('admin.attribute.bulk_action')}}",
+            //                 method: "GET",
+            //                 data: {idsArray:idsArray,action_type:action_type},
+            //                 success: function (data) {
+            //                     if(data.success){
+            //                         $('#bulkConfirmModal').modal('hide');
+            //                         table.rows('.selected').deselect();
+            //                         $('#dataListTable').DataTable().ajax.reload();
+            //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                         setTimeout(function() {
+            //                             $('#alert_message').fadeOut("slow");
+            //                         }, 3000);
+            //                     }
+            //                 }
+            //             });
+            //         });
+            //         $("#inactive").on("click",function(){
+            //             action_type = "inactive";
+            //             console.log(idsArray);
+            //             $.ajax({
+            //                 url: "{{route('admin.attribute.bulk_action')}}",
+            //                 method: "GET",
+            //                 data: {idsArray:idsArray,action_type:action_type},
+            //                 success: function (data) {
+            //                     if(data.success){
+            //                         $('#bulkConfirmModal').modal('hide');
+            //                         table.rows('.selected').deselect();
+            //                         $('#dataListTable').DataTable().ajax.reload();
+            //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                         setTimeout(function() {
+            //                             $('#alert_message').fadeOut("slow");
+            //                         }, 3000);
+            //                     }
+            //                 }
+            //             });
+            //         });
+            //     }
+            // });
 
 
         })(jQuery);

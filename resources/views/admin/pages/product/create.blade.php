@@ -216,7 +216,7 @@
 
                                 '<div class="col-6 form-group">'+
                                     '<label>{{__("Values")}}</label>'+
-                                    '<select name="attribute_value_id[]" id="attributeValueId"  class="form-control attributeValueId">'+
+                                    '<select name="attribute_value_id[]"  class="form-control attributeValueId"  data-live-search="true" data-live-search-style="begins" title="Select Value">'+
                                     '</select>'+
                                 '</div>'+
 
@@ -237,12 +237,12 @@
 
                 $('#attributeId').change(function () {
                     var attributeId = $('#attributeId').val();
-                    console.log('ok');
                     $.ajax({
                         url: "{{route('admin.attribute.get_attribute_values')}}",
                         method: "GET",
                         data: {attribute_id: attributeId},
                         success: function (data) {
+                            console.log(data);
                             $('select').selectpicker("destroy");
                             $('#attributeValueId').html(data);
                             $('select').selectpicker();
@@ -253,14 +253,15 @@
                 $(document).on('change','.attributeId',function() {
                     var attributeId = $(this).val();
                     var random_number = Math.floor(Math.random() * 90000) + 10000;
-
                     $('.attributeValueId').addClass('attributeValueId_'+random_number).removeClass('attributeValueId');
                     $.ajax({
                         url: "{{route('admin.attribute.get_attribute_values')}}",
                         method: "GET",
                         data: {attribute_id: attributeId},
                         success: function (data) {
+                            console.log(data);
                             $('select').selectpicker("destroy");
+                            $('.attributeValueId_'+random_number).attr("multiple","multiple");
                             $('.attributeValueId_'+random_number).html(data);
                             $('select').selectpicker();
                         }

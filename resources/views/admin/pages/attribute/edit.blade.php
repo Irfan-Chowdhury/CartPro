@@ -54,7 +54,7 @@
                                                 <div class="col-sm-8">
                                                     <select name="attribute_set_id" id="attributeSetId" class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='@lang('file.Select Attribute Set')'>
                                                         @forelse ($attributeSets as $item)
-                                                            <option value="{{$item->id}}" @if($item->id==$attribute->attribute_set_id) selected @endif>{{$item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null}}</option>
+                                                            <option value="{{$item->id}}" @if($item->id==$attribute->attribute_set_id) selected @endif>{{$item->attribute_set_name}}</option>
                                                         @empty
                                                         @endforelse
                                                     </select>
@@ -78,33 +78,10 @@
                                                 <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Categories')</b></label>
                                                 <div class="col-sm-8">
                                                     <select name="category_id[]" multiple class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
-                                                        @foreach ($categories as $item)
-                                                            @if ($item->categoryTranslation->count()>0)
-                                                                @foreach ($item->categoryTranslation as $key => $value)
-                                                                    @if ($key<1)
-                                                                        @if ($value->local==$local)
-                                                                            <option value="{{$item->id}}" @foreach($attribute->categories as $attributeCategory)
-                                                                                                                @if($attributeCategory->id==$item->id)
-                                                                                                                    selected
-                                                                                                                @endif
-                                                                                                         @endforeach>
-                                                                                                         {{$value->category_name}}
-                                                                                                        </option>
-                                                                        @elseif($value->local=='en')
-                                                                        <option value="{{$item->id}}" @foreach($attribute->categories as $attributeCategory)
-                                                                                                            @if($attributeCategory->id==$item->id)
-                                                                                                                selected
-                                                                                                            @endif
-                                                                     @endforeach>
-                                                                     {{$value->category_name}}
-                                                                    </option>
-                                                                        @endif
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <option value="">{{__('NULL')}}</option>
-                                                            @endif
-                                                        @endforeach
+                                                        @forelse ($categories as $item)
+                                                            <option value="{{$item->id}}" @foreach($attribute->categories as $attributeCategory) @if($attributeCategory->id==$item->id) selected @endif @endforeach>{{$item->category_name}}</option>
+                                                        @empty
+                                                        @endforelse
                                                     </select>
                                                 </div>
                                             </div>

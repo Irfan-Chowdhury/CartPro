@@ -41,7 +41,11 @@
 @endsection
 
 
+
+
 @push('scripts')
+
+
     <script type="text/javascript">
         (function ($) {
             "use strict";

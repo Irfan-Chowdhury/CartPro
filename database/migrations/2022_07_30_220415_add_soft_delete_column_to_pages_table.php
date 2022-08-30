@@ -26,7 +26,7 @@ class AddSoftDeleteColumnToPagesTable extends Migration
     public function down()
     {
         Schema::table('pages', function (Blueprint $table) {
-            //
+            $table->dropSoftDeletes();
         });
     }
 }

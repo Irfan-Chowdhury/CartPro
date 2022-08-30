@@ -24,8 +24,7 @@ class AttributeSetController extends Controller
         return abort('403', __('You are not authorized'));
     }
 
-    public function datatable()
-    {
+    public function datatable(){
         return $this->attributeSetService->dataTable();
     }
 

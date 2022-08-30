@@ -12,9 +12,9 @@ class CategoryRepository implements CategoryContract
 {
     use ActiveInactiveTrait, DeleteWithFileTrait;
 
-    public function getAllCategories()
+    public function getAll()
     {
-        return Category::with(['catTranslation','parentCategory.catTranslation'])
+        $category = Category::with(['catTranslation','parentCategory.catTranslation'])
             ->orderBy('is_active','DESC')
             ->orderBy('id','DESC')
             ->get()
@@ -28,7 +28,27 @@ class CategoryRepository implements CategoryContract
                 ];
             });
 
+        return json_decode(json_encode($category), FALSE);
+    }
 
+    public function getAllActiveData()
+    {
+        $category = Category::with(['catTranslation','parentCategory.catTranslation'])
+            ->where('is_active',1)
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC')
+            ->get()
+            ->map(function($category){
+                return [
+                    'id'=>$category->id,
+                    'image'=>$category->image,
+                    'is_active'=>$category->is_active,
+                    'category_name'=>$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null,
+                    'parent_category_name'=> ($category->parentCategory!=NULL) ? ($category->parentCategory->catTranslation->category_name ?? $category->parentCategory->categoryTranslationDefaultEnglish->category_name) : 'NONE',
+                ];
+            });
+
+        return json_decode(json_encode($category), FALSE);
     }
 
     public function storeCategory($data){

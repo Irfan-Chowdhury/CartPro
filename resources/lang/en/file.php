@@ -122,6 +122,7 @@ return array (
   'Attribute Set' => 'Attribute Set',
   'Attribute Set Name' => 'Attribute Set Name',
   'Attribute Sets' => 'Attribute Sets',
+  'Attribute Wise Inventory' => 'Attribute Wise Inventory',
   'Attribute-Set' => 'Attribute Set',
   'Attribute_Set' => 'Attribute Set',
   'Attributes' => 'Attributes',

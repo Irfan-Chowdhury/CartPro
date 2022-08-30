@@ -44,7 +44,7 @@
                                                         <div class="col-sm-8">
                                                             <select name="attribute_set_id" id="attributeSetId" required class="form-control selectpicker @error('attribute_set_id') is-invalid @enderror" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Attribute Set')}}'>
                                                                 @forelse ($attributeSets as $item)
-                                                                    <option value="{{$item->id}}">{{$item->attributeSetTranslation->attribute_set_name ?? $item->attributeSetTranslationEnglish->attribute_set_name ?? null}}</option>
+                                                                    <option value="{{$item->id}}">{{$item->attribute_set_name}}</option>
                                                                 @empty
                                                                 @endforelse
                                                             </select>
@@ -69,19 +69,7 @@
                                                         <div class="col-sm-8">
                                                             <select name="category_id[]"  class="form-control selectpicker" multiple data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Category')}}'>
                                                                 @foreach ($categories as $item)
-                                                                    @if ($item->categoryTranslation->count()>0)
-                                                                        @foreach ($item->categoryTranslation as $key => $value)
-                                                                            @if ($key<1)
-                                                                                @if ($value->local==$local)
-                                                                                    <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                @elseif($value->local=='en')
-                                                                                    <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">{{__('NULL')}}</option>
-                                                                    @endif
+                                                                    <option value="{{$item->id}}">{{$item->category_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>

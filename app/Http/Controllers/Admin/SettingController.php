@@ -1079,49 +1079,14 @@ class SettingController extends Controller
 		return redirect()->back()->with('empty_message', 'Database cleared successfully');
 	}
 
-
-
-// compress all files in the source directory to destination directory
-function create_zip($files = array(), $dest = '', $overwrite = false) {
-    if (file_exists($dest) && !$overwrite) {
-        return false;
-    }
-    if (($files)) {
-        $zip = new ZipArchive();
-        if ($zip->open($dest, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
-            return false;
-        }
-        foreach ($files as $file) {
-            $zip->addFile($file, $file);
-        }
-        $zip->close();
-        return file_exists($dest);
-    } else {
-        return false;
-    }
-}
-
-function addzip($source, $destination) {
-    $files_to_zip = glob($source . '/*');
-    return $this->create_zip($files_to_zip, $destination);
-}
-
-
-
-
-
-
-
     public function systemBackup(Request $request)
     {
-
         if(isset($request->type)){
             if($request->type=='files' || $request->type=='both'){
 
                 //First Delete Existing Files
                 $file = new Filesystem;
                 $file->cleanDirectory('storage/app/backups');
-
 
                 Artisan::call('backup:run --only-files');
                 $file_name_with_extension = 'backup_files.zip';

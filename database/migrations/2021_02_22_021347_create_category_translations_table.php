@@ -19,7 +19,8 @@ class CreateCategoryTranslationsTable extends Migration
             $table->string('local');
             $table->string('category_name');
             $table->timestamps();
-            
+            $table->softDeletes();
+
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }

@@ -16,7 +16,7 @@ class CreateAttributeTranslationsTable extends Migration
         Schema::create('attribute_translations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('attribute_id');
-            $table->string('local');
+            $table->string('locale');
             $table->string('attribute_name');
             $table->timestamps();
 

@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Contracts\Slider\SliderContract;
 use App\Contracts\Slider\SliderTranslationContract;
+use App\Traits\WordCheckTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
 use Exception;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 
 class SliderService
 {
-    use SlugTrait, imageHandleTrait;
+    use SlugTrait, imageHandleTrait,WordCheckTrait;
     private $sliderContract;
     private $sliderTranslationContract;
 
@@ -22,8 +23,13 @@ class SliderService
         $this->sliderTranslationContract = $sliderTranslationContract;
     }
 
-    public function getAllSlider(){
-        return $this->sliderContract->getAllSlider();
+    public function getAllSlider()
+    {
+        if ($this->wordCheckInURL('sliders')) {
+            return $this->sliderContract->getAllSlider();
+        }else{
+            return $this->sliderContract->getAllActiveSlider();
+        }
     }
 
     public function dataTable()

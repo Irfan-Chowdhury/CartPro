@@ -48,7 +48,7 @@
                     <li id="brand-list-menu" class="{{(Request::is('admin/brands') || Request::is('admin/brands/brand/*')) ? 'active' : ''}}"><a href="{{route('admin.brand')}}">{{__('file.Brand')}}</a></li>
                 @endcan
                 @can('attribute_set')
-                    <li id="brand-list-menu" class="{{Request::is('admin/attribute-sets') ? 'active' : ''}}"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute_Set')}}</a></li>
+                    <li id="brand-list-menu" class="{{Request::is('admin/attribute-sets') ? 'active' : ''}}"><a href="{{route('admin.attribute_set.index')}}">{{__('file.Attribute Set')}}</a></li>
                 @endcan
                 @can('attribute')
                     <li id="brand-list-menu" class="{{Request::is('admin/attributes') || Request::is('admin/attributes/create') || Request::is('admin/attributes/edit/*') ? 'active' : ''}}"><a href="{{route('admin.attribute.index')}}">{{__('file.Attributes')}}</a></li>

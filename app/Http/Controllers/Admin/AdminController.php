@@ -19,8 +19,10 @@ use Spatie\Analytics\AnalyticsFacade as Analytics;
 use Spatie\Analytics\Period;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use ZipArchive;
 
 class AdminController extends Controller
 {
@@ -36,6 +38,35 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+
+        // ======== Test Start ========
+
+
+       /* Source File URL */
+        // // $remote_file_url = 'http://cartproshop.com/demo_old/public/Test/Test123.zip';
+        // $remote_file_url = 'http://peopleprohrm.com/irfan.zip';
+        // $remote_file_name = pathinfo($remote_file_url)['basename'];
+
+        // /* New file name and path for this file */
+        // $local_file = public_path('Test/MoveFolder/'.$remote_file_name);
+
+        // /* Copy the file from source url to server */
+        // $copy = copy( $remote_file_url, $local_file );
+
+        // /* Add notice for success/failure */
+        // if( !$copy ) {
+        //     return 0;
+        // }
+        // else{
+        //     return 1;
+        // }
+
+        // return 5;
+
+        // ======== Test End ========
+
+
+
         $orders = Order::orderBy('id','DESC')->get();
         $products = Product::where('is_active',1)->get();
         $total_customers = User::where('user_type',0)->get()->count();
@@ -138,10 +169,8 @@ class AdminController extends Controller
     public function chart()
     {
         $startDate = Carbon::now()->subYear();
-        $endDate = Carbon::now();
+        $endDate   = Carbon::now();
         // $result = Analytics::fetchVisitorsAndPageViews(Period::create($startDate, $endDate));
-
-
         $result = Analytics::fetchVisitorsAndPageViews(Period::days(7));
 
         return response()->json($result);

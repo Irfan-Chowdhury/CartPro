@@ -10,8 +10,17 @@ class AttributeSetRepository implements AttributeSetContract
 {
     use ActiveInactiveTrait;
 
-    public function getAllAttributeSet(){
+    public function getAll(){
         return AttributeSet::with('attributeSetTranslations')
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get()
+                ->map->format();
+    }
+
+    public function getAllActiveData(){
+        return AttributeSet::with('attributeSetTranslations')
+                ->where('is_active',1)
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()

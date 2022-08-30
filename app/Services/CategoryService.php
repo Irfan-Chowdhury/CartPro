@@ -4,13 +4,14 @@ namespace App\Services;
 
 use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
+use App\Traits\WordCheckTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\File;
 
 class CategoryService
 {
-    use SlugTrait, imageHandleTrait;
+    use SlugTrait, imageHandleTrait, WordCheckTrait;
 
     private $categoryContract;
     private $categoryTranslationContract;
@@ -22,8 +23,11 @@ class CategoryService
 
     public function getAllCategories()
     {
-        $data = $this->categoryContract->getAllCategories();
-        return json_decode(json_encode($data), FALSE);
+        if ($this->wordCheckInURL('categories')) {
+            return $this->categoryContract->getAll();
+        }else{
+            return $this->categoryContract->getAllActiveData();
+        }
     }
 
     public function dataTable()

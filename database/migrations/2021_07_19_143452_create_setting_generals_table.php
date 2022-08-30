@@ -19,7 +19,7 @@ class CreateSettingGeneralsTable extends Migration
             $table->string('default_country');
             $table->string('default_timezone');
             $table->string('customer_role');
-            $table->integer('number_format');
+            $table->integer('number_format_type');
             $table->tinyInteger('reviews_and_ratings')->nullable();
             $table->tinyInteger('auto_approve_reviews')->nullable();
             $table->tinyInteger('cookie_bar')->nullable();

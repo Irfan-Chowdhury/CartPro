@@ -15,6 +15,7 @@ class CreateStorefrontImagesTable extends Migration
     {
         Schema::create('storefront_images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('setting_id');
             $table->string('title');
             $table->string('type');
             $table->string('image');

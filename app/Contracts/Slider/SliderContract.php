@@ -6,6 +6,8 @@ interface SliderContract
 {
     public function getAllSlider();
 
+    public function getAllActiveSlider();
+
     public function storeData($data);
 
     public function getById($id);

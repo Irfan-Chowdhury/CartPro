@@ -3,9 +3,12 @@ namespace App\Services;
 
 use App\Contracts\AttributeSet\AttributeSetContract;
 use App\Contracts\AttributeSet\AttributeSetTranslationContract;
+use App\Traits\WordCheckTrait;
 
 class AttributeSetService
 {
+    use WordCheckTrait;
+
     private $attributeSetContract;
     private $attributeSetTranslationContract;
     public function __construct(AttributeSetContract $attributeSetContract, AttributeSetTranslationContract $attributeSetTranslationContract)
@@ -16,7 +19,12 @@ class AttributeSetService
 
     public function getAllAttributeSet()
     {
-        $data = $this->attributeSetContract->getAllAttributeSet();
+        if ($this->wordCheckInURL('attribute-sets')) {
+            $data = $this->attributeSetContract->getAll();
+        }else{
+            $data =  $this->attributeSetContract->getAllActiveData();
+        }
+
         return json_decode(json_encode($data), FALSE); //This is use when we use map()->format
     }
 

@@ -20,7 +20,7 @@
 
                     <div class="col-6 form-group">
                         <label>{{__("file.Values")}}</label>
-                        <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Value">
+                        <select name="attribute_value_id[]" id="attributeValueId" class="form-control selectpicker" multiple="multiple"  data-live-search="true" data-live-search-style="begins" title="Select Value">
                         </select>
                     </div>
 
@@ -32,6 +32,5 @@
             </div>
 
             <span class="btn btn-link add-more" id="addMore"><i class="dripicons-plus"></i> @lang('file.Add New Attribute')</span>
-
         </div>
     </div>

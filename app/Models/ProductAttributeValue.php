@@ -46,8 +46,8 @@ class ProductAttributeValue extends Model
     public function attributeValueTranslations()
     {
         $locale = Session::get('currentLocal');
-        return $this->hasMany(AttributeValueTranslation::class,'attribute_id','attribute_id')
-                ->where('local',$locale);
-                // ->orWhere('local','en');
+        return $this->hasMany(AttributeValueTranslation::class,'attribute_value_id','attribute_value_id')
+                ->where('local',$locale)
+                ->orWhere('local','en');
     }
 }

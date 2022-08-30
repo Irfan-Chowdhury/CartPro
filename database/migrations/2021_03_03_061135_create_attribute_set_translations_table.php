@@ -19,6 +19,7 @@ class CreateAttributeSetTranslationsTable extends Migration
             $table->string('local');
             $table->string('attribute_set_name');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('attribute_set_id')->references('id')->on('attribute_sets')->onDelete('cascade');
 

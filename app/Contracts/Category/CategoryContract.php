@@ -4,7 +4,9 @@ namespace App\Contracts\Category;
 
 interface CategoryContract
 {
-    public function getAllCategories();
+    public function getAll();
+
+    public function getAllActiveData();
 
     public function storeCategory($data);
 

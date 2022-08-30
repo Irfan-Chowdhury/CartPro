@@ -252,6 +252,7 @@
                             //console.log(data);
                             $('select').selectpicker("destroy");
                             // $('#attributeValueId').html(data);
+                            $('.attributeValueId_'+random_number).attr("multiple","multiple");
                             $('.attributeValueId_'+random_number).html(data);
                             $('select').selectpicker();
                         }

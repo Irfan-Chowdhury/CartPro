@@ -57,25 +57,6 @@ class PageController extends Controller
         }
     }
 
-    // public function active(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->activeData(Page::find($request->id));
-    //     }
-    // }
-
-    // public function inactive(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->inactiveData(Page::find($request->id));
-    //     }
-    // }
-
-    // public function bulkAction(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         return $this->bulkActionData($request->action_type, Page::whereIn('id',$request->idsArray));
-    //     }
-    // }
-
     public function active(Request $request){
         return $this->pageService->activeById($request->id);
     }

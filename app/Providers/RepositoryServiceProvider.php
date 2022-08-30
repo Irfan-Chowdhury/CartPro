@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\Attribute\AttributeContract;
+use App\Contracts\Attribute\AttributeTranslationContract;
 use App\Contracts\AttributeSet\AttributeSetContract;
 use App\Contracts\AttributeSet\AttributeSetTranslationContract;
+use App\Contracts\AttributeValue\AttributeValueContract;
+use App\Contracts\AttributeValue\AttributeValueTranslationContract;
 use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
 use App\Contracts\Category\CategoryContract;
@@ -16,8 +20,12 @@ use App\Contracts\Slider\SliderContract;
 use App\Contracts\Slider\SliderTranslationContract;
 use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
+use App\Repositories\Attribute\AttributeRepository;
+use App\Repositories\Attribute\AttributeTranslationRepository;
 use App\Repositories\AttributeSet\AttributeSetRepository;
 use App\Repositories\AttributeSet\AttributeSetTranslationRepository;
+use App\Repositories\AttributeValue\AttributeValueRepository;
+use App\Repositories\AttributeValue\AttributeValueTranslationRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandTranslationRepository;
@@ -67,9 +75,17 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SliderContract::class, SliderRepository::class);
         $this->app->bind(SliderTranslationContract::class, SliderTranslationRepository::class);
 
-        //Slider
+        //Page
         $this->app->bind(PageContract::class, PageRepository::class);
         $this->app->bind(PageTranslationContract::class, PageTranslationRepository::class);
+
+        //Attribute
+        $this->app->bind(AttributeContract::class, AttributeRepository::class);
+        $this->app->bind(AttributeTranslationContract::class, AttributeTranslationRepository::class);
+
+        //Attribute Value
+        $this->app->bind(AttributeValueContract::class, AttributeValueRepository::class);
+        $this->app->bind(AttributeValueTranslationContract::class, AttributeValueTranslationRepository::class);
 
     }
 }

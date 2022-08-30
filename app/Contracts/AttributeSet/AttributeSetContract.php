@@ -4,7 +4,9 @@ namespace App\Contracts\AttributeSet;
 
 interface AttributeSetContract
 {
-    public function getAllAttributeSet();
+    public function getAll();
+
+    public function getAllActiveData();
 
     public function storeAttributeSet($data);
 

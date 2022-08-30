@@ -22,9 +22,9 @@ class CreateCouponsTable extends Migration
             $table->tinyInteger('free_shipping');
             $table->decimal('minimum_spend')->nullable();
             $table->decimal('maximum_spend')->nullable();
-            $table->integer('usage_limit_per_coupon')->nullable();
-            $table->integer('usage_limit_per_customer')->nullable();
-            $table->integer('used');
+            // $table->integer('usage_limit_per_coupon')->nullable();
+            // $table->integer('usage_limit_per_customer')->nullable();
+            // $table->integer('used');
             $table->tinyInteger('is_active');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

@@ -6,17 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWishlistsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('product_id');
+            $table->integer('product_id')->nullable();
             $table->timestamps();
         });
     }

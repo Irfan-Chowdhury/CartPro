@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Session;
 
 class AttributeTranslation extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'attribute_id',
-        'local',
+        'locale',
         'attribute_name'
     ];
+    protected $dates = ['deleted_at'];
+
 
     //Shop Product Controller index()
     public function attributeValueTranslation()

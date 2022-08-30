@@ -23,6 +23,7 @@ class Category extends Model
 
 
     //CategoryProductController - index
+    //CategoryProductController - index
     public function categoryTranslation()
     {
     	 return $this->hasMany(CategoryTranslation::class,'category_id');  //Remove Later

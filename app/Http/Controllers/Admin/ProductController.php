@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\AttributeValue;
+use App\Models\AttributeValueTranslation;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
@@ -27,15 +28,20 @@ use App\Traits\FormatNumberTrait;
 use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
 use App\Services\BrandService;
+use App\Services\CategoryService;
 use App\Traits\imageHandleTrait;
+use App\Traits\TranslationTrait;
 
 class ProductController extends Controller
 {
-    use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait, imageHandleTrait;
+    use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait, imageHandleTrait, TranslationTrait;
+
 
     protected $brandService;
-    public function __construct(BrandService $brandService){
-        $this->brandService = $brandService;
+    protected $categoryService;
+    public function __construct(BrandService $brandService, CategoryService $categoryService){
+        $this->brandService    = $brandService;
+        $this->categoryService = $categoryService;
     }
 
 
@@ -131,17 +137,9 @@ class ProductController extends Controller
     public function create()
     {
         $local = Session::get('currentLocal');
-        App::setLocale($local);
 
-        $brands = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
-
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
-                $query->where('local',$local)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $brands     = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
+        $categories =  $this->categoryService->getAllCategories();
 
         $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
@@ -180,6 +178,18 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
+        // $attributeValueIds = $request->attribute_value_id;
+        // ProductAttributeValue::where([
+        //     'product_id'=>2,
+        //     'attribute_id'=>1,
+        //     'attribute_value_id'=>10
+        // ])->delete();
+
+        // $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
+
+        // return $request->attribute_value_id;
+
         if (env('USER_VERIFIED')!=1) {
             session()->flash('type','danger');
             session()->flash('message','Disabled for demo !');
@@ -206,6 +216,18 @@ class ProductController extends Controller
             session()->flash('type','danger');
             session()->flash('message','The From date should not be greater then the To date');
             return redirect()->back();
+        }
+
+        $attribute_arr = [];
+        if (isset($request->attribute_id[0])) {
+            foreach($request->attribute_id as $item){
+                if (!in_array($item, $attribute_arr)){
+                    array_push($attribute_arr, $item);
+                }else{
+                    $this->setErrorMessage(__('Cannot add duplicted attribute. Please select one.'));
+                    return redirect()->back();
+                }
+            }
         }
 
         $local = Session::get('currentLocal');
@@ -299,11 +321,19 @@ class ProductController extends Controller
 
                 //-----------------Product-Attribute--------------
 
-                if ($request->attribute_id[0]) {
-                    $attributeArrayIds =  $request->attribute_id;//Array
-                    $attributeValueIds = $request->attribute_value_id; //Array
-                    for ($i=0; $i <count($attributeArrayIds) ; $i++) {
-                        $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
+                if (isset($request->attribute_id[0])) {
+                    // $attributeArrayIds =  $request->attribute_id;//Array
+                    // $attributeValueIds = $request->attribute_value_id; //Array
+                    // for ($i=0; $i <count($attributeArrayIds) ; $i++) {
+                    //     $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
+                    // }
+                    $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
+                    foreach($attributeValueTranslation as $item){
+                        ProductAttributeValue::insert([
+                                'product_id'=> $product->id,
+                                'attribute_id'=> $item->attribute_id,
+                                'attribute_value_id'=> $item->attribute_value_id
+                        ]);
                     }
                 }
 
@@ -381,6 +411,23 @@ class ProductController extends Controller
         // }
 
 
+        // BFS
+        // first_variant_values = $('#'+variantIds[0]).val().split(_getDelimiter(delimiter[variantIds[0] ])); //attribute Value
+        //         combinations = first_variant_values;
+        //         step = 1;
+        //         while(step < variantIds.length) {
+        //             var newCombinations = [];
+        //             for (var i = 0; i < combinations.length; i++) {
+        //                 new_variant_values = $('#'+variantIds[step]).val().split(_getDelimiter(delimiter[variantIds[step] ])); //Next Row attribute Value
+        //                 for (var j = 0; j < new_variant_values.length; j++) {
+        //                     newCombinations.push(combinations[i]+'/'+new_variant_values[j]);
+        //                 }
+        //             }
+        //             combinations = newCombinations;
+        //             step++;
+        //         }
+
+
 
         // =============== Test ==================
 
@@ -403,18 +450,21 @@ class ProductController extends Controller
                     ->where('id',$id)
                     ->first();
 
+        $productAttributeValues = ProductAttributeValue::with('attributeValueTranslations')
+                                    ->where('product_id',$id)
+                                    ->get()
+                                    ->groupBy('attribute_id');
+
+        // return $productAttributerValues[1][0]->attributeValueTranslations[0]->value_name;
+        // return $productAttributeValues;
+
 
         $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
             ->where('is_active',1)
             ->get();
 
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($local){
-                $query->where('local',$local)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $categories =  $this->categoryService->getAllCategories();
+
 
         $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
             $query->where('local',$local)
@@ -444,7 +494,53 @@ class ProductController extends Controller
 
         $format_number = $this->totalFormatNumber();
 
-        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number','taxes','attribute_values','attributeSets'));
+        return view('admin.pages.product.edit',compact('local','brands','categories','tags','attributes','product','format_number','taxes','attribute_values','attributeSets','productAttributeValues'));
+    }
+
+    public function attributeWiseInventory($product_id)
+    {
+
+        return view('admin.pages.product.edit.attribute_wise_inventory');
+
+        $productAttributerValues = ProductAttributeValue::with('attributeValueTranslations')
+                            ->where('product_id',$product_id)
+                            ->get()
+                            ->groupBy('attribute_id');
+
+        $data = [];
+        $countOfTotalVariant=1;
+        foreach($productAttributerValues as $keyAttribute => $items)
+        {
+            foreach($items as $key => $value)
+            {
+                $data[$keyAttribute][$key]['value_id']   = $value->attribute_value_id;
+                $data[$keyAttribute][$key]['value_name'] = $this->translations($value->attributeValueTranslations)->value_name;
+            }
+
+            $countOfTotalVariant *= count($items->toArray());
+
+        }
+
+        // return $countOfTotalVariant;
+
+
+        // $attribute_ids = [];
+        // foreach($product->productAttributeValues as $item){
+        //     if (!in_array($item->attribute_id, $attribute_ids)) {
+        //         array_push($attribute_ids, $item->attribute_id);
+        //     }
+        // }
+
+        // return  ProductAttributeValue::whereIn('attribute_id',$attribute_ids)->get();
+        // return $product->productAttributeValues;
+
+
+        // $data = [];
+        // foreach($product->productAttributeValues as $item){
+        //     array_push($data, $item);
+        // }
+
+        // return view('admin.pages.product.edit.attribute_wise_inventory');
     }
 
 
@@ -458,12 +554,6 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (env('USER_VERIFIED')!=1) {
-            session()->flash('type','danger');
-            session()->flash('message','Disabled for demo !');
-            return redirect()->back();
-        }
-
         $validator = Validator::make($request->all(),[
             'product_name'=> 'required|max:255|unique:product_translations,product_name,'.$request->product_translation_id,
             'description' => 'required',
@@ -476,16 +566,29 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()){
-            session()->flash('type','danger');
-            session()->flash('message','Something Wrong');
+            $this->setErrorMessage(__('Something Wrong'));
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         if ($request->new_from > $request->new_to) {
-            session()->flash('type','danger');
-            session()->flash('message','The From date should not be greater then the To date');
+            $this->setErrorMessage(__('The From date should not be greater then the To date'));
             return redirect()->back();
         }
+
+        $attribute_arr = [];
+        if (isset($request->attribute_id[0])) {
+            foreach($request->attribute_id as $item){
+                if (!in_array($item, $attribute_arr)){
+                    array_push($attribute_arr, $item);
+                }else{
+                    $this->setErrorMessage(__('Cannot add duplicted attribute. Please select one.'));
+                    return redirect()->back();
+                }
+            }
+        }
+
+
+
 
         if (auth()->user()->can('product-edit'))
         {
@@ -612,18 +715,20 @@ class ProductController extends Controller
 
             //-----------------Product-Attribute-------------
 
-
-            if ($request->attribute_id[0]) {
+            if (isset($request->attribute_id[0])) {
                 ProductAttributeValue::where('product_id',$product->id)->delete();
-                $attributeArrayIds =  $request->attribute_id;//Array
-                $attributeValueIds = $request->attribute_value_id; //Array
-                for ($i=0; $i <count($attributeArrayIds) ; $i++) {
-                    $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
+                $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
+                foreach($attributeValueTranslation as $item){
+                    ProductAttributeValue::insert([
+                            'product_id'=> $product->id,
+                            'attribute_id'=> $item->attribute_id,
+                            'attribute_value_id'=> $item->attribute_value_id
+                    ]);
                 }
+            }else{
+                ProductAttributeValue::where('product_id',$product->id)->delete();
             }
-            session()->flash('type','success');
-            session()->flash('message','Data Updated Successfully.');
-
+            $this->setSuccessMessage(__('Data Updated Successfully'));
             return redirect()->back();
         }
     }

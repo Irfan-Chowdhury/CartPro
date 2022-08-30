@@ -6,7 +6,6 @@
                     <div class="form-group">
                         <label for="inputEmail3"><b>@lang('file.Brand')</b></label>
                             <select name="brand_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Brand')}}'>
-
                                 @forelse ($brands as $item)
                                     <option value="{{$item->id}}" @if(isset($product->brand_id)) @if($item->id==$product->brand_id) selected @endif @endif >{{$item->brandTranslation->brand_name ?? $item->brandTranslationEnglish->brand_name ?? null}}</option>
                                 @empty
@@ -16,40 +15,15 @@
 
                     <div class="form-group">
                         <label for="inputEmail3"><b>@lang('file.Categories') <span class="text-danger">*</span></b></label>
-                            <select name="category_id[]" id="categoryId" class="form-control selectpicker @error('category_id') is-invalid @enderror" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                                @foreach ($categories as $item)
-                                    @if ($item->categoryTranslation->count()>0)
-                                        @foreach ($item->categoryTranslation as $key => $value)
-                                            @if ($key<1)
-                                                @if ($value->local==$local)
-                                                    <option value="{{$item->id}}"
-                                                        @foreach($product->categories as $productCategory)
-                                                            @if($productCategory->id == $item->id)
-                                                                selected
-                                                            @endif
-                                                        @endforeach>
-                                                        {{$value->category_name}}
-                                                    </option>
-                                                @elseif($value->local=='en')
-                                                    <option value="{{$item->id}}"
-                                                        @foreach($product->categories as $productCategory)
-                                                            @if($productCategory->id == $item->id)
-                                                                selected
-                                                            @endif
-                                                        @endforeach>
-                                                        {{$value->category_name}}
-                                                    </option>
-                                                @endif
-                                            @endif
-                                        @endforeach
-                                    @else
-                                        <option value="">{{__('NULL')}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @error('category_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <select name="category_id[]" id="categoryId" class="form-control selectpicker @error('category_id') is-invalid @enderror" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
+                            @forelse ($categories as $item)
+                                <option value="{{$item->id}}" @forelse($product->categories as $productCategory) {{$productCategory->id==$item->id ? 'selected':''}} @empty @endforelse> {{$item->category_name}} </option>
+                            @empty
+                            @endforelse
+                        </select>
+                        @error('category_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">

@@ -68,9 +68,6 @@ use Illuminate\Support\Facades\File;
 DefaultAuth::routes();
 
 Route::get('/optimize', function() {
-
-    // Storage::disk('google')->put('hello.txt', 'Hello World');
-
     Artisan::call('optimize:clear');
     return redirect()->back();
 });
@@ -340,14 +337,15 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //Attributes
             Route::group(['prefix' => 'attributes'], function () {
                 Route::get('/',[AttributeController::class,'index'])->name('admin.attribute.index');
+                Route::get('/datatable',[AttributeController::class,'datatable'])->name('admin.attribute.datatable');
                 Route::get('/create',[AttributeController::class,'create'])->name('admin.attribute.create');
                 Route::post('/store',[AttributeController::class,'store'])->name('admin.attribute.store');
                 Route::get('/edit/{id}',[AttributeController::class,'edit'])->name('admin.attribute.edit');
                 Route::post('/update/{id}',[AttributeController::class,'update'])->name('admin.attribute.update');
                 Route::get('/active',[AttributeController::class,'active'])->name('admin.attribute.active');
                 Route::get('/inactive',[AttributeController::class,'inactive'])->name('admin.attribute.inactive');
+                Route::get('/destroy',[AttributeController::class,'destroy'])->name('admin.attribute.destroy');
                 Route::get('/bulk_action',[AttributeController::class,'bulkAction'])->name('admin.attribute.bulk_action');
-
                 //Attribute's Values
                 Route::get('/get_attribute_values',[AttributeController::class,'getAttributeValues'])->name('admin.attribute.get_attribute_values');
             });
@@ -371,7 +369,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/create',[ProductController::class,'create'])->name('admin.products.create');
                 Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
                 Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit');
-                Route::post('/update/{id}',[ProductController::class,'update'])->name('admin.products.update');
+                Route::get('/edit/{id}/attribute-inventory',[ProductController::class,'attributeWiseInventory'])->name('admin.products.attribute_inventory');
+                Route::post('/update/{id}',[ProductController::class,'update'])->name('admin.products.update')->middleware('demo_check');
                 Route::get('/active',[ProductController::class,'active'])->name('admin.products.active');
                 Route::get('/inactive',[ProductController::class,'inactive'])->name('admin.products.inactive');
                 Route::get('/bulk_action',[ProductController::class,'bulkAction'])->name('admin.products.bulk_action');
@@ -482,7 +481,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 });
 
                 //--Slider--
-                Route::group(['prefix' => 'slider'], function () {
+                Route::group(['prefix' => 'sliders'], function () {
                     Route::get('/',[SliderController::class,'index'])->name('admin.slider');
                     Route::get('/datatable',[SliderController::class,'dataTable'])->name('admin.slider.datatable');
                     Route::get('/data-fetch-by-type',[SliderController::class,'dataFetchByType'])->name('admin.slider.data-fetch-by-type');

@@ -219,6 +219,14 @@
     <script type="text/javascript">
         $(function(){
 
+            function amountSetting(data){
+                $('.tax_rate').text(data.tax_rate);
+                $('#taxId').val(data.tax_id); //For Form
+                $('.total_amount').text(data.total_amount);
+                $('#totalAmount').val(data.total_amount); //For Form
+                $('#totalAmountPaystack').val(data.total_amount); //For Paystack
+            }
+
 
             var billingCountry = $("#billingCountry").val();
             if (billingCountry) {
@@ -233,12 +241,7 @@
                         shipping_cost:shippingCost,
                     },
                     success: function (data) {
-                        $('.tax_rate').text(data.tax_rate);
-                        $('#taxId').val(data.tax_id); //For Form
-                        $('.total_amount').text(data.total_amount);
-                        $('#totalAmount').val(data.total_amount); //For Form
-
-                        $('#totalAmountPaystack').val(data.total_amount); //For Paystack
+                        amountSetting(data);
                     }
                 });
             }
@@ -257,13 +260,7 @@
                     },
                     success: function (data) {
                         console.log(data);
-                        $('.tax_rate').text(data.tax_rate);
-                        $('#taxId').val(data.tax_id); //For Form
-                        $('.total_amount').text(data.total_amount);
-                        $('#totalAmount').val(data.total_amount); //For Form
-
-                        $('#totalAmountPaystack').val(data.total_amount); //For Paystack
-
+                        amountSetting(data);
                     }
                 })
             });
@@ -282,12 +279,8 @@
                     success: function (data) {
                         console.log(data)
                         if (data.type=='success') {
-                            $('.tax_rate').text(data.tax_rate);
-                            $('#taxId').val(data.tax_id); //For Form
-                            $('.total_amount').text(data.total_amount);
-                            $('#totalAmount').val(data.total_amount); //For Form
+                            amountSetting(data);
                             $('#couponValue').val(data.coupon_value); //For Form
-                            $('#totalAmountPaystack').val(data.total_amount); //For Paystack
                             if(data.coupon_value==0){
                                 $('#invalidCoupon').text('Invalid Coupon !!');
                             }else{
@@ -318,13 +311,7 @@
                         console.log(data)
                         if (data.type=='success') {
                             $('#couponValue').val(data.coupon_value); //For Form
-                            $('.tax_rate').text(data.tax_rate);
-                            $('#taxId').val(data.tax_id); //For Form
-                            $('.total_amount').text(data.total_amount);
-                            $('#totalAmount').val(data.total_amount); //For Form
-
-                            $('#totalAmountPaystack').val(data.total_amount); //For Paystack
-
+                            amountSetting(data);
                         }
                     }
                 })
@@ -429,31 +416,32 @@
                 if (paymentType=='razorpay'){
                     e.preventDefault();
                     $('totalAmount').val();
-                        var options = {
-                                        "key": "{{env('RAZORPAY_KEY')}}",
-                                        "amount": $('#totalAmount').val()*100,
-                                        "currency": "INR",
-                                        // "name": "Acme Corp",
-                                        // "description": "Test Transaction",
-                                        // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
-                                        // "handler": function (response){
-                                        //     alert(response.razorpay_payment_id);
-                                        //     alert(response.razorpay_order_id);
-                                        //     alert(response.razorpay_signature)
-                                        // },
-                                        // "prefill": {
-                                        //     "name": "Gaurav Kumar",
-                                        //     "email": "gaurav.kumar@example.com",
-                                        //     "contact": "9999988999"
-                                        // },
-                                        // "notes": {
-                                        //     "address": "Razorpay Corporate Office"
-                                        // },
-                                        // "theme": {
-                                        //     "color": "#3399cc"
-                                        // }
-                                    };
-                                    var rzp1 = new Razorpay(options);
+                        var options =
+                        {
+                            "key": "{{env('RAZORPAY_KEY')}}",
+                            "amount": $('#totalAmount').val()*100,
+                            "currency": "INR",
+                            // "name": "Acme Corp",
+                            // "description": "Test Transaction",
+                            // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
+                            // "handler": function (response){
+                            //     alert(response.razorpay_payment_id);
+                            //     alert(response.razorpay_order_id);
+                            //     alert(response.razorpay_signature)
+                            // },
+                            // "prefill": {
+                            //     "name": "Gaurav Kumar",
+                            //     "email": "gaurav.kumar@example.com",
+                            //     "contact": "9999988999"
+                            // },
+                            // "notes": {
+                            //     "address": "Razorpay Corporate Office"
+                            // },
+                            // "theme": {
+                            //     "color": "#3399cc"
+                            // }
+                        };
+                        var rzp1 = new Razorpay(options);
                         rzp1.open();
                     }
             });

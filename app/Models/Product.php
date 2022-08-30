@@ -116,4 +116,14 @@ class Product extends Model
     {
         return $this->hasMany(CategoryProduct::class);
     }
+
+
+    // Product
+    public function attributeTranslations()
+    {
+        $locale = Session::get('currentLocal');
+        return $this->hasMany(AttributeTranslation::class,'attribute_id')
+                    ->where('locale',$locale)
+                    ->orWhere('locale','en');
+    }
 }

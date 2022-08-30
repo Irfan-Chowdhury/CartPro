@@ -16,6 +16,8 @@ class CreateAttributeSetsTable extends Migration
         Schema::create('attribute_sets', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('is_active')->default(0);
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

@@ -16,21 +16,11 @@
                     <div class="form-group">
                         <label for="inputEmail3"><b>@lang('file.Categories') <span class="text-danger">*</span> </b></label>
                         <select name="category_id[]" id="categoryId" class="form-control selectpicker @error('category_id') is-invalid @enderror" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Category')}}'>
-                            @foreach ($categories as $item)
-                                @if ($item->categoryTranslation->count()>0)
-                                    @foreach ($item->categoryTranslation as $key => $value)
-                                        @if ($key<1)
-                                            @if ($value->local==$local)
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                            @elseif($value->local=='en')
-                                                <option value="{{$item->id}}">{{$value->category_name}}</option>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @else
-                                    <option value="">{{__('NULL')}}</option>
-                                @endif
-                            @endforeach
+                            @forelse ($categories as $item)
+                               <option value="{{$item->id}}">{{$item->category_name}}</option>
+                            @empty
+                                <option value="">{{__('NULL')}}</option>
+                            @endforelse
                         </select>
                         @error('category_id')
                             <div class="text-danger">{{ $message }}</div>

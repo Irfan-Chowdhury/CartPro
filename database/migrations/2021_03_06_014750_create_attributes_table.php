@@ -17,13 +17,11 @@ class CreateAttributesTable extends Migration
             $table->id();
             $table->string('slug');
             $table->unsignedBigInteger('attribute_set_id');
-            // $table->unsignedBigInteger('category_id')->nullable();
             $table->tinyInteger('is_filterable')->nullable();
             $table->tinyInteger('is_active')->nullable()->default(0);
             $table->timestamps();
 
             $table->foreign('attribute_set_id')->references('id')->on('attribute_sets')->onDelete('cascade');
-            // $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
