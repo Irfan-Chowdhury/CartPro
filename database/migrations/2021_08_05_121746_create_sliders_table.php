@@ -20,8 +20,12 @@ class CreateSlidersTable extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->text('url')->nullable();
             $table->string('slider_image');
+            $table->string('slider_image_full_width');
+            $table->string('slider_image_secondary');
             $table->string('target')->nullable();
             $table->string('is_active')->nullable();
+            $table->string('text_alignment')->nullable();
+            $table->string('text_color')->nullable();
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');

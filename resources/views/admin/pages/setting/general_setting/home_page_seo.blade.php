@@ -79,6 +79,9 @@
     </div>
 </div>
 
+@php
+    $meta_description = isset($setting_home_page_seo->meta_description) ? $setting_home_page_seo->meta_description : null
+@endphp
 
 @push('scripts')
     <script type="text/javascript">
@@ -86,10 +89,11 @@
             "use strict";
 
                 var myStr = '';
-                var settingHomePageSeo = {!! json_encode($setting_home_page_seo) !!};
-                if (settingHomePageSeo) {
-                    var myStr =  {!! json_encode($setting_home_page_seo->meta_description) !!};
+                var metaDescription = {!! json_encode($meta_description) !!};
+                if (metaDescription) {
+                    var myStr =  metaDescription;
                 }
+
 
                 var myStringCount = myStr.length;
                 var text_max = 160;

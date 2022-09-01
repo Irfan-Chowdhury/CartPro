@@ -17,6 +17,7 @@ class CreateCurrencyRatesTable extends Migration
             $table->id();
             $table->string('currency_name')->nullable();
             $table->string('currency_code')->nullable();
+            $table->string('currency_symbol')->nullable();
             $table->string('currency_rate')->nullable();
             $table->timestamps();
         });

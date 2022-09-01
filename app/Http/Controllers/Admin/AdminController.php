@@ -23,6 +23,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
@@ -40,10 +41,119 @@ class AdminController extends Controller
     {
 
         // ======== Test Start ========
+        // $track_files_arr = [];
+        // $track_file = File::exists('track/track_file.txt');
+        // if ($track_file) {
+        //     $track_files_arr = [];
+        //     $myfile = fopen("track/track_file.txt", "r") or die("Unable to open file!");
+        //     while(!feof($myfile)) {
+        //         $get_data = fgets($myfile);
+        //         $track_files_arr[] = str_replace("\r\n", '', $get_data);
+        //     }
+        // }
 
+        // if ($track_files_arr) {
+        //     foreach ($track_files_arr as $value) {
+        //         // File transfer server to server
+        //         $remote_file_url  = "http://peopleprohrm.com/auto_update_files/".$value;
+        //         $remote_file_name = pathinfo($remote_file_url)['basename'];
+        //         $local_file = base_path('/'.$remote_file_name);
+        //         $copy = copy($remote_file_url, $local_file);
+        //         if ($copy) {
+        //             // ****** Unzip ********
+        //             $zip = new ZipArchive;
+        //             $file = base_path($remote_file_name);
+        //             $res = $zip->open($file);
+        //             if ($res === TRUE) {
+        //                 $zip->extractTo(base_path('/'));
+        //                 $zip->close();
+
+        //                 // ****** Delete Zip File ******
+        //                 File::delete($remote_file_name);
+        //             }
+        //         }
+        //     }
+        //     Artisan::call('migrate');
+
+        //     return 'Congratulation !!! Successfully Migrated';
+        // }else {
+        //     return 'Something Wrong. Please try again later';
+        // }
+
+
+
+
+
+
+
+
+        // Full Code
+        // ======== Test Start ========
+
+        // ***** File transfer server to server ******
+
+        // $remote_file_url  = 'http://peopleprohrm.com/auto_update_files/irfan.zip';
+
+        // // $all_files = File::allFiles($remote_file_url);
+        // // return $all_files;
+
+        // $remote_file_name = pathinfo($remote_file_url)['basename'];
+
+        // $local_file = base_path('/'.$remote_file_name);
+
+        // $copy = copy( $remote_file_url, $local_file );
+
+        // if( !$copy ) {
+        //     return 'error';
+        // }
+        // else{
+
+        //     // ****** Unzip ********
+        //     $zip = new ZipArchive;
+        //     $file = base_path($remote_file_name);
+        //     $res = $zip->open($file);
+        //     if ($res === TRUE) {
+        //         $zip->extractTo(base_path('/'));
+        //         $zip->close();
+
+        //         // ****** Delete File ******
+        //         File::delete($remote_file_name);
+        //        return 'unzip success and delete the file';
+        //     } else {
+        //         return 'problem';
+        //     }
+        // }
+
+
+
+
+
+        // Partially
+
+
+    // =========== Unzip ======================
+
+        // $zip = new ZipArchive;
+        // $file = base_path('irfan.zip');
+        // $res = $zip->open($file);
+        // if ($res === TRUE) {
+        //     $zip->extractTo(base_path('/'));
+        //     $zip->close();
+        //     // =========== Delete File ======================
+        //     File::delete($file);
+        //     return 'done';
+        // } else {
+        //     return 'not';
+        // }
+
+
+    // ============== File transfer server to server ===================
+
+    //
 
        /* Source File URL */
         // // $remote_file_url = 'http://cartproshop.com/demo_old/public/Test/Test123.zip';
+        // $remote_file_url = 'http://peopleprohrm.com/irfan.zip';
         // $remote_file_url = 'http://peopleprohrm.com/irfan.zip';
         // $remote_file_name = pathinfo($remote_file_url)['basename'];
 

@@ -134,7 +134,7 @@ class SettingController extends Controller
 
         $setting_free_shipping = SettingFreeShipping::latest()->first();
         $setting_local_pickup  = SettingLocalPickup::latest()->first();
-        $setting_flat_rate  = SettingFlatRate::latest()->first();
+        $setting_flat_rate     = SettingFlatRate::latest()->first();
         $setting_paypal  = SettingPaypal::latest()->first();
         $setting_strip  = SettingStrip::latest()->first();
         $setting_paytm  = SettingPaytm::latest()->first();

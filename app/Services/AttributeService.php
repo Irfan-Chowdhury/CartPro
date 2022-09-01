@@ -84,44 +84,32 @@ class AttributeService
         }
     }
 
+
     public function storeAttribute($request)
     {
-        $data = [];
-        $data['attribute_set_id'] = $request->attribute_set_id;
-        $data['slug']             = $this->slug($request->attribute_name);
-        $data['is_filterable']    = $request->input('is_filterable',0);
-        $data['is_active']        = $request->input('is_active',0);
-
-        $data['locale']           = Session::get('currentLocal');
-        $data['attribute_name']   = $request->attribute_name;
-
+        $data = $this->requestHandleData($request);
         $attribute = $this->attributeContract->store($data);
         $data['attribute_id'] = $attribute->id;
         $this->attributeTranslationContract->store($data);
 
         //----------------- Attribute-Category Sync --------------
-        if (!empty($request->category_id)) {
-            $categoryArrayIds = $request->category_id;
-            $attribute->categories()->sync($categoryArrayIds);
-        }
-
+        $this->attributeCategorySync($request, $attribute);
 
         //-------- Attribute-Value ----------
         $attributeValueNameArray= $request->value_name;
         if(array_filter($attributeValueNameArray) != []){ //if value_empty it show  [null] when use return, checking that way.
 
-            $attributeValueArray = $request->value_name;
-            foreach ($attributeValueArray as $key => $value)
+            $attributeValueNameArray = $request->value_name;
+            foreach ($attributeValueNameArray as $key => $value)
             {
                 $attributeValue = $this->attributeValueContract->store($data);
-                $data['attribute_value_id']   = $attributeValue->id;
-                $data['local']   = Session::get('currentLocal');
-                $data['value_name']   = $attributeValueArray[$key];
-                $this->attributeValueTranslationContract->store($data);
+                $attributeValueData = $this->requestHandleAttributeValueData($data['attribute_id'], $attributeValue->id, $attributeValueNameArray[$key]);
+                $this->attributeValueTranslationContract->store($attributeValueData);
             }
         }
         return;
     }
+
 
     public function findAttribute($id){
         return $this->attributeContract->getById($id);
@@ -149,29 +137,17 @@ class AttributeService
         return $attributeValueTranslation;
     }
 
-    // Update
     public function updateAttribute($request, $id)
     {
-        $data = [];
-        $data['attribute_id']     = $id;
-        $data['attribute_set_id'] = $request->attribute_set_id;
-        $data['slug']             = $this->slug($request->attribute_name);
-        $data['is_filterable']    = $request->input('is_filterable',0);
-        $data['is_active']        = $request->input('is_active',0);
-
-        $data['locale']           = Session::get('currentLocal');
-        $data['attribute_name']   = $request->attribute_name;
-
+        $data = $this->requestHandleData($request);
+        $data['attribute_id'] = $id;
         $this->attributeContract->update($data);
         $this->attributeTranslationContract->updateOrInsert($data);
 
         $attribute = $this->findAttribute($id);
 
         //----------------- Attribute-Category Sync --------------
-        if (!empty($request->category_id)) {
-            $categoryArrayIds = $request->category_id;
-            $attribute->categories()->sync($categoryArrayIds);
-        }
+        $this->attributeCategorySync($request, $attribute);
 
         //--------- Value Part--------
         $attributeValueNameArray = $request->value_name;
@@ -180,22 +156,18 @@ class AttributeService
         if (empty($attributeValueNameArray)) {
             $this->attributeValueContract->deleteByAttributeId($id);
         }
-
         if (isset($attributeValueNameArray) && isset($attributeValueIdArray)) {
             $this->attributeValueContract->deleteByAttributeIdWhereNotInIds($id,$attributeValueIdArray);
             foreach ($attributeValueNameArray as $key => $value) {
                 $this->attributeValueTranslationContract->update($data, $attributeValueIdArray[$key], $attributeValueNameArray[$key]);
             }
         }
-
         if(isset($request->add_more_value_name)) {
             $attributeValueNameArray = $request->add_more_value_name;
             foreach ($attributeValueNameArray as $key => $value) {
                 $attributeValue = $this->attributeValueContract->store($data);
-                $data['attribute_value_id']   = $attributeValue->id;
-                $data['local']                = Session::get('currentLocal');
-                $data['value_name']           = $attributeValueNameArray[$key];
-                $this->attributeValueTranslationContract->store($data);
+                $attributeValueData = $this->requestHandleAttributeValueData($data['attribute_id'], $attributeValue->id, $attributeValueNameArray[$key]);
+                $this->attributeValueTranslationContract->store($attributeValueData);
             }
         }
 
@@ -224,6 +196,41 @@ class AttributeService
             return $this->attributeTranslationContract->bulkAction($type, $ids);
         }else{
             return $this->attributeContract->bulkAction($type, $ids);
+        }
+    }
+
+
+
+    protected function requestHandleData($request)
+    {
+        $data = [];
+        $data['attribute_set_id'] = $request->attribute_set_id;
+        $data['slug']             = $this->slug($request->attribute_name);
+        $data['is_filterable']    = $request->input('is_filterable',0);
+        $data['is_active']        = $request->input('is_active',0);
+        $data['locale']           = Session::get('currentLocal');
+        $data['attribute_name']   = $request->attribute_name;
+
+        return $data;
+    }
+
+    protected function requestHandleAttributeValueData($attribute_id, $attributeValueId, $attributeValueNameArrayKey)
+    {
+        $data = [];
+        $data['attribute_id']         = $attribute_id;
+        $data['attribute_value_id']   = $attributeValueId;
+        $data['local']                = Session::get('currentLocal');
+        $data['value_name']           = $attributeValueNameArrayKey;
+
+        return $data;
+    }
+
+
+    protected function attributeCategorySync($request, $attribute)
+    {
+        if (!empty($request->category_id)) {
+            $categoryArrayIds = $request->category_id;
+            $attribute->categories()->sync($categoryArrayIds);
         }
     }
 

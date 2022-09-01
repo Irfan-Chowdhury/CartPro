@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
             $table->string('email')->unique();
             $table->string('image')->nullable();
             $table->string('password');
+            $table->integer('user_type')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -17,25 +17,19 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('brands')->nullable();
-            $table->string('categories')->nullable();
+            $table->unsignedBigInteger('brand_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('tags')->nullable();
             $table->decimal('price')->nullable();
             $table->integer('qty')->nullable();
             $table->integer('weight')->nullable();
             $table->string('image')->nullable();
-            $table->string('option_1')->nullable();
-            $table->string('option_value_1')->nullable();
-            $table->string('option_2')->nullable();
-            $table->string('option_value_2')->nullable();
-            $table->string('option_3')->nullable();
-            $table->string('option_value_3')->nullable();
-            $table->decimal('discount')->nullable();
+            $table->longText('options')->nullable();
             $table->decimal('tax')->nullable();
+            $table->string('discount')->nullable();
             $table->decimal('subtotal')->nullable();
-
             $table->timestamps();
-
+            
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }

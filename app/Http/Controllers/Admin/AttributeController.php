@@ -7,22 +7,13 @@ use App\Http\Requests\Attribute\AttributeStoreRequest;
 use App\Http\Requests\Attribute\AttributeUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Attribute;
-use App\Models\AttributeTranslation;
-use App\Models\AttributeSet;
-use App\Models\AttributeValue;
 use App\Models\AttributeValueTranslation;
-use App\Models\Category;
 use App\Services\AttributeService;
 use App\Services\AttributeSetService;
 use App\Services\CategoryService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
-use Illuminate\Support\Facades\App;
-use Stichoza\GoogleTranslate\GoogleTranslate;
-use ZipArchive;
 
 class AttributeController extends Controller
 {
@@ -106,7 +97,7 @@ class AttributeController extends Controller
         return $this->attributeService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
     }
 
-    
+
 
     public function getAttributeValues(Request $request)
     {

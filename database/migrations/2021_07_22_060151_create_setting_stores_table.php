@@ -25,8 +25,11 @@ class CreateSettingStoresTable extends Migration
             $table->string('store_country')->nullable();
             $table->string('store_state')->nullable();
             $table->string('store_zip')->nullable();
+            $table->string('admin_logo')->nullable();
             $table->tinyInteger('hide_store_phone')->nullable();
             $table->tinyInteger('hide_store_email')->nullable();
+            $table->text('get_in_touch')->nullable();
+            $table->text('schedule')->nullable();
 
             $table->timestamps();
         });

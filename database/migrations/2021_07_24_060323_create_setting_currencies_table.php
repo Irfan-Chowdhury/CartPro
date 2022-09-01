@@ -16,6 +16,7 @@ class CreateSettingCurrenciesTable extends Migration
         Schema::create('setting_currencies', function (Blueprint $table) {
             $table->id();
             $table->text('supported_currency');
+            $table->string('default_currency_code');
             $table->string('default_currency');
             $table->string('currency_format');
             $table->string('exchange_rate_service')->nullable();

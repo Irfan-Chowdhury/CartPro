@@ -11,7 +11,6 @@ class AttributeRepository implements AttributeContract
 {
     use TranslationTrait, ActiveInactiveTrait;
 
-
     public function getAll()
     {
         $data = Attribute::with('attributeTranslations','attributeSetTranslations')

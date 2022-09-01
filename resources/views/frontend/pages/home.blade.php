@@ -1,16 +1,16 @@
 @extends('frontend.layouts.master')
 
 @section('meta_info')
-    @if ($setting_home_page_seo)
-        <meta product="og:site_name" content="{{$setting_home_page_seo->meta_site_name}}">
-        <meta product="og:title" content="{{$setting_home_page_seo->meta_title}}">
-        <meta product="og:description" content="{{$setting_home_page_seo->meta_description}}">
-        <meta product="og:url" content="{{$setting_home_page_seo->meta_url}}">
-        <meta product="og:type" content="{{$setting_home_page_seo->meta_type}}">
-        @if ($setting_home_page_seo->meta_image)
-            <meta product="og:image" content="{{asset('public/'.$setting_home_page_seo->meta_image)}}">
-        @endif
-    @endif
+
+    <meta product="og:site_name" @isset($setting_home_page_seo->meta_site_name) content="{{$setting_home_page_seo->meta_site_name}}" @endisset >
+    <meta product="og:title"  @isset($setting_home_page_seo->meta_title) content="{{$setting_home_page_seo->meta_title}}" @endisset >
+    <meta product="og:description" @isset($setting_home_page_seo->meta_description) content="{{$setting_home_page_seo->meta_description}}" @endisset >
+    <meta product="og:url" @isset($setting_home_page_seo->meta_url) content="{{$setting_home_page_seo->meta_url}}" @endisset >
+    <meta product="og:type" @isset($setting_home_page_seo->meta_type) content="{{$setting_home_page_seo->meta_type}}" @endisset >
+    @isset ($setting_home_page_seo->meta_image)
+        <meta product="og:image" content="{{asset('public/'.$setting_home_page_seo->meta_image)}}">
+    @endisset
+
 @endsection
 
 
