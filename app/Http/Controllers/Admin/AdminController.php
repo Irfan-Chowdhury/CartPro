@@ -74,7 +74,6 @@ class AdminController extends Controller
         //         }
         //     }
         //     Artisan::call('migrate');
-
         //     return 'Congratulation !!! Successfully Migrated';
         // }else {
         //     return 'Something Wrong. Please try again later';

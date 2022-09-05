@@ -1,6 +1,5 @@
 app.zip
 bootstrap.zip
-config
 config.zip
 database.zip
 public.zip
