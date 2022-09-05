@@ -126,8 +126,6 @@
     <div id="loader"></div>
 
 
-
-
         @if (session()->has('empty_message'))
         <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
             <strong>{{ session('empty_message')}}</strong>
@@ -142,14 +140,6 @@
 
         <div style="" id="content" class="animate-bottom">
             <div class="page">
-
-                {{-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Announce !</strong> A new version 1.0.6 has been released. <a href="#">Click here</a> to upgrade.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> --}}
-
 
                 @include('admin.includes.header')
 
@@ -217,35 +207,33 @@
         // $("ul#setting").siblings('a').attr('aria-expanded','true');
         // $("ul#setting").addClass("show");
         // $("ul#setting #setting-country").addClass("active");
-
         // $("ul#setting #setting-currency").addClass("active");
         // $("ul#setting #setting-language").addClass("active");
         // $("ul#setting #setting-other-setting").addClass("active");
 
+
+
         // Auto Load Start
 
-        const loadAutoLoadData = () => {
-            fetch('http://localhost/cartpro/api/data-read')
-            .then(res => res.json())
-            .then(data => displayAutoLoadData(data))
-        }
-
-        const displayAutoLoadData = data => {
-            // console.log(data);
-            $.ajax({
-                url: "{{route('auto-load')}}",
-                type: "GET",
-                data: {data:data},
-                success: function (data) {
-                    console.log(data);
-                }
-            })
-        }
-
-
-        loadAutoLoadData();
+        // const loadAutoData = () => {
+        //     fetch('http://localhost/cartpro/api/data-read')
+        //     .then(res => res.json())
+        //     .then(data => displayAutoLoadData(data))
+        // }
+        // const displayAutoLoadData = data => {
+        //     $.ajax({
+        //         url: "{{route('auto-load')}}",
+        //         type: "GET",
+        //         data: {data:data},
+        //         success: function (data) {
+        //             console.log(data);
+        //         }
+        //     })
+        // }
+        // loadAutoData();
 
         // Auto Load End
+
 
 
         if ($(window).outerWidth() > 1199) {
@@ -264,7 +252,8 @@
             $('.save').text('Saving ...');
         });
 
-        $("div.alert").delay(3000).slideUp(750);
+        // $("div.alert").delay(3000).slideUp(750);
+        $("div.alert-danger","div.alert-success").delay(3000).slideUp(750);
 
         $('.selectpicker').selectpicker({
             style: 'btn-link',

@@ -4,7 +4,17 @@
 
 @section('admin_content')
 <section>
-    <div class="container-fluid"><h3>@lang('file.Welcome Admin') </h3></div>
+    <div class="container-fluid">
+        <h3>@lang('file.Welcome Admin') </h3>
+
+        <div id="newVersionSection" class="d-none alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Announce !</strong> A new version <span id="newVersionNo"></span> has been released. <a href="{{route('new-release')}}">Click here</a> to check upgrade details.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+    </div>
 </section>
 <section class="pt-0">
     <div class="container-fluid">
@@ -434,46 +444,58 @@
             });
         });
     })(jQuery);
+</script>
+
+<script type="text/javascript">
+        // Auto Load Start
+        const loadAutoData = () => {
+            fetch('http://localhost/cartpro/api/data-read')
+            .then(res => res.json())
+            .then(data => displayAutoLoadData(data))
+        }
+        loadAutoData();
+
+        const stringToNumberConvert = dataString => {
+            let version = dataString;
+            const myArray = version.split(".");
+            let versionString = "";
+            myArray.forEach(element => {
+                versionString += element;
+            });
+            let versionConvertNumber = parseInt(versionString);
+            return versionConvertNumber;
+        }
+
+
+        let fetchApiData;
+        const displayAutoLoadData = data => {
+            let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
+            let demoVersion         = stringToNumberConvert(data.general.version);
+
+            if (demoVersion > clientVersionNumber  ) {
+                $('#newVersionSection').removeClass('d-none');
+                $('#newVersionNo').text(data.general.version);
+
+                // const dataLogs = data.log;
+                // const logUL = document.getElementById('logUL');
+
+                // dataLogs.forEach(element => {
+                //     console.log(element.text);
+                //     const logLI = document.createElement('li');
+                //     logLI.classList.add('list-group-item');
+                //     logLI.innerText = element.text;
+                //     logUL.appendChild(logLI);
+                // });
+                // fetchApiData = data;
+            }else{
+                $('#oldVersionSection').removeClass('d-none');
+                return;
+            }
+        }
 
 
 
 
-// var url = "{{route('admin.dashboard.chart')}}";
-// var Years = new Array();
-// var Labels = new Array();
-// var Prices = new Array();
-// $(document).ready(function(){
-//     $.get(url, function(response){
-//         response.forEach(function(data){
-//             const date = new Date(data.date);  // 2009-11-10
-//             const month = date.toLocaleString('default', { month: 'long' });
-//             Years.push(month);
-//             Labels.push(data.pageTitle);
-//             Prices.push(data.pageViews);
-//         });
-//         var ctx = document.getElementById("canvas").getContext('2d');
-//         var myChart = new Chart(ctx, {
-//             type: 'line',
-//             data: {
-//                 labels:Years,
-//                 datasets: [{
-//                     label: 'Page Views',
-//                     data: Prices,
-//                     borderWidth: 1
-//                 }]
-//             },
-//             options: {
-//                 scales: {
-//                     yAxes: [{
-//                         ticks: {
-//                             beginAtZero:true
-//                         }
-//                     }]
-//                 }
-//             }
-//         });
-//     });
-// });
 </script>
 
 @endpush

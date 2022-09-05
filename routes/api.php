@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\API\AutoUpdateController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('data-read', [AutoUpdateController::class, 'dataRead']);
-Route::get('auto-upload', [AutoUpdateController::class, 'autoUpload'])->name('auto-load');
+Route::get('data-read', [AutoUpdateController::class, 'dataRead'])->name('data-read');
+Route::post('auto-upload', [AutoUpdateController::class, 'autoUpload'])->name('auto-load');
 

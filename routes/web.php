@@ -52,6 +52,7 @@ use App\Http\Controllers\Frontend\UserBillingAddressController;
 use App\Http\Controllers\Frontend\UserShippingAddressController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\API\AutoUpdateController;
 
 
 /*
@@ -279,6 +280,10 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::group(['prefix' => 'admin','middleware'=>'admin_check'], function () {
         Route::group(['namespace'=>'Admin'], function () {
 
+            // New Release
+            Route::get('/new-release',[AutoUpdateController::class,'index'])->name('new-release');
+
+            
             //Admin Dashboard
             Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
             Route::get('dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');
