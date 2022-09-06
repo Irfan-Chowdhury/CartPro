@@ -7,9 +7,11 @@
     <div class="container-fluid">
         <h3>@lang('file.Welcome Admin') </h3>
 
-        <div id="newVersionSection" class="d-none alert alert-info alert-dismissible fade show" role="alert">
-            <strong>Announce !</strong> A new version <span id="newVersionNo"></span> has been released. <a href="{{route('new-release')}}">Click here</a> to check upgrade details.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <div id="alertSection" class="d-none alert alert-primary alert-dismissible fade show" role="alert">
+            <p id="announce" class="d-none"><strong>Announce !!!</strong> A new version <span id="newVersionNo"></span> has been released. <a href="{{route('new-release')}}">Click here</a> to check upgrade details.</p>
+            <p id="congratulation" class="d-none"><strong>Congratulation !!!</strong> New version {{env('VERSION')}} upgrated successfully.</p>
+
+            <button type="button" id="closeButton" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -448,12 +450,41 @@
 
 <script type="text/javascript">
         // Auto Load Start
+
+        $(document).ready(function () {
+
+
         const loadAutoData = () => {
             fetch('http://localhost/cartpro/api/data-read')
             .then(res => res.json())
             .then(data => displayAutoLoadData(data))
         }
-        loadAutoData();
+
+        let fetchApiData;
+        const displayAutoLoadData = data => {
+            let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
+            let demoVersion         = stringToNumberConvert(data.general.version);
+            let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
+            let autoUpdateEnable  = data.general.auto_update_enable;
+            let productMode       = data.general.product_mode;
+
+
+            if (clientVersionNumber >= minimumRequiredVersion && autoUpdateEnable===true && productMode==='DEMO') {
+                // Announce
+                if (demoVersion > clientVersionNumber) {
+                    $('#alertSection').removeClass('d-none');
+                    $('#newVersionNo').text(data.general.version);
+
+                    $('#announce').removeClass('d-none');
+                }
+                // Congratulation
+                else if (sessionStorage.getItem('status')=='done' && (demoVersion === clientVersionNumber)) {
+                    console.log(sessionStorage.getItem('status'));
+                    $('#alertSection').removeClass('d-none').addClass('alert-info');
+                    $('#congratulation').removeClass('d-none');
+                }
+            }
+        }
 
         const stringToNumberConvert = dataString => {
             let version = dataString;
@@ -467,33 +498,13 @@
         }
 
 
-        let fetchApiData;
-        const displayAutoLoadData = data => {
-            let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
-            let demoVersion         = stringToNumberConvert(data.general.version);
-
-            if (demoVersion > clientVersionNumber  ) {
-                $('#newVersionSection').removeClass('d-none');
-                $('#newVersionNo').text(data.general.version);
-
-                // const dataLogs = data.log;
-                // const logUL = document.getElementById('logUL');
-
-                // dataLogs.forEach(element => {
-                //     console.log(element.text);
-                //     const logLI = document.createElement('li');
-                //     logLI.classList.add('list-group-item');
-                //     logLI.innerText = element.text;
-                //     logUL.appendChild(logLI);
-                // });
-                // fetchApiData = data;
-            }else{
-                $('#oldVersionSection').removeClass('d-none');
-                return;
-            }
-        }
+            loadAutoData();
+        });
 
 
+        $('#closeButton').on('click',function(){
+            sessionStorage.removeItem('status');
+        });
 
 
 </script>

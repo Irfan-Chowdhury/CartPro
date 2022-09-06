@@ -72,28 +72,35 @@
 
             let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
             let demoVersion         = stringToNumberConvert(data.general.version);
+            let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
+            let autoUpdateEnable    = data.general.auto_update_enable;
+            let productMode         = data.general.product_mode;
 
-            if (demoVersion > clientVersionNumber  ) {
-                $('#newVersionSection').removeClass('d-none');
-                $('#newVersionNo').text(data.general.version);
 
-                const dataLogs = data.log;
-                const logUL = document.getElementById('logUL');
+            if (clientVersionNumber >= minimumRequiredVersion && autoUpdateEnable===true && productMode==='DEMO') {
+                if (demoVersion > clientVersionNumber) {
+                    $('#newVersionSection').removeClass('d-none');
+                    $('#newVersionNo').text(data.general.version);
 
-                dataLogs.forEach(element => {
-                    console.log(element.text);
-                    const logLI = document.createElement('li');
-                    logLI.classList.add('list-group-item');
-                    logLI.innerText = element.text;
-                    logUL.appendChild(logLI);
-                });
-                fetchApiData = data;
-            }else{
-                $('#oldVersionSection').removeClass('d-none');
-                return;
+                    const dataLogs = data.log;
+                    const logUL = document.getElementById('logUL');
+
+                    dataLogs.forEach(element => {
+                        console.log(element.text);
+                        const logLI = document.createElement('li');
+                        logLI.classList.add('list-group-item');
+                        logLI.innerText = element.text;
+                        logUL.appendChild(logLI);
+                    });
+                    fetchApiData = data;
+                }else if(demoVersion === clientVersionNumber){
+                    $('#oldVersionSection').removeClass('d-none');
+                    return;
+                }else{
+                    return;
+                }
             }
         }
-        loadAutoData();
 
         const stringToNumberConvert = dataString => {
             let version = dataString;
@@ -105,6 +112,8 @@
             let versionConvertNumber = parseInt(versionString);
             return versionConvertNumber;
         }
+
+        loadAutoData();
 
 
         $('#upgrade').on('click', function(e){
@@ -132,6 +141,8 @@
                 success: function (data) {
                     console.log(data);
                     if (data == 'success') {
+                        sessionStorage.setItem('status','done');
+
                         $('#spinner').addClass('d-none');
                         $('#upgrade').text('Upgrade');
                         window.location.href = "{{ route('admin.dashboard')}}";

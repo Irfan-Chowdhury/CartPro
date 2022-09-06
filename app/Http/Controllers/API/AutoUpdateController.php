@@ -25,6 +25,12 @@ class AutoUpdateController extends Controller
     {
         $track_files_arr = json_decode(json_encode($request->data), FALSE);
 
+        // $this->dataWriteInENVFile('VERSION',$track_files_arr->general->version);
+        // Artisan::call('optimize:clear');
+        // return response()->json('success');
+
+
+
         if ($track_files_arr) {
             try{
                 // File transfer server to server
@@ -71,6 +77,7 @@ class AutoUpdateController extends Controller
                 'product_mode'      => env('PRODUCT_MODE'),
                 // 'version'           => env('VERSION'),
                 'version'           => '1.0.6',
+                'minimum_required_version'=> '1.0.5',
                 'auto_update_enable'=> true,
             ],
             'files'=>
