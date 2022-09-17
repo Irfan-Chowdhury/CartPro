@@ -8,14 +8,19 @@
         <h3>@lang('file.Welcome Admin') </h3>
 
         <div id="alertSection" class="d-none alert alert-primary alert-dismissible fade show" role="alert">
-            <p id="announce" class="d-none"><strong>Announce !!!</strong> A new version <span id="newVersionNo"></span> has been released. <a href="{{route('new-release')}}">Click here</a> to check upgrade details.</p>
+            <p id="announce" class="d-none"><strong>Announce !!!</strong> A new version <span id="newVersionNo"></span> has been released. Please <i><b><a href="{{route('new-release')}}">Click here</a></b></i> to check upgrade details.</p>
             <p id="congratulation" class="d-none"><strong>Congratulation !!!</strong> New version {{env('VERSION')}} upgrated successfully.</p>
-
-            <button type="button" id="closeButton" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" id="closeButtonUpgrade" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-
+        <div id="alertBugSection" class="d-none alert alert-primary alert-dismissible fade show" style="background-color: rgb(248,215,218)" role="alert">
+            <p id="alertBug" class="d-none" style="color: rgb(126,44,52)"><strong>Alert !!!</strong> Minor bug fixed in version {{env('VERSION')}}. Please <i><b><a href="{{route('bug-update-page')}}">Click here</a></b></i> to update the system.</p>
+            <p id="congratulationBug" class="d-none"><strong>Congratulation !!!</strong> System updated successfully.</p>
+            <button type="button" style="color: rgb(126,44,52)" id="closeButtonBugUpdate" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     </div>
 </section>
 <section class="pt-0">
@@ -387,6 +392,7 @@
 </section>
 @endsection
 
+
 @push('scripts')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
@@ -448,63 +454,113 @@
     })(jQuery);
 </script>
 
+<script>
+    let clientCurrrentVersion = {!! json_encode(env("VERSION"))  !!};
+    let clientCurrrentBugNo   = {!! json_encode(env("BUG_NO"))  !!};
+</script>
+<script type="text/javascript" src="{{asset('public/js/admin/dashboard/notification.js')}}"></script>
+
+
 <script type="text/javascript">
         // Auto Load Start
 
-        $(document).ready(function () {
+        // $(document).ready(function () {
 
 
-        const loadAutoData = () => {
-            fetch('http://localhost/cartpro/api/data-read')
-            .then(res => res.json())
-            .then(data => displayAutoLoadData(data))
-        }
+            // Auto Upgrade Notification
+            // const loadAutoData = () => {
+            //     let url = 'http://cartproshop.com/demo_old/api/fetch-data-upgrade'; //Demo Link
+            //     fetch(url)
+            //     .then(res => res.json())
+            //     .then(data => displayUpgradeNotification(data));
+            // }
 
-        let fetchApiData;
-        const displayAutoLoadData = data => {
-            let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
-            let demoVersion         = stringToNumberConvert(data.general.version);
-            let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
-            let autoUpdateEnable  = data.general.auto_update_enable;
-            let productMode       = data.general.product_mode;
+            // let fetchApiData;
+            // const displayUpgradeNotification = data => {
+            //     let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
+            //     let demoVersion         = stringToNumberConvert(data.general.version);
+            //     let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
+            //     let autoUpgradeEnable   = data.general.auto_upgrade_enable;
+            //     let productMode         = data.general.product_mode;
 
+            //     if (clientVersionNumber >= minimumRequiredVersion && autoUpgradeEnable===true && productMode==='DEMO') {
+            //         // Announce
+            //         if (demoVersion > clientVersionNumber) {
+            //             $('#alertSection').removeClass('d-none');
+            //             $('#newVersionNo').text(data.general.version);
 
-            if (clientVersionNumber >= minimumRequiredVersion && autoUpdateEnable===true && productMode==='DEMO') {
-                // Announce
-                if (demoVersion > clientVersionNumber) {
-                    $('#alertSection').removeClass('d-none');
-                    $('#newVersionNo').text(data.general.version);
-
-                    $('#announce').removeClass('d-none');
-                }
-                // Congratulation
-                else if (sessionStorage.getItem('status')=='done' && (demoVersion === clientVersionNumber)) {
-                    console.log(sessionStorage.getItem('status'));
-                    $('#alertSection').removeClass('d-none').addClass('alert-info');
-                    $('#congratulation').removeClass('d-none');
-                }
-            }
-        }
-
-        const stringToNumberConvert = dataString => {
-            let version = dataString;
-            const myArray = version.split(".");
-            let versionString = "";
-            myArray.forEach(element => {
-                versionString += element;
-            });
-            let versionConvertNumber = parseInt(versionString);
-            return versionConvertNumber;
-        }
+            //             $('#announce').removeClass('d-none');
+            //         }
+            //         // Congratulation
+            //         else if (sessionStorage.getItem('status')=='done' && (demoVersion === clientVersionNumber)) {
+            //             console.log(sessionStorage.getItem('status'));
+            //             $('#alertSection').removeClass('d-none').addClass('alert-info');
+            //             $('#congratulation').removeClass('d-none');
+            //         }
+            //     }
+            // }
+            // loadAutoData();
 
 
-            loadAutoData();
-        });
+            // Auto Bug Notification
+            // const loadBugsInfo = () => {
+            //     let url = 'http://cartproshop.com/demo_old/api/fetch-data-bugs'; //Demo Link
+            //     fetch(url)
+            //     .then(res => res.json())
+            //     .then(data => displayBugNotification(data));
+            // }
+
+            // let fetchBugApiData;
+            // const displayBugNotification = data => {
+            //     let clientVersionNumber  = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
+
+            //     console.log(clientVersionNumber);
+            //     return;
+
+            //     let clientBugNo          = {!! json_encode(env("BUG_NO"))  !!};
+            //     let demoVersion          = stringToNumberConvert(data.general.version);
+            //     let demoBugNo            = data.general.bug_no;
+
+            //     // console.log(clientVersionNumber);
+            //     // return;
+
+            //     let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
+            //     let autoBugUpdateEnable  = data.general.auto_bug_update_enable;
+            //     let productMode          = data.general.product_mode;
 
 
-        $('#closeButton').on('click',function(){
-            sessionStorage.removeItem('status');
-        });
+
+            //     if (clientVersionNumber >= minimumRequiredVersion && demoVersion === clientVersionNumber && autoBugUpdateEnable===true && productMode==='DEMO') {
+            //         // Alert
+            //         if (parseInt(demoBugNo) > parseInt(clientBugNo)) {
+            //             $('#alertBugSection').removeClass('d-none');
+            //             $('#alertBug').removeClass('d-none');
+            //         }
+            //         // Congratulation
+            //         else if (sessionStorage.getItem('bug_status')=='done' && (clientBugNo === demoBugNo)) {
+            //             console.log('Yes Done Bug');
+            //             console.log(sessionStorage.getItem('bug_status'));
+            //             $('#alertBugSection').removeClass('d-none').addClass('alert-info');
+            //             $('#congratulationBug').removeClass('d-none');
+            //         }
+            //     }
+            // }
+
+            // loadBugsInfo();
+        // });
+
+        // const stringToNumberConvert = dataString => {
+        //     const myArray = dataString.split(".");
+        //     let versionString = "";
+        //     myArray.forEach(element => {
+        //         versionString += element;
+        //     });
+        //     let versionConvertNumber = parseInt(versionString);
+        //     return versionConvertNumber;
+        // }
+
+
+
 
 
 </script>

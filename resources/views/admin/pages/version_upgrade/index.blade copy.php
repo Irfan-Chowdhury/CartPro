@@ -62,7 +62,8 @@
 
         // Auto Load Start
         const loadAutoData = () => {
-            fetch('http://localhost/cartpro/api/data-read')
+            let url = 'http://cartproshop.com/demo_old/api/fetch-data-upgrade'; //Demo Link
+            fetch(url)
             .then(res => res.json())
             .then(data => displayAutoLoadData(data))
         }
@@ -73,11 +74,11 @@
             let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
             let demoVersion         = stringToNumberConvert(data.general.version);
             let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
-            let autoUpdateEnable    = data.general.auto_update_enable;
+            let autoUpgradeEnable    = data.general.auto_upgrade_enable;
             let productMode         = data.general.product_mode;
 
 
-            if (clientVersionNumber >= minimumRequiredVersion && autoUpdateEnable===true && productMode==='DEMO') {
+            if (clientVersionNumber >= minimumRequiredVersion && autoUpgradeEnable===true && productMode==='DEMO') {
                 if (demoVersion > clientVersionNumber) {
                     $('#newVersionSection').removeClass('d-none');
                     $('#newVersionNo').text(data.general.version);

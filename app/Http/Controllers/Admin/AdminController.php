@@ -175,6 +175,7 @@ class AdminController extends Controller
         // ======== Test End ========
 
 
+        // Artisan::call('optimize:clear');
 
         $orders = Order::orderBy('id','DESC')->get();
         $products = Product::where('is_active',1)->get();

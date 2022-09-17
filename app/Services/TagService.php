@@ -4,10 +4,11 @@ namespace App\Services;
 use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
 use App\Traits\SlugTrait;
+use App\Traits\WordCheckTrait;
 
 class TagService
 {
-    use SlugTrait;
+    use SlugTrait, WordCheckTrait;
 
     private $tagContract, $tagTranslationContract;
     public function __construct(TagContract $tagContract, TagTranslationContract $tagTranslationContract){
@@ -15,45 +16,15 @@ class TagService
         $this->tagTranslationContract = $tagTranslationContract;
     }
 
-    public function getAllTag(){
-        $data = $this->tagContract->getAll();
-        return json_decode(json_encode($data), FALSE); //This is use when we use map()->format
+    public function getAllTag()
+    {
+        if ($this->wordCheckInURL('tags')) {
+            return $this->tagContract->getAll();
+        }else{
+            return $this->tagContract->getAllActiveData();
+        }
     }
 
-    // public function dataTable()
-    // {
-    //     if (request()->ajax()){
-    //         $tags = $this->getAllTag();
-
-    //         return datatables()->of($tags)
-    //         ->setRowId(function ($row){
-    //             return $row->id;
-    //         })
-    //         ->addColumn('tag_name', function ($row){
-    //             return $row->tagTranslations->tag_name ?? $row->tagTranslationEnglish->tag_name ?? "";
-    //         })
-    //         ->addColumn('action', function ($row)
-    //         {
-    //             $actionBtn = "";
-    //             if (auth()->user()->can('tag-edit'))
-    //             {
-    //                 $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-    //                 &nbsp; ';
-    //             }
-    //             if (auth()->user()->can('tag-action'))
-    //             {
-    //                 if ($row->is_active==1) {
-    //                     $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
-    //                 }else {
-    //                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
-    //                 }
-    //             }
-    //             return $actionBtn;
-    //         })
-    //         ->rawColumns(['action'])
-    //         ->make(true);
-    //     }
-    // }
     public function dataTable()
     {
         if (request()->ajax()){

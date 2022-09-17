@@ -28,6 +28,11 @@ class AttributeSetService
         return json_decode(json_encode($data), FALSE); //This is use when we use map()->format
     }
 
+    public function getAllWithAttributesAndValues()
+    {
+        return $this->attributeSetContract->getAllWithAttributesAndValues();
+    }
+
     public function dataTable()
     {
         if (request()->ajax()){

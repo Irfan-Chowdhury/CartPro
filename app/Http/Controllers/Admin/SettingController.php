@@ -147,6 +147,8 @@ class SettingController extends Controller
         //Home Page Seo
         $setting_home_page_seo = $this->settingHomePageSeo();
 
+        // return $setting_home_page_seo;
+
         return view('admin.pages.setting.index',compact('countries','currencies','zones_array','setting_general','setting_home_page_seo','selected_countries','setting_store','selected_currencies',
                     'setting_currency','setting_sms','setting_mail','setting_newsletter','setting_custom_css_js','setting_facebook','setting_google',
                     'setting_free_shipping','setting_local_pickup','setting_flat_rate','setting_paypal','setting_strip','setting_paytm',

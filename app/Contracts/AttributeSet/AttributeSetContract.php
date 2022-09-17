@@ -8,6 +8,8 @@ interface AttributeSetContract
 
     public function getAllActiveData();
 
+    public function getAllWithAttributesAndValues();
+
     public function storeAttributeSet($data);
 
     public function getById($id);

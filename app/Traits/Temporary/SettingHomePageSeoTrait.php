@@ -25,9 +25,9 @@ trait SettingHomePageSeoTrait
                                     ];
                                 });
 
-        // if($data_home_page->isNotEmpty()){
-        //     $setting_home_page_seo = json_decode(json_encode($data_home_page[0]), FALSE);
-        // }
+        if($data_home_page->isNotEmpty()){
+            $setting_home_page_seo = json_decode(json_encode($data_home_page[0]), FALSE);
+        }
 
         return  $setting_home_page_seo;
     }

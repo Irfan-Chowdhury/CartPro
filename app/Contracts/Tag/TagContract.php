@@ -6,6 +6,8 @@ interface TagContract
 {
     public function getAll();
 
+    public function getAllActiveData();
+
     public function storeData($data);
 
     public function getById($id);

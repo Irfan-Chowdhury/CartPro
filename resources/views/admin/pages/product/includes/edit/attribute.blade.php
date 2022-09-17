@@ -125,23 +125,14 @@
 
 
             <!-- Attribute Wise Inventory -->
-            <div class="card">
+            {{-- <div class="card">
                 <div class="card-body">
                     <label class="text-bold">For maintaining attribute wise inventory please goto the link below</label>
                     <br>
                     <a href="{{route('admin.products.attribute_inventory',$product->id)}}" target="__blank" class="btn btn-outline-primary btn-sm">Click Here</a>
                 </div>
-            </div>
-
-            {{-- <input type="chekbox" class="form-control"> Enable Varient Wise Inventory --}}
-            {{-- <div class="form-group row">
-                <div class="col-sm-8">
-                    <div class="form-check mt-1">
-                        <input type="checkbox" value="1" name="reviews_and_ratings" id="reviewsAndRatings" class="form-check-input">
-                        <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable Varient Wise Inventory')</label>
-                    </div>
-                </div>
             </div> --}}
+
 
         </div>
     </div>

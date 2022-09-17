@@ -41,19 +41,7 @@
                         <label for="inputEmail3"><b>@lang('file.Tags')</b></label>
                         <select name="tag_id[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Tag')}}'>
                             @foreach ($tags as $item)
-                                @if ($item->tagTranslation->count()>0)
-                                    @foreach ($item->tagTranslation as $key => $value)
-                                        @if ($key<1)
-                                            @if ($value->local==$local)
-                                                <option value="{{$item->id}}">{{$value->tag_name}}</option>
-                                            @elseif($value->local=='en')
-                                                <option value="{{$item->id}}">{{$value->tag_name}}</option>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @else
-                                    <option value="">{{__('NULL')}}</option>
-                                @endif
+                                <option value="{{$item->id}}">{{$item->tag_name}}</option>
                             @endforeach
                         </select>
                     </div>

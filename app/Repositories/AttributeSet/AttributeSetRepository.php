@@ -18,13 +18,24 @@ class AttributeSetRepository implements AttributeSetContract
                 ->map->format();
     }
 
-    public function getAllActiveData(){
+    public function getAllActiveData()
+    {
         return AttributeSet::with('attributeSetTranslations')
                 ->where('is_active',1)
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
                 ->map->format();
+    }
+
+    public function getAllWithAttributesAndValues()
+    {
+        return AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish','attributes.attributeTranslation',
+                'attributes.attributeTranslationEnglish','attributes.attributeValues.attributeValueTranslation')
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get();
     }
 
     public function storeAttributeSet($data){

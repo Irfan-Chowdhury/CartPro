@@ -15,6 +15,7 @@ use App\Models\ProductImage;
 use App\Models\ProductTranslation;
 use App\Models\Tag;
 use App\Models\Tax;
+use App\Services\AttributeSetService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -29,6 +30,7 @@ use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
 use App\Services\BrandService;
 use App\Services\CategoryService;
+use App\Services\TagService;
 use App\Traits\imageHandleTrait;
 use App\Traits\TranslationTrait;
 
@@ -39,9 +41,13 @@ class ProductController extends Controller
 
     protected $brandService;
     protected $categoryService;
-    public function __construct(BrandService $brandService, CategoryService $categoryService){
+    protected $tagService;
+    protected $attributeSetService;
+    public function __construct(BrandService $brandService, CategoryService $categoryService, TagService $tagService, AttributeSetService $attributeSetService){
         $this->brandService    = $brandService;
         $this->categoryService = $categoryService;
+        $this->tagService      = $tagService;
+        $this->attributeSetService = $attributeSetService;
     }
 
 
@@ -140,24 +146,13 @@ class ProductController extends Controller
 
         $brands     = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
         $categories =  $this->categoryService->getAllCategories();
-
-        $tags = Tag::with(['tagTranslation'=> function ($query) use ($local){
-            $query->where('local',$local)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])->get();
-
-        $attributeSets = AttributeSet::with('attributeSetTranslation','attributeSetTranslationEnglish','attributes.attributeTranslation',
-                                    'attributes.attributeTranslationEnglish','attributes.attributeValues.attributeValueTranslation')
-                                    ->where('is_active',1)
-                                    ->orderBy('is_active','DESC')
-                                    ->orderBy('id','DESC')
-                                    ->get();
+        $tags       =  $this->tagService->getAllTag();
+        $attributeSets = $this->attributeSetService->getAllWithAttributesAndValues();
 
         //No Need
-        $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
-                    ->where('is_active',1)
-                    ->get();
+        // $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
+        //             ->where('is_active',1)
+        //             ->get();
 
         $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
                 ->where('is_active',1)
@@ -165,7 +160,7 @@ class ProductController extends Controller
                 ->orderBy('id','ASC')
                 ->get();
 
-        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributeSets','attributes','taxes'));
+        return view('admin.pages.product.create',compact('local','brands','categories','tags','attributeSets','taxes'));
     }
 
     /*

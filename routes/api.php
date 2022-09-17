@@ -18,6 +18,12 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('data-read', [AutoUpdateController::class, 'dataRead'])->name('data-read');
+// Fetch data from Demo
+Route::get('fetch-data-general', [AutoUpdateController::class, 'fetchDataGeneral'])->name('fetch-data-general');
+Route::get('fetch-data-upgrade', [AutoUpdateController::class, 'fetchDataForAutoUpgrade'])->name('data-read');
+Route::get('fetch-data-bugs', [AutoUpdateController::class, 'fetchDataForBugs'])->name('fetch-data-bugs');
+
+// Action in Client server
+Route::post('bug-update', [AutoUpdateController::class, 'bugUpdate'])->name('bug-update');
 Route::post('auto-upload', [AutoUpdateController::class, 'autoUpload'])->name('auto-load');
 

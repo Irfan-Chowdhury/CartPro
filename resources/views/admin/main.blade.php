@@ -212,30 +212,6 @@
         // $("ul#setting #setting-other-setting").addClass("active");
 
 
-
-        // Auto Load Start
-
-        // const loadAutoData = () => {
-        //     fetch('http://localhost/cartpro/api/data-read')
-        //     .then(res => res.json())
-        //     .then(data => displayAutoLoadData(data))
-        // }
-        // const displayAutoLoadData = data => {
-        //     $.ajax({
-        //         url: "{{route('auto-load')}}",
-        //         type: "GET",
-        //         data: {data:data},
-        //         success: function (data) {
-        //             console.log(data);
-        //         }
-        //     })
-        // }
-        // loadAutoData();
-
-        // Auto Load End
-
-
-
         if ($(window).outerWidth() > 1199) {
             $('nav.side-navbar').removeClass('shrink');
         }

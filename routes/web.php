@@ -280,10 +280,11 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::group(['prefix' => 'admin','middleware'=>'admin_check'], function () {
         Route::group(['namespace'=>'Admin'], function () {
 
-            // New Release
-            Route::get('/new-release',[AutoUpdateController::class,'index'])->name('new-release');
 
-            
+            Route::get('/new-release',[AutoUpdateController::class,'index'])->name('new-release'); // New Release
+            Route::get('/bugs',[AutoUpdateController::class,'bugUpdatePage'])->name('bug-update-page'); // Bugs
+
+
             //Admin Dashboard
             Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
             Route::get('dashboard/chart',[AdminController::class,'chart'])->name('admin.dashboard.chart');

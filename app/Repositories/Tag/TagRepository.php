@@ -11,8 +11,9 @@ class TagRepository implements TagContract
 {
     use TranslationTrait, ActiveInactiveTrait;
 
-    public function getAll(){
-        return Tag::with('tagTranslation')
+    public function getAll()
+    {
+        $data = Tag::with('tagTranslation')
             ->orderBy('is_active','DESC')
             ->orderBy('id','DESC')
             ->get()
@@ -24,6 +25,27 @@ class TagRepository implements TagContract
                     'local'=> $this->translations($tag->tagTranslation)->local ?? null,
                 ];
             });
+
+        return json_decode(json_encode($data), FALSE);
+
+    }
+
+    public function getAllActiveData()
+    {
+        $data = Tag::with('tagTranslation')
+            ->where('is_active',1)
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC')
+            ->get()
+            ->map(function($tag){
+                return [
+                    'id'=>$tag->id,
+                    'is_active'=>$tag->is_active,
+                    'tag_name'=> $this->translations($tag->tagTranslation)->tag_name ?? null,
+                    'local'=> $this->translations($tag->tagTranslation)->local ?? null,
+                ];
+            });
+        return json_decode(json_encode($data), FALSE);
     }
 
     public function storeData($data){
