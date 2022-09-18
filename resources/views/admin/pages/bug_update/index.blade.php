@@ -4,9 +4,11 @@
 
 @section('admin_content')
 
+    <div class="mt-3 mb-3" id="errorMessage"></div>
+
+
     <!-- Old Version -->
     <section id="noBug" class="d-none container mt-5 text-center">
-        <div class="mt-3 mb-3" id="errorMessage"></div>
         <div class="card">
             <div class="card-body">
                 <h4 class="text-center text-info">Your current version is <span>{{env('VERSION')}}</span></h4>
@@ -17,10 +19,9 @@
 
     <!-- For New Version -->
     <section id="bugSection" class="d-none container mt-5 text-center">
-        <div class="mt-3 mb-3" id="errorMessage"></div>
         <div class="card">
             <div class="card-body">
-                <h4 class="text-center text-success">Minor bug found. Please update it</h4>
+                <h4 class="text-center text-success">Minor bug found. Please update it.</h4>
                 <p>Before updating, we highly recomended you to keep a backup of your current script and database.</p>
             </div>
         </div>
@@ -41,8 +42,6 @@
 
         <button id="update" type="button" class="mt-5 mb-5 btn btn-primary btn-lg">Update</button>
     </section>
-
-
 @endsection
 
 

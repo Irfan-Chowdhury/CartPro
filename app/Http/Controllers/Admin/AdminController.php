@@ -39,6 +39,25 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        $name = "Irfan Chowdhury";
+        $age  = 24;
+        $data = `<pre>Hello this is {$name} and Age is {$age}</pre>`;
+
+
+        return $data;
+
+
+        // $filePath    = base_path('/'.'fahim');
+        // $newFileName = base_path('/'.'irfan');
+
+        // /* Rename File name */
+        // if( !rename($filePath, $newFileName) ) {
+        //     return "File can't be renamed!";
+        // }
+        // else {
+        //     return "File has been renamed!";
+        // }
+
 
         // ======== Test Start ========
         // $track_files_arr = [];

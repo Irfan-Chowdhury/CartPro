@@ -71,8 +71,11 @@
                         </button>
                     </div>
                 </form>
-                <!-- This three buttons for demo only-->
-                <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">@lang('file.LogIn as Admin')</button>
+
+                @if (env('PRODUCT_MODE') !==null && (env('PRODUCT_MODE')=='DEMO' || env('PRODUCT_MODE')=='DEVELOPER'))
+                    <!-- This three buttons for demo only-->
+                    <button type="submit" class="btn btn-success btn-sm default admin-btn" id="admin-btn">@lang('file.LogIn as Admin')</button>
+                @endif
                 <br><br>
             </div>
             <div class="copyrights text-center">

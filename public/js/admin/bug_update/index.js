@@ -7,6 +7,7 @@ let fetchGeneralApiData;
 let productMode;
 let clientVersionNumber;
 let clientBugNo;
+let demoVersionString;
 let demoVersionNumber;
 let demoBugNo;
 let minimumRequiredVersion;
@@ -32,7 +33,8 @@ const displayGeneralData = data => {
     productMode            = data.general.product_mode;
     clientVersionNumber    = stringToNumberConvert(clientCurrrentVersion);
     clientBugNo            = parseInt(clientCurrrentBugNo);
-    demoVersionNumber      = stringToNumberConvert(data.general.demo_version);
+    demoVersionString      = data.general.demo_version;
+    demoVersionNumber      = stringToNumberConvert(demoVersionString);
     demoBugNo              = data.general.demo_bug_no;
     minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
     latestVersionUpgradeEnable   = data.general.latest_version_upgrade_enable;

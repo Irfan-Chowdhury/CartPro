@@ -96,6 +96,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
         Route::get('/',[HomeController::class,'index'])->name('cartpro.home');
 
+        Route::get('/change-for/{text}',[HomeController::class,'changeForDemoOrClient']);
+
         //FAQ
         Route::get('/faq',[HomeController::class,'faq'])->name('cartpro.faq');
         //Contact

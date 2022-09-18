@@ -1,14 +1,12 @@
 /************************************************
         Common General Data
 *************************************************/
-
-
 const demoURL = 'http://cartproshop.com/demo_old/api'; //Demo Link
-// const demoURL = 'http://localhost/cartpro/api'; //Demo Link
 let productMode;
 let clientVersionNumber;
 let clientBugNo;
-let demoVersion;
+let demoVersionString;
+let demoVersionNumber;
 let demoBugNo;
 let minimumRequiredVersion;
 let latestVersionUpgradeEnable;
@@ -28,7 +26,8 @@ const displayGeneralData = data => {
     productMode            = data.general.product_mode;
     clientVersionNumber    = stringToNumberConvert(clientCurrrentVersion);
     clientBugNo            = parseInt(clientCurrrentBugNo);
-    demoVersion            = stringToNumberConvert(data.general.demo_version);
+    demoVersionString      = data.general.demo_version;
+    demoVersionNumber      = stringToNumberConvert(demoVersionString);
     demoBugNo              = data.general.demo_bug_no;
     minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
     latestVersionUpgradeEnable   = data.general.latest_version_upgrade_enable;
@@ -55,13 +54,13 @@ let fetchApiData;
 const displayUpgradeNotification = data => {
     if (clientVersionNumber >= minimumRequiredVersion && latestVersionUpgradeEnable===true && productMode==='DEMO') {
         // Announce
-        if (demoVersion > clientVersionNumber) {
+        if (demoVersionNumber > clientVersionNumber) {
             $('#alertSection').removeClass('d-none');
-            $('#newVersionNo').text(data.general.demo_version);
+            $('#newVersionNo').text(demoVersionString);
             $('#announce').removeClass('d-none');
         }
         // Congratulation
-        else if (localStorage.getItem('version_upgrade_status')=='done' && (demoVersion === clientVersionNumber)) {
+        else if (localStorage.getItem('version_upgrade_status')=='done' && (demoVersionNumber === clientVersionNumber)) {
             // console.log(sessionStorage.getItem('version_upgrade_status'));
             $('#alertSection').removeClass('d-none').addClass('alert-info');
             $('#congratulation').removeClass('d-none');
@@ -87,7 +86,7 @@ const loadBugsInfo = () => {
 
 let fetchBugApiData;
 const displayBugNotification = () => {
-    if (clientVersionNumber >= minimumRequiredVersion && demoVersion === clientVersionNumber && bugUpdateEnable===true && productMode==='DEMO') {
+    if (clientVersionNumber >= minimumRequiredVersion && demoVersionNumber === clientVersionNumber && bugUpdateEnable===true && productMode==='DEMO') {
         // Alert
         if (demoBugNo > clientBugNo) {
             $('#alertBugSection').removeClass('d-none');

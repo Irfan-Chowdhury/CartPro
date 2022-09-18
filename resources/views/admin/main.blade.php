@@ -101,8 +101,6 @@
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
-
-
     @stack('css')
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZBZQHXN8Q"></script>

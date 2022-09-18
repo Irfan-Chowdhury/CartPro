@@ -7,7 +7,10 @@
           <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
             <li class="nav-item">
-                <a class="dropdown-header-name" style="padding-right: 10px" href="{{route('cartpro.home')}}" target="_blank"><i class="dripicons-preview"></i> <span>View Website</span> </a>
+                <a class="dropdown-header-name" style="padding-right: 10px" href="{{url('/optimize')}}" title="Clear all cache with refresh"><i class="fa fa-refresh"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="dropdown-header-name" style="padding-right: 10px" href="{{route('cartpro.home')}}" target="_blank" title="View Website"><i class="dripicons-preview"></i></a>
             </li>
 
             <li class="nav-item">
@@ -47,10 +50,10 @@
                     @endforeach
                 </div>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/documentation')}}" target="_blank" data-toggle="tooltip"
-                   title="{{__('Help')}}">
+                   title="{{__('Documentation')}}">
                     <i class="dripicons-information"></i>
                 </a>
             </li>

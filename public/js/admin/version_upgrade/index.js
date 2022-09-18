@@ -30,7 +30,7 @@ const displayGenealData = data => {
     clientVersionNumber    = stringToNumberConvert(clientCurrrentVersion);
     clientBugNo            = parseInt(clientCurrrentBugNo);
     demoVersionString      = data.general.demo_version;
-    demoVersionNumber      = stringToNumberConvert(data.general.demo_version);
+    demoVersionNumber      = stringToNumberConvert(demoVersionString);
     demoBugNo              = data.general.demo_bug_no;
     minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
     latestVersionUpgradeEnable   = data.general.latest_version_upgrade_enable;

@@ -25,5 +25,5 @@ Route::get('fetch-data-bugs', [AutoUpdateController::class, 'fetchDataForBugs'])
 
 // Action in Client server
 Route::post('bug-update', [AutoUpdateController::class, 'bugUpdate'])->name('bug-update');
-Route::post('auto-upload', [AutoUpdateController::class, 'autoUpload'])->name('auto-load');
+Route::post('version-upgrade', [AutoUpdateController::class, 'versionUpgrade'])->name('version-upgrade');
 

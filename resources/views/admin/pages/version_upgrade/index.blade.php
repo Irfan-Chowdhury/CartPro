@@ -2,9 +2,11 @@
 @section('title','Admin | New Release Version')
 @section('admin_content')
 
+    <div class="mt-3 mb-3" id="errorMessage"></div>
+
+
     <!-- Old Version -->
     <section id="oldVersionSection" class="d-none container mt-5 text-center">
-        <div class="mt-3 mb-3" id="errorMessage"></div>
         <div class="card">
             <div class="card-body">
                 <h4 class="text-center text-info">Your current version is <span>{{env('VERSION')}}</span></h4>
@@ -16,7 +18,6 @@
 
     <!-- For New Version -->
     <section id="newVersionSection" class="d-none container mt-5 text-center">
-        <div class="mt-3 mb-3" id="errorMessage"></div>
         <div class="card">
             <div class="card-body">
                 <h4 class="text-center text-success">A new version <span id="newVersionNo"></span> has been released.</h4>
@@ -44,12 +45,6 @@
 @endsection
 
 @push('scripts')
-
-    <!-- Optional JavaScript -->
-    {{-- <script type="text/javascript" src="{{ asset('public/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/popper.js/umd/popper.min.js') }}"></script> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> --}}
-
     <script>
         let clientCurrrentVersion = {!! json_encode(env("VERSION"))  !!};
         let clientCurrrentBugNo   = {!! json_encode(env("BUG_NO"))  !!};
@@ -59,61 +54,6 @@
 
     <script type="text/javascript">
 
-        // Auto Load Start
-        // const loadAutoData = () => {
-        //     let url = 'http://cartproshop.com/demo_old/api/fetch-data-upgrade'; //Demo Link
-        //     fetch(url)
-        //     .then(res => res.json())
-        //     .then(data => displayAutoLoadData(data))
-        // }
-        // let fetchApiData;
-
-        // const displayAutoLoadData = data => {
-
-        //     let clientVersionNumber = stringToNumberConvert({!! json_encode(env("VERSION"))  !!});
-        //     let demoVersion         = stringToNumberConvert(data.general.version);
-        //     let minimumRequiredVersion = stringToNumberConvert(data.general.minimum_required_version);
-        //     let autoUpgradeEnable    = data.general.auto_upgrade_enable;
-        //     let productMode         = data.general.product_mode;
-
-
-        //     if (clientVersionNumber >= minimumRequiredVersion && autoUpgradeEnable===true && productMode==='DEMO') {
-        //         if (demoVersion > clientVersionNumber) {
-        //             $('#newVersionSection').removeClass('d-none');
-        //             $('#newVersionNo').text(data.general.version);
-
-        //             const dataLogs = data.log;
-        //             const logUL = document.getElementById('logUL');
-
-        //             dataLogs.forEach(element => {
-        //                 console.log(element.text);
-        //                 const logLI = document.createElement('li');
-        //                 logLI.classList.add('list-group-item');
-        //                 logLI.innerText = element.text;
-        //                 logUL.appendChild(logLI);
-        //             });
-        //             fetchApiData = data;
-        //         }else if(demoVersion === clientVersionNumber){
-        //             $('#oldVersionSection').removeClass('d-none');
-        //             return;
-        //         }else{
-        //             return;
-        //         }
-        //     }
-        // }
-
-        // const stringToNumberConvert = dataString => {
-        //     let version = dataString;
-        //     const myArray = version.split(".");
-        //     let versionString = "";
-        //     myArray.forEach(element => {
-        //         versionString += element;
-        //     });
-        //     let versionConvertNumber = parseInt(versionString);
-        //     return versionConvertNumber;
-        // }
-
-        // loadAutoData();
         (function ($) {
             "use strict";
             $.ajaxSetup({
@@ -126,7 +66,7 @@
                 $('#spinner').removeClass('d-none');
                 $('#upgrade').text('Upgrading...');
                 $.post({
-                    url: "{{route('auto-load')}}",
+                    url: "{{route('version-upgrade')}}",
                     type: "POST",
                     data: {data:fetchVersionUpgradeApiData, general: fetchGeneralApiData},
                     error: function(response){

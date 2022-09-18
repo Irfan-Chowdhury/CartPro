@@ -37,6 +37,8 @@ use App\Traits\ENVFilePutContent;
 use App\Traits\AutoDataUpdateTrait;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 
 class HomeController extends Controller
 {
@@ -234,7 +236,7 @@ class HomeController extends Controller
         $brands = Cache::remember('brands', 300, function () use($brand_ids) {
             return $this->brandService->getBrandsWhereInIds($brand_ids);
         });
-        
+
 
         $order_details = Cache::remember('order_details', 300, function () {
             return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
@@ -594,5 +596,39 @@ class HomeController extends Controller
     {
         $setting_about_us = SettingAboutUs::with('aboutUsTranslation','aboutUsTranslationEnglish')->latest()->first();
         return view('frontend.pages.about_us',compact('setting_about_us'));
+    }
+
+
+
+    public function changeForDemoOrClient($text)
+    {
+        // $this->dataWriteInENVFile('APP_DEBUG',null);
+        // return 1;
+
+
+        if (isset($text) && $text==='CLIENT') {
+            $installFileOldName = base_path('/'.'install0');
+            $installFileNewName = base_path('/'.'install');
+
+            /* Rename File Name */
+            if(!rename($installFileOldName, $installFileNewName)) {
+                return "File can't be renamed!";
+            }
+            $this->dataWriteInENVFile('PRODUCT_MODE',$text);
+            $this->dataWriteInENVFile('USER_VERIFIED',1);
+        }
+        else if (isset($text) && $text==='DEMO'){
+            $this->dataWriteInENVFile('PRODUCT_MODE',$text);
+            $this->dataWriteInENVFile('USER_VERIFIED',null);
+        }
+        Artisan::call('optimize:clear');
+        return redirect()->back();
+
+        // $this->dataWriteInENVFile('PRODUCT_MODE','DEMO');
+        // $this->dataWriteInENVFile('USER_VERIFIED',1);
+        // $this->dataWriteInENVFile('APP_DEBUG',1);
+
+        // Artisan::call('optimize:clear');
+        // return redirect()->back();
     }
 }
