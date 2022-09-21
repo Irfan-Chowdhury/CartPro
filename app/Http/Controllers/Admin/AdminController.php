@@ -39,12 +39,22 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
-        $name = "Irfan Chowdhury";
-        $age  = 24;
-        $data = `<pre>Hello this is {$name} and Age is {$age}</pre>`;
+        // $path = base_path('track/control.json');
+        // $data = null;
+        // if (File::exists($path)) {
+        //     $json_file = File::get($path);
+        //     $data = json_decode($json_file);
+        // }
+        // return $data->control[0];
 
 
-        return $data;
+
+        // $name = "Irfan Chowdhury";
+        // $age  = 24;
+        // $data = `<pre>Hello this is {$name} and Age is {$age}</pre>`;
+
+
+        // return $data;
 
 
         // $filePath    = base_path('/'.'fahim');

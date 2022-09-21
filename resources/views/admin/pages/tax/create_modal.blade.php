@@ -1,5 +1,5 @@
 <!--Create Modal -->
-<div class="modal fade" id="createModalForm" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,7 +8,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div id="alertMessage" role="alert"></div>
+        <div id="errorMessage" role="alert"></div>
 
         <div class="modal-body">
             <form method="POST" id="submitForm" action="{{route('admin.tax.store')}}">
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Save')</button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">@lang('file.Save')</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('file.Close')</button>
                     </div>
                 </div>

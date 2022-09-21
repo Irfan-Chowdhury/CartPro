@@ -33,14 +33,14 @@ class AutoUpdateController extends Controller
         $this->minimum_required_version = '1.0.7';
 
         // Set During New Release Announce
-        $this->latest_version_upgrade_enable   = true;
+        $this->latest_version_upgrade_enable   = false;
         $this->latest_version_db_migrate_enable= false;
-        $this->version_upgrade_base_url        = env('APP_URL').'version_upgrade_files/';
+        $this->version_upgrade_base_url        = 'http://cartproshop.com/version_upgrade_files/'; // Fixed | Connect with server
 
         // Set During Bug Update
-        $this->bug_update_enable     = true;
+        $this->bug_update_enable     = false;
         $this->bug_db_migrate_enable = false;
-        $this->bug_update_base_url   = env('APP_URL').'bug_update_files/';
+        $this->bug_update_base_url   = 'http://cartproshop.com/bug_update_files/';  // Fixed | Connect with server
     }
 
     // Client
@@ -70,10 +70,16 @@ class AutoUpdateController extends Controller
         $track_files_arr   = json_decode(json_encode($request->data), FALSE);
         $track_general_arr = json_decode(json_encode($request->general), FALSE);
 
+        if($action_type =='version_upgrade'){
+            $base_url = $this->version_upgrade_base_url;
+        }else if($action_type == 'bug_update') {
+            $base_url = $this->bug_update_base_url;
+        }
+
         try{
             if ($track_files_arr && $track_general_arr) {
                 foreach ($track_files_arr->files as $value) {
-                    $remote_file_url  = $this->version_upgrade_base_url.$value->file_name;
+                    $remote_file_url  = $base_url.$value->file_name;
                     $remote_file_name = pathinfo($remote_file_url)['basename'];
                     $local_file = base_path('/'.$remote_file_name);
                     $copy = copy($remote_file_url, $local_file);
@@ -140,48 +146,71 @@ class AutoUpdateController extends Controller
 
     public function fetchDataForAutoUpgrade()
     {
-        $data = [
-            'files'=>
-            [
-                ['sl'=> 1, 'file_name'=>'irfan.zip'],
-                // ['sl'=> 2, 'file_name'=>'test456.zip'],
-            ],
-            'log'=>
-            [
-                ['text'=>'Some Bug Fixed.'],
-                ['text'=>'Auto upload fetaure updated.'],
-            ]
-        ];
+        $path = base_path('track/fetch-data-upgrade.json');
+        $data = null;
+        if (File::exists($path)) {
+            $json_file = File::get($path);
+            $data = json_decode($json_file);
+        }
         return response()->json($data,201);
+
+        // $json_file = File::get("track/fetch-data-upgrade.json");
+        // $data = json_decode($json_file);
+        // return response()->json($data,201);
+        // $data = [
+        //     'files'=>
+        //     [
+        //         ['sl'=> 1, 'file_name'=>'irfan.zip'],
+        //         // ['sl'=> 2, 'file_name'=>'test456.zip'],
+        //     ],
+        //     'log'=>
+        //     [
+        //         ['text'=>'Some Bug Fixed.'],
+        //         ['text'=>'Auto upload fetaure updated.'],
+        //     ]
+        // ];
+        // return response()->json($data,201);
     }
 
     public function fetchDataForBugs()
     {
-        $data = [
-            'files'=>
-            [
-                // ['sl'=> 1, 'file_name'=>'irfan.zip'],
-                // ['sl'=> 1, 'file_name'=>'editorconfig.zip'],
-                // ['sl'=> 2, 'file_name'=>'app.zip'],
-                // ['sl'=> 3, 'file_name'=>'artisan.zip'],
-                // ['sl'=> 4, 'file_name'=>'bootstrap.zip'],
-                // ['sl'=> 5, 'file_name'=>'composer.zip'],
-                // ['sl'=> 6, 'file_name'=>'config.zip'],
-                // ['sl'=> 7, 'file_name'=>'database.zip'],
-                // ['sl'=> 8, 'file_name'=>'install0.zip'],
-                // ['sl'=> 9, 'file_name'=>'resources.zip'],
-                // ['sl'=> 10, 'file_name'=>'routes.zip'],
-                // ['sl'=> 11, 'file_name'=>'storage.zip'],
-                // ['sl'=> 12, 'file_name'=>'tests.zip'],
-                // ['sl'=> 13, 'file_name'=>'irfan.zip'],
-            ],
-            'log'=>
-            [
-                ['text'=>'Some Bug Fixed.'],
-                ['text'=>'Auto upload fetaure updated.'],
-            ]
-        ];
+
+        $path = base_path('track/fetch-data-bug.json');
+        $data = null;
+        if (File::exists($path)) {
+            $json_file = File::get($path);
+            $data = json_decode($json_file);
+        }
         return response()->json($data,201);
+
+        // $json_file = File::get("track/fetch-data-bug.json");
+        // $data = json_decode($json_file);
+        // return response()->json($data,201);
+        // $data = [
+        //     'files'=>
+        //     [
+        //         ['sl'=> 1, 'file_name'=>'irfan.zip'],
+        //         ['sl'=> 1, 'file_name'=>'editorconfig.zip'],
+        //         ['sl'=> 2, 'file_name'=>'app.zip'],
+        //         ['sl'=> 3, 'file_name'=>'artisan.zip'],
+        //         ['sl'=> 4, 'file_name'=>'bootstrap.zip'],
+        //         ['sl'=> 5, 'file_name'=>'composer.zip'],
+        //         ['sl'=> 6, 'file_name'=>'config.zip'],
+        //         ['sl'=> 7, 'file_name'=>'database.zip'],
+        //         ['sl'=> 8, 'file_name'=>'install0.zip'],
+        //         ['sl'=> 9, 'file_name'=>'resources.zip'],
+        //         ['sl'=> 10, 'file_name'=>'routes.zip'],
+        //         ['sl'=> 11, 'file_name'=>'storage.zip'],
+        //         ['sl'=> 12, 'file_name'=>'tests.zip'],
+        //         ['sl'=> 13, 'file_name'=>'irfan.zip'],
+        //     ],
+        //     'log'=>
+        //     [
+        //         ['text'=>'Some Bug Fixed.'],
+        //         ['text'=>'Auto upload fetaure updated.'],
+        //     ]
+        // ];
+        // return response()->json($data,201);
     }
 }
 

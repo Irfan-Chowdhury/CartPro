@@ -7,11 +7,11 @@
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">{{__('file.Taxes')}}</h4>
-        <div id="success_alert" role="alert"></div>
+        <div id="alert_message" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('tax-store'))
-            <button type="button" class="btn btn-info" name="createModalForm" data-toggle="modal" data-target="#createModalForm">
+            <button type="button" class="btn btn-info" name="formModal" data-toggle="modal" data-target="#formModal">
                 <i class="fa fa-plus"></i> {{__('file.Add Tax')}}
             </button>
         @endif
@@ -24,7 +24,7 @@
 
     </div>
     <div class="table-responsive">
-    	<table id="dataTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -41,372 +41,33 @@
 @include('admin.pages.tax.create_modal')
 @include('admin.pages.tax.edit_modal')
 @include('admin.includes.confirm_modal')
-
 @endsection
 
 
 @push('scripts')
-    <script type="text/javascript">
-        (function ($) {
-            "use strict";
 
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
+<script type="text/javascript">
     $(document).ready(function () {
-        let table = $('#dataTable').DataTable({
-            initComplete: function () {
-                this.api().columns([1]).every(function () {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
-                        $('select').selectpicker('refresh');
-                    });
-                });
-            },
-            responsive: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('admin.tax.index') }}",
-            },
-
-            columns: [
-                {
-                    data: null,
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'tax_name',
-                    name: 'tax_name',
-                },
-                {
-                    data: 'country',
-                    name: 'country',
-                },
-                {
-                    data: 'is_active',
-                    name: 'is_active',
-                        render:function (data) {
-                            if (data == 1) {
-                            return "<span class='p-2 badge badge-success'>Active</span>";
-                        }else{
-                            return "<span class='p-2 badge badge-danger'>Inactive</span>";
-                        }
-                    }
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                }
-            ],
-
-
-            "order": [],
-            'language': {
-                'lengthMenu': '_MENU_ {{__("records per page")}}',
-                "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
-                "search": '{{trans("file.Search")}}',
-                'paginate': {
-                    'previous': '{{trans("file.Previous")}}',
-                    'next': '{{trans("file.Next")}}'
-                }
-            },
-            'columnDefs': [
-                {
-                    "orderable": false,
-                    'targets': [0],
-                },
-                {
-                    'render': function (data, type, row, meta) {
-                        if (type === 'display') {
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
-                        }
-
-                        return data;
-                    },
-                    'checkboxes': {
-                        'selectRow': true,
-                        'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                    },
-                    'targets': [0]
-                }
-            ],
-
-
-            'select': {style: 'multi', selector: 'td:first-child'},
-            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            dom: '<"row"lfB>rtip',
-            buttons: [
-                {
-                    extend: 'pdf',
-                    text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'csv',
-                    text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'print',
-                    text: '<i title="print" class="fa fa-print"></i>',
-                    exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                },
-                {
-                    extend: 'colvis',
-                    text: '<i title="column visibility" class="fa fa-eye"></i>',
-                    columns: ':gt(0)'
-                },
-            ],
-        });
-        new $.fn.dataTable.FixedHeader(table);
-    });
-
-
-    //----------Insert Data----------------------
-    $('#submitForm').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{route('admin.tax.store')}}",
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            success: function (data) {
-                let html = '';
-
-                if (data.errors) {
-                    html = '<div class="alert alert-danger">';
-                    for (let count = 0; count < data.errors.length; count++) {
-                        html += '<p>' + data.errors[count] + '</p>';
-                    }
-                    html += '</div>';
-                    $('#alertMessage').fadeIn("slow");
-                    $('#alertMessage').html(html);
-                    setTimeout(function() {
-                        $('#alertMessage').fadeOut("slow");
-                    }, 3000);
-                }
-
-                else if(data.success){
-                    $("#createModalForm").modal('hide');
-                    $('#dataTable').DataTable().ajax.reload();
-                    $('#submitForm')[0].reset();
-                    $('select').selectpicker('refresh');
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                    ("#success_alert").removeClass('bg-danger text-center text-light p-1');
-                }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
     });
+    let indexURL      = "{{route('admin.tax.index') }}";
+    let storeURL      = "{{route('admin.tax.store')}}";
+    let editURL       = "{{route('admin.tax.edit')}}";
+    let updateURL     = "{{route('admin.tax.update')}}";
+    let activeURL     = "{{route('admin.tax.active')}}";
+    let inactiveURL   = "{{route('admin.tax.inactive')}}";
+    let deleteURL     = "";
+    let bulkActionURL = "{{route('admin.tax.bulk_action')}}";
 
-    // ------------ Edit ------------------
-    $(document).on("click",".edit",function(e){
-        e.preventDefault();
-        var taxId = $(this).data("id");
+    @include('admin.includes.common_js.common_word')
+</script>
+<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/index.js')}}"></script>
 
-        $.ajax({
-            url: "{{route('admin.tax.edit')}}",
-            type: "GET",
-            data: {tax_id:taxId},
-            success: function(data){
-                console.log(data);
+<!-- Common Action For All CRUD-->
+@include('admin.includes.common_action')
 
-                $('#tax_id').val(data.tax.id);
-                $('#taxTranslationId').val(data.taxTranslation.id);
-                $('#tax_class').val(data.taxTranslation.tax_class);
-                $('#based_on').selectpicker('val',data.tax.based_on);
-                $('#tax_name').val(data.taxTranslation.tax_name);
-                $('#country').selectpicker('val',data.tax.country);
-                $('#state').val(data.taxTranslation.state);
-                $('#city').val(data.taxTranslation.city);
-                $('#zip').val(data.tax.zip);
-                $('#rate').val(data.tax.rate);
-                if (data.tax.is_active==1) {
-                    $('#is_active').attr('checked', true)
-                }else{
-                    $('#is_active').attr('checked', false)
-                }
-                $('#EditformModal').modal('show');
-            }
-        });
-    });
-
-    //----------Update Data----------------------
-    $("#updateForm").on("submit",function(e){
-        e.preventDefault();
-        var formData = new FormData(this); //For Image always use this method
-
-        $.ajax({
-            url: "{{route('admin.tax.update')}}",
-            type: "POST",
-            data: formData,
-            contentType: false, //That means we send mulitpart/data
-            processData: false, //deafult value is true- that means pass data as object/string. false is opposite.
-            success: function(data){
-                console.log(data);
-                if (data.errors) {
-                    $("#alertMessageEdit").addClass('bg-danger text-center text-light p-1').html(data.errors) //Check in create modal
-                }
-                else if(data.success){
-                    $("#EditformModal").modal('hide');
-                    $('#dataTable').DataTable().ajax.reload();
-                    $('#updatetForm')[0].reset();
-                    $('select').selectpicker('refresh');
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                    ("#alertMessageEdit").removeClass('bg-danger text-center text-light p-1');
-                }
-            }
-        });
-    });
-
-    //---------- Active -------------
-    $(document).on("click",".active",function(e){
-        e.preventDefault();
-        var id = $(this).data("id");
-
-        $.ajax({
-            url: "{{route('admin.tax.active')}}",
-            type: "GET",
-            data: {id:id},
-            success: function(data){
-                console.log(data);
-                if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //---------- Inactive -------------
-    $(document).on("click",".inactive",function(e){
-        e.preventDefault();
-        var id = $(this).data("id");
-
-        $.ajax({
-            url: "{{route('admin.tax.inactive')}}",
-            type: "GET",
-            data: {id:id},
-            success: function(data){
-                console.log(data);
-                if(data.success){
-                    $('#dataTable').DataTable().ajax.reload();
-                    $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                    $('#success_alert').addClass('alert alert-success').html(data.success);
-                    setTimeout(function() {
-                        $('#success_alert').fadeOut("slow");
-                    }, 3000);
-                }
-            }
-        });
-    });
-
-
-    //Bulk Action
-    $("#bulk_action").on("click",function(){
-        var idsArray = [];
-        let table = $('#dataTable').DataTable();
-        idsArray = table.rows({selected: true}).ids().toArray();
-
-        if(idsArray.length === 0){
-            alert("Please Select at least one checkbox.");
-        }else{
-            $('#bulkConfirmModal').modal('show');
-            let action_type;
-
-            $("#active").on("click",function(){
-                console.log(idsArray);
-                action_type = "active";
-                $.ajax({
-                    url: "{{route('admin.tax.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#dataTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-            $("#inactive").on("click",function(){
-                action_type = "inactive";
-                console.log(idsArray);
-                $.ajax({
-                    url: "{{route('admin.tax.bulk_action')}}",
-                    method: "GET",
-                    data: {idsArray:idsArray,action_type:action_type},
-                    success: function (data) {
-                        if(data.success){
-                            $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
-                            $('#dataTable').DataTable().ajax.reload();
-                            $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                            $('#success_alert').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#success_alert').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
-        }
-    });
- })(jQuery);
-    </script>
 @endpush

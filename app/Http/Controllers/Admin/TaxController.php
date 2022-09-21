@@ -27,7 +27,6 @@ class TaxController extends Controller
             // App::setLocale($locale);
 
             $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
-                    ->where('is_active',1)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
                     ->get();
@@ -58,6 +57,8 @@ class TaxController extends Controller
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                        // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+
                     }
                     return $actionBtn;
                 })
@@ -192,6 +193,8 @@ class TaxController extends Controller
 
     public function inactive(Request $request)
     {
+        // return response()->json('ok fahim');
+
         if (auth()->user()->can('tax-action'))
         {
             if ($request->ajax()){

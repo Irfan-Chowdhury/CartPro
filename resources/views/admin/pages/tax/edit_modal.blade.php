@@ -1,5 +1,5 @@
 <!--Edit Modal -->
-<div class="modal fade" id="EditformModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -16,6 +16,9 @@
 
                 <input type="hidden" name="tax_id" id="tax_id">
                 <input type="hidden" name="tax_translation_id" id="taxTranslationId">
+
+                <div id="errorMessageEdit" role="alert"></div>
+
 
                 <div class="row">
                     <div class="col-md-2"></div>
@@ -90,7 +93,7 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <button type="submit" class="btn btn-primary" id="save-button">@lang('file.Update')</button>
+                        <button type="submit" class="btn btn-primary" id="updateButton">@lang('file.Update')</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('file.Close')</button>
                     </div>
                 </div>

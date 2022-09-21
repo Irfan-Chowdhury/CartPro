@@ -10,7 +10,7 @@
         </div>
             <div class="modal-body">
 
-                <div class="container-fluid"><span id="error_message"></span></div>
+                <div class="container-fluid"><span id="errorMessage"></span></div>
 
 
                 <form method="post" id="submitForm" action="{{route('admin.category.store')}}" enctype="multipart/form-data">

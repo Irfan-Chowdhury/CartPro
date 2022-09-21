@@ -1,5 +1,5 @@
    <!-- Modal -->
-   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -10,7 +10,7 @@
         </div>
             <div class="modal-body">
 
-                <div class="container-fluid"><span id="error_message_edit"></span></div>
+                <div class="container-fluid"><span id="errorMessageEdit"></span></div>
 
                 <form method="post" id="updateForm" enctype="multipart/form-data">
                     @csrf
@@ -59,7 +59,7 @@
 
                     </div>
                     <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" name="action_button" id="UpdateButton" class="btn btn-primary">@lang('file.Update')</button>
+                        <button type="submit" name="action_button" id="updateButton" class="btn btn-primary">@lang('file.Update')</button>
                     </div>
                 </form>
             </div>

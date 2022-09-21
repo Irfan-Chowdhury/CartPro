@@ -57,6 +57,13 @@
                     <i class="dripicons-information"></i>
                 </a>
             </li>
+            {{-- <li class="nav-item">
+                <a class="nav-link" href="" target="_blank" data-toggle="tooltip"
+                   title="{{__('Notification')}}">
+                   <i class="fa fa-bell-o" aria-hidden="true"></i>
+                   <span class="badge badge-defaultr bg-danger" style="width:25px"><span class="text-light">  5 </span></span>
+                </a>
+            </li> --}}
 
             <li class="nav-item">
             <a rel="nofollow" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item">

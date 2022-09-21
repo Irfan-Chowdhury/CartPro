@@ -1,7 +1,7 @@
 /************************************************
         Common General Data
 *************************************************/
-const demoURL = 'http://cartproshop.com/demo_old/api'; //Demo Link
+const demoURL = 'http://cartproshop.com/demo/api'; //Demo Link
 let productMode;
 let clientVersionNumber;
 let clientBugNo;
@@ -22,7 +22,6 @@ const loadGeneralData = () => {
 }
 
 const displayGeneralData = data => {
-    // console.log(data);
     productMode            = data.general.product_mode;
     clientVersionNumber    = stringToNumberConvert(clientCurrrentVersion);
     clientBugNo            = parseInt(clientCurrrentBugNo);
@@ -51,7 +50,9 @@ const loadVersionUpgradeData = () => {
 }
 
 let fetchApiData;
-const displayUpgradeNotification = data => {
+const displayUpgradeNotification = (data) => {
+    console.log(data);
+
     if (clientVersionNumber >= minimumRequiredVersion && latestVersionUpgradeEnable===true && productMode==='DEMO') {
         // Announce
         if (demoVersionNumber > clientVersionNumber) {
@@ -81,11 +82,12 @@ const loadBugsInfo = () => {
     let url = `${demoURL}/fetch-data-bugs`;
     fetch(url)
     .then(res => res.json())
-    .then(data => displayBugNotification());
+    .then(data => displayBugNotification(data));
 }
 
 let fetchBugApiData;
-const displayBugNotification = () => {
+const displayBugNotification = (data) => {
+    console.log(data);
     if (clientVersionNumber >= minimumRequiredVersion && demoVersionNumber === clientVersionNumber && bugUpdateEnable===true && productMode==='DEMO') {
         // Alert
         if (demoBugNo > clientBugNo) {

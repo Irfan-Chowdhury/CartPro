@@ -602,8 +602,8 @@ class HomeController extends Controller
 
     public function changeForDemoOrClient($text)
     {
-        // $this->dataWriteInENVFile('APP_DEBUG',null);
-        // return 1;
+        // $this->dataWriteInENVFile('APP_DEBUG',(bool)false);
+        return 1;
 
 
         if (isset($text) && $text==='CLIENT') {
