@@ -174,17 +174,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        // $attributeValueIds = $request->attribute_value_id;
-        // ProductAttributeValue::where([
-        //     'product_id'=>2,
-        //     'attribute_id'=>1,
-        //     'attribute_value_id'=>10
-        // ])->delete();
-
-        // $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
-
-        // return $request->attribute_value_id;
-
         if (env('USER_VERIFIED')!=1) {
             session()->flash('type','danger');
             session()->flash('message','Disabled for demo !');
@@ -316,12 +305,7 @@ class ProductController extends Controller
 
                 //-----------------Product-Attribute--------------
 
-                if (isset($request->attribute_id[0])) {
-                    // $attributeArrayIds =  $request->attribute_id;//Array
-                    // $attributeValueIds = $request->attribute_value_id; //Array
-                    // for ($i=0; $i <count($attributeArrayIds) ; $i++) {
-                    //     $product->attributes()->attach([$attributeArrayIds[$i]=>['attribute_value_id'=>$attributeValueIds[$i]]]);
-                    // }
+                if (!empty($request->attribute_id) && $request->attribute_id[0]) {
                     $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
                     foreach($attributeValueTranslation as $item){
                         ProductAttributeValue::insert([
@@ -710,7 +694,7 @@ class ProductController extends Controller
 
             //-----------------Product-Attribute-------------
 
-            if (isset($request->attribute_id[0])) {
+            if (!empty($request->attribute_id) && $request->attribute_id[0]) {
                 ProductAttributeValue::where('product_id',$product->id)->delete();
                 $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
                 foreach($attributeValueTranslation as $item){

@@ -1,18 +1,12 @@
 {
     "files": [
         {
-            "file_name": "irfan.zip"
-        },
-        {
-            "file_name": "fahim.zip"
+            "file_name": "app.zip"
         }
     ],
     "log": [
         {
             "text": "Some Bug Fixed."
-        },
-        {
-            "text": "Auto upload fetaure updated."
         }
     ]
 }

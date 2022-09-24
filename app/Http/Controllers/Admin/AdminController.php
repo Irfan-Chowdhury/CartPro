@@ -39,6 +39,224 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        // return $this->testingCode();
+
+        // Artisan::call('optimize:clear');
+
+        $orders = Order::orderBy('id','DESC')->get();
+        $products = Product::where('is_active',1)->get();
+        $total_customers = User::where('user_type',0)->get()->count();
+
+        //We will convert it in ExpiryReminder later
+        $this->autoDataUpdate();
+
+        $top_brands = OrderDetail::with('brand.brandTranslation','brand.brandTranslationEnglish')
+                            ->select('brand_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
+                            ->orderBy('total_amount','DESC')
+                            ->groupBy('brand_id')
+                            ->get()
+                            ->take(5);
+
+        $top_categories = OrderDetail::with('category.catTranslation','category.categoryTranslationDefaultEnglish')
+                            ->select('category_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
+                            ->orderBy('total_amount','DESC')
+                            ->groupBy('category_id')
+                            ->get()
+                            ->take(5);
+
+        $top_products = OrderDetail::with('product','orderProductTranslation','orderProductTranslationEnglish','baseImage')
+                            ->select('product_id', DB::raw('sum(subtotal) as total_amount'))
+                            ->orderBy('total_amount','DESC')
+                            ->groupBy('product_id')
+                            ->get()
+                            ->take(6);
+
+        $category_product =  CategoryProduct::get();
+        $category_ids = [];
+        foreach ($products as $key => $item) {
+            foreach ($category_product as $key => $value) {
+                if ($item->id==$value->product_id) {
+                    $category_ids[$item->id] = $category_product[$key];
+                    break;
+                }
+            }
+        }
+
+
+        $browsers = Analytics::fetchTopBrowsers(Period::days(7));
+        $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(7))->take(10);
+        $topReferrers = Analytics::fetchTopReferrers(Period::days(7))->take(10);
+        $topUserTypes = Analytics::fetchUserTypes(Period::days(7))->take(10);
+        // $topAnaluticsService = Analytics::getAnalyticsService();
+        // dd($topAnaluticsService);
+
+
+        return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids',
+                                                'browsers','topVisitedPages','topReferrers','topUserTypes'));
+    }
+
+    protected function readFileEnglish(){
+
+        //******* Temporaray For Language Input */
+        // $lang_en = $this->readFileEnglish();
+        // $lang_other = $this->readFileothers('bn');
+        // $this->writeFile($lang_en, $lang_other);
+        // return 'ok';
+        // sort($lang_en);
+        // foreach ($lang_en as $key => $val) {
+        //     echo $val."</br>";
+        // }
+        //******* Temporaray End*/
+
+        $lang_en = [];
+        $myfile = fopen("temporary/lang_en.txt", "r") or die("Unable to open file!");
+        while(!feof($myfile)) {
+            $stringRemoveCotation = fgets($myfile);
+            $stringRemoveNewLine = str_replace("\n", '', $stringRemoveCotation);
+            $lang_en[] = str_replace("'", '', $stringRemoveNewLine);
+        }
+        return $lang_en;
+    }
+
+    protected function readFileothers($locale){
+        $lang_other = [];
+        $myfile = fopen('temporary/lang_'.$locale.'.txt', 'r') or die("Unable to open file!");
+        while(!feof($myfile)) {
+            $stringRemoveCotation = fgets($myfile);
+            $stringRemoveNewLine = str_replace("\n", '', $stringRemoveCotation);
+            $lang_other[] = str_replace("'", '', $stringRemoveNewLine);
+        }
+        return $lang_other;
+    }
+
+    protected function writeFile($lang_en, $lang_other){
+        $myfile_read = fopen("temporary/output_lang.txt", "w") or die("Unable to open file!");
+        foreach ($lang_other as $key => $value) {
+            if ($value==null){
+                break;
+            }else {
+                $text = "'$lang_en[$key]'". '=>' ."'$value',\n";
+                fwrite($myfile_read, $text);
+            }
+        }
+    }
+
+
+    public function chart()
+    {
+        $startDate = Carbon::now()->subYear();
+        $endDate   = Carbon::now();
+        // $result = Analytics::fetchVisitorsAndPageViews(Period::create($startDate, $endDate));
+        $result = Analytics::fetchVisitorsAndPageViews(Period::days(7));
+
+        return response()->json($result);
+    }
+
+    public function googleAnalytics()
+    {
+        $analytics = Analytics::fetchVisitorsAndPageViews(Period::days(1));
+        dd($analytics);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+            $message=array(
+                'messege'=>'Successfully Logout',
+                'alert-type'=>'success'
+                 );
+
+        Session::flush();
+
+             return Redirect()->route('admin')->with($message);
+    }
+
+
+    protected function testingCode()
+    {
+        $url = 'https://cartproshop.com/bug_update_files/app.zip';
+        $array = @get_headers($url);
+        $string = $array[0];
+        if(!strpos($string, "200")) {
+            return 'Specified URL does not exist';
+        }
+        else {
+            return 'Specified URL Exists';
+        }
+
+
+        // S-1
+        // Data Read
+        $path = base_path('track/fetch-data-bug.json');
+        $fetch_data_bug_data = null;
+        if (File::exists($path)) {
+            $json_file = File::get($path);
+            $fetch_data_bug_data = json_decode($json_file);
+        }
+        // $track_files_arr   = $fetch_data_bug_data;
+        $track_files_arr   = json_decode(json_encode($fetch_data_bug_data), FALSE);
+        $base_url = 'https://cartproshop.com/bug_update_files/';
+
+
+        // S-2
+        $posts = [];
+        foreach ($track_files_arr->files as $key => $value) {
+            $remote_file_url  = $base_url.$value->file_name;
+            // $remote_file_url  = $value->file_name;
+            return $remote_file_url;
+            $remote_file_name = pathinfo($remote_file_url)['basename'];
+
+            $posts[] = Array (
+                "sl" => $key+1,
+                "title" => $remote_file_name,
+            );
+        }
+        // $path = base_path('track/bug_track.json');
+        // $json = json_encode($posts);
+        // file_put_contents($path, $json); //generate json file
+
+
+
+        // S-3
+        $path_bug_track = base_path('track/bug_track.json');
+        $bug_track = null;
+        if (File::exists($path_bug_track)) {
+            $json_file = File::get($path_bug_track);
+            $bug_track = json_decode($json_file);
+        }
+
+        // S-4
+        if (count($fetch_data_bug_data->files) == count($bug_track)) {
+           return 'ok';
+        }else{
+            return 'not ok';
+        }
+
+
+
+
+        // Data Write
+        $posts = Array (
+            "0" => Array (
+                "id" => "01",
+                "title" => "Hello",
+            ),
+            "1" => Array (
+                "id" => "02",
+                "title" => "Yoyo",
+            ),
+            "2" => Array (
+                "id" => "03",
+                "title" => "I like Apples",
+            )
+        );
+
+        $path = base_path('track/bug_track.json');
+
+        $json = json_encode($posts);
+        $bytes = file_put_contents($path, $json); //generate json file
+        return "Here is the myfile data $bytes.";
+
         // $path = base_path('track/control.json');
         // $data = null;
         // if (File::exists($path)) {
@@ -202,136 +420,6 @@ class AdminController extends Controller
         // return 5;
 
         // ======== Test End ========
-
-
-        // Artisan::call('optimize:clear');
-
-        $orders = Order::orderBy('id','DESC')->get();
-        $products = Product::where('is_active',1)->get();
-        $total_customers = User::where('user_type',0)->get()->count();
-
-        //We will convert it in ExpiryReminder later
-        $this->autoDataUpdate();
-
-        $top_brands = OrderDetail::with('brand.brandTranslation','brand.brandTranslationEnglish')
-                            ->select('brand_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
-                            ->orderBy('total_amount','DESC')
-                            ->groupBy('brand_id')
-                            ->get()
-                            ->take(5);
-
-        $top_categories = OrderDetail::with('category.catTranslation','category.categoryTranslationDefaultEnglish')
-                            ->select('category_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
-                            ->orderBy('total_amount','DESC')
-                            ->groupBy('category_id')
-                            ->get()
-                            ->take(5);
-
-        $top_products = OrderDetail::with('product','orderProductTranslation','orderProductTranslationEnglish','baseImage')
-                            ->select('product_id', DB::raw('sum(subtotal) as total_amount'))
-                            ->orderBy('total_amount','DESC')
-                            ->groupBy('product_id')
-                            ->get()
-                            ->take(6);
-
-        $category_product =  CategoryProduct::get();
-        $category_ids = [];
-        foreach ($products as $key => $item) {
-            foreach ($category_product as $key => $value) {
-                if ($item->id==$value->product_id) {
-                    $category_ids[$item->id] = $category_product[$key];
-                    break;
-                }
-            }
-        }
-
-
-        $browsers = Analytics::fetchTopBrowsers(Period::days(7));
-        $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(7))->take(10);
-        $topReferrers = Analytics::fetchTopReferrers(Period::days(7))->take(10);
-        $topUserTypes = Analytics::fetchUserTypes(Period::days(7))->take(10);
-        // $topAnaluticsService = Analytics::getAnalyticsService();
-        // dd($topAnaluticsService);
-
-
-        return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids',
-                                                'browsers','topVisitedPages','topReferrers','topUserTypes'));
-    }
-
-    protected function readFileEnglish(){
-
-        //******* Temporaray For Language Input */
-        // $lang_en = $this->readFileEnglish();
-        // $lang_other = $this->readFileothers('bn');
-        // $this->writeFile($lang_en, $lang_other);
-        // return 'ok';
-        // sort($lang_en);
-        // foreach ($lang_en as $key => $val) {
-        //     echo $val."</br>";
-        // }
-        //******* Temporaray End*/
-
-        $lang_en = [];
-        $myfile = fopen("temporary/lang_en.txt", "r") or die("Unable to open file!");
-        while(!feof($myfile)) {
-            $stringRemoveCotation = fgets($myfile);
-            $stringRemoveNewLine = str_replace("\n", '', $stringRemoveCotation);
-            $lang_en[] = str_replace("'", '', $stringRemoveNewLine);
-        }
-        return $lang_en;
-    }
-
-    protected function readFileothers($locale){
-        $lang_other = [];
-        $myfile = fopen('temporary/lang_'.$locale.'.txt', 'r') or die("Unable to open file!");
-        while(!feof($myfile)) {
-            $stringRemoveCotation = fgets($myfile);
-            $stringRemoveNewLine = str_replace("\n", '', $stringRemoveCotation);
-            $lang_other[] = str_replace("'", '', $stringRemoveNewLine);
-        }
-        return $lang_other;
-    }
-
-    protected function writeFile($lang_en, $lang_other){
-        $myfile_read = fopen("temporary/output_lang.txt", "w") or die("Unable to open file!");
-        foreach ($lang_other as $key => $value) {
-            if ($value==null){
-                break;
-            }else {
-                $text = "'$lang_en[$key]'". '=>' ."'$value',\n";
-                fwrite($myfile_read, $text);
-            }
-        }
-    }
-
-
-    public function chart()
-    {
-        $startDate = Carbon::now()->subYear();
-        $endDate   = Carbon::now();
-        // $result = Analytics::fetchVisitorsAndPageViews(Period::create($startDate, $endDate));
-        $result = Analytics::fetchVisitorsAndPageViews(Period::days(7));
-
-        return response()->json($result);
-    }
-
-    public function googleAnalytics()
-    {
-        $analytics = Analytics::fetchVisitorsAndPageViews(Period::days(1));
-        dd($analytics);
-    }
-
-    public function logout()
-    {
-        Auth::logout();
-            $message=array(
-                'messege'=>'Successfully Logout',
-                'alert-type'=>'success'
-                 );
-
-        Session::flush();
-
-             return Redirect()->route('admin')->with($message);
     }
 
 }

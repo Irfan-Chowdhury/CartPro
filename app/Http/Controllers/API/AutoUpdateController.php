@@ -35,12 +35,12 @@ class AutoUpdateController extends Controller
         // Set During New Release Announce
         $this->latest_version_upgrade_enable   = false;
         $this->latest_version_db_migrate_enable= false;
-        $this->version_upgrade_base_url        = 'http://cartproshop.com/version_upgrade_files/'; // Fixed | Connect with server
+        $this->version_upgrade_base_url        = 'https://cartproshop.com/version_upgrade_files/'; // Fixed | Connect with server
 
         // Set During Bug Update
         $this->bug_update_enable     = false;
         $this->bug_db_migrate_enable = false;
-        $this->bug_update_base_url   = 'http://cartproshop.com/bug_update_files/';  // Fixed | Connect with server
+        $this->bug_update_base_url   = 'https://cartproshop.com/bug_update_files/';  // Fixed | Connect with server
     }
 
     // Client
@@ -66,7 +66,6 @@ class AutoUpdateController extends Controller
 
     protected function actionTransfer($request, $action_type)
     {
-
         $track_files_arr   = json_decode(json_encode($request->data), FALSE);
         $track_general_arr = json_decode(json_encode($request->general), FALSE);
 
@@ -76,6 +75,20 @@ class AutoUpdateController extends Controller
             $base_url = $this->bug_update_base_url;
         }
 
+        // Chack all Before Execute
+        if ($track_files_arr && $track_general_arr) {
+            foreach ($track_files_arr->files as $value) {
+                $remote_file_url  = $base_url.$value->file_name;
+                $array = @get_headers($remote_file_url);
+                $string = $array[0];
+                if(!strpos($string, "200")) {
+                    return response()->json(['error' => ['Something problem. Please contact with support team.']],404);
+                }
+            }
+        }
+
+
+        // Start Execute
         try{
             if ($track_files_arr && $track_general_arr) {
                 foreach ($track_files_arr->files as $value) {
