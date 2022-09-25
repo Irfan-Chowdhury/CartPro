@@ -14,37 +14,37 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail From Name')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail From Name')  <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="mail_name" class="form-control" @isset($setting_mail->mail_name) value="{{$setting_mail->mail_name}}" @endisset>
+                            <input type="text" name="mail_name" class="form-control" value="{{env('MAIL_FROM_NAME')}}">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Host')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Host') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" name="mail_host" class="form-control" @isset($setting_mail->mail_host) value="{{$setting_mail->mail_host}}" @endisset>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Port')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Port') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" name="mail_port" class="form-control" @isset($setting_mail->mail_port) value="{{$setting_mail->mail_port}}" @endisset>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Username')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Username') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <input type="text" name="mail_username" class="form-control" @isset($setting_mail->mail_username) value="{{$setting_mail->mail_username}}" @endisset>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Password')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Password') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <input type="password" name="mail_password" class="form-control">
+                            <input type="password" required name="mail_password" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Encryption')</b></label>
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Mail Encryption')  <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             <select name="mail_encryption" class="form-control">
                                 <option value="">@lang('file.-- Select Encryption --')</option>
@@ -59,7 +59,7 @@
                     <br>
                     <h3 class="text-bold">@lang('file.Customer Notification Settings')</h3>
                     <br>
-                    
+
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Welcome Email')</b></label>
                         <div class="col-sm-8">

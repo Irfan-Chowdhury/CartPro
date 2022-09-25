@@ -248,7 +248,7 @@ class StoreFrontController extends Controller
             $this->previousImageDeleteFromStorefront('favicon_logo');
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_favicon_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_favicon_logo,$directory,$type='store_front')]
+                    [ 'image' => $this->imageStore($request->image_favicon_logo,$directory,'store_front')]
                 );
         }
 
@@ -256,14 +256,14 @@ class StoreFrontController extends Controller
             $this->previousImageDeleteFromStorefront('header_logo');
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_header_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_header_logo,$directory,$type='header_logo')]
+                    [ 'image' => $this->imageStore($request->image_header_logo,$directory,'header_logo')]
                 );
         }
         if ($request->title_mail_logo=="mail_logo" && (!empty($request->image_mail_logo))) {
             $this->previousImageDeleteFromStorefront('mail_logo');
             StorefrontImage::updateOrCreate(
                     [ 'title' => $request->title_mail_logo, 'type' => 'logo'],
-                    [ 'image' => $this->imageStore($request->image_mail_logo,$directory,$type='store_front')]
+                    [ 'image' => $this->imageStore($request->image_mail_logo,$directory,'mail_logo')]
                 );
         }
         return response()->json(['success' => __('Data Saved successfully.')]);

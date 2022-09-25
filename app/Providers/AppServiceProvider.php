@@ -66,6 +66,8 @@ class AppServiceProvider extends ServiceProvider
         $favicon_logo_path = $empty_image;
         $header_logo_path  = $empty_image;
         $header_db_logo_path  = $empty_image;
+        $mail_logo_path    = $empty_image;
+        $mail_db_logo_path  = $empty_image;
         $topbar_logo_path  = 'public/images/top_images.gif';
 
         $one_column_banner_image  = $empty_image;
@@ -104,6 +106,14 @@ class AppServiceProvider extends ServiceProvider
                 }else{
                     $header_logo_path = url('public'.$item->image);
                     $header_db_logo_path = '/public'.$item->image;
+                }
+            }
+            elseif ($item->title=='mail_logo') {
+                if (!file_exists('public'.$item->image)) {
+                    $mail_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
+                }else{
+                    $mail_logo_path   = url('public'.$item->image);
+                    $mail_db_logo_path = '/public'.$item->image;
                 }
             }
             elseif ($item->title=='accepted_payment_method_image') {
@@ -416,6 +426,8 @@ class AppServiceProvider extends ServiceProvider
                     'favicon_logo_path'=>$favicon_logo_path,
                     'header_logo_path'=>$header_logo_path,
                     'header_db_logo_path'=>$header_db_logo_path,
+                    'mail_logo_path'=>$mail_logo_path,
+                    'mail_db_logo_path'=>$mail_db_logo_path,
                     'settings' => $settings,
                     'storefront_theme_color'=>$storefront_theme_color,
                     'storefront_navbg_color'=>$storefront_navbg_color,

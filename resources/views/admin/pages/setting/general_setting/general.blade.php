@@ -94,6 +94,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.App URL') <span class="text-danger">*</span></b></label>
+                        <div class="col-sm-8">
+                            <input type="text" required name="app_url" class="form-control" placeholder="Ex: www.example.com" value="{{env('APP_URL')}}">
+                        </div>
+                    </div>
+
 
                     <div class="form-group row">
                         <div class="col-sm-4"></div>

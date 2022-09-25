@@ -16,7 +16,7 @@ trait imageHandleTrait{
         if ($type=='brand') {
             Image::make($image)->encode('jpg', 60)->fit(500,150)->save($location);
         }
-        elseif ($type=='header_logo') {
+        elseif ($type=='header_logo' || $type=='mail_logo') {
             Image::make($image)->encode('jpg', 60)->fit(280,62)->save($location);
         }
         elseif($type=='store_front_footer')

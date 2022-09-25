@@ -7,5 +7,5 @@
 <br>
 
 Thanks,<br>
-{{ config('app.name') }}
+{{ env('MAIL_FROM_NAME') }}
 @endcomponent

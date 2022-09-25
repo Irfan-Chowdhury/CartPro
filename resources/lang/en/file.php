@@ -109,6 +109,7 @@ return array (
   'Apartment, suite, unit etc. (optional)' => 'Apartment, suite, unit etc. (optional)',
   'App ID' => 'App ID',
   'App Secret' => 'App Secret',
+  'App URL' => 'App URL',
   'Appearance' => 'Appearance',
   'Apply' => 'Apply',
   'Approve' => 'Approve',

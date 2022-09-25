@@ -200,6 +200,7 @@ class SettingController extends Controller
 		file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
 
         $this->dataWriteInENVFile('APP_TIMEZONE',$request->default_timezone);
+        $this->dataWriteInENVFile('APP_URL',$request->app_url);
 
         return response()->json(['success' => __('Data Added successfully.')]);
     }
@@ -522,8 +523,8 @@ class SettingController extends Controller
             $this->dataWriteInENVFile('MAIL_PASSWORD',$data['mail_password']);
             $this->dataWriteInENVFile('MAIL_ENCRYPTION',$data['mail_encryption']);
             $this->dataWriteInENVFile('MAIL_FROM_ADDRESS',$data['mail_address']);
-            $this->dataWriteInENVFile('MAIL_FROM_NAME',$data['mail_name']);
-
+            $this->dataWriteInENVFile('MAIL_FROM_NAME','"'.$data['mail_name'].'"');
+            
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }

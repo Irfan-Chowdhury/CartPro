@@ -79,7 +79,7 @@
                     @forelse ($storefront_images as $key=> $item)
                         @if ($item->title=='mail_logo')
                             @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                <img src="{{asset('public/'.$item->image)}}" id="mail_logo" height="100px" width="100px">
+                                <img src="{{asset('public'.$item->image)}}" id="mail_logo" height="100px" width="100px">
                             @else
                                 <img src="https://dummyimage.com/100x100/000000/0f6954.png&text=Mail-Logo" id="mail_logo">
                             @endif
