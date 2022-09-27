@@ -508,6 +508,10 @@ class SettingController extends Controller
             $data['new_order_to_admin'] = $request->new_order_to_admin;
             $data['invoice_mail']  = $request->invoice_mail;
             $data['mail_order_status'] = $request->mail_order_status;
+            $data['mail_header_theme_color'] = $request->mail_header_theme_color;
+            $data['mail_body_theme_color'] = $request->mail_body_theme_color;
+            $data['mail_footer_theme_color'] = $request->mail_footer_theme_color;
+            $data['mail_layout_background_theme_color'] = $request->mail_layout_background_theme_color;
 
             $setting_mail = SettingMail::latest()->first();
 
@@ -524,7 +528,7 @@ class SettingController extends Controller
             $this->dataWriteInENVFile('MAIL_ENCRYPTION',$data['mail_encryption']);
             $this->dataWriteInENVFile('MAIL_FROM_ADDRESS',$data['mail_address']);
             $this->dataWriteInENVFile('MAIL_FROM_NAME','"'.$data['mail_name'].'"');
-            
+
             return response()->json(['success' => __('Data Added successfully.')]);
         }
     }

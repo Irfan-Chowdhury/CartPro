@@ -18,5 +18,9 @@ class SettingMail extends Model
         'new_order_to_admin',
         'invoice_mail',
         'mail_order_status',
+        'mail_header_theme_color',
+        'mail_body_theme_color',
+        'mail_footer_theme_color',
+        'mail_layout_background_theme_color',
     ];
 }

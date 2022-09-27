@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CurrencyRate;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Traits\InvoiceTrait;
+use App\Traits\MailTrait;
+use App\Traits\UtilitiesTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    use UtilitiesTrait, InvoiceTrait, MailTrait;
+
     public function index()
     {
         if (auth()->user()->can('order-view'))
@@ -172,18 +176,18 @@ class OrderController extends Controller
         return response()->json(['success'=>'Delivery time updated successfully']);
     }
 
-
     public function orderDetails($reference_no)
     {
-        $order = Order::with('orderDetails.product.productTranslation','shippingDetails')->where('reference_no',$reference_no)->first();
-
-        $currency_rate = 0.00;
-        $default_currency_code = env('DEFAULT_CURRENCY_CODE');
-        if ($default_currency_code) {
-            $currency_rate = CurrencyRate::where('currency_code',$default_currency_code)->first()->currency_rate;
-        }
+        $order         = $this->getOrderByReference($reference_no);
+        $currency_rate = $this->currencyRate();
         return view('admin.pages.order.order_details',compact('order','currency_rate'));
     }
+
+
+    public function downloadInvoice($reference_no){
+        return $this->getOrderDetailsInvoice($reference_no);
+    }
+
 
     public function orderStatus(Request $request)
     {

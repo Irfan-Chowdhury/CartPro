@@ -8,4 +8,5 @@
 
 Thanks,<br>
 {{ env('MAIL_FROM_NAME') }}
+
 @endcomponent

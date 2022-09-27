@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Library\SslCommerz\SslCommerzNotification;
-use App\Mail\OrderMail;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\FlashSaleProduct;
@@ -18,17 +17,16 @@ use App\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
-use Illuminate\Support\Facades\Mail;
+use App\Traits\MailTrait;
 use Stripe;
 use Illuminate\Support\Facades\Redirect;
 use Paystack;
 
 class PaymentController extends Controller
 {
-    use ENVFilePutContent;
+    use ENVFilePutContent, MailTrait;
 
     public function PaypalCreate(Request $request)
     {
@@ -58,8 +56,6 @@ class PaymentController extends Controller
         // DB::commit();
         // return response()->json($order);
     }
-
-
 
     public function paymentProcees(Request $request)
     {
@@ -246,15 +242,7 @@ class PaymentController extends Controller
         $order_id = $order->id;
 
         //Mail
-        $data_mail = [];
-        $data_mail['fullname'] = $request->billing_first_name.' '.$request->billing_last_name;
-        $data_mail['email'] = $request->billing_email;
-        // $data_mail['order_id'] = $order_id;
-        $data_mail['reference_no'] = $reference_no;
-        $data_mail['message'] = 'Thanks for the shopping. Your order is confirmed. Order reference no is ';
-        Mail::to($data_mail['email'])->send(new OrderMail($data_mail));
-
-
+        $this->sendMailWithOrderDetailsInvoice($reference_no);
         return $order_id;
     }
 

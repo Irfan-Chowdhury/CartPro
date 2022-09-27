@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -38,6 +39,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
     public function shippingDetails()
     {
         return $this->hasOne(Shipping::class);

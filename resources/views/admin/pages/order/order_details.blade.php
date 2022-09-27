@@ -12,6 +12,7 @@
             <div class="card">
                 <div class="card-body">
                     <h3 class="font-weight-bold mt-3"> #{{$order->reference_no}} <small>{{__('file.Order Details')}}</small></h3>
+                    <a class="btn btn-danger" href="{{route('admin.order.download-invoice',$order->reference_no)}}" style="color: #fff "><i class="fa fa-file-pdf-o" aria-hidden="true">&nbsp;&nbsp; @lang('file.Download Invoice')</i></a>
                 </div>
             </div>
         </div>
@@ -233,21 +234,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4>{{__('file.Shipping Address')}}</h4>
-                                <hr>
-                                <span>{{$order->shippingDetails->shipping_address_1 ?? null}}</span> <br>
-                                <span>{{$order->shippingDetails->shipping_city ?? null}}</span><br>
-                                <span>{{$order->shippingDetails->shipping_state ?? null}}</span><br>
-                                <span>{{$order->shippingDetails->shipping_zip_code ?? null}}</span><br>
-                                <span>{{$order->shippingDetails->shipping_country ?? null}}</span>
+                @if ($order->shippingDetails)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4>{{__('file.Shipping Address')}}</h4>
+                                    <hr>
+                                    <span>{{$order->shippingDetails->shipping_address_1 ?? null}}</span> <br>
+                                    <span>{{$order->shippingDetails->shipping_city ?? null}}</span><br>
+                                    <span>{{$order->shippingDetails->shipping_state ?? null}}</span><br>
+                                    <span>{{$order->shippingDetails->shipping_zip_code ?? null}}</span><br>
+                                    <span>{{$order->shippingDetails->shipping_country ?? null}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>

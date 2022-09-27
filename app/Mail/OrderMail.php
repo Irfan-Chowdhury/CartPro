@@ -11,19 +11,17 @@ class OrderMail extends Mailable
     use Queueable, SerializesModels;
 
     public $data;
-    // public function __construct($data)
-    public function __construct(array $data)
+    public $pdf;
+
+    public function __construct(array $data, $pdf)
     {
         $this->data = $data;
+        $this->pdf  = $pdf;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->markdown('mail.order-mail');
+        // return $this->markdown('mail.order-mail');
+        return $this->view('mail.order-mail-template')->attachData($this->pdf->output(), "invoice.pdf");
     }
 }

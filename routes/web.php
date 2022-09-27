@@ -394,12 +394,16 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             //Sales
             Route::group(['prefix' => 'order'], function () {
+                // Route::get('/irfan',function(){
+                //     dd('irfan chow');
+                // });
                 Route::get('/',[OrderController::class,'index'])->name('admin.order.index');
                 Route::get('/details/{reference_no}',[OrderController::class,'orderDetails'])->name('admin.order.details');
                 Route::get('/status',[OrderController::class,'orderStatus'])->name('admin.order.status'); //Will be removed later
                 Route::get('/{order_id}/{status}',[OrderController::class,'orderStatusChange'])->name('admin.order.status_change');
                 Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');
                 Route::post('/delivery-time',[OrderController::class,'orderDeliveryTime'])->name('admin.order.delivery_time');
+                Route::get('/download/invoice/{reference_no}',[OrderController::class,'downloadInvoice'])->name('admin.order.download-invoice');
             });
             Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
 
