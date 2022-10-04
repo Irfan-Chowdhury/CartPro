@@ -97,8 +97,6 @@ class AttributeController extends Controller
         return $this->attributeService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
     }
 
-
-
     public function getAttributeValues(Request $request)
     {
         $attribute = Attribute::find($request->attribute_id);

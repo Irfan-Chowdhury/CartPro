@@ -9,6 +9,7 @@ use App\Models\Language;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Notifications\NewOrderNotification;
 use App\Traits\AutoDataUpdateTrait;
 use Auth;
 use Illuminate\Support\Facades\App;
@@ -20,6 +21,7 @@ use Spatie\Analytics\Period;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
@@ -41,7 +43,6 @@ class AdminController extends Controller
     {
         // return $this->testingCode();
 
-        // Artisan::call('optimize:clear');
 
         $orders = Order::orderBy('id','DESC')->get();
         $products = Product::where('is_active',1)->get();
@@ -64,12 +65,16 @@ class AdminController extends Controller
                             ->get()
                             ->take(5);
 
+
         $top_products = OrderDetail::with('product','orderProductTranslation','orderProductTranslationEnglish','baseImage')
                             ->select('product_id', DB::raw('sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')
                             ->groupBy('product_id')
                             ->get()
                             ->take(6);
+
+        // return $top_products;
+
 
         $category_product =  CategoryProduct::get();
         $category_ids = [];
@@ -172,8 +177,30 @@ class AdminController extends Controller
     }
 
 
+
+
     protected function testingCode()
     {
+        // $notification = auth()->user();
+
+        // $notification = User::find(1);
+        // $notification = $order->unreadNotifications;
+
+        // auth()->user()->notify(new NewOrderNotification(1089));
+        // return 1;
+        // $notifications = DB::table('notifications')->where('read_at', null)->get();
+        // $notifications = DB::table('notifications')->where('read_at', null)->update(['read_at'=> Carbon::now()]);
+        // return $notifications;
+
+
+        // auth()->user()->notify(new NewOrderNotification($reference_no));
+
+        $test = DB::table('notifications')->where('read_at', null)->get();
+        foreach($test as $notification){
+            return json_decode($notification->data)->link;
+        }
+        return json_decode($test[0]->data)->link;
+
         $url = 'https://cartproshop.com/bug_update_files/app.zip';
         $array = @get_headers($url);
         $string = $array[0];

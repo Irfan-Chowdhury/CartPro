@@ -6,7 +6,7 @@
     <div class="container-fluid"><span id="alert_message"></span></div>
 
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">{{__('file.Currency Rates')}}</h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Currency Rates')}} <small class="text-danger"><i>[Default currency rate have to set 1.00]</i></small></h4>
         <br>
     </div>
 

@@ -30,3 +30,6 @@ class AddSoftDeleteColumnToAttributeTranslationsTable extends Migration
         });
     }
 }
+
+// php artisan make:migration add_soft_delete_column_to_attribute_translations --table=attribute_translations
+

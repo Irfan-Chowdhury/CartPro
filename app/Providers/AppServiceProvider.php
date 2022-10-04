@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Share;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
+use Illuminate\Notifications\Notification;
 
 class AppServiceProvider extends ServiceProvider
 {

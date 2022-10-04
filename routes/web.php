@@ -53,6 +53,8 @@ use App\Http\Controllers\Frontend\UserShippingAddressController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\API\AutoUpdateController;
+use App\Http\Controllers\Admin\DeveloperSectionController;
+use App\Http\Controllers\Admin\NotificationController;
 
 
 /*
@@ -282,10 +284,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
     Route::group(['prefix' => 'admin','middleware'=>'admin_check'], function () {
         Route::group(['namespace'=>'Admin'], function () {
 
-
             Route::get('/new-release',[AutoUpdateController::class,'index'])->name('new-release'); // New Release
             Route::get('/bugs',[AutoUpdateController::class,'bugUpdatePage'])->name('bug-update-page'); // Bugs
-
 
             //Admin Dashboard
             Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
@@ -293,6 +293,13 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::get('/google_analytics',[AdminController::class,'googleAnalytics'])->name('admin.googleAnalytics');
             Route::get('/logout',[AdminController::class,'Logout'])->name('admin.logout');
 
+
+            // Notification Related
+            Route::group(['prefix' => 'notification'], function () {
+                Route::get('/markAsRead',[NotificationController::class,'markAsReadNotification'])->name('markAsRead');
+                Route::get('/all/notifications',[NotificationController::class,'allNotifications'])->name('seeAllNotification');
+                Route::get('clearAll',[NotificationController::class,'clearAll'])->name('clearAll');
+            });
 
 
             //Admin Profile
@@ -394,9 +401,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             //Sales
             Route::group(['prefix' => 'order'], function () {
-                // Route::get('/irfan',function(){
-                //     dd('irfan chow');
-                // });
                 Route::get('/',[OrderController::class,'index'])->name('admin.order.index');
                 Route::get('/details/{reference_no}',[OrderController::class,'orderDetails'])->name('admin.order.details');
                 Route::get('/status',[OrderController::class,'orderStatus'])->name('admin.order.status'); //Will be removed later
@@ -526,7 +530,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 });
             });
 
-
             //User
             Route::get('/user',[UserController::class,'index'])->name('admin.user');
             Route::post('/insertUser',[UserController::class,'store'])->name('user.store');
@@ -534,6 +537,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             Route::get('/user/{id}/edit',[UserController::class,'edit'])->name('admin.user_edit');
             Route::get('/user/active',[UserController::class,'active'])->name('admin.user.active');
             Route::get('/user/inactive',[UserController::class,'inactive'])->name('admin.user.inactive');
+            Route::get('/user/delete',[UserController::class,'delete'])->name('admin.user.delete');
             Route::get('/user/bulk_action',[UserController::class,'bulkAction'])->name('admin.user.bulk_action');
 
 
@@ -576,13 +580,11 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('product_purchase_report',[ReportController::class,'productPurchaseReport'])->name('admin.reports.product_purchase_report');
             });
 
-
             Route::get('report/today',[ReportController::class,'todayReport'])->name('report.today');
             Route::get('report/this_week',[ReportController::class,'thisWeekReport'])->name('report.this_week');
             Route::get('report/this_month',[ReportController::class,'thisYearReport'])->name('report.this_year');
             Route::get('report/filter_report',[ReportController::class,'filterReport'])->name('report.filter_report');
             //---- temporaray ---
-
 
             Route::group(['prefix' => 'setting'], function () {
 
@@ -659,7 +661,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
             Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');
 
-
             //FAQ
             Route::prefix('faq')->group(function () {
                 Route::prefix('type')->group(function () {
@@ -682,6 +683,12 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/delete',[FAQController::class,'delete'])->name('admin.faq.delete');
                 Route::get('/bulk_action',[FAQController::class,'bulkAction'])->name('admin.faq.bulk_action');
             });
+
+            Route::group(['prefix' => 'developer-section'], function () {
+                Route::get('index',[DeveloperSectionController::class,'index'])->name('admin.developer.section.index');
+                Route::post('auto-update-submit',[DeveloperSectionController::class,'autoUpdateSubmit'])->name('admin.developer.section.auto-update-submit');
+            });
+
         });
     });
 });

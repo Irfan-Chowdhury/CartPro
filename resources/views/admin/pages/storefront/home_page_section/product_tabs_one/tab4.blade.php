@@ -6,9 +6,9 @@
         <input type="text" name="storefront_product_tabs_1_section_tab_4_title" class="form-control" placeholder="@lang('file.Title')"
         @forelse ($setting[97]->settingTranslations as $key => $item)
             @if ($item->locale==$locale)
-                value="{{$item->value}}" @break
+                value="{!! htmlspecialchars_decode($item->value)!!}" @break
             @elseif($item->locale=='en')
-                value="{{$item->value}}" @break
+                value="{!! htmlspecialchars_decode($item->value)!!}" @break
             @endif
         @empty
         @endforelse >

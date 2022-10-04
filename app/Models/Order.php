@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
+    use Notifiable;
+
     protected $fillable = [
         'reference_no',
         'user_id',

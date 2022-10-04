@@ -43,12 +43,13 @@
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
+    <!-- table sorter preload-->
+
     <!-- Custom Scrollbar-->
+
     <link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
-
-    <!-- table sorter preload-->
 
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.css') }}">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.css') }}"></noscript>
@@ -131,7 +132,9 @@
 
                 @include('admin.includes.header')
 
-                @yield('admin_content')
+                <div class="content">
+                    @yield('admin_content')
+                </div>
 
                 <footer class="main-footer">
                     <div class="container-fluid">

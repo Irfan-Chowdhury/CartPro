@@ -21,10 +21,29 @@
             </li>
 
             <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>
+            <li class="nav-item">
+                <a rel="nofollow" id="notify-btn" href="#" class="nav-link dropdown-item" data-toggle="tooltip" title="{{__('Notifications')}}">
+                    <i class="dripicons-bell"></i>
 
+                    @php $notifications = DB::table('notifications')->where('deleted_at', null)->get(); @endphp
+
+                    @if(count($notifications->where('read_at', null)))
+                        <span id="notificationCount" class="badge badge-danger">
+                            {{count($notifications->where('read_at', null))}}
+                        </span>
+                    @endif
+                </a>
+                <ul class="right-sidebar">
+                    <li class="header">
+                        <span class="pull-right"><a href="{{route('clearAll')}}">{{__('Clear All')}}</a></span>
+                        <span class="pull-left"><a href="{{route('seeAllNotification')}}">{{__('See All')}}</a></span>
+                    </li>
+                    @foreach($notifications as $notification)
+                        <li><a class="unread-notification text-primary" href={{json_decode($notification->data)->link}}>{{json_decode($notification->data)->data}}</a></li>
+                    @endforeach
+                </ul>
+            </li>
             @php
-
-
                  $languages = DB::table('languages')
                             ->select('id','language_name','local')
                             // ->where('default','=',0)
@@ -57,39 +76,54 @@
                     <i class="dripicons-information"></i>
                 </a>
             </li>
-            {{-- <li class="nav-item">
-                <a class="nav-link" href="" target="_blank" data-toggle="tooltip"
-                   title="{{__('Notification')}}">
-                   <i class="fa fa-bell-o" aria-hidden="true"></i>
-                   <span class="badge badge-defaultr bg-danger" style="width:25px"><span class="text-light">  5 </span></span>
-                </a>
-            </li> --}}
+
 
             <li class="nav-item">
-            <a rel="nofollow" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item">
-                @if(auth()->user()->image && Illuminate\Support\Facades\File::exists(public_path(auth()->user()->image)))
-                    <img class="profile-photo sm mr-1" src="{{asset('public/'.auth()->user()->image)}}">
-                @else
-                    <img class="profile-photo sm mr-1" src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Admin">
-                @endif
-                <span> {{auth()->user()->username}}</span>
-            </a>
+                <a rel="nofollow" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item">
+                    @if(auth()->user()->image && Illuminate\Support\Facades\File::exists(public_path(auth()->user()->image)))
+                        <img class="profile-photo sm mr-1" src="{{asset('public/'.auth()->user()->image)}}">
+                    @else
+                        <img class="profile-photo sm mr-1" src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Admin">
+                    @endif
+                    <span> {{auth()->user()->username}}</span>
+                </a>
 
-              <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                <li>
-                    <a href="{{route('admin.profile')}}">
-                        <i class="dripicons-user"></i>
-                        {{trans('file.Profile')}}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.logout') }}"><i class="dripicons-power"></i>
-                        {{trans('file.logout')}}
-                    </a>
-                  </li>
-              </ul>
+                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                    <li>
+                        <a href="{{route('admin.profile')}}">
+                            <i class="dripicons-user"></i>
+                            {{trans('file.Profile')}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.logout') }}"><i class="dripicons-power"></i>
+                            {{trans('file.logout')}}
+                        </a>
+                    </li>
+                </ul>
             </li>
           </ul>
         </div>
     </nav>
   </header>
+
+
+  @push('scripts')
+    <script type="text/javascript">
+            (function ($) {
+                "use strict";
+
+                $('#notify-btn').on('click', function () {
+                    $('#notificationCount').removeClass('badge badge-danger').text('');
+                    $.ajax({
+                        url: '{{route('markAsRead')}}',
+                        dataType: "json",
+                        success: function (result) {
+                        },
+                    });
+                })
+
+            })(jQuery);
+    </script>
+
+@endpush

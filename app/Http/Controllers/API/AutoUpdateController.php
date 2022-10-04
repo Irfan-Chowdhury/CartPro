@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Traits\ENVFilePutContent;
+use App\Traits\JSONFileTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -12,7 +13,7 @@ use ZipArchive;
 
 class AutoUpdateController extends Controller
 {
-    use ENVFilePutContent;
+    use ENVFilePutContent, JSONFileTrait;
 
     private $product_mode;
     private $demo_version;
@@ -27,20 +28,25 @@ class AutoUpdateController extends Controller
 
     public function __construct()
     {
+        $general = $this->readJSONData('track/general.json');
+        $control = $this->readJSONData('track/control.json');
+
         $this->product_mode = env('PRODUCT_MODE');
         $this->demo_version = env('VERSION');
         $this->demo_bug_no  = intval(env('BUG_NO'));
-        $this->minimum_required_version = '1.0.7';
+        $this->minimum_required_version = $general->minimum_required_version;
 
         // Set During New Release Announce
-        $this->latest_version_upgrade_enable   = false;
-        $this->latest_version_db_migrate_enable= false;
-        $this->version_upgrade_base_url        = 'https://cartproshop.com/version_upgrade_files/'; // Fixed | Connect with server
+        $this->latest_version_upgrade_enable   = $control->version_upgrade->latest_version_upgrade_enable;
+        $this->latest_version_db_migrate_enable= $control->version_upgrade->latest_version_db_migrate_enable;
+        $this->version_upgrade_base_url        = $control->version_upgrade->version_upgrade_base_url; // Fixed | Connect with server
+        // $this->version_upgrade_base_url        = 'https://cartproshop.com/version_upgrade_files/'; // Fixed | Connect with server
 
         // Set During Bug Update
-        $this->bug_update_enable     = false;
-        $this->bug_db_migrate_enable = false;
-        $this->bug_update_base_url   = 'https://cartproshop.com/bug_update_files/';  // Fixed | Connect with server
+        $this->bug_update_enable     = $control->bug_update->bug_update_enable;
+        $this->bug_db_migrate_enable = $control->bug_update->bug_db_migrate_enable;
+        $this->bug_update_base_url   = $control->bug_update->bug_update_base_url;  // Fixed | Connect with server
+        // $this->bug_update_base_url   = 'https://cartproshop.com/bug_update_files/';  // Fixed | Connect with server
     }
 
     // Client
@@ -152,8 +158,6 @@ class AutoUpdateController extends Controller
                 'bug_db_migrate_enable'     => $this->bug_db_migrate_enable,
             ],
         ];
-        // $data =  json_decode(json_encode($data), FALSE);
-        // return $data;
         return response()->json($data,201);
     }
 
@@ -166,23 +170,6 @@ class AutoUpdateController extends Controller
             $data = json_decode($json_file);
         }
         return response()->json($data,201);
-
-        // $json_file = File::get("track/fetch-data-upgrade.json");
-        // $data = json_decode($json_file);
-        // return response()->json($data,201);
-        // $data = [
-        //     'files'=>
-        //     [
-        //         ['sl'=> 1, 'file_name'=>'irfan.zip'],
-        //         // ['sl'=> 2, 'file_name'=>'test456.zip'],
-        //     ],
-        //     'log'=>
-        //     [
-        //         ['text'=>'Some Bug Fixed.'],
-        //         ['text'=>'Auto upload fetaure updated.'],
-        //     ]
-        // ];
-        // return response()->json($data,201);
     }
 
     public function fetchDataForBugs()
@@ -195,35 +182,6 @@ class AutoUpdateController extends Controller
             $data = json_decode($json_file);
         }
         return response()->json($data,201);
-
-        // $json_file = File::get("track/fetch-data-bug.json");
-        // $data = json_decode($json_file);
-        // return response()->json($data,201);
-        // $data = [
-        //     'files'=>
-        //     [
-        //         ['sl'=> 1, 'file_name'=>'irfan.zip'],
-        //         ['sl'=> 1, 'file_name'=>'editorconfig.zip'],
-        //         ['sl'=> 2, 'file_name'=>'app.zip'],
-        //         ['sl'=> 3, 'file_name'=>'artisan.zip'],
-        //         ['sl'=> 4, 'file_name'=>'bootstrap.zip'],
-        //         ['sl'=> 5, 'file_name'=>'composer.zip'],
-        //         ['sl'=> 6, 'file_name'=>'config.zip'],
-        //         ['sl'=> 7, 'file_name'=>'database.zip'],
-        //         ['sl'=> 8, 'file_name'=>'install0.zip'],
-        //         ['sl'=> 9, 'file_name'=>'resources.zip'],
-        //         ['sl'=> 10, 'file_name'=>'routes.zip'],
-        //         ['sl'=> 11, 'file_name'=>'storage.zip'],
-        //         ['sl'=> 12, 'file_name'=>'tests.zip'],
-        //         ['sl'=> 13, 'file_name'=>'irfan.zip'],
-        //     ],
-        //     'log'=>
-        //     [
-        //         ['text'=>'Some Bug Fixed.'],
-        //         ['text'=>'Auto upload fetaure updated.'],
-        //     ]
-        // ];
-        // return response()->json($data,201);
     }
 }
 

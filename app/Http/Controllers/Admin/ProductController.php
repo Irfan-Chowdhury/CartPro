@@ -98,10 +98,24 @@ class ProductController extends Controller
                 ->addColumn('price', function ($row)
                 {
                     if ($row->special_price > 0) {
-                        return  '<span>'.number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').'</span></br><span class="text-danger"><del>'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').'</del></span>';
+                        if(env('CURRENCY_FORMAT')=='prefix'){
+                            return  '<span>'.env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').'</span></br><span class="text-danger"><del>'.env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').'</del></span>';
+                        }else{
+                            return  '<span>'.number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL').'</span></br><span class="text-danger"><del>'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL').'</del></span>';
+                        }
                     }else {
-                        return '$'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '');
+                        if(env('CURRENCY_FORMAT')=='prefix'){
+                            return env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '');
+                        }else{
+                            return number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL');
+                        }
                     }
+
+                    // if(env('CURRENCY_FORMAT')=='prefix'){
+                    //     return env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '');
+                    // }else{
+                    //     return number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL');
+                    // }
                 })
                 ->addColumn('action', function ($row)
                 {

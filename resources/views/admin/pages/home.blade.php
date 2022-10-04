@@ -5,8 +5,8 @@
 @section('admin_content')
 <section>
     <div class="container-fluid">
-        <h3>@lang('file.Welcome Admin') </h3>
 
+        <!-- Alert Section for version upgrade-->
         <div id="alertSection" class="d-none alert alert-primary alert-dismissible fade show" role="alert">
             <p id="announce" class="d-none"><strong>Announce !!!</strong> A new version <span id="newVersionNo"></span> has been released. Please <i><b><a href="{{route('new-release')}}">Click here</a></b></i> to check upgrade details.</p>
             <p id="congratulation" class="d-none"><strong>Congratulation !!!</strong> New version {{env('VERSION')}} upgrated successfully.</p>
@@ -14,12 +14,18 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <!-- Alert Section for Bug update-->
         <div id="alertBugSection" class="d-none alert alert-primary alert-dismissible fade show" style="background-color: rgb(248,215,218)" role="alert">
             <p id="alertBug" class="d-none" style="color: rgb(126,44,52)"><strong>Alert !!!</strong> Minor bug fixed in version {{env('VERSION')}}. Please <i><b><a href="{{route('bug-update-page')}}">Click here</a></b></i> to update the system.</p>
             <p id="congratulationBug" class="d-none"><strong>Congratulation !!!</strong> System updated successfully.</p>
             <button type="button" style="color: rgb(126,44,52)" id="closeButtonBugUpdate" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3>@lang('file.Welcome Admin') </h3>
+            </div>
         </div>
     </div>
 </section>
@@ -100,7 +106,10 @@
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title">@lang('file.Top Brands')</h1>
+                                <div class="d-flex justify-content-between">
+                                    <div><h1 class="card-title">@lang('file.Top Brands')</h1></div>
+                                    <div><p><a href="{{route('admin.brand')}}">@lang('file.All Brands')</a></p></div>
+                                </div>
                                 <table class="table">
                                     <tbody>
                                         @forelse ($top_brands as $item)
@@ -131,7 +140,10 @@
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title">@lang('file.Top Categories')</h1>
+                                <div class="d-flex justify-content-between">
+                                    <div><h1 class="card-title">@lang('file.Top Categories')</h1></div>
+                                    <div><p><a href="{{route('admin.category')}}">@lang('file.All Categories')</a></p></div>
+                                </div>
                                 <table class="table">
                                     <tbody>
                                         @forelse ($top_categories as $item)
@@ -160,8 +172,12 @@
                 </div>
             </div>
 
-            <div class="col-sm-12">
-                <h1 class="card-title">@lang('file.Top Products')</h1>
+            <div class="col-sm-12 card">
+                <div class="p-3 d-flex justify-content-between">
+                    <div><h1 class="card-title">@lang('file.Top Products')</h1></div>
+                    <div><p><a href="{{route('admin.products.index')}}">@lang('file.All Products')</a></p></div>
+                </div>
+                <hr>
 
                 <div class="row">
                     @forelse ($top_products as $item)
@@ -273,8 +289,6 @@
                 </div>
             </div>
 
-
-
             <div class="col-sm-6">
                 <div class="card">
                     <div class="card-body">
@@ -342,39 +356,8 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                    <h1 class="card-title"><i class="fa fa-shopping-cart"></i> @lang('file.Last 10 Pending Orders')</h1>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">@lang('file.Order ID')</th>
-                            <th scope="col">@lang('file.Customer')</th>
-                            <th scope="col">@lang('file.Status')</th>
-                            <th scope="col">@lang('file.Total')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($orders->where('order_status','pending')->take(10) as $item)
-                                <tr>
-                                    <th>{{$item->id}}</th>
-                                    <td>{{$item->billing_first_name.' '.$item->billing_last_name}}</td>
-                                    <td>{{$item->order_status}}</td>
-                                    <td>
-                                        @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{ number_format($item->total,'2')}}  {{env('DEFAULT_CURRENCY_SYMBOL')}}
-                                        @else
-                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($item->total,'2')}}
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h4><i>No order found</i></h4>
-                                    </div>
-                                </div>
-                            @endforelse
-                        </tbody>
-                        </table>
+                        <h1 class="card-title">@lang('file.Page View Statistics')</h1>
+                        <canvas id="canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -382,8 +365,43 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title">@lang('file.Page View Statistics')</h1>
-                        <canvas id="canvas"></canvas>
+                        <div class="d-flex justify-content-between">
+                            <div><h1 class="card-title"><i class="fa fa-shopping-cart"></i> @lang('file.Last 10 Pending Orders')</h1></div>
+                            <div><p><a href="{{route('admin.order.index')}}">@lang('file.All Orders')</a></p></div>
+                        </div>
+                        <hr>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">@lang('file.Order ID')</th>
+                                <th scope="col">@lang('file.Customer')</th>
+                                <th scope="col">@lang('file.Status')</th>
+                                <th scope="col">@lang('file.Total')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($orders->where('order_status','pending')->take(10) as $item)
+                                    <tr>
+                                        <th>{{$item->id}}</th>
+                                        <td>{{$item->billing_first_name.' '.$item->billing_last_name}}</td>
+                                        <td>{{$item->order_status}}</td>
+                                        <td>
+                                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                                {{ number_format($item->total,'2')}}  {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                            @else
+                                                {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($item->total,'2')}}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4><i>No order found</i></h4>
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

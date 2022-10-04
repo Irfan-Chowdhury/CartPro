@@ -88,7 +88,7 @@
         @endcan
 
         @can('flash_sale')
-        <li class="{{Request::is('admin/flash-sales') || Request::is('admin/flash-sales/create') || Request::is('admin/flash-sales/edit/*') ? 'active' : ''}}"><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('file.Flash Sales')}}</span></a></li>
+            <li class="{{Request::is('admin/flash-sales') || Request::is('admin/flash-sales/create') || Request::is('admin/flash-sales/edit/*') ? 'active' : ''}}"><a href="{{route('admin.flash_sale.index')}}"><i class="fa fa-bolt"></i><span>{{__('file.Flash Sales')}}</span></a></li>
         @endcan
 
         @can('coupon')
@@ -139,16 +139,16 @@
         </li>
 
         @can('users_and_roles')
-        <li><a href="#user" aria-expanded="{{Request::is('admin/user') || Request::is('admin/roles') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>{{__('file.Users and Roles')}}</span></a>
-            <ul id="user" class="collapse list-unstyled {{Request::is('admin/user') || Request::is('admin/roles')? 'show':'' }}">
-            @can('user')
-                <li class="{{Route::current()->getName()=='admin.user' ? 'active' : ''}}" id="navigation-menu"><a href="{{route('admin.user')}}">{{__('file.Users')}}</a></li>
-            @endcan
-            @can('role')
-                <li class="{{Route::current()->getName()=='admin.role.index' || Request::is('admin/roles/role-permission/*') ? 'active' : ''}}"  id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('file.Roles')}}</a></li>
-            @endcan
-            </ul>
-        </li>
+            <li><a href="#user" aria-expanded="{{Request::is('admin/user') || Request::is('admin/roles') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>{{__('file.Users and Roles')}}</span></a>
+                <ul id="user" class="collapse list-unstyled {{Request::is('admin/user') || Request::is('admin/roles')? 'show':'' }}">
+                @can('user')
+                    <li class="{{Route::current()->getName()=='admin.user' ? 'active' : ''}}" id="navigation-menu"><a href="{{route('admin.user')}}">{{__('file.Users')}}</a></li>
+                @endcan
+                @can('role')
+                    <li class="{{Route::current()->getName()=='admin.role.index' || Request::is('admin/roles/role-permission/*') ? 'active' : ''}}"  id="navigation-menu"><a href="{{route('admin.role.index')}}">{{__('file.Roles')}}</a></li>
+                @endcan
+                </ul>
+            </li>
         @endcan
 
         @can('localization')
@@ -166,28 +166,30 @@
             </li>
         @endcan
 
-
-
         @can('site-setting')
-        <li class="has-dropdown">
-            <a href="#setting" aria-expanded="{{Request::is('admin/setting/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-toggles"></i><span>{{trans('file.Site Settings')}}</span></a>
-            <ul id="setting" class="collapse list-unstyled {{Request::is('admin/setting/*')  ? 'show':'' }}">
-                @can('country')
-                    <li id="setting-country" class="{{Request::is('admin/setting/countries') ? 'active' : ''}}"><a href="{{route('admin.country.index')}}">{{__('file.Country')}}</a></li>
-                @endcan
-                @can('currency')
-                    <li id="setting-currency" class="{{Request::is('admin/setting/currencies') ? 'active' : ''}}"><a href="{{route('admin.currency.index')}}">{{__('file.Currency')}}</a></li>
-                @endcan
-                    {{-- <li><a href="{{route('admin.shipping.location.index')}}">{{__('file.Shipping')}}</a></li> --}}
-                @can('setting')
-                    <li id="setting-other-setting" class="{{Request::is('admin/setting/others') ? 'active' : ''}}"><a href="{{route('admin.setting.index')}}">{{__('file.Other Setting')}}</a></li>
-                @endcan
-                @can('language')
-                    <li id="setting-language" class="{{Request::is('admin/setting/language') ? 'active' : ''}}"><a href="{{route('admin.setting.language')}}">{{__('file.Language')}}</a></li>
-                @endcan
-            </ul>
-        </li>
+            <li class="has-dropdown">
+                <a href="#setting" aria-expanded="{{Request::is('admin/setting/*') ? 'true':'false' }}" data-toggle="collapse"> <i class="dripicons-toggles"></i><span>{{trans('file.Site Settings')}}</span></a>
+                <ul id="setting" class="collapse list-unstyled {{Request::is('admin/setting/*')  ? 'show':'' }}">
+                    @can('country')
+                        <li id="setting-country" class="{{Request::is('admin/setting/countries') ? 'active' : ''}}"><a href="{{route('admin.country.index')}}">{{__('file.Country')}}</a></li>
+                    @endcan
+                    @can('currency')
+                        <li id="setting-currency" class="{{Request::is('admin/setting/currencies') ? 'active' : ''}}"><a href="{{route('admin.currency.index')}}">{{__('file.Currency')}}</a></li>
+                    @endcan
+                        {{-- <li><a href="{{route('admin.shipping.location.index')}}">{{__('file.Shipping')}}</a></li> --}}
+                    @can('setting')
+                        <li id="setting-other-setting" class="{{Request::is('admin/setting/others') ? 'active' : ''}}"><a href="{{route('admin.setting.index')}}">{{__('file.Other Setting')}}</a></li>
+                    @endcan
+                    @can('language')
+                        <li id="setting-language" class="{{Request::is('admin/setting/language') ? 'active' : ''}}"><a href="{{route('admin.setting.language')}}">{{__('file.Language')}}</a></li>
+                    @endcan
+                </ul>
+            </li>
         @endcan
+
+        @if (env('PRODUCT_MODE')==='DEVELOPER')
+            <li class="{{Request::is('admin/developer-section/index') ? 'active' : ''}}"><a href="{{route('admin.developer.section.index')}}"><i class="fa fa-cogs"></i><span>{{__('file.Developer Section')}}</span></a></li>
+        @endif
     </ul>
 </nav>
 <!-- Sidebar-->

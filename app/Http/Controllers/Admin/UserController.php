@@ -67,10 +67,11 @@ class UserController extends Controller
                         {
                             $button .= '&nbsp;&nbsp;';
                             if ($row->is_active==1) {
-                                $button .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+                                $button .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
                             }else {
                                 $button .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
                             }
+                            $button .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
                         }
                         return $button;
                     })
@@ -217,34 +218,31 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function delete(Request $request)
     {
         if (env('USER_VERIFIED')!=1) {
             return response()->json(['errors' => ['Disabled for demo !']]);
         }
-
-        User::whereId($id)->delete();
-
+        User::whereId($request->id)->delete();
         return response()->json(['success' => __('Data is successfully deleted')]);
-
     }
-    function delete_by_selection(Request $request)
-    {
-
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['errors' => ['Disabled for demo !']]);
-        }
 
 
-        $user_id = $request['UserListIdArray'];
-        $users = User::whereIn('id', $user_id);
-        if ($users->delete())
-        {
-            return response()->json(['success' => __('Multi Delete', ['key' => trans('file.Account')])]);
-        } else
-        {
-            return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
-        }
+    // function delete_by_selection(Request $request)
+    // {
+    //     if (env('USER_VERIFIED')!=1) {
+    //         return response()->json(['errors' => ['Disabled for demo !']]);
+    //     }
 
-    }
+    //     $user_id = $request['UserListIdArray'];
+    //     $users = User::whereIn('id', $user_id);
+    //     if ($users->delete())
+    //     {
+    //         return response()->json(['success' => __('Multi Delete', ['key' => trans('file.Account')])]);
+    //     } else
+    //     {
+    //         return response()->json(['error' => 'Error,selected Accounts can not be deleted']);
+    //     }
+
+    // }
 }

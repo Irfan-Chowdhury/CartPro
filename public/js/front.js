@@ -93,7 +93,7 @@ $(document).ready(function () {
     $('header .dropdown-item').on('click', function(){
         $('.right-sidebar.open').removeClass('open');
         $(this).siblings('.right-sidebar').addClass('open');
-        $('.page').on('click', function(){
+        $('.content').on('click', function(){
             $('.right-sidebar.open').removeClass('open');
         })
     })

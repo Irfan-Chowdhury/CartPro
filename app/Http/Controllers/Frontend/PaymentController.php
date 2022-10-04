@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Shipping;
 use App\Models\Tax;
+use App\Notifications\NewOrderNotification;
 use App\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -243,6 +244,11 @@ class PaymentController extends Controller
 
         //Mail
         $this->sendMailWithOrderDetailsInvoice($reference_no);
+        $order->notify(new NewOrderNotification($reference_no));
+        // if(Auth::check()){
+        //     auth()->user()->notify(new NewOrderNotification($reference_no));
+        // }
+
         return $order_id;
     }
 

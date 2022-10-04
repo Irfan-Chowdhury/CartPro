@@ -64,6 +64,7 @@
             let bulkActionURL = "{{route('admin.category.bulk_action')}}";
             @include('admin.includes.common_js.common_word')
         </script>
+        <!-- index and edit -->
         <script type="text/javascript" src="{{asset('public/js/admin/pages/category/index.js')}}"></script>
 
         <!-- Common Action For All CRUD-->

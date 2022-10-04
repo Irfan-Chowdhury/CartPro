@@ -3,7 +3,7 @@
 @section('admin_content')
 <section>
 
-        <div class="container-fluid"><span id="general_result"></span></div>
+        <div class="container-fluid"><span id="alert_message"></span></div>
 
 
         <div class="container-fluid mb-3">
@@ -18,7 +18,7 @@
         </div>
 
 <div class="table-responsive">
-  <table id="user_list_table" class="table ">
+  <table id="dataListTable" class="table ">
       <thead>
       <tr>
       <th class="not-exported"></th>
@@ -49,7 +49,7 @@
 
 
         $(document).ready(function () {
-            let table = $('#user_list_table').DataTable({
+            let table = $('#dataListTable').DataTable({
                 initComplete: function () {
                     this.api().columns([1]).every(function () {
                         var column = this;
@@ -235,7 +235,7 @@
                         if (data.success) {
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
-                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                         }
                         $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                     }
@@ -268,7 +268,7 @@
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             setTimeout(function () {
                                 $('#formModal').modal('hide');
-                                $('#user_list_table').DataTable().ajax.reload();
+                                $('#dataListTable').DataTable().ajax.reload();
                                 $('#sample_form')[0].reset();
                             }, 2000);
 
@@ -327,7 +327,7 @@
             success: function(data){
                 console.log(data);
                 if(data.success){
-                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#general_result').fadeIn("slow"); //Check in top in this blade
                     $('#general_result').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -335,7 +335,7 @@
                     }, 3000);
                 }
                 else if(data.errors){
-                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#general_result').fadeIn("slow");
                     $('#general_result').addClass('alert alert-danger').html(data.errors);
                     setTimeout(function() {
@@ -359,7 +359,7 @@
             success: function(data){
                 console.log(data);
                 if(data.success){
-                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#general_result').fadeIn("slow"); //Check in top in this blade
                     $('#general_result').addClass('alert alert-success').html(data.success);
                     setTimeout(function() {
@@ -367,7 +367,7 @@
                     }, 3000);
                 }
                 else if(data.errors){
-                    $('#user_list_table').DataTable().ajax.reload();
+                    $('#dataListTable').DataTable().ajax.reload();
                     $('#general_result').fadeIn("slow");
                     $('#general_result').addClass('alert alert-danger').html(data.errors);
                     setTimeout(function() {
@@ -382,7 +382,7 @@
     //Bulk Action
     $("#bulk_action").on("click",function(){
         var idsArray = [];
-        let table = $('#user_list_table').DataTable();
+        let table = $('#dataListTable').DataTable();
         idsArray = table.rows({selected: true}).ids().toArray();
 
         if(idsArray.length === 0){
@@ -402,7 +402,7 @@
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#general_result').fadeIn("slow"); //Check in top in this blade
                             $('#general_result').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -410,7 +410,7 @@
                             }, 3000);
                         }
                         else if(data.errors){
-                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#general_result').fadeIn("slow");
                             $('#general_result').addClass('alert alert-danger').html(data.errors);
                             setTimeout(function() {
@@ -424,14 +424,14 @@
                 action_type = "inactive";
                 console.log(idsArray);
                 $.ajax({
-                    url: "{{route('admin.slider.bulk_action')}}",
+                    url: "{{route('admin.user.bulk_action')}}",
                     method: "GET",
                     data: {idsArray:idsArray,action_type:action_type},
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
                             table.rows('.selected').deselect();
-                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#general_result').fadeIn("slow"); //Check in top in this blade
                             $('#general_result').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -439,7 +439,7 @@
                             }, 3000);
                         }
                         else if(data.errors){
-                            $('#user_list_table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#general_result').fadeIn("slow");
                             $('#general_result').addClass('alert alert-danger').html(data.errors);
                             setTimeout(function() {
@@ -449,87 +449,42 @@
                     }
                 });
             });
+
+            $("#bulkDelete").on("click",function(){
+                action_type = "delete";
+                $.ajax({
+                    url: "{{route('admin.user.bulk_action')}}",
+                    method: "GET",
+                    data: {idsArray:idsArray,action_type:action_type},
+                    success: function (data) {
+                        console.log(data);
+                        if(data.success){
+                            $('#bulkConfirmModal').modal('hide');
+                            table.rows('.selected').deselect();
+                            $('#dataListTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-success').html(data.success);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                        else if (data.demo) {
+                            $('#bulkConfirmModal').modal('hide');
+                            $('#dataListTable').DataTable().ajax.reload();
+                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
+                            $('#alert_message').addClass('alert alert-danger').html(data.demo);
+                            setTimeout(function() {
+                                $('#alert_message').fadeOut("slow");
+                            }, 3000);
+                        }
+                    }
+                });
+            });
         }
     });
 
-
-        let delete_id;
-
-        $(document).on('click', '.delete', function () {
-            delete_id = $(this).attr('id');
-            $('#confirmModal').modal('show');
-            $('.modal-title').text('{{__('DELETE Record')}}');
-            $('#ok_button').text('{{trans('file.OK')}}');
-
-        });
-
-
-        $(document).on('click', '#bulk_delete', function () {
-
-            let id = [];
-            let table = $('#user_list_table').DataTable();
-            id = table.rows({selected: true}).ids().toArray();
-
-            if (id.length > 0) {
-                if (confirm('{{__('Delete Selection',['key'=>__('Category Info')])}}')) {
-                    $.ajax({
-                        url: '{{url('/admin/user/massdelete')}}',
-                        method: 'POST',
-                        data: {
-                            PageListIdArray: id
-                        },
-                        success: function (data) {
-                            if (data.success) {
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
-                            }
-                            if (data.error) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
-                            }
-                            table.ajax.reload();
-                            table.rows('.selected').deselect();
-                            if (data.errors) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
-                            }
-                            $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
-
-                        }
-
-                    });
-                }
-            } else {
-
-            }
-        });
-
-
-        $('.close').click(function () {
-            $('#sample_form')[0].reset();
-            $('#user_list_table').DataTable().ajax.reload();
-        });
-
-        $('#ok_button').click(function () {
-            let target = "{{route('admin.user')}}/" + delete_id + '/delete';
-            $.ajax({
-                url: target,
-                beforeSend: function () {
-                    $('#ok_button').text('{{trans('file.Deleting...')}}');
-                },
-                success: function (data) {
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                    }
-                    if (data.error) {
-                        html = '<div class="alert alert-danger">' + data.error + '</div>';
-                    }
-                    setTimeout(function () {
-                        $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
-                        $('#confirmModal').modal('hide');
-                        $('#user_list_table').DataTable().ajax.reload();
-                    }, 2000);
-                }
-            })
-        });
-
+    //---------- Delete ------------
+    @include('admin.includes.common_js.delete_js',['route_name'=>'admin.user.delete'])
 
 })(jQuery);
     </script>

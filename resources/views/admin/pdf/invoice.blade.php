@@ -43,7 +43,6 @@
             font-size: 70%;
             color: #000
         }
-        /* * { font-family: DejaVu Sans, sans-serif; } */
     </style>
   </head>
   <body>

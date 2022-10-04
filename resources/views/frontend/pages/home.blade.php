@@ -25,24 +25,6 @@
                 @if ($store_front_slider_format == 'full_width')
                     <div class="col-md-12">
                         <div class="banner-slider">
-                            {{-- @foreach ($sliders as $item)
-                                @if ($item->sliderTranslation->isNotEmpty())
-                                    <div class="item">
-                                        @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
-                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
-                                        @else
-                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
-                                        @endif
-                                            <div class="@if($item->text_alignment=='right') info right @else info @endif" >
-                                                <div>
-                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_title}}</h3>
-                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach --}}
                             @foreach ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
@@ -87,31 +69,6 @@
                     {{-- Half Width --}}
                     <div class="col-md-8">
                         <div class="banner-slider">
-                            {{-- @foreach ($sliders as $item)
-                                @if ($item->sliderTranslation->isNotEmpty())
-                                    <div class="item">
-                                        @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
-                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
-                                        @else
-                                            <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
-                                        @endif
-                                            <div class="@if($item->text_alignment=='right') info right @else info @endif" >
-                                                <div>
-                                                    <h3 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_title}}</h3>
-                                                    <h5 style="color: {{$item->text_color ?? '#ffffff'}} ">{{$item->sliderTranslation[0]->slider_subtitle}}</h5>
-
-                                                    @if ($item->type=='category')
-                                                        <a class="button style1 md" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">Read More</a>
-                                                    @elseif ($item->type=='url')
-                                                        <a class="button style1 md" href="{{$item->url}}">Read More</a>
-                                                    @endif
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach --}}
                             @foreach ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
@@ -176,8 +133,6 @@
 
                     <div class="category-slider-wrapper swiper-container">
                     <div class="swiper-wrapper">
-
-
                         @forelse ($categories->where('top',1) as $item)
                             <div class="swiper-slide">
                                 <a href="{{url('category')}}/{{$item->slug}}">
@@ -228,7 +183,6 @@
 @if ($settings[81]->plain_value==1)
     <section class="product-tab-section">
         <div class="container">
-
             <div class="row">
                 <div class="col-md-12 text-center">
                     <ul class="nav nav-tabs product-details-tab" id="lionTab" role="tablist">
@@ -236,7 +190,7 @@
                         @foreach ($settings as $setting)
                             @if ($setting->key =='storefront_product_tabs_1_section_tab_1_title'|| $setting->key =='storefront_product_tabs_1_section_tab_2_title' || $setting->key =='storefront_product_tabs_1_section_tab_3_title' || $setting->key =='storefront_product_tabs_1_section_tab_4_title')
                                 <li class="nav-item">
-                                    <a @if($i==0) class="nav-link active" @else class="nav-link" @endif data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{{$setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null}}</a>
+                                    <a @if($i==0) class="nav-link active" @else class="nav-link" @endif data-bs-toggle="tab" href="#{{$setting->key}}" role="tab" aria-selected="true">{!! htmlspecialchars_decode($setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null) !!}</a>
                                 </li>
                                 @php $i++ ; @endphp
                             @endif
@@ -248,7 +202,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="tab-content mt-3" id="lionTabContent">
@@ -643,7 +596,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -694,7 +646,7 @@
 @endif
 
 <!--Flash Sale And Vertical Products Start-->
-@if ($flash_sale_and_vertical_products_section_enabled==1)
+@if ($flash_sale_and_vertical_products_section_enabled)
     <section>
         <div class="container">
             <div class="row">

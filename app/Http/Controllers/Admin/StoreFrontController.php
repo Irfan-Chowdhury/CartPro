@@ -848,9 +848,12 @@ class StoreFrontController extends Controller
                 return response()->json(['errors'=>['This is disabled for demo']]);
             }
 
-            if(empty($request->storefront_flash_sale_and_vertical_products_section_enabled)){
-                Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
-            }
+            // if(empty($request->storefront_flash_sale_and_vertical_products_section_enabled)){
+            // if($request->storefront_flash_sale_and_vertical_products_section_enabled){
+            //     // Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
+            // }
+            $enable_value = $request->storefront_flash_sale_and_vertical_products_section_enabled ? true : false;
+            Setting::where('key','storefront_flash_sale_and_vertical_products_section_enabled')->update(['plain_value'=>$enable_value]);
 
             $locale = Session::get('currentLocal');
             foreach ($request->all() as $key => $value) {

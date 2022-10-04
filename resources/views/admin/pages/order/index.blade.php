@@ -130,6 +130,7 @@
                                     columns: ':visible:Not(.not-exported)',
                                     rows: ':visible'
                                 },
+                                footer:true
                             },
                             {
                                 extend: 'csv',
@@ -138,6 +139,7 @@
                                     columns: ':visible:Not(.not-exported)',
                                     rows: ':visible'
                                 },
+                                footer:true
                             },
                             {
                                 extend: 'print',
@@ -146,6 +148,7 @@
                                     columns: ':visible:Not(.not-exported)',
                                     rows: ':visible'
                                 },
+                                footer:true
                             },
                             {
                                 extend: 'colvis',
@@ -172,7 +175,6 @@
                     for (let i = 0; i < rowsdataCol.length; i++) {
                         text = rowsdataCol[i];
                         data = text.replace("$", "");
-                        // total  += parseFloat(rowsdataCol[i]);
                         total  += parseFloat(data);
                     }
                     var resultOfSum  = total.toFixed(2);
