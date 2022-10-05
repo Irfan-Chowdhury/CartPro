@@ -2,7 +2,7 @@
         Common General Data
 *************************************************/
 
-const demoURL = 'http://cartproshop.com/demo/api'; //Demo Link
+const demoURL = 'https://cartproshop.com/demo/api'; //Demo Link
 let fetchGeneralApiData;
 let productMode;
 let clientVersionNumber;
