@@ -46,12 +46,22 @@ class BrandRepository implements BrandContract
     //Front - HomeController
     public function getBrandsWhereInIds($ids)
     {
-        return Brand::whereIn('id',$ids)
+        $data = Brand::whereIn('id',$ids)
                 ->where('is_active',1)
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
-                ->map->format();
+                ->map(function($brand){
+                    return [
+                        'id'=>$brand->id,
+                        'slug'=>$brand->slug,
+                        'is_active'=>$brand->is_active,
+                        'brand_logo'=>$brand->brand_logo ?? null,
+                        'brand_name'=>$brand->translations($brand->brandTranslations)->brand_name,
+                    ];
+                });
+
+        return json_decode(json_encode($data), FALSE);
     }
 }
 

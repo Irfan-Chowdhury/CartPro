@@ -233,10 +233,8 @@ class HomeController extends Controller
         }
 
         $brand_ids = json_decode($storefront_top_brands);
-        $brands = Cache::remember('brands', 300, function () use($brand_ids) {
-            return $this->brandService->getBrandsWhereInIds($brand_ids);
-        });
-
+        $brands =  $this->brandService->getBrandsWhereInIds($brand_ids);
+        
 
         $order_details = Cache::remember('order_details', 300, function () {
             return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
