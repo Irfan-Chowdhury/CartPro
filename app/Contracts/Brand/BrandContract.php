@@ -16,8 +16,9 @@ interface BrandContract
 
     public function inactive($id);
 
-    public function bulkAction($type, $ids);
+    public function destroy($id);
 
+    public function bulkAction($type, $ids);
 
     //Front - HomeController
     public function getBrandsWhereInIds($ids);

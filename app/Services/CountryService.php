@@ -3,9 +3,11 @@ namespace App\Services;
 
 use App\Contracts\Country\CountryContract;
 use App\Models\SettingGeneral;
+use App\Traits\WordCheckTrait;
 
 class CountryService
 {
+    use WordCheckTrait;
     private $countryContract;
     public function __construct(CountryContract $countryContract){
         $this->countryContract = $countryContract;

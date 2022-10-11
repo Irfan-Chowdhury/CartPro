@@ -54,7 +54,7 @@
             }
         });
     });
-    let indexURL      = "{{route('admin.tax.index') }}";
+    let dataTableURL  = "{{route('admin.tax.datatable')}}";
     let storeURL      = "{{route('admin.tax.store')}}";
     let editURL       = "{{route('admin.tax.edit')}}";
     let updateURL     = "{{route('admin.tax.update')}}";
@@ -65,9 +65,9 @@
 
     @include('admin.includes.common_js.common_word')
 </script>
-<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/index.js')}}"></script>
+<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/datatable.js')}}"></script>
 
-<!-- Common Action For All CRUD-->
-@include('admin.includes.common_action')
+    <!-- Common Action For All CRUD-->
+    @include('admin.includes.common_action',['all'=>true])
 
 @endpush

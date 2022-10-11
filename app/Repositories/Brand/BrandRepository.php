@@ -5,11 +5,12 @@ namespace App\Repositories\Brand;
 use App\Contracts\Brand\BrandContract;
 use App\Models\Brand;
 use App\Traits\ActiveInactiveTrait;
+use App\Traits\DeleteWithFileTrait;
 use App\Traits\TranslationTrait;
 
 class BrandRepository implements BrandContract
 {
-    use ActiveInactiveTrait, TranslationTrait;
+    use ActiveInactiveTrait, TranslationTrait, DeleteWithFileTrait;
 
     public function getAllBrands(){
         return Brand::orderBy('is_active','DESC')
@@ -62,6 +63,10 @@ class BrandRepository implements BrandContract
                 });
 
         return json_decode(json_encode($data), FALSE);
+    }
+
+    public function destroy($id){
+        $this->deleteWithFile($this->getById($id));
     }
 }
 

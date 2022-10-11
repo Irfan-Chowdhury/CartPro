@@ -20,6 +20,8 @@ use App\Contracts\Slider\SliderContract;
 use App\Contracts\Slider\SliderTranslationContract;
 use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
+use App\Contracts\Tax\TaxContract;
+use App\Contracts\Tax\TaxTranslationContract;
 use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Attribute\AttributeTranslationRepository;
 use App\Repositories\AttributeSet\AttributeSetRepository;
@@ -39,6 +41,8 @@ use App\Repositories\Slider\SliderRepository;
 use App\Repositories\Slider\SliderTranslationRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Tag\TagTranslationRepository;
+use App\Repositories\Tax\TaxRepository;
+use App\Repositories\Tax\TaxTranslationRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -86,6 +90,10 @@ class RepositoryServiceProvider extends ServiceProvider
         //Attribute Value
         $this->app->bind(AttributeValueContract::class, AttributeValueRepository::class);
         $this->app->bind(AttributeValueTranslationContract::class, AttributeValueTranslationRepository::class);
+
+        //Tax
+        $this->app->bind(TaxContract::class, TaxRepository::class);
+        $this->app->bind(TaxTranslationContract::class, TaxTranslationRepository::class);
 
     }
 }

@@ -1,10 +1,8 @@
-(function($) {
-
-
+(function ($) {
     "use strict";
 
     $(document).ready(function () {
-        let table_table = $('#dataListTable').DataTable({
+        let table = $('#dataListTable').DataTable({
             initComplete: function () {
                 this.api().columns([1]).every(function () {
                     var column = this;
@@ -34,7 +32,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: indexURL,
+                url: dataTableURL,
             },
 
             columns: [
@@ -44,21 +42,23 @@
                     searchable: false
                 },
                 {
-                    data: 'category_image',
-                    name: 'category_image',
+                    data: 'tax_name',
+                    name: 'tax_name',
                 },
                 {
-                    data: 'category_name',
-                    name: 'category_name',
-                },
-                {
-                    data: 'parent',
-                    name: 'parent',
-
+                    data: 'country',
+                    name: 'country',
                 },
                 {
                     data: 'is_active',
                     name: 'is_active',
+                        render:function (data) {
+                            if (data == '1') {
+                            return "<span class='p-2 badge badge-success'>Active</span>";
+                        }else{
+                            return "<span class='p-2 badge badge-danger'>Inactive</span>";
+                        }
+                    }
                 },
                 {
                     data: 'action',
@@ -135,40 +135,37 @@
                 },
             ],
         });
-        new $.fn.dataTable.FixedHeader(table_table);
+        new $.fn.dataTable.FixedHeader(table);
     });
 
-
-    $(document).on('click', '.edit', function () {
-        var id = $(this).data("id");
-        $('#alert_message').html('');
+    // ------------ Edit ------------------
+    $(document).on("click",".edit",function(e){
+        e.preventDefault();
+        var taxId = $(this).data("id");
         $.ajax({
             url: editURL,
             type: "GET",
-            data: {category_id:id},
-            success: function (data) {
+            data: {tax_id:taxId},
+            success: function(data){
                 console.log(data);
-                $('#category_id').val(data.category.id);
-                $('#category_translation_id').val(data.categoryTranslation.id);
-                $('#category_name_edit').val(data.categoryTranslation.category_name);
-                $('#description_edit').val(data.category.description);
-                $('#cateogry_icon_edit').val(data.category.icon);
-                $('#parent_id_edit').selectpicker('val', data.category.parent_id);
-                $('#description_position_edit').selectpicker('val', data.category.description_position);
-                if (data.category.top === 1) {
-                    $('#top_edit').prop('checked', true);
-                } else {
-                    $('#top_edit').prop('checked', false);
-                }
-                if (data.category.is_active === 1) {
-                    $('#isActive_edit').prop('checked', true);
-                } else {
-                    $('#isActive_edit').prop('checked', false);
+                $('#tax_id').val(data.tax.id);
+                $('#taxTranslationId').val(data.taxTranslation.id);
+                $('#tax_class').val(data.taxTranslation.tax_class);
+                $('#based_on').selectpicker('val',data.tax.based_on);
+                $('#tax_name').val(data.taxTranslation.tax_name);
+                $('#country').selectpicker('val',data.tax.country);
+                $('#state').val(data.taxTranslation.state);
+                $('#city').val(data.taxTranslation.city);
+                $('#zip').val(data.tax.zip);
+                $('#rate').val(data.tax.rate);
+                if (data.tax.is_active==1) {
+                    $('#is_active').attr('checked', true)
+                }else{
+                    $('#is_active').attr('checked', false)
                 }
                 $('#editFormModal').modal('show');
             }
-        })
+        });
     });
 
 })(jQuery);
-

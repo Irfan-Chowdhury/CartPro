@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
 
-                <div class="container-fluid"><span id="error_message"></span></div>
+                <div class="container-fluid"><span id="errorMessage"></span></div>
 
                 <form method="post" id="submitForm" class="form-horizontal" action="{{route('admin.brand.store')}}" enctype="multipart/form-data">
                     @csrf
@@ -29,10 +29,8 @@
                                 <label class="form-check-label" for="defaultCheck1">@lang('file.Active')</label>
                             </div>
                         </div>
-                          <div class="col form-group" align="center">
-                            <input type="hidden" name="action" id="action"/>
-                            <input type="hidden" name="hidden_id" id="hidden_id"/>
-                            <input type="submit" name="action_button" id="submitButton" class="btn btn-warning" value={{trans('file.Add')}}>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="submit" name="action_button" id="submitButton" class="btn btn-primary">@lang('file.Submit')</button>
                         </div>
                     </div>
                 </form>

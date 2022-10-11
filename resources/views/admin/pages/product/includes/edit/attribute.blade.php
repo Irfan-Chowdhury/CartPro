@@ -125,13 +125,13 @@
 
 
             <!-- Attribute Wise Inventory -->
-            {{-- <div class="card">
+            <div class="card">
                 <div class="card-body">
                     <label class="text-bold">For maintaining attribute wise inventory please goto the link below</label>
                     <br>
                     <a href="{{route('admin.products.attribute_inventory',$product->id)}}" target="__blank" class="btn btn-outline-primary btn-sm">Click Here</a>
                 </div>
-            </div> --}}
+            </div>
 
 
         </div>

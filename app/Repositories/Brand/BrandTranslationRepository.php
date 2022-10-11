@@ -23,4 +23,8 @@ class BrandTranslationRepository implements BrandTranslationContract
             ['brand_name'=> htmlspecialchars_decode($request->brand_name)]
         );
     }
+
+    public function destroy($brand_id){
+        BrandTranslation::where('brand_id', $brand_id)->delete();
+    }
 }

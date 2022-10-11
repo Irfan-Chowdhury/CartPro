@@ -60,10 +60,12 @@ class BrandService
                     }
                     if (auth()->user()->can('brand-action')){
                         if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                        // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" title="Edit" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>
+                        // &nbsp; ';
                     }
                     return $actionBtn;
                 })
@@ -73,9 +75,6 @@ class BrandService
 
     public function storeBrand($request)
     {
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
         $data  = $this->requestHandleData($request, $brand = null);
         $brand = $this->brandContract->storeBrand($data);
 
@@ -146,6 +145,12 @@ class BrandService
             return response()->json(['demo' => 'Disabled for demo !']);
         }
         return $this->brandContract->inactive($id);
+    }
+
+    public function destroy($id){
+        $this->brandContract->destroy($id);
+        $this->brandTranslationContract->destroy($id);
+        return response()->json(['success' => 'Data Deleted Successfully']);
     }
 
     public function bulkActionByTypeAndIds($type, $ids)

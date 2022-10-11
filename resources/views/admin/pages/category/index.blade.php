@@ -68,6 +68,6 @@
         <script type="text/javascript" src="{{asset('public/js/admin/pages/category/index.js')}}"></script>
 
         <!-- Common Action For All CRUD-->
-        @include('admin.includes.common_action')
+        @include('admin.includes.common_action',['all'=>true])
 
     @endpush

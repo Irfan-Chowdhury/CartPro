@@ -327,11 +327,12 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
             //brands
             Route::group(['prefix' => '/brands'], function () {
                 Route::get('/',[BrandController::class,'index'])->name('admin.brand');
-                Route::post('/store',[BrandController::class,'store'])->name('admin.brand.store');
+                Route::post('/store',[BrandController::class,'store'])->name('admin.brand.store')->middleware(['demo_check','checkAjax']);
                 Route::get('/brand/{id}',[BrandController::class,'brandEdit'])->name('admin.brand.edit');
                 Route::post('/update/{id}',[BrandController::class,'brandUpdate'])->name('brand.update');
                 Route::get('/active',[BrandController::class,'active'])->name('admin.brand.active');
                 Route::get('/inactive',[BrandController::class,'inactive'])->name('admin.brand.inactive');
+                Route::get('/delete',[BrandController::class,'delete'])->name('admin.brand.delete')->middleware(['demo_check','checkAjax']);
                 Route::get('/bulk_action',[BrandController::class,'bulkAction'])->name('admin.brand.bulk_action');
             });
 
@@ -515,7 +516,8 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 //Taxes
                 Route::group(['prefix' => 'taxes'], function () {
                     Route::get('/',[TaxController::class,'index'])->name('admin.tax.index');
-                    Route::post('/store',[TaxController::class,'store'])->name('admin.tax.store');
+                    Route::get('/datatable',[TaxController::class,'datatable'])->name('admin.tax.datatable')->middleware(['checkAjax']);
+                    Route::post('/store',[TaxController::class,'store'])->name('admin.tax.store')->middleware(['demo_check','checkAjax']);
                     Route::get('/edit',[TaxController::class,'edit'])->name('admin.tax.edit');
                     Route::post('/update',[TaxController::class,'update'])->name('admin.tax.update');
                     Route::get('/active',[TaxController::class,'active'])->name('admin.tax.active');

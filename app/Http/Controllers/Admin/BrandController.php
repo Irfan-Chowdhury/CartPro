@@ -62,6 +62,10 @@ class BrandController extends Controller
         }
     }
 
+    public function delete(Request $request){
+        return $this->brandService->destroy($request->id);
+    }
+
     public function bulkAction(Request $request){
         if ($request->ajax()) {
             return $this->brandService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);

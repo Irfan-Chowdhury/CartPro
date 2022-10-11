@@ -21,5 +21,4 @@ interface TagContract
     public function destroy($id);
 
     public function bulkAction($type, $ids);
-
 }

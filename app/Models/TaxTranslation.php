@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaxTranslation extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'tax_id',
         'locale',
@@ -14,4 +17,7 @@ class TaxTranslation extends Model
         'state',
         'city',
     ];
+    
+    protected $dates = ['deleted_at'];
+
 }

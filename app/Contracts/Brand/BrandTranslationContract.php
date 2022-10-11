@@ -8,5 +8,7 @@ interface BrandTranslationContract
 
     public function getByIdAndLocale($brand_id, $locale);
 
+    public function destroy($brand_id);
+
     public function updateOrInsertBrandTranslation($request);
 }
