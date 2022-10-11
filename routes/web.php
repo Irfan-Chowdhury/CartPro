@@ -518,11 +518,12 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::get('/',[TaxController::class,'index'])->name('admin.tax.index');
                     Route::get('/datatable',[TaxController::class,'datatable'])->name('admin.tax.datatable')->middleware(['checkAjax']);
                     Route::post('/store',[TaxController::class,'store'])->name('admin.tax.store')->middleware(['demo_check','checkAjax']);
-                    Route::get('/edit',[TaxController::class,'edit'])->name('admin.tax.edit');
-                    Route::post('/update',[TaxController::class,'update'])->name('admin.tax.update');
-                    Route::get('/active',[TaxController::class,'active'])->name('admin.tax.active');
-                    Route::get('/inactive',[TaxController::class,'inactive'])->name('admin.tax.inactive');
-                    Route::get('/bulk_action',[TaxController::class,'bulkAction'])->name('admin.tax.bulk_action');
+                    Route::get('/edit',[TaxController::class,'edit'])->name('admin.tax.edit')->middleware(['checkAjax']);
+                    Route::post('/update',[TaxController::class,'update'])->name('admin.tax.update')->middleware(['demo_check','checkAjax']);
+                    Route::get('/active',[TaxController::class,'active'])->name('admin.tax.active')->middleware(['demo_check','checkAjax']);
+                    Route::get('/inactive',[TaxController::class,'inactive'])->name('admin.tax.inactive')->middleware(['demo_check','checkAjax']);
+                    Route::get('/delete',[TaxController::class,'delete'])->name('admin.tax.delete');
+                    Route::get('/bulk_action',[TaxController::class,'bulkAction'])->name('admin.tax.bulk_action')->middleware(['demo_check','checkAjax']);
                 });
                 //Currency Rates
                 Route::group(['prefix' => 'currency_rates'], function () {

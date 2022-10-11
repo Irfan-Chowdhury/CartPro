@@ -11,7 +11,7 @@
         <div id="alertMessageEdit" role="alert"></div>
 
         <div class="modal-body">
-            <form method="POST" id="updateForm" action="{{route('admin.tax.update')}}">
+            <form method="POST" id="updateForm">
                 @csrf
 
                 <input type="hidden" name="tax_id" id="tax_id">

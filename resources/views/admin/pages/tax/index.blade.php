@@ -60,12 +60,14 @@
     let updateURL     = "{{route('admin.tax.update')}}";
     let activeURL     = "{{route('admin.tax.active')}}";
     let inactiveURL   = "{{route('admin.tax.inactive')}}";
-    let deleteURL     = "";
+    let deleteURL     = "{{route('admin.tax.delete')}}";
     let bulkActionURL = "{{route('admin.tax.bulk_action')}}";
 
     @include('admin.includes.common_js.common_word')
 </script>
+
 <script type="text/javascript" src="{{asset('public/js/admin/pages/tax/datatable.js')}}"></script>
+<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/edit.js')}}"></script>
 
     <!-- Common Action For All CRUD-->
     @include('admin.includes.common_action',['all'=>true])

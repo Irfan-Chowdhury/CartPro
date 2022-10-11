@@ -22,6 +22,7 @@ use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
 use App\Contracts\Tax\TaxContract;
 use App\Contracts\Tax\TaxTranslationContract;
+use App\Repositories\ActiveInactiveRepository;
 use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Attribute\AttributeTranslationRepository;
 use App\Repositories\AttributeSet\AttributeSetRepository;
@@ -94,7 +95,6 @@ class RepositoryServiceProvider extends ServiceProvider
         //Tax
         $this->app->bind(TaxContract::class, TaxRepository::class);
         $this->app->bind(TaxTranslationContract::class, TaxTranslationRepository::class);
-
     }
 }
 

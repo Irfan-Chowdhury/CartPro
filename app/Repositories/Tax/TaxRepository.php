@@ -6,8 +6,9 @@ use App\Contracts\Tax\TaxContract;
 use App\Models\Tax;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\TranslationTrait;
+use App\Utilities\BulkAction;
 
-class TaxRepository implements TaxContract
+class TaxRepository extends BulkAction implements TaxContract
 {
     use TranslationTrait, ActiveInactiveTrait;
 
@@ -62,8 +63,31 @@ class TaxRepository implements TaxContract
         return json_decode(json_encode($tax), FALSE);
     }
 
-    
     public function store($data){
         return Tax::create($data);
+    }
+
+    public function getById($id){
+        return Tax::find($id);
+    }
+
+    public function update($data){
+        return $this->getById($data['tax_id'])->update($data);
+    }
+
+    public function active($id){
+        return $this->activeData($this->getById($id));
+    }
+
+    public function inactive($id){
+        return $this->inactiveData($this->getById($id));
+    }
+
+    public function destroy($id){
+        $this->getById($id)->delete();
+    }
+
+    public function bulkAction($type, $ids){
+        return BulkAction::setBulkAction($type, Tax::whereIn('id',$ids));
     }
 }

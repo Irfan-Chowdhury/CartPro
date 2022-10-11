@@ -4,7 +4,7 @@
     $(document).on("click",".delete",function(e){
         e.preventDefault();
         let id = $(this).data("id");
-        
+
         if (!confirm('Are you sure you want to continue?')) {
             alert(false);
         }else{
@@ -12,7 +12,6 @@
                 url: deleteURL,
                 data: {id:id},
                 error: function(response){
-                    console.log(response)
                     var dataKeys   = Object.keys(response.responseJSON.errors);
                     var dataValues = Object.values(response.responseJSON.errors);
                     let html = '<div class="alert alert-danger">';

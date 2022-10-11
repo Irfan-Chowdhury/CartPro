@@ -18,6 +18,8 @@ class CheckAjax
     {
         if($request->ajax()){
             return $next($request);
+        }else{
+            return redirect()->back();
         }
     }
 }
