@@ -30,7 +30,6 @@ class UserController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
-
             if (request()->ajax())
             {
                 return datatables()->of($users)

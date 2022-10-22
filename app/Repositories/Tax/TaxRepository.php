@@ -4,13 +4,12 @@ namespace App\Repositories\Tax;
 
 use App\Contracts\Tax\TaxContract;
 use App\Models\Tax;
-use App\Traits\ActiveInactiveTrait;
 use App\Traits\TranslationTrait;
-use App\Utilities\BulkAction;
+use App\Utilities\Action;
 
-class TaxRepository extends BulkAction implements TaxContract
+class TaxRepository extends Action implements TaxContract
 {
-    use TranslationTrait, ActiveInactiveTrait;
+    use TranslationTrait;
 
     public function getAll()
     {
@@ -76,11 +75,11 @@ class TaxRepository extends BulkAction implements TaxContract
     }
 
     public function active($id){
-        return $this->activeData($this->getById($id));
+        Action::setActive($this->getById($id));
     }
 
     public function inactive($id){
-        return $this->inactiveData($this->getById($id));
+        Action::setInactive($this->getById($id));
     }
 
     public function destroy($id){
@@ -88,6 +87,6 @@ class TaxRepository extends BulkAction implements TaxContract
     }
 
     public function bulkAction($type, $ids){
-        return BulkAction::setBulkAction($type, Tax::whereIn('id',$ids));
+        Action::setBulkAction($type, Tax::whereIn('id',$ids));
     }
 }

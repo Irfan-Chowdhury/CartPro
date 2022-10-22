@@ -51,8 +51,6 @@ const loadVersionUpgradeData = () => {
 
 let fetchApiData;
 const displayUpgradeNotification = (data) => {
-    console.log(data);
-
     if (clientVersionNumber >= minimumRequiredVersion && latestVersionUpgradeEnable===true && productMode==='DEMO') {
         // Announce
         if (demoVersionNumber > clientVersionNumber) {
@@ -87,7 +85,6 @@ const loadBugsInfo = () => {
 
 let fetchBugApiData;
 const displayBugNotification = (data) => {
-    console.log(data);
     if (clientVersionNumber >= minimumRequiredVersion && demoVersionNumber === clientVersionNumber && bugUpdateEnable===true && productMode==='DEMO') {
         // Alert
         if (demoBugNo > clientBugNo) {

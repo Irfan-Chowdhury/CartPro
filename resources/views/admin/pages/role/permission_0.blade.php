@@ -54,12 +54,10 @@
         (function ($) {
             "use strict";
 
-
+            var checkedNodes;
 
 
             $(document).ready(function () {
-
-                var checkedNodes;
 
                 $("ul#setting").siblings('a').attr('aria-expanded', 'true');
                 $("ul#setting").addClass("show");

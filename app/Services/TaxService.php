@@ -48,7 +48,7 @@ class TaxService extends Message
                     }else {
                         $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                     }
-                    $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+                    // $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
                 }
                 return $actionBtn;
             })
@@ -118,14 +118,16 @@ class TaxService extends Message
         if (!auth()->user()->can('tax-action')){
             return Message::getPermissionMessage();
         }
-        return $this->taxContract->active($id);
+        $this->taxContract->active($id);
+        return Message::activeSuccessMessage();
     }
 
     public function inactiveById($id){
         if (!auth()->user()->can('tax-action')){
             return Message::getPermissionMessage();
         }
-        return $this->taxContract->inactive($id);
+        $this->taxContract->inactive($id);
+        return Message::inactiveSuccessMessage();
     }
 
     public function destroy($id)
@@ -146,9 +148,11 @@ class TaxService extends Message
 
         if ($type=='delete') {
             $this->taxContract->bulkAction($type, $ids);
-            return $this->taxTranslationContract->bulkAction($type, $ids);
+            $this->taxTranslationContract->bulkAction($type, $ids);
+            return Message::deleteSuccessMessage();
         }else{
-            return $this->taxContract->bulkAction($type, $ids);
+            $this->taxContract->bulkAction($type, $ids);
+            return $type=='active' ? Message::activeSuccessMessage() : Message::inactiveSuccessMessage();
         }
     }
 

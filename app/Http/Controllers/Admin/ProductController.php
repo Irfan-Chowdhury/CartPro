@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\App;
 use App\Services\BrandService;
 use App\Services\CategoryService;
 use App\Services\TagService;
+use App\Services\TaxService;
 use App\Traits\imageHandleTrait;
 use App\Traits\TranslationTrait;
 
@@ -43,11 +44,13 @@ class ProductController extends Controller
     protected $categoryService;
     protected $tagService;
     protected $attributeSetService;
-    public function __construct(BrandService $brandService, CategoryService $categoryService, TagService $tagService, AttributeSetService $attributeSetService){
+    protected $taxService;
+    public function __construct(BrandService $brandService, CategoryService $categoryService, TagService $tagService, AttributeSetService $attributeSetService ,TaxService $taxService){
         $this->brandService    = $brandService;
         $this->categoryService = $categoryService;
         $this->tagService      = $tagService;
         $this->attributeSetService = $attributeSetService;
+        $this->taxService      = $taxService;
     }
 
 
@@ -156,24 +159,12 @@ class ProductController extends Controller
 
     public function create()
     {
-        $local = Session::get('currentLocal');
-
-        $brands     = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
-        $categories =  $this->categoryService->getAllCategories();
-        $tags       =  $this->tagService->getAllTag();
+        $local         = Session::get('currentLocal');
+        $brands        = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
+        $categories    = $this->categoryService->getAllCategories();
+        $tags          = $this->tagService->getAllTag();
         $attributeSets = $this->attributeSetService->getAllWithAttributesAndValues();
-
-        //No Need
-        // $attributes = Attribute::with('attributeTranslation','attributeTranslationEnglish')
-        //             ->where('is_active',1)
-        //             ->get();
-
-        $taxes = Tax::with('taxTranslation','taxTranslationDefaultEnglish')
-                ->where('is_active',1)
-                ->orderBy('is_active','DESC')
-                ->orderBy('id','ASC')
-                ->get();
-
+        $taxes         = $this->taxService->getAllTax();
         return view('admin.pages.product.create',compact('local','brands','categories','tags','attributeSets','taxes'));
     }
 
@@ -187,7 +178,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         if (env('USER_VERIFIED')!=1) {
             session()->flash('type','danger');
             session()->flash('message','Disabled for demo !');
@@ -200,8 +190,8 @@ class ProductController extends Controller
             'price'       => 'required',
             'sku'         => 'required|unique:products',
             'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
-            'category_id'  => 'required',
-            'tax_id'  => 'required',
+            'category_id' => 'required',
+            'tax_id'      => 'required',
         ]);
 
         if ($validator->fails()){

@@ -27,6 +27,14 @@ class Message
         return response()->json(['success' => __('Data Deleted Successfully')]);
     }
 
+    public static function activeSuccessMessage(){
+        return response()->json(['success' => 'Data Active Successfully']);
+    }
+
+    public static function inactiveSuccessMessage(){
+        return response()->json(['success' => 'Data Inactive Successfully']);
+    }
+
     public static function getErrorMessage($data){
         return response()->json(['errors' => [$data]], 422);
     }
@@ -34,5 +42,7 @@ class Message
     public static function getPermissionMessage(){
         return response()->json(['errors' => __('You are not Authorised')]);
     }
+
+
 }
 ?>

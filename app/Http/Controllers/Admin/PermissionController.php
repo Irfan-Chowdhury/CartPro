@@ -19,6 +19,8 @@ class PermissionController extends Controller
         if (auth()->user()->can('set_permission'))
         {
             $role = Role::find($id);
+            // return $this->permissionDetails($id);
+
             return view('admin.pages.role.permission',compact('role'));
         }
         return abort('403', __('You are not authorized'));
