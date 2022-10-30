@@ -6,6 +6,9 @@
             url: editURL,
             type: "GET",
             data: {tax_id:taxId},
+            error: function(response){
+                console.log(response.responseJSON.errors);
+            },
             success: function(data){
                 console.log(data);
                 $('#tax_id').val(data.tax.id);

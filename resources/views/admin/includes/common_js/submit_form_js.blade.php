@@ -26,6 +26,8 @@ $("#submitForm").on("submit",function(e){
             $('#submitButton').text('Save');
         },
         success: function (response) {
+            console.log(response);
+            
             $('#dataListTable').DataTable().ajax.reload();
             $('#submitForm')[0].reset();
             $("#formModal").modal('hide');
