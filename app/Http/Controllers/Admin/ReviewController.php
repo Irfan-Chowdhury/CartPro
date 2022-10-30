@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Review;
+use App\Services\ReviewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Session;
 
 class ReviewController extends Controller
 {
+    private $reviewService;
+    public function __construct(ReviewService $reviewService){
+        $this->reviewService = $reviewService;
+    }
+
     public function index()
     {
         if (auth()->user()->can('review-view'))
@@ -35,10 +41,13 @@ class ReviewController extends Controller
                 ->addColumn('action', function ($row)
                 {
                     $actionBtn = "";
-                    if (auth()->user()->can('review-edit'))
-                    {
+                    if (auth()->user()->can('review-edit')){
                         $actionBtn .= '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
                         &nbsp; ';
+                    }
+
+                    if (auth()->user()->can('review-action')){
+                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
                     }
                     return $actionBtn;
                 })
@@ -84,5 +93,10 @@ class ReviewController extends Controller
             }
         }
         return abort('403', __('You are not authorized'));
+    }
+
+
+    public function delete(Request $request){
+        return $this->reviewService->destroy($request->id);
     }
 }

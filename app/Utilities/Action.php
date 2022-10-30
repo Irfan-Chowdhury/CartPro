@@ -18,7 +18,7 @@ class Action
         $data->is_active = 0;
         $data->save();
     }
-    
+
 
     public static function setBulkAction($action_type, $Model)
     {

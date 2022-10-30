@@ -5,15 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Page\PageStoreRequest;
 use App\Http\Requests\Page\PageUpdateRequest;
-use App\Models\Page;
-use App\Models\PageTranslation;
 use App\Services\PageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\SlugTrait;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\App;
 
 class PageController extends Controller
 {

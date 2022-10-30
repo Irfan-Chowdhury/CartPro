@@ -12,7 +12,7 @@
     </div>
 
     <div class="table-responsive">
-    	<table id="reviewListTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -46,7 +46,8 @@
                     }
                 });
 
-                let table = $('#reviewListTable').DataTable({
+
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -220,7 +221,7 @@
                     dataType: "json",
                     success: function (data) {
                         if(data.success){
-                            $('#reviewListTable').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#updateForm')[0].reset();
                             $("#editModal").modal('hide');
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
@@ -232,7 +233,14 @@
                     }
                 });
             });
-            
+
         })(jQuery);
     </script>
+
+    <script>
+            let deleteURL     = "{{route('admin.review.delete')}}";
+            @include('admin.includes.common_js.common_word')
+    </script>
+        <!-- Common Action For All CRUD-->
+        @include('admin.includes.common_action',['action'=>true])
 @endpush

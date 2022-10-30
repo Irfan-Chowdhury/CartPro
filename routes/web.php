@@ -398,6 +398,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/',[ReviewController::class,'index'])->name('admin.review.index');
                 Route::get('/edit',[ReviewController::class,'edit'])->name('admin.review.edit');
                 Route::post('/update',[ReviewController::class,'update'])->name('admin.review.update');
+                Route::get('/delete',[ReviewController::class,'delete'])->name('admin.review.delete');
             });
 
             //Sales

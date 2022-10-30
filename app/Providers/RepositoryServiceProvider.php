@@ -16,6 +16,7 @@ use App\Contracts\Country\CountryContract;
 use App\Contracts\Currency\CurrencyContract;
 use App\Contracts\Page\PageContract;
 use App\Contracts\Page\PageTranslationContract;
+use App\Contracts\Review\ReviewContract;
 use App\Contracts\Slider\SliderContract;
 use App\Contracts\Slider\SliderTranslationContract;
 use App\Contracts\Tag\TagContract;
@@ -38,6 +39,7 @@ use App\Repositories\Country\CountryRepository;
 use App\Repositories\Currency\CurrencyRepository;
 use App\Repositories\Page\PageRepository;
 use App\Repositories\Page\PageTranslationRepository;
+use App\Repositories\Review\ReviewRepository;
 use App\Repositories\Slider\SliderRepository;
 use App\Repositories\Slider\SliderTranslationRepository;
 use App\Repositories\Tag\TagRepository;
@@ -95,6 +97,9 @@ class RepositoryServiceProvider extends ServiceProvider
         //Tax
         $this->app->bind(TaxContract::class, TaxRepository::class);
         $this->app->bind(TaxTranslationContract::class, TaxTranslationRepository::class);
+
+        //Review
+        $this->app->bind(ReviewContract::class, ReviewRepository::class);
     }
 }
 
