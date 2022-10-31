@@ -23,7 +23,7 @@ class FlashSaleController extends Controller
 
     private $flashSaleService;
     public function __construct(FlashSaleService $flashSaleService){
-        $this->flashSaleService     = $flashSaleService;
+        $this->flashSaleService = $flashSaleService;
     }
 
     public function index()
@@ -272,30 +272,6 @@ class FlashSaleController extends Controller
             return redirect()->back();
         }
     }
-
-
-
-
-
-
-    // public function active(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->activeData(FlashSale::find($request->id));
-    //     }
-    // }
-
-    // public function inactive(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->inactiveData(FlashSale::find($request->id));
-    //     }
-    // }
-
-    // public function bulkAction(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         return $this->bulkActionData($request->action_type, FlashSale::whereIn('id',$request->idsArray));
-    //     }
-    // }
 
 
     public function active(Request $request){

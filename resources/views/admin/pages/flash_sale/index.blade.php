@@ -36,7 +36,6 @@
     </div>
 </section>
 
-{{-- @include('admin.pages.flash_sale.confirm_modal') --}}
 @include('admin.includes.confirm_modal')
 
 @endsection

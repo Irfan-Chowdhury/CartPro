@@ -15,6 +15,8 @@ use App\Contracts\Category\CategoryTranslationContract;
 use App\Contracts\Country\CountryContract;
 use App\Contracts\Currency\CurrencyContract;
 use App\Contracts\FlashSale\FlashSaleContract;
+use App\Contracts\FlashSale\FlashSaleProductContract;
+use App\Contracts\FlashSale\FlashSaleTranslationContract;
 use App\Contracts\Order\OrderContract;
 use App\Contracts\Order\OrderDetailsContract;
 use App\Contracts\Page\PageContract;
@@ -40,7 +42,9 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
 use App\Repositories\Country\CountryRepository;
 use App\Repositories\Currency\CurrencyRepository;
+use App\Repositories\FlashSale\FlashSaleProductRepository;
 use App\Repositories\FlashSale\FlashSaleRepository;
+use App\Repositories\FlashSale\FlashSaleTranslationRepository;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Page\PageRepository;
 use App\Repositories\Page\PageTranslationRepository;
@@ -114,6 +118,8 @@ class RepositoryServiceProvider extends ServiceProvider
 
         //Flash Sale
         $this->app->bind(FlashSaleContract::class, FlashSaleRepository::class);
+        $this->app->bind(FlashSaleTranslationContract::class, FlashSaleTranslationRepository::class);
+        $this->app->bind(FlashSaleProductContract::class, FlashSaleProductRepository::class);
     }
 }
 
