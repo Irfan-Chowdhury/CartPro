@@ -410,6 +410,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');
                 Route::post('/delivery-time',[OrderController::class,'orderDeliveryTime'])->name('admin.order.delivery_time');
                 Route::get('/download/invoice/{reference_no}',[OrderController::class,'downloadInvoice'])->name('admin.order.download-invoice');
+                Route::get('/delete',[OrderController::class,'delete'])->name('admin.order.delete');
             });
             Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
 
@@ -422,6 +423,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/update/{id}',[FlashSaleController::class,'update'])->name('admin.flash_sale.update');
                 Route::get('/active',[FlashSaleController::class,'active'])->name('admin.flash_sale.active');
                 Route::get('/inactive',[FlashSaleController::class,'inactive'])->name('admin.flash_sale.inactive');
+                Route::get('/delete',[FlashSaleController::class,'delete'])->name('admin.flash_sale.delete');
                 Route::get('/bulk_action',[FlashSaleController::class,'bulkAction'])->name('admin.flash_sale.bulk_action');
             });
 

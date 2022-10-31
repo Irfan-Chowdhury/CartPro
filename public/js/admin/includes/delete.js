@@ -27,7 +27,7 @@
                 },
                 success: function(data){
                     console.log(data);
-                    
+
                     $('#alert_message').fadeIn("slow");
                     if(data.success){
                         $('#dataListTable').DataTable().ajax.reload();

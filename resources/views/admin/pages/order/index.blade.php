@@ -4,7 +4,7 @@
 
 
 <section>
-    <div class="container-fluid"><span id="general_result"></span></div>
+    <div class="container-fluid"><span id="alert_message"></span></div>
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">{{__('Orders')}}</h4>
@@ -12,7 +12,7 @@
         <br>
     </div>
     <div class="table-responsive">
-    	<table id="orderTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
                     <th scope="col">{{trans('file.Reference No')}}</th>
@@ -23,11 +23,13 @@
                     <th scope="col">{{trans('file.Customer Email')}}</th>
         		    <th scope="col">{{trans('file.Total')}}</th>
         		    <th scope="col">{{trans('file.Created')}}</th>
+        		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
               <tfoot>
                 <tr>
                     <th>{{trans('file.Total')}}</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -57,7 +59,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    let table = $('#orderTable').DataTable({
+                    let table = $('#dataListTable').DataTable({
                         responsive: true,
                         fixedHeader: {
                             header: true,
@@ -100,6 +102,10 @@
                             {
                                 data: 'created_at',
                                 name: 'created_at',
+                            },
+                            {
+                                data: 'action',
+                                name: 'action',
                             },
                         ],
 
@@ -243,7 +249,11 @@
                 $('.date_field').datepicker().on('changeDate', function (ev) {
                     $('.date_field').Close();
                 });
-
             })(jQuery);
+
+            const deleteURL = "{{route('admin.order.delete')}}";
     </script>
+
+    <!-- Common Action For All CRUD-->
+    @include('admin.includes.common_action',['delete'=>true])
 @endpush

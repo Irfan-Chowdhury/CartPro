@@ -7,6 +7,7 @@ use App\Models\FlashSale;
 use App\Models\FlashSaleProduct;
 use App\Models\FlashSaleTranslations;
 use App\Models\Product;
+use App\Services\FlashSaleService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\App;
 class FlashSaleController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
+
+    private $flashSaleService;
+    public function __construct(FlashSaleService $flashSaleService){
+        $this->flashSaleService     = $flashSaleService;
+    }
 
     public function index()
     {
@@ -67,10 +73,12 @@ class FlashSaleController extends Controller
                     if (auth()->user()->can('flash_sale-action'))
                     {
                         if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+
                     }
                     return $actionBtn;
                 })
@@ -265,22 +273,44 @@ class FlashSaleController extends Controller
         }
     }
 
+
+
+
+
+
+    // public function active(Request $request){
+    //     if ($request->ajax()){
+    //         return $this->activeData(FlashSale::find($request->id));
+    //     }
+    // }
+
+    // public function inactive(Request $request){
+    //     if ($request->ajax()){
+    //         return $this->inactiveData(FlashSale::find($request->id));
+    //     }
+    // }
+
+    // public function bulkAction(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         return $this->bulkActionData($request->action_type, FlashSale::whereIn('id',$request->idsArray));
+    //     }
+    // }
+
+
     public function active(Request $request){
-        if ($request->ajax()){
-            return $this->activeData(FlashSale::find($request->id));
-        }
+        return $this->flashSaleService->activeById($request->id);
     }
 
     public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->inactiveData(FlashSale::find($request->id));
-        }
+        return $this->flashSaleService->inactiveById($request->id);
     }
 
-    public function bulkAction(Request $request)
-    {
-        if ($request->ajax()) {
-            return $this->bulkActionData($request->action_type, FlashSale::whereIn('id',$request->idsArray));
-        }
+    public function delete(Request $request){
+        return $this->flashSaleService->destroy($request->id);
+    }
+
+    public function bulkAction(Request $request){
+        return $this->flashSaleService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
     }
 }

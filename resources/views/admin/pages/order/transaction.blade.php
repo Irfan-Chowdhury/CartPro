@@ -3,7 +3,7 @@
 @section('admin_content')
 
 <section>
-    <div class="container-fluid"><span id="general_result"></span></div>
+    <div class="container-fluid"><span id="alert_message"></span></div>
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">{{__('Transactions')}}</h4>
@@ -12,7 +12,7 @@
 
     </div>
     <div class="table-responsive">
-    	<table id="orderTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -21,6 +21,7 @@
                     <th scope="col">{{trans('file.Payment Method')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Created')}}</th>
+                    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
     	</table>
@@ -42,7 +43,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-                let table = $('#orderTable').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -99,6 +100,10 @@
                         {
                             data: 'created_at',
                             name: 'created_at',
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
                         }
                     ],
 
@@ -170,8 +175,11 @@
                 });
                 new $.fn.dataTable.FixedHeader(table);
             });
-
-
         })(jQuery);
+
+        const deleteURL = "{{route('admin.order.delete')}}";
     </script>
+
+    <!-- Common Action For All CRUD-->
+    @include('admin.includes.common_action',['delete'=>true])
 @endpush

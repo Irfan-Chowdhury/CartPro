@@ -194,7 +194,6 @@
     <script type="text/javascript" src="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
 
     <script type="text/javascript">
-
         // $("ul#setting").siblings('a').attr('aria-expanded','true');
         // $("ul#setting").addClass("show");
         // $("ul#setting #setting-country").addClass("active");

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Services\OrderService;
 use App\Traits\InvoiceTrait;
 use App\Traits\MailTrait;
 use App\Traits\UtilitiesTrait;
@@ -15,6 +16,11 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     use UtilitiesTrait, InvoiceTrait, MailTrait;
+
+    private $orderService;
+    public function __construct(OrderService $orderService){
+        $this->orderService = $orderService;
+    }
 
     public function index()
     {
@@ -110,6 +116,11 @@ class OrderController extends Controller
                 {
                     return date('Y-m-d',strtotime($row->created_at));
                 })
+                ->addColumn('action', function ($row)
+                {
+                    $actionBtn = '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+                    return $actionBtn;
+                })
                 ->rawColumns(['reference_no','action','order_status','delivery_date','delivery_time'])
                 ->make(true);
             }
@@ -140,6 +151,11 @@ class OrderController extends Controller
                 ->addColumn('created_at', function ($row)
                 {
                     return date('Y-m-d',strtotime($row->created_at));
+                })
+                ->addColumn('action', function ($row)
+                {
+                    $actionBtn = '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+                    return $actionBtn;
                 })
                 ->rawColumns(['reference_no','action'])
                 ->make(true);
@@ -204,5 +220,9 @@ class OrderController extends Controller
         }
 
         return response()->json(['type'=>'success']);
+    }
+
+    public function delete(Request $request){
+        return $this->orderService->destroy($request->id);
     }
 }

@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Session;
 
 class OrderDetail extends Model
 {
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -29,8 +33,6 @@ class OrderDetail extends Model
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }
-
-    
 
     //Admin Dashboard
     public function orderProductTranslation()

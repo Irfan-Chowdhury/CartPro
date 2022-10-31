@@ -3,7 +3,7 @@
 @section('admin_content')
 
 <section>
-    <div class="container-fluid"><span id="success_alert"></span></div>
+    <div class="container-fluid"><span id="alert_message"></span></div>
     <div class="container-fluid mb-3">
 
         <h4 class="font-weight-bold mt-3">@lang('file.Flash Sale')</h4>
@@ -23,7 +23,7 @@
 
     </div>
     <div class="table-responsive">
-    	<table id="table" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -36,7 +36,8 @@
     </div>
 </section>
 
-@include('admin.pages.flash_sale.confirm_modal')
+{{-- @include('admin.pages.flash_sale.confirm_modal') --}}
+@include('admin.includes.confirm_modal')
 
 @endsection
 
@@ -58,7 +59,7 @@
                     }
                 });
 
-                let table = $('#table').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -201,7 +202,7 @@
                     success: function(data){
                         console.log(data);
                         if(data.success){
-                            $('#table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#success_alert').fadeIn("slow"); //Check in top in this blade
                             $('#success_alert').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -226,7 +227,7 @@
                     success: function(data){
                         console.log(data);
                         if(data.success){
-                            $('#table').DataTable().ajax.reload();
+                            $('#dataListTable').DataTable().ajax.reload();
                             $('#success_alert').fadeIn("slow"); //Check in top in this blade
                             $('#success_alert').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -240,7 +241,7 @@
             //Bulk Action
             $("#bulk_action").on("click",function(){
                 var idsArray = [];
-                let table = $('#table').DataTable();
+                let table = $('#dataListTable').DataTable();
                 idsArray = table.rows({selected: true}).ids().toArray();
 
                 if(idsArray.length === 0){
@@ -260,7 +261,7 @@
                                 if(data.success){
                                     $('#bulkConfirmModal').modal('hide');
                                     table.rows('.selected').deselect();
-                                    $('#table').DataTable().ajax.reload();
+                                    $('#dataListTable').DataTable().ajax.reload();
                                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                     $('#success_alert').addClass('alert alert-success').html(data.success);
                                     setTimeout(function() {
@@ -281,7 +282,7 @@
                                 if(data.success){
                                     $('#bulkConfirmModal').modal('hide');
                                     table.rows('.selected').deselect();
-                                    $('#table').DataTable().ajax.reload();
+                                    $('#dataListTable').DataTable().ajax.reload();
                                     $('#success_alert').fadeIn("slow"); //Check in top in this blade
                                     $('#success_alert').addClass('alert alert-success').html(data.success);
                                     setTimeout(function() {
@@ -295,6 +296,16 @@
             });
 
         })(jQuery);
+
+
+        let activeURL     = "{{route('admin.flash_sale.active')}}";
+        let inactiveURL   = "{{route('admin.flash_sale.inactive')}}";
+        let deleteURL     = "{{route('admin.flash_sale.delete')}}";
+        let bulkActionURL = "{{route('admin.flash_sale.bulk_action')}}";
     </script>
+
+    <!-- Common Action For All-->
+    @include('admin.includes.common_action',['action'=>true])
+
 @endpush
 
