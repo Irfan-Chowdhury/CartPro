@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\CouponTranslation;
 use App\Models\Product;
+use App\Services\CouponService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActiveInactiveTrait;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\App;
 class CouponController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait, CouponTrait;
+
+    private $couponService;
+    public function __construct(CouponService $couponService){
+        $this->couponService = $couponService;
+    }
 
     public function index()
     {
@@ -88,10 +94,11 @@ class CouponController extends Controller
                     if (auth()->user()->can('coupon-action'))
                     {
                         if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button>';
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>';
                         }
+                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
                     }
                     return $actionBtn;
                 })
@@ -330,22 +337,38 @@ class CouponController extends Controller
     }
 
 
+    // public function active(Request $request){
+    //     if ($request->ajax()){
+    //         return $this->activeData(Coupon::find($request->id));
+    //     }
+    // }
+
+    // public function inactive(Request $request){
+    //     if ($request->ajax()){
+    //         return $this->inactiveData(Coupon::find($request->id));
+    //     }
+    // }
+
+    // public function bulkAction(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         return $this->bulkActionData($request->action_type, Coupon::whereIn('id',$request->idsArray));
+    //     }
+    // }
+
     public function active(Request $request){
-        if ($request->ajax()){
-            return $this->activeData(Coupon::find($request->id));
-        }
+        return $this->couponService->activeById($request->id);
     }
 
     public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->inactiveData(Coupon::find($request->id));
-        }
+        return $this->couponService->inactiveById($request->id);
     }
 
-    public function bulkAction(Request $request)
-    {
-        if ($request->ajax()) {
-            return $this->bulkActionData($request->action_type, Coupon::whereIn('id',$request->idsArray));
-        }
+    public function delete(Request $request){
+        return $this->couponService->destroy($request->id);
+    }
+
+    public function bulkAction(Request $request){
+        return $this->couponService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
     }
 }

@@ -24,7 +24,7 @@
     </div>
 
     <div class="table-responsive">
-        <table id="data_list_table" class="table ">
+        <table id="dataListTable" class="table ">
             <thead>
                 <tr>
                     <th class="not-exported"></th>
@@ -51,7 +51,7 @@
 
             $(document).ready(function () {
 
-                let table = $('#data_list_table').DataTable({
+                let table = $('#dataListTable').DataTable({
                     initComplete: function () {
                         this.api().columns([1]).every(function () {
                             var column = this;
@@ -192,110 +192,119 @@
             });
 
             //---------- Active -------------
-            $(document).on("click",".active",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
+            // $(document).on("click",".active",function(e){
+            //     e.preventDefault();
+            //     var id = $(this).data("id");
 
-                $.ajax({
-                    url: "{{route('admin.coupon.active')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#data_list_table').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            //     $.ajax({
+            //         url: "{{route('admin.coupon.active')}}",
+            //         type: "GET",
+            //         data: {id:id},
+            //         success: function(data){
+            //             console.log(data);
+            //             if(data.success){
+            //                 $('#dataListTable').DataTable().ajax.reload();
+            //                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                 $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                 setTimeout(function() {
+            //                     $('#alert_message').fadeOut("slow");
+            //                 }, 3000);
+            //             }
+            //         }
+            //     });
+            // });
 
             //---------- Inactive -------------
-            $(document).on("click",".inactive",function(e){
-                e.preventDefault();
-                var id = $(this).data("id");
+            // $(document).on("click",".inactive",function(e){
+            //     e.preventDefault();
+            //     var id = $(this).data("id");
 
-                $.ajax({
-                    url: "{{route('admin.coupon.inactive')}}",
-                    type: "GET",
-                    data: {id:id},
-                    success: function(data){
-                        console.log(data);
-                        if(data.success){
-                            $('#data_list_table').DataTable().ajax.reload();
-                            $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                            $('#alert_message').addClass('alert alert-success').html(data.success);
-                            setTimeout(function() {
-                                $('#alert_message').fadeOut("slow");
-                            }, 3000);
-                        }
-                    }
-                });
-            });
+            //     $.ajax({
+            //         url: "{{route('admin.coupon.inactive')}}",
+            //         type: "GET",
+            //         data: {id:id},
+            //         success: function(data){
+            //             console.log(data);
+            //             if(data.success){
+            //                 $('#dataListTable').DataTable().ajax.reload();
+            //                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                 $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                 setTimeout(function() {
+            //                     $('#alert_message').fadeOut("slow");
+            //                 }, 3000);
+            //             }
+            //         }
+            //     });
+            // });
 
 
-            //Bulk Action
-            $("#bulk_action").on("click",function(){
-                var idsArray = [];
-                let table = $('#data_list_table').DataTable();
-                idsArray = table.rows({selected: true}).ids().toArray();
+            // //Bulk Action
+            // $("#bulk_action").on("click",function(){
+            //     var idsArray = [];
+            //     let table = $('#dataListTable').DataTable();
+            //     idsArray = table.rows({selected: true}).ids().toArray();
 
-                if(idsArray.length === 0){
-                    alert("Please Select at least one checkbox.");
-                }else{
-                    $('#bulkConfirmModal').modal('show');
-                    let action_type;
+            //     if(idsArray.length === 0){
+            //         alert("Please Select at least one checkbox.");
+            //     }else{
+            //         $('#bulkConfirmModal').modal('show');
+            //         let action_type;
 
-                    $("#active").on("click",function(){
-                        console.log(idsArray);
-                        action_type = "active";
-                        $.ajax({
-                            url: "{{route('admin.coupon.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#data_list_table').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                    $("#inactive").on("click",function(){
-                        action_type = "inactive";
-                        console.log(idsArray);
-                        $.ajax({
-                            url: "{{route('admin.coupon.bulk_action')}}",
-                            method: "GET",
-                            data: {idsArray:idsArray,action_type:action_type},
-                            success: function (data) {
-                                if(data.success){
-                                    $('#bulkConfirmModal').modal('hide');
-                                    table.rows('.selected').deselect();
-                                    $('#data_list_table').DataTable().ajax.reload();
-                                    $('#alert_message').fadeIn("slow"); //Check in top in this blade
-                                    $('#alert_message').addClass('alert alert-success').html(data.success);
-                                    setTimeout(function() {
-                                        $('#alert_message').fadeOut("slow");
-                                    }, 3000);
-                                }
-                            }
-                        });
-                    });
-                }
-            });
+            //         $("#active").on("click",function(){
+            //             console.log(idsArray);
+            //             action_type = "active";
+            //             $.ajax({
+            //                 url: "{{route('admin.coupon.bulk_action')}}",
+            //                 method: "GET",
+            //                 data: {idsArray:idsArray,action_type:action_type},
+            //                 success: function (data) {
+            //                     if(data.success){
+            //                         $('#bulkConfirmModal').modal('hide');
+            //                         table.rows('.selected').deselect();
+            //                         $('#dataListTable').DataTable().ajax.reload();
+            //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                         setTimeout(function() {
+            //                             $('#alert_message').fadeOut("slow");
+            //                         }, 3000);
+            //                     }
+            //                 }
+            //             });
+            //         });
+            //         $("#inactive").on("click",function(){
+            //             action_type = "inactive";
+            //             console.log(idsArray);
+            //             $.ajax({
+            //                 url: "{{route('admin.coupon.bulk_action')}}",
+            //                 method: "GET",
+            //                 data: {idsArray:idsArray,action_type:action_type},
+            //                 success: function (data) {
+            //                     if(data.success){
+            //                         $('#bulkConfirmModal').modal('hide');
+            //                         table.rows('.selected').deselect();
+            //                         $('#dataListTable').DataTable().ajax.reload();
+            //                         $('#alert_message').fadeIn("slow"); //Check in top in this blade
+            //                         $('#alert_message').addClass('alert alert-success').html(data.success);
+            //                         setTimeout(function() {
+            //                             $('#alert_message').fadeOut("slow");
+            //                         }, 3000);
+            //                     }
+            //                 }
+            //             });
+            //         });
+            //     }
+            // });
 
         })(jQuery);
+
+        let activeURL     = "{{route('admin.coupon.active')}}";
+        let inactiveURL   = "{{route('admin.coupon.inactive')}}";
+        let deleteURL     = "{{route('admin.coupon.delete')}}";
+        let bulkActionURL = "{{route('admin.coupon.bulk_action')}}";
     </script>
+
+        <!-- Common Action For All-->
+        @include('admin.includes.common_action',['action'=>true])
+
 @endpush
 

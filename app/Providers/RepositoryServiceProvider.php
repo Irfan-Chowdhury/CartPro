@@ -13,6 +13,8 @@ use App\Contracts\Brand\BrandTranslationContract;
 use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
 use App\Contracts\Country\CountryContract;
+use App\Contracts\Coupon\CouponContract;
+use App\Contracts\Coupon\CouponTranslationContract;
 use App\Contracts\Currency\CurrencyContract;
 use App\Contracts\FlashSale\FlashSaleContract;
 use App\Contracts\FlashSale\FlashSaleProductContract;
@@ -28,7 +30,6 @@ use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
 use App\Contracts\Tax\TaxContract;
 use App\Contracts\Tax\TaxTranslationContract;
-use App\Repositories\ActiveInactiveRepository;
 use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Attribute\AttributeTranslationRepository;
 use App\Repositories\AttributeSet\AttributeSetRepository;
@@ -41,6 +42,8 @@ use App\Repositories\Brand\BrandTranslationRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
 use App\Repositories\Country\CountryRepository;
+use App\Repositories\Coupon\CouponRepository;
+use App\Repositories\Coupon\CouponTranslationRepository;
 use App\Repositories\Currency\CurrencyRepository;
 use App\Repositories\FlashSale\FlashSaleProductRepository;
 use App\Repositories\FlashSale\FlashSaleRepository;
@@ -120,6 +123,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(FlashSaleContract::class, FlashSaleRepository::class);
         $this->app->bind(FlashSaleTranslationContract::class, FlashSaleTranslationRepository::class);
         $this->app->bind(FlashSaleProductContract::class, FlashSaleProductRepository::class);
+
+        // Coupon
+        $this->app->bind(CouponContract::class, CouponRepository::class);
+        $this->app->bind(CouponTranslationContract::class, CouponTranslationRepository::class);
+
     }
 }
 

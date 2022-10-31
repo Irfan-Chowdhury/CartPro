@@ -398,7 +398,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::get('/',[ReviewController::class,'index'])->name('admin.review.index');
                 Route::get('/edit',[ReviewController::class,'edit'])->name('admin.review.edit');
                 Route::post('/update',[ReviewController::class,'update'])->name('admin.review.update');
-                Route::get('/delete',[ReviewController::class,'delete'])->name('admin.review.delete');
+                Route::get('/delete',[ReviewController::class,'delete'])->name('admin.review.delete')->middleware('demo_check');
             });
 
             //Sales
@@ -410,9 +410,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/date',[OrderController::class,'orderDate'])->name('admin.order.order_date');
                 Route::post('/delivery-time',[OrderController::class,'orderDeliveryTime'])->name('admin.order.delivery_time');
                 Route::get('/download/invoice/{reference_no}',[OrderController::class,'downloadInvoice'])->name('admin.order.download-invoice');
-                Route::get('/delete',[OrderController::class,'delete'])->name('admin.order.delete');
+                Route::get('/delete',[OrderController::class,'delete'])->name('admin.order.delete')->middleware('demo_check');
             });
-            Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index');
+            Route::get('/transaction',[OrderController::class,'transactionIndex'])->name('admin.transaction.index')->middleware('demo_check');
 
             //Flash Sale
             Route::group(['prefix' => 'flash-sales'], function () {
@@ -436,6 +436,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/update',[CouponController::class,'update'])->name('admin.coupon.update');
                 Route::get('/active',[CouponController::class,'active'])->name('admin.coupon.active');
                 Route::get('/inactive',[CouponController::class,'inactive'])->name('admin.coupon.inactive');
+                Route::get('/delete',[CouponController::class,'delete'])->name('admin.coupon.delete');
                 Route::get('/bulk_action',[CouponController::class,'bulkAction'])->name('admin.coupon.bulk_action');
             });
 
