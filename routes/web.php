@@ -451,7 +451,6 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::post('/update',[PageController::class,'update'])->name('admin.page.update')->middleware(['demo_check','checkAjax']);
                     Route::get('/active',[PageController::class,'active'])->name('admin.page.active')->middleware(['demo_check','checkAjax']);
                     Route::get('/inactive',[PageController::class,'inactive'])->name('admin.page.inactive')->middleware(['demo_check','checkAjax']);
-                    // Route::get('/bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action');
                     Route::get('/destroy',[PageController::class,'destroy'])->name('admin.page.destroy')->middleware(['demo_check','checkAjax']);
                     Route::get('bulk_action',[PageController::class,'bulkAction'])->name('admin.page.bulk_action')->middleware(['demo_check','checkAjax']);
                 });
@@ -464,6 +463,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                     Route::post('/update-test',[MenuController::class,'update'])->name('admin.menu.update');
                     Route::get('/active-test',[MenuController::class,'active'])->name('admin.menu.active');
                     Route::get('/inactive-test',[MenuController::class,'inactive'])->name('admin.menu.inactive');
+                    Route::get('/delete',[MenuController::class,'delete'])->name('admin.menu.delete');
                     Route::get('test/bulk_action',[MenuController::class,'bulkAction'])->name('admin.menu.bulk_action');
                     //--Menus Items--
                     Route::get('/{menuId}/items',[MenuItemController::class,'index'])->name('admin.menu.menu_item');

@@ -19,6 +19,8 @@ use App\Contracts\Currency\CurrencyContract;
 use App\Contracts\FlashSale\FlashSaleContract;
 use App\Contracts\FlashSale\FlashSaleProductContract;
 use App\Contracts\FlashSale\FlashSaleTranslationContract;
+use App\Contracts\Menu\MenuContract;
+use App\Contracts\Menu\MenuTranslationContract;
 use App\Contracts\Order\OrderContract;
 use App\Contracts\Order\OrderDetailsContract;
 use App\Contracts\Page\PageContract;
@@ -48,6 +50,8 @@ use App\Repositories\Currency\CurrencyRepository;
 use App\Repositories\FlashSale\FlashSaleProductRepository;
 use App\Repositories\FlashSale\FlashSaleRepository;
 use App\Repositories\FlashSale\FlashSaleTranslationRepository;
+use App\Repositories\Menu\MenuRepository;
+use App\Repositories\Menu\MenuTranslationRepository;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Page\PageRepository;
 use App\Repositories\Page\PageTranslationRepository;
@@ -127,6 +131,10 @@ class RepositoryServiceProvider extends ServiceProvider
         // Coupon
         $this->app->bind(CouponContract::class, CouponRepository::class);
         $this->app->bind(CouponTranslationContract::class, CouponTranslationRepository::class);
+
+        // Menu
+        $this->app->bind(MenuContract::class, MenuRepository::class);
+        $this->app->bind(MenuTranslationContract::class, MenuTranslationRepository::class);
 
     }
 }

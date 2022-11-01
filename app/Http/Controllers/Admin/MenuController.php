@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MenuTranslation;
+use App\Services\MenuService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,6 +18,11 @@ use Illuminate\Support\Facades\App;
 class MenuController extends Controller
 {
     use ActiveInactiveTrait, SlugTrait;
+
+    private $menuService;
+    public function __construct(MenuService $menuService){
+        $this->menuService = $menuService;
+    }
 
 
     public function index(Request $request)
@@ -77,10 +83,12 @@ class MenuController extends Controller
                     if (auth()->user()->can('menu-action'))
                     {
                         if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-danger btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
+                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-down"></i></button>';
                         }else {
                             $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="dripicons-thumbs-up"></i></button>';
                         }
+                        $actionBtn .= '<button type="button" title="Delete" class="delete btn btn-danger btn-sm ml-2" data-id="'.$row->id.'"><i class="dripicons-trash"></i></button>';
+
                     }
                     return $actionBtn;
                 })
@@ -175,22 +183,18 @@ class MenuController extends Controller
     }
 
     public function active(Request $request){
-        if ($request->ajax()){
-            return $this->activeData(Menu::find($request->id));
-        }
+        return $this->menuService->activeById($request->id);
     }
 
     public function inactive(Request $request){
-        if ($request->ajax()){
-            return $this->inactiveData(Menu::find($request->id));
-        }
+        return $this->menuService->inactiveById($request->id);
     }
 
-    public function bulkAction(Request $request)
-    {
-        if ($request->ajax()) {
+    public function delete(Request $request){
+        return $this->menuService->destroy($request->id);
+    }
 
-            return $this->bulkActionData($request->action_type, Menu::whereIn('id',$request->idsArray));
-        }
+    public function bulkAction(Request $request){
+        return $this->menuService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
     }
 }
