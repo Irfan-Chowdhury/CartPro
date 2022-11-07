@@ -9,6 +9,7 @@ use App\Models\Language;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\ProductTranslation;
 use App\Notifications\NewOrderNotification;
 use App\Traits\AutoDataUpdateTrait;
 use Auth;
@@ -41,11 +42,8 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
-        // return $this->testingCode();
-
-
-        $orders = Order::orderBy('id','DESC')->get();
-        $products = Product::where('is_active',1)->get();
+        $orders          = Order::orderBy('id','DESC')->get();
+        $products        = Product::where('is_active',1)->get();
         $total_customers = User::where('user_type',0)->get()->count();
 
         //We will convert it in ExpiryReminder later
@@ -65,16 +63,12 @@ class AdminController extends Controller
                             ->get()
                             ->take(5);
 
-
         $top_products = OrderDetail::with('product','orderProductTranslation','orderProductTranslationEnglish','baseImage')
                             ->select('product_id', DB::raw('sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')
                             ->groupBy('product_id')
                             ->get()
                             ->take(6);
-
-        // return $top_products;
-
 
         $category_product =  CategoryProduct::get();
         $category_ids = [];
@@ -86,7 +80,6 @@ class AdminController extends Controller
                 }
             }
         }
-
 
         $browsers = Analytics::fetchTopBrowsers(Period::days(7));
         $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(7))->take(10);

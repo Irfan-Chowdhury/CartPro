@@ -336,26 +336,6 @@ class CouponController extends Controller
         }
     }
 
-
-    // public function active(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->activeData(Coupon::find($request->id));
-    //     }
-    // }
-
-    // public function inactive(Request $request){
-    //     if ($request->ajax()){
-    //         return $this->inactiveData(Coupon::find($request->id));
-    //     }
-    // }
-
-    // public function bulkAction(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         return $this->bulkActionData($request->action_type, Coupon::whereIn('id',$request->idsArray));
-    //     }
-    // }
-
     public function active(Request $request){
         return $this->couponService->activeById($request->id);
     }

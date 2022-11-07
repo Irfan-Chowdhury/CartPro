@@ -181,42 +181,44 @@
 
                 <div class="row">
                     @forelse ($top_products as $item)
-                        <div class="col-md-2">
-                            <a href="{{url('product/'.$item->product->slug.'/'. $category_ids[$item->product->id]->category_id)}}" target="__blank">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img src="{{asset('public/'.$item->baseImage->image_medium)}}" class="card-img-top">
-                                        <span class="card-text mt-3">
-                                            @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
-                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                    {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                @else
-                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
-                                                @endif
+                        @isset($category_ids[$item->product->id])
+                            <div class="col-md-2">
+                                <a href="{{url('product/'.$item->product->slug.'/'. $category_ids[$item->product->id]->category_id)}}" target="__blank">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img src="{{asset('public/'.$item->baseImage->image_medium)}}" class="card-img-top">
+                                            <span class="card-text mt-3">
+                                                @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                    @else
+                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                    @endif
 
-                                                <br>
-                                                <del>
+                                                    <br>
+                                                    <del>
+                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                            {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                        @else
+                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                        @endif
+                                                    </del>
+                                                @else
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
                                                         {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                     @else
                                                         @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                     @endif
-                                                </del>
-                                            @else
-                                                @if(env('CURRENCY_FORMAT')=='suffix')
-                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
-                                                @else
-                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                 @endif
-                                            @endif
-                                        </span>
+                                            </span>
 
-                                        @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name  @endphp
-                                        <p class="card-text mt-2 text-bold">{{ strlen($product_name) > 25 ? substr($product_name,0,25)."..." : $product_name}}</p>
+                                            @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name  @endphp
+                                            <p class="card-text mt-2 text-bold">{{ strlen($product_name) > 25 ? substr($product_name,0,25)."..." : $product_name}}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endisset
                     @empty
                         <div class="mb-5"></div>
                     @endforelse

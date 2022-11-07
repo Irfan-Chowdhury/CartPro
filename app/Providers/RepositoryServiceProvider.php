@@ -26,6 +26,7 @@ use App\Contracts\Order\OrderDetailsContract;
 use App\Contracts\Page\PageContract;
 use App\Contracts\Page\PageTranslationContract;
 use App\Contracts\Review\ReviewContract;
+use App\Contracts\Role\RoleContract;
 use App\Contracts\Slider\SliderContract;
 use App\Contracts\Slider\SliderTranslationContract;
 use App\Contracts\Tag\TagContract;
@@ -56,6 +57,7 @@ use App\Repositories\Order\OrderRepository;
 use App\Repositories\Page\PageRepository;
 use App\Repositories\Page\PageTranslationRepository;
 use App\Repositories\Review\ReviewRepository;
+use App\Repositories\Role\RoleRepository;
 use App\Repositories\Slider\SliderRepository;
 use App\Repositories\Slider\SliderTranslationRepository;
 use App\Repositories\Tag\TagRepository;
@@ -135,6 +137,9 @@ class RepositoryServiceProvider extends ServiceProvider
         // Menu
         $this->app->bind(MenuContract::class, MenuRepository::class);
         $this->app->bind(MenuTranslationContract::class, MenuTranslationRepository::class);
+
+        // Role
+        $this->app->bind(RoleContract::class, RoleRepository::class);
 
     }
 }

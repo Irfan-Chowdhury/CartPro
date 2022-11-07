@@ -556,6 +556,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
                 Route::post('/update',[RoleController::class,'update'])->name('admin.role.update');
                 Route::get('/active',[RoleController::class,'active'])->name('admin.role.active');
                 Route::get('/inactive',[RoleController::class,'inactive'])->name('admin.role.inactive');
+                Route::get('/delete',[RoleController::class,'delete'])->name('admin.role.delete');
                 Route::get('/bulk_action',[RoleController::class,'bulkAction'])->name('admin.role.bulk_action');
 
                 //--Permission--
