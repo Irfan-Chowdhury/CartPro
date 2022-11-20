@@ -45,5 +45,5 @@
 39. Social Logins (Facebook, Google and Github)
 40. Shipping Method (Free Shipping, Local pickup, Flat Rate)
 
-##### <p style="color:red">[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
+##### <p>[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
 
