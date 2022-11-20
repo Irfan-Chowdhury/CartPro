@@ -41,6 +41,7 @@ class DailyDealsController extends Controller
                     ->where('is_active',1)
                     ->where('special_price','>','price')
                     ->orderBy('products.id','ASC')
+                    ->where('products.deleted_at',null)
                     ->get();
          });
 
@@ -119,6 +120,7 @@ class DailyDealsController extends Controller
                 ->where('is_active',1)
                 ->orderBy('products.id','ASC')
                 ->limit($request->limit_data)
+                ->where('products.deleted_at',null)
                 ->get();
 
         $category_product =  CategoryProduct::get();
@@ -164,6 +166,7 @@ class DailyDealsController extends Controller
                             ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
                             ->orderBy('products.id','DESC')
+                            ->where('products.deleted_at',null)
                             ->get();
         }elseif ($request->condition=='low_to_high') {
             $products =  DB::table('products')
@@ -183,6 +186,7 @@ class DailyDealsController extends Controller
                             ->where('is_active',1)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','ASC')
+                            ->where('products.deleted_at',null)
                             ->get();
         }elseif ($request->condition=='high_to_low') {
             $products =  DB::table('products')
@@ -202,6 +206,7 @@ class DailyDealsController extends Controller
                             ->where('is_active',1)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','DESC')
+                            ->where('products.deleted_at',null)
                             ->get();
         }
 

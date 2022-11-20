@@ -9,7 +9,7 @@ use App\Models\SettingCurrency;
 class CurrencyRepository implements CurrencyContract
 {
     public function getAll(){
-        return Currency::select('id','currency_name','currency_code')->get();
+        return Currency::select('id','currency_name','currency_code','currency_symbol')->orderBy('currency_name','ASC')->get();
     }
 
     public function storeData($data){

@@ -35,15 +35,22 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function productTranslation()
-    {
+
+    // New
+    public function productTranslations(){
+        $locale = Session::get('currentLocal');
+    	return $this->hasMany(ProductTranslation::class,'product_id')
+                    ->where('local',$locale)
+                    ->orWhere('local','en');
+    }
+
+    public function productTranslation(){  // Remove Later
     	$locale = Session::get('currentLocal');
     	return $this->hasOne(ProductTranslation::class,'product_id')
                 ->where('local',$locale);
     }
 
-    public function productTranslationEnglish()
-    {
+    public function productTranslationEnglish(){ // Remove Later
     	return $this->hasOne(ProductTranslation::class,'product_id')
                         ->where('local','en');
     }

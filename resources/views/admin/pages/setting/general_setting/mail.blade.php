@@ -144,6 +144,21 @@
                         </div>
                     </div>
 
+                    <div class="form-check mt-3 mb-3">
+                        <input class="form-check-input" name="send_mail_check" type="checkbox" value="1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            <b>Send me a mail for testing</b>
+                        </label>
+                    </div>
+
+                    <div class="collapse m-3" id="collapseExample">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-4 col-form-label"><b>Send to Mail</b></label>
+                            <div class="col-sm-8">
+                                <input class="form-control" name="mail_to" type="text" placeholder="example@gmail.com" name="mail_to">
+                            </div>
+                        </div>
+                    </div>
 
 
                     {{--

@@ -31,6 +31,7 @@ class UserAccountController extends Controller
             ->where('user_id',Auth::user()->id)
             ->select('id','reference_no','total','date','order_status','delivery_date','delivery_time')
             ->orderBy('id','DESC')
+            ->where('orders.deleted_at',null)
             ->get();
         return view('frontend.pages.user_account.user_orders',compact('orders'));
     }
@@ -50,6 +51,7 @@ class UserAccountController extends Controller
                     ->where('user_id',Auth::user()->id)
                     ->select('product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options','order_details.subtotal')
                     ->where('order_details.order_id',$order->id)
+                    ->where('order_details.deleted_at',null)
                     ->get();
 
 

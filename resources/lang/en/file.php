@@ -274,6 +274,7 @@ return array (
   'Currency Position' => 'Currency Position',
   'Currency Rate' => 'Currency Rate',
   'Currency Rates' => 'Currency Rates',
+  'Currency Symbol' => 'Currency Symbol',
   'Current Password' => 'Current Password',
   'Custom color' => 'Custom color',
   'Customer' => 'Customer',

@@ -56,6 +56,7 @@
                 </div>
             </div>
         </div>
+
         <div id="header-middle" class="header-middle">
             <div class="container">
                 <div class="row">
@@ -149,8 +150,6 @@
                 }
                 $category_product_count[$category->id] = $product_count;
             }
-
-
 
         @endphp
 
@@ -283,6 +282,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="header-mobile collapse" id="mobile-search">
             <div class="container">
                 <div id="header-search" class="d-lg-none">

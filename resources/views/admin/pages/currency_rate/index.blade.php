@@ -6,7 +6,7 @@
     <div class="container-fluid"><span id="alert_message"></span></div>
 
     <div class="container-fluid mb-3">
-        <h4 class="font-weight-bold mt-3">{{__('file.Currency Rates')}} <small class="text-danger"><i>[Default currency rate have to set 1.00]</i></small></h4>
+        <h4 class="font-weight-bold mt-3">{{__('file.Currency Rates')}} <small class="text-info"><i>[Default currency rate always 1.00]</i></small></h4>
         <br>
     </div>
 
@@ -53,10 +53,10 @@
                             <input type="hidden" class="col-md-8 form-control" name="id" id="id">
                         </div>
 
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="inputEmail3" class="col-md-4 col-form-label"><b>@lang('file.Symbol')</label>
                             <input type="text" class="col-md-8 form-control" name="currency_symbol" id="currency_symbol">
-                        </div>
+                        </div> --}}
 
                     </div>
                     <div class="col-md-2"></div>
@@ -214,6 +214,11 @@
                             columns: ':gt(0)'
                         },
                     ],
+                    createdRow: (row, data, dataIndex, cells) => {
+                        if ( data['default'] === 1 ){
+                            $('td', row).css('background-color', 'rgb(52,207,170)');
+                        }
+                    }
                 });
                 new $.fn.dataTable.FixedHeader(table);
             });
@@ -270,8 +275,6 @@
                 });
             });
 
-
             })(jQuery);
         </script>
     @endpush
-

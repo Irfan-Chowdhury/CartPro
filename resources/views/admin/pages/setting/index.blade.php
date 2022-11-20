@@ -127,7 +127,6 @@
                     @include('admin.includes.error_message')
 
 
-
                     <!----------------------------------- General Setting ------------------------------------------>
 
                     <!-- general -->
@@ -335,6 +334,15 @@
                         }
                     });
                 });
+
+
+                //Currency - Change Default Currency
+                $('#defaultCurrencyCode').change(function() {
+                    let data = $('#defaultCurrencyCode option:selected').text();
+                    let dataSplit = data.split('|');
+                    $('#defaultCurrencySymbol').val(dataSplit[1]);
+                });
+
 
 
                 //Currency - exchange rate service

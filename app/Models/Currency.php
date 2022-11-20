@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Currency extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['currency_name','currency_code'];
+    protected $fillable = ['currency_name','currency_code','currency_symbol'];
 
     protected $dates = ['deleted_at'];
 }

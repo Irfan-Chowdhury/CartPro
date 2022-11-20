@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits;
 
+use App\Mail\MailTesting;
 use App\Mail\OrderMail;
 use App\Models\Setting;
 use App\Models\SettingMail;
@@ -49,5 +50,9 @@ trait MailTrait{
         $data_mail['store_name']               = $setting_store->store_name ?? null;
 
         return $data_mail;
+    }
+
+    public function checkMailForTesting($mail_to){
+        Mail::to($mail_to)->send(new MailTesting());
     }
 }

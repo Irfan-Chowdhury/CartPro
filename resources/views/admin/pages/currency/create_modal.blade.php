@@ -23,6 +23,10 @@
                     <label>{{__('file.Currency Code')}}</label>
                     <input type="text" name="currency_code" class="form-control" placeholder="Ex: BDT">
                 </div>
+                <div class="form-group">
+                    <label>{{__('file.Currency Symbol')}}</label>
+                    <input type="text" name="currency_symbol" class="form-control" placeholder="Ex: ৳">
+                </div>
             </div>
 
             <div class="modal-footer d-flex justify-content-center">

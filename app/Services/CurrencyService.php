@@ -40,6 +40,9 @@ class CurrencyService
                 ->addColumn('currency_code', function ($row){
                     return $row->currency_code ?? "";
                 })
+                ->addColumn('currency_symbol', function ($row){
+                    return $row->currency_symbol ?? "";
+                })
                 ->addColumn('action', function ($row) use($supported_currencies)
                 {
                     $actionBtn = '';
@@ -68,8 +71,9 @@ class CurrencyService
     protected function requestHandleData($request)
     {
         $data = [];
-        $data['currency_name'] = $request->currency_name;
-        $data['currency_code'] = $request->currency_code;
+        $data['currency_name']   = $request->currency_name;
+        $data['currency_code']   = $request->currency_code;
+        $data['currency_symbol'] = $request->currency_symbol;
         return $data;
     }
 

@@ -1,3 +1,23 @@
+@php
+if (Session::has('currency_rate')){
+    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
+}else{
+    $CHANGE_CURRENCY_RATE = 1;
+    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
+}
+
+if (Session::has('currency_symbol')){
+    $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+}else{
+    $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
+    Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
+}
+@endphp
+
+
+
+
+
 @extends('frontend.layouts.master')
 @section('title','Shop')
 
@@ -136,6 +156,7 @@
                         <div class="shop-products-wrapper">
                             <div class="product-grid shopProductsField">
                                 @forelse ($products as $item)
+                                    @isset($category_ids[$item->id])
                                         <form class="addToCart">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$item->id}}">
@@ -261,6 +282,7 @@
                                                 </div>
                                             </div>
                                         </form>
+                                    @endisset
                                 @empty
                                 @endforelse
                             </div>
@@ -273,7 +295,9 @@
         <!-- Shop Page Ends-->
 
         @forelse ($products as $item)
-            @include('frontend.includes.quickshop_shop')
+            @isset($category_ids[$item->id])
+                @include('frontend.includes.quickshop_shop')
+            @endisset
         @empty
         @endforelse
 

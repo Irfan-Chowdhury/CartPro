@@ -14,7 +14,7 @@ class CurrencyRateController extends Controller
         {
             if (request()->ajax())
             {
-                $currency_rates = CurrencyRate::all();
+                $currency_rates = CurrencyRate::orderBy('currency_name','ASC')->get();
 
                 return datatables()->of($currency_rates)
                 ->setRowId(function ($row){
@@ -31,17 +31,20 @@ class CurrencyRateController extends Controller
                 })
                 ->addColumn('action', function ($row)
                 {
-                    if (auth()->user()->can('currency-rate-edit'))
-                    {
-                        $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
-                        &nbsp; ';
+                    if (auth()->user()->can('currency-rate-edit')){
+                        if ($row->default==1) {
+                            $actionBtn = '<button disabled type="button" title="Can Not Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                            &nbsp; ';
+                            $actionBtn .= '<span class="badge badge-light text-success">Default</span>';
+                        }else{
+                            $actionBtn = '<button type="button" title="Edit" class="edit btn btn-info btn-sm" title="Edit" data-id="'.$row->id.'"><i class="dripicons-pencil"></i></button>
+                            &nbsp; ';
+                        }
                     }
-
                     return $actionBtn;
                 })
                 ->rawColumns(['action','currency_symbol'])
                 ->make(true);
-
             }
             return view('admin.pages.currency_rate.index');
         }
@@ -62,8 +65,8 @@ class CurrencyRateController extends Controller
         {
             if (request()->ajax()) {
                 $data = CurrencyRate::find($request->id);
-                $data->currency_rate = number_format((float)$request->currency_rate, env('FORMAT_NUMBER'), '.', '');
-                $data->currency_symbol = $request->currency_symbol;
+                $data->currency_rate   = number_format((float)$request->currency_rate, env('FORMAT_NUMBER'), '.', '');
+                // $data->currency_symbol = $request->currency_symbol;
                 $data->update();
 
                 return response()->json(['success' => 'Data Updated Successfully']);

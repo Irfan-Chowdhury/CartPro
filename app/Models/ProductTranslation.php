@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductTranslation extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'product_id',
         'local',
@@ -15,6 +18,8 @@ class ProductTranslation extends Model
         'meta_title',
         'meta_description',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function product()
     {

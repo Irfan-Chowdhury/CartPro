@@ -1,3 +1,12 @@
+@php
+if (Session::has('currency_rate')){
+    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
+}else{
+    $CHANGE_CURRENCY_RATE = 1;
+    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
+}
+@endphp
+
     <!-- Quick Shop Modal starts -->
     <div class="modal fade quickshop" id="id_{{$item->product->id}}" tabindex="-1" role="dialog" aria-labelledby="{{$item->product->id}}" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">

@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Session;
 
 class ProductAttributeValue extends Model
 {
+
     protected $table = 'product_attribute_value';
 
     protected $fillable = ['product_id','attribute_id','attribute_value_id'];
-
-
 
     //Used HomeController for product-details;
     public function attributeTranslation()

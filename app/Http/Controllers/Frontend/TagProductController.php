@@ -46,6 +46,7 @@ class TagProductController extends Controller
                 })
                 ->select('products.*','product_images.image','product_images.type','product_translations.product_name','product_translations.short_description')
                 ->whereIn('products.id',$product_tag_ids)
+                ->where('products.deleted_at',null)
                 ->get();
         });
 

@@ -21,6 +21,21 @@ class MenuItemController extends Controller
         return view('admin.pages.menu.menu_item.index',compact('menuId'));
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     public function dataFetchByType(Request $request)
     {
         if ($request->ajax()) {

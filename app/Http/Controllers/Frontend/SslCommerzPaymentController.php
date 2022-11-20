@@ -246,6 +246,7 @@ class SslCommerzPaymentController extends Controller
 
         if ($order_detials->status == 'Pending') {
             $update_product = DB::table('orders')
+                ->where('orders.deleted_at',null)
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);
             echo "Transaction is Cancel";

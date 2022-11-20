@@ -34,7 +34,7 @@
                 <form class="newsletter" id="newsLatterSubmitForm" action="{{route('cartpro.newslatter_store')}}" method="POST">
                     @csrf
                     <input type="email" placeholder="Enter your email" name="email" required>
-                    <button type="submit" class="button style1 btn-search" type="submit">@lang('file.Subscribe')</button>
+                    <button type="submit" class="button style1 btn-search">@lang('file.Subscribe')</button>
                 </form>
             </div>
         </div>

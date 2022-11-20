@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\ClientAutoUpdateController;
 use App\Http\Controllers\API\DemoAutoUpdateController;
+use App\Http\Controllers\API\Frontend\CommonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,11 @@ Route::get('fetch-data-bugs', [DemoAutoUpdateController::class, 'fetchDataForBug
 Route::post('bug-update', [ClientAutoUpdateController::class, 'bugUpdate'])->name('bug-update');
 Route::post('version-upgrade', [ClientAutoUpdateController::class, 'versionUpgrade'])->name('version-upgrade');
 
+
+/*
+|--------------------------------------------------------------------------
+| Frontend React
+|--------------------------------------------------------------------------
+*/
+Route::get('common-data', [CommonController::class, 'index']);
+Route::get('header-data', [CommonController::class, 'headerData']);

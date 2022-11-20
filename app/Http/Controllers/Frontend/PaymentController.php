@@ -245,6 +245,7 @@ class PaymentController extends Controller
         //Mail
         $this->sendMailWithOrderDetailsInvoice($reference_no);
         $order->notify(new NewOrderNotification($reference_no));
+        
         // if(Auth::check()){
         //     auth()->user()->notify(new NewOrderNotification($reference_no));
         // }

@@ -26,6 +26,7 @@
         		    <th class="not-exported"></th>
         		    <th scope="col">{{trans('file.Currency Name')}}</th>
         		    <th scope="col">{{trans('file.Currency Code')}}</th>
+        		    <th scope="col">{{trans('file.Currency Symbol')}}</th>
         		    <th scope="col">{{trans('file.Action')}}</th>
         	   </tr>
     	  	</thead>
@@ -96,6 +97,10 @@
                         {
                             data: 'currency_code',
                             name: 'currency_code',
+                        },
+                        {
+                            data: 'currency_symbol',
+                            name: 'currency_symbol',
                         },
                         {
                             data: 'action',
@@ -195,6 +200,7 @@
                         $('#currencyId').val(data.id);
                         $('#currencyName').val(data.currency_name);
                         $('#currencyCode').val(data.currency_code);
+                        $('#currencySymbol').val(data.currency_symbol);
                         $('#editFormModal').modal('show');
                     }
                 })

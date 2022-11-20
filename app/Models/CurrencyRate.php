@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class CurrencyRate extends Model
 {
-    protected $fillable = ['currency_name','currency_code','currency_rate'];
+    protected $fillable = ['currency_name','currency_code','currency_symbol','currency_rate','default'];
 }

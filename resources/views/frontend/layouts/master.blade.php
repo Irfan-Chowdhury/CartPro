@@ -9,7 +9,16 @@
         }else {
             $total_wishlist = 0;
         }
+
+
+        if (Session::has('currency_symbol')){
+            $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+        }else{
+            $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
+            Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
+        }
 @endphp
+
 
 
 <!DOCTYPE html>
@@ -105,6 +114,7 @@
 
     <!--Footer-->
     @include('frontend.includes.footer')
+
 
     <!--Plugin js -->
     <script src="{{asset('public/frontend/js/plugin.js')}}"></script>

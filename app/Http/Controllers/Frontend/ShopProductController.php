@@ -97,7 +97,8 @@ class ShopProductController extends Controller
                         ->where('product_images.type', '=', 'base');
                     })
                     ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
-                    ->where('is_active',1)
+                    ->where('products.is_active',1)
+                    ->where('products.deleted_at',null)
                     ->orderBy('products.id','ASC')
                     ->get();
 
@@ -126,7 +127,6 @@ class ShopProductController extends Controller
         $product_attr_val = Product::with('productAttributeValues','brandTranslation')
                         ->orderBy('id','DESC')
                         ->get();
-
         return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values','product_attr_val'));
     }
 
@@ -151,6 +151,7 @@ class ShopProductController extends Controller
                 ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                 ->where('is_active',1)
                 ->orderBy('products.id','ASC')
+                ->where('products.deleted_at',null)
                 ->limit($request->limit_data)
                 ->get();
 
@@ -196,6 +197,7 @@ class ShopProductController extends Controller
                             })
                             ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
+                            ->where('products.deleted_at',null)
                             ->orderBy('products.id','DESC')
                             ->get();
         }elseif ($request->condition=='low_to_high') {
@@ -214,6 +216,7 @@ class ShopProductController extends Controller
                             })
                             ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
                             ->where('is_active',1)
+                            ->where('products.deleted_at',null)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','ASC')
                             ->get();
@@ -235,6 +238,7 @@ class ShopProductController extends Controller
                             ->where('is_active',1)
                             ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                             ->orderBy('current_price','DESC')
+                            ->where('products.deleted_at',null)
                             ->get();
         }
 
@@ -280,6 +284,7 @@ class ShopProductController extends Controller
             })
             ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
             ->where('is_active',1)
+            ->where('products.deleted_at',null)
             ->whereBetween('products.price', [$min_price, $max_price])
             ->get();
 

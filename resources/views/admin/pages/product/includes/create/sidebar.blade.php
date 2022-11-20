@@ -31,7 +31,7 @@
                         <label for="inputEmail3"><b>@lang('file.Tax') Class <span class="text-danger">*</span></b></label>
                         <select name="tax_id" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Tax')}}'>
                             @forelse ($taxes as $tax)
-                                <option value="{{$tax->id}}">{{$tax->taxTranslation->tax_name ?? $tax->taxTranslationDefaultEnglish->tax_name ?? null}}</option>
+                                <option value="{{$tax->id}}">{{$tax->tax_name ?? $tax->tax_name ?? null}}</option>
                             @empty
                             @endforelse
                         </select>

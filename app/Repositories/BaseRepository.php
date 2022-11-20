@@ -27,7 +27,7 @@ class BaseRepository extends Action implements BaseContract
     }
 
     public function destroy($columnName, $id){
-        $this->model::where($columnName, $id)->delete();
+        return $this->model::where($columnName, $id)->delete();
     }
 
     public function bulkAction($type, $columnName, $ids){

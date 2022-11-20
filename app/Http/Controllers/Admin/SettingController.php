@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\SlugTrait;
 use App\Traits\ENVFilePutContent;
 use App\Traits\imageHandleTrait;
+use App\Traits\MailTrait;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
@@ -42,10 +43,11 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Artisan;
 use ZipArchive;
 use Illuminate\Filesystem\Filesystem;
+use Exception;
 
 class SettingController extends Controller
 {
-    use SlugTrait, ENVFilePutContent, imageHandleTrait, SettingHomePageSeoTrait;
+    use SlugTrait, ENVFilePutContent, imageHandleTrait, SettingHomePageSeoTrait, MailTrait;
 
     public function index()
     {
@@ -102,6 +104,7 @@ class SettingController extends Controller
             $selected_currencies= [];
         }
 
+        //SMS
         $setting_sms = SettingSms::latest()->first();
         if (empty($setting_sms)) {
             $setting_sms = [];
@@ -350,7 +353,6 @@ class SettingController extends Controller
     public function currencyStoreOrUpdate(Request $request)
     {
         if ($request->ajax()) {
-
             if (!env('USER_VERIFIED')) {
                 return response()->json(['errors'=>['This is disabled for demo']]);
             }
@@ -366,7 +368,7 @@ class SettingController extends Controller
             }
 
             $default_currency_code = $request->default_currency_code;
-            $selected_currencies = Currency::whereIn('currency_name',$request->supported_currencies)->select('currency_name','currency_code')->get();
+            $selected_currencies = Currency::whereIn('currency_name',$request->supported_currencies)->select('currency_name','currency_code','currency_symbol')->get();
 
             $match = 0;
             foreach ($selected_currencies as $value) {
@@ -413,10 +415,15 @@ class SettingController extends Controller
             CurrencyRate::whereNotIn('currency_name',$request->supported_currencies)->delete();
             foreach ($selected_currencies as $value) {
                 CurrencyRate::updateOrCreate(
-                    [ 'currency_name' => $value->currency_name],
-                    [ 'currency_code' => $value->currency_code]
+                    ['currency_name' => $value->currency_name],
+                    [
+                        'currency_code'  => $value->currency_code,
+                        'currency_symbol'=> $value->currency_symbol,
+                        'default'=>0
+                    ]
                 );
             }
+            CurrencyRate::where('currency_code',$data['default_currency_code'])->update(['currency_rate'=>1,'default'=>1]);
 
 
             //Default Currency
@@ -513,13 +520,6 @@ class SettingController extends Controller
             $data['mail_footer_theme_color'] = $request->mail_footer_theme_color;
             $data['mail_layout_background_theme_color'] = $request->mail_layout_background_theme_color;
 
-            $setting_mail = SettingMail::latest()->first();
-
-            if (empty($setting_mail)) {
-                SettingMail::create($data);
-            }else {
-                SettingMail::whereId($setting_mail->id)->update($data);
-            }
 
             $this->dataWriteInENVFile('MAIL_HOST',$data['mail_host']);
             $this->dataWriteInENVFile('MAIL_PORT',$data['mail_port']);
@@ -528,6 +528,29 @@ class SettingController extends Controller
             $this->dataWriteInENVFile('MAIL_ENCRYPTION',$data['mail_encryption']);
             $this->dataWriteInENVFile('MAIL_FROM_ADDRESS',$data['mail_address']);
             $this->dataWriteInENVFile('MAIL_FROM_NAME','"'.$data['mail_name'].'"');
+
+            if($request->send_mail_check){
+                try{
+                    $this->checkMailForTesting($request->mail_to);
+                }catch(Exception $e){
+                    $this->dataWriteInENVFile('MAIL_HOST',null);
+                    $this->dataWriteInENVFile('MAIL_PORT',null);
+                    $this->dataWriteInENVFile('MAIL_USERNAME',null);
+                    $this->dataWriteInENVFile('MAIL_PASSWORD',null);
+                    $this->dataWriteInENVFile('MAIL_ENCRYPTION',null);
+                    $this->dataWriteInENVFile('MAIL_FROM_ADDRESS',null);
+                    $this->dataWriteInENVFile('MAIL_FROM_NAME',null);
+                    return response()->json(['errors' => [$e->getMessage()]]);
+                }
+            }
+
+            $setting_mail = SettingMail::latest()->first();
+
+            if (empty($setting_mail)) {
+                SettingMail::create($data);
+            }else {
+                SettingMail::whereId($setting_mail->id)->update($data);
+            }
 
             return response()->json(['success' => __('Data Added successfully.')]);
         }

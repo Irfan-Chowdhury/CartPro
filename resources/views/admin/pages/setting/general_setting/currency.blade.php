@@ -1,3 +1,4 @@
+
 <div class="card">
     <h3 class="card-header p-3"><b>@lang('file.Currency')</b></h3>
     <hr>
@@ -12,7 +13,8 @@
                         <div class="col-sm-8">
                             <select name="default_currency_code" id="defaultCurrencyCode" class="form-control selectpicker" data-live-search="true" title='{{__('file.Select Currency')}}'>
                                 @foreach ($currencies as $currency)
-                                    <option value="{{$currency->currency_code}}" @if($setting_currency) {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}} @endif> {{$currency->currency_name}} ({{$currency->currency_code}})</option>
+                                    {{-- <option value="{{$currency->currency_code}}" @if($setting_currency) {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}} @endif> {{$currency->currency_name}} ({{$currency->currency_code}}) </option> --}}
+                                    <option value="{{$currency->currency_code}}" @if($setting_currency) {{$currency->currency_code==$setting_currency->default_currency_code ? 'selected' : ''}} @endif> {{$currency->currency_name}} ({{$currency->currency_code}}) <p class="hiddenOption">| {{$currency->currency_symbol}}</p> </option>
                                 @endforeach
                             </select>
                         </div>
@@ -41,7 +43,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Default Currency Symbol') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" name="default_currency" @isset($setting_currency->default_currency) value="{{$setting_currency->default_currency}}" @endisset>
+                            <input type="text" class="form-control" id="defaultCurrencySymbol" readonly name="default_currency" @isset($setting_currency->default_currency) value="{{$setting_currency->default_currency}}" @endisset>
                         </div>
                     </div>
                     <div class="form-group row">

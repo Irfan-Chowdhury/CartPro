@@ -189,6 +189,7 @@ class CategoryProductController extends Controller
                     ->where('product_images.type', '=', 'base');
                 })
                 ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
+                ->where('products.deleted_at',null)
                 ->get()->toArray();
 
         $product_attribute_value =  DB::table('product_attribute_value')
@@ -278,6 +279,7 @@ class CategoryProductController extends Controller
                     })
                     ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
                     ->whereBetween('products.price', [$min_price, $max_price])
+                    ->where('products.deleted_at',null)
                     // ->whereBetween('products.weight', [$min_weight, $max_weight])
                     // ->where('products.weight','!=',NULL)
                     ->get();
@@ -486,6 +488,7 @@ class CategoryProductController extends Controller
                 })
                 ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
                 ->orderBy('products.id','DESC')
+                ->where('products.deleted_at',null)
                 ->get();
         }elseif ($request->condition=='low_to_high') {
             $products =  DB::table('products')
@@ -504,6 +507,7 @@ class CategoryProductController extends Controller
                 ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
                 ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                 ->orderBy('current_price','ASC')
+                ->where('products.deleted_at',null)
                 ->get();
         }elseif ($request->condition=='high_to_low') {
             $products =  DB::table('products')
@@ -522,6 +526,7 @@ class CategoryProductController extends Controller
                 ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
                 ->addSelect(DB::raw('IF(is_special=0, price, special_price ) AS current_price'))
                 ->orderBy('current_price','DESC')
+                ->where('products.deleted_at',null)
                 ->get();
         }
 
@@ -572,6 +577,7 @@ class CategoryProductController extends Controller
                 })
                 ->select('category_product.category_id','product_images.image','product_translations.product_name','product_translations.description','products.*')
                 ->whereBetween('products.price', [$min_price, $max_price])
+                ->where('products.deleted_at',null)
                 ->get();
 
         $html = $this->shortedProductShow($category,$products);

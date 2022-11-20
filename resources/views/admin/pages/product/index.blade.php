@@ -11,7 +11,7 @@
 
     <div class="container-fluid mb-3">
         <h4 class="font-weight-bold mt-3">@lang('file.Products')</h4>
-        <div id="success_alert" role="alert"></div>
+        <div id="alert_message" role="alert"></div>
         <br>
 
         @if (auth()->user()->can('product-store'))
@@ -27,7 +27,7 @@
     </div>
 
     <div class="table-responsive">
-    	<table id="productTable" class="table ">
+    	<table id="dataListTable" class="table ">
     	    <thead>
         	   <tr>
         		    <th class="not-exported"></th>
@@ -60,7 +60,7 @@
                         }
                     });
 
-                    let table = $('#productTable').DataTable({
+                    let table = $('#dataListTable').DataTable({
                         initComplete: function () {
                             this.api().columns([1]).every(function () {
                                 var column = this;
@@ -89,7 +89,7 @@
                         processing: true,
                         serverSide: true,
                         ajax: {
-                            url: "{{ route('admin.products.index') }}",
+                            url: "{{ route('admin.products.dataTable') }}",
                         },
                         columns: [
                             {
@@ -196,150 +196,14 @@
                     });
                     new $.fn.dataTable.FixedHeader(table);
                 });
-
-
-                //---------- Active -------------
-                $(document).on("click",".active",function(e){
-                    e.preventDefault();
-                    var productId = $(this).data("id");
-                    console.log(productId);
-
-                    $.ajax({
-                        url: "{{route('admin.products.active')}}",
-                        type: "GET",
-                        data: {id:productId},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#productTable').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.errors){
-                                $('#productTable').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow");
-                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-                //---------- Inactive -------------
-                $(document).on("click",".inactive",function(e){
-                    e.preventDefault();
-                    var productId = $(this).data("id");
-                    console.log(productId);
-
-                    $.ajax({
-                        url: "{{route('admin.products.inactive')}}",
-                        type: "GET",
-                        data: {id:productId},
-                        success: function(data){
-                            console.log(data);
-                            if(data.success){
-                                $('#productTable').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                $('#success_alert').addClass('alert alert-success').html(data.success);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                            else if(data.errors){
-                                $('#productTable').DataTable().ajax.reload();
-                                $('#success_alert').fadeIn("slow");
-                                $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                setTimeout(function() {
-                                    $('#success_alert').fadeOut("slow");
-                                }, 3000);
-                            }
-                        }
-                    });
-                });
-
-                //Bulk Action
-                $("#bulk_action").on("click",function(){
-                    var idsArray = [];
-                    let table = $('#productTable').DataTable();
-                    idsArray = table.rows({selected: true}).ids().toArray();
-
-                    if(idsArray.length === 0){
-                        alert("Please Select at least one checkbox.");
-                    }else{
-                        $('#bulkConfirmModal').modal('show');
-                        let action_type;
-
-                        $("#active").on("click",function(){
-                            action_type = "active";
-                            $.ajax({
-                                url: "{{route('admin.products.bulk_action')}}",
-                                method: "GET",
-                                data: {idsArray:idsArray,action_type:action_type},
-                                success: function (data) {
-                                    console.log(idsArray);
-                                    if(data.success){
-                                        $('#bulkConfirmModal').modal('hide');
-                                        table.rows('.selected').deselect();
-                                        $('#productTable').DataTable().ajax.reload();
-                                        $('#success_alert').fadeIn("slow");
-                                        $('#success_alert').addClass('alert alert-success').html(data.success);
-                                        setTimeout(function() {
-                                            $('#success_alert').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                    else if(data.errors){
-                                        $('#productTable').DataTable().ajax.reload();
-                                        $('#success_alert').fadeIn("slow");
-                                        $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                        setTimeout(function() {
-                                            $('#success_alert').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                }
-                            });
-                        });
-                        $("#inactive").on("click",function(){
-                            action_type = "inactive";
-                            console.log(idsArray);
-
-                            $.ajax({
-                                url: "{{route('admin.products.bulk_action')}}",
-                                method: "GET",
-                                data: {idsArray:idsArray,action_type:action_type},
-                                success: function (data) {
-                                    if(data.success){
-                                        $('#bulkConfirmModal').modal('hide');
-                                        table.rows('.selected').deselect();
-                                        $('#productTable').DataTable().ajax.reload();
-                                        $('#success_alert').fadeIn("slow"); //Check in top in this blade
-                                        $('#success_alert').addClass('alert alert-success').html(data.success);
-                                        setTimeout(function() {
-                                            $('#success_alert').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                    else if(data.errors){
-                                        $('#productTable').DataTable().ajax.reload();
-                                        $('#success_alert').fadeIn("slow");
-                                        $('#success_alert').addClass('alert alert-danger').html(data.errors);
-                                        setTimeout(function() {
-                                            $('#success_alert').fadeOut("slow");
-                                        }, 3000);
-                                    }
-                                }
-                            });
-                        });
-                    }
-                });
-
-
-
-
             })(jQuery);
+
+            let activeURL     = "{{route('admin.products.active')}}";
+            let inactiveURL   = "{{route('admin.products.inactive')}}";
+            let deleteURL     = "{{route('admin.products.delete')}}";
+            let bulkActionURL = "{{route('admin.products.bulk_action')}}";
     </script>
+            <!-- Common Action For All-->
+            @include('admin.includes.common_action',['action'=>true])
 @endpush
 

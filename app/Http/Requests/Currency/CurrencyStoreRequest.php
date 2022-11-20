@@ -26,6 +26,7 @@ class CurrencyStoreRequest extends FormRequest
         return [
             'currency_name' => 'required|unique:currencies,currency_name,NULL,id,deleted_at,NULL',
             'currency_code' => 'required|unique:currencies,currency_code,NULL,id,deleted_at,NULL',
+            'currency_symbol'=> 'required',
         ];
     }
 }

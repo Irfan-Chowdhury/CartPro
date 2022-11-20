@@ -12,7 +12,7 @@
         <form method="post" id="updateForm"  class="form-horizontal">
           @csrf
             <input type="hidden" name="currency_id" id="currencyId">
-            
+
             <div class="modal-body">
                 <div class="container-fluid"><span id="errorMessageEdit"></span></div>
 
@@ -23,6 +23,10 @@
                 <div class="form-group">
                     <label>{{__('file.Currency Code')}}</label>
                     <input type="text" name="currency_code" id="currencyCode"  class="form-control" placeholder="Ex: BDT">
+                </div>
+                <div class="form-group">
+                    <label>{{__('file.Currency Symbol')}}</label>
+                    <input type="text" name="currency_symbol" id="currencySymbol"  class="form-control" placeholder="Ex: ৳">
                 </div>
             </div>
 

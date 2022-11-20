@@ -55,6 +55,7 @@ class BrandProductController extends Controller
                     })
                     ->select('products.*','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description')
                     ->where('brand_id',$brand->id)
+                    ->where('products.deleted_at',null)
                     ->orderBy('products.id','DESC')
                     ->get();
 

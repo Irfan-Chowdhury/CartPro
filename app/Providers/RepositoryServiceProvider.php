@@ -11,6 +11,7 @@ use App\Contracts\AttributeValue\AttributeValueTranslationContract;
 use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
 use App\Contracts\Category\CategoryContract;
+use App\Contracts\Category\CategoryProductContract;
 use App\Contracts\Category\CategoryTranslationContract;
 use App\Contracts\Country\CountryContract;
 use App\Contracts\Coupon\CouponContract;
@@ -25,6 +26,11 @@ use App\Contracts\Order\OrderContract;
 use App\Contracts\Order\OrderDetailsContract;
 use App\Contracts\Page\PageContract;
 use App\Contracts\Page\PageTranslationContract;
+use App\Contracts\Product\ProductAttributeValueContract;
+use App\Contracts\Product\ProductContract;
+use App\Contracts\Product\ProductImageContract;
+use App\Contracts\Product\ProductTagContract;
+use App\Contracts\Product\ProductTranslationContract;
 use App\Contracts\Review\ReviewContract;
 use App\Contracts\Role\RoleContract;
 use App\Contracts\Slider\SliderContract;
@@ -42,6 +48,7 @@ use App\Repositories\AttributeValue\AttributeValueTranslationRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandTranslationRepository;
+use App\Repositories\Category\CategoryProductRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryTranslationRepository;
 use App\Repositories\Country\CountryRepository;
@@ -56,6 +63,11 @@ use App\Repositories\Menu\MenuTranslationRepository;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Page\PageRepository;
 use App\Repositories\Page\PageTranslationRepository;
+use App\Repositories\Product\ProductAttributeValueRepository;
+use App\Repositories\Product\ProductImageRepository;
+use App\Repositories\Product\ProductRepository;
+use App\Repositories\Product\ProductTagRepository;
+use App\Repositories\Product\ProductTranslationRepository;
 use App\Repositories\Review\ReviewRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\Slider\SliderRepository;
@@ -77,6 +89,7 @@ class RepositoryServiceProvider extends ServiceProvider
         //Category
         $this->app->bind(CategoryContract::class, CategoryRepository::class);
         $this->app->bind(CategoryTranslationContract::class, CategoryTranslationRepository::class);
+        $this->app->bind(CategoryProductContract::class, CategoryProductRepository::class);
 
         //Brand
         $this->app->bind(BrandContract::class, BrandRepository::class);
@@ -140,6 +153,13 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Role
         $this->app->bind(RoleContract::class, RoleRepository::class);
+
+        // Products
+        $this->app->bind(ProductContract::class, ProductRepository::class);
+        $this->app->bind(ProductTranslationContract::class, ProductTranslationRepository::class);
+        $this->app->bind(ProductAttributeValueContract::class, ProductAttributeValueRepository::class);
+        $this->app->bind(ProductImageContract::class, ProductImageRepository::class);
+        $this->app->bind(ProductTagContract::class, ProductTagRepository::class);
 
     }
 }

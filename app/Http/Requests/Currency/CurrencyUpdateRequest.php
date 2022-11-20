@@ -26,6 +26,7 @@ class CurrencyUpdateRequest extends FormRequest
         return [
             'currency_name' => 'required|unique:currencies,currency_name,'.$this->currency_id.',id,deleted_at,NULL',
             'currency_code' => 'required|unique:currencies,currency_code,'.$this->currency_id.',id,deleted_at,NULL',
+            'currency_symbol'=> 'required',
         ];
     }
 }

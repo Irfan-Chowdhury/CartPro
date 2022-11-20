@@ -9,6 +9,7 @@ use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\CurrencyRate;
 use App\Models\FaqType;
 use App\Models\FlashSale;
 use App\Models\KeywordHit;
@@ -39,11 +40,11 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use App\Http\Controllers\Frontend\FrontBaseController;
 
-class HomeController extends Controller
+class HomeController extends FrontBaseController
 {
     use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait;
-
 
     private $sliderService;
     private $brandService;
@@ -51,11 +52,18 @@ class HomeController extends Controller
     {
         $this->sliderService = $sliderService;
         $this->brandService  = $brandService;
+        // parent::__construct();
     }
 
 
     public function index()
     {
+        if (!Session::has('currency_code')){
+            Session::put('currency_code', env('DEFAULT_CURRENCY_CODE'));
+            $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',env('DEFAULT_CURRENCY_SYMBOL'));
+            $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE', env('DEFAULT_CURRENCY_RATE'));
+        }
+
         $categories = Cache::remember('categories', 300, function () {
             return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
                     ->where('is_active',1)
@@ -234,7 +242,7 @@ class HomeController extends Controller
 
         $brand_ids = json_decode($storefront_top_brands);
         $brands =  $this->brandService->getBrandsWhereInIds($brand_ids);
-        
+
 
         $order_details = Cache::remember('order_details', 300, function () {
             return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
@@ -309,6 +317,7 @@ class HomeController extends Controller
                     ->where('product_id',$product->id)
                     ->where('status','approved')
                     ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
+                    ->where('reviews.deleted_at',null)
                     ->get();
 
         if (empty($reviews)) {
@@ -463,6 +472,7 @@ class HomeController extends Controller
                     ->where('user_id',Auth::user()->id)
                     ->select('product_translations.product_name','order_details.image','order_details.price','order_details.qty','order_details.options','order_details.subtotal')
                     ->where('order_details.order_id',$order->id)
+                    ->where('order_details.deleted_at',null)
                     ->get();
 
 
@@ -517,16 +527,22 @@ class HomeController extends Controller
 
     public function currencyChange($currency_code)
     {
-        // $main_amount = 500;
-        // $this->CurrencyConvert($main_amount);
-        // $this->CurrencySymbol();
+        // return Session::get('currency_symbol');
+        // return Session::get('currency_rate');
 
-        Session::put('currency_code', $currency_code);
+        // Session::put('currency_code', $currency_code);
+        // $currency_symbol = $this->CurrencySymbol();
+        // $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',$currency_symbol);
+        // $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE',$this->ChangeCurrencyRate());
+        // return redirect()->back();
 
-        $currency_symbol = $this->CurrencySymbol();
-        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',$currency_symbol);
-        $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE',$this->ChangeCurrencyRate());
+        session()->put('currency_code', $currency_code);
+        session()->put('currency_symbol',$this->CurrencySymbol($currency_code));
+        session()->put('currency_rate',$this->ChangeCurrencyRate($currency_code));
 
+        // Session::put('currency_code', $currency_code);
+        // $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL', $this->CurrencySymbol($currency_code));
+        // $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE', $this->ChangeCurrencyRate($currency_code));
         return redirect()->back();
     }
 

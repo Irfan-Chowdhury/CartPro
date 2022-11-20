@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\AttributeValue;
 use App\Models\AttributeValueTranslation;
+use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
@@ -30,6 +33,7 @@ use App\Traits\DeleteWithFileTrait;
 use Illuminate\Support\Facades\App;
 use App\Services\BrandService;
 use App\Services\CategoryService;
+use App\Services\ProductService;
 use App\Services\TagService;
 use App\Services\TaxService;
 use App\Traits\imageHandleTrait;
@@ -40,12 +44,14 @@ class ProductController extends Controller
     use ActiveInactiveTrait, SlugTrait, FormatNumberTrait, DeleteWithFileTrait, imageHandleTrait, TranslationTrait;
 
 
+    protected $productService;
     protected $brandService;
     protected $categoryService;
     protected $tagService;
     protected $attributeSetService;
     protected $taxService;
-    public function __construct(BrandService $brandService, CategoryService $categoryService, TagService $tagService, AttributeSetService $attributeSetService ,TaxService $taxService){
+    public function __construct(ProductService $productService, BrandService $brandService, CategoryService $categoryService, TagService $tagService, AttributeSetService $attributeSetService ,TaxService $taxService){
+        $this->productService  = $productService;
         $this->brandService    = $brandService;
         $this->categoryService = $categoryService;
         $this->tagService      = $tagService;
@@ -61,92 +67,16 @@ class ProductController extends Controller
     |
     |
     */
-
     public function index()
     {
-        if (auth()->user()->can('product-view'))
-        {
-            $local = Session::get('currentLocal');
-            App::setLocale($local);
-
-            $products = Product::with('baseImage','productTranslation','productTranslationEnglish')
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','DESC')
-                        ->get();
-
-
-            if (request()->ajax())
-            {
-                return datatables()->of($products)
-                ->setRowId(function ($row){
-                    return $row->id;
-                })
-                ->addColumn('image', function ($row)
-                {
-                    if (($row->baseImage==null) || ($row->baseImage->type!='base')) {
-                        $url = 'https://dummyimage.com/50x50/000/fff';
-                    }elseif ($row->baseImage->type=='base') {
-                        if (!File::exists(public_path($row->baseImage->image_small))) {
-                            $url = 'https://dummyimage.com/50x50/000/fff';
-                        }else {
-                            $url = url("public/".$row->baseImage->image_small);
-                        }
-                    }
-                    return '<img src="'. $url .'" height="50px" width="50px"/>';
-                })
-                ->addColumn('product_name', function ($row)
-                {
-                    return $row->productTranslation->product_name ?? $row->productTranslationEnglish->product_name ?? null;
-                })
-                ->addColumn('price', function ($row)
-                {
-                    if ($row->special_price > 0) {
-                        if(env('CURRENCY_FORMAT')=='prefix'){
-                            return  '<span>'.env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').'</span></br><span class="text-danger"><del>'.env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').'</del></span>';
-                        }else{
-                            return  '<span>'.number_format((float)$row->special_price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL').'</span></br><span class="text-danger"><del>'.number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL').'</del></span>';
-                        }
-                    }else {
-                        if(env('CURRENCY_FORMAT')=='prefix'){
-                            return env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '');
-                        }else{
-                            return number_format((float)$row->price, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL');
-                        }
-                    }
-
-                    // if(env('CURRENCY_FORMAT')=='prefix'){
-                    //     return env('DEFAULT_CURRENCY_SYMBOL').number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '');
-                    // }else{
-                    //     return number_format((float)$row->total, env('FORMAT_NUMBER'), '.', '').env('DEFAULT_CURRENCY_SYMBOL');
-                    // }
-                })
-                ->addColumn('action', function ($row)
-                {
-                    $actionBtn = "";
-                    if (auth()->user()->can('product-edit'))
-                    {
-                        $actionBtn .= '<a href="'.route('admin.products.edit', $row->id) .'" class="edit btn btn-primary btn-sm" title="Edit"><i class="dripicons-pencil"></i></a>
-                        &nbsp; ';
-                    }
-                    if (auth()->user()->can('product-action'))
-                    {
-                        if ($row->is_active==1) {
-                            $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button> &nbsp';;
-                        }else {
-                            $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>  &nbsp';
-                        }
-                    }
-                        // $actionBtn .= '<a  onclick="return confirm(\'Are you sure to delete ?\')" href="'.route('admin.products.delete', $row->id) .'" class="delete btn btn-danger btn-sm" title="Delete"><i class="dripicons-trash"></i></a>';
-
-                    return $actionBtn;
-                })
-                ->rawColumns(['image','action','price'])
-                ->make(true);
-            }
-            return view('admin.pages.product.index');
+        if (!auth()->user()->can('product-view')){
+            return abort('403', __('You are not authorized'));
         }
-        return abort('403', __('You are not authorized'));
+        return view('admin.pages.product.index');
+    }
 
+    public function dataTable(){
+        return $this->productService->dataTable();
     }
 
     /*
@@ -173,33 +103,10 @@ class ProductController extends Controller
     | Product Store
     |--------------------------------------------------------------------------
     |
-    |
     */
 
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        if (env('USER_VERIFIED')!=1) {
-            session()->flash('type','danger');
-            session()->flash('message','Disabled for demo !');
-            return redirect()->back();
-        }
-
-        $validator = Validator::make($request->all(),[
-            'product_name'=> 'required|unique:product_translations',
-            'description' => 'required',
-            'price'       => 'required',
-            'sku'         => 'required|unique:products',
-            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
-            'category_id' => 'required',
-            'tax_id'      => 'required',
-        ]);
-
-        if ($validator->fails()){
-            session()->flash('type','danger');
-            session()->flash('message','Something Wrong');
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         if ($request->new_from > $request->new_to) {
             session()->flash('type','danger');
             session()->flash('message','The From date should not be greater then the To date');
@@ -223,107 +130,107 @@ class ProductController extends Controller
         if (auth()->user()->can('product-store'))
         {
 
-                $product                = new Product();
-                if ($request->brand_id) {
-                    $product->brand_id  = $request->brand_id;
+            $product                = new Product();
+            if ($request->brand_id) {
+                $product->brand_id  = $request->brand_id;
+            }
+            $product->tax_id        = $request->tax_id;
+            $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
+            $product->price         = $request->price;
+
+            $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
+
+            if ($request->special_price && $request->price > $request->special_price){
+                $product->is_special = 1;
+            }else {
+                $product->is_special = 0;
+            }
+            $product->special_price_type = $request->special_price_type;
+            $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)): null;
+            $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)): null;
+            $product->selling_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
+            $product->sku           = $request->sku;
+            $product->manage_stock  = $request->manage_stock==0 ? 0:1;
+            $product->qty           = $request->qty;
+            $product->in_stock      = $request->in_stock==0 ? 0:1;
+            $product->new_from      = $request->new_from==true ? date("Y-m-d",strtotime($request->new_from)): null;
+            $product->new_to        = $request->new_to==true ? date("Y-m-d",strtotime($request->new_to)): null;
+            $product->avg_rating    = 0;
+            $product->is_active     = $request->is_active==0 ? 0 : 1;
+            $product->save();
+
+            //----------------- Product Translation --------------
+
+            $productTranslation = new ProductTranslation();
+            $productTranslation->product_id  = $product->id;
+            $productTranslation->local        = Session::get('currentLocal');
+            $productTranslation->product_name = htmlspecialchars_decode($request->product_name);
+            $productTranslation->description  = htmlspecialchars_decode($request->description);;
+            $productTranslation->short_description = $request->short_description;
+            $productTranslation->meta_title    = $request->meta_title;
+            $productTranslation->meta_description  = $request->meta_description;
+            $productTranslation->save();
+
+            //----------------- Base Image --------------
+            if (!empty($request->base_image)){
+                $image_name = $this->imageStoreProduct($request->base_image);
+
+                $productImage = [];
+                $productImage['product_id'] = $product->id;
+                $productImage['image']        = '/images/products/large/'.$image_name;
+                $productImage['image_medium'] = '/images/products/medium/'.$image_name;
+                $productImage['image_small']  = '/images/products/small/'.$image_name;
+                $productImage['type']       = 'base';
+                ProductImage::insert($productImage);
+            }
+
+            //----------------- Multiple Image ---------------
+            if (!empty($request->additional_images)) {
+                $additionalImagesArray = $request->additional_images;
+                foreach($additionalImagesArray as $key => $image){
+                    $image_name = $this->imageStoreProduct($image);
+                    $data = [];
+                    $data['product_id'] = $product->id;
+                    $data['image']        = '/images/products/large/'.$image_name;
+                    $data['image_medium'] = '/images/products/medium/'.$image_name;
+                    $data['image_small']  = '/images/products/small/'.$image_name;
+                    $data['type']  = 'additional';
+
+                    ProductImage::insert($data);
                 }
-                $product->tax_id        = $request->tax_id;
-                $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
-                $product->price         = $request->price;
+            }
 
-                $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
+            //----------------- Category-Product --------------
+            if (!empty($request->category_id)) {
+                $categoryArrayIds = $request->category_id;
+                $product->categories()->sync($categoryArrayIds);
+            }
 
-                if ($request->special_price && $request->price > $request->special_price){
-                    $product->is_special = 1;
-                }else {
-                    $product->is_special = 0;
+
+            //-----------------Product-Tag--------------
+            if (!empty($request->tag_id)) {
+                $tagArrayIds = $request->tag_id;
+                $product->tags()->sync($tagArrayIds);
+            }
+
+
+            //-----------------Product-Attribute--------------
+
+            if (!empty($request->attribute_id) && $request->attribute_id[0]) {
+                $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
+                foreach($attributeValueTranslation as $item){
+                    ProductAttributeValue::insert([
+                            'product_id'=> $product->id,
+                            'attribute_id'=> $item->attribute_id,
+                            'attribute_value_id'=> $item->attribute_value_id
+                    ]);
                 }
-                $product->special_price_type = $request->special_price_type;
-                $product->special_price_start= $request->special_price_start==true ? date("Y-m-d",strtotime($request->special_price_start)): null;
-                $product->special_price_end  = $request->special_price_end==true ? date("Y-m-d",strtotime($request->special_price_end)): null;
-                $product->selling_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
-                $product->sku           = $request->sku;
-                $product->manage_stock  = $request->manage_stock==0 ? 0:1;
-                $product->qty           = $request->qty;
-                $product->in_stock      = $request->in_stock==0 ? 0:1;
-                $product->new_from      = $request->new_from==true ? date("Y-m-d",strtotime($request->new_from)): null;
-                $product->new_to        = $request->new_to==true ? date("Y-m-d",strtotime($request->new_to)): null;
-                $product->avg_rating    = 0;
-                $product->is_active     = $request->is_active==0 ? 0 : 1;
-                $product->save();
+            }
 
-                //----------------- Product Translation --------------
+            session()->flash('type','success');
+            session()->flash('message','Data Saved Successfully.');
 
-                $productTranslation = new ProductTranslation();
-                $productTranslation->product_id  = $product->id;
-                $productTranslation->local        = Session::get('currentLocal');
-                $productTranslation->product_name = htmlspecialchars_decode($request->product_name);
-                $productTranslation->description  = htmlspecialchars_decode($request->description);;
-                $productTranslation->short_description = $request->short_description;
-                $productTranslation->meta_title    = $request->meta_title;
-                $productTranslation->meta_description  = $request->meta_description;
-                $productTranslation->save();
-
-                //----------------- Base Image --------------
-                if (!empty($request->base_image)){
-                    $image_name = $this->imageStoreProduct($request->base_image);
-
-                    $productImage = [];
-                    $productImage['product_id'] = $product->id;
-                    $productImage['image']        = '/images/products/large/'.$image_name;
-                    $productImage['image_medium'] = '/images/products/medium/'.$image_name;
-                    $productImage['image_small']  = '/images/products/small/'.$image_name;
-                    $productImage['type']       = 'base';
-                    ProductImage::insert($productImage);
-                }
-
-                //----------------- Multiple Image ---------------
-                if (!empty($request->additional_images)) {
-                    $additionalImagesArray = $request->additional_images;
-                    foreach($additionalImagesArray as $key => $image){
-                        $image_name = $this->imageStoreProduct($image);
-                        $data = [];
-                        $data['product_id'] = $product->id;
-                        $data['image']        = '/images/products/large/'.$image_name;
-                        $data['image_medium'] = '/images/products/medium/'.$image_name;
-                        $data['image_small']  = '/images/products/small/'.$image_name;
-                        $data['type']  = 'additional';
-
-                        ProductImage::insert($data);
-                    }
-                }
-
-                //----------------- Category-Product --------------
-                if (!empty($request->category_id)) {
-                    $categoryArrayIds = $request->category_id;
-                    $product->categories()->sync($categoryArrayIds);
-                }
-
-
-                //-----------------Product-Tag--------------
-                if (!empty($request->tag_id)) {
-                    $tagArrayIds = $request->tag_id;
-                    $product->tags()->sync($tagArrayIds);
-                }
-
-
-                //-----------------Product-Attribute--------------
-
-                if (!empty($request->attribute_id) && $request->attribute_id[0]) {
-                    $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
-                    foreach($attributeValueTranslation as $item){
-                        ProductAttributeValue::insert([
-                                'product_id'=> $product->id,
-                                'attribute_id'=> $item->attribute_id,
-                                'attribute_value_id'=> $item->attribute_value_id
-                        ]);
-                    }
-                }
-
-                session()->flash('type','success');
-                session()->flash('message','Data Saved Successfully.');
-
-                return redirect()->back();
+            return redirect()->back();
         }
     }
 
@@ -339,85 +246,6 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-
-        // =============== Test ==================
-
-        //From DB
-        // $attributes =  [];
-        // array_push($attributes,'Color','Size','Others'); //$attributes[0]='color';  $attributes[1]='size';
-        // foreach($attributes as $item){
-        //     $data[$item] = [];
-        //     if($item=='Color'){
-        //         array_push($data[$item],'Black','White','Red');
-        //     }
-        //     else if($item=='Size'){
-        //         array_push($data[$item],'L','M','S');
-        //     }
-        //     else if($item=='Others'){
-        //         array_push($data[$item],'X','Y');
-        //     }
-        // }
-
-
-        //Main Working
-        // $row = [];
-        // foreach($attributes as $key => $item){
-
-        //         if (count($attributes)==1) {
-        //             $row[] = $item;
-        //         }
-
-        //         if (count($attributes)==2) {
-        //             foreach($data[$item] as $value){
-        //                 $row[] = $item.' --- '.$value;
-        //             }
-        //         }
-
-        //         // if (count($attributes)==3) {
-        //         //     foreach($data[$item] as $value2){
-        //         //         return $key;
-        //         //         // foreach($data[$item] as $value3){
-        //         //             // $row[] = $item.' --- '.$value2.' --- '.$value3;
-        //         //             $row[] = $item.' --- '.$value2;
-        //         //         // }
-        //         //     }
-        //         // }
-
-        // }
-
-        //done for 2 attribute
-        // $row = [];
-        // foreach($data as $key => $item){
-        //      foreach($data[$key] as $value){
-        //          $row[] = $key.' --- '.$value;
-        //      }
-        // }
-
-
-        // BFS
-        // first_variant_values = $('#'+variantIds[0]).val().split(_getDelimiter(delimiter[variantIds[0] ])); //attribute Value
-        //         combinations = first_variant_values;
-        //         step = 1;
-        //         while(step < variantIds.length) {
-        //             var newCombinations = [];
-        //             for (var i = 0; i < combinations.length; i++) {
-        //                 new_variant_values = $('#'+variantIds[step]).val().split(_getDelimiter(delimiter[variantIds[step] ])); //Next Row attribute Value
-        //                 for (var j = 0; j < new_variant_values.length; j++) {
-        //                     newCombinations.push(combinations[i]+'/'+new_variant_values[j]);
-        //                 }
-        //             }
-        //             combinations = newCombinations;
-        //             step++;
-        //         }
-
-
-
-        // =============== Test ==================
-
-
-
-
-
         $local = Session::get('currentLocal');
 
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','tags','brand','brandTranslation','brandTranslationEnglish',
@@ -535,24 +363,8 @@ class ProductController extends Controller
     |
     */
 
-    public function update(Request $request, $id)
+    public function update(ProductUpdateRequest $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'product_name'=> 'required|max:255|unique:product_translations,product_name,'.$request->product_translation_id,
-            'description' => 'required',
-            'price'       => 'required',
-            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
-            'category_id'  => 'required',
-            'sku'=> 'required|unique:products,sku,'.$id,
-            'brand_id' => 'nullable',
-            'tax_id' => 'required',
-        ]);
-
-        if ($validator->fails()){
-            $this->setErrorMessage(__('Something Wrong'));
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         if ($request->new_from > $request->new_to) {
             $this->setErrorMessage(__('The From date should not be greater then the To date'));
             return redirect()->back();
@@ -662,7 +474,6 @@ class ProductController extends Controller
             if (!empty($request->additional_images)) {
                 $data = ProductImage::where('product_id',$id)->where('type','additional')->get();
                 foreach ($data as $key => $value) {
-
                     if (File::exists(public_path().$value->image)) {
                         File::delete(public_path().$value->image);
                         File::delete(public_path().$value->image_medium);
@@ -718,39 +529,28 @@ class ProductController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Product Active-Inactive
+    | Product Action
     |--------------------------------------------------------------------------
     |
     |
     */
 
     public function active(Request $request){
-        if ($request->ajax()){
-            if (env('USER_VERIFIED')!=1) {
-                return response()->json(['errors' => ['Disabled for demo !']]);
-            }
-            return $this->activeData(Product::find($request->id));
-        }
+        return $this->productService->activeById($request->id);
     }
 
     public function inactive(Request $request){
-        if ($request->ajax()){
-            if (env('USER_VERIFIED')!=1) {
-                return response()->json(['errors' => ['Disabled for demo !']]);
-            }
-            return $this->inactiveData(Product::find($request->id));
-        }
+        return $this->productService->inactiveById($request->id);
     }
 
-    public function bulkAction(Request $request)
-    {
-        if ($request->ajax()) {
-            if (env('USER_VERIFIED')!=1) {
-                return response()->json(['errors' => ['Disabled for demo !']]);
-            }
-            return $this->bulkActionData($request->action_type, Product::whereIn('id',$request->idsArray));
-        }
+    public function delete(Request $request){
+        return $this->productService->destroy($request->id);
     }
+
+    public function bulkAction(Request $request){
+        return $this->productService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
+    }
+
 
     protected function imageStoreProduct($image)
     {
@@ -776,20 +576,100 @@ class ProductController extends Controller
     |
     */
 
-    public function delete($id)
-    {
-        // return Product::withTrashed()->find(37)->restore();
-        // $onlySoftDeleted = Model::onlyTrashed()->get();
+    // public function delete($id)
+    // {
+    //     // return Product::withTrashed()->find(37)->restore();
+    //     // $onlySoftDeleted = Model::onlyTrashed()->get();
 
-        $product = Product::find($id);
-        $this->deleteWithFile($product);
+    //     $product = Product::find($id);
+    //     $this->deleteWithFile($product);
 
-        $product_images = ProductImage::where('product_id',$id);
-        $this->deleteMultipleDataWithImages($product_images);
+    //     $product_images = ProductImage::where('product_id',$id);
+    //     $this->deleteMultipleDataWithImages($product_images);
 
-        session()->flash('type','success');
-        session()->flash('message','Data Deleted Successfully.');
+    //     session()->flash('type','success');
+    //     session()->flash('message','Data Deleted Successfully.');
 
-        return redirect()->back();
-    }
+    //     return redirect()->back();
+    // }
 }
+
+
+
+
+        // =============== Test (Edit) ==================
+
+        //From DB
+        // $attributes =  [];
+        // array_push($attributes,'Color','Size','Others'); //$attributes[0]='color';  $attributes[1]='size';
+        // foreach($attributes as $item){
+        //     $data[$item] = [];
+        //     if($item=='Color'){
+        //         array_push($data[$item],'Black','White','Red');
+        //     }
+        //     else if($item=='Size'){
+        //         array_push($data[$item],'L','M','S');
+        //     }
+        //     else if($item=='Others'){
+        //         array_push($data[$item],'X','Y');
+        //     }
+        // }
+
+
+        //Main Working
+        // $row = [];
+        // foreach($attributes as $key => $item){
+
+        //         if (count($attributes)==1) {
+        //             $row[] = $item;
+        //         }
+
+        //         if (count($attributes)==2) {
+        //             foreach($data[$item] as $value){
+        //                 $row[] = $item.' --- '.$value;
+        //             }
+        //         }
+
+        //         // if (count($attributes)==3) {
+        //         //     foreach($data[$item] as $value2){
+        //         //         return $key;
+        //         //         // foreach($data[$item] as $value3){
+        //         //             // $row[] = $item.' --- '.$value2.' --- '.$value3;
+        //         //             $row[] = $item.' --- '.$value2;
+        //         //         // }
+        //         //     }
+        //         // }
+
+        // }
+
+        //done for 2 attribute
+        // $row = [];
+        // foreach($data as $key => $item){
+        //      foreach($data[$key] as $value){
+        //          $row[] = $key.' --- '.$value;
+        //      }
+        // }
+
+
+        // BFS
+        // first_variant_values = $('#'+variantIds[0]).val().split(_getDelimiter(delimiter[variantIds[0] ])); //attribute Value
+        //         combinations = first_variant_values;
+        //         step = 1;
+        //         while(step < variantIds.length) {
+        //             var newCombinations = [];
+        //             for (var i = 0; i < combinations.length; i++) {
+        //                 new_variant_values = $('#'+variantIds[step]).val().split(_getDelimiter(delimiter[variantIds[step] ])); //Next Row attribute Value
+        //                 for (var j = 0; j < new_variant_values.length; j++) {
+        //                     newCombinations.push(combinations[i]+'/'+new_variant_values[j]);
+        //                 }
+        //             }
+        //             combinations = newCombinations;
+        //             step++;
+        //         }
+
+
+
+        // =============== Test ==================
+
+
+

@@ -13,6 +13,7 @@ use App\Models\SettingStore;
 use App\Models\StorefrontImage;
 use App\Models\Tag;
 use App\Models\Wishlist;
+use App\Traits\CurrencyConrvertion;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Harimayco\Menu\Models\Menus;
@@ -27,22 +28,13 @@ use Illuminate\Notifications\Notification;
 
 class AppServiceProvider extends ServiceProvider
 {
-    use SettingHomePageSeoTrait;
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
+    use SettingHomePageSeoTrait, CurrencyConrvertion;
+
     public function register()
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
     {
 
@@ -58,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         $locale = Session::get('currentLocal');
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currency_codes = CurrencyRate::select('currency_code')->get();
+
 
         $storefront_images = Cache::remember('storefront_images', 300, function (){
             return  StorefrontImage::select('title','type','image')->get();
@@ -398,11 +391,31 @@ class AppServiceProvider extends ServiceProvider
 
         $orders = Order::get();
 
-        $CHANGE_CURRENCY_SYMBOL = env('USER_CHANGE_CURRENCY_SYMBOL');
-        if ($CHANGE_CURRENCY_SYMBOL==NULL) {
-            $CHANGE_CURRENCY_SYMBOL = NULL;
-        }
-        $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE');
+        // ============= CURRENCY PART ===========
+        // if (!Session::has('currency_code') && !Session::has('currency_symbol') && !Session::has('currency_rate')) {
+        //     $DEFAULT_CURRENCY_CODE = env('DEFAULT_CURRENCY_CODE') ?? 'USD';
+        //     $CHANGE_CURRENCY_SYMBOL= env('DEFAULT_CURRENCY_SYMBOL') ?? '$';
+        //     $CHANGE_CURRENCY_RATE  = env('DEFAULT_CURRENCY_RATE') ?? '1.0';
+
+        //     Session::put('currency_code', $DEFAULT_CURRENCY_CODE);
+        // }
+        // $DEFAULT_CURRENCY_CODE  = Session::get('currency_code');
+        // $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+        // $CHANGE_CURRENCY_RATE   = Session::get('currency_rate');
+
+
+        // $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+        // $CHANGE_CURRENCY_RATE   = Session::get('currency_rate');
+
+
+        // Before
+        // $CHANGE_CURRENCY_SYMBOL = env('USER_CHANGE_CURRENCY_SYMBOL');
+        // if ($CHANGE_CURRENCY_SYMBOL==NULL) {
+        //     $CHANGE_CURRENCY_SYMBOL = NULL;
+        // }
+        // $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE');
+
+        // ============= CURRENCY PART ===========
 
         //Update it this process in every where in home
         $settings_new = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish','page'])->get()->keyBy('key');
@@ -471,8 +484,8 @@ class AppServiceProvider extends ServiceProvider
                     'three_column_full_width_banners_image_1'=>$three_column_full_width_banners_image_1,
                     'three_column_full_width_banners_image_2'=>$three_column_full_width_banners_image_2,
                     'three_column_full_width_banners_image_3'=>$three_column_full_width_banners_image_3,
-                    'CHANGE_CURRENCY_SYMBOL'=> $CHANGE_CURRENCY_SYMBOL,
-                    'CHANGE_CURRENCY_RATE'=> $CHANGE_CURRENCY_RATE,
+                    // 'CHANGE_CURRENCY_SYMBOL'=> $CHANGE_CURRENCY_SYMBOL,
+                    // 'CHANGE_CURRENCY_RATE'=> $CHANGE_CURRENCY_RATE,
                     'settings_new'=> $settings_new,
                     'socialShare'=> $socialShare,
                     'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,

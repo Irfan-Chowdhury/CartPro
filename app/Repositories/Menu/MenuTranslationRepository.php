@@ -11,8 +11,4 @@ class MenuTranslationRepository extends BaseRepository implements MenuTranslatio
     public function __construct(MenuTranslation $model){
         parent::__construct($model);
     }
-
-    // public function destroy($tax_id){
-    //     MenuTranslation::where('tax_id', $tax_id)->delete();
-    // }
 }
