@@ -5,7 +5,20 @@
 
 ## Features & Functionality
 1. Google Anylytics
-2. Payment Gateway: Paystack, Razorpay, SSL Commerz, Cash on Delivery, Paypal
+    - Top Brower
+    - Top Most Visited Pages
+    - Top Referrers
+    - Top User Types
+    - Page View Statistics
+
+2. Payment Gateway 
+    - Paypal
+    - Stripe
+    - SSL Commerze
+    - Cash On Delivery
+    - Razorpay
+    - Paystack
+    
 3. Menu bar background and text color change option
 4. Contact Us
 5. About Us
@@ -44,6 +57,42 @@
 38. Empty database
 39. Social Logins (Facebook, Google and Github)
 40. Shipping Method (Free Shipping, Local pickup, Flat Rate)
+
+
+## Packages
+- #### [Laravel DOMPDF](https://github.com/barryvdh/laravel-dompdf)
+
+
+- #### [bumbummen99/shoppingcart](https://packagist.org/packages/bumbummen99/shoppingcart)
+
+- #### [harimayco/laravel-menu](https://packagist.org/packages/harimayco/laravel-menu)
+
+- #### [intervention/image](https://image.intervention.io/v2)
+
+- #### [joedixon/laravel-translation](https://github.com/joedixon/laravel-translation)
+
+- #### [jorenvanhocht/laravel-share](https://packagist.org/packages/jorenvanhocht/laravel-share)
+
+- #### [laravel/socialite](https://packagist.org/packages/laravel/socialite)
+
+- #### [spatie/laravel-analytics](https://github.com/spatie/laravel-analytics)
+
+- #### [Laravel-Backup](https://spatie.be/docs/laravel-backup/v8/introduction)
+
+- #### [spatie/laravel-cookie-consent](https://github.com/spatie/laravel-cookie-consent)
+
+- #### [spatie/laravel-newsletter](https://github.com/spatie/laravel-newsletter)
+
+- #### [Laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
+
+- #### [Paypal](https://github.com/srmklive/laravel-paypal)
+
+- #### [Stripe-Php](https://github.com/stripe/stripe-php)
+
+- #### [laravel-paystack](https://github.com/unicodeveloper/laravel-paystack)
+
+- #### [yajra/laravel-datatables](https://yajrabox.com/docs/laravel-datatables/master/installation)
+
 
 ##### <p>[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
 

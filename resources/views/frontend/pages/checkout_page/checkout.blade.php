@@ -115,14 +115,14 @@ if (Session::has('currency_symbol')){
                     <div class="row">
                         <div class="col-md-6 mar-top-30">
 
-                            <!--billing Details-->
+                            <!-- billing Details -->
                             @include('frontend.pages.checkout_page.billing_details')
 
-                            <!--Create Account-->
+                            <!-- Create Account -->
                             @include('frontend.pages.checkout_page.create_account')
 
 
-                            <!--Shipping Details-->
+                            <!-- Shipping Details -->
                             @include('frontend.pages.checkout_page.shipping_details')
                         </div>
 
@@ -141,12 +141,10 @@ if (Session::has('currency_symbol')){
                                         @if(env('CURRENCY_FORMAT')=='suffix')
                                             <span class="cartSubtotal">{{ number_format((float)$cart_subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                         @else
-                                            {{-- @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cartSubtotal">{{ number_format((float)$cart_subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> --}}
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cartSubtotal">{{$cart_subtotal}}</span>
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cartSubtotal">{{number_format((float)$cart_subtotal * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span>
                                         @endif
                                     </div>
                                 </div>
-
 
                                 <!--Coupon-->
                                 @include('frontend.pages.checkout_page.coupon')
@@ -171,9 +169,9 @@ if (Session::has('currency_symbol')){
                                     <div class="label">{{__('file.Total')}}</div>
                                     <div class="price">
                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                            <span class="total_amount">{{$cart_total}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                            <span class="total_amount">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                         @else
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_amount">{{$cart_total}}</span>
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_amount">{{number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}}</span>
                                         @endif
                                     </div>
                                 </div>

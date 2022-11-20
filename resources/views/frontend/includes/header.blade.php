@@ -1,3 +1,4 @@
+
     <!--Header Area starts-->
     <header>
         @if (!Cookie::has('top_banner') && env('TOPBAR_BANNER_ENABLED'))
@@ -120,9 +121,9 @@
                                 <span class="badge badge-light cart_count">{{$cart_count}}</span>
                                 <span class="total">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        <span class="cart_total">{{$cart_total}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                        <span class="cart_total">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                     @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cart_total">{{$cart_total}}</span>
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cart_total">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                                     @endif
                                 </span>
                             </li>
@@ -306,7 +307,6 @@
             </div>
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
-
                         <div class="cart_list">
                             @forelse ($cart_contents as $item)
                                 <div id="{{$item->rowId}}" class="shp__single__product">
@@ -319,9 +319,9 @@
                                         <h2><a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">{{$item->name}}</a></h2>
                                         <span class="my_cart_specific_qty_{{$item->rowId}}">{{$item->qty}}</span> x <span class="shp__price">
                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                {{$item->price * $CHANGE_CURRENCY_RATE}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                <span>{{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                             @else
-                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{$item->price * $CHANGE_CURRENCY_RATE}}
+                                                <span>@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                                             @endif
                                         </span>
                                     </div>
@@ -344,9 +344,9 @@
                     <span class="subtotal">@lang('file.Subtotal')</span>
                     <span class="total__price">
                         @if(env('CURRENCY_FORMAT')=='suffix')
-                            <span class="total_price">{{$cart_total * $CHANGE_CURRENCY_RATE}}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                            <span>{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                         @else
-                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{$cart_total * $CHANGE_CURRENCY_RATE}}</span>
+                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                         @endif
                     </span>
                 </div>
