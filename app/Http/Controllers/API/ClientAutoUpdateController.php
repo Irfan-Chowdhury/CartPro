@@ -19,6 +19,7 @@ class ClientAutoUpdateController extends Controller
     public function index(){
         return view('admin.pages.version_upgrade.index');
     }
+    
     // Client
     public function bugUpdatePage(){
         return view('admin.pages.bug_update.index');

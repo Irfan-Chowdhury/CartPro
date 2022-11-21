@@ -17,20 +17,6 @@
 @section('frontend_content')
 
 
-{{-- @include('frontend.includes.currency-conversion') --}}
-@php
-// if (!Session::put('currency_code') && !Session::has('currency_symbol') && !Session::has('currency_rate')){
-//         $DEFAULT_CURRENCY_CODE = env('DEFAULT_CURRENCY_CODE') ?? 'USD';
-//         $CHANGE_CURRENCY_SYMBOL= env('DEFAULT_CURRENCY_SYMBOL') ?? '$';
-//         $CHANGE_CURRENCY_RATE  = 1.00;
-//         Session::put('currency_code',$DEFAULT_CURRENCY_CODE);
-//     }
-//     $DEFAULT_CURRENCY_CODE  = Session::get('currency_code');
-//     $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
-//     $CHANGE_CURRENCY_RATE   = 1; //Session::get('currency_rate');
-@endphp
-
-
 @php
 if (Session::has('currency_rate')){
     $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
@@ -52,8 +38,10 @@ if (Session::has('currency_rate')){
                             @foreach ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
+                                            <h1>Test 1</h1>
                                             <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
                                         @else
+                                            <h1>Test 2</h1>
                                             <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
@@ -93,7 +81,7 @@ if (Session::has('currency_rate')){
                     {{-- Half Width --}}
                     <div class="col-md-8">
                         <div class="banner-slider">
-                            @foreach ($sliders as $item)
+                            @forelse ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
                                             <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
@@ -115,21 +103,29 @@ if (Session::has('currency_rate')){
                                             </div>
                                         </div>
                                     </div>
-                            @endforeach
+                            @empty
+                                <div class="item">
+                                    <div class="img-fill" style="background-image: url('https://dummyimage.com/600x400/e5e8ec/000000&text=Slider'); background-size: cover; background-position: center;">
+                                    </div>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         @empty(!$slider_banners)
                             @foreach ($slider_banners as $key => $item)
-                                <a href="{{$slider_banners[$key]['action_url']}}" target="{{$slider_banners[$key]['new_window']==1 ? '__blank' : '' }}">
                                 @if($slider_banners[$key]['image']!==null && Illuminate\Support\Facades\File::exists(public_path($slider_banners[$key]['image'])))
-                                    <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
+                                    <a href="{{$slider_banners[$key]['action_url']}}" target="{{$slider_banners[$key]['new_window']==1 ? '__blank' : '' }}">
+                                        <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
+                                            <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
+                                        </div>
+                                    </a>
                                 @else
-                                    <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/e5e8ec/e5e8ec&text=Slider-Banner');background-size:cover;background-position: center;">
+                                    <div class="slider-banner" style="background-image:url('https://dummyimage.com/600x400/e5e8ec/000000&text=Slider-Banner');background-size:cover;background-position: center;"></div>
                                 @endif
-                                    <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
-                                </div></a>
+                                    {{-- <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
+                                </div></a> --}}
                             @endforeach
                         @endempty
                     </div>

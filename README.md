@@ -3,7 +3,19 @@
 # CartPro
 </div>
 
-## Features & Functionality
+CartPro is a unique and modern e-commerce cms Laravel script built with users in mind. Both frontend and admin panel offers high level of interactivity and optimum performance to ensure user satisfaction. It is perfect for your digital store, hi-tech/electronics/gadget store, watch store, men store, women store, clothing store, furniture store, bookstore, cosmetics shop, luxury jewelry & accessories store and you name it.
+
+Furthermore, this amazing platform comes with lots of features – ajax cart, fast search, filter and sorting options, unlimited color schemes, Slider with smooth transition effects and a lot more. You have all the power to make an amazing, fast, user friendly, secure eCommerce store that your customers will love to browse and buy from.
+
+Let’s experience this awesomeness and celebrate your growth with CartPro.
+
+### Visit [Demo](http://cartproshop.com/demo)
+
+### Visit in [Codecanyon](https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommerce-cms/36768394)
+
+
+
+### Features & Functionality
 1. Google Anylytics
     - Top Brower
     - Top Most Visited Pages
@@ -59,7 +71,7 @@
 40. Shipping Method (Free Shipping, Local pickup, Flat Rate)
 
 
-## Packages
+### Packages
 - #### [Laravel DOMPDF](https://github.com/barryvdh/laravel-dompdf)
 
 

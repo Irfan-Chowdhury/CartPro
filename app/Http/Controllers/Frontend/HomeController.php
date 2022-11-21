@@ -41,10 +41,13 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Frontend\FrontBaseController;
+use App\Models\SettingTranslation;
+use App\Models\StorefrontImage;
+use App\Traits\TranslationTrait;
 
 class HomeController extends FrontBaseController
 {
-    use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait;
+    use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait, TranslationTrait;
 
     private $sliderService;
     private $brandService;
@@ -58,6 +61,24 @@ class HomeController extends FrontBaseController
 
     public function index()
     {
+        // ========== Test ============
+        // $settings_data = Setting::with(['settingTranslations'])
+        // ->get()
+        // ->keyBy('key')
+        // ->map(function($setting){
+        //     return [
+        //         'id'             => $setting->id,
+        //         'key'            => $setting->key,
+        //         'plain_value'    => $setting->plain_value,
+        //         'is_translatable'=> $setting->is_translatable,
+        //         'locale' => $this->translations($setting->settingTranslations)->locale ?? null,
+        //         'value'  => $this->translations($setting->settingTranslations)->value ?? null,
+        //     ];
+        // });
+        // $storeFrontSettings = json_decode(json_encode($settings_data), FALSE);
+        // return  $storeFrontSettings->storefront_welcome_text->value;
+        // ========== Test ============
+
         if (!Session::has('currency_code')){
             Session::put('currency_code', env('DEFAULT_CURRENCY_CODE'));
             $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',env('DEFAULT_CURRENCY_SYMBOL'));
@@ -126,9 +147,7 @@ class HomeController extends FrontBaseController
 
 
         //Slider Banner
-        $slider_banners = Cache::remember('slider_banners', 300, function () use ($settings) {
-            return $this->getSliderBanner($settings);
-        });
+        $slider_banners = $this->getSliderBanner($settings);
 
         foreach ($settings as $key => $setting)
         {
@@ -199,7 +218,7 @@ class HomeController extends FrontBaseController
                         }
                     }
                 }
-                $storefront_vertical_product_1_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+                $storefront_vertical_product_1_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
             }
             elseif ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
@@ -209,7 +228,9 @@ class HomeController extends FrontBaseController
                         }
                     }
                 }
-                $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+                // $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+                $storefront_vertical_product_2_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
+
             }
             elseif ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
                 if ($settings[$key-1]->plain_value=='category_products') {
@@ -219,7 +240,8 @@ class HomeController extends FrontBaseController
                         }
                     }
                 }
-                $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+                // $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+                $storefront_vertical_product_3_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
             }
             //Top Brands
             elseif ($setting->key=='storefront_top_brands_section_enabled' && $setting->plain_value!=NULL) {
@@ -389,7 +411,7 @@ class HomeController extends FrontBaseController
     protected function getSliderBanner($settings)
     {
         $slider_banners = [];
-        $empty_image = 'images/empty.jpg';
+        $empty_image = null;//'images/empty.jpg';
 
         for ($i=0; $i < 3; $i++) {
             foreach ($settings as $item){
@@ -401,7 +423,7 @@ class HomeController extends FrontBaseController
                     }
                 }
                 elseif ($item->key=='storefront_slider_banner_'.($i+1).'_title') {
-                    $slider_banners[$i]['title'] = $item->settingTranslations[0]->value;
+                    $slider_banners[$i]['title'] = $item->settingTranslations[0]->value ?? null;
                 }
                 elseif ($item->key=='storefront_slider_banner_'.($i+1).'_call_to_action_url') {
                     $slider_banners[$i]['action_url'] = $item->plain_value;

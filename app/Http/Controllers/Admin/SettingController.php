@@ -1101,11 +1101,13 @@ class SettingController extends Controller
 		$str = 'Tables_in_' . env('DB_DATABASE');
 		foreach ($tables as $table) {
 			// if($table->$str != 'countries' && $table->$str != 'model_has_roles' && $table->$str != 'role_users' && $table->$str != 'general_settings'  && $table->$str != 'migrations' && $table->$str != 'password_resets' && $table->$str != 'permissions' &&  $table->$str != 'roles' && $table->$str != 'role_has_permissions' && $table->$str != 'users') {
-			if($table->$str != 'colors' && $table->$str != 'countries' && $table->$str != 'model_has_roles' && $table->$str != 'currencies'  && $table->$str != 'migrations' && $table->$str != 'languages' && $table->$str != 'permissions' &&  $table->$str != 'roles' && $table->$str != 'role_has_permissions' && $table->$str != 'users' && $table->$str != 'settings' && $table->$str != 'setting_translations' && $table->$str != 'storefront_images') {
+			// if($table->$str != 'colors' && $table->$str != 'countries' && $table->$str != 'model_has_roles' && $table->$str != 'currencies'  && $table->$str != 'migrations' && $table->$str != 'languages' && $table->$str != 'permissions' &&  $table->$str != 'roles' && $table->$str != 'role_has_permissions' && $table->$str != 'users' && $table->$str != 'settings' && $table->$str != 'setting_translations' && $table->$str != 'storefront_images') {
+			if($table->$str != 'colors' && $table->$str != 'countries' && $table->$str != 'model_has_roles' && $table->$str != 'currencies'  && $table->$str != 'migrations' && $table->$str != 'languages' && $table->$str != 'permissions' &&  $table->$str != 'roles' && $table->$str != 'role_has_permissions' && $table->$str != 'users' && $table->$str != 'settings') {
 				DB::table($table->$str)->truncate();
 			}
 		}
 		DB::statement("SET foreign_key_checks=1");
+        Artisan::call('optimize:clear');
 		return redirect()->back()->with('empty_message', 'Database cleared successfully');
 	}
 

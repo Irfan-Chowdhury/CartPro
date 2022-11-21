@@ -52,9 +52,10 @@ class AppServiceProvider extends ServiceProvider
         $currency_codes = CurrencyRate::select('currency_code')->get();
 
 
-        $storefront_images = Cache::remember('storefront_images', 300, function (){
-            return  StorefrontImage::select('title','type','image')->get();
-        });
+        // $storefront_images = Cache::remember('storefront_images', 300, function (){
+        //     return  StorefrontImage::select('title','type','image')->get();
+        // });
+        $storefront_images = StorefrontImage::select('title','type','image')->get();
 
         $empty_image = 'public/images/empty.jpg';
         $favicon_logo_path = $empty_image;
@@ -199,15 +200,11 @@ class AppServiceProvider extends ServiceProvider
         }
 
         //Appereance-->Storefront --> Setting
-        $settings = Cache::remember('settings', 300, function (){
-            return Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
-        });
+        $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
 
-        $menus = Cache::remember('menus', 300, function (){
-            return Menus::with('items')
-                    ->where('is_active',1)
-                    ->get();
-        });
+        $menus = Menus::with('items')
+                ->where('is_active',1)
+                ->get();
 
         $storefront_theme_color = "#0071df";
         $storefront_navbg_color = null;
@@ -434,6 +431,26 @@ class AppServiceProvider extends ServiceProvider
         //Home Page Seo
         $setting_home_page_seo = $this->settingHomePageSeo();
 
+
+        // ======= This Settings is Updated
+
+        // $settings_data = Setting::with(['settingTranslations'])
+        //         ->get()
+        //         ->keyBy('key')
+        //         ->map(function($setting){
+        //             return [
+        //                 'id'             => $setting->id,
+        //                 'key'            => $setting->key,
+        //                 'plain_value'    => $setting->plain_value,
+        //                 'is_translatable'=> $setting->is_translatable,
+        //                 'locale' => $this->translations($setting->settingTranslations)->locale ?? null,
+        //                 'value'  => $this->translations($setting->settingTranslations)->value ?? null,
+        //             ];
+        //         });
+        // $storeFrontSettings = json_decode(json_encode($settings_data), FALSE);
+
+
+
         View::share(['languages'=>$languages,
                     'currency_codes'=>$currency_codes,
                     'storefront_images'=>$storefront_images,
@@ -495,6 +512,9 @@ class AppServiceProvider extends ServiceProvider
                     'storefront_shop_page_enabled'=> $storefront_shop_page_enabled,
                     'storefront_brand_page_enabled'=> $storefront_brand_page_enabled,
                     'setting_home_page_seo'=> $setting_home_page_seo,
+
+                    // New Storefront Settings
+                    // 'storeFrontSettings'=> $storeFrontSettings,
             ]);
 
             $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);
