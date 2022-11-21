@@ -7,13 +7,20 @@
             "file_name": "fahim.zip"
         }
     ],
-    
+
     "log": [
         {
-            "text": "Some Bug Fixed."
+            "text": "Added: Delete feture added"
         },
         {
-            "text": "Auto upload fetaure updated."
+            "text": "Currency Update"
+        },
+        {
+            "text": "Mail Setting Update"
+        },
+        {
+            "text": "Minor Bug Fixed."
         }
+
     ]
 }

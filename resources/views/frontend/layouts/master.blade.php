@@ -11,19 +11,19 @@
         }
 
 
-if (Session::has('currency_rate')){
-    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
-}else{
-    $CHANGE_CURRENCY_RATE = 1;
-    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
-}
+        if (Session::has('currency_rate')){
+            $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
+        }else{
+            $CHANGE_CURRENCY_RATE = 1;
+            Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
+        }
 
-if (Session::has('currency_symbol')){
-    $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
-}else{
-    $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
-    Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
-}
+        if (Session::has('currency_symbol')){
+            $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+        }else{
+            $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
+            Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
+        }
 @endphp
 
 

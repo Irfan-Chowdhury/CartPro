@@ -1,3 +1,12 @@
+@php
+    if (Session::has('currency_rate')){
+        $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
+    }else{
+        $CHANGE_CURRENCY_RATE = 1;
+        Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
+    }
+@endphp
+
 <!doctype html>
 <html lang="en">
   <head>
