@@ -885,6 +885,7 @@ class SettingController extends Controller
 
             $this->dataWriteInENVFile('STRIPE_KEY',$request->publishable_key);
             $this->dataWriteInENVFile('STRIPE_SECRET',$request->secret_key);
+            $this->dataWriteInENVFile('STRIPE_CURRENCY',$request->currency);
 
             return response()->json(['success' => __('Data Added successfully.')]);
         }

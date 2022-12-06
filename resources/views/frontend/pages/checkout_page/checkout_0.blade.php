@@ -210,7 +210,7 @@ if (Session::has('currency_symbol')){
                             </div>
 
                             <div class="checkout-actions mar-top-30 pay_now_div">
-                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Payment Procced')}}</button>
+                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Pay Now')}}</button>
                             </div>
                         </div>
                     </div>

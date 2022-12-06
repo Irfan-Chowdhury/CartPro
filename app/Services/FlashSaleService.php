@@ -8,7 +8,6 @@ use App\Utilities\Message;
 
 class FlashSaleService extends Message
 {
-
     private $flashSaleContract, $flashSaleTranslationContract, $flashSaleProductContract;
     public function __construct(FlashSaleContract $flashSaleContract, FlashSaleTranslationContract $flashSaleTranslationContract, FlashSaleProductContract $flashSaleProductContract){
         $this->flashSaleContract = $flashSaleContract;
@@ -48,7 +47,6 @@ class FlashSaleService extends Message
         if (!auth()->user()->can('flash_sale-action')){
             return Message::getPermissionMessage();
         }
-
         if ($type=='delete') {
             $this->flashSaleContract->bulkAction($type, $ids);
             $this->flashSaleTranslationContract->bulkAction($type, $ids);

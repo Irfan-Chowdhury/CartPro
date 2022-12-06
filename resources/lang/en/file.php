@@ -721,6 +721,7 @@ return array (
   'Payment Methods' => 'Payment Methods',
   'Payment Mode' => 'Payment Mode',
   'Payment Note' => 'Payment Note',
+  'Payment Procced' => 'Payment Procced',
   'Payment Recieved' => 'Payment Received',
   'Payment Reference' => 'Payment Reference',
   'Payment Report' => 'Payment Report',

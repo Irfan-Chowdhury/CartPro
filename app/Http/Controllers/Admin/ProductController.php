@@ -108,8 +108,7 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
         if ($request->new_from > $request->new_to) {
-            session()->flash('type','danger');
-            session()->flash('message','The From date should not be greater then the To date');
+            $this->setErrorMessage(__('The From date should not be greater then the To date.'));
             return redirect()->back();
         }
 
@@ -129,7 +128,6 @@ class ProductController extends Controller
 
         if (auth()->user()->can('product-store'))
         {
-
             $product                = new Product();
             if ($request->brand_id) {
                 $product->brand_id  = $request->brand_id;
@@ -240,7 +238,6 @@ class ProductController extends Controller
     |--------------------------------------------------------------------------
     | Product Edit
     |--------------------------------------------------------------------------
-    |
     |
     */
 

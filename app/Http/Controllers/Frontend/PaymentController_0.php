@@ -25,7 +25,6 @@ use App\Traits\MailTrait;
 use Stripe;
 use Illuminate\Support\Facades\Redirect;
 use Paystack;
-use Illuminate\Support\Facades\Response;
 
 class PaymentController extends Controller
 {
@@ -57,14 +56,7 @@ class PaymentController extends Controller
         // return response()->json($order);
     }
 
-
-    /*
-    |------------------------------------------------------------
-    |Payment Procedure Start
-    |------------------------------------------------------------
-    */
-
-    public function paymentProcees(Request $request)
+    public function paymentProcees(Request $request, PaymentService $paymentService)
     {
 
         if(!env('USER_VERIFIED')){
@@ -115,132 +107,22 @@ class PaymentController extends Controller
             Customer::create($data);
         }
 
-        return redirect(route("payment.pay.page",'cash_on_delivery'), 307);
+        $order_id = $this->orderStore($request);
 
-
-        // $order_id = $this->orderStore($request);
-        // if ($request->payment_type=='sslcommerz'){
-        //     $this->SSLCommerz($request, $order_id);
-        // }elseif ($request->payment_type=='cash_on_delivery' || $request->payment_type=='paypal'){
-        //     $this->reduceProductQuantity($order_id);
-        //     return $this->destroyOthers();
-        // }elseif ($request->payment_type=='stripe'){
-        //     $this->stripe($request);
-        //     $this->reduceProductQuantity($order_id);
-        //     return $this->destroyOthers();
-        // }elseif ($request->payment_type=='paystack'){
-        //     $this->reduceProductQuantity($order_id);
-        //     return $this->redirectToGateway();
-        // }
-
-        // $payment = $paymentService->initialize($request->payment_type);
-        // return $payment->pay($request);
-
-    }
-
-    public function paymentPayPage($payment_method, Request $request)
-    {
-        $requestData = json_encode($request->all());
-
-        $payment_method_name = null;
-        switch ($payment_method) {
-            case 'cash_on_delivery':
-                $payment_method_name = "Cash On Delivery";
-                return view('frontend.pages.payment_page.cash_on_delivery',compact('payment_method_name','payment_method','requestData'));
-            default:
-                break;
+        if ($request->payment_type=='sslcommerz'){
+            $this->SSLCommerz($request, $order_id);
+        }elseif ($request->payment_type=='cash_on_delivery' || $request->payment_type=='paypal'){
+            $this->reduceProductQuantity($order_id);
+            return $this->destroyOthers();
+        }elseif ($request->payment_type=='stripe'){
+            $this->stripe($request);
+            $this->reduceProductQuantity($order_id);
+            return $this->destroyOthers();
+        }elseif ($request->payment_type=='paystack'){
+            $this->reduceProductQuantity($order_id);
+            return $this->redirectToGateway();
         }
-        return 1;
     }
-
-    public function paymentPayConfirm($payment_method, Request $request, PaymentService $paymentService)
-    {
-        $requestData = json_decode(str_replace('&quot;', '"', $request->requestData));
-        $payment     = $paymentService->initialize($payment_method);
-        return $payment->pay($requestData);
-    }
-
-    public function paymentPayCancel($payment_method, PaymentService $paymentService)
-    {
-        $payment = $paymentService->initialize($payment_method);
-        return $payment->cancel();
-    }
-
-    /*
-    |------------------------------------------------------------
-    |Payment Procedure End
-    |------------------------------------------------------------
-    */
-
-
-
-    // public function paymentProcees(Request $request, PaymentService $paymentService)
-    // {
-
-    //     if(!env('USER_VERIFIED')){
-    //         session()->flash('message','Disabled For Demo');
-    //         return redirect()->back();
-    //     }
-
-    //     $validator = Validator::make($request->all(),[
-    //         'billing_first_name' => 'required|string',
-    //         'billing_last_name'  => 'required|string',
-    //         'billing_country'    => 'required',
-    //         'billing_phone'      => 'required|numeric',
-    //         'billing_email'      => 'required|regex:/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/',
-    //         'shipping_phone'     => 'nullable|numeric',
-    //         'shipping_email'     => 'nullable|email',
-    //         'shipping_cost'      => 'required',
-    //     ]);
-    //     if($validator->fails()){
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //         // return redirect(route("cart.checkout"), 307)->withErrors($validator)->withInput();
-    //     }
-
-    //     if ($request->billing_create_account_check) {
-    //         $validator = Validator::make($request->all(),[
-    //             'billing_first_name' => 'required|string',
-    //             'billing_last_name'  => 'required|string',
-    //             'username'           => 'required|string|unique:users',
-    //             'billing_phone'      => 'required',
-    //             'password'           => 'required|string|confirmed',
-    //             'password_confirmation' => 'required',
-    //         ]);
-
-    //         if($validator->fails()){
-    //             session()->flash('error','Something Error');
-    //             return redirect()->back()->withErrors($validator)->withInput();
-    //         }
-
-    //         $data['first_name'] = $request->billing_first_name;
-    //         $data['last_name']  = $request->billing_last_name;
-    //         $data['username']   = $request->username;
-    //         $data['email']      = $request->billing_email;
-    //         $data['phone']      = $request->billing_phone;
-    //         $data['user_type']  = 0;
-    //         $data['password']   = Hash::make($request->password);
-
-    //         $user = User::create($data);
-    //         $data['user_id'] = $user->id;
-    //         Customer::create($data);
-    //     }
-
-    //     $order_id = $this->orderStore($request);
-
-    //     if ($request->payment_type=='sslcommerz'){
-    //         $this->SSLCommerz($request, $order_id);
-    //     }elseif ($request->payment_type=='cash_on_delivery' || $request->payment_type=='paypal'){
-    //         $this->reduceProductQuantity($order_id);
-    //         return $this->destroyOthers();
-    //     }elseif ($request->payment_type=='stripe'){
-    //         $this->stripe($request);
-    //         $this->reduceProductQuantity($order_id);
-    //         return $this->destroyOthers();
-    //     }elseif ($request->payment_type=='paystack'){
-    //         $this->reduceProductQuantity($order_id);
-    //         return $this->redirectToGateway();
-    //     }
-    // }
 
 
 
@@ -292,8 +174,6 @@ class PaymentController extends Controller
                 $order->tax = null;
             }
         }
-        // $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
-
 
         if ($request->coupon_code && $request->coupon_checked==1) {
             $coupon = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1);
@@ -361,27 +241,8 @@ class PaymentController extends Controller
         $this->sendMailWithOrderDetailsInvoice($reference_no);
         $order->notify(new NewOrderNotification($reference_no));
 
-        // if(Auth::check()){
-        //     auth()->user()->notify(new NewOrderNotification($reference_no));
-        // }
-
         return $order_id;
     }
-
-    // protected function limitCoupon($request){
-    //     if (isset($request->coupon_code)) {
-    //         DB::table('coupons')
-    //             ->where('coupon_code',$request->coupon_code)
-    //             ->where('limit_qty','>',0)
-    //             ->orWhere('limit_qty','!=',NULL)
-    //             ->update(['limit_qty' => DB::raw('limit_qty - 1')]);
-
-    //         $coupon = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
-    //         if ($coupon && $coupon->is_limit && $coupon->limit_qty==0) {
-    //             $coupon->update(['value'=>0.00]);
-    //         }
-    //     }
-    // }
 
     protected function reduceProductQuantity($order_id){
         $order_details = OrderDetail::where('order_id',$order_id)->get();

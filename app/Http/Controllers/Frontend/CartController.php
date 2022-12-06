@@ -320,13 +320,34 @@ class CartController extends Controller
         if ($request->ajax()) {
 
             //Coupon
+            // $coupon_value = 0;
+            // if ($request->coupon_code!=NULL) {
+            //     $coupon =  Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
+            //     if ($coupon) {
+            //         $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first()->value;
+            //     }
+            // }
+
+            //Coupon
             $coupon_value = 0;
+            $expired = false;
             if ($request->coupon_code!=NULL) {
-                $coupon =  Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first();
-                if ($coupon) {
-                    $coupon_value = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1)->first()->value;
+                $coupon =  Coupon::where('coupon_code',$request->coupon_code)
+                            ->where('limit_qty','>',0)
+                            ->first();
+                if ($coupon && $coupon->is_expire) {
+                    if(date('Y-m-d',strtotime($coupon->start_date)) <= date('Y-m-d') &&  date('Y-m-d',strtotime($coupon->end_date)) >= date('Y-m-d')){
+                        $coupon_value = $coupon->value;
+                    }else{
+                        $coupon_value = 0;
+                        $expired = true;
+                    }
+                }
+                elseif ($coupon && !$coupon->is_expire){
+                    $coupon_value = $coupon->value;
                 }
             }
+
 
             //Shipping Cost
             if ($request->shipping_cost!=NULL) {
@@ -355,7 +376,8 @@ class CartController extends Controller
             return response()->json(['type'=>'success','total_amount'=>number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', ''),
                                     'coupon_value'=>$coupon_value,
                                     'tax_rate'=>$tax_rate,
-                                    'tax_id'=>$tax_id]);
+                                    'tax_id'=>$tax_id,
+                                    'expired'=>$expired]);
         }
     }
 

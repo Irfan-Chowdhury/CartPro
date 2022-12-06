@@ -44,6 +44,12 @@
                             <input type="text" name="secret_key" class="form-control" @isset($setting_strip->secret_key) value="{{$setting_strip->secret_key}}" @endisset>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>@lang('file.Currency')<span class="ml-2 text-danger">*</span></b></label>
+                        <div class="col-sm-8">
+                            <input type="text" required name="currency" class="form-control" @if(env('STRIPE_CURRENCY')) value="{{env('STRIPE_CURRENCY')}}" @endif placeholder="Ex: inr">
+                        </div>
+                    </div>
 
 
 

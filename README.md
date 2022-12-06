@@ -26,7 +26,7 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 2. Payment Gateway 
     - Paypal
     - Stripe
-    - SSL Commerze
+    - SSL Commerz
     - Cash On Delivery
     - Razorpay
     - Paystack
@@ -97,11 +97,24 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 
 - #### [Laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
 
-- #### [Paypal](https://github.com/srmklive/laravel-paypal)
+- #### [Paypal](https://github.com/srmklive/laravel-paypal) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://dev.to/alamriku/how-to-integrate-paypal-payment-gateway-in-laravel-8-x-ba6
 
-- #### [Stripe-Php](https://github.com/stripe/stripe-php)
+    - Login [Developer Paypal](https://developer.paypal.com/)
 
-- #### [laravel-paystack](https://github.com/unicodeveloper/laravel-paystack)
+    - https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US
+    - [PayPal Javascript SDK](https://developer.paypal.com/demo/checkout/#/pattern/client)
+
+- #### [Stripe](https://github.com/stripe/stripe-php) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://www.positronx.io/integrate-stripe-payment-gateway-in-laravel-application
+
+- #### [Laravel Paystack](https://github.com/unicodeveloper/laravel-paystack) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://www.itsolutionstuff.com/post/razorpay-payment-gateway-integration-in-laravel-8-tutorialexample.html
+- #### [Razorpay](https://razorpay.com/) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://www.itsolutionstuff.com/post/razorpay-payment-gateway-integration-in-laravel-8-tutorialexample.html
+
+- #### [SSL Commerz](https://sslcommerz.com/) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://github.com/sslcommerz/SSLCommerz-Laravel
 
 - #### [yajra/laravel-datatables](https://yajrabox.com/docs/laravel-datatables/master/installation)
 

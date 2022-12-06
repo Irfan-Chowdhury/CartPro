@@ -20,24 +20,29 @@
             <select class="form-control" name="billing_country" id="billingCountry">
                 <option value="">* @lang('file.Select Country')</option>
                 @foreach ($countries as $country)
-                    <option value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
+                    <option selected value="{{$country->country_name}}" @isset($billing_address) {{$country->country_name==$billing_address->country ? 'selected':''}}  @endisset>{{$country->country_name}}</option>
                 @endforeach
             </select>
         </div>
     </div>
     <div class="col-12">
-        <input class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
+        <input value="test Addess"
+        class="form-control" type="text" name="billing_address_1" @isset($billing_address) value="{{$billing_address->address_1 ?? ''}}" @endisset placeholder="@lang('file.Street Address')">
     </div>
     <div class="col-12">
-        <input class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
+        <input value="test Addess 2"
+        class="form-control" type="text" name="billing_address_2" @isset($billing_address) value="{{$billing_address->address_2 ?? ''}}" @endisset placeholder="@lang('file.Apartment, suite, unit etc. (optional)')">
     </div>
     <div class="col-12">
-        <input class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
+        <input value="test city"
+        class="form-control" type="text" name="billing_city" @isset($billing_address) value="{{$billing_address->city ?? ''}}" @endisset placeholder="@lang('file.City / Town')">
     </div>
     <div class="col-sm-6">
-        <input class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
+        <input value="test state"
+        class="form-control" type="text" name="billing_state" @isset($billing_address) value="{{$billing_address->state ?? ''}}" @endisset placeholder="@lang('file.State / County')">
     </div>
     <div class="col-sm-6">
-        <input class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
+        <input value="123"
+        class="form-control" type="text" name="billing_zip_code" @isset($billing_address) value="{{$billing_address->zip_code ?? ''}}" @endisset placeholder="@lang('file.Postcode / Zip')">
     </div>
 </div>

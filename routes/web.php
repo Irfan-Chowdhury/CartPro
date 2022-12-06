@@ -226,6 +226,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         */
         //Payment For All
         Route::post('/payment/process',[Frontend\PaymentController::class,'paymentProcees'])->name('payment.process');
+        Route::post('/payment/{payment_method}/pay',[Frontend\PaymentController::class,'paymentPayPage'])->name('payment.pay.page');
+        Route::post('/payment/{payment_method}/pay/confirm',[Frontend\PaymentController::class,'paymentPayConfirm'])->name('payment.pay.confirm');
+        Route::post('/payment/{payment_method}/pay/cancel',[Frontend\PaymentController::class,'paymentPayCancel'])->name('payment.pay.cancel');
 
 
         // SSLCOMMERZ
@@ -247,7 +250,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         //SSLCOMMERZ END
 
         //Paypal
-        Route::post('/paypal/create',[Frontend\PaymentController::class,'PaypalCreate']);
+        Route::post('/paypal/create',[Frontend\PaymentController::class,'paypal-create']);
 
         //Paystack
         Route::get('/payment/callback', [Frontend\PaymentController::class,'handleGatewayCallback']);
