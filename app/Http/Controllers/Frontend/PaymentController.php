@@ -23,27 +23,31 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\ENVFilePutContent;
 use App\Traits\MailTrait;
 use Stripe;
+use Illuminate\Support\Facades\Response;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
+
 use Illuminate\Support\Facades\Redirect;
 use Paystack;
-use Illuminate\Support\Facades\Response;
 
 class PaymentController extends Controller
 {
     use ENVFilePutContent, MailTrait;
 
-    public function PaypalCreate(Request $request)
+    public function PaypalCreate($request)
     {
+        $provider = new PayPalClient();
+        return $provider->setApiCredentials(config('paypal'));
         $data = json_decode($request->getContent(), true);
-        $this->paypalClient->setApiCredentials(config('paypal'));
-        $token = $this->paypalClient->getAccessToken();
-        $this->paypalClient->setAccessToken($token);
-        $order = $this->paypalClient->createOrder([
+        $provider->setApiCredentials(config('paypal'));
+        $token = $provider->getAccessToken();
+        $provider->setAccessToken($token);
+        $order = $provider->createOrder([
             "intent"=> "CAPTURE",
             "purchase_units"=> [
                  [
                     "amount"=> [
                         "currency_code"=> "USD",
-                        "value"=> 0.01
+                        "value"=> 0.03
                     ],
                      'description' => 'test'
                 ]
@@ -60,12 +64,14 @@ class PaymentController extends Controller
 
     /*
     |------------------------------------------------------------
-    |Payment Procedure Start
+    |****************  Payment Procedure Start ******************
     |------------------------------------------------------------
     */
 
     public function paymentProcees(Request $request)
     {
+        // ============ Test ================
+        // ============ Test ================
 
         if(!env('USER_VERIFIED')){
             session()->flash('message','Disabled For Demo');
@@ -115,7 +121,7 @@ class PaymentController extends Controller
             Customer::create($data);
         }
 
-        return redirect(route("payment.pay.page",'cash_on_delivery'), 307);
+        return redirect(route("payment.pay.page",$request->payment_type), 307);
 
 
         // $order_id = $this->orderStore($request);
@@ -141,34 +147,56 @@ class PaymentController extends Controller
     public function paymentPayPage($payment_method, Request $request)
     {
         $requestData = json_encode($request->all());
+        $totalAmount = $request->totalAmount;
 
         $payment_method_name = null;
         switch ($payment_method) {
             case 'cash_on_delivery':
                 $payment_method_name = "Cash On Delivery";
-                return view('frontend.pages.payment_page.cash_on_delivery',compact('payment_method_name','payment_method','requestData'));
+                return view('frontend.pages.payment_page.cash_on_delivery',compact('payment_method_name','payment_method','requestData','totalAmount'));
+            case 'stripe':
+                $payment_method_name = "Stripe";
+                return view('frontend.pages.payment_page.stripe',compact('payment_method_name','payment_method','requestData','totalAmount'));
+            case 'paypal':
+                $payment_method_name = "Paypal";
+                return view('frontend.pages.payment_page.paypal',compact('payment_method_name','payment_method','requestData','totalAmount'));
+            case 'paystack':
+                $payment_method_name = "Paystack";
+                return view('frontend.pages.payment_page.paystack',compact('payment_method_name','payment_method','requestData','totalAmount'));
             default:
                 break;
         }
         return 1;
     }
 
-    public function paymentPayConfirm($payment_method, Request $request, PaymentService $paymentService)
-    {
+    public function paymentPayConfirm($payment_method, Request $request, PaymentService $paymentService){
         $requestData = json_decode(str_replace('&quot;', '"', $request->requestData));
         $payment     = $paymentService->initialize($payment_method);
-        return $payment->pay($requestData);
+        return $payment->pay($requestData, $request->all());
     }
 
-    public function paymentPayCancel($payment_method, PaymentService $paymentService)
-    {
+    public function paymentPayCancel($payment_method, PaymentService $paymentService){
         $payment = $paymentService->initialize($payment_method);
         return $payment->cancel();
     }
 
     /*
     |------------------------------------------------------------
-    |Payment Procedure End
+    |Paystack
+    |------------------------------------------------------------
+    */
+    public function handleGatewayCallback(PaymentService $paymentService){
+        $payment = $paymentService->initialize('paystack');
+        return $payment->paymentCallback();
+    }
+
+
+
+
+
+    /*
+    |------------------------------------------------------------
+    |****************  Payment Procedure End ********************
     |------------------------------------------------------------
     */
 
@@ -620,26 +648,17 @@ class PaymentController extends Controller
     }
 
 
-    /*
-    |------------------------------------------------------------
-    |Paystack
-    |------------------------------------------------------------
-    */
-    protected function redirectToGateway()
-    {
-        try{
-            return Paystack::getAuthorizationUrl()->redirectNow();
-        }catch(\Exception $e) {
-            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
-        }
-    }
 
-    public function handleGatewayCallback()
-    {
-        return $this->destroyOthers();
-        // $paymentDetails = Paystack::getPaymentData();
-        // dd($paymentDetails);
-    }
+    // protected function redirectToGateway()
+    // {
+    //     try{
+            // return Paystack::getAuthorizationUrl()->redirectNow();
+    //     }catch(\Exception $e) {
+    //         return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+    //     }
+    // }
+
+
 
 
 

@@ -37,3 +37,4 @@ Route::post('version-upgrade', [ClientAutoUpdateController::class, 'versionUpgra
 */
 Route::get('common-data', [CommonController::class, 'index']);
 Route::get('header-data', [CommonController::class, 'headerData']);
+Route::post('contact', [CommonController::class, 'contact']);

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Payment\CashOnDeliveryPayment;
 use App\Payment\PaypalPayment;
+use App\Payment\PaystackPayment;
 use App\Payment\StripePayment;
 use App\Traits\ENVFilePutContent;
 use App\Traits\MailTrait;
@@ -23,6 +24,8 @@ class PaymentService
                 return new PaypalPayment();
             case 'stripe':
                 return new StripePayment();
+            case 'paystack':
+                return new PaystackPayment();
             default:
                 # code...
                 break;

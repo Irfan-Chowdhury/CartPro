@@ -68,6 +68,10 @@ use App\Http\Middleware\DemoCheck;
 |
 */
 
+Route::get('/', function() {
+    return view('frontend.pages.maintenance');
+});
+
 DefaultAuth::routes();
 
 Route::get('/optimize', function() {
@@ -180,11 +184,15 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::get('/payment_success',function(){
             return view('frontend.pages.payment_success');
         });
+        //Cancel Pages
+        Route::get('/order_cancel',function(){
+            return view('frontend.pages.order_cancel');
+        });
 
 
         //Wishlist
         Route::prefix('/wishlist')->group(function () {
-            Route::get('',[WishlistController::class,'index'])->name('wishlist.index');
+            Route::get('/',[WishlistController::class,'index'])->name('wishlist.index');
             Route::get('/add',[WishlistController::class,'addToWishlist'])->name('wishlist.add');
             Route::get('/remove',[WishlistController::class,'removeToWishlist'])->name('wishlist.remove');
         });
@@ -229,6 +237,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         Route::post('/payment/{payment_method}/pay',[Frontend\PaymentController::class,'paymentPayPage'])->name('payment.pay.page');
         Route::post('/payment/{payment_method}/pay/confirm',[Frontend\PaymentController::class,'paymentPayConfirm'])->name('payment.pay.confirm');
         Route::post('/payment/{payment_method}/pay/cancel',[Frontend\PaymentController::class,'paymentPayCancel'])->name('payment.pay.cancel');
+        //Paystack
+        Route::get('/payment/paystack/pay/callback', [Frontend\PaymentController::class,'handleGatewayCallback'])->name('payment.pay.callback');
+
 
 
         // SSLCOMMERZ
@@ -252,8 +263,7 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
         //Paypal
         Route::post('/paypal/create',[Frontend\PaymentController::class,'paypal-create']);
 
-        //Paystack
-        Route::get('/payment/callback', [Frontend\PaymentController::class,'handleGatewayCallback']);
+
 
 
 

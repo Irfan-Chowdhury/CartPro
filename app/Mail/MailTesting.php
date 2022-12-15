@@ -28,6 +28,9 @@ class MailTesting extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.mail-testing');
+        return $this->markdown('mail.mail-testing')
+        // return $this->view('view.mail-testing')
+        ->subject('Your Subject Here');
+
     }
 }

@@ -135,6 +135,7 @@ if (Session::has('currency_rate')){
     </div>
 </div>
 
+<!-- Top Category Section -->
 @if ($top_categories_section_enabled==1)
     <section class="category-tab-section pt-0">
         <div class="container">

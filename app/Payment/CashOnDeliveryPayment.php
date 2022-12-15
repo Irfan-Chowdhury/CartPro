@@ -15,16 +15,16 @@ class CashOnDeliveryPayment implements PaybleContract
     //     $this->reduceProductQuantity($order_id);
     // }
 
-    public function pay($request)
+    public function pay($request, $otherRequest)
     {
         $order_id = $this->orderStore($request);
         $this->reduceProductQuantity($order_id);
         return redirect('payment_success');
     }
 
-
     public function cancel(){
-        return $this->orderCancel();
+        $this->orderCancel();
+        return redirect(route('cartpro.home'));
     }
 }
 

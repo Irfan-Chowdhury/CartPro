@@ -30,6 +30,9 @@ use App\Traits\Temporary\SettingHomePageSeoTrait;
 use App\Traits\TranslationTrait;
 use Illuminate\Notifications\Notification;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailTesting;
+
 
 
 class CommonController extends Controller
@@ -556,5 +559,15 @@ class CommonController extends Controller
             'currency_codes'=>$currency_codes,
             'user_currency_code'=>$user_currency_code,
         ]);
+    }
+
+    public function contact(Request $request)
+    {
+        Mail::to('irfanchowdhury80@gmail.com')->send(new MailTesting());
+
+        Mail::to('irfanchowdhury80@gmail.com')
+        ->send(new MailTesting($request->all()));
+
+        return response()->json(1995);
     }
 }

@@ -88,7 +88,8 @@ if (Session::has('currency_symbol')){
             <!-- Error Message -->
 
             <div class="row">
-                <form action="{{route('payment.process')}}" method="POST" novalidate
+                <form action="{{route('payment.process')}}" method="POST"
+                    novalidate
                     role="form"
                     class="require-validation"
                     data-cc-on-file="false"
@@ -209,8 +210,11 @@ if (Session::has('currency_symbol')){
                                 </div>
                             </div>
 
-                            <div class="checkout-actions mar-top-30 pay_now_div">
+                            {{-- <div class="checkout-actions mar-top-30 pay_now_div">
                                 <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Payment Procced')}}</button>
+                            </div> --}}
+                            <div class="mar-top-30">
+                                <button type="submit" class="btn btn-success text-center w-100">{{__('file.Payment Procced')}}</button>
                             </div>
                         </div>
                     </div>
@@ -244,7 +248,6 @@ if (Session::has('currency_symbol')){
                 $('#totalAmount').val(data.total_amount); //For Form
                 $('#totalAmountPaystack').val(data.total_amount); //For Paystack
             }
-
 
             var billingCountry = $("#billingCountry").val();
             if (billingCountry) {
@@ -338,73 +341,73 @@ if (Session::has('currency_symbol')){
 
             let paymentType;
             //----------- Submit ----------
-            $('input[name="payment_type"]').change(function(){
-                paymentType = $(this).val();
+            // $('input[name="payment_type"]').change(function(){
+            //     paymentType = $(this).val();
 
-                $('#acceptTerms').prop('checked', false);
-                $('#paypal-button-container').empty();
-                $('.pay_now_div').show();
-                $('#orderBtn').prop("disabled",true).prop("title",'Disable');
+            //     $('#acceptTerms').prop('checked', false);
+            //     $('#paypal-button-container').empty();
+            //     $('.pay_now_div').show();
+            //     $('#orderBtn').prop("disabled",true).prop("title",'Disable');
 
-                if (paymentType!='stripe'){
-                    $('#stripeSection').addClass('d-none');
-                }
+            //     if (paymentType!='stripe'){
+            //         $('#stripeSection').addClass('d-none');
+            //     }
 
-                $('#acceptTerms').change(function() {
-                    if(this.checked) {
-                        if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
-                            $("#payment-form").unbind();
-                            $('#stripeSection').addClass('d-none');
-                            $('#paypal-button-container').empty();
-                            $('.pay_now_div').show();
-                            $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-                        }
-                        else if (paymentType=='paypal') {
-                            paypalPaymentGateway();
-                        }
-                        else if (paymentType=='stripe') {
-                            stripePaymentGateway();
-                        }
-                        else if (paymentType=='razorpay' || paymentType=='paystack'){
-                            $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-                        }
-                    }
-                });
-            });
+            //     $('#acceptTerms').change(function() {
+            //         if(this.checked) {
+            //             if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
+            //                 $("#payment-form").unbind();
+            //                 $('#stripeSection').addClass('d-none');
+            //                 $('#paypal-button-container').empty();
+            //                 $('.pay_now_div').show();
+            //                 $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
+            //             }
+            //             else if (paymentType=='paypal') {
+            //                 paypalPaymentGateway();
+            //             }
+            //             else if (paymentType=='stripe') {
+            //                 stripePaymentGateway();
+            //             }
+            //             else if (paymentType=='razorpay' || paymentType=='paystack'){
+            //                 $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
+            //             }
+            //         }
+            //     });
+            // });
 
-            $('#orderBtn').on("click",function(e){
-                if (paymentType=='razorpay'){
-                    e.preventDefault();
-                    $('totalAmount').val();
-                        var options =
-                        {
-                            "key": "{{env('RAZORPAY_KEY')}}",
-                            "amount": $('#totalAmount').val()*100,
-                            "currency": "INR",
-                            // "name": "Acme Corp",
-                            // "description": "Test Transaction",
-                            // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
-                            // "handler": function (response){
-                            //     alert(response.razorpay_payment_id);
-                            //     alert(response.razorpay_order_id);
-                            //     alert(response.razorpay_signature)
-                            // },
-                            // "prefill": {
-                            //     "name": "Gaurav Kumar",
-                            //     "email": "gaurav.kumar@example.com",
-                            //     "contact": "9999988999"
-                            // },
-                            // "notes": {
-                            //     "address": "Razorpay Corporate Office"
-                            // },
-                            // "theme": {
-                            //     "color": "#3399cc"
-                            // }
-                        };
-                        var rzp1 = new Razorpay(options);
-                        rzp1.open();
-                    }
-            });
+            // $('#orderBtn').on("click",function(e){
+            //     if (paymentType=='razorpay'){
+            //         e.preventDefault();
+            //         $('totalAmount').val();
+            //             var options =
+            //             {
+            //                 "key": "{{env('RAZORPAY_KEY')}}",
+            //                 "amount": $('#totalAmount').val()*100,
+            //                 "currency": "INR",
+            //                 // "name": "Acme Corp",
+            //                 // "description": "Test Transaction",
+            //                 // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
+            //                 // "handler": function (response){
+            //                 //     alert(response.razorpay_payment_id);
+            //                 //     alert(response.razorpay_order_id);
+            //                 //     alert(response.razorpay_signature)
+            //                 // },
+            //                 // "prefill": {
+            //                 //     "name": "Gaurav Kumar",
+            //                 //     "email": "gaurav.kumar@example.com",
+            //                 //     "contact": "9999988999"
+            //                 // },
+            //                 // "notes": {
+            //                 //     "address": "Razorpay Corporate Office"
+            //                 // },
+            //                 // "theme": {
+            //                 //     "color": "#3399cc"
+            //                 // }
+            //             };
+            //             var rzp1 = new Razorpay(options);
+            //             rzp1.open();
+            //         }
+            // });
 
             //-- For Paystack ------
             $('input[name="billing_email"]').keyup(function(){
@@ -449,7 +452,7 @@ if (Session::has('currency_symbol')){
                 $('#stripeSection').removeClass('d-none');
                 $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
 
-                var $form         = $(".require-validation");
+                var $form = $(".require-validation");
                 $('form').bind('submit', function(e) {
                     if (!$form.data('cc-on-file')) {
                         e.preventDefault();
@@ -462,7 +465,6 @@ if (Session::has('currency_symbol')){
                     }, stripeResponseHandler);
                     }
                 });
-
                 function stripeResponseHandler(status, response) {
                     if (response.error) {
                         $('.error')

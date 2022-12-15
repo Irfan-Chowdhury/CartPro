@@ -7,6 +7,6 @@
 <br>
 
 Thanks,<br>
-{{ env('MAIL_FROM_NAME') }}
+irfan
 
 @endcomponent

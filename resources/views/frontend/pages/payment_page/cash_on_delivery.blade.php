@@ -25,7 +25,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="page-title h2 text-center uppercase mt-1 mb-5">{{$payment_method_name}}</h1>
+                    <h1 class="page-title h2 text-center uppercase mt-1 mb-5">{{ $payment_method_name }}
+                        <small>
+                            @if(env('CURRENCY_FORMAT')=='suffix')
+                                ( {{ number_format((float)$totalAmount, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL') )
+                            @else
+                                ( @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float) $totalAmount, env('FORMAT_NUMBER'), '.', '') }} )
+                            @endif
+                        </small>
+                    </h1>
                 </div>
             </div>
 

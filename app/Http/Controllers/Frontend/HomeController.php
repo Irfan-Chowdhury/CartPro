@@ -61,24 +61,6 @@ class HomeController extends FrontBaseController
 
     public function index()
     {
-        // ========== Test ============
-        // $settings_data = Setting::with(['settingTranslations'])
-        // ->get()
-        // ->keyBy('key')
-        // ->map(function($setting){
-        //     return [
-        //         'id'             => $setting->id,
-        //         'key'            => $setting->key,
-        //         'plain_value'    => $setting->plain_value,
-        //         'is_translatable'=> $setting->is_translatable,
-        //         'locale' => $this->translations($setting->settingTranslations)->locale ?? null,
-        //         'value'  => $this->translations($setting->settingTranslations)->value ?? null,
-        //     ];
-        // });
-        // $storeFrontSettings = json_decode(json_encode($settings_data), FALSE);
-        // return  $storeFrontSettings->storefront_welcome_text->value;
-        // ========== Test ============
-
         if (!Session::has('currency_code')){
             Session::put('currency_code', env('DEFAULT_CURRENCY_CODE'));
             $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',env('DEFAULT_CURRENCY_SYMBOL'));
@@ -636,35 +618,35 @@ class HomeController extends FrontBaseController
 
 
 
-    public function changeForDemoOrClient($text)
-    {
-        // $this->dataWriteInENVFile('APP_DEBUG',(bool)false);
-        return 1;
+    // public function changeForDemoOrClient($text)
+    // {
+    //     // $this->dataWriteInENVFile('APP_DEBUG',(bool)false);
+    //     return 1;
 
 
-        if (isset($text) && $text==='CLIENT') {
-            $installFileOldName = base_path('/'.'install0');
-            $installFileNewName = base_path('/'.'install');
+    //     if (isset($text) && $text==='CLIENT') {
+    //         $installFileOldName = base_path('/'.'install0');
+    //         $installFileNewName = base_path('/'.'install');
 
-            /* Rename File Name */
-            if(!rename($installFileOldName, $installFileNewName)) {
-                return "File can't be renamed!";
-            }
-            $this->dataWriteInENVFile('PRODUCT_MODE',$text);
-            $this->dataWriteInENVFile('USER_VERIFIED',1);
-        }
-        else if (isset($text) && $text==='DEMO'){
-            $this->dataWriteInENVFile('PRODUCT_MODE',$text);
-            $this->dataWriteInENVFile('USER_VERIFIED',null);
-        }
-        Artisan::call('optimize:clear');
-        return redirect()->back();
+    //         /* Rename File Name */
+    //         if(!rename($installFileOldName, $installFileNewName)) {
+    //             return "File can't be renamed!";
+    //         }
+    //         $this->dataWriteInENVFile('PRODUCT_MODE',$text);
+    //         $this->dataWriteInENVFile('USER_VERIFIED',1);
+    //     }
+    //     else if (isset($text) && $text==='DEMO'){
+    //         $this->dataWriteInENVFile('PRODUCT_MODE',$text);
+    //         $this->dataWriteInENVFile('USER_VERIFIED',null);
+    //     }
+    //     Artisan::call('optimize:clear');
+    //     return redirect()->back();
 
-        // $this->dataWriteInENVFile('PRODUCT_MODE','DEMO');
-        // $this->dataWriteInENVFile('USER_VERIFIED',1);
-        // $this->dataWriteInENVFile('APP_DEBUG',1);
+    //     // $this->dataWriteInENVFile('PRODUCT_MODE','DEMO');
+    //     // $this->dataWriteInENVFile('USER_VERIFIED',1);
+    //     // $this->dataWriteInENVFile('APP_DEBUG',1);
 
-        // Artisan::call('optimize:clear');
-        // return redirect()->back();
-    }
+    //     // Artisan::call('optimize:clear');
+    //     // return redirect()->back();
+    // }
 }

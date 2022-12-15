@@ -102,6 +102,8 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 
     - Login [Developer Paypal](https://developer.paypal.com/)
 
+    - [Laravel Paypal](https://srmklive.github.io/laravel-paypal/)
+
     - https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US
     - [PayPal Javascript SDK](https://developer.paypal.com/demo/checkout/#/pattern/client)
 

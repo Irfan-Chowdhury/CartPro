@@ -55,6 +55,7 @@ trait PaymentTrait{
         // $order->tax_id = $request->tax_id!=NULL ? $request->tax_id : NULL;
 
 
+        // Check Restore & Cancel
         if ($request->coupon_code && $request->coupon_checked==1) {
             $coupon = Coupon::where('coupon_code',$request->coupon_code)->where('is_active',1);
             if ($coupon->exists()) {
@@ -151,9 +152,55 @@ trait PaymentTrait{
         OrderDetail::where('order_id',$order_id)->delete();
     }
 
+    protected function undoTableDataAndRestoreProductQuantity($reference_no){
+        $order_id = $this->restoreProductQuantityByReference($reference_no);
+        $this->undoDBTableData($order_id);
+    }
+
     protected function orderCancel(){
         Cart::destroy();
-        return redirect(route('cartpro.home'));
+    }
+
+    // Paystack
+    protected function updateOrderAfterPaymentComplete($reference_no, $payment_id){
+        $order = Order::where('reference_no',$reference_no)->first();
+        $order->order_status   = 'order_completed';
+        $order->payment_status = 'complete';
+        $order->payment_id     = $payment_id;
+        $order->update();
+        return redirect('payment_success');
+    }
+
+    // Paystack
+    protected function restoreProductQuantityByReference($reference_no){
+        $order = Order::where('reference_no',$reference_no)->first();
+        return $this->restoreProductQuantity($order);
+    }
+
+    // Paystack
+    protected function restoreProductQuantity($order){
+        $order_details = OrderDetail::where('order_id',$order->id)->get();
+        foreach ($order_details as $row) {
+            if (FlashSaleProduct::where('product_id',$row->product_id)->exists()) {
+                DB::table('flash_sale_products')
+                ->where('product_id',$row->product_id)
+                ->update(['qty' => DB::raw('qty +'.$row->qty)]);
+            }else {
+                DB::table('products')
+                ->where('id',$row->product_id)
+                ->where('manage_stock',1)
+                ->update(['qty' => DB::raw('qty +'.$row->qty)]);
+            }
+        }
+        Cart::destroy();
+        return $order->id;
+    }
+
+    // Paystack
+    protected function latestOrderCancel(){
+        $order = Order::latest()->first();
+        $this->restoreProductQuantity($order);
+        $this->undoDBTableData($order->id);
     }
 }
 

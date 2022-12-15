@@ -9,11 +9,17 @@ class PaypalPayment implements PaybleContract
 {
     use PaymentTrait;
 
-    public function pay($request, $order_id)
+    public function pay($request, $otherRequest)
     {
-        //logic here
+        $request->payment_status = "completed";
+        $order_id = $this->orderStore($request);
         $this->reduceProductQuantity($order_id);
-        $this->destroyOthers();
+        return response()->json(['success' =>'done']);
+    }
+
+    public function cancel(){
+        $this->orderCancel();
+        return response()->json('success');
     }
 }
 
