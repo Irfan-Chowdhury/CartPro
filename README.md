@@ -110,10 +110,12 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 - #### [Stripe](https://github.com/stripe/stripe-php) (<small><i>follow the tutorial given bellow</i></small>)
     - https://www.positronx.io/integrate-stripe-payment-gateway-in-laravel-application
 
-- #### [Laravel Paystack](https://github.com/unicodeveloper/laravel-paystack) (<small><i>follow the tutorial given bellow</i></small>)
-    - https://www.itsolutionstuff.com/post/razorpay-payment-gateway-integration-in-laravel-8-tutorialexample.html
+- #### [Laravel Paystack](https://github.com/codetagon/integrate_paystack_laravel) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://github.com/codetagon/integrate_paystack_laravel
 - #### [Razorpay](https://razorpay.com/) (<small><i>follow the tutorial given bellow</i></small>)
     - https://www.itsolutionstuff.com/post/razorpay-payment-gateway-integration-in-laravel-8-tutorialexample.html
+    - https://github.com/razorpay/razorpay-php
+    - Documentation : https://razorpay.com/docs/#home-payments
 
 - #### [SSL Commerz](https://sslcommerz.com/) (<small><i>follow the tutorial given bellow</i></small>)
     - https://github.com/sslcommerz/SSLCommerz-Laravel

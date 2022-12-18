@@ -161,7 +161,7 @@ trait PaymentTrait{
         Cart::destroy();
     }
 
-    // Paystack
+    // Paystack || Razorpay
     protected function updateOrderAfterPaymentComplete($reference_no, $payment_id){
         $order = Order::where('reference_no',$reference_no)->first();
         $order->order_status   = 'order_completed';

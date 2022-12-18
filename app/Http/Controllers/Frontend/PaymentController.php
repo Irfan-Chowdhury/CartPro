@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Response;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Paystack;
 
 class PaymentController extends Controller
@@ -70,8 +71,7 @@ class PaymentController extends Controller
 
     public function paymentProcees(Request $request)
     {
-        // ============ Test ================
-        // ============ Test ================
+
 
         if(!env('USER_VERIFIED')){
             session()->flash('message','Disabled For Demo');
@@ -163,6 +163,9 @@ class PaymentController extends Controller
             case 'paystack':
                 $payment_method_name = "Paystack";
                 return view('frontend.pages.payment_page.paystack',compact('payment_method_name','payment_method','requestData','totalAmount'));
+            case 'razorpay':
+                $payment_method_name = "Razorpay";
+                return view('frontend.pages.payment_page.razorpay',compact('payment_method_name','payment_method','requestData','totalAmount'));
             default:
                 break;
         }
