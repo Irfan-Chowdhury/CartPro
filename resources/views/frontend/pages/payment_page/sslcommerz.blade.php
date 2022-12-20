@@ -19,7 +19,7 @@
         <!--Breadcrumb Area ends-->
 
         <!-- Content Wrapper -->
-        <section class="content-wrapper mt-0 mb-5">
+        <section class="content-wrapper">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -28,6 +28,38 @@
                 </div>
             </div>
         </section>
+
+        <div class="row mb-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{route('payment.pay.confirm','sslcommerz')}}" method="post" id="razorpayPaymentForm">
+                            @csrf
+
+                            <input type="hidden" name="requestData" value="{{ $requestData }}">
+                            <input type="hidden" name="totalAmount" value="{{ $totalAmount }}">
+
+                            <div class="d-grid gap-2 mx-auto">
+                                <button type="submit" class="btn btn-outline-success">
+                                    Pay Now
+                                    <small>
+                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                            ( {{ number_format((float)$totalAmount, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL'))
+                                        @else
+                                            ( @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float) $totalAmount, env('FORMAT_NUMBER'), '.', '') }})
+                                        @endif
+                                    </small>
+                                </button>
+                            </div>
+                            <div class="mt-3 d-grid gap-2 mx-auto">
+                                <button type="button" id="payCancelBtn" class="btn btn-outline-danger">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

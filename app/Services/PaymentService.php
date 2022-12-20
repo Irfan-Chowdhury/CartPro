@@ -7,6 +7,7 @@ use App\Payment\CashOnDeliveryPayment;
 use App\Payment\PaypalPayment;
 use App\Payment\PaystackPayment;
 use App\Payment\RazorpayPayment;
+use App\Payment\SSLCommerzPayment;
 use App\Payment\StripePayment;
 use App\Traits\ENVFilePutContent;
 use App\Traits\MailTrait;
@@ -29,6 +30,8 @@ class PaymentService
                 return new PaystackPayment();
             case 'razorpay':
                 return new RazorpayPayment();
+            case 'sslcommerz':
+                return new SSLCommerzPayment();
             default:
                 # code...
                 break;

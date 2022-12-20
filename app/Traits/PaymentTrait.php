@@ -161,17 +161,18 @@ trait PaymentTrait{
         Cart::destroy();
     }
 
-    // Paystack || Razorpay
+    // Paystack || Razorpay || SSL Commerz
     protected function updateOrderAfterPaymentComplete($reference_no, $payment_id){
-        $order = Order::where('reference_no',$reference_no)->first();
-        $order->order_status   = 'order_completed';
-        $order->payment_status = 'complete';
-        $order->payment_id     = $payment_id;
-        $order->update();
+        Order::where('reference_no',$reference_no)
+            ->update([
+                'order_status'  =>'order_completed',
+                'payment_status'=>'complete',
+                'payment_id'    => $payment_id,
+            ]);
         return redirect('payment_success');
     }
 
-    // Paystack
+    // Paystack || SSL Commerz
     protected function restoreProductQuantityByReference($reference_no){
         $order = Order::where('reference_no',$reference_no)->first();
         return $this->restoreProductQuantity($order);

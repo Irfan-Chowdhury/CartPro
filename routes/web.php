@@ -243,9 +243,9 @@ Route::group(['middleware' => ['XSS','set_locale']], function ()
 
 
         // SSLCOMMERZ
-        Route::post('/success', [Frontend\PaymentController::class, 'success']);
-        Route::post('/fail', [Frontend\PaymentController::class, 'fail']);
-        Route::post('/cancel', [Frontend\PaymentController::class, 'cancel']);
+        Route::post('/success', [Frontend\PaymentController::class, 'sslCommerzSuccess']);
+        Route::post('/fail', [Frontend\PaymentController::class, 'sslCommerzFail']);
+        Route::post('/cancel', [Frontend\PaymentController::class, 'sslCommerzCancel']);
         Route::post('/ipn', [Frontend\PaymentController::class, 'ipn']);
 
 

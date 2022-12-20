@@ -409,7 +409,7 @@ if (Session::has('currency_symbol')){
             //-- For Paystack ------
             $('input[name="billing_email"]').keyup(function(){
                 var billing_email = $('input[name="billing_email"]').val();
-                 $('#emailPaystack').val(billing_email);
+                $('#emailPaystack').val(billing_email);
             });
 
             const paypalPaymentGateway = () =>{

@@ -113,9 +113,10 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 - #### [Laravel Paystack](https://github.com/codetagon/integrate_paystack_laravel) (<small><i>follow the tutorial given bellow</i></small>)
     - https://github.com/codetagon/integrate_paystack_laravel
 - #### [Razorpay](https://razorpay.com/) (<small><i>follow the tutorial given bellow</i></small>)
-    - https://www.itsolutionstuff.com/post/razorpay-payment-gateway-integration-in-laravel-8-tutorialexample.html
+    - https://medium.com/@laraveltuts/laravel-9-integrate-razorpay-payment-gateway-491569c13a99
     - https://github.com/razorpay/razorpay-php
-    - Documentation : https://razorpay.com/docs/#home-payments
+    - Documentation : https://razorpay.com/docs/#home-payments || Testing Card Number:  https://razorpay.com/docs/payments/payments/test-card-upi-details/
+                     
 
 - #### [SSL Commerz](https://sslcommerz.com/) (<small><i>follow the tutorial given bellow</i></small>)
     - https://github.com/sslcommerz/SSLCommerz-Laravel

@@ -19,7 +19,7 @@
                     <h1 class="text-light">@lang('file.Order Cancel')</h1>
 
                     @if (session()->has('error'))
-                        <p>{{ session()->get('error')}}</p>
+                        <p class="text-light">{{ session()->get('error')}}</p>
                     @endif
                     <p class="mb-3 text-light">@lang("file.Your order has been canceled").</p>
                     <p class="mb-3 text-light">Please add to cart again</p>
