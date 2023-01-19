@@ -1,4 +1,4 @@
-app/google/*.key
+app/google/*.json
 /node_modules
 /public/hot
 /public/storage
