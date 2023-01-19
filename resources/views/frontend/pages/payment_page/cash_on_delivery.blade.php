@@ -46,11 +46,19 @@
                             <form action="{{route('payment.pay.confirm', $payment_method)}}" method="post">
                                 @csrf
                                 <input type="hidden" name="requestData" value="{{$requestData}}">
-
                                 <div class="d-grid gap-2 mx-auto">
                                     <button type="submit" class="btn btn-outline-success btn-lg">Pay Now</button>
                                 </div>
                             </form>
+
+                            {{-- <form action='https://www.2checkout.com/checkout/purchase' method='post'>
+                                <input type='hidden' name='sid' value='123456789' />
+                                <input type='hidden' name='mode' value='2CO' />
+                                <input type='hidden' name='li_0_name' value='test' />
+                                <input type='hidden' name='li_0_price' value='1.00' />
+                                <input type='hidden' name='demo' value='Y' />
+                                <input name='submit' type='submit' value='Checkout' />
+                            </form> --}}
                         </div>
                     </div>
                 </div>

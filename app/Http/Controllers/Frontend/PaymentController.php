@@ -214,18 +214,13 @@ class PaymentController extends Controller
         return $payment->failAndCancel($request);
     }
 
-
-
-
-
     /*
     |------------------------------------------------------------
     |****************  Payment Procedure End ********************
     |------------------------------------------------------------
     */
 
-
-
+    
     // public function paymentProcees(Request $request, PaymentService $paymentService)
     // {
 

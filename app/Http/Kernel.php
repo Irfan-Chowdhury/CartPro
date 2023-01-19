@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'set_locale' => \App\Http\Middleware\SetLocale::class,
         'demo_check' => \App\Http\Middleware\DemoCheck::class,
         'checkAjax' => \App\Http\Middleware\CheckAjax::class,
+        'maintenance_mode' => \App\Http\Middleware\MaintenanceMode::class,
     ];
 }

@@ -525,7 +525,7 @@ class HomeController extends FrontBaseController
         if($products->count()>0){
             return view('frontend.pages.search_products',compact('products'));
         }else {
-            return view('frontend.includes.prodcut_not_found');
+            return view('frontend.includes.product_not_found');
         }
     }
 
@@ -602,12 +602,15 @@ class HomeController extends FrontBaseController
         }
 
         $data = [];
-        $data['name'] = request('name');
-        $data['email'] = request('email');
+        $data['name']    = request('name');
+        $data['email']   = request('email');
+        $data['subject'] = request('subject');
         $data['message'] = request('message');
         Mail::to($store_email)->send(new ContactMail($data));
 
-        return redirect()->back()->with('success', 'Message sent successfully');
+        session()->flash('message',"Message sent successfully");
+        session()->flash('type','success');
+        return redirect()->back();
     }
 
     public function aboutUs()

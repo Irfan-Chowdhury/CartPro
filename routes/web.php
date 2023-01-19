@@ -68,8 +68,8 @@ use App\Http\Middleware\DemoCheck;
 |
 */
 
-Route::get('/', function() {
-    return view('frontend.pages.maintenance');
+Route::get('/maintenance-mode', function() {
+    return view('maintenance');
 });
 
 DefaultAuth::routes();
@@ -79,12 +79,22 @@ Route::get('/optimize', function() {
     return redirect()->back();
 });
 
+// Route::get('/DBSEED', function() {
+//     Artisan::call('db:seed --class=CountrySeeder');
+//     return view('admin.pages.country.index');
+// });
+
+Route::get('/migrate', function() {
+    Artisan::call('migrate');
+    return 'Successfully Migrated';
+});
+
 
 Route::get('/documentation',function(){
     return File::get(public_path() . '/documentation/index.html');
 });
 
-Route::group(['middleware' => ['XSS','set_locale']], function ()
+Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function ()
 {
     /*
     |--------------------------------------------------------------------------

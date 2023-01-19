@@ -14,7 +14,7 @@ class CurrencyService
         return $this->currencyContract->getAll();
     }
 
-    protected function supportedCurrencies()
+    public function supportedCurrencies()
     {
         $setting_currency = $this->currencyContract->supportedCurrencies();
         $supported_currencies = array();

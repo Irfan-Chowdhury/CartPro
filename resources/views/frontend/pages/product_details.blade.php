@@ -690,7 +690,6 @@ if (Session::has('currency_symbol')){
             $('.attribute_value_productTab1').on("click",function(e){
                 e.preventDefault();
                 $(this).addClass('selected');
-
                 var selectedVal = $(this).data('value_id');
                 values.push(selectedVal);
                 $('.value_ids_products').val(values);

@@ -427,10 +427,10 @@
             });
 
 
+            // ---------- Attribute ----------
             let values         = [];
             let valueNames     = [];
             let attributeNames = [];
-
             $('.attribute_value').on("click",function(e){
                 e.preventDefault();
 
@@ -479,6 +479,7 @@
                 $('#value_names').val(valueNames);
                 $('#attribute_names').val(attributeNames);
             });
+            // ---------- Attribute ----------
 
             $('#disable_popup').on("click",function (e) {
                 var disable_popup =  $('#disable_popup').val();

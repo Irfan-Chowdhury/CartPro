@@ -15,8 +15,10 @@
                                 <img class="lazy" data-src="{{asset('public/'.$item->options->image ?? null)}}" alt="...">
                                 <div>
                                     <h3 class="h6">{{$item->name}}</h3>
+
+
                                     <div class="input-qty">
-                                        <input type="text" class="input-number" readonly value="{{$item->qty}}">
+                                        <input type="text" readonly class="input-number" readonly value="{{$item->qty}}">
                                         X
                                         <span class="amount">&nbsp;
                                             @if(env('CURRENCY_FORMAT')=='suffix')
@@ -26,6 +28,29 @@
                                             @endif
                                         </span>
                                     </div>
+
+                                    <br>
+                                    <div class="mt-2 input-qty">
+                                        @php
+                                            if($item->options->attributes){
+                                                $data = $item->options->attributes;
+                                                $attributes = array();
+                                                for($i=0; $i< count($data['name']); $i++){
+                                                    $attributes[] = [
+                                                            'name' => $data['name'][$i],
+                                                            'value' => $data['value'][$i]
+                                                        ];
+                                                }
+                                            }
+                                        @endphp
+
+                                        @if ($item->options->attributes)
+                                            @foreach ($attributes as $attribute)
+                                                <div class="row"><span><b>{{$attribute['name']}} :</b>{{$attribute['value']}}</span></div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+
                                 </div>
                             </div>
                         </td>

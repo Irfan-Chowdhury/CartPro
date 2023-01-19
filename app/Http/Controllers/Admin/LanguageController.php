@@ -54,24 +54,24 @@ class LanguageController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
+            $request_locale = strtolower(htmlspecialchars(trim($request->local)));
+
             $language = new Language();
             $language->language_name = htmlspecialchars($request->language_name);
-            $language->local         = strtolower(htmlspecialchars(trim($request->local)));
+            $language->local         = $request_locale;
 
             if (empty($request->default)) {
                 $language->default   = 0;
             }
             else {
-
                 Language::where('default', '=', 1)->update(['default' => 0]);
-
                 $language->default       = $request->default;
             }
 
             $language->save();
 
             //New
-            $this->translation->addLanguage($request->local, $request->language_name);
+            $this->translation->addLanguage($request_locale, $request->language_name);
 
             session()->flash('type','success');
             session()->flash('message','Successfully Saved');
@@ -104,26 +104,27 @@ class LanguageController extends Controller
             return redirect()->back();
         }
 
+        $request_locale = strtolower(htmlspecialchars(trim($request->local)));
 
         if ($request->default) {
             Language::where('default',1)->update(['default'=>0]);
         }
         $language = Language::find($request->id);
-        if ($language->local != $request->local) {
+        if ($language->local != $request_locale) {
             $old_directory = 'resources/lang/'.$language->local;
-            $new_directory = 'resources/lang/'.$request->local;
+            $new_directory = 'resources/lang/'.$request_locale;
             File::copyDirectory($old_directory,$new_directory);
             File::deleteDirectory($old_directory);
         }
         $language->language_name = htmlspecialchars($request->language_name);
-        $language->local         = strtolower(htmlspecialchars(trim($request->local)));
+        $language->local         = $request_locale;
         $language->default       = $request->default ?? 0;
         $language->update();
 
-
-        Session::put('currentLocal', $language->local);
-        App::setlanguage($language->local);
-
+        if ($request->default) {
+            Session::put('currentLocal', $language->local);
+            // App::setlanguage($language->local);
+        }
         session()->flash('type','success');
         session()->flash('message','Successfully Updated');
         return redirect()->back();

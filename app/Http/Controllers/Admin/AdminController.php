@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductTranslation;
 use App\Notifications\NewOrderNotification;
 use App\Traits\AutoDataUpdateTrait;
+use App\Traits\JSONFileTrait;
 use Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
-    use AutoDataUpdateTrait;
+    use AutoDataUpdateTrait, JSONFileTrait;
         /**
      * Create a new controller instance.
      *
@@ -42,6 +43,9 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        $data = $this->readJSONData('track/test.json');
+        return $data;
+
         $orders          = Order::orderBy('id','DESC')->get();
         $products        = Product::where('is_active',1)->get();
         $total_customers = User::where('user_type',0)->get()->count();

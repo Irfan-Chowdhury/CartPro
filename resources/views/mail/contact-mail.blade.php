@@ -1,16 +1,18 @@
 @component('mail::message')
-# Introduction
 
-<p><b>User Name:</b> {{$data['name']}} </p>
-<br>
-<p><b>Email:</b>  {{$data['email']}} </p>
-<br>
-<p><b>Message:</b> {{$data['message']}} </p>
+<span>
+    Dear {{ config('app.name') }},
+</span>
+    <br>
 
-{{-- @component('mail::button', ['url' => ''])
-Button Text
-@endcomponent --}}
+<span>{{$data['message']}}</span>
 
-Thanks,<br>
-{{ config('app.name') }}
+<span>
+    Regards,
+    <br>
+    {{$data['name']}}
+    <br>
+    {{$data['email']}}
+</span>
+
 @endcomponent

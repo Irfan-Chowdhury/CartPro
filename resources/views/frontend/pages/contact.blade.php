@@ -7,6 +7,17 @@
             <div class="col-12">
                 <h1 class="page-title h2 text-center uppercase mt-1 mb-5">@lang('file.Contact Us')</h1>
             </div>
+            
+            @if (session()->has('message'))
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-{{ session('type')}} alert-dismissible fade show" role="alert">
+                        <strong>{{ session('message')}}!</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
+
+
             <div class="row">
                 <div class="col-md-7">
                     <h3 class="h5">@lang('file.Write To Us')</h3>
@@ -14,15 +25,19 @@
                         @csrf
 
                         <div class="form-control-wrap">
-                            <input id="name" type="text" class="form-control" name="name" autocomplete="off" required data-error="Please enter your name" placeholder="Name*">
+                            <input id="name" type="text" class="form-control" name="name" autocomplete="off" required data-error="Please enter your name" placeholder="Type your Name *">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-control-wrap">
-                            <input id="Email" type="email" class="form-control" name="email" autocomplete="off" required data-error="Please enter your email" placeholder="Email*">
+                            <input id="Email" type="email" class="form-control" name="email" autocomplete="off" required data-error="Please enter your email" placeholder="Type your Email *">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-control-wrap">
-                            <textarea id="message" class="form-control textarea" rows="10" name="message"  data-error="Please enter your message subject" placeholder="Message"></textarea>
+                            <input id="subject" type="text" class="form-control" name="subject" autocomplete="off" required data-error="Please type the Subject" placeholder="Type your Subject *">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-control-wrap">
+                            <textarea id="message" class="form-control textarea" rows="10" name="message"  data-error="Please enter your message subject" placeholder="Type your Message *"></textarea>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-submit mar-top-30">

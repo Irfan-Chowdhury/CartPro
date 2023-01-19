@@ -31,7 +31,6 @@ class CartController extends Controller
     public function productAddToCart(Request $request)
     {
         if ($request->ajax()) {
-
             //New
             $cart_content = Cart::content();
             $request_qty = $request->qty;
@@ -94,9 +93,15 @@ class CartController extends Controller
             //         $data['options'][$value]= $value_names[$key];
             //     }
             // }
+
             if ($attribute_names[0]!=NULL && $value_names[0]!=NULL) {
                 for ($i=0; $i < count($attribute_names); $i++) {
                    $data['options'][$attribute_names[$i]] = $value_names[$i];
+
+                    // --------- Test (Checkout Visible)-------------
+                    // $data['options']['attributes']['name'][$i] = $attribute_names[$i];
+                    // $data['options']['attributes']['value'][$i] = $value_names[$i];
+                   // ----------- Test End -------
                }
             }
 
@@ -108,6 +113,9 @@ class CartController extends Controller
             $data['options']['stock_qty']= $product->qty ?? null;
             $data['options']['in_stock']= $product->in_stock ?? 0;
 
+
+            // Cart::add($data);
+            // return;
 
             if ($rowId) {
                 Cart::update($rowId, $data);
@@ -231,6 +239,9 @@ class CartController extends Controller
         $CHANGE_CURRENCY_RATE = env('USER_CHANGE_CURRENCY_RATE') !=NULL ? env('USER_CHANGE_CURRENCY_RATE'): 1.00;
 
         $cart_content = Cart::content();
+
+        return $cart_content;
+
         $cart_subtotal = number_format((float) implode(explode(',',Cart::subtotal())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
         $cart_total = number_format((float) implode(explode(',',Cart::total())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
 
@@ -267,6 +278,61 @@ class CartController extends Controller
                 return UserShippingAddress::where('user_id',Auth::user()->id)->where('is_default',1)->first();
             });
         }
+
+        // ------ Test -----------
+        // return $cart_content;
+        // $attributes[][] = [];
+        // foreach($cart_content as $item){
+        //     // return $item->options->attributes['name'];
+        //     return count($item->options->attributes['name']);
+
+        //     for($i=0; $i< count($item->options->attributes['name']); $i++){
+        //         $attributes[$item->rowId][$i] = [
+        //                 'name' => $item->options->attributes['name'][$i],
+        //                 // 'value' => $item->options->attributes['value'][$i]
+        //             ];
+        //     }
+        // }
+        // return $attributes;
+
+
+
+
+        // $data = $cart_content['66da2a5e593c37b25d5cea24b02a1205']->options->attributes;
+        // $attributes = array();
+        // for($i=0; $i< count($data['name']); $i++){
+        //     $attributes[] = [
+        //             'name' => $data['name'][$i],
+        //             'value' => $data['value'][$i]
+        //         ];
+        // }
+
+        // foreach($attributes as $item){
+        //     return $item['value'];
+        // }
+        // return $attributes;
+
+
+
+
+
+        // foreach($data as $key => $item){
+        //     return json_decode(serialize($item));
+        // }
+        // $cart_content['0693784773e867fbd989140b179326fc']->options->attributes;
+
+        // $cart_content['0693784773e867fbd989140b179326fc']->options->attributes;
+        // $data = $cart_content['0693784773e867fbd989140b179326fc']->options->attributes;
+        // return $cart_content['cf32fb01aee0a0479af6670382f09fea']->options;
+        // Test End
+
+        // foreach($cart_content as $item){
+        //     $data = $item->options->attributes;
+        // }
+        // foreach($data as $key => $item){
+        //     return $key;
+        // }
+        // ------ Test End -----------
 
         return view('frontend.pages.checkout_page.checkout',compact('cart_content','cart_subtotal','cart_total','setting_free_shipping','setting_local_pickup','setting_flat_rate','countries',
                                             'cash_on_delivery','stripe','paypal','billing_address','shipping_address'));

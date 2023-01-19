@@ -80,10 +80,8 @@ if (Session::has('currency_rate')){
                         <div class="col-lg-6 d-none d-lg-flex d-xl-flex middle-column justify-content-center">
                             <form id="KeyWordHit" class="header-search" action="{{route('cartpro.search_product')}}" method="POST">
                                 @csrf
-
                                 <input type="text" list="browsers" id="searchText" placeholder="Search Products" name="search">
                                 <button type="submit" class="btn btn-search"><i class="ti-search"></i></button>
-                                {{-- <span class="btn btn-search"><i class="ti-search"></i></span> --}}
                                 <!-- Search Field-->
                                 <div class="row" id="search_field">
                                     <ul id="result">
