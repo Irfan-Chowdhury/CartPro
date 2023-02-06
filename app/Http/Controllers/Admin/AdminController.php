@@ -41,11 +41,9 @@ class AdminController extends Controller
     {
         return view('admin.pages.home');
     }
+
     public function dashboard()
     {
-        $data = $this->readJSONData('track/test.json');
-        return $data;
-
         $orders          = Order::orderBy('id','DESC')->get();
         $products        = Product::where('is_active',1)->get();
         $total_customers = User::where('user_type',0)->get()->count();
