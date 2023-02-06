@@ -19,14 +19,16 @@
                                 <thead>
                                     <tr>
                                         <th class="wd-15p">@lang('file.Date')</th>
+                                        <th class="wd-15p">@lang('file.Customer Name')</th>
                                         <th class="wd-15p">@lang('file.Coupon Name')</th>
                                         <th class="wd-15p">@lang('file.Coupon Code')</th>
                                         <th class="wd-15p">@lang('file.Orders')</th>
+                                        <th class="wd-15p">@lang('file.Status')</th>
                                         <th class="wd-15p">@lang('file.Total')</th>
                                     </tr>
                                 </thead>
                                 <tbody id="reportResult">
-                                    @foreach ($coupon_reports as $item)
+                                    {{-- @foreach ($coupon_reports as $item)
                                         @if ($item->orders->isNotEmpty())
                                             <tr>
                                                 <td>
@@ -52,103 +54,29 @@
                                                 </td>
                                             </tr>
                                         @endif
+                                    @endforeach --}}
+                                    @foreach ($coupon_reports as $item)
+                                        <tr>
+                                            <td>{{$item->date}}</td>
+                                            <td>{{$item->customer_name}}</td>
+                                            <td>{{$item->coupon_name}}</td>
+                                            <td>{{$item->coupon_code}}</td>
+                                            <td>{{$item->total_orders}}</td>
+                                            <td>{{$item->status}}</td>
+                                            <td>
+                                                @if(env('CURRENCY_FORMAT')=='suffix')
+                                                    {{ number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                @else
+                                                    {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') }}
+                                                @endif
+                                            </td>
+                                        </tr>
                                     @endforeach
-                                    {{--
-                                     <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>50.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>50.00</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 Mar, 2022 - 03 Jul, 2022</td>
-                                        <td>Summer-2022</td>
-                                        <td>summer2022</td>
-                                        <td>4</td>
-                                        <td>3239.00</td>
-                                    </tr> --}}
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -227,7 +155,7 @@
             $('#couponDataTable').DataTable({
                 drawCallback: function () {
                     var api = this.api();
-                    datatable_sum(api, 4);
+                    datatable_sum(api, 6);
                     // for (let i = 4; i <5; i++) {
                     //     datatable_sum(api, i);
                     // }

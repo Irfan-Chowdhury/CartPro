@@ -8,6 +8,7 @@ use App\Models\KeywordHit;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Tax;
+use App\Traits\TranslationTrait;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,74 +20,100 @@ use Spatie\Analytics\Period;
 
 class ReportController extends Controller
 {
-    public function todayReport()
-    {
-    	$reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereDate('created_at',Carbon::today())->get();
-
-        return view('admin.pages.report.today_report',compact('reports'));
-    }
-
-    public function thisWeekReport()
-    {
-        $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereMonth('created_at',Carbon::now()->month)->get();
-        return view('admin.pages.report.this_month',compact('reports'));
-    }
-
-
-    public function thisYearReport()
-    {
-        $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereYear('created_at',Carbon::now()->year)->get();
-        return view('admin.pages.report.this_year',compact('reports'));
-    }
-
-    public function filterReport(Request $request)
-    {
-        if ($request->start_date && $request->end_date) {
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
-
-            $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereBetween('date',[$start_date,$end_date])->get();
-            return view('admin.pages.report.filter_report',compact('reports'));
-        }else {
-            return view('admin.pages.report.filter_report');
-        }
-    }
+    use TranslationTrait;
 
     public function reportCoupon(Request $request)
     {
         if ($request->ajax()) {
+            $html='';
             if ($request->start_date && $request->end_date && $request->report_type) {
-                $from = date($request->start_date);
-                $to   = date($request->end_date);
+                $from        = date($request->start_date);
+                $to          = date($request->end_date);
                 $report_type = $request->report_type;
 
-                $coupon_reports = Coupon::with(['couponTranslation','couponTranslationEnglish','orders'=>function ($query) use($from,$to,$report_type){
-                    $query->whereBetween('date', [$from, $to])
-                          ->where('order_status', $report_type)
-                          ->get();
-                }])->get();
+                $orders = Order::with('coupon.couponTranslations','orderDetails')
+                            ->where('coupon_id','!=',null)
+                            ->whereBetween('date', [$from, $to])
+                            ->where('order_status', $report_type)
+                            ->get()
+                            ->map(function($order){
+                                return [
+                                    'id'          => $order->id,
+                                    'date'        => date('d M, Y',strtotime($order->date)),
+                                    'coupon_name' => $this->translations($order->coupon->couponTranslations)->coupon_name ?? null,
+                                    'coupon_code' => $order->coupon->coupon_code,
+                                    'total_orders'=> $order->orderDetails->count(),
+                                    'status'      => ucwords(str_replace("_", ' ', $order->order_status)),
+                                    'total_amount'=> $order->total,
+                                ];
+                            });
             }
             elseif ($request->start_date && $request->end_date) {
                 $from = date($request->start_date);
                 $to   = date($request->end_date);
 
-                $coupon_reports = Coupon::with(['couponTranslation','couponTranslationEnglish','orders'=>function ($query) use($from,$to){
-                    $query->whereBetween('date', [$from, $to])->get();
-                }])->get();
+                // $coupon_reports = Coupon::with(['couponTranslation','couponTranslationEnglish','orders'=>function ($query) use($from,$to){
+                //     $query->whereBetween('date', [$from, $to])->get();
+                // }])->get();
 
-                $html = $this->couponReportDataHtml($coupon_reports);
+                $orders = Order::with('coupon.couponTranslations','orderDetails')
+                        ->where('coupon_id','!=',null)
+                        ->whereBetween('date', [$from, $to])
+                        ->get()
+                        ->map(function($order){
+                            return [
+                                'id'          => $order->id,
+                                'date'        => date('d M, Y',strtotime($order->date)),
+                                'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                                'coupon_name' => $this->translations($order->coupon->couponTranslations)->coupon_name ?? null,
+                                'coupon_code' => $order->coupon->coupon_code,
+                                'total_orders'=> $order->orderDetails->count(),
+                                'status'      => ucwords(str_replace("_", ' ', $order->order_status)),
+                                'total_amount'=> $order->total,
+                            ];
+                        });
             }
             elseif ($request->report_type){
                 $report_type = $request->report_type;
-                $coupon_reports = Coupon::with(['couponTranslation','couponTranslationEnglish','orders'=>function ($query) use ($report_type){
-                    $query->where('order_status', $report_type)->get();
-                }])->get();
 
-                $html = $this->couponReportDataHtml($coupon_reports);
+                $orders = Order::with('coupon.couponTranslations','orderDetails')
+                    ->where('coupon_id','!=',null)
+                    ->where('order_status', $report_type)
+                    ->get()
+                    ->map(function($order){
+                        return [
+                            'id'          => $order->id,
+                            'date'        => date('d M, Y',strtotime($order->date)),
+                            'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                            'coupon_name' => $this->translations($order->coupon->couponTranslations)->coupon_name ?? null,
+                            'coupon_code' => $order->coupon->coupon_code,
+                            'total_orders'=> $order->orderDetails->count(),
+                            'status'      => ucwords(str_replace("_", ' ', $order->order_status)),
+                            'total_amount'=> $order->total,
+                        ];
+                    });
             }
+            $coupon_reports = json_decode(json_encode($orders), FALSE);
+            $html = $this->couponReportDataHtml($coupon_reports);
             return response()->json($html);
-        }else {
-            $coupon_reports = Coupon::with(['couponTranslation','couponTranslationEnglish','orders'])->get();
+        }
+        else {
+            $orders = Order::with('coupon.couponTranslations','orderDetails')
+                        ->where('coupon_id','!=',null)
+                        ->get()
+                        ->map(function($order){
+                            return [
+                                'id'          => $order->id,
+                                'date'        => date('d M, Y',strtotime($order->date)),
+                                'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                                'coupon_name' => $order->coupon->couponTranslations ? $this->translations($order->coupon->couponTranslations)->coupon_name : '',
+                                'coupon_code' => $order->coupon->coupon_code,
+                                'total_orders'=> $order->orderDetails->count(),
+                                'status'      => ucwords(str_replace("_", ' ', $order->order_status)),
+                                'total_amount'=> $order->total,
+                            ];
+                        });
+            $coupon_reports = json_decode(json_encode($orders), FALSE);
             return view('admin.pages.report.index',compact('coupon_reports'));
         }
     }
@@ -94,124 +121,145 @@ class ReportController extends Controller
     protected function couponReportDataHtml($coupon_reports){
         $html = '';
         foreach ($coupon_reports as $item){
-            if ($item->orders->isNotEmpty()){
                 $html .= '<tr><td>';
-                    $html .=  date('d M, Y',strtotime($item->orders[0]->date)) .' - '.date('d M, Y',strtotime($item->orders[count($item->orders)-1]->date)); //;
-                    $html .= '</td><td>';
-                    $html .= $item->couponTranslation->coupon_name ?? $item->couponTranslationEnglish->coupon_name ?? null ;
-                    $html .= '</td><td>';
-                    $html .= $item->coupon_code;
-                    $html .= '</td><td>';
-                    $html .= $item->orders->count();
-                    $html .= '</td><td>';
+                $html .= $item->date;
+                $html .= '</td><td>';
+                $html .= $item->customer_name;
+                $html .= '</td><td>';
+                $html .= $item->coupon_name;
+                $html .= '</td><td>';
+                $html .= $item->coupon_code;
+                $html .= '</td><td>';
+                $html .= $item->total_orders;
+                $html .= '</td><td>';
+                $html .= $item->status;
+                $html .= '</td><td>';
 
-                    $total_amount = 0;
-                    foreach ($item->orders as $value) {
-                        $total_amount += $value->total;
-                    }
-                    if(env('CURRENCY_FORMAT')=='suffix'){
-                        $html .= number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', '') .' '.env('DEFAULT_CURRENCY_SYMBOL');
-                    }else{
-                        $html .= env('DEFAULT_CURRENCY_SYMBOL') .' '.number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', '');
-                    }
-                    $html .= '</td></tr>';
-            }
+                if(env('CURRENCY_FORMAT')=='suffix'){
+                    $html .= number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') .' '.env('DEFAULT_CURRENCY_SYMBOL');
+                }else{
+                    $html .= env('DEFAULT_CURRENCY_SYMBOL') .' '.number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '');
+                }
+                $html .= '</td></tr>';
         }
         return $html;
     }
-    
+
 
     public function reportcustomerOrders(Request $request)
     {
         if ($request->ajax()) {
-            if ($request->start_date && $request->end_date && $request->report_type && $request->customer_email && $request->customer_name) {
-                $from = date($request->start_date);
-                $to   = date($request->end_date);
-                $report_type = $request->report_type;
-                $customer_name = explode(" ",$request->customer_name);
-
-                $customer_order_reports = User::with(['orders.orderDetails','orders'=>function ($query) use($from,$to,$report_type,$customer_name){
-                                    $query->whereBetween('date', [$from, $to])
-                                    ->where('order_status', $report_type)
-                                    ->get();
-                                }])
-                                ->where('first_name','LIKE', $customer_name[0].'%')
-                                ->where('email',$request->customer_email)
-                                ->where('user_type',0)
-                                ->where('is_active',1)
-                                ->get();
-            }
-            else if ($request->start_date && $request->end_date && $request->report_type && $request->customer_email) {
+            if ($request->start_date && $request->end_date && $request->report_type) {
                 $from = date($request->start_date);
                 $to   = date($request->end_date);
                 $report_type = $request->report_type;
 
-                $customer_order_reports = User::with(['orders.orderDetails','orders'=>function ($query) use($from,$to,$report_type){
-                                    $query->whereBetween('date', [$from, $to])
-                                    ->where('order_status', $report_type)
-                                    ->get();
-                                }])
-                                ->where('email',$request->customer_email)
-                                ->where('user_type',0)
-                                ->where('is_active',1)
-                                ->get();
-            }
-            else if ($request->start_date && $request->end_date && $request->report_type) {
-                $from = date($request->start_date);
-                $to   = date($request->end_date);
-                $report_type = $request->report_type;
-
-                $customer_order_reports = User::with(['orders.orderDetails','orders'=>function ($query) use($from,$to,$report_type){
-                                    $query->whereBetween('date', [$from, $to])
-                                    ->where('order_status', $report_type)
-                                    ->get();
-                                }])
-                                ->where('user_type',0)
-                                ->where('is_active',1)
-                                ->get();
+                $data = Order::with('orderDetails')
+                    ->whereBetween('date', [$from, $to])
+                    ->where('order_status', $report_type)
+                    ->get()
+                    ->map(function($order){
+                        return [
+                            'id'            => $order->id,
+                            'date'          => date('d M, Y',strtotime($order->date)),
+                            'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                            'email'         => $order->billing_email,
+                            'total_products'=> $order->orderDetails->count(),
+                            'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+                            'total_amount'  => $order->total,
+                        ];
+                    });
             }
             else if ($request->start_date && $request->end_date) {
                 $from = date($request->start_date);
                 $to   = date($request->end_date);
-
-                $customer_order_reports = User::with(['orders.orderDetails','orders'=>function ($query) use($from,$to){
-                                    $query->whereBetween('date', [$from, $to])->get();
-                                }])
-                                ->where('user_type',0)
-                                ->where('is_active',1)
-                                ->get();
+                $data = Order::with('orderDetails')
+                        ->whereBetween('date', [$from, $to])
+                        ->get()
+                        ->map(function($order){
+                            return [
+                                'id'            => $order->id,
+                                'date'          => date('d M, Y',strtotime($order->date)),
+                                'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                                'email'         => $order->billing_email,
+                                'total_products'=> $order->orderDetails->count(),
+                                'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+                                'total_amount'  => $order->total,
+                            ];
+                        });
             }
             elseif ($request->report_type){
                 $report_type = $request->report_type;
-                $customer_order_reports = User::with(['orders.orderDetails','orders'=>function ($query) use($report_type){
-                                            $query->where('order_status', $report_type)->get();
-                                        }])
-                                        ->where('user_type',0)
-                                        ->where('is_active',1)
-                                        ->get();
+                $data = Order::with('orderDetails')
+                        ->where('order_status', $report_type)
+                        ->get()
+                        ->map(function($order){
+                            return [
+                                'id'            => $order->id,
+                                'date'          => date('d M, Y',strtotime($order->date)),
+                                'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                                'email'         => $order->billing_email,
+                                'total_products'=> $order->orderDetails->count(),
+                                'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+                                'total_amount'  => $order->total,
+                            ];
+                        });
             }
-            elseif ($request->customer_name){
-                $customer_name = explode(" ",$request->customer_name);
-                $customer_order_reports = User::with('orders.orderDetails')
-                                        ->where('first_name','LIKE', $customer_name[0].'%')
-                                        ->where('user_type',0)
-                                        ->where('is_active',1)
-                                        ->get();
+            elseif ($request->report_type){
+                $report_type = $request->report_type;
+                $data = Order::with('orderDetails')
+                        ->where('order_status', $report_type)
+                        ->get()
+                        ->map(function($order){
+                            return [
+                                'id'            => $order->id,
+                                'date'          => date('d M, Y',strtotime($order->date)),
+                                'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                                'email'         => $order->billing_email,
+                                'total_products'=> $order->orderDetails->count(),
+                                'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+                                'total_amount'  => $order->total,
+                            ];
+                        });
             }
-            elseif ($request->customer_email){
-                $customer_order_reports = User::with('orders.orderDetails')
-                                        ->where('email',$request->customer_email)
-                                        ->where('user_type',0)
-                                        ->where('is_active',1)
-                                        ->get();
-            }
+            // elseif ($request->customer_email){
+            //     $data = Order::with('orderDetails')
+            //             ->get()
+            //             ->map(function($order){
+            //                 return [
+            //                     'id'            => $order->id,
+            //                     'date'          => date('d M, Y',strtotime($order->date)),
+            //                     'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+            //                     'email'         => $order->billing_email,
+            //                     'total_products'=> $order->orderDetails->count(),
+            //                     'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+            //                     'total_amount'  => $order->total,
+            //                 ];
+            //             });
+            // }
+            $customer_order_reports = json_decode(json_encode($data), FALSE);
             $html = $this->customerOrderReportHtml($customer_order_reports);
             return response()->json($html);
         }else {
-            $customer_order_reports = User::with('orders.orderDetails')
-                                    ->where('user_type',0)
-                                    ->where('is_active',1)
-                                    ->get();
+            // $customer_order_reports = User::with('orders.orderDetails')
+            //                         ->where('user_type',0)
+            //                         ->where('is_active',1)
+            //                         ->get();
+            $data = Order::with('orderDetails')
+                    ->get()
+                    ->map(function($order){
+                        return [
+                            'id'            => $order->id,
+                            'date'          => date('d M, Y',strtotime($order->date)),
+                            'customer_name' => $order->billing_first_name.' '.$order->billing_last_name,
+                            'email'         => $order->billing_email,
+                            'total_products'=> $order->orderDetails->count(),
+                            'status'        => ucwords(str_replace("_", ' ', $order->order_status)),
+                            'total_amount'  => $order->total,
+                        ];
+                    });
+
+    $customer_order_reports = json_decode(json_encode($data), FALSE);
             return view('admin.pages.report.customer_orders',compact('customer_order_reports'));
         }
     }
@@ -219,35 +267,24 @@ class ReportController extends Controller
     protected function customerOrderReportHtml($customer_order_reports){
         $html = '';
         foreach ($customer_order_reports as $item){
-            if ($item->orders->isNotEmpty()){
                 $html .= '<tr><td>';
-                    $html .=  date('d M, Y',strtotime($item->orders[0]->date)) .' - '.date('d M, Y',strtotime($item->orders[count($item->orders)-1]->date)); //;
-                    $html .= '</td><td>';
-                    $html .= $item->first_name .' '.$item->last_name;
-                    $html .= '</td><td>';
-                    $html .= $item->email;
-                    $html .= '</td><td>';
-                    $html .= $item->orders->count();
-                    $html .= '</td><td>';
+                $html .= $item->date; //;
+                $html .= '</td><td>';
+                $html .= $item->customer_name;
+                $html .= '</td><td>';
+                $html .= $item->email;
+                $html .= '</td><td>';
+                $html .= $item->total_products;
+                $html .= '</td><td>';
+                $html .= $item->status;
+                $html .= '</td><td>';
 
-                    $total_products = 0;
-                    foreach ($item->orders as $value){
-                        $total_products += $value->orderDetails->count();
-                    }
-                    $html .= $total_products;
-                    $html .= '</td><td>';
-
-                    $total_amount = 0;
-                    foreach ($item->orders as $value) {
-                        $total_amount += $value->total;
-                    }
-                    if(env('CURRENCY_FORMAT')=='suffix'){
-                        $html .= number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', '') .' '.env('DEFAULT_CURRENCY_SYMBOL');
-                    }else{
-                        $html .= env('DEFAULT_CURRENCY_SYMBOL') .' '.number_format((float)$total_amount, env('FORMAT_NUMBER'), '.', '');
-                    }
-                    $html .= '</td></tr>';
-            }
+                if(env('CURRENCY_FORMAT')=='suffix'){
+                    $html .= number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') .' '.env('DEFAULT_CURRENCY_SYMBOL');
+                }else{
+                    $html .= env('DEFAULT_CURRENCY_SYMBOL') .' '.number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '');
+                }
+                $html .= '</td></tr>';
         }
 
         return $html;
@@ -344,7 +381,6 @@ class ReportController extends Controller
         }
     }
 
-
     protected function productViewReportShow($google_results, $all_product_slugs){
         $product_name_and_views =[];
 
@@ -365,8 +401,6 @@ class ReportController extends Controller
         }
         return $product_name_and_views;
     }
-
-
 
     public function salesReport(Request $request)
     {
@@ -434,51 +468,42 @@ class ReportController extends Controller
                 }else{
                     $html .= env('DEFAULT_CURRENCY_SYMBOL').' '.number_format((float)$item->total, env('FORMAT_NUMBER'), '.', '');
                 }
+                $html .= '</td><td>';
+
+                $html .= $item->order_status;
                 $html .= '</td></tr>';
+
         }
 
         return $html;
     }
 
-    public function searchReport()
-    {
+    public function searchReport(){
         $keyword_hits = KeywordHit::select('keyword','hit')->get();
-
         return view('admin.pages.report.search_report',compact('keyword_hits'));
     }
 
     public function shippingReport(Request $request)
     {
         if ($request->ajax()) {
-            if ($request->start_date && $request->end_date) {
-
+            if ($request->start_date && $request->end_date && $request->report_type) {
                 $to = $request->start_date;
                 $end= $request->end_date;
-
-                $shipping_reports = Order::select('shipping_method', DB::raw('count(*) as total_order'), DB::raw('sum(total) as total'))
-                            ->selectRaw("MIN(date) AS first_date")
-                            ->selectRaw('MAX(date) AS last_date')
-                            ->whereBetween('date',[$to,$end])
-                            ->groupBy('shipping_method')
-                            ->get();
+                $shipping_reports = Order::with('orderDetails')->whereBetween('date',[$to,$end])->where('shipping_method',$request->report_type)->get();
             }
-            else if ($request->report_type ) {
-                $shipping_reports = Order::select('shipping_method', DB::raw('count(*) as total_order'), DB::raw('sum(total) as total'))
-                            ->selectRaw("MIN(date) AS first_date")
-                            ->selectRaw('MAX(date) AS last_date')
-                            ->where('shipping_method',$request->report_type)
-                            ->groupBy('shipping_method')
-                            ->get();
+            else if ($request->start_date && $request->end_date) {
+                $to = $request->start_date;
+                $end= $request->end_date;
+                $shipping_reports = Order::with('orderDetails')->whereBetween('date',[$to,$end])->get();
+            }
+            else if ($request->report_type) {
+                $shipping_reports = Order::with('orderDetails')->where('shipping_method',$request->report_type)->get();
             }
             $html = $this->shippingReportHtml($shipping_reports);
             return response()->json($html);
 
         }else {
-            $shipping_reports = Order::select('shipping_method', DB::raw('count(*) as total_order'), DB::raw('sum(total) as total'))
-                            ->selectRaw("MIN(date) AS first_date")
-                            ->selectRaw('MAX(date) AS last_date')
-                            ->groupBy('shipping_method')
-                            ->get();
+            $shipping_reports = Order::with('orderDetails')->get();
             return view('admin.pages.report.shipping_report',compact('shipping_reports'));
         }
     }
@@ -489,11 +514,13 @@ class ReportController extends Controller
         if (!empty($shipping_reports)) {
             foreach ($shipping_reports as $item){
                 $html .= '<tr><td>';
-                $html .=  date('d M, Y',strtotime($item->first_date)) .' - '.date('d M, Y',strtotime($item->last_date)); //;
+                $html .=  date('d M, Y',strtotime($item->date)); //;
                 $html .= '</td><td>';
-                $html .= $item->shipping_method;
+                $html .= ucwords(str_replace("_", ' ', $item->shipping_method));
                 $html .= '</td><td>';
-                $html .= $item->total_order;
+                $html .= $item->orderDetails->count();
+                $html .= '</td><td>';
+                $html .= ucwords(str_replace("_", ' ', $item->order_status));
                 $html .= '</td><td>';
 
                 if(env('CURRENCY_FORMAT')=='suffix'){
@@ -624,3 +651,40 @@ class ReportController extends Controller
             // $data = explode("//",$current_url);
             // $text = explode("/",$data[1]);
             // $product_name =  $text[3];
+
+
+
+
+
+// public function todayReport()
+// {
+//     $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereDate('created_at',Carbon::today())->get();
+
+//     return view('admin.pages.report.today_report',compact('reports'));
+// }
+
+// public function thisWeekReport()
+// {
+//     $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereMonth('created_at',Carbon::now()->month)->get();
+//     return view('admin.pages.report.this_month',compact('reports'));
+// }
+
+
+// public function thisYearReport()
+// {
+//     $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereYear('created_at',Carbon::now()->year)->get();
+//     return view('admin.pages.report.this_year',compact('reports'));
+// }
+
+// public function filterReport(Request $request)
+// {
+//     if ($request->start_date && $request->end_date) {
+//         $start_date = $request->start_date;
+//         $end_date = $request->end_date;
+
+//         $reports = Order::with('orderDetails.product.productTranslation','shippingDetails')->whereBetween('date',[$start_date,$end_date])->get();
+//         return view('admin.pages.report.filter_report',compact('reports'));
+//     }else {
+//         return view('admin.pages.report.filter_report');
+//     }
+// }

@@ -17,6 +17,7 @@
                             <th class="wd-15p text-center">@lang('file.Subtotal')</th>
                             <th class="wd-15p text-center">@lang('file.Shipping')</th>
                             <th class="wd-15p text-center">@lang('file.Total')</th>
+                            <th class="wd-15p text-center">@lang('file.Status')</th>
                         </tr>
                     </thead>
                     <tbody id="reportResult">
@@ -55,6 +56,7 @@
                                         {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->total, env('FORMAT_NUMBER'), '.', '') }}
                                     @endif
                                 </td>
+                                <td>{{$item->order_status}}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -133,7 +135,7 @@
       $('#datatable').DataTable({
             drawCallback: function () {
                 let api = this.api();
-                for (let i = 3; i < 6; i++) {
+                for (let i = 3; i < 7; i++) {
                     datatable_sum(api, i);
                 }
                 // var pageTotalColumn3 = api.column(3,{page:'current'}).data().sum();

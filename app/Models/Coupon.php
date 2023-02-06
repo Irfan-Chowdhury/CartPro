@@ -30,15 +30,13 @@ class Coupon extends Model
     ];
 
     //old
-    public function couponTranslations()
-    {
+    public function couponTranslations(){
     	return $this->hasMany(CouponTranslation::class,'coupon_id');
     }
 
 
     //new
-    public function couponTranslation()
-    {
+    public function couponTranslation(){
         $locale = Session::get('currentLocal');
     	return $this->hasOne(CouponTranslation::class,'coupon_id')
                     ->where('locale',$locale);

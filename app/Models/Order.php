@@ -50,4 +50,8 @@ class Order extends Model
     {
         return $this->hasOne(Shipping::class);
     }
+
+    public function coupon(){
+        return $this->belongsTo(Coupon::class,'coupon_id');
+    }
 }

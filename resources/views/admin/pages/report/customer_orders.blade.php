@@ -15,12 +15,12 @@
                             <th class="wd-15p">@lang('file.Customer Name')</th>
                             <th class="wd-15p">@lang('file.Customer Email')</th>
                             <th class="wd-15p text-center">@lang('file.Orders')</th>
-                            <th class="wd-15p text-center">@lang('file.Products')</th>
+                            <th class="wd-15p text-center">@lang('file.Status')</th>
                             <th class="wd-15p text-center">@lang('file.Total')</th>
                         </tr>
                     </thead>
                     <tbody id="reportResult">
-                        @foreach ($customer_order_reports as $item)
+                        {{-- @foreach ($customer_order_reports as $item)
                             @if ($item->orders->isNotEmpty())
                                 <tr>
                                     <td>
@@ -50,6 +50,26 @@
                                     </td>
                                 </tr>
                             @endif
+                        @endforeach --}}
+                        @foreach ($customer_order_reports as $item)
+                            {{-- @if ($item->orders->isNotEmpty()) --}}
+                                <tr>
+                                    <td>{{date('d M, Y',strtotime($item->date))}}</td>
+                                    <td> {{$item->customer_name}}</td>
+                                    <td>{{$item->email}}</td>
+                                    <td class="text-center">{{$item->total_products}}</td>
+                                    <td class="text-center">
+                                        {{$item->status}}
+                                    </td>
+                                    <td class="text-center">
+                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                            {{ number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') }} {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                        @else
+                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format((float)$item->total_amount, env('FORMAT_NUMBER'), '.', '') }}
+                                        @endif
+                                    </td>
+                                </tr>
+                            {{-- @endif --}}
                         @endforeach
                     </tbody>
                     <tfoot>
@@ -115,15 +135,15 @@
                                 </select>
                             </div>
 
-                            <div class="form-group mt-4">
+                            {{-- <div class="form-group mt-4">
                                 <h5 class="">@lang('file.Customer Name')</h5>
                                 <input type="text" name="customer_name" id="customer_name" class="form-control">
-                            </div>
+                            </div> --}}
 
-                            <div class="form-group mt-4">
+                            {{-- <div class="form-group mt-4">
                                 <h5 class="">@lang('file.Customer Email')</h5>
                                 <input type="text" name="customer_email" id="customer_email" class="form-control">
-                            </div>
+                            </div> --}}
 
                             <button type="submit" class="mt-4 btn btn-success">@lang('file.Filter')</button>
                         </form>
