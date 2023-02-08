@@ -116,6 +116,8 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
 
         //FAQ
         Route::get('/faq',[HomeController::class,'faq'])->name('cartpro.faq');
+        Route::get('/search-faq',[HomeController::class,'searchFAQ'])->name('cartpro.search-faq');
+        
         //Contact
         Route::get('/contact',[HomeController::class,'contact'])->name('cartpro.contact');
         Route::post('/contact-message',[HomeController::class,'contactMessage'])->name('cartpro.contact.message');

@@ -48,8 +48,4 @@
             </label>
         @endif
     </div>
-    <div class="custom-control custom-checkbox text-center mt-5 mb-5">
-        <input type="checkbox" class="custom-control-input" id="acceptTerms">
-        <label class="custom-control-label" for="acceptTerms">@lang('file.I have read and accecpt the') <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
-    </div>
 </div>

@@ -66,10 +66,10 @@ trait PaymentTrait{
                 //Limit Coupon
                 DB::table('coupons')
                 ->where('coupon_code',$request->coupon_code)
-                ->where('limit_qty','>',0)
-                ->orWhere('limit_qty','!=',NULL)
-                ->update(['limit_qty' => DB::raw('limit_qty - 1')]);
-                if ($coupon && $coupon->is_limit && $coupon->limit_qty==0) {
+                ->where('coupon_remaining','>',0)
+                ->orWhere('coupon_remaining','!=',NULL)
+                ->update(['coupon_remaining' => DB::raw('coupon_remaining - 1')]);
+                if ($coupon && $coupon->is_limit && $coupon->coupon_remaining==0) {
                     $coupon->update(['value'=>0.00]);
                 }
             }

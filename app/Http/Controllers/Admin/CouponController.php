@@ -83,6 +83,10 @@ class CouponController extends Controller
                         return 'Unlimited';
                     }
                 })
+                ->addColumn('coupon_remaining', function ($row)
+                {
+                    return $row->coupon_remaining ?? 0;
+                })
                 ->addColumn('action', function ($row)
                 {
                     $actionBtn = "";
@@ -178,8 +182,11 @@ class CouponController extends Controller
             $coupon->start_date    = $request->is_expire ? date('Y-m-d',strtotime($request->start_date)) : NULL;
             $coupon->end_date      = $request->is_expire ? date('Y-m-d',strtotime($request->end_date)) : NULL;
 
-            $coupon->is_limit      = $request->is_limit ?? 0;
-            $coupon->limit_qty     = $request->is_limit ? $request->limit_qty : null;
+            $coupon->is_limit         = $request->is_limit ?? 0;
+            if($request->is_limit){
+                $coupon->limit_qty        = $request->is_limit ? $request->limit_qty : null;
+                $coupon->coupon_remaining = $request->limit_qty;
+            }
 
             $coupon->is_active     = $request->is_active ?? 0;
 
@@ -258,8 +265,7 @@ class CouponController extends Controller
             'discount_type' => 'required',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()){
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
@@ -298,10 +304,27 @@ class CouponController extends Controller
             $coupon->end_date      = $request->is_expire ? date('Y-m-d',strtotime($request->end_date)) : NULL;
 
             $coupon->is_limit      = $request->is_limit ?? 0;
-            $coupon->limit_qty     = $request->is_limit ? $request->limit_qty : null;
+            // $coupon->limit_qty     = $request->is_limit ? $request->limit_qty : null;
 
             $coupon->is_active     = $request->is_active ?? 0;
 
+
+            if ($coupon->limit_qty==0) {
+                $coupon->limit_qty        = $request->limit_qty;
+                $coupon->coupon_remaining = $request->limit_qty;
+            }
+            elseif ($request->limit_qty > $coupon->limit_qty) {
+                $coupon->coupon_remaining = $request->coupon_remaining + ($request->limit_qty - $coupon->limit_qty);
+                $coupon->limit_qty        =  $request->limit_qty;
+            }
+            elseif ($request->limit_qty < $coupon->limit_qty) {
+                $coupon->coupon_remaining = $request->coupon_remaining - ($coupon->limit_qty - $request->limit_qty);
+                $coupon->limit_qty        = $request->limit_qty;
+            }
+            else {
+                $coupon->limit_qty        =  $request->limit_qty;
+                $coupon->coupon_remaining =  $coupon->coupon_remaining;
+            }
 
 
             DB::beginTransaction();
@@ -332,7 +355,8 @@ class CouponController extends Controller
 
                 return response()->json(['error' => $e->getMessage()]);
             }
-            return response()->json(['success'=>'Data Saved Successfully']);
+
+            return response()->json(['success'=>'Data Saved Successfully','coupon_remaining'=>$coupon->coupon_remaining]);
         }
     }
 

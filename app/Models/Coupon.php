@@ -22,11 +22,14 @@ class Coupon extends Model
         'maximum_spend',
         'usage_limit_per_coupon',
         'usage_limit_per_customer',
+
         'start_date',
         'end_date',
         'is_expire',
+
         'is_limit',
         'is_active',
+        'coupon_remaining'
     ];
 
     //old

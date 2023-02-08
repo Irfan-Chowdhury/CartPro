@@ -32,6 +32,7 @@
                      <th scope="col">{{trans('file.Code')}}</th>
                     <th scope="col">{{trans('file.Discount')}}</th>
                     <th scope="col">{{trans('file.Usage Limit Coupon')}}</th>
+                    <th scope="col">{{trans('file.Remaining Coupon')}}</th>
                     <th scope="col">{{trans('file.Status')}}</th>
                     <th scope="col">{{trans('file.Action')}}</th>
                 </tr>
@@ -106,6 +107,10 @@
                             name: 'limit_qty',
                         },
                         {
+                            data: 'coupon_remaining',
+                            name: 'coupon_remaining',
+                        },
+                        {
                             data: 'is_active',
                             name: 'is_active',
                             render:function (data) {
@@ -136,7 +141,7 @@
                     'columnDefs': [
                         {
                             "orderable": false,
-                            'targets': [0, 4],
+                            'targets': [0, 5],
                         },
                         {
                             'render': function (data, type, row, meta) {

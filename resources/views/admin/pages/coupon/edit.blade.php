@@ -4,6 +4,7 @@
 @section('admin_content')
 
 <section>
+
     <div class="container-fluid mb-3">
         <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('admin.coupon.index')}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Coupon Edit')</h4>
         <div id="alert_message" role="alert"></div>
@@ -74,10 +75,17 @@
                                     <input class="mt-3" type="checkbox" name="is_limit" {{$coupon->is_limit ? 'checked':''}} value="1 " data-toggle="collapse" data-target="#isLimit" aria-expanded="false" aria-controls="isLimit"> <strong>@lang('file.Enable Usage Limit Per Coupon')</strong>
                                     <div class="collapse {{$coupon->is_limit ? 'show':''}}" id="isLimit">
                                         <div class="card card-body">
+
                                             <div class="form-group row">
                                                 <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Usage Limit Per Coupon') }}</b></label>
                                                 <div class="col-sm-9">
                                                     <input type="number" min="0" name="limit_qty" class="form-control" placeholder="Limit Quantity" value="{{$coupon->limit_qty}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label"><b>{{ trans('file.Coupon Remaining') }}</b></label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" id="couponRemaining" readonly min="0" name="coupon_remaining" class="form-control" placeholder="Limit Quantity" value="{{$coupon->coupon_remaining}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -152,7 +160,7 @@
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-                            
+
                             let html = '';
                             if (data.errors) {
                                 html = '<div class="alert alert-danger">';
@@ -173,6 +181,7 @@
                                 }, 3000);
                             }
                             else if(data.success){
+                                $('#couponRemaining').val(data.coupon_remaining);
                                 $('#alert_message').fadeIn("slow"); //Check in top in this blade
                                 $('#alert_message').addClass('alert alert-success').html(data.success);
                                 setTimeout(function() {

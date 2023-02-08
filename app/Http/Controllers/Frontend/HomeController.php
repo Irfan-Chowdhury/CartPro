@@ -577,6 +577,50 @@ class HomeController extends FrontBaseController
         return view('frontend.pages.faq',compact('faq_types'));
     }
 
+    public function searchFAQ(Request $request)
+    {
+        $locale = Session::get('currentLocal');
+
+        $faqSearchBaseOnFaqType =   DB::table('faq_translations')
+                                    ->select('faq_translations.title','faq_translations.description','faq_translations.locale','faq_type_translations.type_name as type_name')
+                                    ->join('faqs','faqs.id','faq_translations.faq_id')
+                                    ->join('faq_type_translations','faq_type_translations.faq_type_id','faqs.faq_type_id')
+                                    ->where('faq_type_translations.locale',$locale)
+                                    ->where('faq_translations.locale',$locale)->where('faq_type_translations.type_name','LIKE', '%'.$request->search_faq.'%')
+                                    ->get()
+                                    ->groupBy('type_name');
+
+        $faqSearchBaseOnFaqTitle =  DB::table('faq_translations')
+                                    ->select('faq_translations.title','faq_translations.description','faq_translations.locale','faq_type_translations.type_name as type_name')
+                                    ->join('faqs','faqs.id','faq_translations.faq_id')
+                                    ->join('faq_type_translations','faq_type_translations.faq_type_id','faqs.faq_type_id')
+                                    ->where('faq_type_translations.locale',$locale)
+                                    ->where('faq_translations.locale',$locale)->where('faq_translations.title','LIKE', '%'.$request->search_faq.'%')
+                                    ->get()
+                                    ->groupBy('type_name');
+
+        $faqSearchBaseOnFaqDescription = DB::table('faq_translations')
+                                        ->select('faq_translations.title','faq_translations.description','faq_translations.locale','faq_type_translations.type_name as type_name')
+                                        ->join('faqs','faqs.id','faq_translations.faq_id')
+                                        ->join('faq_type_translations','faq_type_translations.faq_type_id','faqs.faq_type_id')
+                                        ->where('faq_type_translations.locale',$locale)
+                                        ->where('faq_translations.locale',$locale)->where('faq_translations.description','LIKE', '%'.$request->search_faq.'%')
+                                        ->get()
+                                        ->groupBy('type_name');
+
+
+        if(count($faqSearchBaseOnFaqType)>0){
+            $search_product = $faqSearchBaseOnFaqType;
+        }
+        else if(count($faqSearchBaseOnFaqTitle)>0){
+            $search_product = $faqSearchBaseOnFaqTitle;
+        }
+        else{
+            $search_product = $faqSearchBaseOnFaqDescription;
+        }
+        return view('frontend.pages.faq',compact('search_product'));
+    }
+
     public function contact()
     {
         $schedules = [];

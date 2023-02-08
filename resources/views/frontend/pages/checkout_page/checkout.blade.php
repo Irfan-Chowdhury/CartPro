@@ -177,44 +177,22 @@ if (Session::has('currency_symbol')){
                                     </div>
                                 </div>
                                 <hr>
-                                <!--Shipping-->
+                                <!--/Shipping-->
+
+                                <!-- Payment Option -->
                                 @include('frontend.pages.checkout_page.payment_options')
+                                <!--/ Payment Option -->
+
+                                <!-- Terms & Condition -->
+                                <div class="custom-control custom-checkbox text-center mt-5 mb-5">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <label class="custom-control-label" for="acceptTerms">@lang('file.I have read and accecpt the') <a class="theme-color" @isset($terms_and_condition_page_slug) href="{{route('page.Show',$terms_and_condition_page_slug)}}" target="__blank" @endisset >Terms & Conditions</a></label>
+                                </div>
+                                <!--/ Terms & Condition -->
                             </div>
 
-                            <!--Paypal-->
-                            <div id="paypal-button-container"></div>
-
-                            <div class="mb-3 d-none" id="stripeSection">
-                                <div class='form-row row'>
-                                    <div class='col-xs-12 form-group'>
-                                        <input class='form-control' size='4' type='text' name="card_name" placeholder="@lang('file.Name on Card')">
-                                    </div>
-                                </div>
-
-                                <div class='form-row row'>
-                                    <div class='col-xs-12 form-group'>
-                                        <input autocomplete='off' name="card_number" class='form-control card-number' placeholder="@lang('file.Card Number')" size='20' type='text'>
-                                    </div>
-                                </div>
-
-                                <div class='form-row row'>
-                                    <div class='col-xs-12 col-md-4 form-group cvc'>
-                                        <input autocomplete='off' name="card-cvc" class='form-control card-cvc' size='4' type='text' placeholder="CVC (ex. 311)">
-                                    </div>
-                                    <div class='col-xs-12 col-md-4 form-group expiration'>
-                                        <input class='form-control card-expiry-month' name="card-expiry-month" size='2' type='text' placeholder="Expiration Month (MM)">
-                                    </div>
-                                    <div class='col-xs-12 col-md-4 form-group expiration'>
-                                        <input class='form-control card-expiry-year' name="card-expiry-year" placeholder='Expiration Year (YYYY)' size='4' type='text'>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- <div class="checkout-actions mar-top-30 pay_now_div">
-                                <button type="submit" class="btn button lg style1 d-block text-center w-100" disabled title="disabled" id="orderBtn">{{__('file.Payment Procced')}}</button>
-                            </div> --}}
                             <div class="mar-top-30">
-                                <button type="submit" class="btn btn-success text-center w-100">{{__('file.Payment Procced')}}</button>
+                                <button type="submit" id="paymentProccedBtn" disabled class="btn btn-success text-center w-100">{{__('file.Payment Procced')}}</button>
                             </div>
                         </div>
                     </div>
@@ -301,17 +279,31 @@ if (Session::has('currency_symbol')){
                         console.log(data)
                         if (data.type=='success') {
                             amountSetting(data);
-                            $('#couponValue').val(data.coupon_value); //For Form
-                            if(data.coupon_value==0){
+
+                            couponValue = +data.coupon_value;
+
+                            $('#couponValue').val(data.couponValue); //For Form
+                            $('#couponValueDisplay').text(couponValue.toFixed(2));
+
+                            if(data.coupon_value==0 && data.expired===true){
+                                $('#invalidCoupon').text('Coupon is Expired !!');
+                                $('#couponValue').val(couponValue); //For Form
+                                $('#couponValueDisplay').text(couponValue.toFixed(2));
+                            }
+                            else if(data.coupon_value==0){
                                 $('#invalidCoupon').text('Invalid Coupon !!');
-                            }else{
+                                $('#couponValue').val(couponValue); //For Form
+                                $('#couponValueDisplay').text(couponValue.toFixed(2));
+                            }
+                            else{
                                 $('#invalidCoupon').empty();
+                                $('#couponValue').val(couponValue); //For Form
+                                $('#couponValueDisplay').text(couponValue.toFixed(2));
                             }
                         }
                     }
                 })
             });
-
 
             //Shipping
             $('.shippingCharge').on("click",function(e){
@@ -340,74 +332,23 @@ if (Session::has('currency_symbol')){
 
 
             let paymentType;
-            //----------- Submit ----------
-            // $('input[name="payment_type"]').change(function(){
-            //     paymentType = $(this).val();
+            $("input[type='checkbox']").change(function() {
+                if($(this).is(":checked")) {
+                    if($('input[name="payment_type"]').is(":checked")) {
+                        $("#paymentProccedBtn").removeAttr("disabled");
+                        console.log("Radio button is checked");
+                        console.log("And Checkbox is checked");
+                    } else {
+                        $("#paymentProccedBtn").attr("disabled", "disabled");
+                        console.log("Radio button is unchecked");
+                        console.log("But Checkbox is checked");
+                    }
+                }else {
+                    $("#paymentProccedBtn").attr("disabled", "disabled");
+                    console.log("Checkbox is unchecked");
+                }
+            });
 
-            //     $('#acceptTerms').prop('checked', false);
-            //     $('#paypal-button-container').empty();
-            //     $('.pay_now_div').show();
-            //     $('#orderBtn').prop("disabled",true).prop("title",'Disable');
-
-            //     if (paymentType!='stripe'){
-            //         $('#stripeSection').addClass('d-none');
-            //     }
-
-            //     $('#acceptTerms').change(function() {
-            //         if(this.checked) {
-            //             if (paymentType=='cash_on_delivery' || paymentType=='sslcommerz') {
-            //                 $("#payment-form").unbind();
-            //                 $('#stripeSection').addClass('d-none');
-            //                 $('#paypal-button-container').empty();
-            //                 $('.pay_now_div').show();
-            //                 $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-            //             }
-            //             else if (paymentType=='paypal') {
-            //                 paypalPaymentGateway();
-            //             }
-            //             else if (paymentType=='stripe') {
-            //                 stripePaymentGateway();
-            //             }
-            //             else if (paymentType=='razorpay' || paymentType=='paystack'){
-            //                 $('#orderBtn').prop("disabled",false).prop("title",'Pay Now');
-            //             }
-            //         }
-            //     });
-            // });
-
-            // $('#orderBtn').on("click",function(e){
-            //     if (paymentType=='razorpay'){
-            //         e.preventDefault();
-            //         $('totalAmount').val();
-            //             var options =
-            //             {
-            //                 "key": "{{env('RAZORPAY_KEY')}}",
-            //                 "amount": $('#totalAmount').val()*100,
-            //                 "currency": "INR",
-            //                 // "name": "Acme Corp",
-            //                 // "description": "Test Transaction",
-            //                 // "image": "https://cdn.razorpay.com/logos/F9Yhfb7ZXjXmIQ_medium.png",
-            //                 // "handler": function (response){
-            //                 //     alert(response.razorpay_payment_id);
-            //                 //     alert(response.razorpay_order_id);
-            //                 //     alert(response.razorpay_signature)
-            //                 // },
-            //                 // "prefill": {
-            //                 //     "name": "Gaurav Kumar",
-            //                 //     "email": "gaurav.kumar@example.com",
-            //                 //     "contact": "9999988999"
-            //                 // },
-            //                 // "notes": {
-            //                 //     "address": "Razorpay Corporate Office"
-            //                 // },
-            //                 // "theme": {
-            //                 //     "color": "#3399cc"
-            //                 // }
-            //             };
-            //             var rzp1 = new Razorpay(options);
-            //             rzp1.open();
-            //         }
-            // });
 
             //-- For Paystack ------
             $('input[name="billing_email"]').keyup(function(){

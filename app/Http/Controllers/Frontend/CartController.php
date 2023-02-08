@@ -240,8 +240,6 @@ class CartController extends Controller
 
         $cart_content = Cart::content();
 
-        return $cart_content;
-
         $cart_subtotal = number_format((float) implode(explode(',',Cart::subtotal())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
         $cart_total = number_format((float) implode(explode(',',Cart::total())) * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '');
 
@@ -399,7 +397,7 @@ class CartController extends Controller
             $expired = false;
             if ($request->coupon_code!=NULL) {
                 $coupon =  Coupon::where('coupon_code',$request->coupon_code)
-                            ->where('limit_qty','>',0)
+                            ->where('coupon_remaining','>',0)
                             ->first();
                 if ($coupon && $coupon->is_expire) {
                     if(date('Y-m-d',strtotime($coupon->start_date)) <= date('Y-m-d') &&  date('Y-m-d',strtotime($coupon->end_date)) >= date('Y-m-d')){
