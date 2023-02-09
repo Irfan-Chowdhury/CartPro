@@ -146,31 +146,24 @@
                 $('#demo').toggleClass('open');
 
                 $('.color-change-theme').click(function() {
-
                     var color = $(this).data('color');
                     $('#color-input').val(color);
                     $('body').css('--theme-color', color);
-
                 });
 
                 $('.color-change-navbg').click(function() {
-
                     var color = $(this).data('color');
                     $('#color-input').val(color);
                     $('body').css('--navbg-color', color);
-
                 });
 
                 $('.color-change-navtext').click(function() {
-
                     var color = $(this).data('color');
                     var hover = $(this).data('hover-color');
                     $('#color-input').val(color);
                     $('body').css('--menu-text-color', color);
                     $('body').css('--menu-text-hover-color', hover);
-
                 });
-
             });
 
         })(jQuery);
@@ -262,12 +255,30 @@
                             var cart_content = data.cart_content;
                             $.each( cart_content, function( key, value ) {
                                 let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
+                                // For Attribute
+                                if (value.options.attributes) {
+                                    var data = value.options.attributes;
+                                    var attributes = [];
+                                    for (var i = 0; i < data.name.length; i++) {
+                                        attributes.push({
+                                            name: data.name[i],
+                                            value: data.value[i]
+                                        });
+                                    }
+                                }
                                 var image = "{{url('/')}}/"+'public'+value.options.image;
                                 html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                        '<img src="'+image+'">'+
-                                        '</a></div><div class="shp__pro__details"><h2>'+
-                                        '<a href="#">'+value.name+'</a></h2>'+
-                                        '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
+                                            '<img src="'+image+'">'+
+                                            '</a></div><div class="shp__pro__details"><h2>'+
+                                            '<a href="#">'+value.name+'</a></h2>';
+                                // For Attribute
+                                if (value.options.attributes) {
+                                    for (var i = 0; i < attributes.length; i++) {
+                                    var attribute = attributes[i];
+                                        html += "<div class='row'><span>" + attribute.name + " :" + attribute.value + "</span></div>";
+                                    }
+                                }
+                                html += '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
                                         '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
                             });
                             $('.cart_list').html(html);

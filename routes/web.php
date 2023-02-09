@@ -56,6 +56,7 @@ use App\Http\Controllers\API\ClientAutoUpdateController;
 use App\Http\Controllers\Admin\DeveloperSectionController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Middleware\DemoCheck;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,31 +69,17 @@ use App\Http\Middleware\DemoCheck;
 |
 */
 
-// Route::get('/maintenance-mode', function() {
-//     return view('maintenance');
-// });
+
 
 DefaultAuth::routes();
 
-// Route::get('/optimize', function() {
-//     Artisan::call('optimize:clear');
-//     return redirect()->back();
-// });
 
-// Route::get('/DBSEED', function() {
-//     Artisan::call('db:seed --class=CountrySeeder');
-//     return view('admin.pages.country.index');
-// });
-
-// Route::get('/migrate', function() {
-//     Artisan::call('migrate');
-//     return 'Successfully Migrated';
-// });
-
-
-// Route::get('/documentation',function(){
-//     return File::get(public_path() . '/documentation/index.html');
-// });
+Route::get('/cart-data', function() {
+    return Cart::content();
+    // return Cart::weight();
+    $cart_content = Cart::content();
+    return $cart_content['c2857b6429ca61a9430c069b6f87f54e']->options->attributes['name'][0];
+});
 
 Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function ()
 {
@@ -117,7 +104,7 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
         //FAQ
         Route::get('/faq',[HomeController::class,'faq'])->name('cartpro.faq');
         Route::get('/search-faq',[HomeController::class,'searchFAQ'])->name('cartpro.search-faq');
-        
+
         //Contact
         Route::get('/contact',[HomeController::class,'contact'])->name('cartpro.contact');
         Route::post('/contact-message',[HomeController::class,'contactMessage'])->name('cartpro.contact.message');

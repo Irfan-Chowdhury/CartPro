@@ -48,8 +48,8 @@ class CartController extends Controller
 
             $attribute_names = array();
             $attribute_names = explode(",",$request->attribute_names);
-            $value_ids       = array();
-            $value_ids       = explode(",",$request->value_ids);
+            // $value_ids       = array();
+            // $value_ids       = explode(",",$request->value_ids);
             $value_names     = array();
             $value_names     = explode(",",$request->value_names);
 
@@ -71,7 +71,8 @@ class CartController extends Controller
             }
 
             $data = [];
-            $data['id']     = $product->id;
+            // $data['id']     = $product->id;
+            $data['id']     = uniqid();
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
             $data['qty']    = $request_qty;
             $data['tax']    = 0;
@@ -85,7 +86,9 @@ class CartController extends Controller
                 $data['price']  = $product->price;
             }
             $data['weight'] = 1;
-            $data['options']['image'] = $product->baseImage->image;
+            $data['options']['image']= $product->baseImage->image;
+            $data['options']['product_id'] = $product->id;
+
 
             // if (!empty($attribute_name_arr) && !empty($request->value_ids)) {
             //     foreach($attribute_name_arr as $key => $value) {
@@ -97,11 +100,9 @@ class CartController extends Controller
             if ($attribute_names[0]!=NULL && $value_names[0]!=NULL) {
                 for ($i=0; $i < count($attribute_names); $i++) {
                    $data['options'][$attribute_names[$i]] = $value_names[$i];
-
-                    // --------- Test (Checkout Visible)-------------
-                    // $data['options']['attributes']['name'][$i] = $attribute_names[$i];
-                    // $data['options']['attributes']['value'][$i] = $value_names[$i];
-                   // ----------- Test End -------
+                    // --------- Only Attribute -------------
+                    $data['options']['attributes']['name'][$i]  = $attribute_names[$i];
+                    $data['options']['attributes']['value'][$i] = $value_names[$i];
                }
             }
 
@@ -112,10 +113,6 @@ class CartController extends Controller
             $data['options']['manage_stock']= $product->manage_stock ?? null;
             $data['options']['stock_qty']= $product->qty ?? null;
             $data['options']['in_stock']= $product->in_stock ?? 0;
-
-
-            // Cart::add($data);
-            // return;
 
             if ($rowId) {
                 Cart::update($rowId, $data);

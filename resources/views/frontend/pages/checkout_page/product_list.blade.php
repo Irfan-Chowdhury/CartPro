@@ -29,6 +29,7 @@
                                         </span>
                                     </div>
 
+                                    <!-- Attributes -->
                                     <br>
                                     <div class="mt-2 input-qty">
                                         @php
@@ -43,7 +44,6 @@
                                                 }
                                             }
                                         @endphp
-
                                         @if ($item->options->attributes)
                                             @foreach ($attributes as $attribute)
                                                 <div class="row"><span><b>{{$attribute['name']}} :</b>{{$attribute['value']}}</span></div>

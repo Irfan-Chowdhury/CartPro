@@ -103,7 +103,7 @@ trait PaymentTrait{
         {
             $order_detail = new OrderDetail();
             $order_detail->order_id   = $order->id;
-            $order_detail->product_id = $row->id;
+            $order_detail->product_id = $row->options->product_id;;
             $order_detail->category_id= $row->options->category_id;
             $order_detail->brand_id   = $row->options->brand_id;
             $order_detail->image      = $row->options->image;
@@ -121,7 +121,6 @@ trait PaymentTrait{
         //Mail
         $this->sendMailWithOrderDetailsInvoice($reference_no);
         $order->notify(new NewOrderNotification($reference_no));
-
         return $order_id;
     }
 

@@ -323,6 +323,25 @@ if (Session::has('currency_rate')){
                                     </div>
                                     <div class="shp__pro__details">
                                         <h2><a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">{{$item->name}}</a></h2>
+                                        
+                                        @php
+                                            if($item->options->attributes){
+                                                $data = $item->options->attributes;
+                                                $attributes = array();
+                                                for($i=0; $i< count($data['name']); $i++){
+                                                    $attributes[] = [
+                                                            'name' => $data['name'][$i],
+                                                            'value' => $data['value'][$i]
+                                                        ];
+                                                }
+                                            }
+                                        @endphp
+                                        @if ($item->options->attributes)
+                                            @foreach ($attributes as $attribute)
+                                                <div class="row"><span>{{$attribute['name']}} :{{$attribute['value']}}</span></div>
+                                            @endforeach
+                                        @endif
+
                                         <span class="my_cart_specific_qty_{{$item->rowId}}">{{$item->qty}}</span> x <span class="shp__price">
                                             @if(env('CURRENCY_FORMAT')=='suffix')
                                                 <span>{{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')

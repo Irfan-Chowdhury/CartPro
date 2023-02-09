@@ -72,7 +72,7 @@
                                                 $attributes = json_decode($item->options);
                                             @endphp
                                             @forelse ($attributes as $key => $item)
-                                                @if ($key!='image' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
+                                                @if ($key!='image' && $key!='product_id' && $key!='attributes' && $key!='product_slug' && $key!='category_id' && $key!= 'manage_stock' && $key!='stock_qty' && $key!='in_stock' && $key!='brand_id')
                                                     <p><i><b>{{$key}}</b> :{{$item}}</i></p>
                                                 @endif
                                             @empty

@@ -14,12 +14,6 @@ if (Session::has('currency_symbol')){
 }
 @endphp
 
-
-
-
-
-
-
 @extends('frontend.layouts.master')
 
 @section('meta_info')
@@ -317,16 +311,6 @@ if (Session::has('currency_symbol')){
                                     <div class="col-sm-12">
                                         <label ></label>
                                         <ul class="product-rating">
-                                            {{-- @php
-                                                for ($i=1; $i <=5 ; $i++){
-                                                    if ($i<=$product->rating){  @endphp
-                                                        <li><i class="las la-star"></i></li>
-                                            @php
-                                                    }else { @endphp
-                                                        <li><i class="lar la-star"></i></li>
-                                            @php        }
-                                                }
-                                            @endphp --}}
                                             <li><i class="lar la-star" id="star_1"></i></li>
                                             <li><i class="lar la-star" id="star_2"></i></li>
                                             <li><i class="lar la-star" id="star_3"></i></li>
@@ -572,7 +556,6 @@ if (Session::has('currency_symbol')){
 
             $("#productAddToCartSingle").on("submit",function(e){
                 e.preventDefault();
-
                 let qty = $("input[name=qty]").val();
                 if (qty) {
                     const Toast = Swal.mixin({
@@ -600,6 +583,11 @@ if (Session::has('currency_symbol')){
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
+
+                            $('.attribute_value').removeClass('text-primary')
+                                                    .removeClass('selected')
+                                                    .addClass('deselect');
+
                             if (data.type=='success') {
                                 let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}}
                                 let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
@@ -610,15 +598,33 @@ if (Session::has('currency_symbol')){
 
                                 var html = '';
                                 var cart_content = data.cart_content;
-                                $.each( cart_content, function( key, value ) {
+                                $.each(cart_content, function( key, value ) {
                                     let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
 
+                                    // For Attribute
+                                    if (value.options.attributes) {
+                                        var data = value.options.attributes;
+                                        var attributes = [];
+                                        for (var i = 0; i < data.name.length; i++) {
+                                            attributes.push({
+                                                name: data.name[i],
+                                                value: data.value[i]
+                                            });
+                                        }
+                                    }
                                     var image = "{{url('/')}}/"+'public'+value.options.image;
                                     html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
-                                            '<img src="'+image+'">'+
-                                            '</a></div><div class="shp__pro__details"><h2>'+
-                                            '<a href="#">'+value.name+'</a></h2>'+
-                                            '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
+                                                '<img src="'+image+'">'+
+                                                '</a></div><div class="shp__pro__details"><h2>'+
+                                                '<a href="#">'+value.name+'</a></h2>';
+                                    // For Attribute
+                                    if (value.options.attributes) {
+                                        for (var i = 0; i < attributes.length; i++) {
+                                        var attribute = attributes[i];
+                                            html += "<div class='row'><span>" + attribute.name + " :" + attribute.value + "</span></div>";
+                                        }
+                                    }
+                                    html += '<span>'+value.qty+'</span> x <span class="shp__price">'+ moneySymbol +' '+singleProductCurrency.toFixed(2)+'</span>'+
                                             '</div><div class="remove__btn"><a href="#" class="remove_cart" data-id="'+value.rowId+'" title="Remove this item"><i class="las la-times"></i></a></div></div>';
                                 });
                                 $('.cart_list').html(html);
@@ -687,13 +693,13 @@ if (Session::has('currency_symbol')){
                 $('#rating').val(5);
             })
 
-            $('.attribute_value_productTab1').on("click",function(e){
-                e.preventDefault();
-                $(this).addClass('selected');
-                var selectedVal = $(this).data('value_id');
-                values.push(selectedVal);
-                $('.value_ids_products').val(values);
-            });
+            // $('.attribute_value_productTab1').on("click",function(e){
+            //     e.preventDefault();
+            //     $(this).addClass('selected');
+            //     var selectedVal = $(this).data('value_id');
+            //     values.push(selectedVal);
+            //     $('.value_ids_products').val(values);
+            // });
 
         })(jQuery);
     </script>

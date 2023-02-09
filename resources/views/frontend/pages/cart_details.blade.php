@@ -72,6 +72,25 @@ if (Session::has('currency_symbol')){
                                                             <a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">
                                                                 <h3 class="h6">{{$item->name}}</h3>
                                                             </a>
+
+                                                            @php
+                                                                if($item->options->attributes){
+                                                                    $data = $item->options->attributes;
+                                                                    $attributes = array();
+                                                                    for($i=0; $i< count($data['name']); $i++){
+                                                                        $attributes[] = [
+                                                                                'name' => $data['name'][$i],
+                                                                                'value'=> $data['value'][$i]
+                                                                            ];
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if ($item->options->attributes)
+                                                                @foreach ($attributes as $attribute)
+                                                                    <div class="row"><span>{{$attribute['name']}} :{{$attribute['value']}}</span></div>
+                                                                @endforeach
+                                                            @endif
+
                                                             <div class="input-qty">
                                                                 <form class="quantity_change_submit" data-id="{{$item->rowId}}" method="get">
                                                                     <span class="input-group-btn">
