@@ -1,48 +1,49 @@
 <?php
 
-use Illuminate\Support\Facades\Auth AS DefaultAuth;
-
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeSetController;
-use App\Http\Controllers\Auth;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CouponController;
-use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CurrencyRateController;
-use App\Http\Controllers\Admin\DeveloperSectionController;
-use App\Http\Controllers\Admin\FAQController;
-use App\Http\Controllers\Admin\FaqTypeController;
 use App\Http\Controllers\Admin\FlashSaleController;
 use App\Http\Controllers\Admin\LanguageController;
-use App\Http\Controllers\Admin\LocaleFileController;
+use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
-use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\ShippingLocationController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\StoreFrontController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\API\ClientAutoUpdateController;
+use App\Http\Controllers\Admin\LocaleFileController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\FAQController;
+use App\Http\Controllers\Admin\FaqTypeController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\ShippingLocationController;
+use Illuminate\Support\Facades\Auth AS DefaultAuth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth;
+use App\Http\Controllers\API\ClientAutoUpdateController;
+use App\Http\Controllers\Admin\DeveloperSectionController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Middleware\DemoCheck;
 
 /*
 |--------------------------------------------------------------------------
-| Admin Section
+| Admin Routes
 |--------------------------------------------------------------------------
 */
 
@@ -51,8 +52,15 @@ DefaultAuth::routes();
 
 Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function ()
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Section
+    |--------------------------------------------------------------------------
+    */
+
+
     Route::get('/admin',[Auth\LoginController::class,'showAdminLoginForm'])->name('admin');
-    Route::post('/admin/login',[Auth\LoginController::class,'login'])->name('admin.login');
+    Route::post('/admin/login',[LoginController::class,'login'])->name('admin.login');
 
     Route::group(['prefix' => 'admin','middleware'=>'admin_check'], function () {
         Route::group(['namespace'=>'Admin'], function () {

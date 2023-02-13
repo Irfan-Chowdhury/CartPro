@@ -124,6 +124,15 @@ class ProductController extends Controller
             }
         }
 
+        if($request->weight_base_calculation && $request->weight==null){
+            $this->setErrorMessage('Weight can not be empty. Please input the weight');
+            return redirect()->back();
+        }
+        else if($request->weight_base_calculation && ($request->weight > 1 || $request->weight < 1)){
+            $this->setErrorMessage('For weight base calculation you have to set weight = 1');
+            return redirect()->back();
+        }
+
         $local = Session::get('currentLocal');
 
         if (auth()->user()->can('product-store'))
@@ -135,6 +144,9 @@ class ProductController extends Controller
             $product->tax_id        = $request->tax_id;
             $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
             $product->price         = $request->price;
+
+            $product->weight        = $request->weight_base_calculation ? $request->weight : null;
+            $product->weight_base_calculation  = $request->weight_base_calculation ?? 0;
 
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', '');
 
@@ -379,6 +391,17 @@ class ProductController extends Controller
             }
         }
 
+        if($request->weight_base_calculation && $request->weight==null){
+            $this->setErrorMessage('Weight can not be empty. Please input the weight');
+            return redirect()->back();
+        }
+        else if($request->weight_base_calculation && ($request->weight > 1 || $request->weight < 1)){
+            $this->setErrorMessage('For weight base calculation you have to set weight = 1');
+            return redirect()->back();
+        }
+
+        // ProductAttributeValue::
+
 
 
 
@@ -395,6 +418,8 @@ class ProductController extends Controller
             }
             $product->tax_id        = $request->tax_id;
             $product->price         = $request->price; //1st option
+            $product->weight        = $request->weight_base_calculation ? $request->weight : null;
+            $product->weight_base_calculation  = $request->weight_base_calculation ?? 0;
             $product->special_price = number_format((float)$request->special_price, env('FORMAT_NUMBER'), '.', ''); //2nd option
 
             if ($request->special_price && $request->price > $request->special_price){
@@ -510,11 +535,18 @@ class ProductController extends Controller
                 ProductAttributeValue::where('product_id',$product->id)->delete();
                 $attributeValueTranslation = AttributeValueTranslation::whereIn('attribute_value_id',$request->attribute_value_id)->get();
                 foreach($attributeValueTranslation as $item){
-                    ProductAttributeValue::insert([
-                            'product_id'=> $product->id,
-                            'attribute_id'=> $item->attribute_id,
-                            'attribute_value_id'=> $item->attribute_value_id
-                    ]);
+                    $checkProductAttributeValueExists = ProductAttributeValue::where('product_id',$product->id)
+                                            ->where('attribute_id',$item->attribute_id)
+                                            ->where('attribute_value_id',$item->attribute_value_id)
+                                            ->exists();
+                                            
+                    if (!$checkProductAttributeValueExists) {
+                        ProductAttributeValue::insert([
+                                'product_id'=> $product->id,
+                                'attribute_id'=> $item->attribute_id,
+                                'attribute_value_id'=> $item->attribute_value_id
+                        ]);
+                    }
                 }
             }else{
                 ProductAttributeValue::where('product_id',$product->id)->delete();

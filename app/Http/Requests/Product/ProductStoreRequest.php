@@ -23,7 +23,7 @@ class ProductStoreRequest extends FormRequest
             'description' => 'required',
             'price'       => 'required',
             'sku'         => 'required|unique:products',
-            'base_image'  => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
+            'base_image'  => 'image|required|max:10240|mimes:jpeg,png,jpg,gif,webp',
             'category_id' => 'required',
             'tax_id'      => 'required',
         ];

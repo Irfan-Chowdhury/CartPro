@@ -16,6 +16,8 @@ class Product extends Model
         'tax_class_id',
         'slug',
         'price',
+        'weight',
+        'weight_base_calculation',
         'special_price',
         'is_special',
         'special_price_type',

@@ -583,7 +583,6 @@ if (Session::has('currency_symbol')){
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-
                             $('.attribute_value').removeClass('text-primary')
                                                     .removeClass('selected')
                                                     .addClass('deselect');

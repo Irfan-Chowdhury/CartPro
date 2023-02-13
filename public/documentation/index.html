@@ -107,7 +107,7 @@
             requirements for running the software is listed below .Please do check if your server matches those
             requirements</p>
         <ul>
-            <li>PHP &gt;= 7.3.0</li>
+            <li>PHP - 7.4</li>
             <li>BCMath PHP Extension</li>
             <li>Ctype PHP Extension</li>
             <li>Fileinfo PHP Extension</li>
@@ -603,6 +603,18 @@
             <li><b>Product New From:</b> The start date for the New badge in the product card.</li>
             <li><b>Product New To:</b> The end date for the New badge in the product card.</li>
         </ul>
+
+        <br>
+        <!--Weight-->
+        <p><b><i>Weight:</i></b></p>
+        <p>You can maintain weight base calculation.</p>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_113.png"></p>
+        <ul>
+            <li>Price will be calculated on weight basis. (1 KG= 1000 gm). On the other hand if your product depends on weight basis like hen, fruits, milk etc. then set <b>"1"</b> in weight input field and enable the checkbox because product will calculate 1 KG = 1000 gm basis and the attribute value should be assigned as like <b>"200 gm", "500 gm", "1000 gm"</b> etc.</li>
+            <li>This time attribute values should look like which is given below -</li>
+            <li>If you don't want weight base calculation, then untick the checkbox</li>
+        </ul>
+        <p><img src="public/documentation/assets/images/cartpro_admin/Screenshot_114.png"></p>
     </section>
 
     <section id="review">
@@ -693,13 +705,15 @@
             <strong>Coupons --> Create</strong><br>
             1. General : You can set Coupon Name, Coupon Code, Discount Type, Value, Free Shipping, Start Date, End Date, Status.
         </p>
-        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_28.png"></p>
+        <p><img alt="" src="public/documentation/assets/images/cartpro_admin/Screenshot_115.jpeg"></p>
         <ul>
             <li><b>Coupon Name</b> (translatable): The name of the coupon.</li>
             <li><b>Code</b> A unique code for the coupon. Customers will use this code for applying the coupon to their shopping cart.</li>
             <li><b>Discount Type:</b> You can either set a fixed value coupon. The value of coupon will be calculated based on the shopping cart.</li>
             <li><b>Value:</b> Set the value of the coupon.</li>
             <li><b>Status:</b> Enable the coupon by checking this checkbox. Only enabled coupons can be used.</li>
+            <li><b>Enable Expiry Date:</b> Coupon will available within the expiry date if you want.</li>
+            <li><b>Enable Usage Limit Per Coupon:</b> Coupon will available base on quantity if you want.</li>
         </ul>
     </section>
 

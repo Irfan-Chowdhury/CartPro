@@ -290,7 +290,6 @@ class HomeController extends FrontBaseController
                 ->first();
 
 
-
         $attribute = [];
         foreach ($product->productAttributeValues as $value) {
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
@@ -335,6 +334,7 @@ class HomeController extends FrontBaseController
                         'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
                     ->where('category_id', $category_id)
                     ->get();
+
 
         return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
     }

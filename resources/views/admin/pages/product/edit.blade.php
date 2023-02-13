@@ -66,6 +66,10 @@
                     <!-- SEO -->
                         @include('admin.pages.product.includes.edit.seo')
                     <!--/ SEO -->
+
+                    <!-- Weight -->
+                    @include('admin.pages.product.includes.edit.weight')
+                    <!--/ Weight -->
                 </div>
             </div>
 

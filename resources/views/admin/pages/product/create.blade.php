@@ -68,6 +68,10 @@
                     <!-- SEO -->
                         @include('admin.pages.product.includes.create.seo')
                     <!--/ SEO -->
+
+                    <!-- Weight -->
+                        @include('admin.pages.product.includes.create.weight')
+                    <!--/ Weight -->
                 </div>
                 <div class="col-4">
                     <!-- sidebar -->

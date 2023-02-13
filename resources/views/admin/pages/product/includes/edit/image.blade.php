@@ -7,7 +7,7 @@
                 <div class="col-md-12">
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Basic Image')}} </b></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b> {{__('file.Basic Image')}} <span class="text-danger">*</span> </b></label>
                         <div class="col-sm-8">
                             <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror" onchange="showImage(this,'item_photo')">
                             @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))

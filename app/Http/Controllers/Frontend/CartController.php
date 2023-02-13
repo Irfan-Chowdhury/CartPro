@@ -48,11 +48,8 @@ class CartController extends Controller
 
             $attribute_names = array();
             $attribute_names = explode(",",$request->attribute_names);
-            // $value_ids       = array();
-            // $value_ids       = explode(",",$request->value_ids);
             $value_names     = array();
             $value_names     = explode(",",$request->value_names);
-
 
             $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
                         'baseImage'=> function ($query){
@@ -71,7 +68,6 @@ class CartController extends Controller
             }
 
             $data = [];
-            // $data['id']     = $product->id;
             $data['id']     = uniqid();
             $data['name']   = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
             $data['qty']    = $request_qty;
@@ -81,14 +77,15 @@ class CartController extends Controller
                 $data['price']  = $request->flash_sale_price;
             }
             else if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price){
-                $data['price']  = $product->special_price;
+                $productPrice  = $product->special_price;
             }else {
-                $data['price']  = $product->price;
+                $productPrice  = $product->price;
             }
-            $data['weight'] = 1;
+
+            $data['price'] = $productPrice;
+            $data['weight'] =  $product->weight ?? 0;
             $data['options']['image']= $product->baseImage->image;
             $data['options']['product_id'] = $product->id;
-
 
             // if (!empty($attribute_name_arr) && !empty($request->value_ids)) {
             //     foreach($attribute_name_arr as $key => $value) {
@@ -104,6 +101,33 @@ class CartController extends Controller
                     $data['options']['attributes']['name'][$i]  = $attribute_names[$i];
                     $data['options']['attributes']['value'][$i] = $value_names[$i];
                }
+            }
+
+            // --------- Weight Base Price -------------
+            if($product->weight_base_calculation){
+                // Test
+                for($i=0; $i<count($value_names); $i++){
+                    $originalString = $value_names[$i];
+                    $wordToCheck = "gm";
+                    if (strpos($originalString, $wordToCheck) !== false){
+                        $attributeWeightOfGram = (int) str_replace($wordToCheck, "", $originalString);
+                        $productOriginalWeightOfGram = 1000;
+                        $perProductPrice       = ($productPrice * $attributeWeightOfGram) / $productOriginalWeightOfGram;
+                        $data['price']  = $perProductPrice;
+                        $data['weight'] = $attributeWeightOfGram / 1000;
+                    }
+                }
+                // Test
+
+                // $originalString = $value_names[0];
+                // $wordToCheck = "gm";
+                // if (strpos($originalString, $wordToCheck) !== false) {
+                //     $attributeWeightOfGram = (int) str_replace($wordToCheck, "", $originalString);
+                //     $productOriginalWeightOfGram = 1000;
+                //     $perProductPrice       = ($productPrice * $attributeWeightOfGram) / $productOriginalWeightOfGram;
+                //     $data['price']  = $perProductPrice;
+                //     $data['weight'] = $attributeWeightOfGram / 1000;
+                // }
             }
 
 

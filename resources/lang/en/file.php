@@ -1183,6 +1183,7 @@ return array (
   'Warehouse Report' => 'Warehouse Report',
   'Warehouse Stock Chart' => 'Warehouse Stock Chart',
   'Warehouse quantity of product variants' => 'Warehouse quantity of product variants',
+  'Weight' => 'Weight',
   'Welcome Admin' => 'Welcome Admin',
   'Welcome Email' => 'Welcome Email',
   'Welcome Text' => 'Welcome Text',
