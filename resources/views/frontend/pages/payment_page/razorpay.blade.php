@@ -70,9 +70,9 @@
                                             Pay Now
                                             <small>
                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                    ( {{ number_format((float)$totalAmount, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL') INR)
+                                                    ( {{ number_format((float)$totalAmount, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL'))
                                                 @else
-                                                    ( @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float) $totalAmount, env('FORMAT_NUMBER'), '.', '') }} INR)
+                                                    ( @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float) $totalAmount, env('FORMAT_NUMBER'), '.', '') }})
                                                 @endif
                                             </small>
                                         </button>
@@ -95,7 +95,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(function(){
-            let cancelURL = "{{ url('/payment/paypal/pay/cancel')}}";
+            let cancelURL = "{{ url('/payment/razorpay/pay/cancel')}}";
             let redirectURLAfterCancel = "{{ url('/')}}";
             $.ajaxSetup({
                 headers: {

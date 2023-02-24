@@ -112,8 +112,6 @@
                 }
             });
 
-
-
                 var $form = $(".require-validation");
                 $('form').bind('submit', function(e) {
                 // $("#stripePaymentForm").on("submit",function(e){
@@ -180,7 +178,6 @@
                     });
                 }
             });
-
         });
     </script>
 @endpush

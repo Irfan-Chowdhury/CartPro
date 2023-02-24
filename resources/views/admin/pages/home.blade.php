@@ -222,7 +222,7 @@ if (Session::has('currency_rate')){
                                                 @endif
                                             </span>
 
-                                            @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name  @endphp
+                                            @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name ?? null @endphp
                                             <p class="card-text mt-2 text-bold">{{ strlen($product_name) > 25 ? substr($product_name,0,25)."..." : $product_name}}</p>
                                         </div>
                                     </div>

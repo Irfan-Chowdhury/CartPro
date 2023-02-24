@@ -46,7 +46,7 @@ if (Session::has('currency_rate')){
                         <div class="header-top-right">
                             <ul>
                                 <li><a href="{{route('cartpro.order_tracking')}}">{{'Order Tracking'}}</a></li>
-                                <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[$locale]->language_name}}</a>
+                                <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[Session::get('currentLocal')]->language_name}}</a>
                                     <ul class="dropdown p-0">
                                         @foreach ($languages as $item)
                                             <li><a href="{{route('cartpro.default_language_change',$item->id)}}" {{$item->local==Session::get('currentLocal') ? 'selected': ''}}>{{$item->language_name}}</a></li>
@@ -171,7 +171,7 @@ if (Session::has('currency_rate')){
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
                                                 <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a>
-                                                    <ul class="dropdown">
+                                                    <ul class="dropdown" style="width:300px">
                                                         @foreach ($category->child as $item)
                                                             <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></li>
                                                         @endforeach
@@ -323,7 +323,7 @@ if (Session::has('currency_rate')){
                                     </div>
                                     <div class="shp__pro__details">
                                         <h2><a href="{{url('product/'.$item->options->product_slug.'/'. $item->options->category_id)}}">{{$item->name}}</a></h2>
-                                        
+
                                         @php
                                             if($item->options->attributes){
                                                 $data = $item->options->attributes;

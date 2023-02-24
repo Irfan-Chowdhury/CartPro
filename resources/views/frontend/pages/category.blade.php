@@ -47,15 +47,15 @@ if (Session::has('currency_symbol')){
                     @if (isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
                         <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="{{asset('public/'.$item->image)}}" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
                     @else
-                        <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
+                        <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></h4>
                     @endif
                     <hr>
                     <div class="row">
                         @forelse ($item->child as $value)
                             <div class="col-md-2 mt-3">
-                                <p><a href="{{route('cartpro.category_wise_products',$value->slug)}}"><b> {{$category->translations($value->categoryTranslation)->category_name}} ({{$category_product_count[$value->id]}})</b></a></p>
+                                <p><a href="{{route('cartpro.category_wise_products',$value->slug)}}"><b> {{$category->translations($value->categoryTranslation)->category_name ?? null}} ({{$category_product_count[$value->id]}})</b></a></p>
                                 @forelse ($value->child as $data)
-                                    &nbsp;&nbsp;&nbsp; ---- <a href="{{route('cartpro.category_wise_products',$data->slug)}}">{{$category->translations($data->categoryTranslation)->category_name}} ({{$category_product_count[$data->id]}}) </a> <br>
+                                    &nbsp;&nbsp;&nbsp; ---- <a href="{{route('cartpro.category_wise_products',$data->slug)}}">{{$category->translations($data->categoryTranslation)->category_name ?? null}} ({{$category_product_count[$data->id]}}) </a> <br>
                                 @empty
                                 @endforelse
                             </div>

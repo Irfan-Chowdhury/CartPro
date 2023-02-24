@@ -3,12 +3,14 @@ namespace App\Traits;
 
 use App\Models\CurrencyRate;
 use App\Models\Order;
+use App\Traits\TranslationTrait;
 
 trait UtilitiesTrait{
 
+    use TranslationTrait;
 
     public function getOrderByReference($reference_no){
-        return Order::with('orderDetails.product.productTranslation','shippingDetails')->where('reference_no',$reference_no)->first();
+        return Order::with('orderDetails.product.productTranslations','shippingDetails')->where('reference_no',$reference_no)->first();
     }
 
     protected function currencyRate()
@@ -23,6 +25,16 @@ trait UtilitiesTrait{
 
     protected function getOrderArray($order)
     {
+
+        // // Test
+        // foreach($order->orderDetails as $key => $item){
+        //     return $this->translations($item->product->productTranslations);
+        //     // $data['product_name'][$key] = ;
+        // }
+        // return $data['product_name'];
+        // // Test
+
+
         $orderArray                  = $order->toArray();
         $orderArray['currency_rate'] = $this->currencyRate();
         $orderArray['total_qty']     = $order->orderDetails->sum('qty');

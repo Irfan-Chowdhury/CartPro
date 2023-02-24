@@ -27,7 +27,7 @@ class StripePayment implements PaybleContract
     public function pay($request, $otherRequest)
     {
         try {
-            $this->stripe($request->totalAmount, $otherRequest['stripeToken']);
+            $this->stripe($request->totalAmount * 100, $otherRequest['stripeToken']);
         } catch (Exception $e) {
             return response()->json(['errors' => $e->getMessage()]);
         }

@@ -74,6 +74,7 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 ### Packages
 - #### [Laravel DOMPDF](https://github.com/barryvdh/laravel-dompdf)
 
+- #### [Artisan View](https://github.com/svenluijten/artisan-view)
 
 - #### [bumbummen99/shoppingcart](https://packagist.org/packages/bumbummen99/shoppingcart)
 
@@ -110,8 +111,8 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 - #### [Stripe](https://github.com/stripe/stripe-php) (<small><i>follow the tutorial given bellow</i></small>)
     - https://www.positronx.io/integrate-stripe-payment-gateway-in-laravel-application
 
-- #### [Laravel Paystack](https://github.com/codetagon/integrate_paystack_laravel) (<small><i>follow the tutorial given bellow</i></small>)
-    - https://github.com/codetagon/integrate_paystack_laravel
+- #### [Laravel Paystack](https://paystack.com/) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://github.com/unicodeveloper/laravel-paystack
 - #### [Razorpay](https://razorpay.com/) (<small><i>follow the tutorial given bellow</i></small>)
     - https://medium.com/@laraveltuts/laravel-9-integrate-razorpay-payment-gateway-491569c13a99
     - https://github.com/razorpay/razorpay-php

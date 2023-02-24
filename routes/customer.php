@@ -215,9 +215,6 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
         Route::post('/paypal/create',[Frontend\PaymentController::class,'paypal-create']);
 
 
-
-
-
         //Google Login
         Route::get('/login/google', [Auth\LoginController::class, 'redirectToGoogle'])->name('login.google');
         Route::get('/login/google/callback', [Auth\LoginController::class, 'handleGoogleCallback']);

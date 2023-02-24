@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 trait MailTrait{
 
     use UtilitiesTrait;
+    use TranslationTrait;
 
     public function sendMailWithOrderDetailsInvoice($reference_no)
     {
@@ -23,9 +24,13 @@ trait MailTrait{
 
         // For PDF
         $orderArray    = $this->getOrderArray($order);
+
+        // // Test
+        // return  $orderArray;
+        // // Test ENd
         $pdf           = Pdf::loadView('admin.pdf.invoice', $orderArray);
 
-        // For Email Tamplate Body
+        // // For Email Tamplate Body
         $data_mail     = $this->newOrderEmailTemplateBody($reference_no, $order, $setting_mail, $setting, $setting_store);
         Mail::to($data_mail['email'])->send(new OrderMail($data_mail, $pdf));
     }

@@ -28,8 +28,8 @@ class TaxRepository extends Action implements TaxContract
                         'locale'     => $this->translations($tax->taxTranslations)->locale ?? null,
                         'tax_class'  => $this->translations($tax->taxTranslations)->tax_class ?? null,
                         'tax_name'   => $this->translations($tax->taxTranslations)->tax_name ?? null,
-                        'state'      => $this->translations($tax->taxTranslations)->state,
-                        'city'       => $this->translations($tax->taxTranslations)->city,
+                        'state'      => $this->translations($tax->taxTranslations)->state ?? null,
+                        'city'       => $this->translations($tax->taxTranslations)->city ?? null,
                     ];
                 });
 
@@ -54,8 +54,8 @@ class TaxRepository extends Action implements TaxContract
                         'locale'     => $this->translations($tax->taxTranslations)->locale ?? null,
                         'tax_class'  => $this->translations($tax->taxTranslations)->tax_class ?? null,
                         'tax_name'   => $this->translations($tax->taxTranslations)->tax_name ?? null,
-                        'state'      => $this->translations($tax->taxTranslations)->state,
-                        'city'       => $this->translations($tax->taxTranslations)->city,
+                        'state'      => $this->translations($tax->taxTranslations)->state  ?? null,
+                        'city'       => $this->translations($tax->taxTranslations)->city  ?? null,
                     ];
                 });
 

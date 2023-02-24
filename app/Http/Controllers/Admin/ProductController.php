@@ -90,7 +90,7 @@ class ProductController extends Controller
     public function create()
     {
         $local         = Session::get('currentLocal');
-        $brands        = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
+        $brands        = $this->brandService->getAllBrands();
         $categories    = $this->categoryService->getAllCategories();
         $tags          = $this->tagService->getAllTag();
         $attributeSets = $this->attributeSetService->getAllWithAttributesAndValues();
@@ -539,7 +539,7 @@ class ProductController extends Controller
                                             ->where('attribute_id',$item->attribute_id)
                                             ->where('attribute_value_id',$item->attribute_value_id)
                                             ->exists();
-                                            
+
                     if (!$checkProductAttributeValueExists) {
                         ProductAttributeValue::insert([
                                 'product_id'=> $product->id,

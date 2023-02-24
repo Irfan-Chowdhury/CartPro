@@ -20,8 +20,7 @@ class BrandService
         $this->brandTranslationContract = $brandTranslationContract;
     }
 
-    public function getAllBrands()
-    {
+    public function getAllBrands(){
         return $this->brandContract->getAllBrands();
     }
 

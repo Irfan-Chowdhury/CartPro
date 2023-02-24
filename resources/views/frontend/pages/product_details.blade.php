@@ -33,6 +33,8 @@ if (Session::has('currency_symbol')){
 @endphp
 @section('title',$product_name)
 
+@inject('trans', 'App\Http\Controllers\Frontend\HomeController')
+
 
 @section('frontend_content')
 
@@ -42,7 +44,7 @@ if (Session::has('currency_symbol')){
             <div class="breadcrumb-section">
                 <ul>
                     <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                    <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name}}</a> </li>
+                    <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$trans->translations($category->categoryTranslation)->category_name ?? null}}</a> </li>
                     <li>{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</li>
                 </ul>
             </div>
