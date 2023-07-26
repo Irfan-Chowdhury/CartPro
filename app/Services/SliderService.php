@@ -102,7 +102,7 @@ class SliderService
         $data = [];
         $data['slider_slug']    = $this->slug($request->slider_title);
         $data['type']           = $request->type;
-        $data['category_id']    = $request->category_id;
+        $data['category_id']    = $request->category_id ? $request->category_id : null;
         $data['url']            = $request->url;
         $data['target']         = $request->target;
         if ($request->slider_image) {
