@@ -9,13 +9,27 @@ Furthermore, this amazing platform comes with lots of features – ajax cart, fa
 
 Let’s experience this awesomeness and celebrate your growth with CartPro.
 
-### Visit [Demo](http://cartproshop.com/demo)
+## Visit 
 
-### Visit in [Codecanyon](https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommerce-cms/36768394)
+- Demo : http://cartproshop.com/demo
+
+- Customer Panel : https://cartproshop.com/demo/login
+```
+Username : customer@cartpro.com
+Password : customer
+```
+- Admin Panel : https://cartproshop.com/demo/admin
+```
+Username : admin
+Password : admin
+```
+
+## Visit in Codecanyon
+URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommerce-cms/36768394
 
 
 
-### Features & Functionality
+## Features & Functionality
 1. Google Anylytics
     - Top Brower
     - Top Most Visited Pages
@@ -71,7 +85,7 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
 40. Shipping Method (Free Shipping, Local pickup, Flat Rate)
 
 
-### Packages
+## Packages
 - #### [Laravel DOMPDF](https://github.com/barryvdh/laravel-dompdf)
 
 - #### [Artisan View](https://github.com/svenluijten/artisan-view)
@@ -123,6 +137,12 @@ Let’s experience this awesomeness and celebrate your growth with CartPro.
     - https://github.com/sslcommerz/SSLCommerz-Laravel
 
 - #### [yajra/laravel-datatables](https://yajrabox.com/docs/laravel-datatables/master/installation)
+
+## Credits
+- Author : [LION CODERS](https://lion-coders.com/)
+- Template Design : [Tarik Iqbal](https://www.linkedin.com/in/tarik-iqbal-51046b34/)
+- Backend Developer : [Irfan Chowdhury](https://github.com/Irfan-Chowdhury)
+
 
 
 ##### <p>[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
