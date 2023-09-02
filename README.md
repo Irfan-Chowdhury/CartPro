@@ -1,3 +1,7 @@
+##### [ <i>Alert:  Due to copyright issue, some necessary files have been kept hide</i> ]
+
+<br>
+
 <div align='center'>
 
 # CartPro
@@ -145,5 +149,5 @@ URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommer
 
 
 
-##### <p>[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
+
 
