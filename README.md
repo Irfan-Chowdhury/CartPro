@@ -122,9 +122,12 @@ URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommer
     - Login [Developer Paypal](https://developer.paypal.com/)
 
     - [Laravel Paypal](https://srmklive.github.io/laravel-paypal/)
+    - [Laravel Paypal Official Docs](https://srmklive.github.io/laravel-paypal/docs.html)
 
     - https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US
     - [PayPal Javascript SDK](https://developer.paypal.com/demo/checkout/#/pattern/client)
+    
+    - Reference : [CodeWithArefin](https://www.youtube.com/watch?v=FET5t4hx8dg)
 
 - #### [Stripe](https://github.com/stripe/stripe-php) (<small><i>follow the tutorial given bellow</i></small>)
     - https://www.positronx.io/integrate-stripe-payment-gateway-in-laravel-application

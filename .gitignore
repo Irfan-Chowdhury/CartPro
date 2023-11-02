@@ -1,4 +1,7 @@
+/install0
 /public
+/track
+
 !/app/google/
 /node_modules
 /public/hot
