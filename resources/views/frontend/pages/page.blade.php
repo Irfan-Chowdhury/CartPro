@@ -1,7 +1,3 @@
-
-
-
-
 @extends('frontend.layouts.master')
 
 @inject('translation', 'App\Http\Controllers\Frontend\PageController')

@@ -163,7 +163,7 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
             //Products
             Route::group(['prefix' => 'products', 'middleware' => 'demo_check'], function () {
                 Route::get('/',[ProductController::class,'index'])->name('admin.products.index')->withoutMiddleware([DemoCheck::class]);
-                Route::get('/dataTable',[ProductController::class,'dataTable'])->name('admin.products.dataTable')->middleware('checkAjax');
+                Route::get('/dataTable',[ProductController::class,'dataTable'])->name('admin.products.dataTable')->withoutMiddleware([DemoCheck::class]);
                 Route::get('/create',[ProductController::class,'create'])->name('admin.products.create')->withoutMiddleware([DemoCheck::class]);
                 Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
                 Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit')->withoutMiddleware([DemoCheck::class]);
