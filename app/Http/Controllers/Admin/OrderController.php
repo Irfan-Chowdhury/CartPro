@@ -8,7 +8,6 @@ use App\Models\OrderDetail;
 use App\Services\OrderService;
 use App\Traits\InvoiceTrait;
 use App\Traits\MailTrait;
-use App\Traits\TranslationTrait;
 use App\Traits\UtilitiesTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    use UtilitiesTrait, InvoiceTrait, MailTrait, TranslationTrait;
+    use UtilitiesTrait, InvoiceTrait, MailTrait;
 
     private $orderService;
     public function __construct(OrderService $orderService){
@@ -195,7 +194,7 @@ class OrderController extends Controller
 
     public function orderDetails($reference_no)
     {
-        $order = $this->getOrderByReference($reference_no);
+        $order         = $this->getOrderByReference($reference_no);
         $currency_rate = $this->currencyRate();
         return view('admin.pages.order.order_details',compact('order','currency_rate'));
     }

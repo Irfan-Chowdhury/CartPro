@@ -7,7 +7,7 @@ return array (
   '-- Select Type --' => '-- Select Type --',
   '' => 
   array (
-    'All Orders' => '.All Orders',
+    'All Orders' => '.All Order',
   ),
   'About Us' => 'About Us',
   'Accepted Payment Methods Image' => 'Accepted Payment Methods Image',
@@ -1244,6 +1244,7 @@ return array (
   'submit' => 'Submit',
   'test' => 'test',
   'top' => 'Top',
+  'tr' => 'tr',
   'welcome' => 'Welcome',
   'yearly report' => 'Yearly Report',
   1 => '1',

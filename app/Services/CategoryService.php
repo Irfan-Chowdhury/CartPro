@@ -42,13 +42,13 @@ class CategoryService
                     })
                     ->addColumn('category_image', function ($row){
                         if ($row->image==null) {
-                            return '<img src="'.url("public/images/empty.jpg").'" alt="" height="50px" width="50px">';
+                            return '<img src="'.url("images/empty.jpg").'" alt="" height="50px" width="50px">';
                         }
                         else {
                             if (!File::exists(public_path($row->image))) {
                                 $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category';
                             }else {
-                                $url = url("public/".$row->image);
+                                $url = url($row->image);
                             }
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }

@@ -40,7 +40,7 @@ class UserController extends Controller
                     ->addColumn('image', function ($row)
                     {
                         if($row->image!=NULL && (File::exists(public_path($row->image)))) {
-                            $url = url("public/".$row->image);
+                            $url = url($row->image);
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
                         else {

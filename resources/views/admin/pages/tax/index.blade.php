@@ -66,8 +66,8 @@
     @include('admin.includes.common_js.common_word')
 </script>
 
-<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/datatable.js')}}"></script>
-<script type="text/javascript" src="{{asset('public/js/admin/pages/tax/edit.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/admin/pages/tax/datatable.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/admin/pages/tax/edit.js')}}"></script>
 
     <!-- Common Action For All CRUD-->
     @include('admin.includes.common_action',['all'=>true])

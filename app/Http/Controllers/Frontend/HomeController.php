@@ -295,7 +295,7 @@ class HomeController extends FrontBaseController
             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
         }
 
-        $category = Category::with('categoryTranslation','catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
+        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
         $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
         if ($cart) {
@@ -334,8 +334,6 @@ class HomeController extends FrontBaseController
                         'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
                     ->where('category_id', $category_id)
                     ->get();
-
-        // return $category;
 
 
         return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
@@ -488,7 +486,9 @@ class HomeController extends FrontBaseController
     public function defaultLanguageChange($id)
     {
         $language = Language::find($id);
+
         Session::put('currentLocal', $language->local);
+
         App::setLocale($language->local);
         return redirect()->back();
     }

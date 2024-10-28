@@ -46,7 +46,7 @@ class SliderService
             ->addColumn('slider_image', function ($row)
             {
                 if ($row->slider_image_secondary!=NULL && (File::exists(public_path($row->slider_image_secondary)))){
-                    $url = url("public/".$row->slider_image_secondary);
+                    $url = url($row->slider_image_secondary);
                     return  '<img src="'. $url .'"/>';
                 }else  {
                     return '<img src="https://dummyimage.com/50x50/000000/0f6954.png&text=Slider">';
@@ -165,7 +165,7 @@ class SliderService
     public function sliderImage($slider_image_path)
     {
         if($slider_image_path!=NULL && (File::exists(public_path($slider_image_path)))) {
-            return url("public/".$slider_image_path);
+            return url($slider_image_path);
         }else {
             return 'https://dummyimage.com/100x100/000000/0f6954.png&text=Slider';
         }

@@ -11,7 +11,7 @@
                     @forelse ($storefront_images as $key => $item)
                         @if ($item->title=='topbar_logo')
                             @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                <img src="{{asset('public/'.$item->image)}}" id="topbar_logo" height="100px" width="100px">
+                                <img src="{{asset($item->image)}}" id="topbar_logo" height="100px" width="100px">
                             @else
                                 <img src="https://dummyimage.com/100x100/000000/0f6954.png&text=Favicon-Logo" id="topbar_logo">
                             @endif

@@ -27,7 +27,7 @@
 
             <div class="mt-3 col-md-6 form-group">
                 @if($brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
-                    <img id="item_photo" src="{{asset('public/'.$brand->brand_logo)}}"  height="100px" width="100px">
+                    <img id="item_photo" src="{{asset($brand->brand_logo)}}"  height="100px" width="100px">
                 @elseif($brand->brand_logo==null || (!Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo))))
                     <img id="item_photo" src="https://dummyimage.com/100x100/000000/0f6954.png&text=Brand"  height="100px" width="100px">
                 @endif

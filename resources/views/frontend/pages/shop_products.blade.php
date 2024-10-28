@@ -92,19 +92,23 @@ if (Session::has('currency_symbol')){
                                 @forelse ($attribute_values as $item)
                                     <div class="sidebar-widget filters">
                                         <div class="sidebar-title">
-                                            <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$item->attributeTranslation->attribute_name}}</h2>
+											@isset($item->attributeTranslation->attribute_name)
+												<h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$item->attributeTranslation->attribute_name}}</h2>
+											@endisset
                                         </div>
                                         <div class="filter-area collapse show" id="collapseSize">
                                             <div class="size-checkbox">
                                                 <ul class="filter-opt size pt-2">
-                                                    @forelse ($item->attributeTranslation->attributeValueTranslation as $value)
-                                                        <li>
-                                                            <div class="custom-control custom-checkbox">
-                                                            <label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$item->attributeTranslation->attribute_name}}" id="valueId_{{$value->attribute_value_id}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
-                                                            </div>
-                                                        </li>
-                                                    @empty
-                                                    @endforelse
+													@isset($item->attributeTranslation->attributeValueTranslation)
+														@forelse ($item->attributeTranslation->attributeValueTranslation as $value)
+															<li>
+																<div class="custom-control custom-checkbox">
+																<label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$item->attributeTranslation->attribute_name}}" id="valueId_{{$value->attribute_value_id}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->value_name}}"><span class="size-block">{{$value->value_name}}</span></label>
+																</div>
+															</li>
+														@empty
+														@endforelse
+													@endisset
                                                 </ul>
                                             </div>
                                         </div>

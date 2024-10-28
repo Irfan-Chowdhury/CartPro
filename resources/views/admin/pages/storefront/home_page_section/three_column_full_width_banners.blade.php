@@ -27,7 +27,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_full_width_banners_background_image')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnFullWidthBannersBackgroundImage" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnFullWidthBannersBackgroundImage" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Background" id="storefrontThreeColumnFullWidthBannersBackgroundImage">
                                     @endif
@@ -51,7 +51,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_full_width_banners_image_1')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnFullWidthBannersImage1" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnFullWidthBannersImage1" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-1" id="storefrontThreeColumnFullWidthBannersImage1">
                                     @endif
@@ -85,7 +85,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_full_width_banners_image_2')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnFullWidthBannersImage2" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnFullWidthBannersImage2" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-2" id="storefrontThreeColumnFullWidthBannersImage2">
                                     @endif
@@ -120,7 +120,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_full_width_banners_image_3')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnFullWidthBannersImage3" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnFullWidthBannersImage3" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-3" id="storefrontThreeColumnFullWidthBannersImage3">
                                     @endif

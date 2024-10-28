@@ -87,7 +87,6 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
             Route::group(['prefix' => 'profile'], function () {
                 Route::get('/',[ProfileController::class,'index'])->name('admin.profile');
                 Route::post('/update',[ProfileController::class,'profileUpdate'])->name('admin.profile_update');
-
             });
 
             //--Category--
@@ -161,18 +160,31 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
             });
 
             //Products
-            Route::group(['prefix' => 'products', 'middleware' => 'demo_check'], function () {
-                Route::get('/',[ProductController::class,'index'])->name('admin.products.index')->withoutMiddleware([DemoCheck::class]);
-                Route::get('/dataTable',[ProductController::class,'dataTable'])->name('admin.products.dataTable')->withoutMiddleware([DemoCheck::class]);
-                Route::get('/create',[ProductController::class,'create'])->name('admin.products.create')->withoutMiddleware([DemoCheck::class]);
-                Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
-                Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit')->withoutMiddleware([DemoCheck::class]);
-                Route::get('/edit/{id}/attribute-inventory',[ProductController::class,'attributeWiseInventory'])->name('admin.products.attribute_inventory')->withoutMiddleware([DemoCheck::class]);
-                Route::post('/update/{id}',[ProductController::class,'update'])->name('admin.products.update');
-                Route::get('/active',[ProductController::class,'active'])->name('admin.products.active');
-                Route::get('/inactive',[ProductController::class,'inactive'])->name('admin.products.inactive');
-                Route::get('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
-                Route::get('/bulk_action',[ProductController::class,'bulkAction'])->name('admin.products.bulk_action');
+            // Route::group(['prefix' => 'products', 'middleware' => 'demo_check'], function () {
+            //     Route::get('/',[ProductController::class,'index'])->name('admin.products.index')->withoutMiddleware([DemoCheck::class]);
+            //     Route::get('/dataTable',[ProductController::class,'dataTable'])->name('admin.products.dataTable');
+            //     Route::get('/create',[ProductController::class,'create'])->name('admin.products.create')->withoutMiddleware([DemoCheck::class]);
+            //     Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
+            //     Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit')->withoutMiddleware([DemoCheck::class]);
+            //     Route::get('/edit/{id}/attribute-inventory',[ProductController::class,'attributeWiseInventory'])->name('admin.products.attribute_inventory')->withoutMiddleware([DemoCheck::class]);
+            //     Route::post('/update/{id}',[ProductController::class,'update'])->name('admin.products.update');
+            //     Route::get('/active',[ProductController::class,'active'])->name('admin.products.active');
+            //     Route::get('/inactive',[ProductController::class,'inactive'])->name('admin.products.inactive');
+            //     Route::get('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
+            //     Route::get('/bulk_action',[ProductController::class,'bulkAction'])->name('admin.products.bulk_action');
+            // });
+            Route::group(['prefix' => 'products'], function () {
+                    Route::get('/',[ProductController::class,'index'])->name('admin.products.index')->withoutMiddleware([DemoCheck::class]);
+                    Route::get('/dataTable',[ProductController::class,'dataTable'])->name('admin.products.dataTable')->withoutMiddleware([DemoCheck::class]);
+                    Route::get('/create',[ProductController::class,'create'])->name('admin.products.create')->withoutMiddleware([DemoCheck::class]);
+                    Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
+                    Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit')->withoutMiddleware([DemoCheck::class]);
+                    Route::get('/edit/{id}/attribute-inventory',[ProductController::class,'attributeWiseInventory'])->name('admin.products.attribute_inventory')->withoutMiddleware([DemoCheck::class]);
+                    Route::post('/update/{id}',[ProductController::class,'update'])->name('admin.products.update');
+                    Route::get('/active',[ProductController::class,'active'])->name('admin.products.active');
+                    Route::get('/inactive',[ProductController::class,'inactive'])->name('admin.products.inactive');
+                    Route::get('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
+                    Route::get('/bulk_action',[ProductController::class,'bulkAction'])->name('admin.products.bulk_action');
             });
 
             //Review

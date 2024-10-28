@@ -7,7 +7,6 @@
     }
 @endphp
 
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -90,7 +89,7 @@
 
                                     @forelse ($order_details as $item)
                                         <tr>
-                                            <td> {{$item['product']['product_translation']['product_name'] ?? null}}</td>
+                                            <td>{{$item['product']['product_translation']['product_name']}}</td>
                                             <td>
                                                 <span>
                                                     @if(env('CURRENCY_FORMAT')=='suffix')

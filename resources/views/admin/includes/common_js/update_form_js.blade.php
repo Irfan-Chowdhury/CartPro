@@ -10,7 +10,7 @@ $("#updateForm").on("submit",function(e){
         processData: false,
         dataType: "json",
         error: function(response){
-            console.log(response)
+            console.log(response);
             var dataKeys   = Object.keys(response.responseJSON.errors);
             var dataValues = Object.values(response.responseJSON.errors);
             let html = '<div class="alert alert-danger">';

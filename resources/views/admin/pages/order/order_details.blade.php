@@ -10,7 +10,6 @@
 @extends('admin.main')
 @section('title','Admin| Show Order')
 @section('admin_content')
-@inject('trans', 'App\Http\Controllers\Admin\OrderController')
 
 <section>
 
@@ -48,8 +47,7 @@
                                 </thead>
                                 @forelse ($order->orderDetails as $item)
                                     <tr>
-                                        {{-- <td>{{$item->product->productTranslation->product_name}}</td> --}}
-                                        <td>{{$trans->translations($item->product->productTranslations)->product_name ?? null}}</td>
+                                        <td>{{$item->product->productTranslation->product_name}}</td>
                                         <td>
                                             <span>
                                                 @if(env('CURRENCY_FORMAT')=='suffix')

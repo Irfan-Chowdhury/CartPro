@@ -25,13 +25,12 @@ class StripePayment implements PaybleContract
     // }
 
     public function pay($request, $otherRequest)
-    {
+    {							
         try {
-            $this->stripe($request->totalAmount * 100, $otherRequest['stripeToken']);
+			$this->stripe($request->totalAmount * 100, $otherRequest['stripeToken']);
         } catch (Exception $e) {
             return response()->json(['errors' => $e->getMessage()]);
-        }
-
+        }		
         $order_id = $this->orderStore($request);
         $this->reduceProductQuantity($order_id);
         return response()->json(['success' =>'done']);
@@ -43,14 +42,16 @@ class StripePayment implements PaybleContract
 
     }
 
-    protected function stripe($totalAmount, $stripeToken){
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        Stripe\Charge::create ([
-                "amount" => (int)implode(explode(',',$totalAmount)),
-                "currency" => env('STRIPE_CURRENCY'),
-                "source" => $stripeToken,
-                "description" => "Stripe Payment Successfull."
-        ]);
+    protected function stripe($totalAmount, $stripeToken)
+	{
+		Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+		Stripe\Charge::create ([
+			"amount" => (int)implode(explode(',',$totalAmount)),
+			"currency" => env('STRIPE_CURRENCY'),
+			"source" => $stripeToken,
+			"description" => "Stripe Payment Successfull."
+		]);
+				
     }
 }
 

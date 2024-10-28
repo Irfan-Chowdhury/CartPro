@@ -27,7 +27,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='two_column_banner_image_1')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontTwoColumnBannerImage1" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontTwoColumnBannerImage1" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-1" id="storefrontTwoColumnBannerImage1">
                                     @endif
@@ -62,7 +62,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='two_column_banner_image_2')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontTwoColumnBannerImage2" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontTwoColumnBannerImage2" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-2" id="storefrontTwoColumnBannerImage2">
                                     @endif

@@ -58,13 +58,13 @@ class CommonController extends Controller
             return  StorefrontImage::select('title','type','image')->get();
         });
 
-        $empty_image = 'public/images/empty.jpg';
+        $empty_image = 'images/empty.jpg';
         $favicon_logo_path = $empty_image;
         $header_logo_path  = $empty_image;
         $header_db_logo_path  = $empty_image;
         $mail_logo_path    = $empty_image;
         $mail_db_logo_path  = $empty_image;
-        // $topbar_logo_path  = 'public/images/top_images.gif'; //Header
+        // $topbar_logo_path  = 'images/top_images.gif'; //Header
 
         $one_column_banner_image  = $empty_image;
 
@@ -83,121 +83,121 @@ class CommonController extends Controller
 
         foreach ($storefront_images as $key => $item) {
             if ($item->title=='favicon_logo'){
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $favicon_logo_path = 'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
                 }else{
-                    $favicon_logo_path = url('public'.$item->image);
+                    $favicon_logo_path = url($item->image);
                 }
             }
 
             //Header
             // if ($item->title=='topbar_logo'){
-            //     if (!file_exists('public'.$item->image)) {
+            //     if (!file_exists($item->image)) {
             //         $topbar_logo_path = 'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
             //     }else{
-            //         $topbar_logo_path = url('public'.$item->image);
+            //         $topbar_logo_path = url($item->image);
             //     }
             // }
             if ($item->title=='header_logo') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $header_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
                 }else{
-                    $header_logo_path = url('public'.$item->image);
+                    $header_logo_path = url($item->image);
                     $header_db_logo_path = '/public'.$item->image;
                 }
             }
             elseif ($item->title=='mail_logo') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $mail_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
                 }else{
-                    $mail_logo_path   = url('public'.$item->image);
+                    $mail_logo_path   = url($item->image);
                     $mail_db_logo_path = '/public'.$item->image;
                 }
             }
             elseif ($item->title=='accepted_payment_method_image') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $payment_method_image = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
                 }else{
-                    $payment_method_image = url('public'.$item->image);
+                    $payment_method_image = url($item->image);
                 }
             }
 
             //one_column_banner_image
             elseif ($item->title=='one_column_banner_image') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $one_column_banner_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $one_column_banner_image = url('public'.$item->image);
+                    $one_column_banner_image = url($item->image);
                 }
             }
 
             //two_column_banner_image
             elseif ($item->title=='two_column_banner_image_1') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $two_column_banner_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $two_column_banner_image_1 = url('public'.$item->image);
+                    $two_column_banner_image_1 = url($item->image);
                 }
             }
             elseif ($item->title=='two_column_banner_image_2') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $two_column_banner_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $two_column_banner_image_2 = url('public'.$item->image);
+                    $two_column_banner_image_2 = url($item->image);
                 }
             }
             //three_column_banner_image
             elseif ($item->title=='three_column_banners_image_1') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_banners_image_1 = url('public'.$item->image);
+                    $three_column_banners_image_1 = url($item->image);
                 }
             }
             elseif ($item->title=='three_column_banners_image_2') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_banners_image_2 = url('public'.$item->image);
+                    $three_column_banners_image_2 = url($item->image);
                 }
             }
             elseif ($item->title=='three_column_banners_image_3') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_banners_image_3 = url('public'.$item->image);
+                    $three_column_banners_image_3 = url($item->image);
                 }
             }
 
             //three_column_banner_image_full
             elseif ($item->title=='three_column_full_width_banners_image_1') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_full_width_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_full_width_banners_image_1 = url('public'.$item->image);
+                    $three_column_full_width_banners_image_1 = url($item->image);
                 }
             }
             elseif ($item->title=='three_column_full_width_banners_image_2') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_full_width_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_full_width_banners_image_2 = url('public'.$item->image);
+                    $three_column_full_width_banners_image_2 = url($item->image);
                 }
             }
             elseif ($item->title=='three_column_full_width_banners_image_3') {
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $three_column_full_width_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
                 }else{
-                    $three_column_full_width_banners_image_3 = url('public'.$item->image);
+                    $three_column_full_width_banners_image_3 = url($item->image);
                 }
             }
 
             //Newsletter Background Image
             // elseif ($item->title=='newsletter_background_image') {
-            //     if (!file_exists('public'.$item->image)) {
+            //     if (!file_exists($item->image)) {
             //         $newsletter_background_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
             //     }else{
-            //         $newsletter_background_image = 'public'.$item->image;
+            //         $newsletter_background_image = $item->image;
             //     }
             // }
         }
@@ -487,15 +487,15 @@ class CommonController extends Controller
     {
         // ================  Storefront Related ============
 
-        $topbar_logo_path  = 'public/images/top_images.gif'; //Header
+        $topbar_logo_path  = 'images/top_images.gif'; //Header
         $storefront_images = StorefrontImage::select('title','type','image')->get();
 
         foreach ($storefront_images as $key => $item) {
             if ($item->title=='topbar_logo'){
-                if (!file_exists('public'.$item->image)) {
+                if (!file_exists($item->image)) {
                     $topbar_logo_path = 'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
                 }else{
-                    $topbar_logo_path = url('public'.$item->image);
+                    $topbar_logo_path = url($item->image);
                 }
             }
         }

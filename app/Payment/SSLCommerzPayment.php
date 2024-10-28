@@ -13,7 +13,6 @@ class SSLCommerzPayment implements PaybleContract
 
     public function pay($request, $otherRequest)
     {
-        // return $request;
         $order_id = $this->orderStore($request);
         $this->reduceProductQuantity($order_id);
         $this->SSLCommerz($request, $order_id);
@@ -31,7 +30,7 @@ class SSLCommerzPayment implements PaybleContract
     */
     protected function SSLCommerz($request, $order_id){
         $reference = $order_id + 1000;
-
+		
         $post_data = array();
         $post_data['total_amount'] = implode(explode(',',$request->totalAmount)); # You cant not pay less than 10
         $post_data['currency'] = "BDT";
@@ -76,7 +75,7 @@ class SSLCommerzPayment implements PaybleContract
         # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
         $payment_options = $sslc->makePayment($post_data, 'hosted');
 
-        //If Something Wrong
+		//If Something Wrong
         if (!is_array($payment_options)) {
             $this->undoTableDataAndRestoreProductQuantity($reference);
             $payment_options = array();
@@ -87,6 +86,7 @@ class SSLCommerzPayment implements PaybleContract
 
     public function success($request)
     {
+		return $request;
         $tran_id = $request->input('tran_id');
         $order_id = $request->input('value_a');
         $reference = $order_id + 1000;

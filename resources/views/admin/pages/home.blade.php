@@ -126,7 +126,7 @@ if (Session::has('currency_rate')){
                                             @if ($item->brand!=null)
                                                 <tr>
                                                     @if($item->brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($item->brand->brand_logo)))
-                                                        <td><img src="{{asset('public/'.$item->brand->brand_logo)}}" height="50px" width="50px"></td>
+                                                        <td><img src="{{asset($item->brand->brand_logo)}}" height="50px" width="50px"></td>
                                                     @else
                                                         <td><img src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Brand" style="background-size: cover; background-position: center;" height="50px" width="50px"></td>
                                                     @endif
@@ -159,7 +159,7 @@ if (Session::has('currency_rate')){
                                         @forelse ($top_categories as $item)
                                             <tr>
                                                 @if($item->category->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->category->image)))
-                                                    <td><img src="{{asset('public/'.$item->category->image)}}" height="50px" width="50px"></td>
+                                                    <td><img src="{{asset($item->category->image)}}" height="50px" width="50px"></td>
                                                 @else
                                                     <td><img src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Category" style="background-size: cover; background-position: center;" height="50px" width="50px"></td>
                                                 @endif
@@ -196,7 +196,7 @@ if (Session::has('currency_rate')){
                                 <a href="{{url('product/'.$item->product->slug.'/'. $category_ids[$item->product->id]->category_id)}}" target="__blank">
                                     <div class="card">
                                         <div class="card-body">
-                                            <img src="{{asset('public/'.$item->baseImage->image_medium)}}" class="card-img-top">
+                                            <img src="{{asset($item->baseImage->image_medium)}}" class="card-img-top">
                                             <span class="card-text mt-3">
                                                 @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                     @if(env('CURRENCY_FORMAT')=='suffix')
@@ -222,7 +222,7 @@ if (Session::has('currency_rate')){
                                                 @endif
                                             </span>
 
-                                            @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name ?? null @endphp
+                                            @php  $product_name = $item->orderProductTranslation->product_name ?? $item->orderProductTranslationEnglish->product_name  @endphp
                                             <p class="card-text mt-2 text-bold">{{ strlen($product_name) > 25 ? substr($product_name,0,25)."..." : $product_name}}</p>
                                         </div>
                                     </div>
@@ -255,13 +255,15 @@ if (Session::has('currency_rate')){
                                 @php
                                     $i = 0;
                                 @endphp
-                                @foreach ($browsers as $key=>$browser)
-                                <tr>
-                                    <td>{{++$i}}</td>
-                                    <td>{{$browser['browser']}}</td>
-                                    <td>{{$browser['sessions']}}</td>
-                                </tr>
-                                @endforeach
+                                @if(isset($browsers))
+                                    @foreach ($browsers as $key=>$browser)
+                                    <tr>
+                                        <td>{{++$i}}</td>
+                                        <td>{{$browser['browser']}}</td>
+                                        <td>{{$browser['sessions']}}</td>
+                                    </tr>
+                                    @endforeach
+                                @endif
 
                             </tbody>
                         </table>
@@ -288,13 +290,15 @@ if (Session::has('currency_rate')){
                                 @php
                                     $i = 0;
                                 @endphp
-                                @foreach ($topVisitedPages as $key=>$topVisitedPage)
-                                    <tr>
-                                        <td>{{++$i}}</td>
-                                        <td><a href="{{$topVisitedPage['url']}}">{{$topVisitedPage['pageTitle']}}</a></td>
-                                        <td>{{$topVisitedPage['pageViews']}}</td>
-                                    </tr>
-                                @endforeach
+                                @if(isset($topVisitedPages))
+                                    @foreach ($topVisitedPages as $key=>$topVisitedPage)
+                                        <tr>
+                                            <td>{{++$i}}</td>
+                                            <td><a href="{{$topVisitedPage['url']}}">{{$topVisitedPage['pageTitle']}}</a></td>
+                                            <td>{{$topVisitedPage['pageViews']}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -320,13 +324,15 @@ if (Session::has('currency_rate')){
                                 @php
                                     $i = 0;
                                 @endphp
-                                @foreach ($topReferrers as $topReferrer)
-                                    <tr>
-                                        <td>{{++$i}}</td>
-                                        <td>{{$topReferrer['url']}}</td>
-                                        <td>{{$topReferrer['pageViews']}}</td>
-                                    </tr>
-                                @endforeach
+                                @if(isset($topReferrers))
+                                    @foreach ($topReferrers as $topReferrer)
+                                        <tr>
+                                            <td>{{++$i}}</td>
+                                            <td>{{$topReferrer['url']}}</td>
+                                            <td>{{$topReferrer['pageViews']}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -352,13 +358,15 @@ if (Session::has('currency_rate')){
                                 @php
                                     $i = 0;
                                 @endphp
-                                @foreach ($topUserTypes as $toptopUserType)
-                                    <tr>
-                                        <td>{{++$i}}</td>
-                                        <td>{{$toptopUserType['type']}}</td>
-                                        <td>{{$toptopUserType['sessions']}}</td>
-                                    </tr>
-                                @endforeach
+                                @if(isset($topUserTypes))
+                                    @foreach ($topUserTypes as $toptopUserType)
+                                        <tr>
+                                            <td>{{++$i}}</td>
+                                            <td>{{$toptopUserType['type']}}</td>
+                                            <td>{{$toptopUserType['sessions']}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

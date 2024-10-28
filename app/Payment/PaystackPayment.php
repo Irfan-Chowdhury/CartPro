@@ -11,6 +11,7 @@ class PaystackPayment implements PaybleContract
 
     public function pay($request, $otherRequest)
     {
+
         $order_id = $this->orderStore($request);
         $reference_no = 1000 + $order_id;
         $this->reduceProductQuantity($order_id);

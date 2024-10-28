@@ -43,13 +43,12 @@ class ProductService extends Message
         }else{
             return $this->productContract->getAllActiveData();
         }
+
     }
 
 
     public function dataTable()
     {
-        $products = $this->getAllProducts();
-
         return datatables()->of($products)
         ->setRowId(function ($row){
             return $row->id;
@@ -62,7 +61,7 @@ class ProductService extends Message
                 if (!File::exists(public_path($row->baseImage->image_small))) {
                     $url = 'https://dummyimage.com/50x50/000/fff';
                 }else {
-                    $url = url("public/".$row->baseImage->image_small);
+                    $url = url($row->baseImage->image_small);
                 }
             }
             return '<img src="'. $url .'" height="50px" width="50px"/>';
@@ -98,7 +97,7 @@ class ProductService extends Message
             if (auth()->user()->can('product-action'))
             {
                 if ($row->is_active==1) {
-                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button> &nbsp';
+                    $actionBtn .= '<button type="button" title="Inactive" class="inactive btn btn-warning btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-down"></i></button> &nbsp';;
                 }else {
                     $actionBtn .= '<button type="button" title="Active" class="active btn btn-success btn-sm" data-id="'.$row->id.'"><i class="fa fa-thumbs-up"></i></button>  &nbsp';
                 }

@@ -23,29 +23,29 @@
 
 
     <!-- Bootstrap CSS-->
-    <link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
-    <link rel="preload" href="{{ asset('public/vendor/bootstrap/css/awesome-bootstrap-checkbox.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/bootstrap/css/awesome-bootstrap-checkbox.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
-
-
-    <link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap-datepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap-datepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/bootstrap/css/awesome-bootstrap-checkbox.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/bootstrap/css/awesome-bootstrap-checkbox.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
-    <link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap-select.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/bootstrap/css/bootstrap-select.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap-datepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap-datepicker.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+
+
+    <link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap-select.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/bootstrap/css/bootstrap-select.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
     <!-- Font Awesome CSS-->
-    <link rel="preload" href="{{ asset('public/vendor/font-awesome/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/font-awesome/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
     <!-- Dripicons icon font-->
-    <link rel="preload" href="{{ asset('public/vendor/dripicons/webfont.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/dripicons/webfont.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/dripicons/webfont.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/dripicons/webfont.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
     <!-- Google fonts - Roboto -->
@@ -56,45 +56,45 @@
 
     <!-- Custom Scrollbar-->
 
-    <link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/dataTables.bootstrap4.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/dataTables.bootstrap4.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/buttons.bootstrap4.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/buttons.bootstrap4.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/buttons.bootstrap4.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/buttons.bootstrap4.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/select.bootstrap4.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/select.bootstrap4.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/select.bootstrap4.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/select.bootstrap4.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.checkboxes.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/dataTables.checkboxes.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/dataTables.checkboxes.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/dataTables.checkboxes.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/datatables.flexheader.boostrap.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/datatables.flexheader.boostrap.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/datatables.flexheader.boostrap.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/datatables.flexheader.boostrap.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/select2/dist/css/select2.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/select2/dist/css/select2.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/select2/dist/css/select2.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/select2/dist/css/select2.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/RangeSlider/ion.rangeSlider.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/RangeSlider/ion.rangeSlider.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/RangeSlider/ion.rangeSlider.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/RangeSlider/ion.rangeSlider.min.css') }}"></noscript>
 
 
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.css') }}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.css') }}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/datatable.responsive.boostrap.min.css') }}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/datatable/datatable.responsive.boostrap.min.css') }}"></noscript>
 
 
     <!-- theme preload-->
-    <link rel="preload" href="{{ asset('public/css/style.default.css') }}" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="preload" href="{{ asset('public/css/style.default.css') }}" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+    <link rel="preload" href="{{ asset('css/style.default.css') }}" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="preload" href="{{ asset('css/style.default.css') }}" id="theme-stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
 
 
     <!-- Color Picker CSS -->
@@ -112,7 +112,7 @@
         gtag('config', 'G-ZZBZQHXN8Q');
     </script>
 
-    <script type="text/javascript" src="{{ asset('public/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jquery/jquery-3.5.1.min.js') }}"></script>
     <style>
         label{
                 color: #000000;
@@ -171,36 +171,36 @@
         gtag('config', 'G-ZZBZQHXN8Q');
     </script>
 
-    <script type="text/javascript" src="{{ asset('public/vendor/jquery/jquery-ui.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jquery/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
 
-    <script type="text/javascript" src="{{ asset('public/vendor/popper.js/umd/popper.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/bootstrap/js/bootstrap-select.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/chart.js/Chart.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('public/js/charts-custom.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/js/front.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/popper.js/umd/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap-select.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/charts-custom.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/front.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/tinymce/js/tinymce/tinymce.min.js') }}"></script>
 
     <!-- table sorter js-->
 
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/pdfmake.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/vfs_fonts.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/dataTables.bootstrap4.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/dataTables.buttons.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/buttons.bootstrap4.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/buttons.colVis.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/buttons.html5.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/buttons.print.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/dataTables.select.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/sum().js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/dataTables.checkboxes.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/datatable.fixedheader.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/datatable.responsive.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/select2/dist/js/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('public/vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/pdfmake.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/vfs_fonts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/dataTables.buttons.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/buttons.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/buttons.colVis.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/buttons.html5.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/buttons.print.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/dataTables.select.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/sum().js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/dataTables.checkboxes.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatable.fixedheader.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatable.responsive.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatable.responsive.boostrap.min.js') }}"></script>
 
     <script type="text/javascript">
         // $("ul#setting").siblings('a').attr('aria-expanded','true');

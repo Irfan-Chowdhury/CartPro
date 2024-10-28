@@ -77,7 +77,7 @@
                         <div class="col-sm-8">
                             <div class="d-flex justify-content-between">
                                 @if(isset($setting_store->admin_logo) && Illuminate\Support\Facades\File::exists(public_path($setting_store->admin_logo)))
-                                    <div><img src="{{asset('public/'.$setting_store->admin_logo)}}" id="admin_logo" width="100px" height="100px"></div>
+                                    <div><img src="{{asset($setting_store->admin_logo)}}" id="admin_logo" width="100px" height="100px"></div>
                                 @else
                                     <div><img src="https://dummyimage.com/100x100/000000/0f6954.png&text=Admin-Logo"  height="100px" width="100px"></div>
                                 @endif

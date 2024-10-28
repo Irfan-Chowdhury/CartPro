@@ -6,15 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Brand\BrandStoreRequest;
 use App\Http\Requests\Brand\BrandUpdateRequest;
-use App\Models\Brand;
 use App\Services\BrandService;
-use App\Traits\TranslationTrait;
-use Illuminate\Support\Facades\Session;
 
 class BrandController extends Controller
 {
-    use TranslationTrait;
-
     protected $brandService;
     public function __construct(BrandService $brandService){
         $this->brandService = $brandService;
@@ -23,28 +18,8 @@ class BrandController extends Controller
 
     public function index()
     {
-        // Test
-
-        // return Brand::with('brandTranslations')
-        // ->orderBy('id','DESC')
-        // ->get()
-        // ->map(function($brand){
-        //     return [
-        //         'id'=>$brand->id,
-        //         'slug'=>$brand->slug,
-        //         'is_active'=>$brand->is_active,
-        //         'brand_logo'=>$brand->brand_logo ?? null,
-        //         // 'brand_name'=>$brand->brandTranslation->brand_name ?? $brand->brandTranslationEnglish->brand_name ?? null,
-        //         'brand_name'=> $this->translations($brand->brandTranslations)->brand_name ?? null,
-        //     ];
-        // });
-        // Test
-
-
-
         if (auth()->user()->can('brand-view')){
             $brands =  $this->brandService->getAllBrands();
-
             if (request()->ajax()){
                 return $this->brandService->dataTable($brands);
             }

@@ -17,17 +17,17 @@ class Brand extends Model
 
     public $with = ['brandTranslations'];
 
-    // public function format()
-    // {
-    //     return [
-    //         'id'=>$this->id,
-    //         'slug'=>$this->slug,
-    //         'is_active'=>$this->is_active,
-    //         'brand_logo'=>$this->brand_logo ?? null,
-    //         // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
-    //         'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
-    //     ];
-    // }
+    public function format()
+    {
+        return [
+            'id'=>$this->id,
+            'slug'=>$this->slug,
+            'is_active'=>$this->is_active,
+            'brand_logo'=>$this->brand_logo ?? null,
+            // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
+            'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
+        ];
+    }
 
     public function products()
     {
@@ -48,10 +48,11 @@ class Brand extends Model
     }
 
     //New For Repository
-    public function brandTranslations(){
+    public function brandTranslations()
+    {
         $locale = Session::get('currentLocal');
         return $this->hasMany(BrandTranslation::class,'brand_id')
-                ->where('local', $locale)
-                ->orWhere('local','en');
+                    ->where('local',$locale)
+                    ->orWhere('local','en');
     }
 }

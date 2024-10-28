@@ -81,7 +81,7 @@
             <li class="nav-item">
                 <a rel="nofollow" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item">
                     @if(auth()->user()->image && Illuminate\Support\Facades\File::exists(public_path(auth()->user()->image)))
-                        <img class="profile-photo sm mr-1" src="{{asset('public/'.auth()->user()->image)}}">
+                        <img class="profile-photo sm mr-1" src="{{asset(auth()->user()->image)}}">
                     @else
                         <img class="profile-photo sm mr-1" src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Admin">
                     @endif

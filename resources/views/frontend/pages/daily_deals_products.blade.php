@@ -14,6 +14,7 @@ if (Session::has('currency_symbol')){
 }
 @endphp
 
+
 @extends('frontend.layouts.master')
 @section('title','Daily Deals')
 

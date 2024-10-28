@@ -56,7 +56,7 @@
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Meta Image') <span class="text-danger">*</span></b></label>
                         <div class="col-sm-8">
                             @if(!empty($setting_home_page_seo) && $setting_home_page_seo->meta_image!==null && Illuminate\Support\Facades\File::exists(public_path($setting_home_page_seo->meta_image)))
-                                <img src="{{asset('public/'.$setting_home_page_seo->meta_image)}}" id="homePageSeoImage" height="100px" width="100px">
+                                <img src="{{asset($setting_home_page_seo->meta_image)}}" id="homePageSeoImage" height="100px" width="100px">
                             @else
                                 <img src="https://dummyimage.com/100x100/cccccc/666666&text=Empty" id="homePageSeoImage">
                             @endif

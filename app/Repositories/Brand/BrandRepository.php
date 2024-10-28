@@ -13,21 +13,10 @@ class BrandRepository implements BrandContract
     use ActiveInactiveTrait, TranslationTrait, DeleteWithFileTrait;
 
     public function getAllBrands(){
-        $brand = Brand::with('brandTranslations')
+        return Brand::orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
-                ->map(function($brand){
-                    return [
-                        'id'=>$brand->id,
-                        'slug'=>$brand->slug,
-                        'is_active'=>$brand->is_active,
-                        'brand_logo'=>$brand->brand_logo ?? null,
-                        // 'brand_name'=>$brand->brandTranslation->brand_name ?? $brand->brandTranslationEnglish->brand_name ?? null,
-                        'brand_name'=> $this->translations($brand->brandTranslations)->brand_name ?? null,
-                    ];
-                });
-                // ->map->format();
-        return json_decode(json_encode($brand), FALSE);
+                ->map->format();
     }
 
     public function storeBrand($data){

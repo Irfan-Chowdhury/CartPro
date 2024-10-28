@@ -8,7 +8,7 @@
     <meta product="og:url" @isset($setting_home_page_seo->meta_url) content="{{$setting_home_page_seo->meta_url}}" @endisset >
     <meta product="og:type" @isset($setting_home_page_seo->meta_type) content="{{$setting_home_page_seo->meta_type}}" @endisset >
     @isset ($setting_home_page_seo->meta_image)
-        <meta product="og:image" content="{{asset('public/'.$setting_home_page_seo->meta_image)}}">
+        <meta product="og:image" content="{{asset($setting_home_page_seo->meta_image)}}">
     @endisset
 
 @endsection
@@ -38,10 +38,8 @@ if (Session::has('currency_rate')){
                             @foreach ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
-                                            <h1>Test 1</h1>
-                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image_full_width)}}); background-size: cover; background-position: center;">
+                                            <div class="img-fill" style="background-image: url({{url($item->slider_image_full_width)}}); background-size: cover; background-position: center;">
                                         @else
-                                            <h1>Test 2</h1>
                                             <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
                                             <div class="@if($item->text_alignment=='right') info right @else info @endif" >
@@ -67,7 +65,7 @@ if (Session::has('currency_rate')){
                                 <div class="col-sm-4">
                                         <a href="{{$slider_banners[$key]['action_url']}}" target="{{$slider_banners[$key]['new_window']==1 ? '__blank' : '' }}">
                                         @if($slider_banners[$key]['image']!==null && Illuminate\Support\Facades\File::exists(public_path($slider_banners[$key]['image'])))
-                                            <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
+                                            <div class="slider-banner" style="background-image:url({{asset($slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
                                         @else
                                             <div class="slider-banner" style="background-image:url('https://dummyimage.com/75.1526x75.1526/e5e8ec/e5e8ec&text=Slider-Banner');background-size:cover;background-position: center;">
                                         @endif
@@ -84,7 +82,7 @@ if (Session::has('currency_rate')){
                             @forelse ($sliders as $item)
                                     <div class="item">
                                         @if($item->slider_image!==null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
-                                            <div class="img-fill" style="background-image: url({{url('public/'.$item->slider_image)}}); background-size: cover; background-position: center;">
+                                            <div class="img-fill" style="background-image: url({{url($item->slider_image)}}); background-size: cover; background-position: center;">
                                         @else
                                             <div class="img-fill" style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
                                         @endif
@@ -117,7 +115,7 @@ if (Session::has('currency_rate')){
                             @foreach ($slider_banners as $key => $item)
                                 @if($slider_banners[$key]['image']!==null && Illuminate\Support\Facades\File::exists(public_path($slider_banners[$key]['image'])))
                                     <a href="{{$slider_banners[$key]['action_url']}}" target="{{$slider_banners[$key]['new_window']==1 ? '__blank' : '' }}">
-                                        <div class="slider-banner" style="background-image:url({{asset('public/'.$slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
+                                        <div class="slider-banner" style="background-image:url({{asset($slider_banners[$key]['image'])}});background-size:cover;background-position: center;">
                                             <h4 class="text-dark">{{$slider_banners[$key]['title']}}</h4>
                                         </div>
                                     </a>
@@ -159,7 +157,7 @@ if (Session::has('currency_rate')){
                                 <a href="{{url('category')}}/{{$item->slug}}">
                                     <div class="category-container">
                                         @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                            <img class="lazy" data-src="{{asset('public/'.$item->image)}}">
+                                            <img class="lazy" data-src="{{asset($item->image)}}">
                                         @else
                                             <img class="lazy" data-src="https://dummyimage.com/100x100/e5e8ec/e5e8ec&text=Top-Category" alt="...">
                                         @endif
@@ -243,7 +241,7 @@ if (Session::has('currency_rate')){
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image_medium)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
@@ -341,7 +339,7 @@ if (Session::has('currency_rate')){
                                                         <div class="single-product-wrapper">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image_medium)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
@@ -439,7 +437,7 @@ if (Session::has('currency_rate')){
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image_medium)}}"></a>
                                                             @else
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                             @endif
@@ -536,7 +534,7 @@ if (Session::has('currency_rate')){
                                                     <div class="single-product-wrapper">
                                                         <div class="single-product-item">
                                                             @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_medium)))
-                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_medium)}}"></a>
+                                                                <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image_medium)}}"></a>
                                                             @else
                                                                 <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                             @endif
@@ -697,7 +695,7 @@ if (Session::has('currency_rate')){
                                                 <div class="single-product-wrapper deals">
                                                     <div class="single-product-item">
                                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}"></a>
+                                                            <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->product->baseImage->image_medium)}}"></a>
                                                         @else
                                                             <a href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=Best-Deals"></a>
                                                         @endif
@@ -837,7 +835,7 @@ if (Session::has('currency_rate')){
                                                             <div class="single-product-item">
 
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image_small)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image_small)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image_small)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
@@ -933,7 +931,7 @@ if (Session::has('currency_rate')){
                                                         <div class="single-product-wrapper list">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
@@ -1030,7 +1028,7 @@ if (Session::has('currency_rate')){
                                                         <div class="single-product-wrapper list">
                                                             <div class="single-product-item">
                                                                 @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}"></a>
+                                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="{{asset($item->productBaseImage->image)}}"></a>
                                                                 @else
                                                                     <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                 @endif
@@ -1161,7 +1159,7 @@ if (Session::has('currency_rate')){
                                     <div class="single-product-item">
                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
                                         @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
-                                            <img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image_medium)}}">
+                                            <img class="lazy" data-src="{{asset($item->product->baseImage->image_medium)}}">
                                         @else
                                             <img class="lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro">
                                         @endif
@@ -1275,7 +1273,7 @@ if (Session::has('currency_rate')){
                             <div class="swiper-slide">
                                 <a class="brand-wrapper" href="{{route('cartpro.brand.products',$brand->slug)}}">
                                     @if($brand->brand_logo!==null && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
-                                        <img class="swiper-lazy" data-src="{{asset('public/'.$brand->brand_logo)}}" width="150px">
+                                        <img class="swiper-lazy" data-src="{{asset($brand->brand_logo)}}" width="150px">
                                     @else
                                         <img class="swiper-lazy" data-src="https://dummyimage.com/100x100/e5e8ec/e5e8ec&text=Brand-Logo">
                                     @endif

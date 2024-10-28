@@ -50,13 +50,13 @@
     <link rel="icon" type="image/png" href="{{asset($favicon_logo_path)}}"/>
 
     <!-- Bootstrap CSS -->
-    <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('public/frontend/css/cartpro-style.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/cartpro-style.css')}}" rel="stylesheet">
 
     <!-- Plugins CSS -->
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('public/frontend/css/plugins.css')}}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('frontend/css/plugins.css')}}">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('frontend/css/plugins.css')}}"></noscript>
 
     <!-- google fonts-->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
@@ -126,17 +126,17 @@
 
 
     <!--Plugin js -->
-    <script src="{{asset('public/frontend/js/plugin.js')}}"></script>
+    <script src="{{asset('frontend/js/plugin.js')}}"></script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 
     <!-- Sweetalert2 -->
-    <script src="{{asset('public/frontend/js/sweetalert2@11.js')}}"></script>
+    <script src="{{asset('frontend/js/sweetalert2@11.js')}}"></script>
 
     <!-- Main js -->
-    <script src="{{asset('public/frontend/js/main.js')}}"></script>
+    <script src="{{asset('frontend/js/main.js')}}"></script>
 
-    <script src="{{asset('public/js/share.js')}}"></script>
+    <script src="{{asset('js/share.js')}}"></script>
 
     @if (!env('USER_VERIFIED')==1)
     <script>

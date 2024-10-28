@@ -1,7 +1,3 @@
-##### [ <i>Alert:  Due to copyright issue, some necessary files have been kept hide</i> ]
-
-<br>
-
 <div align='center'>
 
 # CartPro
@@ -13,27 +9,13 @@ Furthermore, this amazing platform comes with lots of features – ajax cart, fa
 
 Let’s experience this awesomeness and celebrate your growth with CartPro.
 
-## Visit 
+### Visit [Demo](http://cartproshop.com/demo)
 
-- Demo : http://cartproshop.com/demo
-
-- Customer Panel : https://cartproshop.com/demo/login
-```
-Username : customer@cartpro.com
-Password : customer
-```
-- Admin Panel : https://cartproshop.com/demo/admin
-```
-Username : admin
-Password : admin
-```
-
-## Visit in Codecanyon
-URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommerce-cms/36768394
+### Visit in [Codecanyon](https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommerce-cms/36768394)
 
 
 
-## Features & Functionality
+### Features & Functionality
 1. Google Anylytics
     - Top Brower
     - Top Most Visited Pages
@@ -89,10 +71,9 @@ URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommer
 40. Shipping Method (Free Shipping, Local pickup, Flat Rate)
 
 
-## Packages
+### Packages
 - #### [Laravel DOMPDF](https://github.com/barryvdh/laravel-dompdf)
 
-- #### [Artisan View](https://github.com/svenluijten/artisan-view)
 
 - #### [bumbummen99/shoppingcart](https://packagist.org/packages/bumbummen99/shoppingcart)
 
@@ -122,18 +103,15 @@ URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommer
     - Login [Developer Paypal](https://developer.paypal.com/)
 
     - [Laravel Paypal](https://srmklive.github.io/laravel-paypal/)
-    - [Laravel Paypal Official Docs](https://srmklive.github.io/laravel-paypal/docs.html)
 
     - https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US
     - [PayPal Javascript SDK](https://developer.paypal.com/demo/checkout/#/pattern/client)
-    
-    - Reference : [CodeWithArefin](https://www.youtube.com/watch?v=FET5t4hx8dg)
 
 - #### [Stripe](https://github.com/stripe/stripe-php) (<small><i>follow the tutorial given bellow</i></small>)
     - https://www.positronx.io/integrate-stripe-payment-gateway-in-laravel-application
 
-- #### [Laravel Paystack](https://paystack.com/) (<small><i>follow the tutorial given bellow</i></small>)
-    - https://github.com/unicodeveloper/laravel-paystack
+- #### [Laravel Paystack](https://github.com/codetagon/integrate_paystack_laravel) (<small><i>follow the tutorial given bellow</i></small>)
+    - https://github.com/codetagon/integrate_paystack_laravel
 - #### [Razorpay](https://razorpay.com/) (<small><i>follow the tutorial given bellow</i></small>)
     - https://medium.com/@laraveltuts/laravel-9-integrate-razorpay-payment-gateway-491569c13a99
     - https://github.com/razorpay/razorpay-php
@@ -145,12 +123,6 @@ URL : https://codecanyon.net/item/cartpro-ecommerce-multipurpose-laravel-ecommer
 
 - #### [yajra/laravel-datatables](https://yajrabox.com/docs/laravel-datatables/master/installation)
 
-## Credits
-- Author : [LION CODERS](https://lion-coders.com/)
-- Template Design : [Tarik Iqbal](https://www.linkedin.com/in/tarik-iqbal-51046b34/)
-- Backend Developer : [Irfan Chowdhury](https://github.com/Irfan-Chowdhury)
 
-
-
-
+##### <p>[Note:  Due to copyright reasons, the migration files have been kept hide]</p>
 

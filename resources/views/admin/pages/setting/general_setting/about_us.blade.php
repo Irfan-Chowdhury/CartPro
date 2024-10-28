@@ -43,7 +43,7 @@
 
                         <div class="col-md-8">
                             @if($setting_about_us && $setting_about_us->image!==null && Illuminate\Support\Facades\File::exists(public_path($setting_about_us->image)))
-                                <img src="{{asset('public/'.$setting_about_us->image)}}" id="testImage" height="100px" width="100px">
+                                <img src="{{asset($setting_about_us->image)}}" id="testImage" height="100px" width="100px">
                             @else
                                 <img src="https://dummyimage.com/100x100/cccccc/666666&text=About US" id="testImage">
                             @endif

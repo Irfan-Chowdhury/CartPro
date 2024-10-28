@@ -73,7 +73,7 @@
     </script>
 
     <!-- index and edit -->
-    <script type="text/javascript" src="{{asset('public/js/admin/pages/brand/datatable.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/admin/pages/brand/datatable.js')}}"></script>
 
     <!-- Common Action For All CRUD-->
     @include('admin.includes.common_action',['store'=>true, 'action'=>true])

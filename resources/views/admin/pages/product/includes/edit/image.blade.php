@@ -12,7 +12,7 @@
                             <input type="file" name="base_image" id="baseImage" class="form-control @error('base_image') is-invalid @enderror" onchange="showImage(this,'item_photo')">
                             @if(($product->baseImage!==null) && ($product->baseImage->type=='base'))
                                 @if(isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
-                                    <img id="item_photo" src="{{asset('public/'.$product->baseImage->image)}}"  height="100px" width="100px">
+                                    <img id="item_photo" src="{{asset($product->baseImage->image)}}"  height="100px" width="100px">
                                 @else
                                     <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150"> &nbsp; &nbsp;
                                 @endif
@@ -33,7 +33,7 @@
                             @if($product->additionalImage!==null)
                                 @foreach ($product->additionalImage as $item)
                                     @if(isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}"  height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}"  height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Product" width="150"> &nbsp; &nbsp;
                                     @endif

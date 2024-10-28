@@ -112,11 +112,14 @@
                 }
             });
 
+
+
                 var $form = $(".require-validation");
                 $('form').bind('submit', function(e) {
                 // $("#stripePaymentForm").on("submit",function(e){
                     e.preventDefault();
                     const stripePublishableKey = $('#stripeKey').val();
+					$('#errorMessage').empty();
                     $('#payNowBtn').text('Processing...');
                     if (!$form.data('cc-on-file')) {
                         Stripe.setPublishableKey(stripePublishableKey);
@@ -131,10 +134,12 @@
 
                 function stripeResponseHandler(status, response) {
                     if (response.error) {
-                        $('.error')
-                            .removeClass('hide')
-                            .find('.alert')
-                            .text(response.error.message);
+						    let html = 
+								`<div class="alert alert-danger alert-dismissible fade show" role="alert">${response.error.code}
+                                 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                  </div>`;
+                            $('#errorMessage').html(html);
+							$('#payNowBtn').text('Pay Now');
                     } else {
                         // token contains id, last4, and card type
                         var token = response['id'];
@@ -149,14 +154,9 @@
                             processData: false,
                             dataType: "json",
                             success: function (response) {
+								console.log(response);
                                 $('#payNowBtn').text('Pay Now');
-                                if (response.errors) {
-                                    let html = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                    ${response.errors}
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </div>`;
-                                    $('#errorMessage').html(html);
-                                }else if(response.success){
+								if(response.success){
                                     console.log(response);
                                     window.location.href = redirectURL;
                                 }
@@ -178,6 +178,7 @@
                     });
                 }
             });
+
         });
     </script>
 @endpush

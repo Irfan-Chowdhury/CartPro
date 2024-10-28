@@ -50,7 +50,7 @@ class AdminController extends Controller
 
         //We will convert it in ExpiryReminder later
         $this->autoDataUpdate();
-
+        
         $top_brands = OrderDetail::with('brand.brandTranslation','brand.brandTranslationEnglish')
                             ->select('brand_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')
@@ -83,16 +83,14 @@ class AdminController extends Controller
             }
         }
 
-        $browsers = Analytics::fetchTopBrowsers(Period::days(7));
-        $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(7))->take(10);
-        $topReferrers = Analytics::fetchTopReferrers(Period::days(7))->take(10);
-        $topUserTypes = Analytics::fetchUserTypes(Period::days(7))->take(10);
-        // $topAnaluticsService = Analytics::getAnalyticsService();
-        // dd($topAnaluticsService);
-
-
-        return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids',
-                                                'browsers','topVisitedPages','topReferrers','topUserTypes'));
+        // $browsers = Analytics::fetchTopBrowsers(Period::days(365));
+        // $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(365))->take(10);
+        // $topReferrers = Analytics::fetchTopReferrers(Period::days(365))->take(10);
+        // $topUserTypes = Analytics::fetchUserTypes(Period::days(365))->take(10);
+        
+        //return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids','browsers','topVisitedPages','topReferrers','topUserTypes'));
+                                                
+        return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids'));
     }
 
     protected function readFileEnglish(){

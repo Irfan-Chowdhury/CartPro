@@ -27,7 +27,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_banners_image_1')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnBannersImage1" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnBannersImage1" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-1" id="storefrontThreeColumnBannersImage1">
                                     @endif
@@ -61,7 +61,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_banners_image_2')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnBannersImage2" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnBannersImage2" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-2" id="storefrontThreeColumnBannersImage2">
                                     @endif
@@ -96,7 +96,7 @@
                             @forelse ($storefront_images as $key=> $item)
                                 @if ($item->title=='three_column_banners_image_3')
                                     @if($item->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                                        <img src="{{asset('public/'.$item->image)}}" id="storefrontThreeColumnBannersImage3" height="100px" width="100px">
+                                        <img src="{{asset($item->image)}}" id="storefrontThreeColumnBannersImage3" height="100px" width="100px">
                                     @else
                                         <img src="https://dummyimage.com/100x100/cccccc/666666&text=Banner-3" id="storefrontThreeColumnBannersImage3">
                                     @endif

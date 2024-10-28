@@ -20,7 +20,8 @@ class BrandService
         $this->brandTranslationContract = $brandTranslationContract;
     }
 
-    public function getAllBrands(){
+    public function getAllBrands()
+    {
         return $this->brandContract->getAllBrands();
     }
 
@@ -41,7 +42,7 @@ class BrandService
                         if (!File::exists(public_path($row->brand_logo))) {
                             $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
                         }else {
-                            $url = url("public/".$row->brand_logo);
+                            $url = url($row->brand_logo);
                         }
                     }
                     return  '<img src="'. $url .'" height="50px" width="50px"/>';

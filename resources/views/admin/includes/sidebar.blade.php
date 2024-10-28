@@ -2,7 +2,7 @@
 <nav class="side-navbar">
     <span class="brand-big" id="site_logo_main">
         @if(isset($setting_store->admin_logo) && Illuminate\Support\Facades\File::exists(public_path($setting_store->admin_logo)))
-            <img src="{{asset('public/'.$setting_store->admin_logo)}}" width="150">
+            <img src="{{asset($setting_store->admin_logo)}}" width="150">
             &nbsp; &nbsp;
         @else
         <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Dashboard Logo" width="150">
