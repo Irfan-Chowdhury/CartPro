@@ -161,11 +161,11 @@ class CartController extends Controller
 
     public function cartViewDetails()
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
 
@@ -242,11 +242,11 @@ class CartController extends Controller
             return redirect(url('cart/empty'));
         }
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
 
         $coupons = Coupon::get();

@@ -82,7 +82,7 @@ class AttributeSetService
 
             $dataTranslation                       = [];
             $dataTranslation['attribute_set_id']   = $attribute_set->id;
-            $dataTranslation['locale']             = session('currentLocal');
+            $dataTranslation['locale']             = session('currentLocale');
             $dataTranslation['attribute_set_name'] = $request->attribute_set_name;
             $this->attributeSetTranslationContract->storeAttributeSetTranslation($dataTranslation);
             return response()->json(['success' => __('Data Successfully Saved')]);
@@ -96,7 +96,7 @@ class AttributeSetService
 
     public function findAttributeSetTranslation($attribute_set_id)
     {
-        $attributeSetTranslation = $this->attributeSetTranslationContract->getByIdAndLocale($attribute_set_id,session('currentLocal'));
+        $attributeSetTranslation = $this->attributeSetTranslationContract->getByIdAndLocale($attribute_set_id,session('currentLocale'));
         if (!isset($attributeSetTranslation)) {
             $attributeSetTranslation =  $this->attributeSetTranslationContract->getByIdAndLocale($attribute_set_id,'en');
         }

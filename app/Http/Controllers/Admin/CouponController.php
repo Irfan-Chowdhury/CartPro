@@ -31,7 +31,7 @@ class CouponController extends Controller
     {
         if (auth()->user()->can('coupon-view'))
         {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             App::setLocale($locale);
 
             $coupons = Coupon::with(['couponTranslations'=> function ($query) use ($locale){
@@ -116,7 +116,7 @@ class CouponController extends Controller
 
     public function create()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         App::setLocale($locale);
 
         $products = Product::with(['productTranslation','productTranslationEnglish'])
@@ -165,7 +165,7 @@ class CouponController extends Controller
         }
 
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         if (auth()->user()->can('coupon-store'))
         {
@@ -229,7 +229,7 @@ class CouponController extends Controller
 
     public function edit($id)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         App::setLocale($locale);
 
         $products = Product::with(['productTranslation','productTranslationEnglish'])
@@ -269,7 +269,7 @@ class CouponController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
 
         if ($request->is_expire) {

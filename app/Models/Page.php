@@ -13,7 +13,7 @@ class Page extends Model
 
     public function pageTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasMany(PageTranslation::class,'page_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');
@@ -22,7 +22,7 @@ class Page extends Model
 
     public function pageTranslation() //Remove Later
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(PageTranslation::class,'page_id')
                     ->where('locale',$locale);
     }

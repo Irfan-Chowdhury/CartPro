@@ -16,7 +16,7 @@ class FaqType extends Model
 
     public function faqTypeTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(FaqTypeTranslation::class,'faq_type_id')
                     ->where('locale',$locale);
     }

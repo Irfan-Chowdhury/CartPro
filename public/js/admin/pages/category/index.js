@@ -3,6 +3,89 @@
 
     "use strict";
 
+    // $(document).ready(function () {
+    //     let table_table = $('#dataListTable').DataTable({
+    //         responsive: true,
+    //         fixedHeader: {
+    //             header: true,
+    //             footer: true
+    //         },
+    //         processing: true,
+    //         serverSide: true,
+    //         ajax: {
+    //             url: indexURL,
+    //         },
+
+    //         columns: [
+    //             {
+    //                 data: null,
+    //                 orderable: false,
+    //                 searchable: false
+    //             },
+    //             {
+    //                 data: 'category_image',
+    //                 name: 'category_image',
+    //             },
+    //             {
+    //                 data: 'category_name',
+    //                 name: 'category_name',
+    //             },
+    //             {
+    //                 data: 'parent',
+    //                 name: 'parent',
+
+    //             },
+    //             {
+    //                 data: 'is_active',
+    //                 name: 'is_active',
+    //             },
+    //             {
+    //                 data: 'action',
+    //                 name: 'action',
+    //                 orderable: false,
+    //             }
+    //         ],
+
+
+    //         "order": [],
+    //         'language': {
+    //             'lengthMenu': `_MENU_ ${recordPerPage}`,
+    //             "info": `${showing} _START_ - _END_ (_TOTAL_)`,
+    //             "search": search,
+    //             'paginate': {
+    //                 'previous': previous,
+    //                 'next': next
+    //             }
+    //         },
+    //         'columnDefs': [
+    //             {
+    //                 "orderable": false,
+    //                 'targets': [0],
+    //             },
+    //             {
+    //                 'render': function (data, type, row, meta) {
+    //                     if (type === 'display') {
+    //                         data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+    //                     }
+
+    //                     return data;
+    //                 },
+    //                 'checkboxes': {
+    //                     'selectRow': true,
+    //                     'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+    //                 },
+    //                 'targets': [0]
+    //             }
+    //         ],
+
+
+    //         'select': {style: 'multi', selector: 'td:first-child'},
+    //         'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    //     });
+    //     new $.fn.dataTable.FixedHeader(table_table);
+    // });
+
+
     $(document).ready(function () {
         let table_table = $('#dataListTable').DataTable({
             initComplete: function () {
@@ -139,6 +222,7 @@
     });
 
 
+
     $(document).on('click', '.edit', function () {
         var id = $(this).data("id");
         $('#alert_message').html('');
@@ -149,12 +233,10 @@
             success: function (data) {
                 console.log(data);
                 $('#category_id').val(data.category.id);
-                $('#category_translation_id').val(data.categoryTranslation.id);
-                $('#category_name_edit').val(data.categoryTranslation.category_name);
-                $('#description_edit').val(data.category.description);
+                $('#category_translation_id').val(data.category.category_translation_id);
+                $('#category_name_edit').val(data.category.category_name);
                 $('#cateogry_icon_edit').val(data.category.icon);
                 $('#parent_id_edit').selectpicker('val', data.category.parent_id);
-                $('#description_position_edit').selectpicker('val', data.category.description_position);
                 if (data.category.top === 1) {
                     $('#top_edit').prop('checked', true);
                 } else {

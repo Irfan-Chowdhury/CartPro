@@ -21,7 +21,7 @@ class ShopProductController extends Controller
 
     // public function index()
     // {
-    //     $locale = Session::get('currentLocal');
+    //     $locale = Session::get('currentLocale');
 
     //     $products = Cache::remember('products', 300, function () use ($locale) {
     //         return DB::table('products')
@@ -81,7 +81,7 @@ class ShopProductController extends Controller
     // }
     public function index()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $products = DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
@@ -133,7 +133,7 @@ class ShopProductController extends Controller
     public function limitShopProductShow(Request $request)
     {
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $products = DB::table('products')
                 ->join('product_translations', function ($join) use ($locale) {
@@ -173,11 +173,11 @@ class ShopProductController extends Controller
 
     public function shopProductsShowSortby(Request $request)
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
 
 
@@ -259,7 +259,7 @@ class ShopProductController extends Controller
 
     public function shopProductsSidebarFilter(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         //Price Related
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;

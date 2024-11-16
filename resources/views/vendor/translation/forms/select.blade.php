@@ -10,7 +10,7 @@
             @endif
 
             {{-- @php
-                $locale = \Illuminate\Support\Facades\Session::get('currentLocal');
+                $locale = \Illuminate\Support\Facades\Session::get('currentLocale');
             @endphp
 
             @if(is_numeric($key))

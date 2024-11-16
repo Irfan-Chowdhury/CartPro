@@ -36,7 +36,7 @@ class Brand extends Model
 
     public function brandTranslation() //Remove Later
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(BrandTranslation::class,'brand_id')
                     ->where('local',$locale);
     }
@@ -50,7 +50,7 @@ class Brand extends Model
     //New For Repository
     public function brandTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(BrandTranslation::class,'brand_id')
                     ->where('local',$locale)
                     ->orWhere('local','en');

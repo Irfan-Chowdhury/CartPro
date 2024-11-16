@@ -61,7 +61,7 @@ class CategoryProductController extends Controller
     //                 ->get();
     //     });
 
-    //     $locale  = Session::get('currentLocal');
+    //     $locale  = Session::get('currentLocale');
 
 
     //     $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
@@ -113,7 +113,7 @@ class CategoryProductController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
-        $locale  = Session::get('currentLocal');
+        $locale  = Session::get('currentLocale');
 
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
@@ -153,11 +153,11 @@ class CategoryProductController extends Controller
 
     public function categoryProductsFilterByAttributeValue(Request $request)
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
 
@@ -245,7 +245,7 @@ class CategoryProductController extends Controller
 
     public function categoryWiseSidebarFilter(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         //Price Related
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
         $data_amount = explode(" ",$request->amount);
@@ -458,11 +458,11 @@ class CategoryProductController extends Controller
     public function categoryWiseConditionProducts(Request $request)
     {
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
 
@@ -538,11 +538,11 @@ class CategoryProductController extends Controller
     public function categoryWisePriceRangeProducts(Request $request)
     {
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
@@ -555,7 +555,7 @@ class CategoryProductController extends Controller
         $max_price =  $data_amount_last[0]/$CHANGE_CURRENCY_RATE; //previous 1
 
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
                             'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')

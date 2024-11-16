@@ -40,7 +40,7 @@ class Slider extends Model
     //New For Repository
     public function sliderTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(SliderTranslation::class,'slider_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');

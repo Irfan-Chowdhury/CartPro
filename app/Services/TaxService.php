@@ -88,7 +88,7 @@ class TaxService extends Message
     }
 
     public function findTaxTranslation($tax_id){
-        $taxTranslation = $this->taxTranslationContract->getByIdAndLocale($tax_id, session('currentLocal'));
+        $taxTranslation = $this->taxTranslationContract->getByIdAndLocale($tax_id, session('currentLocale'));
         if (!isset($taxTranslation)) {
             $taxTranslation =  $this->taxTranslationContract->getByIdAndLocale($tax_id, 'en');
         }
@@ -165,7 +165,7 @@ class TaxService extends Message
         $data['based_on'] = $request->based_on;
         $data['is_active']= $request->is_active;
 
-        $data['locale']   = Session::get('currentLocal');
+        $data['locale']   = Session::get('currentLocale');
         $data['tax_class']= $request->tax_class;
         $data['tax_name'] = $request->tax_name;
         $data['state']    = $request->state;

@@ -102,7 +102,7 @@ class AttributeController extends Controller
         $attribute = Attribute::find($request->attribute_id);
 
         if (isset($attribute->attributeValue)) {
-            $attributeValueTranslation = AttributeValueTranslation::where('attribute_id',$request->attribute_id)->where('local',Session::get('currentLocal'))->get();
+            $attributeValueTranslation = AttributeValueTranslation::where('attribute_id',$request->attribute_id)->where('local',Session::get('currentLocale'))->get();
         }else {
             $attributeValueTranslation = NULL;
         }

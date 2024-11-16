@@ -30,7 +30,7 @@ class FlashSaleController extends Controller
     {
         if (auth()->user()->can('flash_sale-view'))
         {
-            $local = Session::get('currentLocal');
+            $local = Session::get('currentLocale');
             $flashSales = FlashSale::with(['flashSaleTranslations'=> function ($query) use ($local){
                 $query->where('local',$local)
                 ->orWhere('local','en')
@@ -93,7 +93,7 @@ class FlashSaleController extends Controller
 
     public function create()
     {
-        $local = Session::get('currentLocal');
+        $local = Session::get('currentLocale');
         App::setLocale($local);
 
         $products = Product::with('productTranslation','productTranslationEnglish')
@@ -129,7 +129,7 @@ class FlashSaleController extends Controller
                 }
 
 
-                $local      = Session::get('currentLocal');
+                $local      = Session::get('currentLocale');
 
                 $product_ids = $request->product_id; //Array Data
                 $end_date   = $request->end_date; //Array Data
@@ -187,7 +187,7 @@ class FlashSaleController extends Controller
 
     public function edit($id)
     {
-        $local = Session::get('currentLocal');
+        $local = Session::get('currentLocale');
         App::setLocale($local);
 
         $products = Product::with('productTranslation','productTranslationEnglish')
@@ -215,7 +215,7 @@ class FlashSaleController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $locale      = Session::get('currentLocal');
+        $locale      = Session::get('currentLocale');
 
         if (auth()->user()->can('flash_sale-edit'))
         {

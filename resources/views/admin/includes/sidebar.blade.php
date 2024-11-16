@@ -157,7 +157,7 @@
                     @can('tax')
                         <li class="{{Route::current()->getName()=='admin.tax.index' ? 'active' : ''}}"><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
                     @endcan
-                    <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
+                    <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocale'))}}">{{__('file.Translations')}}</a></li>
 
                     @can('currency-rate')
                         <li class="{{Route::current()->getName()=='admin.currency_rate.index' ? 'active' : ''}}"><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>

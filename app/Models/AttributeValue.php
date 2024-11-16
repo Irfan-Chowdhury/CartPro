@@ -20,7 +20,7 @@ class AttributeValue extends Model
 
     public function attrValueTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasone(AttributeValueTranslation::class,'attribute_value_id')
                     ->where('local',$locale);
     }

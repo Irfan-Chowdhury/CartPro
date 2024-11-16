@@ -26,7 +26,7 @@ class UserAccountController extends Controller
 
     public function orderHistory()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $orders = DB::table('orders')
             ->where('user_id',Auth::user()->id)
             ->select('id','reference_no','total','date','order_status','delivery_date','delivery_time')
@@ -38,7 +38,7 @@ class UserAccountController extends Controller
 
     public function orderHistoryDetails($reference_no)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $order = Order::where('reference_no',$reference_no)->first();
 
         $order_details = DB::table('order_details')

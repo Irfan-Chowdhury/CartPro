@@ -19,7 +19,7 @@ class Faq extends Model
 
     public function faqTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(FaqTranslation::class,'faq_id')
                     ->where('locale',$locale);
     }
@@ -33,7 +33,7 @@ class Faq extends Model
 
     public function faqType()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->belongsTo(FaqTypeTranslation::class,'faq_type_id')
                 ->where('locale',$locale);
     }

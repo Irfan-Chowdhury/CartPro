@@ -31,7 +31,7 @@ class BrandProductController extends Controller
         // return url('/');
 
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
 
         $brand = $this->brandInfo($locale, $slug);

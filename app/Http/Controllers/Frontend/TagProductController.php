@@ -14,7 +14,7 @@ class TagProductController extends Controller
 {
     public function tagWiseProducts($slug)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $tag = $this->tagInfo($locale, $slug);
         if (!$tag) {

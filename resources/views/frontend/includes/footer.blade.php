@@ -3,7 +3,7 @@
 <!-- Footer Description -->
 @if (Request::routeIs('cartpro.home'))
     @php
-        $footer_description = App\Models\FooterDescription::where('locale',Session::get('currentLocal'))->first();
+        $footer_description = App\Models\FooterDescription::where('locale',Session::get('currentLocale'))->first();
         if (!$footer_description) {
             $footer_description = App\Models\FooterDescription::where('locale','en')->first();
         }

@@ -70,7 +70,7 @@ class PageService
         $data  = [];
         $data['slug']           = $this->slug(htmlspecialchars_decode($request->page_name));
         $data['is_active']      = $request->input('is_active',0);
-        $data['locale']         = Session::get('currentLocal');
+        $data['locale']         = Session::get('currentLocale');
         $data['page_name']      = htmlspecialchars_decode($request->page_name);
         $data['body']           = $request->body;
 
@@ -105,7 +105,7 @@ class PageService
 
     public function findPageTranslation($page_id)
     {
-        $pageTranslation = $this->pageTranslationContract->getByIdAndLocale($page_id, session('currentLocal'));
+        $pageTranslation = $this->pageTranslationContract->getByIdAndLocale($page_id, session('currentLocale'));
         if (!isset($pageTranslation)) {
             $pageTranslation =  $this->pageTranslationContract->getByIdAndLocale($page_id, 'en');
         }

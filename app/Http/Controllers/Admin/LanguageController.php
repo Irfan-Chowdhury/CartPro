@@ -122,7 +122,7 @@ class LanguageController extends Controller
         $language->update();
 
         if ($request->default) {
-            Session::put('currentLocal', $language->local);
+            Session::put('currentLocale', $language->local);
             // App::setlanguage($language->local);
         }
         session()->flash('type','success');
@@ -138,7 +138,7 @@ class LanguageController extends Controller
         // $language->update();
 
         $language = Language::find($id);
-        Session::put('currentLocal', $language->local);
+        Session::put('currentLocale', $language->local);
         App::setLocale($language->local);
 
         session()->flash('type','success');

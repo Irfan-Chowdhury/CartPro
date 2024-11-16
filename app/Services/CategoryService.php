@@ -1,15 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Contracts\Category\CategoryContract;
 use App\Contracts\Category\CategoryTranslationContract;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
+use App\Models\CategoryTranslation;
 use App\Traits\WordCheckTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
+use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use App\Services\StatusHandlerService;
 
-class CategoryService
+class CategoryService extends StatusHandlerService
 {
     use SlugTrait, imageHandleTrait, WordCheckTrait;
 
@@ -23,16 +33,33 @@ class CategoryService
 
     public function getAllCategories()
     {
-        if ($this->wordCheckInURL('categories')) {
-            return $this->categoryContract->getAll();
-        }else{
-            return $this->categoryContract->getAllActiveData();
+        $query = Category::with(['translations','parentCategory'])
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','DESC');
+
+
+        // if (request()->routeIs('specific.route.name')) {
+        if (!$this->wordCheckInURL('categories')) {
+            $query->where('is_active', 1);
         }
+
+        $categories = $query->get()
+                            ->map(function($category) {
+                                return [
+                                    'id'=> $category->id,
+                                    'image'=> $category->image,
+                                    'is_active'=> $category->is_active,
+                                    'category_name'=> $category->translation->category_name,
+                                    'parent_category_name'=> $category->parentTranslation->category_name ?? 'NONE',
+                                ];
+                            });
+
+        return json_decode(json_encode($categories), FALSE);
     }
 
     public function dataTable()
     {
-        $categories = $this->getAllCategories();
+        $categories = self::getAllCategories();
 
         if (request()->ajax()){
 
@@ -90,44 +117,70 @@ class CategoryService
 
     public function storeCategory($request)
     {
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        $data = $this->requestHandleData($request, null);
-        $category =  $this->categoryContract->storeCategory($data);
+        DB::beginTransaction();
+        try {
+            $data = $this->requestHandleData($request, null);
 
-        $dataTranslation  = [];
-        $dataTranslation['category_id']   = $category->id;
-        $dataTranslation['local']         = session('currentLocal');
-        $dataTranslation['category_name'] = htmlspecialchars_decode($request->category_name);
-        $this->categoryTranslationContract->storeCategoryTranslation($dataTranslation);
-        return response()->json(['success' => __('Data Successfully Saved')]);
+            $category = Category::create($data);
+
+            CategoryTranslation::create([
+                'category_id' => $category->id,
+                'locale' => session('currentLocale'),
+                'category_name' => htmlspecialchars_decode($request->category_name),
+            ]);
+
+            DB::commit();
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception($e->getMessage());
+        }
     }
 
-    public function findCategory($id)
+    public function findCategory(int $id)
     {
-        return $this->categoryContract->getById($id);
-    }
+        try {
+            $category = Category::with('translations')->findOrFail($id);
 
-    public function findCategoryTranslation($id)
-    {
-        $categoryTranslation = $this->categoryTranslationContract->getByIdAndLocale($id,session('currentLocal'));
-        if (!isset($categoryTranslation)) {
-            $categoryTranslation =  $this->categoryTranslationContract->getByIdAndLocale($id,'en');
+            return new CategoryResource($category);
+
+        } catch (Exception $e) {
+
+            throw new Exception($e->getMessage());
         }
-        return $categoryTranslation;
     }
 
     public function updateCategory($request)
     {
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
+        DB::beginTransaction();
+        try {
+
+            $category = $this->findCategory((int)$request->category_id);
+
+            $requesteData = $this->requestHandleData($request, $category);
+
+            Category::whereId($request->category_id)->update($requesteData);
+
+            CategoryTranslation::updateOrCreate(
+                [
+                    'category_id' => $request->category_id,
+                    'locale' => session('currentLocale'),
+                ],
+                [
+                    'category_name' => htmlspecialchars_decode($request->category_name),
+                ]
+            );
+
+            DB::commit();
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception($e->getMessage());
         }
-        $category = $this->findCategory($request->category_id);
-        $data     = $this->requestHandleData($request, $category);
-        $this->categoryContract->updateCategoryById($request->category_id, $data);
-        $this->categoryTranslationContract->updateOrInsertCategoryTranslation($request);
-        return response()->json(['success' => 'Data Updated Successfully']);
     }
 
 
@@ -148,45 +201,42 @@ class CategoryService
     }
 
 
-    public function activeById($id)
+    public function activeById(int $id): void
     {
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        return $this->categoryContract->active($id);
+        $this->activeData(Category::findOrFail($id));
+
     }
 
-    public function inactiveById($id)
+    public function inactiveById(int $id): void
     {
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        return $this->categoryContract->inactive($id);
+        $this->inactiveData(Category::findOrFail($id));
     }
 
-    public function destroy($category_id){
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        $this->categoryContract->destroy($category_id);
-        $this->categoryTranslationContract->destroy($category_id);
-        return response()->json(['success' => 'Data Deleted Successfully']);
+
+
+    public function destroy($categoryId): void
+    {
+        Category::findOrFail($categoryId)->delete();
     }
 
-    public function bulkActionByTypeAndIds($type, $ids){
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        return $this->categoryContract->bulkAction($type, $ids);
+    public function bulkActionByTypeAndIds(string $type, array $ids)
+    {
+        // if (env('USER_VERIFIED')!=1) {
+        //     return response()->json(['demo' => 'Disabled for demo !']);
+        // }
+        // return $this->categoryContract->bulkAction($type, $ids);
+
+        return $this->bulkActionData($type, Category::whereIn('id',$ids));
+
     }
 
-    public function bulkDestroy($category_ids){
-        if (env('USER_VERIFIED')!=1) {
-            return response()->json(['demo' => 'Disabled for demo !']);
-        }
-        $this->categoryContract->bulkDestroyByIds($category_ids);
-        $this->categoryTranslationContract->bulkDestroyByIds($category_ids);
-        return response()->json(['success' => 'Data Deleted Successfully']);
-    }
+    // public function bulkDestroy($category_ids){
+    //     if (env('USER_VERIFIED')!=1) {
+    //         return response()->json(['demo' => 'Disabled for demo !']);
+    //     }
+    //     $this->categoryContract->bulkDestroyByIds($category_ids);
+    //     $this->categoryTranslationContract->bulkDestroyByIds($category_ids);
+    //     return response()->json(['success' => 'Data Deleted Successfully']);
+    // }
 }
-?>
+

@@ -40,14 +40,14 @@ class Product extends Model
 
     // New
     public function productTranslations(){
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasMany(ProductTranslation::class,'product_id')
                     ->where('local',$locale)
                     ->orWhere('local','en');
     }
 
     public function productTranslation(){  // Remove Later
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(ProductTranslation::class,'product_id')
                 ->where('local',$locale);
     }
@@ -64,7 +64,7 @@ class Product extends Model
 
     public function productCategoryTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(CategoryTranslation::class,'category_id')
                 ->where('local',$locale);
     }
@@ -104,7 +104,7 @@ class Product extends Model
 
     public function brandTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
                 ->where('local',$locale);
     }
@@ -130,7 +130,7 @@ class Product extends Model
     // Product
     public function attributeTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeTranslation::class,'attribute_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');

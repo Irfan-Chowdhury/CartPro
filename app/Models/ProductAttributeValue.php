@@ -16,7 +16,7 @@ class ProductAttributeValue extends Model
     //Used HomeController for product-details;
     public function attributeTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(AttributeTranslation::class,'attribute_id','attribute_id')
                     ->where('locale',$locale);
     }
@@ -31,7 +31,7 @@ class ProductAttributeValue extends Model
     //Frontend/HomeController index()
     public function attrValueTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasone(AttributeValueTranslation::class,'attribute_value_id','attribute_value_id')
                     ->where('local',$locale);
     }
@@ -45,7 +45,7 @@ class ProductAttributeValue extends Model
     //For ProductController index()
     public function attributeValueTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeValueTranslation::class,'attribute_value_id','attribute_value_id')
                 ->where('local',$locale)
                 ->orWhere('local','en');

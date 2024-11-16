@@ -35,12 +35,12 @@ class MenuItemController extends Controller
 
 
 
-    
+
     public function dataFetchByType(Request $request)
     {
         if ($request->ajax()) {
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
                 $query->where('local',$locale)
                 ->orWhere('local','en')
@@ -82,7 +82,7 @@ class MenuItemController extends Controller
                 return response()->json(['errors' => $validator->errors()->all()]);
             }
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
 
             if (auth()->user()->can('menu_item-store'))
             {
@@ -113,7 +113,7 @@ class MenuItemController extends Controller
 
     public function edit(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $menu_item = MenuItem::find($request->menu_item_id);
 
@@ -141,7 +141,7 @@ class MenuItemController extends Controller
                     return response()->json(['errors' => $validator->errors()->all()]);
                 }
 
-                $locale = Session::get('currentLocal');
+                $locale = Session::get('currentLocale');
 
                 $menu_item = MenuItem::find($request->menu_item_id);
                 $menu_item->type        = $request->type;

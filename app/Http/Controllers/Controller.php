@@ -22,4 +22,33 @@ class Controller extends BaseController
         session()->flash('message',$message);
 		session()->flash('type','danger');
 	}
+
+
+    public function sendResponse($message = null, $result = null)
+    {
+    	$response = [
+            'success' => true,
+            'result'  => $result,
+        ];
+
+        if($message){
+            $response['message'] = $message;
+        }
+
+        return response()->json($response, 200);
+    }
+
+    public function sendError($errorMessage, $code = 500)
+    {
+    	$response = [
+            'success' => false,
+            'errorMessage' => $errorMessage,
+        ];
+
+        // if(!empty($errorMessages)){
+        //     $response['errors'] = $errorMessages;
+        // }
+
+        return response()->json($response, $code);
+    }
 }

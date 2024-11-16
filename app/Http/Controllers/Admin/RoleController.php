@@ -24,7 +24,7 @@ class RoleController extends Controller
     {
         if (auth()->user()->can('role-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
+            App::setLocale(Session::get('currentLocale'));
 
 
             $roles = Role::orderBy('is_active','DESC')

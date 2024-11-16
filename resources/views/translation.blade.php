@@ -1,5 +1,5 @@
 @php
     use Stichoza\GoogleTranslate\GoogleTranslate;
-    $local = Session::get('currentLocal');
+    $local = Session::get('currentLocale');
     $tr    = new GoogleTranslate($local);
 @endphp

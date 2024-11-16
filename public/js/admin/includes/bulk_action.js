@@ -21,8 +21,8 @@
                     success: function (data) {
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
                             $('#dataListTable').DataTable().ajax.reload();
+                            table.rows('.selected').deselect();
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
                             $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {
@@ -51,8 +51,8 @@
                         console.log(data);
                         if(data.success){
                             $('#bulkConfirmModal').modal('hide');
-                            table.rows('.selected').deselect();
                             $('#dataListTable').DataTable().ajax.reload();
+                            table.rows('.selected').deselect();
                             $('#alert_message').fadeIn("slow"); //Check in top in this blade
                             $('#alert_message').addClass('alert alert-success').html(data.success);
                             setTimeout(function() {

@@ -19,7 +19,7 @@ class BrandTranslationRepository implements BrandTranslationContract
     public function updateOrInsertBrandTranslation($request){
         DB::table('brand_translations')
         ->updateOrInsert(
-            ['brand_id' => $request->brand_id, 'local' => session('currentLocal')],
+            ['brand_id' => $request->brand_id, 'local' => session('currentLocale')],
             ['brand_name'=> htmlspecialchars_decode($request->brand_name)]
         );
     }

@@ -29,9 +29,9 @@ class MenuController extends Controller
     {
         if (auth()->user()->can('menu-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
+            App::setLocale(Session::get('currentLocale'));
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
 
             $menus = Menus::with(['menuTranslations'=> function ($query) use ($locale){
                 $query->where('locale',$locale)
@@ -117,7 +117,7 @@ class MenuController extends Controller
                 }
 
 
-                $locale = Session::get('currentLocal');
+                $locale = Session::get('currentLocale');
 
 
                 $menu = new Menus();
@@ -139,7 +139,7 @@ class MenuController extends Controller
     public function edit(Request $request)
     {
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         if ($request->ajax()) {
 
             $menu = Menus::find($request->menu_id);
@@ -156,7 +156,7 @@ class MenuController extends Controller
     {
         if (auth()->user()->can('menu-edit'))
         {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             if ($request->ajax()) {
                 $validator = Validator::make($request->only('menu_name'),[
                     'menu_name' => 'required|unique:menu_translations,menu_name,'.$request->menu_translation_id,

@@ -16,7 +16,7 @@ class Setting extends Model
 
     public function settingTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(SettingTranslation::class,'setting_id')
                 ->where('locale',$locale);
     }
@@ -39,7 +39,7 @@ class Setting extends Model
 
     public function pageTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(PageTranslation::class,'page_id')
                     ->where('locale',$locale);
     }

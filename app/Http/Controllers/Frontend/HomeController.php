@@ -77,11 +77,11 @@ class HomeController extends FrontBaseController
 
 
         //We change the Logic of Flash Sale Products Later
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
 
         //Storefront Theme Color
@@ -345,7 +345,7 @@ class HomeController extends FrontBaseController
 
             $base_url = url('/');
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             $products = ProductTranslation::with(['product:id,slug,price','product.baseImage'=> function($query){
                                 return $query->where('type','base');
                             },
@@ -464,7 +464,7 @@ class HomeController extends FrontBaseController
 
     public function orderTrackingFindDetails($reference_no)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $order = Order::where('reference_no',$reference_no)->first();
         $order_details = DB::table('order_details')
                     ->join('orders','orders.id','order_details.order_id')
@@ -487,7 +487,7 @@ class HomeController extends FrontBaseController
     {
         $language = Language::find($id);
 
-        Session::put('currentLocal', $language->local);
+        Session::put('currentLocale', $language->local);
 
         App::setLocale($language->local);
         return redirect()->back();
@@ -512,7 +512,7 @@ class HomeController extends FrontBaseController
             $keyword_hit->save();
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $products = ProductTranslation::with(['product','product.baseImage'=> function($query){
                     return $query->where('type','base');
                 },
@@ -579,7 +579,7 @@ class HomeController extends FrontBaseController
 
     public function searchFAQ(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $faqSearchBaseOnFaqType =   DB::table('faq_translations')
                                     ->select('faq_translations.title','faq_translations.description','faq_translations.locale','faq_type_translations.type_name as type_name')

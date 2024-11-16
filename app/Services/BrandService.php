@@ -79,7 +79,7 @@ class BrandService
 
         $dataTranslation  = [];
         $dataTranslation['brand_id']   = $brand->id;
-        $dataTranslation['local']      = session('currentLocal');
+        $dataTranslation['local']      = session('currentLocale');
         $dataTranslation['brand_name'] = htmlspecialchars_decode($request->brand_name);
         $this->brandTranslationContract->storeBrandTranslation($dataTranslation);
         return response()->json(['success' => __('Data Successfully Saved')]);
@@ -92,7 +92,7 @@ class BrandService
 
     public function findBrandTranslation($brand_id)
     {
-        $brandTranslation = $this->brandTranslationContract->getByIdAndLocale($brand_id,session('currentLocal'));
+        $brandTranslation = $this->brandTranslationContract->getByIdAndLocale($brand_id,session('currentLocale'));
         if (!isset($brandTranslation)) {
             $brandTranslation =  $this->brandTranslationContract->getByIdAndLocale($brand_id,'en');
         }

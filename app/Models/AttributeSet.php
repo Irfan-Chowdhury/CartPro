@@ -19,7 +19,7 @@ class AttributeSet extends Model
     //New
     public function attributeSetTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeSetTranslation::class,'attribute_set_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');
@@ -39,7 +39,7 @@ class AttributeSet extends Model
     // Previous
     public function attributeSetTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(AttributeSetTranslation::class,'attribute_set_id')
                     ->where('locale',$locale);
     }

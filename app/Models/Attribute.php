@@ -23,7 +23,7 @@ class Attribute extends Model
     //New For AttributeRepository
     public function attributeTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeTranslation::class,'attribute_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');
@@ -32,7 +32,7 @@ class Attribute extends Model
     //New For AttributeRepository
     public function attributeSetTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeSetTranslation::class,'attribute_set_id','attribute_set_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');
@@ -42,7 +42,7 @@ class Attribute extends Model
     //Attribute
     public function attributeTranslation() //Remove Later
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(AttributeTranslation::class,'attribute_id')
                     ->where('locale',$locale);
     }
@@ -56,7 +56,7 @@ class Attribute extends Model
     //Attribute Set
     public function attributeSetTranslation() //Remove Later
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(AttributeSetTranslation::class,'attribute_set_id','attribute_set_id')
                     ->where('locale',$locale);
     }

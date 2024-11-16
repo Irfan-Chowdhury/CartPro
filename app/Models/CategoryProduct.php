@@ -25,7 +25,7 @@ class CategoryProduct extends Model
 
     public function categoryTranslation()
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(CategoryTranslation::class,'category_id','category_id')
                 ->where('local',$locale);
     }
@@ -50,7 +50,7 @@ class CategoryProduct extends Model
 
     public function productTranslation() //remove
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }

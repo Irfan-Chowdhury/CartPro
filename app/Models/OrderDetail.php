@@ -29,7 +29,7 @@ class OrderDetail extends Model
 
     public function productTranslation()
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }
@@ -37,7 +37,7 @@ class OrderDetail extends Model
     //Admin Dashboard
     public function orderProductTranslation()
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }

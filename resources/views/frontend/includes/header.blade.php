@@ -49,7 +49,7 @@ if (Session::has('currency_rate')){
                                 <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[$locale]->language_name}}</a>
                                     <ul class="dropdown p-0">
                                         @foreach ($languages as $item)
-                                            <li><a href="{{route('cartpro.default_language_change',$item->id)}}" {{$item->local==Session::get('currentLocal') ? 'selected': ''}}>{{$item->language_name}}</a></li>
+                                            <li><a href="{{route('cartpro.default_language_change',$item->id)}}" {{$item->local==Session::get('currentLocale') ? 'selected': ''}}>{{$item->language_name}}</a></li>
                                         @endforeach
                                     </ul>
                                 </li>

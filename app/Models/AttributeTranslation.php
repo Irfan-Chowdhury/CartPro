@@ -21,7 +21,7 @@ class AttributeTranslation extends Model
     //Shop Product Controller index()
     public function attributeValueTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeValueTranslation::class,'attribute_id','attribute_id')
                     ->where('local',$locale);
     }

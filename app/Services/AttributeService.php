@@ -117,7 +117,7 @@ class AttributeService
 
     public function findAttributeTranslation($attribute_id)
     {
-        $attributeTranslation = $this->attributeTranslationContract->getByIdAndLocale($attribute_id, session('currentLocal'));
+        $attributeTranslation = $this->attributeTranslationContract->getByIdAndLocale($attribute_id, session('currentLocale'));
         if (!isset($attributeTranslation)) {
             $attributeTranslation =  $this->attributeTranslationContract->getByIdAndLocale($attribute_id, 'en');
         }
@@ -130,7 +130,7 @@ class AttributeService
 
     public function getAttribiuteValueTranslation($attributeValueIds)
     {
-        $attributeValueTranslation = $this->attributeValueTranslationContract->getAttribiuteValueTranslationByIdsAndLocale($attributeValueIds, session('currentLocal'));
+        $attributeValueTranslation = $this->attributeValueTranslationContract->getAttribiuteValueTranslationByIdsAndLocale($attributeValueIds, session('currentLocale'));
         if (count($attributeValueTranslation)==0) {
             $attributeValueTranslation =  $this->attributeValueTranslationContract->getAttribiuteValueTranslationByIdsAndLocale($attributeValueIds, 'en');
         }
@@ -208,7 +208,7 @@ class AttributeService
         $data['slug']             = $this->slug($request->attribute_name);
         $data['is_filterable']    = $request->input('is_filterable',0);
         $data['is_active']        = $request->input('is_active',0);
-        $data['locale']           = Session::get('currentLocal');
+        $data['locale']           = Session::get('currentLocale');
         $data['attribute_name']   = $request->attribute_name;
 
         return $data;
@@ -219,7 +219,7 @@ class AttributeService
         $data = [];
         $data['attribute_id']         = $attribute_id;
         $data['attribute_value_id']   = $attributeValueId;
-        $data['local']                = Session::get('currentLocal');
+        $data['local']                = Session::get('currentLocale');
         $data['value_name']           = $attributeValueNameArrayKey;
 
         return $data;

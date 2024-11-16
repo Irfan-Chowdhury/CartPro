@@ -118,7 +118,7 @@ class SliderService
         $data['text_color']     = $request->text_color;
         $data['is_active']      = $request->is_active;
 
-        $data['locale']         = Session::get('currentLocal');
+        $data['locale']         = Session::get('currentLocale');
         $data['slider_title']   = htmlspecialchars($request->slider_title);
         $data['slider_subtitle']= htmlspecialchars($request->slider_subtitle);
 
@@ -155,7 +155,7 @@ class SliderService
 
     public function findSliderTranslation($slider_id)
     {
-        $sliderTranslation = $this->sliderTranslationContract->getByIdAndLocale($slider_id, session('currentLocal'));
+        $sliderTranslation = $this->sliderTranslationContract->getByIdAndLocale($slider_id, session('currentLocale'));
         if (!isset($sliderTranslation)) {
             $sliderTranslation =  $this->sliderTranslationContract->getByIdAndLocale($slider_id, 'en');
         }

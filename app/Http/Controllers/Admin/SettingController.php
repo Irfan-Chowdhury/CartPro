@@ -246,7 +246,7 @@ class SettingController extends Controller
         SettingHomePageSeoTranslation::updateOrCreate(
             [
                 'setting_home_page_seo_id' => $setting_home_page_seo->id,
-                'locale' => Session::get('currentLocal'),
+                'locale' => Session::get('currentLocale'),
             ],
             [
                 'meta_site_name' => $request->meta_site_name,
@@ -321,7 +321,7 @@ class SettingController extends Controller
                 ]);
                 SettingAboutUsTranslation::create([
                     'setting_about_us_id' => $setting_about->id,
-                    'locale' => Session::get('currentLocal'),
+                    'locale' => Session::get('currentLocale'),
                     'title' => $request->title,
                     'description' => $request->description,
                 ]);
@@ -338,7 +338,7 @@ class SettingController extends Controller
                 SettingAboutUsTranslation::updateOrCreate(
                     [
                         'setting_about_us_id' => $setting_about->id,
-                        'locale' => Session::get('currentLocal'),
+                        'locale' => Session::get('currentLocale'),
                     ],
                     [
                         'title' => $request->title,

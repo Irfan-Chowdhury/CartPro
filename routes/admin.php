@@ -43,6 +43,22 @@ use App\Http\Middleware\DemoCheck;
 
 /*
 |--------------------------------------------------------------------------
+| Admin LTE
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->group(function () {
+    Route::get('/lte-dashboard', function(){
+        return view('lte.admin.pages.dashboard.index');
+    });
+    Route::get('/lte-categories', function(){
+        return view('lte.admin.pages.categories.index');
+    });
+});
+
+
+/*
+|--------------------------------------------------------------------------
 | Admin Routes
 |--------------------------------------------------------------------------
 */
@@ -82,7 +98,6 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
                 Route::get('clearAll',[NotificationController::class,'clearAll'])->name('clearAll');
             });
 
-
             //Admin Profile
             Route::group(['prefix' => 'profile'], function () {
                 Route::get('/',[ProfileController::class,'index'])->name('admin.profile');
@@ -93,15 +108,14 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function
             Route::group(['prefix' => '/categories'], function () {
                 Route::get('/',[CategoryController::class,'index'])->name('admin.category');
                 Route::get('/datatable',[CategoryController::class,'dataTable'])->name('admin.category.datatable');
-                Route::post('/store',[CategoryController::class,'store'])->name('admin.category.store');
+                Route::post('/store',[CategoryController::class,'store'])->name('admin.category.store')->middleware(['demo_check','checkAjax']);
                 Route::get('/edit',[CategoryController::class,'edit'])->name('admin.category.edit');
-                Route::post('updateCategory',[CategoryController::class,'categoryUpdate'])->name('category_list.update'); //Remove Later
-                Route::post('update',[CategoryController::class,'update'])->name('admin.category.update');
-                Route::get('/active',[CategoryController::class,'active'])->name('admin.category.active');
-                Route::get('/inactive',[CategoryController::class,'inactive'])->name('admin.category.inactive');
-                Route::get('/bulk_action',[CategoryController::class,'bulkAction'])->name('admin.category.bulk_action');
-                Route::get('/delete',[CategoryController::class,'delete'])->name('admin.category.delete');
-                Route::get('/bulk_delete',[CategoryController::class,'bulkDelete'])->name('admin.category.bulk_delete');
+                // Route::post('updateCategory',[CategoryController::class,'categoryUpdate'])->name('category_list.update'); //Remove Later
+                Route::post('/update',[CategoryController::class,'update'])->name('admin.category.update')->middleware(['demo_check']);
+                Route::get('/active',[CategoryController::class,'active'])->name('admin.category.active')->middleware(['demo_check']);
+                Route::get('/inactive',[CategoryController::class,'inactive'])->name('admin.category.inactive')->middleware(['demo_check']);
+                Route::get('/bulk_action',[CategoryController::class,'bulkAction'])->name('admin.category.bulk_action')->middleware(['demo_check']);
+                Route::get('/delete',[CategoryController::class,'delete'])->name('admin.category.delete')->middleware(['demo_check']);
             });
 
             //brands
