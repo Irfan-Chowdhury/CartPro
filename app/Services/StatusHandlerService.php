@@ -7,7 +7,7 @@ namespace App\Services;
 
 class StatusHandlerService
 {
-    public function activeData(object $model)
+    public function activeData(object $model): void
     {
         $data = $model;
         $data->is_active = true;
@@ -21,27 +21,27 @@ class StatusHandlerService
         $data->update();
     }
 
-    public function bulkActionData(string $actionType, $model)
+    public function bulkActionData(string $actionType, $model): string
     {
         $data = $model;
 
         if ($actionType == 'active') {
 
-            $data->update(['is_active'=>1]);
+            $data->update(['is_active' => 1]);
 
-            return ['success' => 'Data Active Successfully'];
+            return 'Data Active Successfully';
 
         } else if ($actionType == 'inactive') {
 
-            $data->update(['is_active'=>0]);
+            $data->update(['is_active' => 0]);
 
-            return ['success' => 'Data Inactive Successfully'];
+            return 'Data Inactive Successfully';
 
         } else if ($actionType == 'delete') {
 
             $data->delete();
 
-            return ['success' => 'Data Deleted Successfully'];
+            return 'Data Deleted Successfully';
         }
     }
 }

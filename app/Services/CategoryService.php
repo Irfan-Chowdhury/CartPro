@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Services\StatusHandlerService;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryService extends StatusHandlerService
 {
@@ -25,6 +26,11 @@ class CategoryService extends StatusHandlerService
 
     private $categoryContract;
     private $categoryTranslationContract;
+
+    private static $directory = 'uploads/images/categories/';
+
+    private static $type = 'category';
+
     public function __construct(CategoryContract $categoryContract, CategoryTranslationContract $categoryTranslationContract)
     {
         $this->categoryContract            = $categoryContract;
@@ -72,10 +78,11 @@ class CategoryService extends StatusHandlerService
                             return '<img src="'.url("images/empty.jpg").'" alt="" height="50px" width="50px">';
                         }
                         else {
-                            if (!File::exists(public_path($row->image))) {
+                            // if (!File::exists(public_path("storage/{$row->image}"))) {
+                            if (!Storage::disk('public')->exists($row->image)) {
                                 $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category';
                             }else {
-                                $url = url($row->image);
+                                $url = url("storage/{$row->image}");
                             }
                             return  '<img src="'. $url .'" height="50px" width="50px"/>';
                         }
@@ -119,7 +126,8 @@ class CategoryService extends StatusHandlerService
     {
         DB::beginTransaction();
         try {
-            $data = $this->requestHandleData($request, null);
+
+            $data = $this->requestHandleData($request);
 
             $category = Category::create($data);
 
@@ -184,7 +192,7 @@ class CategoryService extends StatusHandlerService
     }
 
 
-    public function requestHandleData($request, $category){
+    public function requestHandleData($request, $category = null){
         $data              = [];
         $data['slug']      = $this->slug(htmlspecialchars_decode($request->category_name));
         $data['parent_id'] = ($request->parent_id==true) ? $request->parent_id : null;
@@ -195,7 +203,7 @@ class CategoryService extends StatusHandlerService
             if ($category) {
                 $this->previousImageDelete($category->image);
             }
-            $data['image'] = $this->imageStore($request->image, $directory='images/categories/',$type='category');
+            $data['image'] = $this->imageStore($request->image, self::$directory, 300, 300);
         }
         return $data;
     }
@@ -216,27 +224,15 @@ class CategoryService extends StatusHandlerService
 
     public function destroy($categoryId): void
     {
-        Category::findOrFail($categoryId)->delete();
+        $category = Category::findOrFail($categoryId);
+        $this->previousImageDelete($category->image);
+        $category->delete();
     }
 
     public function bulkActionByTypeAndIds(string $type, array $ids)
     {
-        // if (env('USER_VERIFIED')!=1) {
-        //     return response()->json(['demo' => 'Disabled for demo !']);
-        // }
-        // return $this->categoryContract->bulkAction($type, $ids);
-
         return $this->bulkActionData($type, Category::whereIn('id',$ids));
 
     }
-
-    // public function bulkDestroy($category_ids){
-    //     if (env('USER_VERIFIED')!=1) {
-    //         return response()->json(['demo' => 'Disabled for demo !']);
-    //     }
-    //     $this->categoryContract->bulkDestroyByIds($category_ids);
-    //     $this->categoryTranslationContract->bulkDestroyByIds($category_ids);
-    //     return response()->json(['success' => 'Data Deleted Successfully']);
-    // }
 }
 

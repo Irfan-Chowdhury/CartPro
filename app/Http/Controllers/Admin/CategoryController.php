@@ -11,6 +11,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
 use Exception;
+use Str;
+use Image;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -128,9 +131,9 @@ class CategoryController extends Controller
         try {
             self::isAuthorized('category-action');
 
-            $this->categoryService->bulkActionByTypeAndIds((string)$request->action_type, (array)$request->idsArray);
+            $getMessage = $this->categoryService->bulkActionByTypeAndIds((string)$request->action_type, (array)$request->idsArray);
 
-            return $this->sendResponse( 'Successfully Done !');
+            return $this->sendResponse( $getMessage);
 
         } catch (Exception $e) {
 

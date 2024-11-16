@@ -138,9 +138,6 @@
                         data: null,
                         orderable: false,
                         searchable: false,
-                        // render: function () {
-                        //     return '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
-                        // }
                         render: function (data, type, row, meta) {
                             return '<input type="checkbox" class="row-checkbox" data-id="' + row.id + '">';
                         },
@@ -168,19 +165,7 @@
                         orderable: false,
                     }
                 ],
-                // columnDefs: [
-                //     {
-                //         targets: 0,
-                //         orderable: false,
-                //         checkboxes: {
-                //             selectRow: true
-                //         }
-                //     }
-                // ],
-                // select: {
-                //     style: 'multi', // Allows multiple row selection
-                //     selector: 'td:first-child input[type="checkbox"]' // Use checkboxes for selection
-                // },
+
                 "paging": true,
                 "responsive": true,
                 "searching": true,
