@@ -11,10 +11,60 @@ class OrderDetail extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
+    // vendora
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
+
+    // vendora
+    public function orderProductTranslations()
+    {
+        return $this->hasMany(ProductTranslation::class,'product_id','product_id');
+    }
+
+    // vendora
+    public function getOrderProductTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        $translation = $this->orderProductTranslations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->orderProductTranslations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
+    // vendora
+    public function baseImage()
+    {
+        return $this->hasOne(ProductImage::class,'product_id','product_id')
+                    ->where('type','base');
+    }
+
+    // vendora
+    public function additionalImage()
+    {
+        return $this->hasMany(ProductImage::class,'product_id','product_id');
+    }
+
+    public function productAttributeValues()
+    {
+        return $this->hasMany(ProductAttributeValue::class,'product_id','product_id');
+    }
+
+
+
+
+
+
+
+
+    //Old Formation
+
+
 
     public function brand()
     {
@@ -50,10 +100,6 @@ class OrderDetail extends Model
     }
 
 
-    public function baseImage()
-    {
-        return $this->hasOne(ProductImage::class,'product_id','product_id')
-                    ->where('type','base');
-    }
+
 }
 

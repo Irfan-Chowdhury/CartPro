@@ -2,29 +2,19 @@
 
 @section('meta_info')
 
-    <meta product="og:site_name" @isset($setting_home_page_seo->meta_site_name) content="{{$setting_home_page_seo->meta_site_name}}" @endisset >
-    <meta product="og:title"  @isset($setting_home_page_seo->meta_title) content="{{$setting_home_page_seo->meta_title}}" @endisset >
-    <meta product="og:description" @isset($setting_home_page_seo->meta_description) content="{{$setting_home_page_seo->meta_description}}" @endisset >
-    <meta product="og:url" @isset($setting_home_page_seo->meta_url) content="{{$setting_home_page_seo->meta_url}}" @endisset >
-    <meta product="og:type" @isset($setting_home_page_seo->meta_type) content="{{$setting_home_page_seo->meta_type}}" @endisset >
-    @isset ($setting_home_page_seo->meta_image)
-        <meta product="og:image" content="{{asset($setting_home_page_seo->meta_image)}}">
+    <meta product="og:site_name" @isset($settingHomePageSeo->meta_site_name) content="{{$settingHomePageSeo->meta_site_name}}" @endisset >
+    <meta product="og:title"  @isset($settingHomePageSeo->meta_title) content="{{$settingHomePageSeo->meta_title}}" @endisset >
+    <meta product="og:description" @isset($settingHomePageSeo->meta_description) content="{{$settingHomePageSeo->meta_description}}" @endisset >
+    <meta product="og:url" @isset($settingHomePageSeo->meta_url) content="{{$settingHomePageSeo->meta_url}}" @endisset >
+    <meta product="og:type" @isset($settingHomePageSeo->meta_type) content="{{$settingHomePageSeo->meta_type}}" @endisset >
+    @isset ($settingHomePageSeo->meta_image)
+        <meta product="og:image" content="{{asset($settingHomePageSeo->meta_image)}}">
     @endisset
 
 @endsection
 
 
 @section('frontend_content')
-
-
-@php
-if (Session::has('currency_rate')){
-    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
-}else{
-    $CHANGE_CURRENCY_RATE = 1;
-    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
-}
-@endphp
 
 
 <!--Home Banner starts -->
@@ -153,6 +143,7 @@ if (Session::has('currency_rate')){
                     <div class="category-slider-wrapper swiper-container">
                     <div class="swiper-wrapper">
                         @forelse ($categories->where('top',1) as $item)
+                        {{-- @forelse ($categories as $item) --}}
                             <div class="swiper-slide">
                                 <a href="{{url('category')}}/{{$item->slug}}">
                                     <div class="category-container">
@@ -163,7 +154,8 @@ if (Session::has('currency_rate')){
                                         @endif
 
                                         <div class="category-name">
-                                            {{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}}
+                                            {{-- {{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} --}}
+                                            {{$item->category_name ?? null}}
                                         </div>
                                     </div>
                                 </a>
@@ -257,7 +249,7 @@ if (Session::has('currency_rate')){
 
                                                             </div>
                                                             <div class="product-details">
-                                                                <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                                {{-- <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a> --}}
                                                                 <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                     {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
                                                                 </a>
@@ -280,24 +272,24 @@ if (Session::has('currency_rate')){
                                                                             @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                                 <span class="promo-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->special_price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                                 <span class="old-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @else
                                                                                 <span class="price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @endif
@@ -355,7 +347,7 @@ if (Session::has('currency_rate')){
 
                                                             </div>
                                                             <div class="product-details">
-                                                                <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                                {{-- <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a> --}}
                                                                 <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                     {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
                                                                 </a>
@@ -378,24 +370,24 @@ if (Session::has('currency_rate')){
                                                                             @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                                                 <span class="promo-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->special_price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                                 <span class="old-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @else
                                                                                 <span class="price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @endif
@@ -453,7 +445,7 @@ if (Session::has('currency_rate')){
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
-                                                            <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                            {{-- <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a> --}}
                                                             <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                 {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                             </a>
@@ -475,24 +467,24 @@ if (Session::has('currency_rate')){
                                                                         @if ($item->product->special_price>0)
                                                                             <span class="promo-price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                             <span class="old-price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                         @else
                                                                             <span class="price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                         @endif
@@ -550,7 +542,7 @@ if (Session::has('currency_rate')){
                                                             </div>
                                                         </div>
                                                         <div class="product-details">
-                                                            <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
+                                                            {{-- <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a> --}}
                                                             <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
                                                                 {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? NULL}}
                                                             </a>
@@ -572,24 +564,24 @@ if (Session::has('currency_rate')){
                                                                         @if ($item->product->special_price>0)
                                                                             <span class="promo-price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                             <span class="old-price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                         @else
                                                                             <span class="price">
                                                                                 @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                    {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                    {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                 @else
-                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                    @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                 @endif
                                                                             </span>
                                                                         @endif
@@ -735,16 +727,16 @@ if (Session::has('currency_rate')){
                                                                     @if ($item->price>0 && $item->price<$item->product->price)
                                                                         <span class="promo-price">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                {{ number_format((float)$item->price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                             @else
-                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                             @endif
                                                                         </span>
                                                                         <span class="old-price">
                                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                             @else
-                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                             @endif
                                                                         </span>
                                                                     @endif
@@ -863,24 +855,24 @@ if (Session::has('currency_rate')){
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                                 <span class="old-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @else
                                                                                 <span class="price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @endif
@@ -960,24 +952,24 @@ if (Session::has('currency_rate')){
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                                 <span class="old-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @else
                                                                                 <span class="price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @endif
@@ -1056,24 +1048,24 @@ if (Session::has('currency_rate')){
                                                                             @if ($item->product->special_price>0)
                                                                                 <span class="promo-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                                 <span class="old-price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @else
                                                                                 <span class="price">
                                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                                        {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                                     @else
-                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                                                     @endif
                                                                                 </span>
                                                                             @endif
@@ -1145,7 +1137,7 @@ if (Session::has('currency_rate')){
         </div>
         <div class="row">
             <div class="product-grid">
-                @forelse ($order_details as $item)
+                @forelse ($orderDetails as $item)
                     @if ($item->product->is_active==1)
                         <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                             @csrf
@@ -1158,15 +1150,15 @@ if (Session::has('currency_rate')){
                                 <div class="single-product-wrapper">
                                     <div class="single-product-item">
                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                        @if (isset($item->product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image_medium)))
-                                            <img class="lazy" data-src="{{asset($item->product->baseImage->image_medium)}}">
+                                        @if (isset($item->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->baseImage->image_medium)))
+                                            <img class="lazy" data-src="{{asset($item->baseImage->image_medium)}}">
                                         @else
                                             <img class="lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro">
                                         @endif
                                         </a>
 
                                         <!-- product-promo-text -->
-                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
                                         <!--/ product-promo-text -->
 
                                         <div class="product-overlay">
@@ -1175,11 +1167,12 @@ if (Session::has('currency_rate')){
                                         </div>
                                     </div>
                                     <div class="product-details">
-                                        <a class="product-category" href="{{route('cartpro.category_wise_products',$item->product->categoryProduct[0]->category->slug)}}">
+                                        {{-- <a class="product-category" href="{{route('cartpro.category_wise_products',$item->product->categoryProduct[0]->category->slug)}}">
                                             {{$item->product->categoryProduct[0]->category->catTranslation->category_name ?? NULL}}
-                                        </a>
+                                        </a> --}}
                                         <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->product->categoryProduct[0]->category_id)}}">
-                                            {{$item->product->productTranslation->product_name ?? null}}
+                                            {{-- {{$item->product->productTranslation->product_name ?? null}} --}}
+                                            {{$item->orderProductTranslation->product_name ?? null}}
                                         </a>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
@@ -1199,24 +1192,24 @@ if (Session::has('currency_rate')){
                                                     @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
                                                         <span class="old-price">
                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                             @else
-                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                             @endif
                                                         </span>
                                                         <span class="promo-price">
                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                             @else
-                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                             @endif
                                                         </span>
                                                     @else
                                                         <span class="promo-price">
                                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                             @else
-                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}
                                                             @endif
                                                         </span>
                                                     @endif
@@ -1241,7 +1234,7 @@ if (Session::has('currency_rate')){
         </div>
     </div>
 </section>
-@forelse ($order_details as $item )
+@forelse ($orderDetails as $item )
     @include('frontend.includes.quickshop_trending')
 @empty
 @endforelse
@@ -1249,12 +1242,12 @@ if (Session::has('currency_rate')){
 
 
 <!-- One Coloumn Banner --->
-@if ($one_column_banner_enabled==1)
+@if ($oneColumnBannerEnabled==1)
 <section>
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <a href="{{$settings_new['storefront_one_column_banner_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_one_column_banner_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($one_column_banner_image)}}" alt=""></a>
+                <a href="{{$oneColumnBannerCallToActionURL}}" target="{{$storefrontOneColumnBannerOpenInNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($oneColumnBannerImage)}}" alt=""></a>
             </div>
         </div>
     </div>
@@ -1262,7 +1255,7 @@ if (Session::has('currency_rate')){
 @endif
 
 <!--Brands-->
-@if ($storefront_top_brands_section_enabled==1)
+@if ($storefrontTopBrandsSectionEnabled==1)
 <section class="brand-tab-section">
     <div class="container">
         <div class="row">
@@ -1301,45 +1294,45 @@ if (Session::has('currency_rate')){
     <div class="container">
         <div class="row">
 
-            @if ($settings[18]->plain_value==1)
+            @if ($storefrontSectionStatus==1)
                 <!-- Feature 1 -->
                 <div class="col-md-3 col-6 single-promo-item style2 text-center">
                     <div class="promo-icon style2">
-                        <i class="{{$settings[21]->plain_value ?? null }}"></i>
+                        <i class="{{$storefrontFeature_1_Icon }}"></i>
                     </div>
                     <div class="promo-content style2">
-                        <h5>{{$settings[19]->settingTranslation->value ?? $settings[19]->settingTranslationDefaultEnglish->value ?? NULL }}</h5>
-                        <span>{{$settings[20]->settingTranslation->value ?? $settings[19]->settingTranslationDefaultEnglish->value ?? NULL }}</span>
+                        <h5>{{$storefrontFeature_1_Title }}</h5>
+                        <span>{{$storefrontFeature_1_Subtitle }}</span>
                     </div>
                 </div>
                 <!-- Feature 2 -->
                 <div class="col-md-3 col-6 single-promo-item style2 text-center">
                     <div class="promo-icon style2">
-                        <i class="{{$settings[24]->plain_value ?? null }}"></i>
+                        <i class="{{$storefrontFeature_2_Icon }}"></i>
                     </div>
                     <div class="promo-content style2">
-                        <h5>{{$settings[22]->settingTranslation->value ?? $settings[22]->settingTranslationDefaultEnglish->value ?? NULL }}</h5>
-                        <span>{{$settings[23]->settingTranslation->value ?? $settings[23]->settingTranslationDefaultEnglish->value ?? NULL }}</span>
+                        <h5>{{$storefrontFeature_2_Title }}</h5>
+                        <span>{{$storefrontFeature_2_Subtitle }}</span>
                     </div>
                 </div>
                 <!-- Feature 3 -->
                 <div class="col-md-3 col-6 single-promo-item style2 text-center">
                     <div class="promo-icon style2">
-                        <i class="{{$settings[27]->plain_value ?? null }}"></i>
+                        <i class="{{$storefrontFeature_3_Icon }}"></i>
                     </div>
                     <div class="promo-content style2">
-                        <h5>{{$settings[25]->settingTranslation->value ?? $settings[22]->settingTranslationDefaultEnglish->value ?? NULL }}</h5>
-                        <span>{{$settings[26]->settingTranslation->value ?? $settings[23]->settingTranslationDefaultEnglish->value ?? NULL }}</span>
+                        <h5>{{$storefrontFeature_3_Title }}</h5>
+                        <span>{{$storefrontFeature_3_Subtitle }}</span>
                     </div>
                 </div>
                 <!-- Feature 4 -->
                 <div class="col-md-3 col-6 single-promo-item style2 text-center">
                     <div class="promo-icon style2">
-                        <i class="{{$settings[30]->plain_value ?? null }}"></i>
+                        <i class="{{$storefrontFeature_4_Icon }}"></i>
                     </div>
                     <div class="promo-content style2">
-                        <h5>{{$settings[28]->settingTranslation->value ?? $settings[28]->settingTranslationDefaultEnglish->value ?? NULL }}</h5>
-                        <span>{{$settings[29]->settingTranslation->value ?? $settings[29]->settingTranslationDefaultEnglish->value ?? NULL }}</span>
+                        <h5>{{$storefrontFeature_4_Title }}</h5>
+                        <span>{{$storefrontFeature_4_Subtitle }}</span>
                     </div>
                 </div>
             @endif

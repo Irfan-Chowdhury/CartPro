@@ -27,13 +27,13 @@ class CategoryProduct extends Model
     {
     	$locale = Session::get('currentLocale');
     	return $this->hasOne(CategoryTranslation::class,'category_id','category_id')
-                ->where('local',$locale);
+                ->where('locale',$locale);
     }
 
     public function categoryTranslationDefaultEnglish()
     {
     	return $this->hasOne(CategoryTranslation::class,'category_id','category_id')
-                        ->where('local','en');
+                        ->where('locale','en');
     }
 
 

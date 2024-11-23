@@ -17,6 +17,28 @@ class Brand extends Model
 
     public $with = ['brandTranslations'];
 
+
+    public function translations()
+    {
+        return $this->hasMany(BrandTranslation::class,'brand_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+    
+
+
     public function format()
     {
         return [

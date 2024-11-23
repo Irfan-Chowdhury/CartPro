@@ -39,26 +39,37 @@ class CategoryService extends StatusHandlerService
 
     public function getAllCategories()
     {
-        $query = Category::with(['translations','parentCategory'])
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','DESC');
-
-
         // if (request()->routeIs('specific.route.name')) {
         if (!$this->wordCheckInURL('categories')) {
-            $query->where('is_active', 1);
+            $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+            return DB::table('categories')
+                ->select('categories.id', 'categories.slug', 'categories.image', 'categories.is_active', 'category_translations.category_name')
+                ->leftJoin('category_translations', function ($join) use ($locale) {
+                    $join->on('categories.id', '=', 'category_translations.category_id')
+                        ->where(function ($query) use ($locale) {
+                            $query->where('category_translations.locale', $locale)
+                                ->orWhere('category_translations.locale', 'en');
+                        });
+                })
+                ->orderBy('categories.is_active', 'DESC')
+                ->orderBy('categories.id', 'ASC')
+                ->get();
         }
 
-        $categories = $query->get()
-                            ->map(function($category) {
-                                return [
-                                    'id'=> $category->id,
-                                    'image'=> $category->image,
-                                    'is_active'=> $category->is_active,
-                                    'category_name'=> $category->translation->category_name,
-                                    'parent_category_name'=> $category->parentTranslation->category_name ?? 'NONE',
-                                ];
-                            });
+
+        $categories = Category::with(['translations','parentCategory'])
+            ->orderBy('is_active','DESC')
+            ->orderBy('id','ASC')
+            ->get()
+            ->map(function($category) {
+                return [
+                    'id'=> $category->id,
+                    'image'=> $category->image,
+                    'is_active'=> $category->is_active,
+                    'category_name'=> $category->translation->category_name,
+                    'parent_category_name'=> $category->parentTranslation->category_name ?? 'NONE',
+                ];
+            });
 
         return json_decode(json_encode($categories), FALSE);
     }

@@ -1,17 +1,17 @@
 @php
-if (Session::has('currency_rate')){
-    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
-}else{
-    $CHANGE_CURRENCY_RATE = 1;
-    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
-}
+// if (Session::has('currency_rate')){
+//     $changeCurrencyRate = Session::get('currency_rate');
+// }else{
+//     $changeCurrencyRate = 1;
+//     Session::put('currency_rate', $changeCurrencyRate);
+// }
 @endphp
 
     <!--Header Area starts-->
     <header>
         @if (!Cookie::has('top_banner') && env('TOPBAR_BANNER_ENABLED'))
             <div id="top_banner" class="text-center" style="background-color:#e5e8ec">
-                <img src="{{asset($topbar_logo_path)}}" alt="">
+                <img src="{{asset($topbarLogoPath)}}" alt="">
                 <a class="button sm" id="bannerSlideUp"><i class="las la-times"></i></a>
             </div>
         @endif
@@ -21,26 +21,27 @@ if (Session::has('currency_rate')){
                     <div class="d-lg-flex d-xl-flex justify-content-between">
                         <div class="header-top-left d-none d-lg-flex d-xl-flex">
                             <ul class="header-top-social menu">
-                                @if(isset($storefront_facebook_link))
-                                <li><a href="{{$storefront_facebook_link}}"><i class="ti-facebook"></i></a></li>
+                                @if(isset($storefrontFacebookLink))
+                                <li><a href="{{$storefrontFacebookLink}}"><i class="ti-facebook"></i></a></li>
                                 @endif
-                                @if(isset($storefront_twitter_link))
-                                <li><a href="{{$storefront_twitter_link}}"><i class="ti-instagram"></i></a></li>
+                                @if(isset($storefrontTwitterLink))
+                                <li><a href="{{$storefrontTwitterLink}}"><i class="ti-instagram"></i></a></li>
                                 @endif
-                                @if(isset($storefront_instagram_link))
-                                <li><a href="{{$storefront_instagram_link}}"><i class="ti-twitter"></i></a></li>
+                                @if(isset($storefrontInstagramLink))
+                                <li><a href="{{$storefrontInstagramLink}}"><i class="ti-twitter"></i></a></li>
                                 @endif
-                                @if(isset($storefront_youtube_link))
-                                <li><a href="{{$storefront_youtube_link}}"><i class="ti-youtube"></i></a></li>
+                                @if(isset($storefrontYoutubeLink))
+                                <li><a href="{{$storefrontYoutubeLink}}"><i class="ti-youtube"></i></a></li>
                                 @endif
                             </ul>
                         </div>
                         <div class="header-top-middle d-none d-lg-flex d-xl-flex">
                             <span class="announcement">
                                 <!--Welcome-->
-                                @if ($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish)
+                                {{-- @if ($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish)
                                     {{$settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL}}
-                                @endif
+                                @endif --}}
+                                {{ $welcomeTitle }}
                             </span>
                         </div>
                         <div class="header-top-right">
@@ -55,7 +56,7 @@ if (Session::has('currency_rate')){
                                 </li>
                                 <li class="has-dropdown"><a href="#"><i class="las la-money-bill"></i>&nbsp; @if(Session::has('currency_code')) {{Session::get('currency_code')}} @else {{env('DEFAULT_CURRENCY_CODE')}} @endif</a>
                                     <ul class="dropdown p-0">
-                                        @foreach ($currency_codes as $item)
+                                        @foreach ($currencyCodes as $item)
                                             <li><a href="{{route('cartpro.currency_change',$item->currency_code)}}" {{$item->currency_code==Session::get('currency_code') ? 'selected': ''}}>{{$item->currency_code}}</a></li>
                                         @endforeach
                                     </ul>
@@ -73,7 +74,7 @@ if (Session::has('currency_rate')){
                             <div class="mobile-menu-icon d-lg-none"><i class="ti-menu"></i></div>
                             <div class="logo">
                                 <a href="{{route('cartpro.home')}}">
-                                    <img src="{{$header_logo_path}}" alt="Brand logo">
+                                    <img src="{{$headerLogoPath}}" alt="Brand logo">
                                 </a>
                             </div>
                         </div>
@@ -110,7 +111,7 @@ if (Session::has('currency_rate')){
                                         <a href="{{route('wishlist.index')}}">
                                             <i class="lar la-heart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist"></i>
                                         </a>
-                                        <span class="badge badge-light wishlist_count">{{$total_wishlist }}</span>
+                                        <span class="badge badge-light wishlist_count">{{$totalWishlist }}</span>
                                     </li>
                                 @else
                                     <li class="cart__menu d-none d-lg-inline-block d-xl-inline-block">
@@ -124,12 +125,12 @@ if (Session::has('currency_rate')){
 
                                 <li class="cart__menu">
                                     <i class="las la-shopping-cart" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cart"></i>
-                                    <span class="badge badge-light cart_count">{{$cart_count}}</span>
+                                    <span class="badge badge-light cart_count">{{$cartCount}}</span>
                                     <span class="total">
                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                            <span class="cart_total">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                            <span class="cart_total">{{ number_format((float)$cartTotal * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                         @else
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cart_total">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="cart_total">{{ number_format((float)$cartTotal * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span>
                                         @endif
                                     </span>
                                 </li>
@@ -139,11 +140,11 @@ if (Session::has('currency_rate')){
                 </div>
             </div>
         @php
-            $categories = \App\Models\Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-                        ->where('is_active',1)
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','ASC')
-                        ->get();
+            // $categories = \App\Models\Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+            //             ->where('is_active',1)
+            //             ->orderBy('is_active','DESC')
+            //             ->orderBy('id','ASC')
+            //             ->get();
 
             $category_product_count = [];
             foreach ($categories as $category) {
@@ -170,15 +171,18 @@ if (Session::has('currency_rate')){
                                     <ul id="cat_menu" class="dropdown p-0">
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a>
+                                                {{-- <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a> --}}
+                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->translation->category_name}} ({{$category_product_count[$category->id]}})</a>
                                                     <ul class="dropdown">
                                                         @foreach ($category->child as $item)
-                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></li>
+                                                            {{-- <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></li> --}}
+                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->translation->category_name}} ({{$category_product_count[$item->id]}}) </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
                                             @else
-                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a></li>
+                                                {{-- <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a></li> --}}
+                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->translation->category_name}} ({{$category_product_count[$category->id]}})</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -214,11 +218,11 @@ if (Session::has('currency_rate')){
 
                                                 <li class="{{ Request::is('all-categories') ? 'active' : '' }}"><a href="{{route('cartpro.all_categorgies')}}">{{__('file.All Categories')}}</a></li>
 
-                                                @if ($storefront_shop_page_enabled)
+                                                @if ($storefrontShopPageEnabled)
                                                     <li class="{{ Request::is('shop') ? 'active' : '' }}"><a href="{{route('cartpro.shop')}}">{{__('file.Shop')}}</a></li>
                                                 @endif
 
-                                                @if ($storefront_brand_page_enabled)
+                                                @if ($storefrontBrandPageEnabled)
                                                     <li class="{{ Request::is('brands') ? 'active' : '' }}"><a href="{{route('cartpro.brands')}}">{{__('file.Brands')}}</a></li>
                                                 @endif
 
@@ -314,7 +318,7 @@ if (Session::has('currency_rate')){
             <div class="shopping__cart__inner">
                 <div class="shp__cart__wrap">
                         <div class="cart_list">
-                            @forelse ($cart_contents as $item)
+                            @forelse ($cartContents as $item)
                                 <div id="{{$item->rowId}}" class="shp__single__product">
                                     <div class="shp__pro__thumb">
                                         <a href="#">
@@ -344,9 +348,9 @@ if (Session::has('currency_rate')){
 
                                         <span class="my_cart_specific_qty_{{$item->rowId}}">{{$item->qty}}</span> x <span class="shp__price">
                                             @if(env('CURRENCY_FORMAT')=='suffix')
-                                                <span>{{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                <span>{{ number_format((float)$item->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                             @else
-                                                <span>@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                <span>@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span>
                                             @endif
                                         </span>
                                     </div>
@@ -369,9 +373,9 @@ if (Session::has('currency_rate')){
                     <span class="subtotal">@lang('file.Subtotal')</span>
                     <span class="total__price">
                         @if(env('CURRENCY_FORMAT')=='suffix')
-                            <span>{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                            <span>{{ number_format((float)$cartTotal * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span> @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                         @else
-                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{ number_format((float)$cart_total * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
+                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') <span class="total_price">{{ number_format((float)$cartTotal * $changeCurrencyRate, env('FORMAT_NUMBER'), '.', '') }}</span>
                         @endif
                     </span>
                 </div>

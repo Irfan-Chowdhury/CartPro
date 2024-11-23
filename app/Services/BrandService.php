@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
+use App\Models\Brand;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\File;
@@ -22,6 +23,7 @@ class BrandService
 
     public function getAllBrands()
     {
+
         return $this->brandContract->getAllBrands();
     }
 
@@ -162,8 +164,25 @@ class BrandService
 
 
     //Front - HomeController
-    public function getBrandsWhereInIds($ids){
-        return $this->brandContract->getBrandsWhereInIds($ids);
+    public function getBrandsWhereInIds($ids)
+    {
+
+        $data = Brand::with('translations')->whereIn('id',$ids)
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get()
+                ->map(function($brand){
+                    return [
+                        'id'=>$brand->id,
+                        'slug'=>$brand->slug,
+                        'is_active'=>$brand->is_active,
+                        'brand_logo'=>$brand->brand_logo ?? null,
+                        'brand_name'=>$brand->translation->brand_name,
+                    ];
+                });
+
+        return json_decode(json_encode($data), FALSE);
     }
 
 }

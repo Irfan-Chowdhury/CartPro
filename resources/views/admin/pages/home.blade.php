@@ -157,21 +157,24 @@ if (Session::has('currency_rate')){
                                 <table class="table">
                                     <tbody>
                                         @forelse ($top_categories as $item)
-                                            <tr>
-                                                @if($item->category->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->category->image)))
-                                                    <td><img src="{{asset($item->category->image)}}" height="50px" width="50px"></td>
-                                                @else
-                                                    <td><img src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Category" style="background-size: cover; background-position: center;" height="50px" width="50px"></td>
-                                                @endif
-                                                <td>{{$item->category->catTranslation->category_name ?? $item->category->categoryTranslationDefaultEnglish->category_name ?? null }}</td>
-                                                <td>
-                                                    @if(env('CURRENCY_FORMAT')=='suffix')
-                                                        {{ number_format($item->total_amount,'2')}}  {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                            @if ($item->category)
+                                                <tr>
+                                                    @if($item->category->image!==null && Illuminate\Support\Facades\File::exists(public_path($item->category->image)))
+                                                        <td><img src="{{asset($item->category->image)}}" height="50px" width="50px"></td>
                                                     @else
-                                                        {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($item->total_amount,'2')}}
+                                                        <td><img src="https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Category" style="background-size: cover; background-position: center;" height="50px" width="50px"></td>
                                                     @endif
-                                                </td>
-                                            </tr>
+                                                    {{-- <td>{{$item->category->catTranslation->category_name ?? $item->category->categoryTranslationDefaultEnglish->category_name ?? null }}</td> --}}
+                                                    <td>{{$item->category->translation->category_name }}</td>
+                                                     <td>
+                                                        @if(env('CURRENCY_FORMAT')=='suffix')
+                                                            {{ number_format($item->total_amount,'2')}}  {{env('DEFAULT_CURRENCY_SYMBOL')}}
+                                                        @else
+                                                            {{env('DEFAULT_CURRENCY_SYMBOL')}} {{ number_format($item->total_amount,'2')}}
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @empty
                                         @endforelse
                                     </tbody>

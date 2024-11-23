@@ -18,6 +18,31 @@ class Tag extends Model
     protected $dates = ['deleted_at'];
 
 
+    public function translations()
+    {
+        return $this->hasMany(TagTranslation::class,'tag_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
+
+
+
+
+
+
     public function tagTranslation()  //Remove Later
     {
     	return $this->hasMany(TagTranslation::class,'tag_id');
