@@ -1,0 +1,38 @@
+<div class="tab-pane fade show" aria-labelledby="product-seo" id="seo" role="tabpanel">
+    <div class="card">
+        <h4 class="card-header"><b><?php echo e(__('file.SEO')); ?></b></h4>
+        <hr>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b> <?php echo e(__('file.Meta Title')); ?> </b></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="meta_title" id="metaTitle" value="<?php echo e($product->productTranslation->meta_title ?? $product->productTranslationEnglish->meta_title ?? null); ?>"  class="form-control" id="inputEmail3" placeholder="<?php echo app('translator')->get('file.Type'); ?> <?php echo app('translator')->get('file.Meta Title'); ?>" >
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label"><b><?php echo e(__('file.Meta Description')); ?> </b></label>
+                        <div class="col-sm-8">
+                            <textarea name="meta_description" id="meta_description" class="form-control" rows="5"><?php echo e($product->productTranslation->meta_description ?? $product->productTranslationEnglish->meta_description ?? null); ?></textarea>
+                            <?php $__errorArgs = ['meta_description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="text-danger"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php /**PATH /var/www/html/cartpro/cartproshop_new/resources/views/admin/pages/product/includes/edit/seo.blade.php ENDPATH**/ ?>

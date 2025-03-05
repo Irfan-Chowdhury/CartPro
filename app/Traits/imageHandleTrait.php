@@ -9,7 +9,7 @@ use Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-trait imageHandleTrait{
+trait imageHandleTrait {
 
     public function imageStore(string|object $imageFile, string $directory, int $width, int $height)
     {
