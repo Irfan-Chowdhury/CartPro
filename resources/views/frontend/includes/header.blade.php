@@ -45,7 +45,7 @@
                             </span>
                         </div>
                         <div class="header-top-right">
-                            <ul>
+                            {{-- <ul>
                                 <li><a href="{{route('cartpro.order_tracking')}}">{{'Order Tracking'}}</a></li>
                                 <li class="has-dropdown"><a href="#"><i class="las la-language"></i>&nbsp; {{$languages[$locale]->language_name}}</a>
                                     <ul class="dropdown p-0">
@@ -61,7 +61,7 @@
                                         @endforeach
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                 </div>
@@ -171,11 +171,9 @@
                                     <ul id="cat_menu" class="dropdown p-0">
                                         @forelse ($categories->where('parent_id',NULL) as $category)
                                             @if ($category->child->isNotEmpty())
-                                                {{-- <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a> --}}
                                                 <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->translation->category_name}} ({{$category_product_count[$category->id]}})</a>
                                                     <ul class="dropdown">
                                                         @foreach ($category->child as $item)
-                                                            {{-- <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$item->id]}}) </a></li> --}}
                                                             <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->translation->category_name}} ({{$category_product_count[$item->id]}}) </a></li>
                                                         @endforeach
                                                     </ul>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\API\ClientAutoUpdateController;
 use App\Http\Controllers\API\DemoAutoUpdateController;
+use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\Frontend\CommonController;
+use App\Http\Controllers\API\HeaderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,3 +40,11 @@ Route::post('version-upgrade', [ClientAutoUpdateController::class, 'versionUpgra
 Route::get('common-data', [CommonController::class, 'index']);
 Route::get('header-data', [CommonController::class, 'headerData']);
 Route::post('contact', [CommonController::class, 'contact']);
+
+
+Route::get('storefront-header-data', [HeaderController::class, 'storefrontHeaderData']);
+Route::get('storefront-footer-data', [FooterController::class, 'storefrontFooterData']);
+
+
+
+

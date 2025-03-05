@@ -570,4 +570,7 @@ class CommonController extends Controller
 
         return response()->json(1995);
     }
+
+
+
 }

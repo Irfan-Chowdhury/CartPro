@@ -1,0 +1,41 @@
+services:
+  laravel-php81:
+    container_name: cartproshop_v4_php74
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8004:8004  # Change port to avoid conflict with PHP 8.2 project
+    depends_on:
+      - mysql_db74
+    restart: always
+
+  mysql_db74:
+    image: mysql:5.7
+    container_name: mysql_php74
+    environment:
+      MYSQL_ROOT_PASSWORD: irfan95
+      MYSQL_DATABASE: cartproshop_v4
+    ports:
+      - 3307:3306  # Change port to avoid conflict with PHP 8.2
+    volumes:
+      - db_data74:/var/lib/mysql
+    restart: always
+
+  phpmyadmin74:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_php74
+    ports:
+      - 9004:80  # Change port to avoid conflict with PHP 8.2
+    environment:
+      PMA_HOST: mysql_db74
+      PMA_PORT: 3306
+    depends_on:
+      - mysql_db74
+    restart: always
+
+volumes:
+  db_data74:
+

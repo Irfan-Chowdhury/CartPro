@@ -41,6 +41,7 @@
 <!--Scroll to top starts-->
 <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
 <!--Scroll to top ends-->
+
 <!-- Footer section Starts-->
 <div class="footer-wrapper">
     <div class="container">
