@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\API\ClientAutoUpdateController;
 use App\Http\Controllers\API\DemoAutoUpdateController;
+use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\Frontend\CommonController;
 use App\Http\Controllers\API\HeaderController;
+use App\Http\Controllers\API\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,5 +48,7 @@ Route::get('storefront-header-data', [HeaderController::class, 'storefrontHeader
 Route::get('storefront-footer-data', [FooterController::class, 'storefrontFooterData']);
 
 
+Route::get('/home',[HomeController::class,'index']);
+Route::get('/faq',[FaqController::class,'faq']);
 
 
