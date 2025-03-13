@@ -37,6 +37,25 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
+    public function translations()
+    {
+        return $this->hasMany(ProductTranslation::class,'product_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
 
     // New
     public function productTranslations(){

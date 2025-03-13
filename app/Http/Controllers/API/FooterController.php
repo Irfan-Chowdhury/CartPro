@@ -27,7 +27,7 @@ class FooterController extends Controller
 
         $tags = self::getFooterTags($settings->storefront_footer_tag_id->plain_value);
 
-        
+
         $footerData = (object) [
             'newsletterSettings'  => $settingNewslatter->newsletter,
             'storefrontImages'  => [
@@ -101,6 +101,5 @@ class FooterController extends Controller
             'footerLogoPath' => $footerLogoPath,
             'paymentMethodImage' => $paymentMethodImage,
         ];
-
     }
 }

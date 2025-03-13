@@ -1293,7 +1293,6 @@
 <div class="hero-promo-area v1">
     <div class="container">
         <div class="row">
-
             @if ($storefrontSectionStatus==1)
                 <!-- Feature 1 -->
                 <div class="col-md-3 col-6 single-promo-item style2 text-center">
