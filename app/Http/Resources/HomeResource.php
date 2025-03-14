@@ -14,8 +14,9 @@ class HomeResource extends JsonResource
             'settings' => $this->settings ?? null,
             'storefrontImages' => $this->storefrontImages ?? null,
             'homeFooterDescription' => $this->homeFooterDescription ?? null,
-            'orderDetailProducts' => $this->orderDetailProducts ?? null,
+            'trendProducts' => $this->trendProducts ?? null,
             'changeCurrencyRate' => $this->changeCurrencyRate ?? null,
+            'productDetailsTab' => $this->productDetailsTab ?? null,
         ];
     }
 }

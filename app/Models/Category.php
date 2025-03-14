@@ -17,6 +17,7 @@ class Category extends Model
     protected $dates = ['deleted_at'];
 
 
+    // Vendora
     public function translations()
     {
         return $this->hasMany(CategoryTranslation::class,'category_id');
@@ -61,6 +62,14 @@ class Category extends Model
         return $parentTranslation;
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'category_product', 'category_id', 'product_id');
+    }
+    
+
+
+
 
 
 
@@ -87,10 +96,10 @@ class Category extends Model
                         ->where('locale','en');
     }
 
-    public function products()
-    {
-    	return $this->hasMany(Product::class,'category_id');
-    }
+    // public function products()
+    // {
+    // 	return $this->hasMany(Product::class,'category_id');
+    // }
 
 
     public function child()

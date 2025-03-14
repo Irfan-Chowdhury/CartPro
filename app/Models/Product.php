@@ -37,6 +37,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
+    // Vendora
     public function translations()
     {
         return $this->hasMany(ProductTranslation::class,'product_id');

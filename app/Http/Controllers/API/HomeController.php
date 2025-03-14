@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\HomeResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SettingResource;
+use App\Models\Category;
+use App\Models\CategoryProduct;
 use App\Models\FooterDescription;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -34,6 +36,7 @@ class HomeController extends Controller
 
         $changeCurrencyRate = Session::has('currency_rate') ? Session::get('currency_rate') : 1;
 
+        $productDetailsTab = self::getProductTabsData($settings);
 
         $homeData = (object) [
             'sliders' => $sliders,
@@ -74,8 +77,9 @@ class HomeController extends Controller
                 ]
             ],
             'homeFooterDescription' => $homeFooterDescription,
-            'orderDetailProducts' => $orderDetailProducts,
-            'changeCurrencyRate' => $changeCurrencyRate
+            'trendProducts' => $orderDetailProducts,
+            'changeCurrencyRate' => $changeCurrencyRate,
+            'productDetailsTab' => $productDetailsTab
         ];
 
         return new HomeResource($homeData);
@@ -113,8 +117,8 @@ class HomeController extends Controller
         $slider_banners = [];
 
         for ($i=0; $i < 3; $i++) {
-            $keyImage = "storefront_slider_banner_" . ($i + 1) . "_image";
             $keyTitle = "storefront_slider_banner_" . ($i + 1) . "_title";
+            $keyImage = "storefront_slider_banner_" . ($i + 1) . "_image";
             $keyActionUrl ='storefront_slider_banner_'.($i+1).'_call_to_action_url';
             $keyNewWindow ='storefront_slider_banner_'.($i+1).'_open_in_new_window';
 
@@ -188,6 +192,74 @@ class HomeController extends Controller
         return json_decode(json_encode($orderDetailProducts), FALSE);
 
     }
+
+    private function getProductTabsData($settings)
+    {
+        $productTabs = [];
+        $categoryIds = [];
+
+        for ($i=0; $i < 4; $i++) {
+            $keyTitle = "storefront_product_tabs_1_section_tab_" . ($i + 1) . "_title";
+            $keyProductType = "storefront_product_tabs_1_section_tab_" . ($i + 1) . "_product_type";
+            $keyCategoryId = "storefront_product_tabs_1_section_tab_" . ($i + 1) . "_category_id";
+
+            $productTabs[$i]['key'] = $keyTitle;
+            $productTabs[$i]['title'] = $settings->$keyTitle->value ?? null;
+            $productTabs[$i]['keyProductType'] = $settings->$keyProductType->plain_value ?? null;
+            $productTabs[$i]['keyCategoryId'] = $settings->$keyCategoryId->plain_value ?? null;
+            $categoryIds[] = $settings->$keyCategoryId->plain_value ?? null;
+        }
+
+        $categoryWithProducts = Category::with([
+                                'translations',
+                                'products.translations',
+                                'products.baseImage',
+                                'products.additionalImage'
+                            ])
+                            ->whereIn('id', $categoryIds)
+                            ->get()
+                            ->map(function($category){
+                                return [
+                                    'categoryId' => $category->id,
+                                    'slug' => $category->slug,
+                                    'isActive'  => $category->is_active,
+                                    'categoryName' => $category->translation->category_name,
+                                    'products' => $category->products->map(function($product){
+                                        return [
+                                            'productId' => $product->id,
+                                            'name' => $product->translation->product_name,
+                                            'slug' => $product->slug,
+                                            'price' => $product->price,
+                                            'manageStock' => $product->manage_stock,
+                                            'qty' => $product->qty,
+                                            'inStock' => $product->in_stock,
+                                            'newTo' => $product->new_to,
+                                            'avgRating' => $product->avg_rating,
+                                            'specialPrice' => $product->special_price,
+                                            'isActive' => $product->is_active,
+                                            'image' => file_exists(public_path($product->baseImage->image)) ? asset($product->baseImage->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                                            'mediumImage' => file_exists(public_path($product->baseImage->image_medium)) ? asset($product->baseImage->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                                        ];
+                                    })
+                                ];
+                            });
+
+
+        // $categoryWithProducts = json_decode(json_encode($categoryWithProducts), FALSE);
+
+
+        foreach ($categoryWithProducts as $key => $category) {
+            if($category['categoryId'] == $categoryIds[$key]) {
+                $productTabs[$key]['categoryWithProducts'] = $category;
+            }
+        }
+
+        return [
+            'section_enabled' => $settings->storefront_product_tabs_1_section_enabled->plain_value,
+            'productTabs' => $productTabs,
+        ];
+    }
+
 
 
 }

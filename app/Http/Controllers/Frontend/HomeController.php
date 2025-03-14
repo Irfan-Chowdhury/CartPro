@@ -266,8 +266,9 @@ class HomeController extends FrontBaseController
             elseif ($setting->key=='storefront_top_brands' && $setting->plain_value!=NULL) {
                 $storefront_top_brands = $setting->plain_value;
             }
-        }
 
+
+        }
 
 
         //Change this later.

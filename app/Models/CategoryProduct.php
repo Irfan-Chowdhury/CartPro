@@ -10,6 +10,8 @@ class CategoryProduct extends Model
 {
     protected $table = 'category_product';
 
+    protected $fillable = ['product_id', 'category_id']; // Ensure this includes category_id
+
 
 
     /*
@@ -20,8 +22,9 @@ class CategoryProduct extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class);
     }
+
 
     public function categoryTranslation()
     {
