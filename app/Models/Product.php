@@ -15,6 +15,11 @@ class Product extends Model
         'brand_id',
         'tax_class_id',
         'slug',
+        'name',
+        'description',
+        'short_description',
+        'meta_title',
+        'meta_description',
         'price',
         'weight',
         'weight_base_calculation',
@@ -57,6 +62,26 @@ class Product extends Model
         return $translation;
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_product','product_id','category_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class);
+    }
+
+    // Vendora End
+
+
+
+
 
     // New
     public function productTranslations(){
@@ -77,16 +102,16 @@ class Product extends Model
                         ->where('local','en');
     }
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class);
-    }
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class);
+    // }
 
     public function productCategoryTranslation()
     {
         $locale = Session::get('currentLocale');
     	return $this->hasOne(CategoryTranslation::class,'category_id')
-                ->where('local',$locale);
+                ->where('locale',$locale);
     }
 
     public function productCategoryTranslationEnglish()
@@ -111,16 +136,12 @@ class Product extends Model
         return $this->hasMany(ProductImage::class,'product_id');
     }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
 
-    public function attributes()
-    {
-        return $this->belongsToMany(Attribute::class,'product_attribute_value')
-                    ->withPivot('attribute_value_id');
-    }
+    // public function attributes()
+    // {
+    //     return $this->belongsToMany(Attribute::class,'product_attribute_value')
+    //                 ->withPivot('attribute_value_id');
+    // }
 
     public function brandTranslation()
     {

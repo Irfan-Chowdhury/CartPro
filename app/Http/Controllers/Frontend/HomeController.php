@@ -41,9 +41,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Frontend\FrontBaseController;
+use App\Http\Resources\ProductDetailsResource;
 use App\Models\SettingTranslation;
 use App\Models\StorefrontImage;
 use App\Services\CategoryService;
+use App\Services\ProductService;
 use App\Traits\TranslationTrait;
 
 class HomeController extends FrontBaseController
@@ -538,71 +540,127 @@ class HomeController extends FrontBaseController
     // }
 
 
-    public function product_details($product_slug, $category_id)
+    // public function product_details($product_slug, $category_id)
+    // {
+    //     $product = Product::with([
+    //         'productCategoryTranslation',
+    //         'productTranslation',
+    //         'productTranslationEnglish',
+    //         'categories',
+    //         'tags',
+    //         'brand',
+    //         'brandTranslation',
+    //         'brandTranslationEnglish',
+    //             'baseImage'=> function ($query){
+    //                 $query->where('type','base')
+    //                     ->first();
+    //             },
+    //             'additionalImage'=> function ($query){
+    //                 $query->where('type','additional')
+    //                     ->get();
+    //             },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //             'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
+    //             ])
+    //             ->where('slug',$product_slug)
+    //             ->first();
+
+
+    //     $attribute = [];
+    //     foreach ($product->productAttributeValues as $value) {
+    //         $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
+    //     }
+
+    //     $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
+
+    //     $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
+    //     if ($cart) {
+    //         $product_cart_qty = $cart->qty;
+    //     }else {
+    //         $product_cart_qty = null;
+    //     }
+
+    //     //Review Part
+    //     if (Auth::check()) {
+    //         $user_and_product_exists = DB::table('orders')
+    //                     ->join('order_details','order_details.order_id','orders.id')
+    //                     ->where('orders.user_id',Auth::user()->id)
+    //                     ->where('order_details.product_id',$product->id)
+    //                     ->exists();
+    //     }else {
+    //         $user_and_product_exists = null;
+    //     }
+
+    //     $reviews = DB::table('reviews')
+    //                 ->join('users','users.id','reviews.user_id')
+    //                 ->where('product_id',$product->id)
+    //                 ->where('status','approved')
+    //                 ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
+    //                 ->where('reviews.deleted_at',null)
+    //                 ->get();
+
+    //     if (empty($reviews)) {
+    //         $reviews =[];
+    //     }
+
+
+    //     //Related Products
+    //     $category_products =  CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+    //                     'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //                     'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+    //                 ->where('category_id', $category_id)
+    //                 ->get();
+
+
+    //     return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
+    // }
+    public function product_details(string $productSlug, $category_id, ProductService $productService)
     {
-        $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
-                'baseImage'=> function ($query){
-                    $query->where('type','base')
-                        ->first();
-                },
-                'additionalImage'=> function ($query){
-                    $query->where('type','additional')
-                        ->get();
-                },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
-                ])
-                ->where('slug',$product_slug)
-                ->first();
+        // $data = $productService->getProductBySlug($productSlug);
+        // $productDetailResult = new ProductDetailsResource($data);
+
+        $productDetailResult = Cache::remember('productDetailResult', 300, function () use ($productService, $productSlug) {
+            $data = $productService->getProductBySlug($productSlug);
+            return new ProductDetailsResource($data);
+        });
 
 
-        $attribute = [];
-        foreach ($product->productAttributeValues as $value) {
-            $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
-        }
+        $product =  $productDetailResult->productDetails;
+        $category =  $product->category;
+        $attributes =  $product->attributes;
 
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
-        $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
+        $reviews =  $productDetailResult->reviews;
+        $socialShareLinks =  $productDetailResult->socialShareLinks;
+        $categoryWiseProducts = $productDetailResult->categoryWiseProducts->products;
+
+
+        $productCartQty = null;
+        $cart = Cart::content()->where('id',$product->basic->id)->where('options.category_id',$category_id ?? null)->first();
         if ($cart) {
-            $product_cart_qty = $cart->qty;
-        }else {
-            $product_cart_qty = null;
+            $productCartQty = $cart->qty;
         }
 
         //Review Part
+        $userAndProductExists = null;
         if (Auth::check()) {
-            $user_and_product_exists = DB::table('orders')
+            $userAndProductExists = DB::table('orders')
                         ->join('order_details','order_details.order_id','orders.id')
                         ->where('orders.user_id',Auth::user()->id)
                         ->where('order_details.product_id',$product->id)
                         ->exists();
-        }else {
-            $user_and_product_exists = null;
         }
 
-        $reviews = DB::table('reviews')
-                    ->join('users','users.id','reviews.user_id')
-                    ->where('product_id',$product->id)
-                    ->where('status','approved')
-                    ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
-                    ->where('reviews.deleted_at',null)
-                    ->get();
+        return view('frontend.pages.product_details',compact(
+            'product',
+            'category',
+            'attributes',
+            'reviews',
+            'socialShareLinks',
+            'categoryWiseProducts',
+            'productCartQty',
+            'userAndProductExists'));
 
-        if (empty($reviews)) {
-            $reviews =[];
-        }
-
-
-        //Related Products
-        $category_products =  CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
-                        'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                        'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                    ->where('category_id', $category_id)
-                    ->get();
-
-
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
-    }
+   }
 
     public function dataAjaxSearch(Request $request)
     {

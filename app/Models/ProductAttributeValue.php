@@ -13,6 +13,28 @@ class ProductAttributeValue extends Model
 
     protected $fillable = ['product_id','attribute_id','attribute_value_id'];
 
+
+    // Vendora
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function attribute()
+    {
+        return $this->belongsTo(Attribute::class);
+    }
+
+    // public function attributeValue()
+    // {
+    // 	return $this->belongsTo(AttributeValue::class);
+    // }
+
+    // Vendora
+
+
+
     //Used HomeController for product-details;
     public function attributeTranslation()
     {

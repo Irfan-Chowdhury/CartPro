@@ -7,10 +7,17 @@ use App\Contracts\Product\ProductContract;
 use App\Contracts\Product\ProductImageContract;
 use App\Contracts\Product\ProductTagContract;
 use App\Contracts\Product\ProductTranslationContract;
+use App\Models\AttributeProduct;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductAttributeValue;
 use App\Traits\WordCheckTrait;
 use App\Utilities\Message;
 use Illuminate\Support\Facades\File;
 use Str;
+use Illuminate\Support\Facades\DB;
+use Share;
+
 
 class ProductService extends Message
 {
@@ -186,5 +193,185 @@ class ProductService extends Message
             }
         }
     }
+
+
+
+    // For API Frontend
+
+    public function getProductBySlug(string $slug)
+    {
+        // $validAttributes = ProductAttributeValue::select('product_id', 'attribute_id')
+        // ->whereHas('product')
+        // ->whereHas('attribute')
+        // ->distinct()
+        // ->get();
+
+        // $insertData = $validAttributes->map(function ($item) {
+        //     return [
+        //         'product_id' => $item->product_id,
+        //         'attribute_id' => $item->attribute_id
+        //     ];
+        // })->toArray();
+
+        // AttributeProduct::insert($insertData);
+        // return 'ok';
+
+        $product = self::getProduct($slug);
+
+        $reviews = self::getReviews($product->id);
+
+        $socialShareLinks = (object) self::socialShareLinks();
+
+        $categoryWiseProducts = self::getCategoryWiseProducts($product->categories->first()->id);
+
+
+        return (object) [
+            'productDetails' => (object) [
+                'basic' => $product->makeHidden(['categories', 'brand','tags','baseImage','additionalImage','attributes']),
+                'imageCollection' => (object) [
+                    'baseImage' => $product->baseImage,
+                    'additionalImage' => $product->additionalImage,
+                ],
+                'category' => $product->categories->first(),
+                'brand' => $product->brand,
+                'tags' => $product->tags->map(function($tag) {
+                    return [
+                        'id' => $tag->id,
+                        'slug' => $tag->slug,
+                        'name' => $tag->name,
+                    ];
+                }),
+                'attributes' => $product->attributes
+            ],
+            'reviews' => $reviews,
+            'socialShareLinks' => $socialShareLinks,
+            'generalSettings' => (object) [
+                'currencyFormat' => config('general-setting.currency_format'),
+                'currencySymbol' => config('general-setting.currency_symbol'),
+                'formatNumber' => config('general-setting.format_number'),
+                'changeCurrencyRate' => config('general-setting.change_currency_rate'),
+            ],
+            'categoryWiseProducts' => $categoryWiseProducts,
+        ];
+    }
+
+
+
+    // For API
+    private function getProduct(string $slug)
+    {
+        return Product::with([
+            'categories:id,slug,name',
+            'brand:id,slug,name',
+            'tags:id,slug,name',
+            'baseImage'=> function ($query){
+                $query->where('type','base')
+                    ->first();
+            },
+            'additionalImage'=> function ($query){
+                $query->where('type','additional')
+                    ->get();
+            },
+            'attributes' => function ($q) {
+                $q->select('id', 'name')
+                  ->with(['attributeValues:id,attribute_id,name']);
+            }
+            // 'attributes:id,name',
+            // 'attributes.attributeValues:id,attribute_id,name'
+            ])
+            ->where('slug',$slug)
+            ->first();
+    }
+
+    private function getReviews(int $productId)
+    {
+        return DB::table('reviews')
+            ->join('users', 'users.id', 'reviews.user_id')
+            ->where('product_id', $productId)
+            ->where('status', 'approved')
+            ->whereNull('reviews.deleted_at')
+            ->select(
+                'users.id AS userId',
+                DB::raw("CONCAT(users.first_name, ' ', users.last_name) AS name"),
+                'users.image',
+                'reviews.comment',
+                'reviews.rating',
+                'reviews.status',
+                'reviews.created_at'
+            )
+            ->get()
+            ->map(function($item){
+                $item->created_at = date('d M, Y', strtotime($item->created_at));
+                return $item;
+            });
+    }
+
+
+    private function socialShareLinks()
+    {
+        return  Share::page(url()->current(),
+            'Social Share'
+            )
+            ->facebook()
+            ->twitter()
+            ->linkedin()
+            ->telegram()
+            ->whatsapp()
+            ->reddit()
+            ->getRawLinks();
+    }
+
+    private function getCategoryWiseProducts(int $categoryId)
+    {
+        $category = Category::with([
+            'products.baseImage',
+            'products.additionalImage'
+        ])
+        ->find($categoryId);
+
+        $categoryWiseProducts =  (object) [
+                'categoryId' => $category->id,
+                'slug' => $category->slug,
+                'isActive'  => $category->is_active,
+                'categoryName' => $category->name,
+                'products' => $category->products->map(function($product){
+                    return (object) [
+                        'productId' => $product->id,
+                        'name' => $product->name,
+                        'slug' => $product->slug,
+                        'price' => $product->price,
+                        'manageStock' => $product->manage_stock,
+                        'qty' => $product->qty,
+                        'inStock' => $product->in_stock,
+                        'newTo' => $product->new_to,
+                        'avgRating' => $product->avg_rating,
+                        'specialPrice' => $product->special_price,
+                        'isActive' => $product->is_active,
+                        'image' => file_exists(public_path($product->baseImage->image)) ? asset($product->baseImage->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                        'mediumImage' => file_exists(public_path($product->baseImage->image_medium)) ? asset($product->baseImage->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                    ];
+                })
+            ];
+
+        return $categoryWiseProducts;
+    }
+
+
+    // private function getAttributes($productAttributeValues)
+    // {
+    //     return $productAttributeValues;
+
+    //     $attributes = [];
+    //     foreach ($productAttributeValues as $value) {
+    //         $attributes [] = $value->attribute_id;
+
+    //         // if($value->attribute)
+    //         //     $attributes[$value->attribute_id]= $value->attribute->name;
+    //     }
+
+    //     return $attributes;
+    // }
+
+
 
 }

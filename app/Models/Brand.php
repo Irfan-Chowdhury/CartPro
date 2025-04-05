@@ -12,12 +12,13 @@ class Brand extends Model
     use Notifiable, TranslationTrait;
 
     protected $fillable = [
-        'slug','brand_logo', 'is_active',
+        'slug','name','brand_logo', 'is_active',
     ];
 
-    public $with = ['brandTranslations'];
+    // public $with = ['brandTranslations'];
 
 
+    // Vendora
     public function translations()
     {
         return $this->hasMany(BrandTranslation::class,'brand_id');
@@ -36,7 +37,7 @@ class Brand extends Model
 
         return $translation;
     }
-    
+
 
 
     public function format()

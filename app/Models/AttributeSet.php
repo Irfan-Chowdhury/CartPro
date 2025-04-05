@@ -11,9 +11,33 @@ class AttributeSet extends Model
 {
     use TranslationTrait, SoftDeletes;
 
-
-    protected $fillable = ['is_active'];
+    protected $fillable = ['is_active','name'];
     protected $dates = ['deleted_at'];
+
+    // Vendora
+    public function translations()
+    {
+        return $this->hasMany(AttributeSetTranslation::class,'attribute_set_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        $translation = $this->translations->firstWhere('locale', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('locale', 'en');
+        }
+
+        return $translation;
+    }
+
+    // Vendora End
+
+
+
+
 
 
     //New

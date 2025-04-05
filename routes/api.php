@@ -7,6 +7,7 @@ use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\Frontend\CommonController;
 use App\Http\Controllers\API\HeaderController;
 use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,5 +51,6 @@ Route::get('storefront-footer-data', [FooterController::class, 'storefrontFooter
 
 Route::get('/home',[HomeController::class,'index']);
 Route::get('/faq',[FaqController::class,'faq']);
+Route::get('/product/{slug}',[ProductController::class,'productDetails']);
 
 

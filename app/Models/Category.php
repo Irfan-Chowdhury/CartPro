@@ -12,7 +12,7 @@ class Category extends Model
      use Notifiable, SoftDeletes;
 
     protected $fillable = [
-        'slug', 'image','top','is_active','icon','parent_id'
+        'slug', 'name', 'image','top','is_active','icon','parent_id'
     ];
     protected $dates = ['deleted_at'];
 
@@ -66,7 +66,7 @@ class Category extends Model
     {
         return $this->belongsToMany(Product::class, 'category_product', 'category_id', 'product_id');
     }
-    
+
 
 
 

@@ -12,12 +12,14 @@ class Tag extends Model
 
     protected $fillable = [
         'slug',
+        'name',
         'is_active'
     ];
 
     protected $dates = ['deleted_at'];
 
 
+    // Vendora
     public function translations()
     {
         return $this->hasMany(TagTranslation::class,'tag_id');
@@ -38,7 +40,7 @@ class Tag extends Model
     }
 
 
-
+    // Vendora
 
 
 

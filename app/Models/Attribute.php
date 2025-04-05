@@ -12,12 +12,53 @@ class Attribute extends Model
 
     protected $fillable = [
         'slug',
+        'name',
         'attribute_set_id',
         'category_id',
         'is_filterable',
         'is_active'
     ];
     protected $dates = ['deleted_at'];
+
+    // Vendora
+    public function translations()
+    {
+        return $this->hasMany(AttributeTranslation::class,'attribute_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('locale', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('locale', 'en');
+        }
+
+        return $translation;
+    }
+
+    public function attributeSet()
+    {
+        return $this->belongsTo(AttributeSet::class); //db: attribute_category
+    }
+
+    //For AttibuteController || Product Details
+    public function attributeValues()
+    {
+        return $this->hasMany(AttributeValue::class,'attribute_id');
+    }
+
+    // End Vendora
+
+
+
+
+
+
+
 
 
     //New For AttributeRepository
@@ -70,12 +111,6 @@ class Attribute extends Model
     public function attributeValue()
     {
     	return $this->hasOne(AttributeValue::class,'attribute_id');
-    }
-
-    //For AttibuteController
-    public function attributeValues()
-    {
-        return $this->hasMany(AttributeValue::class,'attribute_id');
     }
 
     public function categories()
