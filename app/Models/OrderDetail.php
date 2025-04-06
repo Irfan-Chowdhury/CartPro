@@ -11,40 +11,38 @@ class OrderDetail extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-    // vendora
+    /**
+     * Vendora Start
+     */
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    // vendora
-    public function orderProductTranslations()
-    {
-        return $this->hasMany(ProductTranslation::class,'product_id','product_id');
-    }
+    // public function orderProductTranslations()
+    // {
+    //     return $this->hasMany(ProductTranslation::class,'product_id','product_id');
+    // }
 
-    // vendora
-    public function getOrderProductTranslationAttribute()
-    {
-        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+    // public function getOrderProductTranslationAttribute()
+    // {
+    //     $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
 
-        $translation = $this->orderProductTranslations->firstWhere('local', $locale);
+    //     $translation = $this->orderProductTranslations->firstWhere('local', $locale);
 
-        if (!$translation) {
-            $translation = $this->orderProductTranslations->firstWhere('local', 'en');
-        }
+    //     if (!$translation) {
+    //         $translation = $this->orderProductTranslations->firstWhere('local', 'en');
+    //     }
 
-        return $translation;
-    }
+    //     return $translation;
+    // }
 
-    // vendora
     public function baseImage()
     {
         return $this->hasOne(ProductImage::class,'product_id','product_id')
                     ->where('type','base');
     }
 
-    // vendora
     public function additionalImage()
     {
         return $this->hasMany(ProductImage::class,'product_id','product_id');
@@ -55,15 +53,10 @@ class OrderDetail extends Model
         return $this->hasMany(ProductAttributeValue::class,'product_id','product_id');
     }
 
-
-
-
-
-
-
-
-    //Old Formation
-
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
 
     public function brand()
@@ -71,10 +64,18 @@ class OrderDetail extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+
+    /**
+     * Vendora End
+    */
+
+
+
+    //Old Formation
+
+
+
+
 
 
     public function productTranslation()
