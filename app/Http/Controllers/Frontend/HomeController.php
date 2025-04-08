@@ -74,6 +74,21 @@ class HomeController extends FrontBaseController
 
     public function index()
     {
+        // return $settings = app('setting');
+                    // ->map(function($setting){
+                    //     return [
+                    //         'id'             => $setting->id,
+                    //         'key'            => $setting->key,
+                    //         'plain_value'    => $setting->plain_value ?? null,
+                    //         'is_translatable'=> (boolean) $setting->is_translatable,
+                    //         'locale' => $setting->translation->locale ?? null,
+                    //         'value'  => $setting->translation->value ?? null,
+                    //         'image'  => isset($setting->storeFrontImage->image) && file_exists(public_path($setting->storeFrontImage->image)) ? asset($setting->storeFrontImage->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=Image',
+                    //     ];
+                    // });
+        // dd($settings);
+
+
         /**
         * This is New Formation
         */
@@ -85,8 +100,6 @@ class HomeController extends FrontBaseController
         $homeData = $this->homeService->getHomeData();
 
         $sliders = $homeData->sliders;
-
-        $settings = $homeData->settings;
 
         $sliderBanners = $homeData->sliderBanners;
 
@@ -107,7 +120,6 @@ class HomeController extends FrontBaseController
 
         return view('frontend.pages.home',compact(
             'locale',
-            'settings',
             'categories',
             'homeData',
             'sliders',

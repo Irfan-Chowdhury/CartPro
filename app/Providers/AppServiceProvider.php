@@ -34,9 +34,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         // Register settings as a singleton
-        $this->app->singleton('settings', function () {
-            return Setting::with(['translations','storeFrontImage'])->get();
-        });
+        // $this->app->singleton('settings', function () {
+        //     return Setting::with(['translations','storeFrontImage'])->get();
+        // });
     }
 
     public function boot()

@@ -37,9 +37,12 @@ class PublicCommonData
     {
         $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
 
-        // $settings = Setting::with(['translations'])->get();
+        $setting = app('setting');
 
-        $settings = App::make('settings');
+        // $setting = Cache::remember('storeFrontSetting', now()->addHours(1), function () {
+        //     return app('setting');
+        // });
+
 
         $storefrontImages = StorefrontImage::select('title','type','image')->get()->keyBy('title');
 
@@ -50,14 +53,23 @@ class PublicCommonData
         $settingStore =  SettingStore::first();
 
 
-        self::masterSection($settings, $storefrontImages, $changeCurrencyRate, $settingStore);
+        self::masterSection( $storefrontImages, $changeCurrencyRate, $settingStore);
 
-        self::headerSection($settings, $storefrontImages, $changeCurrencyRate);
+        self::headerSection($setting, $storefrontImages, $changeCurrencyRate);
 
-        self::footerSection($locale, $settings, $storefrontImages, $settingStore);
+        self::footerSection($locale, $setting, $storefrontImages, $settingStore);
 
-        //Pages
-        self::homeSection($settings, $changeCurrencyRate, $storefrontImages);
+        //Home Page
+        // self::homeSection($settings, $changeCurrencyRate, $storefrontImages);
+        view()->composer([
+            'frontend.pages.home'
+        ], function ($view) use (
+                $changeCurrencyRate,
+        ) {
+            $view->with([
+                'changeCurrencyRate' => $changeCurrencyRate,
+            ]);
+        });
 
         return $next($request);
     }
@@ -87,7 +99,6 @@ class PublicCommonData
         $storefrontFeature_2_Icon = $settings->firstWhere('key', 'storefront_feature_2_icon')->plain_value ?? null;
         $storefrontFeature_3_Icon = $settings->firstWhere('key', 'storefront_feature_3_icon')->plain_value ?? null;
         $storefrontFeature_4_Icon = $settings->firstWhere('key', 'storefront_feature_4_icon')->plain_value ?? null;
-
 
 
         // StoreFront
@@ -142,7 +153,7 @@ class PublicCommonData
         });
     }
 
-    private function masterSection($settings, $storefrontImages, $changeCurrencyRate, $settingStore)
+    private function masterSection($storefrontImages, $changeCurrencyRate, $settingStore)
     {
 
         $faviconLogoPath = file_exists($storefrontImages['favicon_logo']->image) ? url($storefrontImages['favicon_logo']->image) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
@@ -162,42 +173,65 @@ class PublicCommonData
         });
     }
 
-    private function headerSection($settings, $storefrontImages, $changeCurrencyRate)
+
+
+
+
+
+
+
+    private function headerSection($setting, $storefrontImages, $changeCurrencyRate)
     {
         $socialShareLinks = app('socialShareLinks');
-        // dd($socialShareLinks);
-
-        // $start = microtime(true);
-        // $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currencyCodes = CurrencyRate::select('currency_code')->get();
+        // $setting = app('setting');
 
-        // $settings = Setting::with(['translations'])->get()->keyBy('key');
-        // $welcomeTitle = $settings['storefront_welcome_text']->translation->value;
+        // dd($settings->storefront_welcome_text->value);
 
-        // $elapsed = microtime(true) - $start;
-        // dd($elapsed);
 
 
         // Setting Translation
-        $welcomeTitle = $settings->firstWhere('key', 'storefront_welcome_text')->translation->value;
+        $welcomeTitle = $setting->storefront_welcome_text->value;
+
         // Setting Just Value
-        $storefrontThemeColor = $settings->firstWhere('key', 'storefront_theme_color')->plain_value;
-        $storefrontNavbgColor = $settings->firstWhere('key', 'storefront_navbar_background_color')->plain_value;
-        $storefrontMenuTextColor = $settings->firstWhere('key', 'storefront_nav_text_color')->plain_value;
-        $storefrontFacebookLink = $settings->firstWhere('key', 'storefront_facebook_link')->plain_value;
-        $storefrontTwitterLink = $settings->firstWhere('key', 'storefront_twitter_link')->plain_value;
-        $storefrontInstagramLink = $settings->firstWhere('key', 'storefront_instagram_link')->plain_value;
-        $storefrontYoutubeLink = $settings->firstWhere('key', 'storefront_youtube_link')->plain_value;
-        $twoColumnBannerEnabled = $settings->firstWhere('key', 'storefront_two_column_banner_enabled')->plain_value;
-        $threeColumnBannersEnabled = $settings->firstWhere('key', 'storefront_three_column_banners_enabled')->plain_value;
-        $topCategoriesSectionEnabled = $settings->firstWhere('key', 'storefront_top_categories_section_enabled')->plain_value;
-        $threeColumnBannerFullEnabled = $settings->firstWhere('key', 'storefront_three_column_full_width_banners_enabled')->plain_value;
-        $flashSaleAndVerticalProductsSectionEnabled = $settings->firstWhere('key', 'storefront_flash_sale_and_vertical_products_section_enabled')->plain_value;
-        $termsAndConditionPageId = $settings->firstWhere('key', 'storefront_terms_and_condition_page')->plain_value;
-        $footerTagIds = $settings->firstWhere('key', 'storefront_footer_tag_id')->plain_value;
-        $storefrontShopPageEnabled = $settings->firstWhere('key', 'storefront_shop_page_enabled')->plain_value;
-        $storefrontBrandPageEnabled = $settings->firstWhere('key', 'storefront_brand_page_enabled')->plain_value;
+        $storefrontThemeColor = $setting->storefront_theme_color->plain_value;
+        $storefrontNavbgColor = $setting->storefront_navbar_background_color->plain_value;
+        $storefrontMenuTextColor = $setting->storefront_nav_text_color->plain_value;
+        $storefrontFacebookLink = $setting->storefront_facebook_link->plain_value;
+        $storefrontTwitterLink = $setting->storefront_twitter_link->plain_value;
+        $storefrontInstagramLink = $setting->storefront_instagram_link->plain_value;
+        $storefrontYoutubeLink = $setting->storefront_youtube_link->plain_value;
+        $twoColumnBannerEnabled = $setting->storefront_two_column_banner_enabled->plain_value;
+        $threeColumnBannersEnabled = $setting->storefront_three_column_banners_enabled->plain_value;
+        $topCategoriesSectionEnabled = $setting->storefront_top_categories_section_enabled->plain_value;
+        $threeColumnBannerFullEnabled = $setting->storefront_three_column_full_width_banners_enabled->plain_value;
+        $flashSaleAndVerticalProductsSectionEnabled = $setting->storefront_flash_sale_and_vertical_products_section_enabled->plain_value;
+        $termsAndConditionPageId = $setting->storefront_terms_and_condition_page->plain_value;
+        $footerTagIds = $setting->storefront_footer_tag_id->plain_value;
+        $storefrontShopPageEnabled = $setting->storefront_shop_page_enabled->plain_value;
+        $storefrontBrandPageEnabled = $setting->storefront_brand_page_enabled->plain_value;
+
+        // // Setting Translation
+        // $welcomeTitle = $settings->firstWhere('key', 'storefront_welcome_text')->translation->value;
+
+        // // Setting Just Value
+        // $storefrontThemeColor = $settings->firstWhere('key', 'storefront_theme_color')->plain_value;
+        // $storefrontNavbgColor = $settings->firstWhere('key', 'storefront_navbar_background_color')->plain_value;
+        // $storefrontMenuTextColor = $settings->firstWhere('key', 'storefront_nav_text_color')->plain_value;
+        // $storefrontFacebookLink = $settings->firstWhere('key', 'storefront_facebook_link')->plain_value;
+        // $storefrontTwitterLink = $settings->firstWhere('key', 'storefront_twitter_link')->plain_value;
+        // $storefrontInstagramLink = $settings->firstWhere('key', 'storefront_instagram_link')->plain_value;
+        // $storefrontYoutubeLink = $settings->firstWhere('key', 'storefront_youtube_link')->plain_value;
+        // $twoColumnBannerEnabled = $settings->firstWhere('key', 'storefront_two_column_banner_enabled')->plain_value;
+        // $threeColumnBannersEnabled = $settings->firstWhere('key', 'storefront_three_column_banners_enabled')->plain_value;
+        // $topCategoriesSectionEnabled = $settings->firstWhere('key', 'storefront_top_categories_section_enabled')->plain_value;
+        // $threeColumnBannerFullEnabled = $settings->firstWhere('key', 'storefront_three_column_full_width_banners_enabled')->plain_value;
+        // $flashSaleAndVerticalProductsSectionEnabled = $settings->firstWhere('key', 'storefront_flash_sale_and_vertical_products_section_enabled')->plain_value;
+        // $termsAndConditionPageId = $settings->firstWhere('key', 'storefront_terms_and_condition_page')->plain_value;
+        // $footerTagIds = $settings->firstWhere('key', 'storefront_footer_tag_id')->plain_value;
+        // $storefrontShopPageEnabled = $settings->firstWhere('key', 'storefront_shop_page_enabled')->plain_value;
+        // $storefrontBrandPageEnabled = $settings->firstWhere('key', 'storefront_brand_page_enabled')->plain_value;
 
 
         //Categries
@@ -286,28 +320,28 @@ class PublicCommonData
         });
     }
 
-    private function footerSection($locale, $settings, $storefrontImages, $settingStore)
+    private function footerSection($locale, $setting, $storefrontImages, $settingStore)
     {
         $footerDescription = FooterDescription::where('locale',$locale)->first();
         $settingNewslatter = SettingNewsletter::first();
         $headerLogoPath = file_exists($storefrontImages['header_logo']->image) ? url($storefrontImages['header_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
 
         // Setting Translation
-        $storefrontAddress = $settings->firstWhere('key', 'storefront_address')->translation->value;
-        $footerMenuOneTitle = $settings->firstWhere('key', 'storefront_footer_menu_title_one')->translation->value;
-        $footerMenuTitleTwo = $settings->firstWhere('key', 'storefront_footer_menu_title_two')->translation->value;
-        $footerMenuTitleThree = $settings->firstWhere('key', 'storefront_footer_menu_title_three')->translation->value;
-        $storefrontCopyrightText = $settings->firstWhere('key', 'storefront_copyright_text')->translation->value;
+        $storefrontAddress = $setting->storefront_address->value;
+        $footerMenuOneTitle = $setting->storefront_footer_menu_title_one->value;
+        $footerMenuTitleTwo = $setting->storefront_footer_menu_title_two->value;
+        $footerMenuTitleThree = $setting->storefront_footer_menu_title_three->value;
+        $storefrontCopyrightText = $setting->storefront_copyright_text->value;
 
         // Setting Value
-        $storefrontFacebookLink = $settings->firstWhere('key', 'storefront_facebook_link')->plain_value;
-        $storefrontTwitterLink = $settings->firstWhere('key', 'storefront_twitter_link')->plain_value;
-        $storefrontInstagramLink = $settings->firstWhere('key', 'storefront_instagram_link')->plain_value;
-        $storefrontYoutubeLink = $settings->firstWhere('key', 'storefront_youtube_link')->plain_value;
-        $footerMenuOneValue = $settings->firstWhere('key', 'storefront_footer_menu_one')->plain_value;
-        $footerMenuTwoValue = $settings->firstWhere('key', 'storefront_footer_menu_two')->plain_value;
-        $footerMenuThreeValue = $settings->firstWhere('key', 'storefront_footer_menu_three')->plain_value;
-        $footerTagIds = json_decode($settings->firstWhere('key', 'storefront_footer_tag_id')->plain_value);
+        $storefrontFacebookLink = $setting->storefront_facebook_link->plain_value;
+        $storefrontTwitterLink = $setting->storefront_twitter_link->plain_value;
+        $storefrontInstagramLink = $setting->storefront_instagram_link->plain_value;
+        $storefrontYoutubeLink = $setting->storefront_youtube_link->plain_value;
+        $footerMenuOneValue = $setting->storefront_footer_menu_one->plain_value;
+        $footerMenuTwoValue = $setting->storefront_footer_menu_two->plain_value;
+        $footerMenuThreeValue = $setting->storefront_footer_menu_three->plain_value;
+        $footerTagIds = json_decode($setting->storefront_footer_tag_id->plain_value);
 
          //StoreFront
          $paymentMethodImage = file_exists($storefrontImages['accepted_payment_method_image']->image) ? url($storefrontImages['accepted_payment_method_image']->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
@@ -400,4 +434,40 @@ class PublicCommonData
         });
 
     }
+
+
+    // private function getSettings()
+    // {
+    //     $setting = Setting::with(['translations','storeFrontImage'])
+    //             ->get()
+    //             ->keyBy('key')
+    //             ->map(function($setting){
+    //                 return [
+    //                     'id'             => $setting->id,
+    //                     'key'            => $setting->key,
+    //                     'plain_value'    => $setting->plain_value,
+    //                     'is_translatable'=> $setting->is_translatable,
+    //                     'locale' => $setting->translation->locale ?? null,
+    //                     'value'  => $setting->translation->value ?? null,
+    //                 ];
+    //             });
+    //     return self::arrayToObject($setting);
+    // }
+
 }
+
+
+
+
+
+
+
+        // $start = microtime(true);
+        // // $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
+
+        // // $settings = Setting::with(['translations'])->get()->keyBy('key');
+        // // $welcomeTitle = $settings['storefront_welcome_text']->translation->value;
+        // // app('setting');
+
+        // $elapsed = microtime(true) - $start;
+        // dd($elapsed);
