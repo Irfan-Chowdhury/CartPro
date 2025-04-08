@@ -15,6 +15,7 @@ use App\Models\SettingStore;
 use App\Models\StorefrontImage;
 use App\Models\Tag;
 use App\Models\Wishlist;
+use App\Services\HeaderService;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,12 @@ use Illuminate\Support\Facades\Cache;
 class PublicCommonData
 {
     use SettingHomePageSeoTrait;
+
+    public $headerService;
+    public function __construct(HeaderService $headerService)
+    {
+        $this->headerService = $headerService;
+    }
 
     public function handle(Request $request, Closure $next)
     {
@@ -157,6 +164,9 @@ class PublicCommonData
 
     private function headerSection($settings, $storefrontImages, $changeCurrencyRate)
     {
+        $socialShareLinks = app('socialShareLinks');
+        // dd($socialShareLinks);
+
         // $start = microtime(true);
         // $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
@@ -238,7 +248,8 @@ class PublicCommonData
                         $cartTotal,
                         $cartCount,
                         $cartContents,
-                        $categories
+                        $categories,
+                        $socialShareLinks
                     ) {
             $view->with([
                 'topbarLogoPath' => $topbarLogoPath,
@@ -257,8 +268,21 @@ class PublicCommonData
                 'cartTotal' => $cartTotal,
                 'cartCount' => $cartCount,
                 'cartContents' => $cartContents,
-                'categories' => $categories
+                'categories' => $categories,
+                'socialShareLinks' => $socialShareLinks,
             ]);
+
+
+
+            // view()->composer([
+            //     'frontend.includes.header'
+            // ], function ($view) use (
+            //                 $socialShareLinks
+            //             ) {
+            // $view->with([
+            //     'socialShareLinks' => $socialShareLinks,
+            // ]);
+
         });
     }
 

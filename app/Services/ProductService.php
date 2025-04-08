@@ -200,22 +200,6 @@ class ProductService extends Message
 
     public function getProductBySlug(string $slug)
     {
-        // $validAttributes = ProductAttributeValue::select('product_id', 'attribute_id')
-        // ->whereHas('product')
-        // ->whereHas('attribute')
-        // ->distinct()
-        // ->get();
-
-        // $insertData = $validAttributes->map(function ($item) {
-        //     return [
-        //         'product_id' => $item->product_id,
-        //         'attribute_id' => $item->attribute_id
-        //     ];
-        // })->toArray();
-
-        // AttributeProduct::insert($insertData);
-        // return 'ok';
-
         $product = self::getProduct($slug);
 
         $reviews = self::getReviews($product->id);

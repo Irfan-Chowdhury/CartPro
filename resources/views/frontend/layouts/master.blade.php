@@ -1,25 +1,11 @@
 @php
-        // $cart_count = Cart::count();
-        // $cart_subtotal = implode(explode(',',Cart::subtotal()));
-        // $cart_total = implode(explode(',',Cart::total()));
-        // $cart_contents = Cart::content();
-
-        // if (Auth::check()) {
-        //     $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();
-        // }else {
-        //     $total_wishlist = 0;
-        // }
-
-        if (Session::has('currency_symbol')){
-            $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
-        }else{
-            $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
-            Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
-        }
+    if (Session::has('currency_symbol')){
+        $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+    }else{
+        $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
+        Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
+    }
 @endphp
-
-
-
 
 
 <!DOCTYPE html>

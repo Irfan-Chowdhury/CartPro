@@ -421,7 +421,7 @@ if (Session::has('currency_symbol')){
                                                 <div class="single-product-item">
                                                     <a href="{{url('product/'.$item->slug.'/'. $category->id)}}">
                                                         @if (isset($item->image))
-                                                            <img class="lazy" data-src="{{asset($item->image)}}">
+                                                            <img class="lazy" src="{{$item->image}}">
                                                         @else
                                                             <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro">
                                                         @endif

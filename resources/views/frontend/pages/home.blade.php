@@ -60,7 +60,7 @@
                     @foreach ($sliderBanners as $key => $item)
                         <div class="col-sm-4">
                             <a href="{{ $item->action_url }}" target="{{ $item->new_window == 1 ? '__blank' : '' }}">
-                                @if ($item->image !== null && Illuminate\Support\Facades\File::exists(public_path($$item->image)))
+                                @if ($item->image !== null && Illuminate\Support\Facades\File::exists(public_path($item->image)))
                                     <div class="slider-banner"
                                         style="background-image:url({{ asset($item->image) }});background-size:cover;background-position: center;">
                                     @else
@@ -81,7 +81,7 @@
                     <div class="item">
                         @if ($item->slider_image !== null && Illuminate\Support\Facades\File::exists(public_path($item->slider_image)))
                             <div class="img-fill"
-                                style="background-image: url({{ url($item->slider_image) }}); background-size: cover; background-position: center;">
+                                style="background-image: url({{ asset($item->slider_image) }}); background-size: cover; background-position: center;">
                         @else
                             <div class="img-fill"
                                 style="background-image: url('https://dummyimage.com/1269x300/e5e8ec/e5e8ec&text=Slider'); background-size: cover; background-position: center;">
@@ -244,8 +244,8 @@
 
                                                             <div class="single-product-wrapper">
                                                                 <div class="single-product-item">
-                                                                    @if (isset($item->image))
-                                                                        <a href="{{url('product/'.$item->slug.'/'. $category->categoryId)}}"><img class="swiper-lazy" data-src="{{asset($item->mediumImage)}}"></a>
+                                                                    @if (isset($item->mediumImage))
+                                                                        <a href="{{url('product/'.$item->slug.'/'. $category->categoryId)}}"><img class="swiper-lazy" data-src="{{$item->mediumImage}}"></a>
                                                                     @else
                                                                         <a href="{{url('product/'.$item->slug.'/'. $category->categoryId)}}"><img class="swiper-lazy" data-src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro"></a>
                                                                     @endif
@@ -467,10 +467,15 @@
                                             <hr>
                                             <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
                                                 <ul class="footer-social d-inline pad-left-15">
-                                                    <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
+                                                    {{-- <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
                                                     <li><a href="{{$socialShare['twitter']}}"><i class="ti-twitter"></i></a></li>
                                                     <li><a href="{{$socialShare['linkedin']}}"><i class="ti-linkedin"></i></a></li>
-                                                    <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li>
+                                                    <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li> --}}
+
+                                                    <li><a href="{{$socialShareLinks->facebook}}"><i class="ti-facebook"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->twitter}}"><i class="ti-twitter"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->linkedin}}"><i class="ti-linkedin"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->reddit}}"><i class="ti-reddit"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -560,7 +565,7 @@
                                         <div class="single-product-item">
                                             <a class="product-name" href="{{url('product/'.$item->slug.'/'. $item->category->id)}}">
                                             @if (isset($item->mediumImage))
-                                                <img class="lazy" data-src="{{asset($item->mediumImage)}}">
+                                                <img class="lazy" data-src="{{$item->mediumImage}}">
                                             @else
                                                 <img class="lazy" data-src="https://dummyimage.com/375x375/e5e8ec/e5e8ec&text=CartPro">
                                             @endif
@@ -776,10 +781,11 @@
                                             <hr>
                                             <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
                                                 <ul class="footer-social d-inline pad-left-15">
-                                                    <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
-                                                    <li><a href="{{$socialShare['twitter']}}"><i class="ti-twitter"></i></a></li>
-                                                    <li><a href="{{$socialShare['linkedin']}}"><i class="ti-linkedin"></i></a></li>
-                                                    <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li>
+                                                    
+                                                    <li><a href="{{$socialShareLinks->facebook}}"><i class="ti-facebook"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->twitter}}"><i class="ti-twitter"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->linkedin}}"><i class="ti-linkedin"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->reddit}}"><i class="ti-reddit"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
