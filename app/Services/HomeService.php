@@ -210,9 +210,10 @@ class HomeService
         // return $settings;
     }
 
+
     public function getCategories()
     {
-        return Category::with(['translations','parentCategory'])
+        return Category::with(['translations','parentCategory.translations'])
             ->orderBy('is_active','DESC')
             ->orderBy('id','ASC')
             ->where('top',1)
