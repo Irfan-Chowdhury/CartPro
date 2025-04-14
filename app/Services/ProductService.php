@@ -202,6 +202,13 @@ class ProductService extends Message
     {
         $product = self::getProduct($slug);
 
+        // DB::enableQueryLog();
+        // $product = self::getProduct($slug);
+        // dd(DB::getQueryLog());
+
+
+
+
         $reviews = self::getReviews($product->id);
 
         $socialShareLinks = (object) self::socialShareLinks();
@@ -260,8 +267,6 @@ class ProductService extends Message
                 $q->select('id', 'name')
                   ->with(['attributeValues:id,attribute_id,name']);
             }
-            // 'attributes:id,name',
-            // 'attributes.attributeValues:id,attribute_id,name'
             ])
             ->where('slug',$slug)
             ->first();

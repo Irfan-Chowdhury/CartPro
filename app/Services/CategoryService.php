@@ -57,7 +57,9 @@ class CategoryService extends StatusHandlerService
         }
 
 
-        $categories = Category::with(['translations','parentCategory'])
+
+        $categories = Category::with(['translations','parentCategory.translations'])
+            // ->where('parent_id', null)
             ->orderBy('is_active','DESC')
             ->orderBy('id','ASC')
             ->get()

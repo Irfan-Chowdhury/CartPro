@@ -18,7 +18,7 @@
     <meta name="robots" content="all,follow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
-    <link rel="icon" href="{{asset($favicon_logo_path)}}" />
+    <link rel="icon" href="{{asset($faviconLogoPath)}}" />
 
 
 

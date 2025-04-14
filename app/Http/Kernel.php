@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'checkAjax' => \App\Http\Middleware\CheckAjax::class,
         'maintenance_mode' => \App\Http\Middleware\MaintenanceMode::class,
         'public_common_data' => \App\Http\Middleware\PublicCommonData::class,
+        'adminCommonData' => \App\Http\Middleware\AdminCommonData::class,
     ];
 }

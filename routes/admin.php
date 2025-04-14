@@ -66,7 +66,7 @@ Route::prefix('admin')->group(function () {
 DefaultAuth::routes();
 
 
-Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function ()
+Route::group(['middleware' => ['XSS','set_locale','maintenance_mode','adminCommonData']], function ()
 {
     /*
     |--------------------------------------------------------------------------

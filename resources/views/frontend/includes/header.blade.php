@@ -11,7 +11,7 @@
     <header>
         @if (!Cookie::has('top_banner') && env('TOPBAR_BANNER_ENABLED'))
             <div id="top_banner" class="text-center" style="background-color:#e5e8ec">
-                <img src="{{asset($topbarLogoPath)}}" alt="">
+                <img src="{{$topbarLogoPath}}" alt="">
                 <a class="button sm" id="bannerSlideUp"><i class="las la-times"></i></a>
             </div>
         @endif
@@ -38,9 +38,6 @@
                         <div class="header-top-middle d-none d-lg-flex d-xl-flex">
                             <span class="announcement">
                                 <!--Welcome-->
-                                {{-- @if ($settings[0]->settingTranslation || $settings[0]->settingTranslationDefaultEnglish)
-                                    {{$settings[0]->settingTranslation->value ?? $settings[0]->settingTranslationDefaultEnglish->value ?? NULL}}
-                                @endif --}}
                                 {{ $welcomeTitle }}
                             </span>
                         </div>
@@ -139,27 +136,7 @@
                     </div>
                 </div>
             </div>
-        @php
-            // $categories = \App\Models\Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-            //             ->where('is_active',1)
-            //             ->orderBy('is_active','DESC')
-            //             ->orderBy('id','ASC')
-            //             ->get();
 
-            $category_product_count = [];
-            foreach ($categories as $category) {
-                $product_count = 0;
-                if ($category->categoryProduct) {
-                    foreach ($category->categoryProduct as $item) {
-                        if ($item->product) {
-                            $product_count++;
-                        }
-                    }
-                }
-                $category_product_count[$category->id] = $product_count;
-            }
-
-        @endphp
 
         <div class="header-bottom">
             <div class="container">
@@ -169,18 +146,18 @@
                             <ul class="pl-0">
                                 <li class="has-dropdown"><a class="category-button" href="#"><i class="ti-menu"></i>{{__('file.Shop By Category')}}</a>
                                     <ul id="cat_menu" class="dropdown p-0">
-                                        @forelse ($categories->where('parent_id',NULL) as $category)
-                                            @if ($category->child->isNotEmpty())
-                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->translation->category_name}} ({{$category_product_count[$category->id]}})</a>
+
+                                        @forelse ($categories as $category)
+                                            @if ($category->childs)
+                                                <li class="has-dropdown"><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i> {{$category->categoryName}} ({{ $category->totalProducts }}) </a>
                                                     <ul class="dropdown">
-                                                        @foreach ($category->child as $item)
-                                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}"><i class="{{$item->icon ?? null}}"></i>{{$item->translation->category_name}} ({{$category_product_count[$item->id]}}) </a></li>
+                                                        @foreach ($category->childs as $child)
+                                                            <li><a href="{{route('cartpro.category_wise_products',$child->slug)}}"><i class="{{$child->icon ?? null}}"></i>{{$child->childCategoryName}} ({{ $child->totalProducts }}) </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
                                             @else
-                                                {{-- <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}} ({{$category_product_count[$category->id]}})</a></li> --}}
-                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->translation->category_name}} ({{$category_product_count[$category->id]}})</a></li>
+                                                <li><a href="{{route('cartpro.category_wise_products',$category->slug)}}"><i class="{{$category->icon ?? null}}"></i>{{$category->categoryName}} ({{ $category->totalProducts }})</a></li>
                                             @endif
                                         @empty
                                         @endforelse
@@ -225,7 +202,7 @@
                                                 @endif
 
 
-                                                @if ($menu!=NULL)
+                                                @if (isset($menu))
                                                     @forelse ($menu->items as $menu_item)
                                                         @if ($menu_item->child->isNotEmpty())
                                                                 @if(strpos($menu_item->link, 'http://') !== false || strpos($menu_item->link, 'https://') !== false)

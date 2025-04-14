@@ -51,7 +51,7 @@ class Category extends Model
     {
         // Check if there is a parent category
         if (!$this->parentCategory) {
-            return 'NONE';
+            return null;
         }
 
         $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
@@ -60,6 +60,26 @@ class Category extends Model
         $parentTranslation = $this->parentCategory->translations->firstWhere('locale', $locale) ?? $this->parentCategory->translations->firstWhere('locale', 'en');
 
         return $parentTranslation;
+    }
+
+    public function childs()
+    {
+        return $this->hasMany(self::class,'parent_id');
+    }
+
+    public function getChildTranslationAttribute()
+    {
+        // Check if there is a parent category
+        if (!$this->childs) {
+            return null;
+        }
+
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Attempt to get the translation for the locale, or fallback to English
+        $childTranslation = $this->translations->firstWhere('locale', $locale) ?? $this->translations->firstWhere('locale', 'en');
+
+        return $childTranslation;
     }
 
     public function products()
@@ -100,13 +120,6 @@ class Category extends Model
     // {
     // 	return $this->hasMany(Product::class,'category_id');
     // }
-
-
-    public function child()
-    {
-        return $this->hasMany(self::class,'parent_id')
-        ->where('is_active',1);
-    }
 
     public function categoryProduct()
     {

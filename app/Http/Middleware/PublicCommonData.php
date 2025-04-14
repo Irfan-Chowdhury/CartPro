@@ -16,6 +16,7 @@ use App\Models\StorefrontImage;
 use App\Models\Tag;
 use App\Models\Wishlist;
 use App\Services\HeaderService;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicCommonData
 {
-    use SettingHomePageSeoTrait;
+    use SettingHomePageSeoTrait, ArrayToObjectConvertionTrait;
 
     public $headerService;
     public function __construct(HeaderService $headerService)
@@ -35,29 +36,35 @@ class PublicCommonData
 
     public function handle(Request $request, Closure $next)
     {
-        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+        // DB::enableQueryLog();
 
-        $setting = app('setting');
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+        $setting = app('setting');  // q-3
+
+        $storefrontImages = StorefrontImage::select('title','type','image')->get()->keyBy('title'); //q-1
 
         // $setting = Cache::remember('storeFrontSetting', now()->addHours(1), function () {
         //     return app('setting');
         // });
 
 
-        $storefrontImages = StorefrontImage::select('title','type','image')->get()->keyBy('title');
 
         $changeCurrencyRate = Session::has('currency_rate') ? Session::get('currency_rate') : 1;
         Session::put('currency_rate', $changeCurrencyRate);
 
 
-        $settingStore =  SettingStore::first();
+        $settingStore =  SettingStore::first(); //q-1
 
 
         self::masterSection( $storefrontImages, $changeCurrencyRate, $settingStore);
 
+
+
         self::headerSection($setting, $storefrontImages, $changeCurrencyRate);
 
         self::footerSection($locale, $setting, $storefrontImages, $settingStore);
+
+        self::adminImage($storefrontImages);
 
         //Home Page
         // self::homeSection($settings, $changeCurrencyRate, $storefrontImages);
@@ -71,7 +78,24 @@ class PublicCommonData
             ]);
         });
 
+        // dd(DB::getQueryLog());
+
         return $next($request);
+    }
+
+    private function adminImage($storefrontImages)
+    {
+        $faviconLogoPath = file_exists(public_path($storefrontImages['favicon_logo']->image)) ? asset($storefrontImages['favicon_logo']->image) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
+
+        view()->composer([
+            'admin.auth.login'
+        ], function ($view) use (
+                $faviconLogoPath,
+        ) {
+            $view->with([
+                'faviconLogoPath' => $faviconLogoPath,
+            ]);
+        });
     }
 
     private function homeSection($settings, $changeCurrencyRate, $storefrontImages)
@@ -102,7 +126,7 @@ class PublicCommonData
 
 
         // StoreFront
-        $oneColumnBannerImage = file_exists($storefrontImages['one_column_banner_image']->image) ? url($storefrontImages['one_column_banner_image']->image) :  'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+        $oneColumnBannerImage = file_exists(public_path($storefrontImages['one_column_banner_image']->image)) ? asset($storefrontImages['one_column_banner_image']->image) :  'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
 
         view()->composer([
             'frontend.pages.home'
@@ -156,7 +180,7 @@ class PublicCommonData
     private function masterSection($storefrontImages, $changeCurrencyRate, $settingStore)
     {
 
-        $faviconLogoPath = file_exists($storefrontImages['favicon_logo']->image) ? url($storefrontImages['favicon_logo']->image) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
+        $faviconLogoPath = file_exists(public_path($storefrontImages['favicon_logo']->image)) ? asset($storefrontImages['favicon_logo']->image) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
 
         view()->composer([
             'frontend.layouts.master'
@@ -173,22 +197,11 @@ class PublicCommonData
         });
     }
 
-
-
-
-
-
-
-
     private function headerSection($setting, $storefrontImages, $changeCurrencyRate)
     {
         $socialShareLinks = app('socialShareLinks');
         $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
         $currencyCodes = CurrencyRate::select('currency_code')->get();
-        // $setting = app('setting');
-
-        // dd($settings->storefront_welcome_text->value);
-
 
 
         // Setting Translation
@@ -212,31 +225,6 @@ class PublicCommonData
         $storefrontShopPageEnabled = $setting->storefront_shop_page_enabled->plain_value;
         $storefrontBrandPageEnabled = $setting->storefront_brand_page_enabled->plain_value;
 
-        // // Setting Translation
-        // $welcomeTitle = $settings->firstWhere('key', 'storefront_welcome_text')->translation->value;
-
-        // // Setting Just Value
-        // $storefrontThemeColor = $settings->firstWhere('key', 'storefront_theme_color')->plain_value;
-        // $storefrontNavbgColor = $settings->firstWhere('key', 'storefront_navbar_background_color')->plain_value;
-        // $storefrontMenuTextColor = $settings->firstWhere('key', 'storefront_nav_text_color')->plain_value;
-        // $storefrontFacebookLink = $settings->firstWhere('key', 'storefront_facebook_link')->plain_value;
-        // $storefrontTwitterLink = $settings->firstWhere('key', 'storefront_twitter_link')->plain_value;
-        // $storefrontInstagramLink = $settings->firstWhere('key', 'storefront_instagram_link')->plain_value;
-        // $storefrontYoutubeLink = $settings->firstWhere('key', 'storefront_youtube_link')->plain_value;
-        // $twoColumnBannerEnabled = $settings->firstWhere('key', 'storefront_two_column_banner_enabled')->plain_value;
-        // $threeColumnBannersEnabled = $settings->firstWhere('key', 'storefront_three_column_banners_enabled')->plain_value;
-        // $topCategoriesSectionEnabled = $settings->firstWhere('key', 'storefront_top_categories_section_enabled')->plain_value;
-        // $threeColumnBannerFullEnabled = $settings->firstWhere('key', 'storefront_three_column_full_width_banners_enabled')->plain_value;
-        // $flashSaleAndVerticalProductsSectionEnabled = $settings->firstWhere('key', 'storefront_flash_sale_and_vertical_products_section_enabled')->plain_value;
-        // $termsAndConditionPageId = $settings->firstWhere('key', 'storefront_terms_and_condition_page')->plain_value;
-        // $footerTagIds = $settings->firstWhere('key', 'storefront_footer_tag_id')->plain_value;
-        // $storefrontShopPageEnabled = $settings->firstWhere('key', 'storefront_shop_page_enabled')->plain_value;
-        // $storefrontBrandPageEnabled = $settings->firstWhere('key', 'storefront_brand_page_enabled')->plain_value;
-
-
-        //Categries
-
-
 
 
         $cartTotal = implode(explode(',',Cart::total()));
@@ -250,17 +238,51 @@ class PublicCommonData
 
 
         //StoreFront
-        $topbarLogoPath = file_exists($storefrontImages['topbar_logo']->image) ? url($storefrontImages['topbar_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
-        $headerLogoPath = file_exists($storefrontImages['header_logo']->image) ? url($storefrontImages['header_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
+        $topbarLogoPath = file_exists(public_path($storefrontImages['topbar_logo']->image)) ? asset($storefrontImages['topbar_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
+        $headerLogoPath = file_exists(public_path($storefrontImages['header_logo']->image)) ? asset($storefrontImages['header_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
 
 
         // Categories
-        // $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-        $categories = Category::with(['translations','parentCategory','child'])
-                    ->where('is_active',1)
+        // DB::enableQueryLog();
+        // $categories = Category::with(['translations','childs.translations'])
+        //             ->where('is_active',1)
+        //             ->orderBy('is_active','DESC')
+        //             ->orderBy('id','ASC')
+        //             ->get();
+
+        $categoriesData = Category::with(['translations','childs.translations','products'])
+                    ->where('parent_id', null)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
-                    ->get();
+                    ->get()
+                    ->map(function($category) {
+                        return [
+                            'id'=> $category->id,
+                            'image'=> $category->image,
+                            'is_active'=> $category->is_active,
+                            'icon'=> $category->icon,
+                            'slug'=> $category->slug,
+                            'totalProducts' => $category->products->count(),
+                            'categoryName'=> $category->translation->category_name,
+                            'childs'=> $category->childs->map(function($childCategory) {
+                                return [
+                                    'id'=> $childCategory->id,
+                                    'image'=> $childCategory->image,
+                                    'is_active'=> $childCategory->is_active,
+                                    'icon'=> $childCategory->icon,
+                                    'slug'=> $childCategory->slug,
+                                    'totalProducts'=> $childCategory->products->count(),
+                                    'childCategoryName'=> $childCategory->childTranslation->category_name,
+                                ];
+                            }),
+                        ];
+                    });
+
+        // dd($categoriesData);
+
+        $categories = $this->arrayToObject($categoriesData);
+
+        // dd(DB::getQueryLog());
 
 
         view()->composer([
@@ -324,7 +346,7 @@ class PublicCommonData
     {
         $footerDescription = FooterDescription::where('locale',$locale)->first();
         $settingNewslatter = SettingNewsletter::first();
-        $headerLogoPath = file_exists($storefrontImages['header_logo']->image) ? url($storefrontImages['header_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
+        $headerLogoPath = file_exists(public_path($storefrontImages['header_logo']->image)) ? asset($storefrontImages['header_logo']->image) :  'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
 
         // Setting Translation
         $storefrontAddress = $setting->storefront_address->value;
@@ -344,7 +366,7 @@ class PublicCommonData
         $footerTagIds = json_decode($setting->storefront_footer_tag_id->plain_value);
 
          //StoreFront
-         $paymentMethodImage = file_exists($storefrontImages['accepted_payment_method_image']->image) ? url($storefrontImages['accepted_payment_method_image']->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
+         $paymentMethodImage = file_exists(public_path($storefrontImages['accepted_payment_method_image']->image)) ? asset($storefrontImages['accepted_payment_method_image']->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
 
 
 
@@ -363,7 +385,6 @@ class PublicCommonData
                 $footerMenuThree = $menus[$key];
             }
         }
-
 
 
         if ($footerTagIds) {
@@ -434,26 +455,6 @@ class PublicCommonData
         });
 
     }
-
-
-    // private function getSettings()
-    // {
-    //     $setting = Setting::with(['translations','storeFrontImage'])
-    //             ->get()
-    //             ->keyBy('key')
-    //             ->map(function($setting){
-    //                 return [
-    //                     'id'             => $setting->id,
-    //                     'key'            => $setting->key,
-    //                     'plain_value'    => $setting->plain_value,
-    //                     'is_translatable'=> $setting->is_translatable,
-    //                     'locale' => $setting->translation->locale ?? null,
-    //                     'value'  => $setting->translation->value ?? null,
-    //                 ];
-    //             });
-    //     return self::arrayToObject($setting);
-    // }
-
 }
 
 
