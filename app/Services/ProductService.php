@@ -344,23 +344,4 @@ class ProductService extends Message
 
         return $categoryWiseProducts;
     }
-
-
-    // private function getAttributes($productAttributeValues)
-    // {
-    //     return $productAttributeValues;
-
-    //     $attributes = [];
-    //     foreach ($productAttributeValues as $value) {
-    //         $attributes [] = $value->attribute_id;
-
-    //         // if($value->attribute)
-    //         //     $attributes[$value->attribute_id]= $value->attribute->name;
-    //     }
-
-    //     return $attributes;
-    // }
-
-
-
 }

@@ -24,11 +24,11 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         $socialShareLinks = app('socialShareLinks');
-        // dd($socialShareLinks);
 
         view()->composer([
             'frontend.includes.quickshop_shop',
-            'frontend.pages.category_wise_products'
+            'frontend.includes.quickshop_brand',
+            'frontend.pages.category_wise_products',
         ], function ($view) use ($socialShareLinks) {
             $view->with([
                 'socialShareLinks' => $socialShareLinks,

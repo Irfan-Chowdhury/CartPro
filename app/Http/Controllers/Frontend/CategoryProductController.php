@@ -102,8 +102,6 @@ class CategoryProductController extends Controller
         ->where('slug',$slug)
         ->first();
 
-        // dd(DB::getQueryLog());
-
         $categoryWiseProducts =  (object) [
                 'categoryId' => $category->id,
                 'slug' => $category->slug,
@@ -168,43 +166,6 @@ class CategoryProductController extends Controller
         $category = $this->arrayToObject($categoryWiseProducts);
 
         return view('frontend.pages.category_wise_products',compact('attributes','category'));
-
-
-
-
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
-                'categoryProduct.product.productTranslation',
-                'categoryProduct.product.productTranslationEnglish',
-                'categoryProduct.product.baseImage',
-                'categoryProduct.product.additionalImage',
-                'child.catTranslation','child.categoryTranslationDefaultEnglish')
-                ->where('slug',$slug)
-                ->first();
-
-
-        $product_count = 0;
-        if ($category->categoryProduct) {
-            foreach ($category->categoryProduct as $item) {
-                if ($item->product) {
-                    $product_count++;
-                }
-            }
-        }
-
-        $attribute_values = DB::table('attribute_category')
-                    ->join('attribute_translations', function ($join) use ($locale) {
-                        $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                        ->where('attribute_translations.locale', '=', $locale);
-                    })
-                    ->join('attribute_value_translations', function ($join) use ($locale) {
-                        $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                        ->where('attribute_value_translations.local', '=', $locale);
-                    })
-                    ->where('category_id',$category->id)
-                    ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
-                    ->get();
-
-        return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
     }
 
     public function categoryProductsFilterByAttributeValue(Request $request)

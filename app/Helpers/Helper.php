@@ -6,3 +6,4 @@ if (!function_exists('public_asset')) {
         return asset('public/' . ltrim($path, '/'));
     }
 }
+

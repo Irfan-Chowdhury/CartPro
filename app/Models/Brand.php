@@ -15,8 +15,6 @@ class Brand extends Model
         'slug','name','brand_logo', 'is_active',
     ];
 
-    // public $with = ['brandTranslations'];
-
 
     // Vendora
     public function translations()
@@ -39,6 +37,11 @@ class Brand extends Model
     }
 
 
+    public function products()
+    {
+    	return $this->hasMany(Product::class,'brand_id');
+    }
+
 
 
 
@@ -54,10 +57,7 @@ class Brand extends Model
     //     ];
     // }
 
-    public function products()
-    {
-    	return $this->hasMany(Product::class,'brand_id');
-    }
+
 
     public function brandTranslation() //Remove Later
     {
