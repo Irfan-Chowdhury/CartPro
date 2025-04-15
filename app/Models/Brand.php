@@ -40,17 +40,19 @@ class Brand extends Model
 
 
 
-    public function format()
-    {
-        return [
-            'id'=>$this->id,
-            'slug'=>$this->slug,
-            'is_active'=>$this->is_active,
-            'brand_logo'=>$this->brand_logo ?? null,
-            // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
-            'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
-        ];
-    }
+
+
+    // public function format()
+    // {
+    //     return [
+    //         'id'=>$this->id,
+    //         'slug'=>$this->slug,
+    //         'is_active'=>$this->is_active,
+    //         'brand_logo'=>$this->brand_logo ?? null,
+    //         // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
+    //         'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
+    //     ];
+    // }
 
     public function products()
     {

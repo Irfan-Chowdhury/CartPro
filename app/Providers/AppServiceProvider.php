@@ -292,7 +292,7 @@ class AppServiceProvider extends ServiceProvider
         //     $total_wishlist = 0;
         // }
 
-        $orders = Order::get();
+        // $orders = Order::get();
 
         // ============= CURRENCY PART ===========
         // if (!Session::has('currency_code') && !Session::has('currency_symbol') && !Session::has('currency_rate')) {

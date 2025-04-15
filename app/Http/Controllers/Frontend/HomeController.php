@@ -85,7 +85,6 @@ class HomeController extends FrontBaseController
         $homeData = Cache::remember('storeFrontHome', now()->addHours(1), function ()  {
             return $this->homeService->getHomeData();
         });
-        // $homeData = $this->homeService->getHomeData();
 
         $sliders = $homeData->sliders;
 

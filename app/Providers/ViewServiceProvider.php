@@ -27,7 +27,8 @@ class ViewServiceProvider extends ServiceProvider
         // dd($socialShareLinks);
 
         view()->composer([
-            'frontend.includes.quickshop_shop'
+            'frontend.includes.quickshop_shop',
+            'frontend.pages.category_wise_products'
         ], function ($view) use ($socialShareLinks) {
             $view->with([
                 'socialShareLinks' => $socialShareLinks,

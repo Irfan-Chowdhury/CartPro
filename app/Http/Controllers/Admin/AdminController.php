@@ -58,13 +58,6 @@ class AdminController extends Controller
                             ->get()
                             ->take(5);
 
-        // $top_categories = OrderDetail::with('category.catTranslation','category.categoryTranslationDefaultEnglish')
-        //                     ->select('category_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
-        //                     ->orderBy('total_amount','DESC')
-        //                     ->groupBy('category_id')
-        //                     ->get()
-        //                     ->take(5);
-
         $top_categories = OrderDetail::with('category.translations')
                             ->select('category_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')

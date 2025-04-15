@@ -27,19 +27,10 @@ if (Session::has('currency_symbol')){
                         <div class="col-md-6">
                             <div class="slider-wrapper">
                                 <div class="slider-for-modal">
-                                    {{-- @foreach ($product_images as $value)
-                                        @if ($value->product_id==$item->id)
-                                            <div class="slider-for__item ex1">
-                                                <img src="{{asset('public/'.$value->image)}}" alt="..." />
-                                            </div>
-                                        @endif
-                                    @endforeach --}}
                                     @foreach ($item->additionalImage as $value)
-                                        {{-- @if ($value->product_id==$item->id) --}}
                                             <div class="slider-for__item ex1">
                                                 <img src="{{$value->image}}" alt="..." />
                                             </div>
-                                        {{-- @endif --}}
                                     @endforeach
                                 </div>
                                 <div class="slider-nav-modal">
@@ -127,36 +118,7 @@ if (Session::has('currency_symbol')){
                                             </ul>
                                         </div>
                                     @endforeach
-                                    {{-- @foreach ($product_attr_val as $key => $productAttrVal )
-                                        @if ($item->id == $productAttrVal->id)
-                                            @php
-                                                $attribute = [];
-                                                if ($productAttrVal->productAttributeValues!=[]) {
-                                                    foreach ($productAttrVal->productAttributeValues as $value2) {
-                                                        $attribute[$value2->attribute_id]= $value2->attributeTranslation->attribute_name ?? $value2->attributeTranslationEnglish->attribute_name ?? null;
-                                                    }
-                                                }
-                                            @endphp
 
-                                            @forelse ($attribute as $key => $value)
-                                                <div class="item-variant">
-                                                    <span>{{$value}}:</span>
-                                                    <input type="hidden" name="attribute_name[]" class="attribute_name" value="{{$value}}">
-                                                        <ul class="product-variant size-opt p-0 mt-1">
-                                                        @forelse ($productAttrVal->productAttributeValues as $value)
-                                                            @if ($value->attribute_id == $key)
-                                                                <li class="attribute_value_productTab1" data-attribute_name="{{$value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null }}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}"><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
-                                                                <input type="hidden" name="value_id[]" value="{{$value->attribute_value_id}}">
-                                                            @endif
-                                                        @empty
-                                                        @endforelse
-                                                    </ul>
-                                                </div>
-                                            @empty
-                                            @endforelse
-                                            @break
-                                        @endif
-                                    @endforeach --}}
 
                                     <div class="item-options">
                                         <div class="input-qty">

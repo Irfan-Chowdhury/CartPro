@@ -7,19 +7,32 @@ use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Traits\ArrayToObjectConvertionTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class BrandProductController extends Controller
 {
+    use ArrayToObjectConvertionTrait;
+
     public function brands()
     {
-        $brands = Cache::remember('brands', 300, function () {
-            return Brand::where('is_active',1)
-                    ->orderBy('id','DESC')
-                    ->get();
-        });
+        $brandData = Brand::with('translations')
+                ->where('is_active',1)
+                ->orderBy('id','DESC')
+                ->get()
+                ->map(function($brand) {
+                    return [
+                        'id'=>$brand->id,
+                        'slug'=>$brand->slug,
+                        'is_active'=>$brand->is_active,
+                        'logo'=> isset($brand->brand_logo) && file_exists(public_path($brand->brand_logo)) ? asset($brand->brand_logo) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand',
+                        'name'=> $brand->translation->brand_name,
+                    ];
+                });
+
+        $brands = $this->arrayToObject($brandData);
 
         return view('frontend.pages.brand',compact('brands'));
     }

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Models\Category;
 use App\Models\CurrencyRate;
 use App\Models\FooterDescription;
 use App\Models\Language;
+use App\Models\Order;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -30,28 +33,27 @@ class AdminCommonData
     {
         $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
 
-        // $setting = app('setting');
-
-        // $setting = Cache::remember('storeFrontSetting', now()->addHours(1), function () {
-        //     return app('setting');
-        // });
-
-
         $storefrontImages = StorefrontImage::select('title','type','image')->get()->keyBy('title');
 
-        // $changeCurrencyRate = Session::has('currency_rate') ? Session::get('currency_rate') : 1;
-        // Session::put('currency_rate', $changeCurrencyRate);
+        $orders = Order::get();
+
+        $storeSetting = SettingStore::first();
+        $adminLogo = isset($storeSetting->admin_logo) && file_exists(public_path($storeSetting->admin_logo)) ? asset($storeSetting->admin_logo) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=AdminLogo';
+        // dd($adminLogo);
 
 
-        // $settingStore =  SettingStore::first();
 
-        self::adminImage($storefrontImages);
+
+        self::adminLogo($storefrontImages);
+
+        self::headerSection($orders, $adminLogo);
+        self::sidebarSection($adminLogo);
 
 
         return $next($request);
     }
 
-    private function adminImage($storefrontImages)
+    private function adminLogo($storefrontImages)
     {
         $faviconLogoPath = file_exists(public_path($storefrontImages['favicon_logo']->image)) ? asset($storefrontImages['favicon_logo']->image) :  'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
 
@@ -63,6 +65,34 @@ class AdminCommonData
         ) {
             $view->with([
                 'faviconLogoPath' => $faviconLogoPath,
+            ]);
+        });
+    }
+
+    private function headerSection(object $orders, string $adminLogo)
+    {
+        view()->composer([
+            'admin.includes.header',
+        ], function ($view) use (
+                $orders,
+                $adminLogo
+        ) {
+            $view->with([
+                'orders' => $orders,
+                'adminLogo' => $adminLogo,
+            ]);
+        });
+    }
+
+    private function sidebarSection(string $adminLogo)
+    {
+        view()->composer([
+            'admin.includes.sidebar',
+        ], function ($view) use (
+                $adminLogo
+        ) {
+            $view->with([
+                'adminLogo' => $adminLogo
             ]);
         });
     }

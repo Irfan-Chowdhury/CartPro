@@ -5,13 +5,14 @@ namespace App\Services;
 use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
 use App\Models\Brand;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\File;
 
 class BrandService
 {
-    use SlugTrait, imageHandleTrait;
+    use SlugTrait, imageHandleTrait, ArrayToObjectConvertionTrait;
 
     private $brandContract;
     private $brandTranslationContract;
@@ -23,13 +24,28 @@ class BrandService
 
     public function getAllBrands()
     {
+        $brandData = Brand::with('translations')
+                    ->get()
+                    ->map(function($brand){
+                        return [
+                            'id'=>$brand->id,
+                            'slug'=>$brand->slug,
+                            'is_active'=>$brand->is_active,
+                            'brand_logo'=> isset($brand->brand_logo) && file_exists(public_path($brand->brand_logo)) ? asset($brand->brand_logo) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand',
+                            'brand_name'=>$brand->translation->brand_name,
+                        ];
+                    });
 
-        return $this->brandContract->getAllBrands();
+
+        return $this->arrayToObject($brandData);
     }
 
     public function dataTable($data)
     {
-        $brands = json_decode(json_encode($data), FALSE);
+
+        $brandData = self::getAllBrands();
+
+        $brands = $this->arrayToObject($brandData);
 
         return datatables()->of($brands)
                 ->setRowId(function ($row){
@@ -37,17 +53,7 @@ class BrandService
                 })
                 ->addColumn('brand_logo', function ($row)
                 {
-                    if ($row->brand_logo==null) {
-                        $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
-                    }
-                    elseif ($row->brand_logo!=null) {
-                        if (!File::exists(public_path($row->brand_logo))) {
-                            $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
-                        }else {
-                            $url = url($row->brand_logo);
-                        }
-                    }
-                    return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                    return  '<img src="'. $row->brand_logo .'" height="50px" width="50px"/>';
                 })
                 ->addColumn('brand_name', function ($row)
                 {

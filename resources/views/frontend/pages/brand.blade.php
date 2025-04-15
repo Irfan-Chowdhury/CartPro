@@ -15,11 +15,6 @@ if (Session::has('currency_symbol')){
 @endphp
 
 
-
-
-
-
-
 @extends('frontend.layouts.master')
 @section('title','Brands')
 
@@ -49,11 +44,7 @@ if (Session::has('currency_symbol')){
                     <div class="col-md-2">
                         <div class="card">
                             <a class="brand-wrapper" href="{{route('cartpro.brand.products',$brand->slug)}}">
-                                @if (isset($brand->brand_logo) && Illuminate\Support\Facades\File::exists(public_path($brand->brand_logo)))
-                                    <img src="{{asset('public/'.$brand->brand_logo)}}">
-                                @else
-                                    <img src="https://dummyimage.com/620x150/e5e8ec/e5e8ec&text=CartPro">
-                                @endif
+                                <img src="{{$brand->logo}}">
                             </a>
                         </div>
                     </div>

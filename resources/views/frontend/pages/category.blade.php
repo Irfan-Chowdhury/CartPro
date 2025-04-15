@@ -1,28 +1,9 @@
-@php
-if (Session::has('currency_rate')){
-    $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
-}else{
-    $CHANGE_CURRENCY_RATE = 1;
-    Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
-}
-
-if (Session::has('currency_symbol')){
-    $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
-}else{
-    $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
-    Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
-}
-@endphp
-
-
-
-
 @extends('frontend.layouts.master')
 @section('title','All Categories')
 
 @section('frontend_content')
 
-@inject('category', 'App\Http\Controllers\Frontend\CategoryProductController')
+{{-- @inject('category', 'App\Http\Controllers\Frontend\CategoryProductController') --}}
 
     <!--Breadcrumb Area start-->
     <div class="breadcrumb-section">
@@ -42,22 +23,17 @@ if (Session::has('currency_symbol')){
     <!-- Content Wrapper -->
     <section class="content-wrapper mt-0 mb-5">
         <div class="container">
-            @forelse ($categories->where('parent_id',NULL) as $item)
+            @forelse ($categories as $category)
                 <div class="row mt-5">
-                    @if (isset($item->image) && Illuminate\Support\Facades\File::exists(public_path($item->image)))
-                        <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="{{asset('public/'.$item->image)}}" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
-                    @else
-                        <h4><a href="{{route('cartpro.category_wise_products',$item->slug)}}"> <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro" height="60px" width="80px"> &nbsp;{{$category->translations($item->categoryTranslation)->category_name}} ({{$category_product_count[$item->id]}}) </a></h4>
-                    @endif
+                    <h4><a href="{{route('cartpro.category_wise_products',$category->slug)}}"> <img src="{{$category->image}}" height="60px" width="80px"> &nbsp;{{$category->categoryName}} ({{$category->totalProducts}}) </a></h4>
                     <hr>
                     <div class="row">
-                        @forelse ($item->child as $value)
+                        @forelse ($category->childs as $value)
                             <div class="col-md-2 mt-3">
-                                <p><a href="{{route('cartpro.category_wise_products',$value->slug)}}"><b> {{$category->translations($value->categoryTranslation)->category_name}} ({{$category_product_count[$value->id]}})</b></a></p>
-                                @forelse ($value->child as $data)
-                                    &nbsp;&nbsp;&nbsp; ---- <a href="{{route('cartpro.category_wise_products',$data->slug)}}">{{$category->translations($data->categoryTranslation)->category_name}} ({{$category_product_count[$data->id]}}) </a> <br>
-                                @empty
-                                @endforelse
+                                <p><a href="{{route('cartpro.category_wise_products',$value->slug)}}"><b> {{$value->childCategoryName}} ({{$value->totalProducts}})</b></a></p>
+                                {{-- @foreach ($value->childs as $data)
+                                    &nbsp;&nbsp;&nbsp; ---- <a href="{{route('cartpro.category_wise_products',$data->slug)}}">{{$data->childCategoryName}} ({{$data->totalProducts}}) </a> <br>
+                                @foreach --}}
                             </div>
                         @empty
                         @endforelse

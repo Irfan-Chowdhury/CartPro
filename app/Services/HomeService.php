@@ -24,7 +24,7 @@ class HomeService
     {
         $sliders = self::getSliders();
 
-        $settings = self::getSettingData();
+        $settings = app('setting');
 
         $sliderBanners = $this->getSliderBanner($settings);
 
@@ -124,6 +124,7 @@ class HomeService
         ])
         ->join('slider_translations', 'slider_translations.slider_id', '=', 'sliders.id')
         ->where('slider_translations.locale', 'en')
+        ->where('sliders.is_active', 1)
         ->orderBy('sliders.is_active', 'DESC')
         ->orderBy('sliders.id', 'ASC')
         ->get();
@@ -196,20 +197,6 @@ class HomeService
 
         return self::arrayToObject($oneColumnBanner);
     }
-
-    public function getSettingData()
-    {
-        return app('setting');
-        // $settingsData = Setting::with(['translations','storeFrontImage'])
-        //                 ->get()
-        //                 ->keyBy('key');
-
-        // $settingArrray = SettingResource::collection($settingsData)->collection->keyBy('key')->toArray();
-        // $settings = json_decode(json_encode($settingArrray), FALSE);
-
-        // return $settings;
-    }
-
 
     public function getCategories()
     {

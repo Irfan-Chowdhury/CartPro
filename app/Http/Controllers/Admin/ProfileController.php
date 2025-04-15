@@ -17,7 +17,7 @@ class ProfileController extends Controller
     {
         $user = User::find(auth()->user()->id);
 
-        // return $user->image;
+        // dd($user);
 
         return view('admin.pages.profile',compact('user'));
     }
