@@ -14,7 +14,7 @@ class SettingAboutUs extends Model
 
     public function aboutUsTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(SettingAboutUsTranslation::class,'setting_about_us_id')
                     ->where('locale',$locale);
     }

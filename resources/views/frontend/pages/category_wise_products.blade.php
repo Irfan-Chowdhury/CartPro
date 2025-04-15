@@ -52,81 +52,79 @@ if (Session::has('currency_symbol')){
 
                             <!--sidebar-categories-box start-->
                             <div class="sidebar-widget sidebar-category-list">
-                                @if ($category->child->count()!=0)
+                                {{-- @if ($category->childs->count()!=0) --}}
+                                @if ($category->childs)
                                 <div class="sidebar-title">
                                     <h2 data-bs-toggle="collapse" href="#collapseCategory" aria-expanded="true">@lang('file.Other Categories')</h2>
                                 </div>
                                 @endif
 
-                                @if($category->child)
-                                <!-- category-sub-menu start -->
-                                <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
-                                    <ul>
-                                        @forelse ($category->child as $item)
-                                            <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->catTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? null }}</a> <span class="count">
+                                @if($category->childs)
+                                    <div class="category-sub-menu style1 mar-top-15 collapse show" id="collapseCategory">
+                                        <ul>
+                                            @forelse ($category->childs as $item)
+                                                <li><a href="{{route('cartpro.category_wise_products',$item->slug)}}">{{$item->childCategoryName}}</a> <span class="count">
 
-                                                @php $count =0; @endphp
-                                                @forelse ($item->categoryProduct as $childCategoryProduct)
-                                                    @if ($childCategoryProduct->product)
-                                                        @php $count++; @endphp
-                                                    @endif
-                                                @empty
-                                                @endforelse
-                                                ({{$count}})
-
-                                            </span>
-                                                @if ($item->child)
-                                                    @forelse ($item->child as $value)
-                                                        <ul>
-                                                            <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->catTranslation->category_name ?? $value->categoryTranslationDefaultEnglish->category_name ?? null }}<span class="count">
-                                                                @php $count =0; @endphp
-                                                                @forelse ($value->categoryProduct as $childCategoryProduct)
-                                                                    @if ($childCategoryProduct->product)
-                                                                        @php $count++; @endphp
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
-                                                                ({{$count}})
-                                                            </span></a></li>
-                                                        </ul>
+                                                    {{-- @php $count =0; @endphp
+                                                    @forelse ($item->categoryProduct as $childCategoryProduct)
+                                                        @if ($childCategoryProduct->product)
+                                                            @php $count++; @endphp
+                                                        @endif
                                                     @empty
                                                     @endforelse
-                                                @endif
-                                            </li>
-                                        @empty
-                                        @endforelse
-                                    </ul>
-                                </div>
-                                <!-- category-sub-menu end -->
+                                                    ({{$count}}) --}}
+                                                    ({{ $item->totalProducts }})
+
+                                                </span>
+                                                    @if (isset($item->childs))
+                                                        @forelse ($item->childs as $value)
+                                                            <ul>
+                                                                <li><a href="{{route('cartpro.category_wise_products',$value->slug)}}">{{$value->childCategoryName}}<span class="count">
+                                                                    {{-- @php $count =0; @endphp
+                                                                    @forelse ($value->categoryProduct as $childCategoryProduct)
+                                                                        @if ($childCategoryProduct->product)
+                                                                            @php $count++; @endphp
+                                                                        @endif
+                                                                    @empty
+                                                                    @endforelse
+                                                                    ({{$count}}) --}}
+                                                                    ({{ $value->totalProducts }})
+                                                                </span></a></li>
+                                                            </ul>
+                                                        @empty
+                                                        @endforelse
+                                                    @endif
+                                                </li>
+                                            @empty
+                                            @endforelse
+                                        </ul>
+                                    </div>
                                 @endif
                             </div>
-                            <!--sidebar-categores-box end  -->
-
 
                             <!--sidebar-categores-box start  -->
+
                             <!-- Filter By Price -->
                             <div class="sidebar-widget filters">
                                 <div class="sidebar-title">
                                     <h2 data-bs-toggle="collapse" href="#collapsePrice" aria-expanded="true">@lang('file.Filter By Price')</h2>
                                 </div>
                                 <div class="filter-area collapse show" id="collapsePrice">
-                                    {{-- <form id="priceRange" action="{{route('cartpro.category.price_range')}}" method="get"> --}}
                                         <div id="slider-range" class="price-range mar-bot-20"></div>
                                         <div class="d-flex justify-content-center">
                                             <div><input type="text" id="amount" name="amount"></div>
                                             <div><input type="hidden" name="category_slug" value="{{$category->slug ?? null}}"></div>
                                         </div>
-                                    {{-- </form> --}}
                                 </div>
                             </div>
 
 
                             <!-- Filter By Attribute Value-->
-                            @if (count($attribute_values)>0)
+                            @if (count($attributes)>0)
                                 <input type="hidden" name="attribute_value_ids" id="value_ids">
                                 <input type="hidden" name="category_slug" value="{{$category->slug}}">
 
-                                @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
+                                {{-- @foreach ($attribute_values->keyBy('attribute_name') as $key => $item)
                                     <div class="sidebar-widget filters">
                                         <div class="sidebar-title">
                                             <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$key}}</h2>
@@ -145,6 +143,30 @@ if (Session::has('currency_symbol')){
                                             </div>
                                         </div>
                                     </div>
+                                @endforeach --}}
+                                @foreach ($attributes as $attribute)
+                                    <div class="sidebar-widget filters">
+                                        <div class="sidebar-title">
+                                            @isset($attribute->name)
+                                                <h2 data-bs-toggle="collapse" href="#collapseSize" aria-expanded="true">@lang('file.Filter By') {{$attribute->name}}</h2>
+                                            @endisset
+                                        </div>
+                                        <div class="filter-area collapse show" id="collapseSize">
+                                            <div class="size-checkbox">
+                                                <ul class="filter-opt size pt-2">
+                                                    @if($attribute->attributeValues)
+                                                        @foreach ($attribute->attributeValues as $attributeValue)
+                                                            <li>
+                                                                <div class="custom-control custom-checkbox">
+                                                                <label for="size-s" class="custom-control-label attribute_value" data-attribute_name="{{$attribute->name}}" id="valueId_{{$attributeValue->id}}" data-value_id="{{$attributeValue->id}}" data-value_name="{{$attributeValue->name}}"><span class="size-block">{{$attributeValue->name}}</span></label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             @endif
 
@@ -153,12 +175,11 @@ if (Session::has('currency_symbol')){
                         </form>
                     </div>
                 </div>
+
                 <div class="col-lg-9">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="page-title h5 uppercase mb-0">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</h1>
-                        @if ($category)
-                            <span class="d-none d-md-block"><strong class="theme-color">{{$product_count}}</strong> @lang('file.Products Found')</span>
-                        @endif
+                        <h1 class="page-title h5 uppercase mb-0">{{$category->categoryName}}</h1>
+                        <span class="d-none d-md-block"><strong class="theme-color">{{$category->totalProducts}}</strong> @lang('file.Products Found')</span>
                     </div>
 
                     <div class="products-header">
@@ -167,7 +188,6 @@ if (Session::has('currency_symbol')){
                             <li class="d-none d-md-block d-lg-block"><a class="view-list"><i class="ti-layout-list-thumb"></i></a></li>
                             <li class="d-md-block d-sm-block d-lg-none"><a class="filter-icon"><i class="las la-sliders-h"></i> @lang('file.Filters')</a></li>
                         </ul>
-                        <!-- shop-item-filter-list start -->
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             @lang('file.Show')
@@ -190,47 +210,40 @@ if (Session::has('currency_symbol')){
                                 <li><a class="dropdown-item sortBy" data-condition="high_to_low" data-category_slug="{{$category->slug}}">Price: High to Low</a></li>
                             </ul>
                         </div>
-                        <!-- shop-item-filter-list end -->
                     </div>
 
-
-                    <!--Shop product wrapper starts-->
                     <div class="shop-products-wrapper">
                         <div class="product-grid categoryWiseProductField">
-                            @if ($category->categoryProduct)
-                                @forelse ($category->categoryProduct as $item)
-                                    @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
+                            @if ($category->products)
+                                @forelse ($category->products as $product)
+                                    @if ($product->isActive==1) <!--Change in query later-->
                                         <form class="addToCart">
                                             @csrf
-                                            <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                            <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
+                                            <input type="hidden" name="product_id" value="{{$product->productId}}">
+                                            <input type="hidden" name="product_slug" value="{{$product->slug}}">
+                                            <input type="hidden" name="category_id" value="{{$category->categoryId}}">
                                             <input type="hidden" name="qty" value="1">
 
                                             <div class="product-grid-item">
                                                 <div class="single-product-wrapper">
                                                     <div class="single-product-item">
-                                                        @if ($item->productBaseImage!=NULL && Illuminate\Support\Facades\File::exists(public_path($item->product->baseImage->image)))
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img class="lazy" data-src="{{asset('public/'.$item->product->baseImage->image)}}"></a>
-                                                        @else
-                                                            <a href="{{url('product/'.$item->product->slug.'/'. $category->id)}}"><img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro"></a>
-                                                        @endif
+                                                        <a href="{{url('product/'.$product->slug.'/'. $category->categoryId)}}"><img class="lazy" data-src="{{$product->image}}"></a>
 
                                                         <!-- product-promo-text -->
-                                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$item->product->manage_stock, 'qty'=>$item->product->qty, 'in_stock'=>$item->product->in_stock, 'in_stock'=>$item->product->in_stock, 'current_date'=>date('Y-m-d') ,'new_to'=>$item->product->new_to])
+                                                        @include('frontend.includes.product-promo-text',['manage_stock'=>$product->manageStock, 'qty'=>$product->qty, 'in_stock'=>$product->inStock, 'current_date'=>date('Y-m-d') ,'new_to'=>$product->newTo])
                                                         <!--/ product-promo-text -->
 
                                                         <div class="product-overlay">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
-                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$product->productId}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                            <a><span class="ti-heart @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->productId}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->categoryId}}" data-qty="1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('file.Add to wishlist')"></span></a>
                                                         </div>
                                                     </div>
                                                     <div class="product-details">
-                                                        <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $category->id)}}">
-                                                            {{$item->product->productTranslation->product_name ?? $item->product->productTranslationEnglish->product_name ?? null}}
+                                                        <a class="product-name" href="{{url('product/'.$product->slug.'/'. $category->categoryId)}}">
+                                                            {{$product->name}}
                                                         </a>
                                                         <div class="product-short-description">
-                                                            {{$item->product->productTranslation->short_description ?? $item->product->productTranslationEnglish->short_description ?? null}}
+                                                            {{$product->shortDescription}}
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>
@@ -239,7 +252,7 @@ if (Session::has('currency_symbol')){
                                                                         <ul class="product-rating">
                                                                             @php
                                                                                 for ($i=1; $i <=5 ; $i++){
-                                                                                    if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                    if ($i<= round($product->avgRating)){  @endphp
                                                                                         <li><i class="las la-star"></i></li>
                                                                             @php
                                                                                     }else { @endphp
@@ -251,25 +264,25 @@ if (Session::has('currency_symbol')){
                                                                     </div>
                                                                 </div>
                                                                 <div class="product-price">
-                                                                    @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price < $item->product->price)
+                                                                    @if ($product->specialPrice!=NULL && $product->specialPrice>0 && $product->specialPrice < $product->price)
                                                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            <span class="promo-price">{{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
-                                                                            <span class="old-price">{{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
+                                                                            <span class="promo-price">{{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
+                                                                            <span class="old-price">{{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
                                                                         @else
-                                                                            <span class="promo-price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} </span>
-                                                                            <span class="old-price"> @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                            <span class="promo-price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '')}} </span>
+                                                                            <span class="old-price"> @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                                                                         @endif
                                                                     @else
                                                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            <span class="price">{{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
+                                                                            <span class="price">{{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')</span>
                                                                         @else
-                                                                            <span class="price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
+                                                                            <span class="price">@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}</span>
                                                                         @endif
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                                @if (($product->manageStock==1 && $product->qty==0) || ($product->inStock==0))
                                                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                                 @else
                                                                     <button class="button style2 sm" type="submit" title="Add To Cart" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
@@ -279,38 +292,38 @@ if (Session::has('currency_symbol')){
                                                     </div>
                                                     <div class="product-options">
                                                         <div class="product-price mt-2">
-                                                            @if ($item->product->special_price!=NULL && $item->product->special_price>0 && $item->product->special_price<$item->product->price)
+                                                            @if ($product->specialPrice!=NULL && $product->specialPrice>0 && $product->specialPrice<$product->price)
                                                                 <span class="promo-price">
                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        {{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                     @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                     @endif
                                                                 </span>
                                                                 <span class="old-price">
                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                     @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                     @endif
                                                                 </span>
                                                             @else
                                                                 <span class="price">
                                                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                        {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                        {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                     @else
-                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                     @endif
                                                                 </span>
                                                             @endif
                                                         </div>
 
-                                                        @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                        @if (($product->manageStock==1 && $product->qty==0) || ($product->inStock==0))
                                                             <button disabled class="button style1 sm d-block w-100 mt-3 mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Out of Stock')}}"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @else
                                                             <button class="button style1 sm d-block w-100 mt-3 mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to Cart')}}"><i class="las la-cart-plus"></i>{{__('file.Add to Cart')}}</button>
                                                         @endif
-                                                        <a class="button style1 sm d-block align-items-center @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$item->product_id}}" data-product_slug="{{$item->product->slug}}" data-category_id="{{$category->id  ?? null}}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to wishlist')}}"><span class="ti-heart"></span> {{__('file.Add to wishlist')}}</a>
+                                                        <a class="button style1 sm d-block align-items-center @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->productId}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->categoryId}}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{__('file.Add to wishlist')}}"><span class="ti-heart"></span> {{__('file.Add to wishlist')}}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -329,13 +342,159 @@ if (Session::has('currency_symbol')){
     <!-- Shop Page Ends-->
 
     <!-- Quick Shop Modal starts -->
-    @forelse ($category->categoryProduct as $item)
-        @if ($item->product!==NULL && $item->product->is_active==1)
-            @include('frontend.includes.quickshop')
-        @endif
-    @empty
-    @endforelse
+    @foreach ($category->products as $product)
+            <!-- Quick Shop Modal starts -->
+            <div class="modal fade quickshop" id="id_{{$product->productId}}" tabindex="-1" role="dialog" aria-labelledby="{{$product->slug}}" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="las la-times"></i></span>
+                            </button>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="slider-wrapper">
+                                        <div class="slider-for-modal">
+                                            @foreach ($product->additionalImage as $value)
+                                                    <div class="slider-for__item ex1">
+                                                        <img src="{{$value->image}}" alt="..." />
+                                                    </div>
+                                            @endforeach
+                                        </div>
+                                        <div class="slider-nav-modal">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{$product->productId}}">
+                                        <input type="hidden" name="product_slug" value="{{$product->slug}}">
+                                        <input type="hidden" name="category_id" value="{{$category->categoryId}}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <input type="hidden" name="value_ids" class="value_ids_shop">
+
+                                        <div class="item-details">
+                                            <h3 class="item-name">{{$product->name}}</h3>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brandName}}</a></div>
+                                                <div class="item-review">
+                                                    <ul class="p-0 m-0">
+                                                        @php
+                                                            for ($i=1; $i <=5 ; $i++){
+                                                                if ($i<= round($product->avgRating)){  @endphp
+                                                                    <li><i class="las la-star"></i></li>
+                                                        @php
+                                                                }else { @endphp
+                                                                    <li><i class="lar la-star"></i></li>
+                                                        @php        }
+                                                            }
+                                                        @endphp
+                                                    </ul>
+                                                    <span>( {{round($product->avgRating)}} )</span>
+                                                </div>
+                                                @if ($product->sku)
+                                                    <div class="item-sku">@lang('file.SKU'): {{$product->sku ?? null}}</div>
+                                                @endif
+                                            </div>
+                                            <hr>
+                                            @if ($product->specialPrice!=NULL && $product->specialPrice>0 && $product->specialPrice<$product->price)
+                                                <div class="item-price">
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        {{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                    @else
+                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                    @endif
+                                                    <hr>
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        <small class="old-price"><del>{{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL') </del></small>
+                                                    @else
+                                                        <small class="old-price"><del>@include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} </del></small>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="item-price">
+                                                    @if(env('CURRENCY_FORMAT')=='suffix')
+                                                        {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                    @else
+                                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                    @endif
+                                                </div>
+                                            @endif
+
+                                            <div class="item-short-description">
+                                                <p>{{$product->shortDescription}}</p>
+                                            </div>
+                                            <hr>
+                                            @php
+                                                $attributes = $product->attributes;
+                                            @endphp
+                                            @foreach ($attributes as $key => $attribute)
+                                                <div class="item-variant">
+                                                    <span>{{$attribute->name}}:</span>
+                                                    <ul class="product-variant size-opt p-0 mt-1">
+                                                        @foreach ($attribute->values as $value)
+                                                            <li class="attribute_value"
+                                                                data-attribute_name="{{$value->name }}"
+                                                                id="valueId_{{$value->id}}"
+                                                                data-value_id="{{$value->id}}"
+                                                                data-value_name="{{$value->name }}">
+                                                                <span>{{$value->name}}</span>
+                                                            </li>
+                                                            <input type="hidden" name="value_id[]" value="{{$value->id}}">
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endforeach
+
+
+                                            <div class="item-options">
+                                                <div class="input-qty">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-left-minus">
+                                                            <span class="ti-minus"></span>
+                                                        </button>
+                                                    </span>
+                                                    <input type="number" name="qty" class="input-number" value="1" min="1">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-right-plus">
+                                                            <span class="ti-plus"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                                @if (($product->manageStock==1 && $product->qty==0) || ($product->inStock==0))
+                                                    <button class="button button-icon style1" disabled title="Out of stock" data-bs-toggle="tooltip" data-bs-placement="top"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to Cart')</span></span></button>
+                                                @else
+                                                    <button class="button button-icon style1" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to Cart')</span></span></button>
+                                                @endif
+                                                <div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->productId}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->categoryId}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to Wishlist')</span></span></div>
+                                            </div>
+
+                                            <hr>
+                                            <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
+                                                <ul class="footer-social d-inline pad-left-15">
+                                                    <li><a href="{{$socialShareLinks->facebook}}"><i class="ti-facebook"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->twitter}}"><i class="ti-twitter"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->linkedin}}"><i class="ti-linkedin"></i></a></li>
+                                                    <li><a href="{{$socialShareLinks->reddit}}"><i class="ti-reddit"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Quick shop modal ends-->
+    @endforeach
+
 @endsection
+
+
+
+
 
 @push('scripts')
     <script src="{{asset('public/frontend/js/jquery-ui.min.js')}}"></script>

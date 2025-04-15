@@ -20,12 +20,12 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
         $default_language = Language::where('default', '=', 1)->first();
-        if(Session::get('currentLocal')){
-            $currentLocale = Session::get('currentLocal');
-            Session::put('currentLocal', $currentLocale);
+        if(Session::get('currentLocale')){
+            $currentLocale = Session::get('currentLocale');
+            Session::put('currentLocale', $currentLocale);
         }else {
             $currentLocale = $default_language->local ?? 'en';
-            Session::put('currentLocal', $currentLocale);
+            Session::put('currentLocale', $currentLocale);
         }
         App::setLocale($currentLocale);
         return $next($request);

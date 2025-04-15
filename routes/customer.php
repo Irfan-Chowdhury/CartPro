@@ -33,7 +33,7 @@ use App\Http\Controllers\Frontend\UserShippingAddressController;
 
 DefaultAuth::routes();
 
-Route::group(['middleware' => ['XSS','set_locale','maintenance_mode']], function ()
+Route::group(['middleware' => ['XSS','set_locale','maintenance_mode','public_common_data']], function ()
 {
     /*
     |--------------------------------------------------------------------------

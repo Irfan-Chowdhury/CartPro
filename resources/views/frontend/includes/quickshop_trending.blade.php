@@ -27,7 +27,7 @@ if (Session::has('currency_symbol')){
                         <div class="col-md-6">
                             <div class="slider-wrapper">
                                 <div class="slider-for-modal">
-                                    @forelse ($item->product->additionalImage as $value)
+                                    @forelse ($item->additionalImage as $value)
                                         <div class="slider-for__item ex1">
                                             <img src="{{asset('public/'.$value->image)}}" alt="..." />
                                         </div>
@@ -47,7 +47,8 @@ if (Session::has('currency_symbol')){
 
                                 <div class="item-details">
                                     <a class="item-category" href="">{{$item->product->categoryProduct[0]->category->catTranslation->category_name ?? NULL}}</a>
-                                    <h3 class="item-name">{{$item->product->productTranslation->product_name ?? null}}</h3>
+                                    {{-- <h3 class="item-name">{{$item->product->productTranslation->product_name ?? null}}</h3> --}}
+                                    <h3 class="item-name">{{$item->orderProductTranslation->product_name ?? null}}</h3>
                                     <div class="d-flex justify-content-between">
                                         <div class="item-review">
                                             <ul class="p-0 m-0">
@@ -94,12 +95,12 @@ if (Session::has('currency_symbol')){
                                     @endif
 
                                     <div class="item-short-description">
-                                        <p>{{$item->product->productTranslation->short_description ?? null}}.</p>
+                                        <p>{{$item->orderProductTranslation->short_description ?? null}}.</p>
                                     </div>
                                     <hr>
                                     @php
                                         $attribute = [];
-                                        foreach ($item->product->productAttributeValues as $value) {
+                                        foreach ($item->productAttributeValues as $value) {
                                             $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
                                         }
                                     @endphp

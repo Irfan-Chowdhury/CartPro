@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Setting;
 use App\Models\Tag;
+use App\Traits\ArrayToObjectConvertionTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -17,89 +19,45 @@ use Illuminate\Support\Facades\Cache;
 
 class CategoryProductController extends Controller
 {
-    use ProductPromoBadgeTextTrait, TranslationTrait;
+    use ProductPromoBadgeTextTrait, TranslationTrait, ArrayToObjectConvertionTrait;
 
     public function allCategogry()
     {
-        $categories = Category::with('categoryTranslation','child.categoryTranslation')
-                    ->where('is_active',1)
+        $categoriesData = Category::with(['translations','childs.translations','products'])
+                    ->where('parent_id', null)
                     ->orderBy('is_active','DESC')
                     ->orderBy('id','ASC')
-                    ->get();
+                    ->get()
+                    ->map(function($category) {
+                        return [
+                            'id'=> $category->id,
+                            'image'=> isset($category->image) && file_exists(public_path($category->image)) ? asset($category->image) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category',
+                            'is_active'=> $category->is_active,
+                            'icon'=> $category->icon,
+                            'slug'=> $category->slug,
+                            'totalProducts' => $category->products->count(),
+                            'categoryName'=> $category->translation->category_name,
+                            'childs'=> $category->childs->map(function($childCategory) {
+                                return [
+                                    'id'=> $childCategory->id,
+                                    'image'=> isset($childCategory->image) && file_exists(public_path($childCategory->image)) ? asset($childCategory->image) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Category',
+                                    'is_active'=> $childCategory->is_active,
+                                    'icon'=> $childCategory->icon,
+                                    'slug'=> $childCategory->slug,
+                                    'totalProducts'=> $childCategory->products->count(),
+                                    'childCategoryName'=> $childCategory->childTranslation->category_name,
+                                ];
+                            }),
+                        ];
+                    });
 
-        $category_product_count = [];
-        foreach ($categories as $category) {
-            $product_count = 0;
-            if ($category->categoryProduct) {
-                foreach ($category->categoryProduct as $item) {
-                    if ($item->product) {
-                        $product_count++;
-                    }
-                }
-            }
-            $category_product_count[$category->id] = $product_count;
-        }
+        $categories = $this->arrayToObject($categoriesData);
 
-        return view('frontend.pages.category',compact('categories','category_product_count'));
+
+        return view('frontend.pages.category',compact('categories'));
     }
 
 
-    // public function categoryWiseProducts($slug)
-    // {
-    //     $setting = Cache::remember('setting', 300, function () {
-    //         return Setting::where('key','storefront_footer_tag_id')->first();
-    //     });
-
-    //     $footer_tag_ids = json_decode($setting->plain_value);
-
-    //     $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
-    //         return Tag::with('tagTranslations','tagTranslationEnglish')
-    //                 ->whereIn('id',$footer_tag_ids)
-    //                 ->where('is_active',1)
-    //                 ->orderBy('is_active','DESC')
-    //                 ->orderBy('id','DESC')
-    //                 ->get();
-    //     });
-
-    //     $locale  = Session::get('currentLocal');
-
-
-    //     $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
-    //             'categoryProduct.product.productTranslation',
-    //             'categoryProduct.product.productTranslationEnglish',
-    //             'categoryProduct.product.baseImage',
-    //             'categoryProduct.product.additionalImage',
-    //             'child.catTranslation','child.categoryTranslationDefaultEnglish')
-    //             ->where('slug',$slug)
-    //             ->first();
-
-
-    //     $product_count = 0;
-    //     if ($category->categoryProduct) {
-    //         foreach ($category->categoryProduct as $item) {
-    //             if ($item->product) {
-    //                 $product_count++;
-    //             }
-    //         }
-    //     }
-
-    //     $attribute_values = Cache::remember('attribute_values', 300, function () use ($locale, $category) {
-    //         return DB::table('attribute_category')
-    //                 ->join('attribute_translations', function ($join) use ($locale) {
-    //                     $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-    //                     ->where('attribute_translations.locale', '=', $locale);
-    //                 })
-    //                 ->join('attribute_value_translations', function ($join) use ($locale) {
-    //                     $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-    //                     ->where('attribute_value_translations.local', '=', $locale);
-    //                 })
-    //                 ->where('category_id',$category->id)
-    //                 ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
-    //                 ->get();
-    //     });
-
-    //     return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
-    // }
     public function categoryWiseProducts($slug)
     {
         $setting = Setting::where('key','storefront_footer_tag_id')->first();
@@ -113,51 +71,110 @@ class CategoryProductController extends Controller
                     ->orderBy('id','DESC')
                     ->get();
 
-        $locale  = Session::get('currentLocal');
+        $locale  = Session::get('currentLocale');
 
-
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish',
-                'categoryProduct.product.productTranslation',
-                'categoryProduct.product.productTranslationEnglish',
-                'categoryProduct.product.baseImage',
-                'categoryProduct.product.additionalImage',
-                'child.catTranslation','child.categoryTranslationDefaultEnglish')
-                ->where('slug',$slug)
-                ->first();
-
-
-        $product_count = 0;
-        if ($category->categoryProduct) {
-            foreach ($category->categoryProduct as $item) {
-                if ($item->product) {
-                    $product_count++;
-                }
-            }
-        }
-
-        $attribute_values = DB::table('attribute_category')
-                    ->join('attribute_translations', function ($join) use ($locale) {
-                        $join->on('attribute_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                        ->where('attribute_translations.locale', '=', $locale);
-                    })
-                    ->join('attribute_value_translations', function ($join) use ($locale) {
-                        $join->on('attribute_value_translations.attribute_id', '=', 'attribute_category.attribute_id')
-                        ->where('attribute_value_translations.local', '=', $locale);
-                    })
-                    ->where('category_id',$category->id)
-                    ->select('attribute_category.*','attribute_translations.attribute_name','attribute_value_translations.attribute_value_id','attribute_value_translations.value_name AS attribute_value_name')
+        $attributes = Attribute::select('id','slug','name')
+                    ->with('attributeValues:id,attribute_id,name')
+                    ->where('is_active',1)
                     ->get();
 
-        return view('frontend.pages.category_wise_products',compact('category','attribute_values','product_count'));
+        // New
+
+        // DB::enableQueryLog();
+
+        $category = Category::with([
+            'translations',
+            'childs.translations',
+            'products' => function ($query) {
+                $query->where('is_active', 1)
+                ->with([
+                    'translations',
+                    'baseImage',
+                    'additionalImage',
+                    'brand',
+                    'attributes' => function ($q) {
+                        $q->select('id', 'name')
+                          ->with(['attributeValues:id,attribute_id,name']);
+                    }
+                ]);
+            },
+        ])
+        ->where('slug',$slug)
+        ->first();
+
+        $categoryWiseProducts =  (object) [
+                'categoryId' => $category->id,
+                'slug' => $category->slug,
+                'isActive'  => $category->is_active,
+                'categoryName' => $category->translation->category_name,
+                'totalProducts' => $category->products->count(),
+                'childs'=> $category->childs->map(function($childCategory) {
+                    return [
+                        'id'=> $childCategory->id,
+                        'image'=> $childCategory->image,
+                        'is_active'=> $childCategory->is_active,
+                        'icon'=> $childCategory->icon,
+                        'slug'=> $childCategory->slug,
+                        'totalProducts'=> $childCategory->products->count(),
+                        'childCategoryName'=> $childCategory->childTranslation->category_name,
+                    ];
+                }),
+                'products' => $category->products->map(function($product){
+                    return (object) [
+                        'productId' => $product->id,
+                        'name' => $product->translation->product_name,
+                        'shortDescription' => $product->short_description,
+                        'slug' => $product->slug,
+                        'sku' => $product->sku,
+                        'price' => $product->price,
+                        'manageStock' => $product->manage_stock,
+                        'qty' => $product->qty,
+                        'inStock' => $product->in_stock,
+                        'newTo' => $product->new_to,
+                        'avgRating' => $product->avg_rating,
+                        'specialPrice' => $product->special_price,
+                        'isActive' => $product->is_active,
+                        'image' => isset($product->baseImage->image) && file_exists(public_path($product->baseImage->image)) ? asset($product->baseImage->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                        'mediumImage' => isset($product->baseImage->image_medium) && file_exists(public_path($product->baseImage->image_medium)) ? asset($product->baseImage->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                        'brandName' => $product->brand->name ?? null,
+                        'additionalImage' => $product->additionalImage->map(function($item) {
+                            return [
+                                'image' => isset($item->image) && file_exists(public_path($item->image)) ? asset($item->image) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                                'mediumImage' => isset($item->image_medium) && file_exists(public_path($item->image_medium)) ? asset($item->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                                'smallImage' => isset($item->image_small) && file_exists(public_path($item->image_small)) ? asset($item->image_small) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                            ];
+                        }),
+                        'attributes' => $product->attributes->map(function($attribute) {
+                            return (object) [
+                                'id' => $attribute->id,
+                                'name' => $attribute->name,
+                                'values' => $attribute->attributeValues->map(function($value) {
+                                    return (object) [
+                                        'id' => $value->id,
+                                        'name' => $value->name,
+                                    ];
+                                }),
+                            ];
+                        }),
+                    ];
+                })
+            ];
+
+        // dd(DB::getQueryLog());
+
+
+        $category = $this->arrayToObject($categoryWiseProducts);
+
+        return view('frontend.pages.category_wise_products',compact('attributes','category'));
     }
 
     public function categoryProductsFilterByAttributeValue(Request $request)
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
 
@@ -245,7 +262,7 @@ class CategoryProductController extends Controller
 
     public function categoryWiseSidebarFilter(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         //Price Related
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
         $data_amount = explode(" ",$request->amount);
@@ -458,11 +475,11 @@ class CategoryProductController extends Controller
     public function categoryWiseConditionProducts(Request $request)
     {
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
 
@@ -538,11 +555,11 @@ class CategoryProductController extends Controller
     public function categoryWisePriceRangeProducts(Request $request)
     {
 
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
         App::setLocale($locale);
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;
@@ -555,7 +572,7 @@ class CategoryProductController extends Controller
         $max_price =  $data_amount_last[0]/$CHANGE_CURRENCY_RATE; //previous 1
 
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $category = Category::with('catTranslation','categoryTranslationDefaultEnglish','categoryProduct.product','categoryProduct.productTranslation','categoryProduct.productTranslationDefaultEnglish',
                             'categoryProduct.productBaseImage','categoryProduct.additionalImage','child.catTranslation','child.categoryTranslationDefaultEnglish')

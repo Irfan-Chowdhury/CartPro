@@ -15,7 +15,7 @@ class ColorController extends Controller
     {
         if (auth()->user()->can('tag-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
+            App::setLocale(Session::get('currentLocale'));
 
             $colors = Color::get();
 

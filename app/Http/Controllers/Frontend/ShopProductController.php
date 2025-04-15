@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductImage;
+use App\Traits\ArrayToObjectConvertionTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,71 +19,113 @@ use Illuminate\Support\Facades\Cache;
 
 class ShopProductController extends Controller
 {
-    use ProductPromoBadgeTextTrait;
-
-    // public function index()
-    // {
-    //     $locale = Session::get('currentLocal');
-
-    //     $products = Cache::remember('products', 300, function () use ($locale) {
-    //         return DB::table('products')
-    //                 ->join('product_translations', function ($join) use ($locale) {
-    //                     $join->on('product_translations.product_id', '=', 'products.id')
-    //                     ->where('product_translations.local', '=', $locale);
-    //                 })
-    //                 ->leftJoin('brand_translations', function ($join) use ($locale) {
-    //                     $join->on('brand_translations.brand_id', '=', 'products.brand_id')
-    //                     ->where('brand_translations.local', '=', $locale);
-    //                 })
-    //                 ->leftJoin('product_images', function ($join) {
-    //                     $join->on('product_images.product_id', '=', 'products.id')
-    //                     ->where('product_images.type', '=', 'base');
-    //                 })
-    //                 ->select('products.*','product_images.image','product_images.image_medium','product_images.type','product_translations.product_name','product_translations.short_description','brand_translations.brand_name')
-    //                 ->where('is_active',1)
-    //                 ->orderBy('products.id','ASC')
-    //                 ->get();
-    //     });
+    use ProductPromoBadgeTextTrait, ArrayToObjectConvertionTrait;
 
 
-    //     $product_images = Cache::remember('product_images', 300, function () {
-    //         return ProductImage::select('product_id','image','type')->get();
-    //     });
 
-
-    //     $category_product = Cache::remember('category_product', 300, function () {
-    //         return CategoryProduct::get();
-    //     });
-
-    //     $category_ids = [];
-    //     foreach ($products as $key => $item) {
-    //         foreach ($category_product as $key => $value) {
-    //             if ($item->id==$value->product_id) {
-    //                 $category_ids[$item->id] = $category_product[$key];
-    //                 break;
-    //             }
-    //         }
-    //     }
-
-    //     $attribute_values = ProductAttributeValue::with('attributeTranslation.attributeValueTranslation')->select('attribute_id')->distinct()->get();
-
-    //     $categories = Cache::remember('categories', 300, function () {
-    //         return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-    //                 ->where('is_active',1)
-    //                 ->orderBy('is_active','DESC')
-    //                 ->orderBy('id','ASC')
-    //                 ->get();
-    //     });
-
-    //     $product_attr_val = Product::with('productAttributeValues','brandTranslation')
-    //                     ->orderBy('id','DESC')
-    //                     ->get();
-
-    //     return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values','product_attr_val'));
-    // }
     public function index()
     {
-        $locale = Session::get('currentLocal');
+        // $locale = Session::get('currentLocale');
+
+        $categories = self::getCategrories();
+
+        $attributes = Attribute::select('id','slug','name')
+                    ->with('attributeValues:id,attribute_id,name')
+                    ->where('is_active',1)
+                    ->get();
+
+        $productsData = Product::with([
+            // 'translations',
+            'categories:id,slug,name',
+            'baseImage',
+            'additionalImage',
+            'brand',
+            'attributes' => function ($q) {
+                $q->select('id', 'name')
+                    ->with(['attributeValues:id,attribute_id,name']);
+            }
+        ])
+        ->where('is_active', 1)
+        ->where('deleted_at', null)
+        ->whereHas('categories')
+        ->get()
+        ->filter(function($product) {
+            return $product->categories->isNotEmpty();
+        })
+        ->sortBy(function ($product) {
+            return optional($product->categories->first())->id;
+        })
+        ->values() // reindex after sort
+        ->map(function($product){
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'categoryId' => optional($product->categories->first())->id,
+                'categoryName' => optional($product->categories->first())->name,
+                'shortDescription' => $product->short_description,
+                'slug' => $product->slug,
+                'sku' => $product->sku,
+                'price' => $product->price,
+                'manageStock' => $product->manage_stock,
+                'qty' => $product->qty,
+                'inStock' => $product->in_stock,
+                'newTo' => $product->new_to,
+                'avgRating' => $product->avg_rating,
+                'specialPrice' => $product->special_price,
+                'isActive' => $product->is_active,
+                // 'brand' => (object) optional($product->brand)->only(['id', 'slug', 'name']),
+                'brandName' => $product->brand->name ?? null,
+                'image' => isset($product->baseImage->image) && file_exists(public_path($product->baseImage->image)) ? asset($product->baseImage->image) :  'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                'mediumImage' => isset($product->baseImage->image_medium) && file_exists(public_path($product->baseImage->image_medium)) ? asset($product->baseImage->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                'additionalImage' => $product->additionalImage->map(function($item) {
+                    return [
+                        'image' => isset($item->image) && file_exists(public_path($item->image)) ? asset($item->image) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                        'mediumImage' => isset($item->image_medium) && file_exists(public_path($item->image_medium)) ? asset($item->image_medium) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                        'smallImage' => isset($item->image_small) && file_exists(public_path($item->image_small)) ? asset($item->image_small) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro',
+                    ];
+                }),
+                'attributes' => $product->attributes->map(function($attribute) {
+                    return [
+                        'attributeId' => $attribute->id,
+                        'name' => $attribute->name,
+                        'attributeValues' => $attribute->attributeValues->map(function($value) {
+                            return [
+                                'attributeValueId' => $value->id,
+                                'name' => $value->name,
+                            ];
+                        }),
+                    ];
+                })
+            ];
+        });
+
+
+        $totalProducts = $productsData->count();
+
+        $products = $this->arrayToObject($productsData);
+
+
+        return view('frontend.pages.shop_products',compact(
+            'categories',
+            'attributes',
+            'totalProducts',
+            'products'
+        ));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         $products = DB::table('products')
                     ->join('product_translations', function ($join) use ($locale) {
@@ -116,24 +160,43 @@ class ShopProductController extends Controller
             }
         }
 
-        $attribute_values = ProductAttributeValue::with('attributeTranslation.attributeValueTranslation')->select('attribute_id')->distinct()->get();
-
-        $categories = Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-                    ->where('is_active',1)
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','ASC')
-                    ->get();
-
         $product_attr_val = Product::with('productAttributeValues','brandTranslation')
                         ->orderBy('id','DESC')
                         ->get();
-        return view('frontend.pages.shop_products',compact('products','product_images','category_ids','categories','attribute_values','product_attr_val'));
+
+        return view('frontend.pages.shop_products',compact(
+            'categories',
+            'attributes',
+            'products',
+            'product_images',
+            'category_ids',
+            'product_attr_val'
+        ));
+    }
+
+    private function getCategrories()
+    {
+        $categoriesData = Category::with('translations')
+                    ->where('is_active',1)
+                    ->where('parent_id',NULL)
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','ASC')
+                    ->get()
+                    ->map(function($category){
+                        return [
+                            'id'  => $category->id,
+                            'name'=> $category->translation->category_name,
+                            'slug' => $category->slug,
+                        ];
+                    });
+
+        return $this->arrayToObject($categoriesData);
     }
 
     public function limitShopProductShow(Request $request)
     {
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $products = DB::table('products')
                 ->join('product_translations', function ($join) use ($locale) {
@@ -173,11 +236,11 @@ class ShopProductController extends Controller
 
     public function shopProductsShowSortby(Request $request)
     {
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
+        if(!Session::get('currentLocale')){
+            Session::put('currentLocale', 'en');
             $locale = 'en';
         }else {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
         }
 
 
@@ -259,7 +322,7 @@ class ShopProductController extends Controller
 
     public function shopProductsSidebarFilter(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         //Price Related
         $CHANGE_CURRENCY_RATE = (env('USER_CHANGE_CURRENCY_RATE')!= NULL) ? env('USER_CHANGE_CURRENCY_RATE'): 1;

@@ -26,7 +26,7 @@ class FlashSale extends Model
     //latest
     public function flashSaleTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(FlashSaleTranslations::class,'flash_sale_id')
                 ->where('local',$locale);
     }

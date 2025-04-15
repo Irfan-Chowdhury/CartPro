@@ -2,7 +2,6 @@
 @section('title','Admin | Category')
 @section('admin_content')
 <section>
-
         <div class="container-fluid"><span id="alert_message"></span></div>
 
         <div class="container-fluid mb-3">

@@ -12,10 +12,37 @@ class Tag extends Model
 
     protected $fillable = [
         'slug',
+        'name',
         'is_active'
     ];
 
     protected $dates = ['deleted_at'];
+
+
+    // Vendora
+    public function translations()
+    {
+        return $this->hasMany(TagTranslation::class,'tag_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
+
+    // Vendora
+
+
 
 
     public function tagTranslation()  //Remove Later
@@ -33,7 +60,7 @@ class Tag extends Model
     //Use tagTranslations and tagTranslationEnglish used in Category Wise Products
     public function tagTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(TagTranslation::class,'tag_id')
                     ->where('local',$locale);
     }

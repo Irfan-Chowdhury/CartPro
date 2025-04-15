@@ -4,13 +4,15 @@ namespace App\Services;
 
 use App\Contracts\Brand\BrandContract;
 use App\Contracts\Brand\BrandTranslationContract;
+use App\Models\Brand;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\File;
 
 class BrandService
 {
-    use SlugTrait, imageHandleTrait;
+    use SlugTrait, imageHandleTrait, ArrayToObjectConvertionTrait;
 
     private $brandContract;
     private $brandTranslationContract;
@@ -22,12 +24,28 @@ class BrandService
 
     public function getAllBrands()
     {
-        return $this->brandContract->getAllBrands();
+        $brandData = Brand::with('translations')
+                    ->get()
+                    ->map(function($brand){
+                        return [
+                            'id'=>$brand->id,
+                            'slug'=>$brand->slug,
+                            'is_active'=>$brand->is_active,
+                            'brand_logo'=> isset($brand->brand_logo) && file_exists(public_path($brand->brand_logo)) ? asset($brand->brand_logo) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand',
+                            'brand_name'=>$brand->translation->brand_name,
+                        ];
+                    });
+
+
+        return $this->arrayToObject($brandData);
     }
 
     public function dataTable($data)
     {
-        $brands = json_decode(json_encode($data), FALSE);
+
+        $brandData = self::getAllBrands();
+
+        $brands = $this->arrayToObject($brandData);
 
         return datatables()->of($brands)
                 ->setRowId(function ($row){
@@ -35,17 +53,7 @@ class BrandService
                 })
                 ->addColumn('brand_logo', function ($row)
                 {
-                    if ($row->brand_logo==null) {
-                        $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
-                    }
-                    elseif ($row->brand_logo!=null) {
-                        if (!File::exists(public_path($row->brand_logo))) {
-                            $url = 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand';
-                        }else {
-                            $url = url($row->brand_logo);
-                        }
-                    }
-                    return  '<img src="'. $url .'" height="50px" width="50px"/>';
+                    return  '<img src="'. $row->brand_logo .'" height="50px" width="50px"/>';
                 })
                 ->addColumn('brand_name', function ($row)
                 {
@@ -79,7 +87,7 @@ class BrandService
 
         $dataTranslation  = [];
         $dataTranslation['brand_id']   = $brand->id;
-        $dataTranslation['local']      = session('currentLocal');
+        $dataTranslation['local']      = session('currentLocale');
         $dataTranslation['brand_name'] = htmlspecialchars_decode($request->brand_name);
         $this->brandTranslationContract->storeBrandTranslation($dataTranslation);
         return response()->json(['success' => __('Data Successfully Saved')]);
@@ -92,7 +100,7 @@ class BrandService
 
     public function findBrandTranslation($brand_id)
     {
-        $brandTranslation = $this->brandTranslationContract->getByIdAndLocale($brand_id,session('currentLocal'));
+        $brandTranslation = $this->brandTranslationContract->getByIdAndLocale($brand_id,session('currentLocale'));
         if (!isset($brandTranslation)) {
             $brandTranslation =  $this->brandTranslationContract->getByIdAndLocale($brand_id,'en');
         }
@@ -162,8 +170,25 @@ class BrandService
 
 
     //Front - HomeController
-    public function getBrandsWhereInIds($ids){
-        return $this->brandContract->getBrandsWhereInIds($ids);
+    public function getBrandsWhereInIds($ids)
+    {
+
+        $data = Brand::with('translations')->whereIn('id',$ids)
+                ->where('is_active',1)
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC')
+                ->get()
+                ->map(function($brand){
+                    return [
+                        'id'=>$brand->id,
+                        'slug'=>$brand->slug,
+                        'is_active'=>$brand->is_active,
+                        'brand_logo'=>$brand->brand_logo ?? null,
+                        'brand_name'=>$brand->translation->brand_name,
+                    ];
+                });
+
+        return json_decode(json_encode($data), FALSE);
     }
 
 }

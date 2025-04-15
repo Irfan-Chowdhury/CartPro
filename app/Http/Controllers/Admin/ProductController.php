@@ -162,7 +162,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $local         = Session::get('currentLocal');
+        $local         = Session::get('currentLocale');
         $brands        = json_decode(json_encode($this->brandService->getAllBrands()), FALSE);
         $categories    = $this->categoryService->getAllCategories();
         $tags          = $this->tagService->getAllTag();
@@ -206,7 +206,7 @@ class ProductController extends Controller
             return redirect()->back();
         }
 
-        $local = Session::get('currentLocal');
+        $local = Session::get('currentLocale');
 
         if (auth()->user()->can('product-store'))
         {
@@ -246,7 +246,7 @@ class ProductController extends Controller
 
             $productTranslation = new ProductTranslation();
             $productTranslation->product_id  = $product->id;
-            $productTranslation->local        = Session::get('currentLocal');
+            $productTranslation->local        = Session::get('currentLocale');
             $productTranslation->product_name = htmlspecialchars_decode($request->product_name);
             $productTranslation->description  = htmlspecialchars_decode($request->description);;
             $productTranslation->short_description = $request->short_description;
@@ -328,7 +328,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $local = Session::get('currentLocal');
+        $local = Session::get('currentLocale');
 
         $product = Product::with(['productTranslation','productTranslationEnglish','categories','tags','brand','brandTranslation','brandTranslationEnglish',
                     'baseImage'=> function ($query){
@@ -480,13 +480,13 @@ class ProductController extends Controller
 
         if (auth()->user()->can('product-edit'))
         {
-            $local = Session::get('currentLocal');
+            $local = Session::get('currentLocale');
 
             $product                = Product::find($id);
             if ($request->brand_id) {
                 $product->brand_id      = $request->brand_id;
             }
-            if (session('currentLocal')=='en') {
+            if (session('currentLocale')=='en') {
                 $product->slug          = $this->slug(htmlspecialchars_decode($request->product_name));
             }
             $product->tax_id        = $request->tax_id;

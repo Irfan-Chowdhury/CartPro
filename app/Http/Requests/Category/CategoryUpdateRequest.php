@@ -27,9 +27,8 @@ class CategoryUpdateRequest extends FormRequest
     {
         return [
             'category_name' => 'required|unique:category_translations,category_name,'.$this->category_translation_id.',id,deleted_at,NULL',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
-
-        // Request::get('category_translation_id')
 
     }
 }

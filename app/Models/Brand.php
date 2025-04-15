@@ -12,31 +12,56 @@ class Brand extends Model
     use Notifiable, TranslationTrait;
 
     protected $fillable = [
-        'slug','brand_logo', 'is_active',
+        'slug','name','brand_logo', 'is_active',
     ];
 
-    public $with = ['brandTranslations'];
 
-    public function format()
+    // Vendora
+    public function translations()
     {
-        return [
-            'id'=>$this->id,
-            'slug'=>$this->slug,
-            'is_active'=>$this->is_active,
-            'brand_logo'=>$this->brand_logo ?? null,
-            // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
-            'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
-        ];
+        return $this->hasMany(BrandTranslation::class,'brand_id');
     }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
 
     public function products()
     {
     	return $this->hasMany(Product::class,'brand_id');
     }
 
+
+
+
+    // public function format()
+    // {
+    //     return [
+    //         'id'=>$this->id,
+    //         'slug'=>$this->slug,
+    //         'is_active'=>$this->is_active,
+    //         'brand_logo'=>$this->brand_logo ?? null,
+    //         // 'brand_name'=>$this->brandTranslation->brand_name ?? $this->brandTranslationEnglish->brand_name ?? null,
+    //         'brand_name'=>$this->translations($this->brandTranslations)->brand_name,
+    //     ];
+    // }
+
+
+
     public function brandTranslation() //Remove Later
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasOne(BrandTranslation::class,'brand_id')
                     ->where('local',$locale);
     }
@@ -50,7 +75,7 @@ class Brand extends Model
     //New For Repository
     public function brandTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(BrandTranslation::class,'brand_id')
                     ->where('local',$locale)
                     ->orWhere('local','en');

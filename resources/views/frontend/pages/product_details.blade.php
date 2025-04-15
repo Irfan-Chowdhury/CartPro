@@ -18,18 +18,18 @@ if (Session::has('currency_symbol')){
 
 @section('meta_info')
     <meta product="og:site_name" content="CartPro">
-    <meta product="og:title" content="{{$product->productTranslation->meta_title ?? null}}">
-    <meta product="og:description" content="{{$product->productTranslation->meta_description ?? null}}">
-    <meta product="og:url" content="{{url('product/'.$product->slug.'/'. $category->id)}}">
+    <meta product="og:title" content="{{$product->basic->meta_title ?? null}}">
+    <meta product="og:description" content="{{$product->basic->meta_description ?? null}}">
+    <meta product="og:url" content="{{url('product/'.$product->basic->slug.'/'. $category->id)}}">
     <meta product="og:type" content="Product">
 
-    @if ($product->baseImage)
-        <meta product="og:image" content="{{asset('public/'.$product->baseImage->image)}}">
+    @if ($product->imageCollection->baseImage)
+        <meta product="og:image" content="{{asset($product->imageCollection->baseImage->image)}}">
     @endif
 @endsection
 
 @php
-    $product_name = $product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? null;
+    $product_name = $product->basic->name;
 @endphp
 @section('title',$product_name)
 
@@ -42,8 +42,8 @@ if (Session::has('currency_symbol')){
             <div class="breadcrumb-section">
                 <ul>
                     <li><a href="{{route('cartpro.home')}}">@lang('file.Home')</a></li>
-                    <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name}}</a> </li>
-                    <li>{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</li>
+                    <li class="active"><a href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->name}}</a> </li>
+                    <li>{{$product->basic->name}}</li>
                 </ul>
             </div>
 
@@ -51,19 +51,19 @@ if (Session::has('currency_symbol')){
                 <div class="col-md-6 mar-bot-30">
                     <div class="slider-wrapper">
                         <div class="slider-nav">
-                             @if ($product->baseImage)
+                             @if ($product->imageCollection->baseImage)
                                 <div class="slider-nav__item">
-                                    @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
-                                        <img src="{{asset('public/'.$product->baseImage->image)}}">
+                                    @if (isset($product->imageCollection->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->imageCollection->baseImage->image)))
+                                        <img src="{{asset($product->imageCollection->baseImage->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @endif
-                            @forelse ($product->additionalImage as $value)
+                            @forelse ($product->imageCollection->additionalImage as $value)
                                 <div class="slider-nav__item">
                                     @if (isset($value->image_small) && Illuminate\Support\Facades\File::exists(public_path($value->image_small)))
-                                        <img src="{{asset('public/'.$value->image_small)}}">
+                                        <img src="{{asset($value->image_small)}}">
                                     @else
                                         <img src="https://dummyimage.com/221.6x221.6/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
@@ -71,21 +71,20 @@ if (Session::has('currency_symbol')){
                             @empty
                             @endforelse
                         </div>
-
                         <div class="slider-for">
-                            @if ($product->baseImage)
+                            @if ($product->imageCollection->baseImage)
                                 <div class="slider-for__item ex1">
-                                    @if (isset($product->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->baseImage->image)))
-                                        <img class="lazy" data-src="{{asset('public/'.$product->baseImage->image)}}">
+                                    @if (isset($product->imageCollection->baseImage->image) && Illuminate\Support\Facades\File::exists(public_path($product->imageCollection->baseImage->image)))
+                                        <img class="lazy" data-src="{{asset($product->imageCollection->baseImage->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/518x518/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
                                 </div>
                             @endif
-                            @forelse ($product->additionalImage as $value)
+                            @forelse ($product->imageCollection->additionalImage as $value)
                                 <div class="slider-for__item ex1">
                                     @if (isset($value->image) && Illuminate\Support\Facades\File::exists(public_path($value->image)))
-                                        <img class="lazy" data-src="{{asset('public/'.$value->image)}}">
+                                        <img class="lazy" data-src="{{asset($value->image)}}">
                                     @else
                                         <img src="https://dummyimage.com/518x518/e5e8ec/e5e8ec&text=CartPro">
                                     @endif
@@ -98,31 +97,31 @@ if (Session::has('currency_symbol')){
                 <div class="col-md-6">
                     <form class="mb-3" id="productAddToCartSingle" action="{{route('product.add_to_cart')}}" method="POST">
                         @csrf
-                        <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <input type="hidden" name="product_slug" value="{{$product->slug}}">
-                        <input type="hidden" name="category_id" value="{{$category->id ?? null}}">
+                        <input type="hidden" name="product_id" value="{{$product->basic->id}}">
+                        <input type="hidden" name="product_slug" value="{{$product->basic->slug}}">
+                        <input type="hidden" name="category_id" value="{{$category->id}}">
                         <input type="hidden" name="value_ids" class="value_ids" id="value_ids">
                         <input type="hidden" name="value_names" class="value_names" id="value_names">
                         <input type="hidden" name="attribute_names" class="attribute_names" id="attribute_names">
 
-                        @isset($flash_sale_product)
+                        {{-- @isset($flash_sale_product)
                             <input type="hidden" name="flash_sale" value="1">
                             <input type="hidden" name="flash_sale_price" value="{{$flash_sale_product->price}}">
-                        @endisset
+                        @endisset --}}
 
 
                         <div class="item-details">
-                            <a class="item-category" href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->catTranslation->category_name ?? $category->categoryTranslationDefaultEnglish->category_name ?? null}}</a>
-                            <h3 class="item-name">{{$product->productTranslation->product_name ?? $product->productTranslationEnglish->product_name ?? NULL}}</h3>
+                            <a class="item-category" href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->name}}</a>
+                            <h3 class="item-name">{{$product->basic->name}}</h3>
                             <div class="d-flex justify-content-between">
-                                @if (isset($product->brandTranslation->brand_name)||isset($product->brandTranslationEnglish->brand_name))
-                                    <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brandTranslation->brand_name ?? $product->brandTranslationEnglish->brand_name ?? null}}</a></div>
+                                @if (isset($product->brand->name))
+                                    <div class="item-brand">@lang('file.Brand'): <a href="">{{$product->brand->name}}</a></div>
                                 @endif
                                 <div class="item-review">
                                     <ul class="p-0 m-0">
                                         @php
                                             for ($i=1; $i <=5 ; $i++){
-                                                if ($i<= round($product->avg_rating)){  @endphp
+                                                if ($i<= round($product->basic->avg_rating)){  @endphp
                                                     <li><i class="las la-star"></i></li>
                                         @php
                                                 }else { @endphp
@@ -133,58 +132,61 @@ if (Session::has('currency_symbol')){
                                     </ul>
                                     <span>( @lang('file.Reviews'): {{count($reviews)}} )</span>
                                 </div>
-                                @if ($product->sku)
-                                    <div class="item-sku">@lang('file.SKU') : {{$product->sku}}</div>
+                                @if ($product->basic->sku)
+                                    <div class="item-sku">@lang('file.SKU') : {{$product->basic->sku}}</div>
                                 @endif
                             </div>
                             <hr>
 
-                            @if ($product->special_price!=NULL && $product->special_price>0 && $product->special_price<$product->price)
+                            @if ($product->basic->special_price!=NULL && $product->basic->special_price>0 && $product->basic->special_price < $product->basic->price)
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                        {{ number_format((float)$product->basic->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                     @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->basic->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                     @endif
                                 </div>
                                 <div class="old-price">
                                     <del>
                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                            {{ number_format((float)$product->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                            {{ number_format((float)$product->basic->price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                         @else
-                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->basic->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                         @endif
                                     </del>
                                 </div>
                             @else
                                 <div class="item-price">
                                     @if(env('CURRENCY_FORMAT')=='suffix')
-                                        {{ number_format((float)$product->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                        {{ number_format((float)$product->basic->price, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                     @else
-                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                        @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$product->basic->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                     @endif
                                 </div>
                             @endif
 
 
-                            @if (isset($product->productTranslation->short_description) || isset($product->productTranslationDefaultEnglish->short_description))
+                            @if (isset($product->basic->short_description))
                                 <hr>
                                 <div class="item-short-description">
-                                    <p>{{strip_tags($product->productTranslation->short_description ?? $product->productTranslationDefaultEnglish->short_description ?? NULL)}}</p>
+                                    <p>{{strip_tags($product->basic->short_description)}}</p>
                                 </div>
                             @endif
 
                             <hr>
-                            @forelse ($attribute as $key => $item)
+                            @forelse ($attributes as $key => $item)
                                 <div class="item-variant">
-                                    <span>{{$item}}:</span>
-                                    {{-- <input type="hidden" name="attribute_name[]" class="attribute_name" value="{{$item}}"> --}}
+                                    <span>{{$item->name}}:</span>
                                     <ul class="product-variant size-opt p-0 mt-1">
-                                        @forelse ($product->productAttributeValues as $value)
-                                            @if ($value->attribute_id == $key)
-                                                <li class="attribute_value" data-attribute_name="{{$value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null }}" id="valueId_{{$value->attribute_value_id}}" data-value_id="{{$value->attribute_value_id}}" data-value_name="{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}"><span>{{$value->attrValueTranslation->value_name ?? $value->attrValueTranslationEnglish->value_name ?? null }}</span></li>
-                                                <input type="hidden" name="value_id[]" value="{{$value->attribute_value_id}}">
-                                            @endif
+                                        @forelse ($item->attributeValues as $value)
+                                                <li class="attribute_value"
+                                                    data-attribute_name="{{$value->name }}"
+                                                    id="valueId_{{$value->id}}"
+                                                    data-value_id="{{$value->id}}"
+                                                    data-value_name="{{$value->name }}">
+                                                    <span>{{$value->name}}</span>
+                                            </li>
+                                                <input type="hidden" name="value_id[]" value="{{$value->id}}">
                                         @empty
                                         @endforelse
                                     </ul>
@@ -201,10 +203,10 @@ if (Session::has('currency_symbol')){
                                         </span>
                                         @if(isset($flash_sale_product)) <!--New Added-->
                                             <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$flash_sale_product->qty}}">
-                                        @elseif (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
+                                        @elseif (($product->basic->manage_stock==1 && $product->basic->qty==0) || ($product->basic->in_stock==0))
                                             <input type="number" name="qty" class="input-number" value="1" min="1" max="0">
                                         @else
-                                            <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$product->qty}}">
+                                            <input type="number" name="qty" class="input-number" value="1" min="1" max="{{$product->basic->qty}}">
                                         @endif
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus">
@@ -213,20 +215,20 @@ if (Session::has('currency_symbol')){
                                         </span>
                                     </div>
 
-                                    @if (($product->manage_stock==1 && $product->qty==0) || ($product->in_stock==0))
+                                    @if (($product->basic->manage_stock==1 && $product->basic->qty==0) || ($product->basic->in_stock==0))
                                         <button disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Out of Stock" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to cart')</span></span></button>
                                     @else
                                         <button type="submit" class="button button-icon style1"><span><i class="las la-shopping-cart"></i> <span>@lang('file.Add to cart')</span></span></button>
                                     @endif
-                                        <a><div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->id}}" data-product_slug="{{$product->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to wishlist')</span></span></div></a>
+                                        <a><div class="button button-icon style4 sm @auth add_to_wishlist @else forbidden_wishlist @endauth" data-product_id="{{$product->basic->id}}" data-product_slug="{{$product->basic->slug}}" data-category_id="{{$category->id ?? null}}" data-qty="1"><span><i class="ti-heart"></i> <span>@lang('file.Add to wishlist')</span></span></div></a>
                             </div>
                             <hr>
                             <div class="item-share mt-3" id="social-links"><span>@lang('file.Share')</span>
                                 <ul class="footer-social d-inline pad-left-15">
-                                    <li><a href="{{$socialShare['facebook']}}"><i class="ti-facebook"></i></a></li>
-                                    <li><a href="{{$socialShare['twitter']}}"><i class="ti-twitter"></i></a></li>
-                                    <li><a href="{{$socialShare['linkedin']}}"><i class="ti-linkedin"></i></a></li>
-                                    <li><a href="{{$socialShare['reddit']}}"><i class="ti-reddit"></i></a></li>
+                                    <li><a href="{{$socialShareLinks->facebook}}"><i class="ti-facebook"></i></a></li>
+                                    <li><a href="{{$socialShareLinks->twitter}}"><i class="ti-twitter"></i></a></li>
+                                    <li><a href="{{$socialShareLinks->linkedin}}"><i class="ti-linkedin"></i></a></li>
+                                    <li><a href="{{$socialShareLinks->reddit}}"><i class="ti-reddit"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -236,6 +238,7 @@ if (Session::has('currency_symbol')){
         </div>
     </section>
     <!--Product details section ends-->
+
     <!--content wrapper section starts-->
     <section class="content-wrapper-section pt-0 pb-0">
         <div class="container">
@@ -256,7 +259,7 @@ if (Session::has('currency_symbol')){
             <div class="container">
                 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
                     <div class="desc-intro">
-                        {!! htmlspecialchars_decode($product->productTranslation->description ?? $product->productTranslationDefaultEnglish->description ?? null) !!}
+                        {!! htmlspecialchars_decode($product->basic->description) !!}
                     </div>
                 </div>
                 <div class="tab-pane fade" id="comments" role="tabpanel">
@@ -272,7 +275,7 @@ if (Session::has('currency_symbol')){
                                                 @if ($item->image==null)
                                                     <img class="lazy" data-src="{{asset('public/images/user_default_image.jpg')}}">
                                                 @else
-                                                    <img class="lazy" data-src="{{asset('public/'.$item->image)}}">
+                                                    <img class="lazy" data-src="{{asset($item->image)}}">
                                                 @endif
 
                                             </div>
@@ -290,7 +293,7 @@ if (Session::has('currency_symbol')){
                                                     }
                                                 @endphp
                                             </ul>
-                                            <h5 class="reviewer-text">{{$item->first_name.' '.$item->last_name}}- <span> {{date('d M, Y',strtotime($item->created_at))}}</span></h5>
+                                            <h5 class="reviewer-text">{{$item->name}}- <span> {{$item->created_at}}</span></h5>
                                             <p>{{$item->comment}}</p>
                                         </div>
                                     </div>
@@ -305,7 +308,7 @@ if (Session::has('currency_symbol')){
 
                                 <form action="{{route('review.store')}}" method="post" class="row contact-form mar-top-20">
                                     @csrf
-                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <input type="hidden" name="product_id" value="{{$product->basic->id}}">
                                     <input type="hidden" name="rating" id="rating" value="0">
 
                                     <div class="col-sm-12">
@@ -319,16 +322,16 @@ if (Session::has('currency_symbol')){
                                         </ul>
                                     </div>
                                     <div class="col-sm-12 text-area">
-                                        <textarea id="comment" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Your Review....*" name="comment" required></textarea>
+                                        <textarea id="comment" required @if(!$userAndProductExists) readonly @endif class="form-control" placeholder="Your Review....*" name="comment" required></textarea>
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="author" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Name*" name="author" type="text" required @auth value="{{auth()->user()->first_name.' '.auth()->user()->last_name}}" @endauth >
+                                        <input id="author" required @if(!$userAndProductExists) readonly @endif class="form-control" placeholder="Name*" name="author" type="text" required @auth value="{{auth()->user()->first_name.' '.auth()->user()->last_name}}" @endauth >
                                     </div>
                                     <div class="col-md-6">
-                                        <input id="subject" required @if(!$user_and_product_exists) readonly @endif class="form-control" placeholder="Email*" name="email" type="email" @auth value="{{auth()->user()->email}}" @endauth required>
+                                        <input id="subject" required @if(!$userAndProductExists) readonly @endif class="form-control" placeholder="Email*" name="email" type="email" @auth value="{{auth()->user()->email}}" @endauth required>
                                     </div>
 
-                                    @if(!$user_and_product_exists)
+                                    @if(!$userAndProductExists)
                                         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
                                             <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
                                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -366,7 +369,7 @@ if (Session::has('currency_symbol')){
                                     @endif
 
                                     <div class="col-sm-12 mar-top-20 mt-3">
-                                        <button class="button style1" @if(!$user_and_product_exists)
+                                        <button class="button style1" @if(!$userAndProductExists)
                                                                         disabled title="Please login first"
                                                                       @else
                                                                         @foreach ($reviews as $item)
@@ -404,21 +407,21 @@ if (Session::has('currency_symbol')){
                 <div class="col-md-12">
                     <div class="product-slider-wrapper v1 swiper-container">
                         <div class="swiper-wrapper">
-                            @forelse ($category_products as $item)
-                                @if (isset($item->product) && $item->product->is_active==1) <!--Change in query later-->
+                            @forelse ($categoryWiseProducts as $item)
+                                @if ($item->isActive==1)
                                     <div class="swiper-slide">
                                         <form action="{{route('product.add_to_cart')}}" class="addToCart" method="post">
                                             @csrf
-                                            <input type="hidden" name="product_id" value="{{$item->product_id}}">
-                                            <input type="hidden" name="product_slug" value="{{$item->product->slug}}">
-                                            <input type="hidden" name="category_id" value="{{$item->category_id ?? null}}">
+                                            <input type="hidden" name="product_id" value="{{$item->productId}}">
+                                            <input type="hidden" name="product_slug" value="{{$item->slug}}">
+                                            <input type="hidden" name="category_id" value="{{$category->id}}">
                                             <input type="hidden" name="qty" value="1">
 
                                             <div class="single-product-wrapper">
                                                 <div class="single-product-item">
-                                                    <a href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                        @if (isset($item->productBaseImage->image) && Illuminate\Support\Facades\File::exists(public_path($item->productBaseImage->image)))
-                                                            <img class="lazy" data-src="{{asset('public/'.$item->productBaseImage->image)}}">
+                                                    <a href="{{url('product/'.$item->slug.'/'. $category->id)}}">
+                                                        @if (isset($item->image))
+                                                            <img class="lazy" src="{{$item->image}}">
                                                         @else
                                                             <img src="https://dummyimage.com/221x221/e5e8ec/e5e8ec&text=CartPro">
                                                         @endif
@@ -426,21 +429,21 @@ if (Session::has('currency_symbol')){
 
 
 
-                                                    @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                    @if (($item->manageStock==1 && $item->qty==0) || ($item->inStock==0))
                                                         <div class="product-promo-text style1">
                                                             <span>Stock Out</span>
                                                         </div>
                                                     @endif
 
                                                     <div class="product-overlay">
-                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->product->id}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#id_{{$item->productId}}"> <span class="ti-zoom-in" data-bs-toggle="tooltip" data-bs-placement="top" title="quick view"></span></a>
                                                     </div>
 
                                                 </div>
                                                 <div class="product-details">
-                                                    <a class="product-category" href="{{route('cartpro.category_wise_products',$item->category->slug)}}">{{$item->categoryTranslation->category_name ?? $item->categoryTranslationDefaultEnglish->category_name ?? NULL}}</a>
-                                                    <a class="product-name" href="{{url('product/'.$item->product->slug.'/'. $item->category_id)}}">
-                                                        {{$item->productTranslation->product_name ?? $item->productTranslationDefaultEnglish->product_name ?? null}}
+                                                    <a class="product-category" href="{{route('cartpro.category_wise_products',$category->slug)}}">{{$category->name}}</a>
+                                                    <a class="product-name" href="{{url('product/'.$item->slug.'/'. $category->id)}}">
+                                                        {{$item->name }}
                                                     </a>
 
                                                     <div class="d-flex justify-content-between align-items-center">
@@ -450,7 +453,7 @@ if (Session::has('currency_symbol')){
                                                                     <ul class="product-rating">
                                                                         @php
                                                                             for ($i=1; $i <=5 ; $i++){
-                                                                                if ($i<= round($item->product->avg_rating)){  @endphp
+                                                                                if ($i<= round($item->avgRating)){  @endphp
                                                                                     <li><i class="las la-star"></i></li>
                                                                         @php
                                                                                 }else { @endphp
@@ -462,34 +465,34 @@ if (Session::has('currency_symbol')){
                                                                 </div>
                                                             </div>
                                                             <div class="product-price">
-                                                                @if ($item->product->special_price>0)
+                                                                @if ($item->specialPrice>0)
                                                                     <span class="promo-price">
                                                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->special_price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                            {{ number_format((float)$item->specialPrice * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                         @else
-                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->special_price  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->specialPrice  * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                         @endif
                                                                     </span>
                                                                     <span class="old-price">
                                                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                            {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                         @else
-                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL') {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                         @endif
                                                                     </span>
                                                                 @else
                                                                     <span class="price">
                                                                         @if(env('CURRENCY_FORMAT')=='suffix')
-                                                                            {{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
+                                                                            {{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }} @include('frontend.includes.SHOW_CURRENCY_SYMBOL')
                                                                         @else
-                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL'){{ number_format((float)$item->product->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
+                                                                            @include('frontend.includes.SHOW_CURRENCY_SYMBOL'){{ number_format((float)$item->price * $CHANGE_CURRENCY_RATE, env('FORMAT_NUMBER'), '.', '') }}
                                                                         @endif
                                                                     </span>
                                                                 @endif
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            @if (($item->product->manage_stock==1 && $item->product->qty==0) || ($item->product->in_stock==0))
+                                                            @if (($item->manageStock==1 && $item->qty==0) || ($item->inStock==0))
                                                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Disabled"><button class="btn button style2 sm" disabled><i class="las la-cart-plus"></i></button></span>
                                                             @else
                                                                 <button class="button style2 sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top"><i class="las la-cart-plus"></i></button>
@@ -506,7 +509,6 @@ if (Session::has('currency_symbol')){
                         </div>
                     </div>
                 </div>
-                <!-- Add Pagination -->
                 <div class="product-navigation">
                     <div class="product-button-next v1"><i class="ti-angle-right"></i></div>
                     <div class="product-button-prev v1"><i class="ti-angle-left"></i></div>
@@ -515,12 +517,12 @@ if (Session::has('currency_symbol')){
         </div>
     </section>
 
-    @forelse ($category_products as $item)
+    {{-- @forelse ($category_products as $item)
         @if (isset($item->product))
             @include('frontend.includes.quickshop')
         @endif
     @empty
-    @endforelse
+    @endforelse --}}
     <!--Related product area ends-->
 
     @endsection

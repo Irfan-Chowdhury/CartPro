@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -8,6 +10,10 @@ use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
+use Exception;
+use Str;
+use Image;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -19,11 +25,11 @@ class CategoryController extends Controller
 
     public function index()
     {
-        if (auth()->user()->can('category-view')){
-            $categories =  $this->categoryService->getAllCategories();
-            return view('admin.pages.category.index',compact('categories'));
-        }
-        return abort('403', __('You are not authorized'));
+        self::isAuthorized('category-view');
+
+        $categories =  $this->categoryService->getAllCategories();
+        // return view('admin.pages.category.index',compact('categories'));
+        return view('lte.admin.pages.category.index', compact('categories'));
     }
 
     public function dataTable(){
@@ -32,65 +38,119 @@ class CategoryController extends Controller
 
     public function store(CategoryStoreRequest $request)
     {
-        if (auth()->user()->can('category-store')){
-            return $this->categoryService->storeCategory($request);
+        try {
+
+            self::isAuthorized('category-store');
+
+            $this->categoryService->storeCategory($request);
+
+            return $this->sendResponse( 'Category created successfully');
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e->getMessage());
         }
     }
 
+
     public function edit(Request $request)
     {
-        $category             = $this->categoryService->findCategory($request->category_id);
-        $categoryTranslation  = $this->categoryService->findCategoryTranslation($request->category_id);
-        return response()->json(['category'=>$category, 'categoryTranslation'=>$categoryTranslation]);
+        $category  = $this->categoryService->findCategory((int)$request->category_id);
+
+        return response()->json(['category'=> $category]);
     }
 
     public function update(CategoryUpdateRequest $request)
     {
-        if (auth()->user()->can('category-edit')){
-           return $this->categoryService->updateCategory($request);
+        try {
+
+            self::isAuthorized('category-edit');
+
+            $this->categoryService->updateCategory($request);
+
+            return $this->sendResponse( 'Data Updated Successfully');
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e->getMessage());
         }
     }
 
-    public function active(Request $request){
-        if (auth()->user()->can('category-action')){
-            if ($request->ajax()){
-                return $this->categoryService->activeById($request->id);
-            }
+    public function active(Request $request)
+    {
+        try {
+
+            self::isAuthorized('category-action');
+
+            $this->categoryService->activeById((int)$request->id);
+
+            return $this->sendResponse( 'Data Inactive Successfully');
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e->getMessage());
         }
     }
 
-    public function inactive(Request $request){
-        if (auth()->user()->can('category-action')){
-            if ($request->ajax()){
-                return $this->categoryService->inactiveById($request->id);
-            }
+    public function inactive(Request $request)
+    {
+        try {
+            self::isAuthorized('category-action');
+
+            $this->categoryService->inactiveById((int)$request->id);
+
+            return $this->sendResponse( 'Data Inactive Successfully');
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e->getMessage());
         }
     }
 
-    public function bulkAction(Request $request){
-        if (auth()->user()->can('category-action')){
-            if ($request->ajax()) {
-                return $this->categoryService->bulkActionByTypeAndIds($request->action_type, $request->idsArray);
-            }
+    public function delete(Request $request)
+    {
+        try {
+
+            self::isAuthorized('category-action');
+
+            $this->categoryService->destroy((int) $request->id);
+
+            // return response()->json(['success' => 'Data Deleted Successfully']);
+            return $this->sendResponse( 'Data Deleted Successfully');
+
+        } catch (Exception $e) {
+
+            // return response()->json(['errors' => [$e->getMessage()]], 422);
+            return $this->sendError($e->getMessage());
         }
     }
 
-    public function delete(Request $request){
-        if (auth()->user()->can('category-action')){
-            if ($request->ajax()) {
-                return $this->categoryService->destroy($request->id);
-            }
+
+    public function bulkAction(Request $request)
+    {
+        try {
+            self::isAuthorized('category-action');
+
+            $getMessage = $this->categoryService->bulkActionByTypeAndIds((string)$request->action_type, (array)$request->idsArray);
+
+            return $this->sendResponse( $getMessage);
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e->getMessage());
         }
     }
 
-    public function bulkDelete(Request $request){
-        if (auth()->user()->can('category-action')){
-            if ($request->ajax()) {
-                return $this->categoryService->bulkDestroy($request->idsArray);
-            }
+
+    private function isAuthorized($value) : void
+    {
+        if (!auth()->user()->can($value)) {
+            throw new Exception("403 | You are unauthorized");
         }
     }
 }
+
+
 
 
 

@@ -1,33 +1,11 @@
 @php
-        $cart_count = Cart::count();
-        $cart_subtotal = implode(explode(',',Cart::subtotal()));
-        $cart_total = implode(explode(',',Cart::total()));
-        $cart_contents = Cart::content();
-
-        if (Auth::check()) {
-            $total_wishlist = App\Models\Wishlist::where('user_id',Auth::user()->id)->count();
-        }else {
-            $total_wishlist = 0;
-        }
-
-
-        if (Session::has('currency_rate')){
-            $CHANGE_CURRENCY_RATE = Session::get('currency_rate');
-        }else{
-            $CHANGE_CURRENCY_RATE = 1;
-            Session::put('currency_rate', $CHANGE_CURRENCY_RATE);
-        }
-
-        if (Session::has('currency_symbol')){
-            $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
-        }else{
-            $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
-            Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
-        }
+    if (Session::has('currency_symbol')){
+        $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
+    }else{
+        $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
+        Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
+    }
 @endphp
-
-
-
 
 
 <!DOCTYPE html>
@@ -43,11 +21,11 @@
     @yield('meta_info')
 
     <!-- Document Title -->
-    @if ($setting_store)
-        <title>@yield('title',$setting_store->store_name)</title>
+    @if ($settingStore)
+        <title>@yield('title',$settingStore->store_name)</title>
     @endif
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset($favicon_logo_path)}}"/>
+    <link rel="icon" type="image/png" href="{{asset($faviconLogoPath)}}"/>
 
     <!-- Bootstrap CSS -->
     <link href="{{asset('frontend/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -198,7 +176,7 @@
                     })
                 @endif
 
-                let amountConvertToCurrency = parseFloat($('.cart_total').text()) * {{$CHANGE_CURRENCY_RATE}}
+                let amountConvertToCurrency = parseFloat($('.cart_total').text()) * {{$changeCurrencyRate}}
                 $('.cart_total').text(amountConvertToCurrency.toFixed(2));
                 $('.total_price').text(amountConvertToCurrency.toFixed(2));
             });
@@ -244,7 +222,7 @@
                     success: function (data) {
                         console.log(data);
                         if (data.type=='success') {
-                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$CHANGE_CURRENCY_RATE}};
+                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$changeCurrencyRate}};
                             let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
 
                             $('.cart_count').text(data.cart_count);
@@ -254,7 +232,7 @@
                             var html = '';
                             var cart_content = data.cart_content;
                             $.each( cart_content, function( key, value ) {
-                                let singleProductCurrency = parseFloat(value.price) * {{$CHANGE_CURRENCY_RATE}};
+                                let singleProductCurrency = parseFloat(value.price) * {{$changeCurrencyRate}};
                                 // For Attribute
                                 if (value.options.attributes) {
                                     var data = value.options.attributes;

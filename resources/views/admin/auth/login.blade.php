@@ -19,7 +19,7 @@
           type="text/css">
     <!-- Custom stylesheet - for your changes-->
     <!-- Favicon-->
-    <link rel="icon" href="{{asset($favicon_logo_path)}}" />
+    <link rel="icon" href="{{$faviconLogoPath}}" />
 </head>
 <body>
 <div class="page login-page">

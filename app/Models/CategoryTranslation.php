@@ -10,10 +10,11 @@ class CategoryTranslation extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'local','category_name',
+        'category_id', 'locale','category_name',
     ];
     protected $dates = ['deleted_at'];
 
+    
 
     public function category()
     {

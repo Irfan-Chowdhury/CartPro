@@ -11,18 +11,18 @@ class CategoryTranslationRepository implements CategoryTranslationContract
 {
     use DeleteWithFileTrait;
 
-    public function storeCategoryTranslation($data){
+    public function storeCategoryTranslation($data){ // No Need
         return CategoryTranslation::create($data);
     }
 
-    public function getByIdAndLocale($id, $locale){
+    public function getByIdAndLocale($id, $locale){ // No Need
         return CategoryTranslation::where('category_id',$id)->where('local', $locale)->first();
     }
 
-    public function updateOrInsertCategoryTranslation($request){
+    public function updateOrInsertCategoryTranslation($request){ // No Need
         DB::table('category_translations')
         ->updateOrInsert(
-            ['category_id' => $request->category_id, 'local' => session('currentLocal')],
+            ['category_id' => $request->category_id, 'local' => session('currentLocale')],
             ['category_name'=> htmlspecialchars_decode($request->category_name)]
         );
     }

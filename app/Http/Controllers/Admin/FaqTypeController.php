@@ -85,7 +85,7 @@ class FaqTypeController extends Controller
 
                 FaqTypeTranslation::create([
                     'faq_type_id'=> $faq_type->id,
-                    'locale'=> Session::get('currentLocal'),
+                    'locale'=> Session::get('currentLocale'),
                     'type_name'=> $request->type_name,
                 ]);
 
@@ -97,7 +97,7 @@ class FaqTypeController extends Controller
     public function edit(Request $request)
     {
         $faq_type = FaqType::find($request->faq_type_id);
-        $faqTypeTranslation = FaqTypeTranslation::where('faq_type_id',$request->faq_type_id)->where('locale',Session::get('currentLocal'))->first();
+        $faqTypeTranslation = FaqTypeTranslation::where('faq_type_id',$request->faq_type_id)->where('locale',Session::get('currentLocale'))->first();
         if (!isset($faqTypeTranslation)) {
             $faqTypeTranslation = FaqTypeTranslation::where('faq_type_id',$request->faq_type_id)->where('locale','en')->first();
         }
@@ -129,7 +129,7 @@ class FaqTypeController extends Controller
                 $faq_type->update();
 
                 FaqTypeTranslation::updateOrCreate(
-                    ['faq_type_id'  => $request->faq_type_id, 'locale' => Session::get('currentLocal'),],
+                    ['faq_type_id'  => $request->faq_type_id, 'locale' => Session::get('currentLocale'),],
                     ['type_name'=> $request->type_name]
                 );
 

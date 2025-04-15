@@ -17,7 +17,7 @@ class AttributeSetTranslationRepository implements AttributeSetTranslationContra
 
     public function updateOrInsertAttributeSetTranslation($request){
         AttributeSetTranslation::updateOrCreate(
-            ['attribute_set_id'  => $request->attribute_set_id, 'locale' => session('currentLocal')],
+            ['attribute_set_id'  => $request->attribute_set_id, 'locale' => session('currentLocale')],
             ['attribute_set_name'=> $request->attribute_set_name]
         );
     }

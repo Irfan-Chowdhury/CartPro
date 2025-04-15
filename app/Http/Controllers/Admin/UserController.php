@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         if (auth()->user()->can('user-view'))
         {
-            App::setLocale(Session::get('currentLocal'));
+            App::setLocale(Session::get('currentLocale'));
 
             $roles =  Role::where('is_active','=',1)->select('id','name')->get();
             $users = User::with('roleName')

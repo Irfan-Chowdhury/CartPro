@@ -10,6 +10,8 @@ class CategoryProduct extends Model
 {
     protected $table = 'category_product';
 
+    protected $fillable = ['product_id', 'category_id']; // Ensure this includes category_id
+
 
 
     /*
@@ -20,20 +22,21 @@ class CategoryProduct extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class);
     }
+
 
     public function categoryTranslation()
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(CategoryTranslation::class,'category_id','category_id')
-                ->where('local',$locale);
+                ->where('locale',$locale);
     }
 
     public function categoryTranslationDefaultEnglish()
     {
     	return $this->hasOne(CategoryTranslation::class,'category_id','category_id')
-                        ->where('local','en');
+                        ->where('locale','en');
     }
 
 
@@ -50,7 +53,7 @@ class CategoryProduct extends Model
 
     public function productTranslation() //remove
     {
-    	$locale = Session::get('currentLocal');
+    	$locale = Session::get('currentLocale');
     	return $this->hasOne(ProductTranslation::class,'product_id','product_id')
                 ->where('local',$locale);
     }

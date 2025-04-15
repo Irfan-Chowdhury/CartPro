@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 class Tax extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'country',
         'zip',
@@ -24,7 +24,7 @@ class Tax extends Model
     // New Added
     public function taxTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasMany(TaxTranslation::class,'tax_id')
                     ->where('locale', $locale)
                     ->orWhere('locale','en');
@@ -33,7 +33,7 @@ class Tax extends Model
     // Remove Later
     public function taxTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(TaxTranslation::class,'tax_id')
                 ->where('locale',$locale);
     }

@@ -2,22 +2,16 @@
 
 <!-- Footer Description -->
 @if (Request::routeIs('cartpro.home'))
-    @php
-        $footer_description = App\Models\FooterDescription::where('locale',Session::get('currentLocal'))->first();
-        if (!$footer_description) {
-            $footer_description = App\Models\FooterDescription::where('locale','en')->first();
-        }
-    @endphp
-    @if ($footer_description && $footer_description->is_active==1)
-    <section class="mb-3">
-        <div class="container">
-            {!! htmlspecialchars_decode($footer_description->description ?? null) !!}
-        </div>
-    </section>
+    @if ($footerDescription && $footerDescription->is_active==1)
+        <section class="mb-3">
+            <div class="container">
+                {!! htmlspecialchars_decode($footerDescription->description ?? null) !!}
+            </div>
+        </section>
     @endif
 @endif
 
-@if ($setting_newslatter && $setting_newslatter->newsletter==1)
+@if ($settingNewslatter && $settingNewslatter->newsletter==1)
 <div class="newsletter-section">
     <div class="container">
         <div class="row">
@@ -47,47 +41,49 @@
 <!--Scroll to top starts-->
 <a href="#" id="scrolltotop"><i class="ti-arrow-up"></i></a>
 <!--Scroll to top ends-->
+
 <!-- Footer section Starts-->
 <div class="footer-wrapper">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-4">
                 <div class="footer-logo">
-                    <a href="#"><img class="lazy" data-src="{{$header_logo_path}}"></a>
+                    <a href="#"><img class="lazy" data-src="{{$headerLogoPath}}"></a>
                 </div>
                 <div class="footer-text">
                     <h5 class="text-grey mb-0">@lang('file.Got Question? Call us') :</h5>
-                    <h4>{{$setting_store->store_phone ?? null}}</h4>
+                    <h4>{{$settingStore->store_phone ?? null}}</h4>
                 </div>
                 <div class="footer-text">
                     <h6 class="text-grey mb-0">@lang('file.Contact Info')</h6>
-                    <p class="mb-1"><i class="las la-envelope"></i> &nbsp; <span>{{$setting_store->store_email ?? null}}</span></p>
-                    <p class="mb-1"><i class="las la-map-marker"></i> &nbsp; <span>{{$storefront_address}}</span></p>
+                    <p class="mb-1"><i class="las la-envelope"></i> &nbsp; <span>{{$settingStore->store_email ?? null}}</span></p>
+                    <p class="mb-1"><i class="las la-map-marker"></i> &nbsp; <span>{{$storefrontAddress}}</span></p>
                 </div>
                 <ul class="footer-social mt-3 p-0">
-                    @if ($storefront_facebook_link!=null)
-                        <li><a href="{{$storefront_facebook_link}}"><i class="ti-facebook"></i></a></li>
+                    @if ($storefrontFacebookLink!=null)
+                        <li><a href="{{$storefrontFacebookLink}}"><i class="ti-facebook"></i></a></li>
                     @endif
-                    @if ($storefront_twitter_link!=null)
-                        <li><a href="{{$storefront_twitter_link}}"><i class="ti-twitter"></i></a></li>
+                    @if ($storefrontTwitterLink!=null)
+                        <li><a href="{{$storefrontTwitterLink}}"><i class="ti-twitter"></i></a></li>
                     @endif
-                    @if ($storefront_instagram_link!=null)
-                        <li><a href="{{$storefront_instagram_link}}"><i class="ti-instagram"></i></a></li>
+                    @if ($storefrontInstagramLink!=null)
+                        <li><a href="{{$storefrontInstagramLink}}"><i class="ti-instagram"></i></a></li>
                     @endif
-                    @if ($storefront_youtube_link!=null)
-                        <li><a href="{{$storefront_youtube_link}}"><i class="ti-youtube"></i></a></li>
+                    @if ($storefrontYoutubeLink!=null)
+                        <li><a href="{{$storefrontYoutubeLink}}"><i class="ti-youtube"></i></a></li>
                     @endif
                 </ul>
             </div>
+
             <div class="col-lg-8 col-md-8">
                 <div class="row">
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
-                            <h3>{{$footer_menu_one_title}}</h3>
+                            <h3>{{$footerMenuOneTitle}}</h3>
                             <div class="d-flex justify-content-between">
                                 <ul class="footer-menu p-0">
-                                    @if ($footer_menu_one)
-                                        @forelse($footer_menu_one->items as $value)
+                                    @if ($footerMenuOne)
+                                        @forelse($footerMenuOne->items as $value)
                                             @if ($value->locale==$locale)
                                             <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
                                             @endif
@@ -100,10 +96,10 @@
                     </div>
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
-                            <h3>{{$footer_menu_title_two}}</h3>
+                            <h3>{{$footerMenuTitleTwo}}</h3>
                             <ul class="footer-menu p-0">
-                                @if ($footer_menu_two)
-                                    @forelse($footer_menu_two->items as $value)
+                                @if ($footerMenuTwo)
+                                    @forelse($footerMenuTwo->items as $value)
                                         @if ($value->locale==$locale)
                                         <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
                                         @endif
@@ -116,10 +112,10 @@
 
                     <div class="col-md-4 col-sm-6">
                         <div class="footer-widget style1">
-                            <h3>{{$footer_menu_title_three}}</h3>
+                            <h3>{{$footerMenuTitleThree}}</h3>
                             <ul class="footer-menu p-0">
-                                @if ($footer_menu_three)
-                                    @forelse($footer_menu_three->items as $value)
+                                @if ($footerMenuThree)
+                                    @forelse($footerMenuThree->items as $value)
                                         @if ($value->locale==$locale)
                                         <li><a class="" href="{{$value->link}}">{!! html_entity_decode($value->label) !!}</a></li>
                                         @endif
@@ -138,17 +134,17 @@
         <hr>
         <div class="mt-3 mb-3">
             @foreach ($tags as $item)
-                <div class="item-tags"><a href="{{route('tag_wise_products',$item->slug)}}">{{$item->tagTranslations->tag_name ?? $item->tagTranslationEnglish->tag_name ?? null}}</a></div>
+                <div class="item-tags"><a href="{{route('tag_wise_products',$item->slug)}}">{{$item->tag_name}}</a></div>
             @endforeach
         </div>
 
         <div class="row footer-bottom mt-0">
             <div class="col-md-6">
-                <p>{!! html_entity_decode($storefront_copyright_text) !!}</p>
+                <p>{!! html_entity_decode($storefrontCopyrightText) !!}</p>
             </div>
             <div class="col-md-6">
                 <div class="footer-payment-options">
-                    <img class="lazy" data-src="{{$payment_method_image}}" width="342px" height="30px">
+                    <img class="lazy" data-src="{{$paymentMethodImage}}" width="342px" height="30px">
                 </div>
             </div>
         </div>

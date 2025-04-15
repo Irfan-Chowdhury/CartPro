@@ -41,303 +41,151 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Frontend\FrontBaseController;
+use App\Http\Resources\ProductDetailsResource;
 use App\Models\SettingTranslation;
 use App\Models\StorefrontImage;
+use App\Services\CategoryService;
+use App\Services\HomeService;
+use App\Services\ProductService;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\TranslationTrait;
+use Share;
 
 class HomeController extends FrontBaseController
 {
-    use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait, TranslationTrait;
+    use CurrencyConrvertion,ENVFilePutContent, AutoDataUpdateTrait, TranslationTrait, ArrayToObjectConvertionTrait;
 
     private $sliderService;
     private $brandService;
-    public function __construct(SliderService $sliderService, BrandService $brandService)
+    private $categoryService;
+    private $productService;
+    private $homeService;
+
+    public function __construct(SliderService $sliderService, BrandService $brandService, CategoryService $categoryService, ProductService $productService, HomeService $homeService)
     {
         $this->sliderService = $sliderService;
         $this->brandService  = $brandService;
-        // parent::__construct();
+        $this->categoryService  = $categoryService;
+        $this->productService  = $productService;
+        $this->homeService  = $homeService;
     }
+
 
 
     public function index()
     {
-        if (!Session::has('currency_code')){
-            Session::put('currency_code', env('DEFAULT_CURRENCY_CODE'));
-            $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',env('DEFAULT_CURRENCY_SYMBOL'));
-            $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE', env('DEFAULT_CURRENCY_RATE'));
-        }
+        /**
+        * This is New Formation
+        * We change the Logic of Flash Sale Products Later
+        */
 
-        $categories = Cache::remember('categories', 300, function () {
-            return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
-                    ->where('is_active',1)
-                    ->orderBy('is_active','DESC')
-                    ->orderBy('id','ASC')
-                    ->get();
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+        $defaultLocale = 'en';
+
+        $homeData = Cache::remember('storeFrontHome', now()->addHours(1), function ()  {
+            return $this->homeService->getHomeData();
         });
 
+        $sliders = $homeData->sliders;
 
-        //We change the Logic of Flash Sale Products Later
-        if(!Session::get('currentLocal')){
-            Session::put('currentLocal', 'en');
-            $locale = 'en';
-        }else {
-            $locale = Session::get('currentLocal');
-        }
+        $sliderBanners = $homeData->sliderBanners;
 
-        //Storefront Theme Color
-        $storefront_theme_color = "#0071df";
+        $categories = $homeData->categories;
 
-        //Store Front Slider Format
-        $store_front_slider_format = 'full_width';
+        $threeColumnBanner = $homeData->settings->threeColumnBanner;
+        $twoColumnBanner = $homeData->settings->twoColumnBanner;
+        $oneColumnBanner = $homeData->settings->oneColumnBannerAgain;
 
-        //Product_Tab_One
-        $product_tabs_one_titles = [];
-        $product_tab_one_section_1 = [];
-        $product_tab_one_section_2 = [];
-        $product_tab_one_section_3 = [];
-        $product_tab_one_section_4 = [];
+        $productDetailsTab = $homeData->productDetailsTab;
 
-        //Flash Sale And Vertical
-        $storefront_flash_sale_title = null;
-        $active_campaign_flash_id = null;
-        $flash_sales = [];
-        $storefront_vertical_product_1_title = null;
-        $storefront_vertical_product_2_title = null;
-        $storefront_vertical_product_3_title = null;
-        $vertical_product_1 = [];
-        $vertical_product_2 = [];
-        $vertical_product_3 = [];
+        $trendProducts = $homeData->trendProducts;
 
-
-        //Settings
-        $settings = Cache::remember('settings', 300, function () {
-            return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();;
-        });
-
-        //CategoryProducts
-        $category_products = Cache::remember('category_products', 300, function () {
-            return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
-                    'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                    'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                    ->get();
-        });
-
-        //Slider
-        $sliders = Cache::remember('sliders', 300, function () {
-            return $this->sliderService->getAllSlider();
-        });
-
-
-        //Slider Banner
-        $slider_banners = $this->getSliderBanner($settings);
-
-        foreach ($settings as $key => $setting)
-        {
-            if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
-                $store_front_slider_format = Cache::remember('store_front_slider_format', 300, function () use($setting) {
-                    return $setting->plain_value;
-                });
-            }
-
-
-            //----- Category-Product Start -----
-            elseif ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $product_tab_one_section_1[] = $category_products[$key2];
-                        }
-                    }
-                }
-                $product_tabs_one_titles[] = $settings[($key-2)]->key;
-            }
-
-            elseif ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $product_tab_one_section_2[] =$category_products[$key2];
-                        }
-                    }
-                }
-                $product_tabs_one_titles[] = $settings[($key-2)]->key;
-            }
-
-            elseif ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $product_tab_one_section_3[] =$category_products[$key2];
-                        }
-                    }
-                }
-                $product_tabs_one_titles[] = $settings[($key-2)]->key;
-            }
-
-            elseif ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $product_tab_one_section_4[] =$category_products[$key2];
-                        }
-                    }
-                }
-                $product_tabs_one_titles[] = $settings[($key-2)]->key;
-            }
-            //Flash sale and vertical product
-            elseif ($setting->key=='storefront_flash_sale_title') {
-                $storefront_flash_sale_title = $setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null;
-            }
-            elseif ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
-                $active_campaign_flash_id = $setting->plain_value;
-            }
-
-            elseif ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $vertical_product_1[] =$category_products[$key2];
-                        }
-                    }
-                }
-                $storefront_vertical_product_1_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
-            }
-            elseif ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $vertical_product_2[] =$category_products[$key2];
-                        }
-                    }
-                }
-                // $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
-                $storefront_vertical_product_2_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
-
-            }
-            elseif ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
-                if ($settings[$key-1]->plain_value=='category_products') {
-                    foreach ($category_products as $key2 => $value) {
-                        if ($value->category_id==$setting->plain_value) {
-                            $vertical_product_3[] =$category_products[$key2];
-                        }
-                    }
-                }
-                // $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
-                $storefront_vertical_product_3_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
-            }
-            //Top Brands
-            elseif ($setting->key=='storefront_top_brands_section_enabled' && $setting->plain_value!=NULL) {
-                $storefront_top_brands_section_enabled = $setting->plain_value ?? null;
-            }
-            elseif ($setting->key=='storefront_top_brands' && $setting->plain_value!=NULL) {
-                $storefront_top_brands = $setting->plain_value;
-            }
-        }
-
-
-        //Change this later.
-        if ($active_campaign_flash_id) {
-            $flash_sales = Cache::remember('flash_sales', 300, function () use ($active_campaign_flash_id) {
-                return FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
-                    'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
-                    'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
-            });
-        }
-
-        $brand_ids = json_decode($storefront_top_brands);
-        $brands =  $this->brandService->getBrandsWhereInIds($brand_ids);
-
-
-        $order_details = Cache::remember('order_details', 300, function () {
-            return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
-                    ->select('product_id')
-                    ->groupBy('product_id')
-                    ->selectRaw('SUM(qty) AS qty_of_sold')
-                    ->orderBy('qty_of_sold','DESC')
-                    ->skip(0)
-                    ->take(10)
-                    ->get();
-        });
+        $socialShareLinks = self::getSocialShareLinks();
+        $menu = null;
 
 
 
-        //We will convert it in ExpiryReminder later
-        $this->autoDataUpdate();
-
-        return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
-                                                'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
-                                                'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
-                                                'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
-                                                'storefront_vertical_product_2_title','storefront_vertical_product_3_title','categories',
-                                                'vertical_product_1','vertical_product_2','vertical_product_3','order_details','storefront_top_brands_section_enabled'));
+        return view('frontend.pages.home',compact(
+            'locale',
+            'categories',
+            'homeData',
+            'sliders',
+            'sliderBanners',
+            'threeColumnBanner',
+            'productDetailsTab',
+            'twoColumnBanner',
+            'trendProducts',
+            'oneColumnBanner',
+            'socialShareLinks',
+            'menu' //depricated
+        ));
     }
 
-
-    public function product_details($product_slug, $category_id)
+    public function product_details(string $productSlug, $category_id)
     {
-        $product = Product::with(['productTranslation','productTranslationEnglish','categories','productCategoryTranslation','tags','brand','brandTranslation','brandTranslationEnglish',
-                'baseImage'=> function ($query){
-                    $query->where('type','base')
-                        ->first();
-                },
-                'additionalImage'=> function ($query){
-                    $query->where('type','additional')
-                        ->get();
-                },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
-                ])
-                ->where('slug',$product_slug)
-                ->first();
+        $productDetailResult = $this->productService->getProductBySlug($productSlug);
+
+        // $productDetailResult = Cache::remember('productDetailResult', 300, function () use ($productSlug) {
+            // $data = $this->productService->getProductBySlug($productSlug);
+            // return new ProductDetailsResource($data);
+        // });
 
 
-        $attribute = [];
-        foreach ($product->productAttributeValues as $value) {
-            $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
-        }
+        $product =  $productDetailResult->productDetails;
+        $category =  $product->category;
+        $attributes =  $product->attributes;
 
-        $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
 
-        $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
+        $reviews =  $productDetailResult->reviews;
+        $socialShareLinks =  $productDetailResult->socialShareLinks;
+        $categoryWiseProducts = $productDetailResult->categoryWiseProducts->products;
+
+
+        $productCartQty = null;
+        $cart = Cart::content()->where('id',$product->basic->id)->where('options.category_id',$category_id ?? null)->first();
         if ($cart) {
-            $product_cart_qty = $cart->qty;
-        }else {
-            $product_cart_qty = null;
+            $productCartQty = $cart->qty;
         }
 
         //Review Part
+        $userAndProductExists = null;
         if (Auth::check()) {
-            $user_and_product_exists = DB::table('orders')
+            $userAndProductExists = DB::table('orders')
                         ->join('order_details','order_details.order_id','orders.id')
                         ->where('orders.user_id',Auth::user()->id)
-                        ->where('order_details.product_id',$product->id)
+                        ->where('order_details.product_id',$product->basic->id)
                         ->exists();
-        }else {
-            $user_and_product_exists = null;
         }
 
-        $reviews = DB::table('reviews')
-                    ->join('users','users.id','reviews.user_id')
-                    ->where('product_id',$product->id)
-                    ->where('status','approved')
-                    ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
-                    ->where('reviews.deleted_at',null)
-                    ->get();
-
-        if (empty($reviews)) {
-            $reviews =[];
-        }
-
-
-        //Related Products
-        $category_products =  CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
-                        'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
-                        'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
-                    ->where('category_id', $category_id)
-                    ->get();
+        return view('frontend.pages.product_details',compact(
+            'product',
+            'category',
+            'attributes',
+            'reviews',
+            'socialShareLinks',
+            'categoryWiseProducts',
+            'productCartQty',
+            'userAndProductExists'));
+   }
 
 
-        return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
-    }
+   public function getSocialShareLinks()
+   {
+       $socialShareLinks =  Share::page(url()->current(),
+           'Social Share'
+           )
+           ->facebook()
+           ->twitter()
+           ->linkedin()
+           ->telegram()
+           ->whatsapp()
+           ->reddit()
+           ->getRawLinks();
+
+       return $this->arrayToObject($socialShareLinks);
+   }
+
+
 
     public function dataAjaxSearch(Request $request)
     {
@@ -345,7 +193,7 @@ class HomeController extends FrontBaseController
 
             $base_url = url('/');
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             $products = ProductTranslation::with(['product:id,slug,price','product.baseImage'=> function($query){
                                 return $query->where('type','base');
                             },
@@ -464,7 +312,7 @@ class HomeController extends FrontBaseController
 
     public function orderTrackingFindDetails($reference_no)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $order = Order::where('reference_no',$reference_no)->first();
         $order_details = DB::table('order_details')
                     ->join('orders','orders.id','order_details.order_id')
@@ -487,7 +335,7 @@ class HomeController extends FrontBaseController
     {
         $language = Language::find($id);
 
-        Session::put('currentLocal', $language->local);
+        Session::put('currentLocale', $language->local);
 
         App::setLocale($language->local);
         return redirect()->back();
@@ -512,7 +360,7 @@ class HomeController extends FrontBaseController
             $keyword_hit->save();
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $products = ProductTranslation::with(['product','product.baseImage'=> function($query){
                     return $query->where('type','base');
                 },
@@ -579,7 +427,7 @@ class HomeController extends FrontBaseController
 
     public function searchFAQ(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $faqSearchBaseOnFaqType =   DB::table('faq_translations')
                                     ->select('faq_translations.title','faq_translations.description','faq_translations.locale','faq_type_translations.type_name as type_name')
@@ -665,6 +513,241 @@ class HomeController extends FrontBaseController
 
 
 
+
+
+        // public function index()
+    // {
+
+    //     //We change the Logic of Flash Sale Products Later
+    //     $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+    //     $defaultLocale = 'en';
+
+    //     $categories = $this->categoryService->getAllCategories();
+
+
+    //     //Storefront Theme Color
+    //     $storefront_theme_color = "#0071df";
+
+    //     //Store Front Slider Format
+    //     $store_front_slider_format = 'full_width';
+
+    //     //Product_Tab_One
+    //     $product_tabs_one_titles = [];
+    //     $product_tab_one_section_1 = [];
+    //     $product_tab_one_section_2 = [];
+    //     $product_tab_one_section_3 = [];
+    //     $product_tab_one_section_4 = [];
+
+    //     //Flash Sale And Vertical
+    //     $storefront_flash_sale_title = null;
+    //     $active_campaign_flash_id = null;
+    //     $flash_sales = [];
+    //     $storefront_vertical_product_1_title = null;
+    //     $storefront_vertical_product_2_title = null;
+    //     $storefront_vertical_product_3_title = null;
+    //     $vertical_product_1 = [];
+    //     $vertical_product_2 = [];
+    //     $vertical_product_3 = [];
+
+
+    //     //Settings
+    //     // $settings = Cache::remember('settings', 300, function () {
+    //     //     return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();;
+    //     // });
+    //     // $settings = Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();
+    //     $settings = App::make('settings');
+
+    //     //CategoryProducts
+    //     $category_products = CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+    //                         'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //                         'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+    //                         ->get();
+
+
+    //     //Slider
+    //     // $sliders = Cache::remember('sliders', 300, function () {
+    //     //     return $this->sliderService->getAllSlider();
+    //     // });
+
+
+        // $sliders = Cache::remember('sliders', 300, function () use ($locale, $defaultLocale) {
+        //     return DB::table('sliders')
+        //         ->select([
+        //             'sliders.id',
+        //             'sliders.slider_slug',
+        //             'sliders.type',
+        //             'sliders.category_id',
+        //             'sliders.url',
+        //             'sliders.slider_image',
+        //             'sliders.slider_image_full_width',
+        //             'sliders.slider_image_secondary',
+        //             'sliders.target',
+        //             'sliders.text_alignment',
+        //             'sliders.text_color',
+        //             'sliders.is_active',
+        //             'slider_translations.slider_title',
+        //             'slider_translations.slider_subtitle'
+        //         ])
+        //         ->leftJoin('slider_translations', function ($join) use ($locale) {
+        //             $join->on('sliders.id', '=', 'slider_translations.slider_id')
+        //                 ->where(function ($query) use ($locale) {
+        //                     $query->where('slider_translations.locale', $locale)
+        //                           ->orWhere('slider_translations.locale', 'en');
+        //                 });
+        //         })
+        //         ->orderBy('sliders.is_active', 'DESC')
+        //         ->orderBy('sliders.id', 'ASC')
+        //         ->get();
+        //     });
+
+
+
+    //     //Slider Banner
+    //     $slider_banners = $this->getSliderBanner($settings);
+
+    //     foreach ($settings as $key => $setting)
+    //     {
+    //         if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
+    //             $store_front_slider_format = Cache::remember('store_front_slider_format', 300, function () use($setting) {
+    //                 return $setting->plain_value;
+    //             });
+    //         }
+
+
+    //         //----- Category-Product Start -----
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_1[] = $category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_2[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_3[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_4[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+    //         //Flash sale and vertical product
+    //         elseif ($setting->key=='storefront_flash_sale_title') {
+    //             $storefront_flash_sale_title = $setting->translation->value;
+    //         }
+    //         elseif ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
+    //             $active_campaign_flash_id = $setting->plain_value;
+    //         }
+
+    //         elseif ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_1[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $storefront_vertical_product_1_title = !$settings[($key-2)]->translation ? null :  ($settings[($key-2)]->translation->value ?? null);
+    //         }
+    //         elseif ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_2[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             // $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? null;
+    //             $storefront_vertical_product_2_title = !$settings[($key-2)]->translation ? null :  ($settings[($key-2)]->translation->value ?? null);
+
+    //         }
+    //         elseif ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_3[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             // $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? null;
+    //             $storefront_vertical_product_3_title = !$settings[($key-2)]->translation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
+    //         }
+    //         //Top Brands
+    //         // elseif ($setting->key=='storefront_top_brands_section_enabled' && $setting->plain_value!=NULL) {
+    //         //     $storefront_top_brands_section_enabled = $setting->plain_value ?? null;
+    //         // }
+    //         elseif ($setting->key=='storefront_top_brands' && $setting->plain_value!=NULL) {
+    //             $storefront_top_brands = $setting->plain_value;
+    //         }
+
+
+    //     }
+
+
+    //     //Change this later.
+    //     if ($active_campaign_flash_id) {
+    //         $flash_sales = Cache::remember('flash_sales', 300, function () use ($active_campaign_flash_id) {
+    //             return FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
+    //                 'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
+    //                 'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+    //         });
+    //     }
+
+    //     $brand_ids = json_decode($storefront_top_brands);
+    //     $brands =  $this->brandService->getBrandsWhereInIds($brand_ids);
+
+    //     $orderDetails = OrderDetail::with('product','orderProductTranslations','baseImage','additionalImage','productAttributeValues.attributeTranslation','productAttributeValues.attrValueTranslation')
+    //                     ->select('product_id')
+    //                     ->groupBy('product_id')
+    //                     ->selectRaw('SUM(qty) AS qty_of_sold')
+    //                     ->orderBy('qty_of_sold','DESC')
+    //                     ->skip(0)
+    //                     ->take(10)
+    //                     ->get();
+
+
+
+    //     // return $order_details[0];
+
+    //     //We will convert it in ExpiryReminder later
+    //     // $this->autoDataUpdate();
+
+    //     return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
+    //                                             'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
+    //                                             'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
+    //                                             'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
+    //                                             'storefront_vertical_product_2_title','storefront_vertical_product_3_title','categories',
+    //                                             'vertical_product_1','vertical_product_2','vertical_product_3','orderDetails'));
+    // }
+
+
     // public function changeForDemoOrClient($text)
     // {
     //     // $this->dataWriteInENVFile('APP_DEBUG',(bool)false);
@@ -695,5 +778,297 @@ class HomeController extends FrontBaseController
 
     //     // Artisan::call('optimize:clear');
     //     // return redirect()->back();
+    // }
+
+
+
+
+       // public function index()
+    // {
+    //     if (!Session::has('currency_code')) {
+    //         Session::put('currency_code', env('DEFAULT_CURRENCY_CODE'));
+    //         $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_SYMBOL',env('DEFAULT_CURRENCY_SYMBOL'));
+    //         $this->dataWriteInENVFile('USER_CHANGE_CURRENCY_RATE', env('DEFAULT_CURRENCY_RATE'));
+    //     }
+
+    //     $categories = Cache::remember('categories', 300, function () {
+    //         return Category::with(['catTranslation','parentCategory.catTranslation','categoryTranslationDefaultEnglish','child.catTranslation'])
+    //                 ->where('is_active',1)
+    //                 ->orderBy('is_active','DESC')
+    //                 ->orderBy('id','ASC')
+    //                 ->get();
+    //     });
+
+    //     //We change the Logic of Flash Sale Products Later
+    //     if(!Session::get('currentLocale')){
+    //         Session::put('currentLocale', 'en');
+    //         $locale = 'en';
+    //     }else {
+    //         $locale = Session::get('currentLocale');
+    //     }
+
+    //     //Storefront Theme Color
+    //     $storefront_theme_color = "#0071df";
+
+    //     //Store Front Slider Format
+    //     $store_front_slider_format = 'full_width';
+
+    //     //Product_Tab_One
+    //     $product_tabs_one_titles = [];
+    //     $product_tab_one_section_1 = [];
+    //     $product_tab_one_section_2 = [];
+    //     $product_tab_one_section_3 = [];
+    //     $product_tab_one_section_4 = [];
+
+    //     //Flash Sale And Vertical
+    //     $storefront_flash_sale_title = null;
+    //     $active_campaign_flash_id = null;
+    //     $flash_sales = [];
+    //     $storefront_vertical_product_1_title = null;
+    //     $storefront_vertical_product_2_title = null;
+    //     $storefront_vertical_product_3_title = null;
+    //     $vertical_product_1 = [];
+    //     $vertical_product_2 = [];
+    //     $vertical_product_3 = [];
+
+
+    //     //Settings
+    //     $settings = Cache::remember('settings', 300, function () {
+    //         return Setting::with(['storeFrontImage','settingTranslation','settingTranslationDefaultEnglish'])->get();;
+    //     });
+
+
+    //     //CategoryProducts
+    //     $category_products = Cache::remember('category_products', 300, function () {
+    //         return CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+    //                 'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //                 'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+    //                 ->get();
+    //     });
+
+
+    //     //Slider
+    //     $sliders = Cache::remember('sliders', 300, function () {
+    //         return $this->sliderService->getAllSlider();
+    //     });
+
+
+    //     //Slider Banner
+    //     $slider_banners = $this->getSliderBanner($settings);
+
+    //     foreach ($settings as $key => $setting)
+    //     {
+    //         if ($setting->key=='store_front_slider_format' && $setting->plain_value!=NULL) {
+    //             $store_front_slider_format = Cache::remember('store_front_slider_format', 300, function () use($setting) {
+    //                 return $setting->plain_value;
+    //             });
+    //         }
+
+
+    //         //----- Category-Product Start -----
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_1_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_1[] = $category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_2_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_2[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_3_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_3[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+
+    //         elseif ($setting->key=='storefront_product_tabs_1_section_tab_4_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $product_tab_one_section_4[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $product_tabs_one_titles[] = $settings[($key-2)]->key;
+    //         }
+    //         //Flash sale and vertical product
+    //         elseif ($setting->key=='storefront_flash_sale_title') {
+    //             $storefront_flash_sale_title = $setting->settingTranslation->value ?? $setting->settingTranslationDefaultEnglish->value ?? null;
+    //         }
+    //         elseif ($setting->key=='storefront_flash_sale_active_campaign_flash_id') {
+    //             $active_campaign_flash_id = $setting->plain_value;
+    //         }
+
+    //         elseif ($setting->key=='storefront_vertical_product_1_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_1[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             $storefront_vertical_product_1_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
+    //         }
+    //         elseif ($setting->key=='storefront_vertical_product_2_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_2[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             // $storefront_vertical_product_2_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+    //             $storefront_vertical_product_2_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
+
+    //         }
+    //         elseif ($setting->key=='storefront_vertical_product_3_category_id' && $setting->plain_value!=NULL) {
+    //             if ($settings[$key-1]->plain_value=='category_products') {
+    //                 foreach ($category_products as $key2 => $value) {
+    //                     if ($value->category_id==$setting->plain_value) {
+    //                         $vertical_product_3[] =$category_products[$key2];
+    //                     }
+    //                 }
+    //             }
+    //             // $storefront_vertical_product_3_title = $settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value;
+    //             $storefront_vertical_product_3_title = !$settings[($key-2)]->settingTranslation ? null :  ($settings[($key-2)]->settingTranslation->value ?? $settings[($key-2)]->settingTranslationDefaultEnglish->value);
+    //         }
+    //         //Top Brands
+    //         elseif ($setting->key=='storefront_top_brands_section_enabled' && $setting->plain_value!=NULL) {
+    //             $storefront_top_brands_section_enabled = $setting->plain_value ?? null;
+    //         }
+    //         elseif ($setting->key=='storefront_top_brands' && $setting->plain_value!=NULL) {
+    //             $storefront_top_brands = $setting->plain_value;
+    //         }
+    //     }
+
+
+    //     //Change this later.
+    //     if ($active_campaign_flash_id) {
+    //         $flash_sales = Cache::remember('flash_sales', 300, function () use ($active_campaign_flash_id) {
+    //             return FlashSale::with(['flashSaleTranslation','flashSaleProducts.product.productTranslation','flashSaleProducts.product.baseImage',
+    //                 'flashSaleProducts.product.additionalImage','flashSaleProducts.product.categoryProduct.categoryTranslation',
+    //                 'flashSaleProducts.product.productAttributeValues'])->where('id',$active_campaign_flash_id)->where('is_active',1)->first();
+    //         });
+    //     }
+
+    //     $brand_ids = json_decode($storefront_top_brands);
+    //     $brands =  $this->brandService->getBrandsWhereInIds($brand_ids);
+
+
+    //     $order_details = Cache::remember('order_details', 300, function () {
+    //         return  OrderDetail::with('product.categoryProduct.category.catTranslation','product.productTranslation','product.baseImage','product.additionalImage','product.productAttributeValues.attributeTranslation','product.productAttributeValues.attrValueTranslation')
+    //                 ->select('product_id')
+    //                 ->groupBy('product_id')
+    //                 ->selectRaw('SUM(qty) AS qty_of_sold')
+    //                 ->orderBy('qty_of_sold','DESC')
+    //                 ->skip(0)
+    //                 ->take(10)
+    //                 ->get();
+    //     });
+
+
+
+    //     //We will convert it in ExpiryReminder later
+    //     $this->autoDataUpdate();
+
+    //     return view('frontend.pages.home',compact('locale','settings','sliders','slider_banners',
+    //                                             'brands','storefront_theme_color','store_front_slider_format','product_tab_one_section_1','product_tab_one_section_2',
+    //                                             'product_tab_one_section_3','product_tab_one_section_4','product_tabs_one_titles',
+    //                                             'storefront_flash_sale_title','flash_sales','storefront_vertical_product_1_title',
+    //                                             'storefront_vertical_product_2_title','storefront_vertical_product_3_title','categories',
+    //                                             'vertical_product_1','vertical_product_2','vertical_product_3','order_details','storefront_top_brands_section_enabled'));
+    // }
+
+
+    // public function product_details($product_slug, $category_id)
+    // {
+    //     $product = Product::with([
+    //         'productCategoryTranslation',
+    //         'productTranslation',
+    //         'productTranslationEnglish',
+    //         'categories',
+    //         'tags',
+    //         'brand',
+    //         'brandTranslation',
+    //         'brandTranslationEnglish',
+    //             'baseImage'=> function ($query){
+    //                 $query->where('type','base')
+    //                     ->first();
+    //             },
+    //             'additionalImage'=> function ($query){
+    //                 $query->where('type','additional')
+    //                     ->get();
+    //             },'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //             'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish',
+    //             ])
+    //             ->where('slug',$product_slug)
+    //             ->first();
+
+
+    //     $attribute = [];
+    //     foreach ($product->productAttributeValues as $value) {
+    //         $attribute[$value->attribute_id]= $value->attributeTranslation->attribute_name ?? $value->attributeTranslationEnglish->attribute_name ?? null;
+    //     }
+
+    //     $category = Category::with('catTranslation','categoryTranslationDefaultEnglish')->find($category_id);
+
+    //     $cart = Cart::content()->where('id',$product->id)->where('options.category_id',$category_id ?? null)->first();
+    //     if ($cart) {
+    //         $product_cart_qty = $cart->qty;
+    //     }else {
+    //         $product_cart_qty = null;
+    //     }
+
+    //     //Review Part
+    //     if (Auth::check()) {
+    //         $user_and_product_exists = DB::table('orders')
+    //                     ->join('order_details','order_details.order_id','orders.id')
+    //                     ->where('orders.user_id',Auth::user()->id)
+    //                     ->where('order_details.product_id',$product->id)
+    //                     ->exists();
+    //     }else {
+    //         $user_and_product_exists = null;
+    //     }
+
+    //     $reviews = DB::table('reviews')
+    //                 ->join('users','users.id','reviews.user_id')
+    //                 ->where('product_id',$product->id)
+    //                 ->where('status','approved')
+    //                 ->select('users.id AS userId','users.first_name','users.last_name','users.image','reviews.comment','reviews.rating','reviews.status','reviews.created_at')
+    //                 ->where('reviews.deleted_at',null)
+    //                 ->get();
+
+    //     if (empty($reviews)) {
+    //         $reviews =[];
+    //     }
+
+
+    //     //Related Products
+    //     $category_products =  CategoryProduct::with('product','productTranslation','productTranslationDefaultEnglish','productBaseImage','additionalImage','category','categoryTranslation','categoryTranslationDefaultEnglish',
+    //                     'productAttributeValues.attributeTranslation','productAttributeValues.attributeTranslationEnglish',
+    //                     'productAttributeValues.attrValueTranslation','productAttributeValues.attrValueTranslationEnglish')
+    //                 ->where('category_id', $category_id)
+    //                 ->get();
+
+
+    //     return view('frontend.pages.product_details',compact('product','category','product_cart_qty','attribute','user_and_product_exists','reviews','category_products'));
     // }
 }

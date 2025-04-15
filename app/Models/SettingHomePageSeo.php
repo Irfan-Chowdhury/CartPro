@@ -18,7 +18,7 @@ class SettingHomePageSeo extends Model
 
     public function settingHomePageSeoTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(SettingHomePageSeoTranslation::class,'setting_home_page_seo_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');

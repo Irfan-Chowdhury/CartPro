@@ -65,12 +65,12 @@ class TagService
     protected function requestHandleData($request)
     {
         $data = [];
-        if (session('currentLocal')=='en') {
+        if (session('currentLocale')=='en') {
             $data['slug']      = $this->slug($request->tag_name);
         }
         $data['is_active'] = $request->input('is_active',0);
         $data['tag_name']  = $request->tag_name;
-        $data['local']     = session('currentLocal');
+        $data['local']     = session('currentLocale');
 
         return $data;
     }
@@ -97,7 +97,7 @@ class TagService
     }
 
     public function findTagTranslation($tag_id){
-        $tagTranslation = $this->tagTranslationContract->getByIdAndLocale($tag_id, session('currentLocal'));
+        $tagTranslation = $this->tagTranslationContract->getByIdAndLocale($tag_id, session('currentLocale'));
         if (!isset($tagTranslation)) {
             $tagTranslation =  $this->tagTranslationContract->getByIdAndLocale($tag_id, 'en');
         }

@@ -47,7 +47,7 @@
                  $languages = DB::table('languages')
                             ->select('id','language_name','local')
                             // ->where('default','=',0)
-                            ->where('local','!=',Session::get('currentLocal'))
+                            ->where('local','!=',Session::get('currentLocale'))
                             ->orderBy('language_name','ASC')
                             ->get();
             @endphp
@@ -55,8 +55,8 @@
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     <i class="dripicons-web">
-                        @if (Session::has('currentLocal'))
-                            {{ __(strtoupper(Session::get('currentLocal'))) }}
+                        @if (Session::has('currentLocale'))
+                            {{ __(strtoupper(Session::get('currentLocale'))) }}
                         @endif
                     </i>
                 </a>

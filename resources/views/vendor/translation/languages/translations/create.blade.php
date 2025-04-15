@@ -6,7 +6,7 @@
 
     <div class="container-fluid mb-3">
 
-        <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('languages.translations.index',Session::get('currentLocal'))}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Add Translation')</h4>
+        <h4 class="font-weight-bold mt-3"><a class="btn btn-sm btn-default mr-1" href="{{route('languages.translations.index',Session::get('currentLocale'))}}"><i class="dripicons-arrow-thin-left"></i></a> @lang('file.Add Translation')</h4>
         <div id="alert_message" role="alert"></div>
         <br>
     </div>

@@ -51,24 +51,24 @@ class CategoryRepository implements CategoryContract
         return json_decode(json_encode($category), FALSE);
     }
 
-    public function storeCategory($data){
+    public function storeCategory($data){ // No Need
         return Category::create($data);
     }
 
-    public function getById($id){
+    public function getById($id){  // No Need
         return Category::find($id);
     }
 
-    public function updateCategoryById($id, $data){
+    public function updateCategoryById($id, $data){ // No Need
         return Category::whereId($id)->update($data);
     }
 
-    public function active($id)
+    public function active($id) // No Need
     {
         return $this->activeData($this->getById($id));
     }
 
-    public function inactive($id)
+    public function inactive($id) // No Need
     {
         return $this->inactiveData($this->getById($id));
     }

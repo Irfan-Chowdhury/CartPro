@@ -100,7 +100,7 @@ class FAQController extends Controller
                 $faq  = Faq::create($data);
 
                 $data['faq_id'] = $faq->id;
-                $data['locale'] = Session::get('currentLocal');
+                $data['locale'] = Session::get('currentLocale');
                 $data['title']  = $request->title;
                 $data['description'] = $request->description;
                 FaqTranslation::create($data);
@@ -113,7 +113,7 @@ class FAQController extends Controller
     public function edit(Request $request)
     {
         $faq = Faq::find($request->faq_id);
-        $faqTranslation = FaqTranslation::where('faq_id',$request->faq_id)->where('locale',Session::get('currentLocal'))->first();
+        $faqTranslation = FaqTranslation::where('faq_id',$request->faq_id)->where('locale',Session::get('currentLocale'))->first();
         if (!isset($faqTranslation)) {
             $faqTranslation = FaqTranslation::where('faq_id',$request->faq_id)->where('locale','en')->first();
         }
@@ -146,7 +146,7 @@ class FAQController extends Controller
                 FaqTranslation::updateOrCreate(
                     [
                         'faq_id'  => $request->faq_id,
-                        'locale' => Session::get('currentLocal'),
+                        'locale' => Session::get('currentLocale'),
                     ],
                     [
                         'title'=> $request->title,

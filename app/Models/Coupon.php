@@ -40,7 +40,7 @@ class Coupon extends Model
 
     //new
     public function couponTranslation(){
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(CouponTranslation::class,'coupon_id')
                     ->where('locale',$locale);
 

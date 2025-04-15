@@ -18,10 +18,10 @@
 
                         <div class="card-body">
 
-                            @if($user->image)
-                                <img src="{{asset('public/'.$user->image)}}" height="120" width="120">
+                            @if(isset($user->image) && file_exists(public_path($user->image)))
+                                <img src="{{asset($user->image)}}" height="120" width="120">
                             @else
-                                <img src="{{asset('public/images/admin.png')}}" height="120" width="120" >
+                                <img src="{{asset('images/admin.png')}}" height="120" width="120" >
                             @endif
 
                             <p class="italic"><small>{{__('file.The field labels marked with * are required input fields')}}.</small></p>

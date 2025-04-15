@@ -30,7 +30,7 @@ class StoreFrontController extends Controller
 
     public function index()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $colors = Color::all();
 
         $setting = Setting::with(['settingTranslations'=> function ($query) use ($locale){
@@ -117,7 +117,7 @@ class StoreFrontController extends Controller
             return response()->json(['errors'=>['This is disabled for demo']]);
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         if ($request->ajax()) {
             foreach ($request->all() as $key => $value) {
@@ -148,7 +148,7 @@ class StoreFrontController extends Controller
     {
 
         if ($request->ajax()) {
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             if (!env('USER_VERIFIED')) {
                 return response()->json(['errors'=>['This is disabled for demo']]);
             }
@@ -186,7 +186,7 @@ class StoreFrontController extends Controller
 
     public function featureStore(Request $request)
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         if ($request->ajax()) {
             if (!env('USER_VERIFIED')) {
@@ -309,7 +309,7 @@ class StoreFrontController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $directory  ='/images/storefront/payment_method/';
 
         if ($request->ajax()) {
@@ -422,7 +422,7 @@ class StoreFrontController extends Controller
             return response()->json(['errors'=>['This is disabled for demo']]);
         }
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
 
         $validator = Validator::make($request->all(),[
             'storefront_slider_banner_1_image' => 'image|max:10240|mimes:jpeg,png,jpg,gif,webp',
@@ -792,7 +792,7 @@ class StoreFrontController extends Controller
                 Setting::where('key','storefront_product_tabs_1_section_enabled')->update(['plain_value'=>0]);
             }
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
 
             foreach ($request->all() as $key => $value) {
                 if ($key == 'storefront_product_tabs_1_section_tab_1_title'|| $key =='storefront_product_tabs_1_section_tab_2_title' || $key =='storefront_product_tabs_1_section_tab_3_title' || $key=='storefront_product_tabs_1_section_tab_4_title') {
@@ -822,7 +822,7 @@ class StoreFrontController extends Controller
                 Setting::where('key','storefront_product_tabs_2_section_enabled')->update(['plain_value'=>0]);
             }
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
 
             foreach ($request->all() as $key => $value) {
                 if ($key == 'storefront_product_tabs_2_section_title' || $key == 'storefront_product_tabs_2_section_tab_1_title'|| $key =='storefront_product_tabs_2_section_tab_2_title' || $key =='storefront_product_tabs_2_section_tab_3_title' || $key=='storefront_product_tabs_2_section_tab_4_title') {
@@ -855,7 +855,7 @@ class StoreFrontController extends Controller
             $enable_value = $request->storefront_flash_sale_and_vertical_products_section_enabled ? true : false;
             Setting::where('key','storefront_flash_sale_and_vertical_products_section_enabled')->update(['plain_value'=>$enable_value]);
 
-            $locale = Session::get('currentLocal');
+            $locale = Session::get('currentLocale');
             foreach ($request->all() as $key => $value) {
                 if ($key == 'storefront_flash_sale_title'|| $key =='storefront_vertical_product_1_title' || $key =='storefront_vertical_product_2_title' || $key=='storefront_vertical_product_3_title') {
                     $setting = Setting::where('key',$key)->first();

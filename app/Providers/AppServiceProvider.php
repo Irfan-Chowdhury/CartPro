@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Share;
 use App\Traits\Temporary\SettingHomePageSeoTrait;
 use Illuminate\Notifications\Notification;
@@ -32,29 +33,32 @@ class AppServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        // Register settings as a singleton
+        // $this->app->singleton('settings', function () {
+        //     return Setting::with(['translations','storeFrontImage'])->get();
+        // });
     }
 
     public function boot()
     {
-        $default_language = Language::where('default', '=', 1)->first();
-        if(Session::get('currentLocal')){
-            $currentLocale = Session::get('currentLocal');
-            Session::put('currentLocal', $currentLocale);
-        }else {
-            $currentLocale = $default_language->local ?? 'en';
-            Session::put('currentLocal', $currentLocale);
-        }
+        // $default_language = Language::where('default', '=', 1)->first();
+        // if(Session::get('currentLocale')){
+        //     $currentLocale = Session::get('currentLocale');
+        //     Session::put('currentLocale', $currentLocale);
+        // }else {
+        //     $currentLocale = $default_language->local ?? 'en';
+        //     Session::put('currentLocale', $currentLocale);
+        // }
 
-        $locale = Session::get('currentLocal');
-        $languages = Language::orderBy('language_name','ASC')->get()->keyBy('local');
-        $currency_codes = CurrencyRate::select('currency_code')->get();
+        $locale = null; //Session::get('currentLocale');
+        $languages = []; //Language::orderBy('language_name','ASC')->get()->keyBy('local');
+        $currency_codes = []; //CurrencyRate::select('currency_code')->get();
 
 
         // $storefront_images = Cache::remember('storefront_images', 300, function (){
         //     return  StorefrontImage::select('title','type','image')->get();
         // });
-        $storefront_images = StorefrontImage::select('title','type','image')->get();
+        // $storefront_images = StorefrontImage::select('title','type','image')->get();
 
         $empty_image = 'images/empty.jpg';
         $favicon_logo_path = $empty_image;
@@ -79,131 +83,95 @@ class AppServiceProvider extends ServiceProvider
 
         $payment_method_image = $empty_image;
 
-        foreach ($storefront_images as $key => $item) {
-            if ($item->title=='favicon_logo'){
-                if (!file_exists($item->image)) {
-                    $favicon_logo_path = 'https://dummyimage.com/221.6x221.6/12787d/ffffff&text=CartPro';
-                }else{
-                    $favicon_logo_path = url($item->image);
-                }
-            }
-            if ($item->title=='topbar_logo'){
-                if (!file_exists($item->image)) {
-                    $topbar_logo_path = 'https://dummyimage.com/1170x60/12787d/ffffff&text=CartPro';
-                }else{
-                    $topbar_logo_path = url($item->image);
-                }
-            }
-            elseif ($item->title=='header_logo') {
-                if (!file_exists($item->image)) {
-                    $header_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
-                }else{
-                    $header_logo_path = url($item->image);
-                    $header_db_logo_path = $item->image;
-                }
-            }
-            elseif ($item->title=='mail_logo') {
-                if (!file_exists($item->image)) {
-                    $mail_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
-                }else{
-                    $mail_logo_path   = url($item->image);
-                    $mail_db_logo_path = $item->image;
-                }
-            }
-            elseif ($item->title=='accepted_payment_method_image') {
-                if (!file_exists($item->image)) {
-                    $payment_method_image = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
-                }else{
-                    $payment_method_image = url($item->image);
-                }
-            }
+        // foreach ($storefront_images as $key => $item) {
 
-            //one_column_banner_image
-            elseif ($item->title=='one_column_banner_image') {
-                if (!file_exists($item->image)) {
-                    $one_column_banner_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $one_column_banner_image = url($item->image);
-                }
-            }
-
-            //two_column_banner_image
-            elseif ($item->title=='two_column_banner_image_1') {
-                if (!file_exists($item->image)) {
-                    $two_column_banner_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $two_column_banner_image_1 = url($item->image);
-                }
-            }
-            elseif ($item->title=='two_column_banner_image_2') {
-                if (!file_exists($item->image)) {
-                    $two_column_banner_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $two_column_banner_image_2 = url($item->image);
-                }
-            }
-            //three_column_banner_image
-            elseif ($item->title=='three_column_banners_image_1') {
-                if (!file_exists($item->image)) {
-                    $three_column_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_banners_image_1 = url($item->image);
-                }
-            }
-            elseif ($item->title=='three_column_banners_image_2') {
-                if (!file_exists($item->image)) {
-                    $three_column_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_banners_image_2 = url($item->image);
-                }
-            }
-            elseif ($item->title=='three_column_banners_image_3') {
-                if (!file_exists($item->image)) {
-                    $three_column_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_banners_image_3 = url($item->image);
-                }
-            }
-
-            //three_column_banner_image_full
-            elseif ($item->title=='three_column_full_width_banners_image_1') {
-                if (!file_exists($item->image)) {
-                    $three_column_full_width_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_full_width_banners_image_1 = url($item->image);
-                }
-            }
-            elseif ($item->title=='three_column_full_width_banners_image_2') {
-                if (!file_exists($item->image)) {
-                    $three_column_full_width_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_full_width_banners_image_2 = url($item->image);
-                }
-            }
-            elseif ($item->title=='three_column_full_width_banners_image_3') {
-                if (!file_exists($item->image)) {
-                    $three_column_full_width_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
-                }else{
-                    $three_column_full_width_banners_image_3 = url($item->image);
-                }
-            }
-
-            //Newsletter Background Image
-            // elseif ($item->title=='newsletter_background_image') {
+            // elseif ($item->title=='mail_logo') {
             //     if (!file_exists($item->image)) {
-            //         $newsletter_background_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //         $mail_logo_path = 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
             //     }else{
-            //         $newsletter_background_image = $item->image;
+            //         $mail_logo_path   = url($item->image);
+            //         $mail_db_logo_path = $item->image;
             //     }
             // }
-        }
+            // //one_column_banner_image
+            // elseif ($item->title=='one_column_banner_image') {
+            //     if (!file_exists($item->image)) {
+            //         $one_column_banner_image = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $one_column_banner_image = url($item->image);
+            //     }
+            // }
+
+            // //two_column_banner_image
+            // elseif ($item->title=='two_column_banner_image_1') {
+            //     if (!file_exists($item->image)) {
+            //         $two_column_banner_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $two_column_banner_image_1 = url($item->image);
+            //     }
+            // }
+            // elseif ($item->title=='two_column_banner_image_2') {
+            //     if (!file_exists($item->image)) {
+            //         $two_column_banner_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $two_column_banner_image_2 = url($item->image);
+            //     }
+            // }
+            // //three_column_banner_image
+            // elseif ($item->title=='three_column_banners_image_1') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_banners_image_1 = url($item->image);
+            //     }
+            // }
+            // elseif ($item->title=='three_column_banners_image_2') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_banners_image_2 = url($item->image);
+            //     }
+            // }
+            // elseif ($item->title=='three_column_banners_image_3') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_banners_image_3 = url($item->image);
+            //     }
+            // }
+
+            //three_column_banner_image_full
+            // elseif ($item->title=='three_column_full_width_banners_image_1') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_full_width_banners_image_1 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_full_width_banners_image_1 = url($item->image);
+            //     }
+            // }
+            // elseif ($item->title=='three_column_full_width_banners_image_2') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_full_width_banners_image_2 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_full_width_banners_image_2 = url($item->image);
+            //     }
+            // }
+            // elseif ($item->title=='three_column_full_width_banners_image_3') {
+            //     if (!file_exists($item->image)) {
+            //         $three_column_full_width_banners_image_3 = 'https://dummyimage.com/1200x270/12787d/ffffff&text=CartPro';
+            //     }else{
+            //         $three_column_full_width_banners_image_3 = url($item->image);
+            //     }
+            // }
+        // }
 
         //Appereance-->Storefront --> Setting
-        $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
+        // $settings = Setting::with(['settingTranslation','settingTranslationDefaultEnglish'])->get();
 
         // $menus = Menus::with('items')
         //         ->where('is_active',1)
         //         ->get();
+
+        // dd($menus);
 
         $menus = [];
         $storefront_theme_color = "#0071df";
@@ -229,9 +197,10 @@ class AppServiceProvider extends ServiceProvider
         $top_categories_section_enabled = null;
         $terms_and_condition_page_id = null;
         $terms_and_condition_page_slug = null;
-        $storefront_shop_page_enabled = null;
-        $storefront_brand_page_enabled = null;
+        // $storefront_shop_page_enabled = null;
+        // $storefront_brand_page_enabled = null;
 
+        $settings  = [];
 
         foreach ($settings as $key => $item) {
             if ($item->key=='storefront_theme_color' && $item->plain_value!=NULL) {
@@ -249,60 +218,6 @@ class AppServiceProvider extends ServiceProvider
                         $menu = $menus[$key2];
                     }
                 }
-            }
-
-            elseif ($item->key=='storefront_footer_menu_title_one' && $item->plain_value==NULL) {
-                $footer_menu_one_title = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? null;
-            }
-
-            elseif ($item->key=='storefront_footer_menu_one' && $item->plain_value!=NULL) {
-                foreach ($menus as $key2 => $value) {
-                    if ($value->id==$item->plain_value) {
-                        $footer_menu_one = $menus[$key2];
-                    }
-                }
-            }
-            elseif ($item->key=='storefront_footer_menu_title_two' && $item->plain_value==NULL) {
-                $footer_menu_title_two = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
-            }
-            elseif ($item->key=='storefront_footer_menu_two' && $item->plain_value!=NULL) {
-                foreach ($menus as $key2 => $value) {
-                    if ($value->id==$item->plain_value) {
-                        $footer_menu_two = $menus[$key2];
-                    }
-                }
-            }
-            elseif ($item->key=='storefront_footer_menu_title_three' && $item->plain_value==NULL) {
-                $footer_menu_title_three = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
-            }
-            elseif ($item->key=='storefront_footer_menu_three' && $item->plain_value!=NULL) {
-                foreach ($menus as $key2 => $value) {
-                    if ($value->id==$item->plain_value) {
-                        $footer_menu_three = $menus[$key2];
-                    }
-                }
-            }
-            elseif ($item->key=='storefront_address' && $item->plain_value==NULL) {
-                $storefront_address = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value  ?? null;
-            }
-
-            elseif ($item->key=='storefront_facebook_link' && $item->plain_value!=NULL) {
-                $storefront_facebook_link = $item->plain_value;
-            }
-
-            elseif ($item->key=='storefront_twitter_link' && $item->plain_value!=NULL) {
-                $storefront_twitter_link = $item->plain_value;
-            }
-
-            elseif ($item->key=='storefront_instagram_link' && $item->plain_value!=NULL) {
-                $storefront_instagram_link = $item->plain_value;
-            }
-
-            elseif ($item->key=='storefront_youtube_link' && $item->plain_value!=NULL) {
-                $storefront_youtube_link = $item->plain_value;
-            }
-            elseif($item->key=='storefront_copyright_text'){
-                $storefront_copyright_text = $item->settingTranslation->value ?? $item->settingTranslationDefaultEnglish->value ?? NULL;
             }
 
             //One Column Enable
@@ -342,29 +257,19 @@ class AppServiceProvider extends ServiceProvider
             elseif ($item->key=='storefront_footer_tag_id' && $item->plain_value!=NULL) {
                 $footer_tag_ids = json_decode($item->plain_value);
             }
-
-            // Shop Page Enabled
-            elseif ($item->key=='storefront_shop_page_enabled' && $item->plain_value!=NULL) {
-                $storefront_shop_page_enabled = $item->plain_value;
-            }
-
-            // Brand Page Enabled
-            elseif ($item->key=='storefront_brand_page_enabled' && $item->plain_value!=NULL) {
-                $storefront_brand_page_enabled = $item->plain_value;
-            }
         }
 
         $tags = [];
-        if ($footer_tag_ids) {
-            $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
-                return Tag::with('tagTranslations','tagTranslationEnglish')
-                        ->whereIn('id',$footer_tag_ids)
-                        ->where('is_active',1)
-                        ->orderBy('is_active','DESC')
-                        ->orderBy('id','DESC')
-                        ->get();
-            });
-        }
+        // if ($footer_tag_ids) {
+        //     $tags = Cache::remember('tags', 300, function () use ($footer_tag_ids) {
+        //         return Tag::with('tagTranslations','tagTranslationEnglish')
+        //                 ->whereIn('id',$footer_tag_ids)
+        //                 ->where('is_active',1)
+        //                 ->orderBy('is_active','DESC')
+        //                 ->orderBy('id','DESC')
+        //                 ->get();
+        //     });
+        // }
 
         if ($terms_and_condition_page_id!=null) {
             $terms_and_condition_page_slug = Page::find($terms_and_condition_page_id)->slug;
@@ -373,20 +278,21 @@ class AppServiceProvider extends ServiceProvider
         //Cart
         $cart_count = Cart::count();
         $cart_subtotal = implode(explode(',',Cart::subtotal()));
-        $cart_total = implode(explode(',',Cart::total()));
-        $cart_contents = Cart::content();
+        $cart_total = null; //implode(explode(',',Cart::total()));
+        $cart_contents = []; //Cart::content();
 
         //Newslatter
-        $setting_newslatter = SettingNewsletter::first();
-        $setting_store =  SettingStore::first();
+        $setting_newslatter = null; //SettingNewsletter::first();
+        $setting_store =  null; //SettingStore::first();
 
-        if (Auth::check()) {
-            $total_wishlist = Wishlist::where('user_id',Auth::user()->id)->count();
-        }else {
-            $total_wishlist = 0;
-        }
+        $total_wishlist = null;
+        // if (Auth::check()) {
+        //     $total_wishlist = Wishlist::where('user_id',Auth::user()->id)->count();
+        // }else {
+        //     $total_wishlist = 0;
+        // }
 
-        $orders = Order::get();
+        // $orders = Order::get();
 
         // ============= CURRENCY PART ===========
         // if (!Session::has('currency_code') && !Session::has('currency_symbol') && !Session::has('currency_rate')) {
@@ -429,93 +335,76 @@ class AppServiceProvider extends ServiceProvider
 
 
         //Home Page Seo
-        $setting_home_page_seo = $this->settingHomePageSeo();
+        $setting_home_page_seo = []; //$this->settingHomePageSeo();
 
 
         // ======= This Settings is Updated
 
-        // $settings_data = Setting::with(['settingTranslations'])
-        //         ->get()
-        //         ->keyBy('key')
-        //         ->map(function($setting){
-        //             return [
-        //                 'id'             => $setting->id,
-        //                 'key'            => $setting->key,
-        //                 'plain_value'    => $setting->plain_value,
-        //                 'is_translatable'=> $setting->is_translatable,
-        //                 'locale' => $this->translations($setting->settingTranslations)->locale ?? null,
-        //                 'value'  => $this->translations($setting->settingTranslations)->value ?? null,
-        //             ];
-        //         });
-        // $storeFrontSettings = json_decode(json_encode($settings_data), FALSE);
+        // View::share(['languages'=>$languages,
+        //             'currency_codes'=>$currency_codes,
+        //             // 'storefront_images'=>$storefront_images,
+        //             'favicon_logo_path'=>$favicon_logo_path,
+        //             'header_logo_path'=>$header_logo_path,
+        //             'header_db_logo_path'=>$header_db_logo_path,
+        //             'mail_logo_path'=>$mail_logo_path,
+        //             'mail_db_logo_path'=>$mail_db_logo_path,
+        //             // 'settings' => $settings,
+        //             'storefront_theme_color'=>$storefront_theme_color,
+        //             'storefront_navbg_color'=>$storefront_navbg_color,
+        //             'storefront_menu_text_color'=>$storefront_menu_text_color,
+        //             'menus'=>$menus,
+        //             'menu'=>$menu,
+        //             'footer_menu_one'=>$footer_menu_one,
+        //             'footer_menu_two'=>$footer_menu_two,
+        //             'footer_menu_three'=>$footer_menu_three,
+        //             'footer_menu_one_title'=>$footer_menu_one_title,
+        //             'footer_menu_title_two'=>$footer_menu_title_two,
+        //             'footer_menu_title_three'=>$footer_menu_title_three,
+        //             'storefront_address'=>$storefront_address,
+        //             'cart_count'=>$cart_count,
+        //             'cart_subtotal'=>$cart_subtotal,
+        //             'cart_total'=>$cart_total,
+        //             'cart_contents'=>$cart_contents,
+        //             'setting_newslatter'=>$setting_newslatter,
+        //             'total_wishlist'=>$total_wishlist,
+        //             'locale'=>$locale,
+        //             'setting_store' => $setting_store,
+        //             'storefront_facebook_link'=> $storefront_facebook_link,
+        //             'storefront_twitter_link'=>$storefront_twitter_link,
+        //             'storefront_instagram_link'=>$storefront_instagram_link,
+        //             'storefront_youtube_link'=>$storefront_youtube_link,
+        //             'payment_method_image'=>$payment_method_image,
+        //             'storefront_copyright_text'=>$storefront_copyright_text,
+        //             'orders'=>$orders,
+        //             'topbar_logo_path'=> null, //$topbar_logo_path,
+        //             // 'one_column_banner_enabled'=>$one_column_banner_enabled,
+        //             'one_column_banner_image'=>$one_column_banner_image,
+        //             'two_column_banner_enabled'=>$two_column_banner_enabled,
+        //             'two_column_banner_image_1'=>$two_column_banner_image_1,
+        //             'two_column_banner_image_2'=>$two_column_banner_image_2,
+        //             'three_column_banner_enabled'=>$three_column_banner_enabled,
+        //             'three_column_banners_image_1'=>$three_column_banners_image_1,
+        //             'three_column_banners_image_2'=>$three_column_banners_image_2,
+        //             'three_column_banners_image_3'=>$three_column_banners_image_3,
+        //             'three_column_banner_full_enabled'=>$three_column_banner_full_enabled,
+        //             'three_column_full_width_banners_image_1'=>$three_column_full_width_banners_image_1,
+        //             'three_column_full_width_banners_image_2'=>$three_column_full_width_banners_image_2,
+        //             'three_column_full_width_banners_image_3'=>$three_column_full_width_banners_image_3,
+        //             // 'CHANGE_CURRENCY_SYMBOL'=> $CHANGE_CURRENCY_SYMBOL,
+        //             // 'CHANGE_CURRENCY_RATE'=> $CHANGE_CURRENCY_RATE,
+        //             'settings_new'=> $settings_new,
+        //             'socialShare'=> $socialShare,
+        //             'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,
+        //             'top_categories_section_enabled'=> $top_categories_section_enabled,
+        //             'terms_and_condition_page_slug'=> $terms_and_condition_page_slug,
+        //             'tags'=> $tags,
+        //             // 'storefront_shop_page_enabled'=> $storefront_shop_page_enabled,
+        //             // 'storefront_brand_page_enabled'=> $storefront_brand_page_enabled,
+        //             'setting_home_page_seo'=> $setting_home_page_seo,
 
-
-
-        View::share(['languages'=>$languages,
-                    'currency_codes'=>$currency_codes,
-                    'storefront_images'=>$storefront_images,
-                    'favicon_logo_path'=>$favicon_logo_path,
-                    'header_logo_path'=>$header_logo_path,
-                    'header_db_logo_path'=>$header_db_logo_path,
-                    'mail_logo_path'=>$mail_logo_path,
-                    'mail_db_logo_path'=>$mail_db_logo_path,
-                    'settings' => $settings,
-                    'storefront_theme_color'=>$storefront_theme_color,
-                    'storefront_navbg_color'=>$storefront_navbg_color,
-                    'storefront_menu_text_color'=>$storefront_menu_text_color,
-                    'menus'=>$menus,
-                    'menu'=>$menu,
-                    'footer_menu_one'=>$footer_menu_one,
-                    'footer_menu_two'=>$footer_menu_two,
-                    'footer_menu_three'=>$footer_menu_three,
-                    'footer_menu_one_title'=>$footer_menu_one_title,
-                    'footer_menu_title_two'=>$footer_menu_title_two,
-                    'footer_menu_title_three'=>$footer_menu_title_three,
-                    'storefront_address'=>$storefront_address,
-                    'cart_count'=>$cart_count,
-                    'cart_subtotal'=>$cart_subtotal,
-                    'cart_total'=>$cart_total,
-                    'cart_contents'=>$cart_contents,
-                    'setting_newslatter'=>$setting_newslatter,
-                    'total_wishlist'=>$total_wishlist,
-                    'locale'=>$locale,
-                    'setting_store' => $setting_store,
-                    'storefront_facebook_link'=> $storefront_facebook_link,
-                    'storefront_twitter_link'=>$storefront_twitter_link,
-                    'storefront_instagram_link'=>$storefront_instagram_link,
-                    'storefront_youtube_link'=>$storefront_youtube_link,
-                    'payment_method_image'=>$payment_method_image,
-                    'storefront_copyright_text'=>$storefront_copyright_text,
-                    'orders'=>$orders,
-                    'topbar_logo_path'=>$topbar_logo_path,
-                    'one_column_banner_enabled'=>$one_column_banner_enabled,
-                    'one_column_banner_image'=>$one_column_banner_image,
-                    'two_column_banner_enabled'=>$two_column_banner_enabled,
-                    'two_column_banner_image_1'=>$two_column_banner_image_1,
-                    'two_column_banner_image_2'=>$two_column_banner_image_2,
-                    'three_column_banner_enabled'=>$three_column_banner_enabled,
-                    'three_column_banners_image_1'=>$three_column_banners_image_1,
-                    'three_column_banners_image_2'=>$three_column_banners_image_2,
-                    'three_column_banners_image_3'=>$three_column_banners_image_3,
-                    'three_column_banner_full_enabled'=>$three_column_banner_full_enabled,
-                    'three_column_full_width_banners_image_1'=>$three_column_full_width_banners_image_1,
-                    'three_column_full_width_banners_image_2'=>$three_column_full_width_banners_image_2,
-                    'three_column_full_width_banners_image_3'=>$three_column_full_width_banners_image_3,
-                    // 'CHANGE_CURRENCY_SYMBOL'=> $CHANGE_CURRENCY_SYMBOL,
-                    // 'CHANGE_CURRENCY_RATE'=> $CHANGE_CURRENCY_RATE,
-                    'settings_new'=> $settings_new,
-                    'socialShare'=> $socialShare,
-                    'flash_sale_and_vertical_products_section_enabled'=> $flash_sale_and_vertical_products_section_enabled,
-                    'top_categories_section_enabled'=> $top_categories_section_enabled,
-                    'terms_and_condition_page_slug'=> $terms_and_condition_page_slug,
-                    'tags'=> $tags,
-                    'storefront_shop_page_enabled'=> $storefront_shop_page_enabled,
-                    'storefront_brand_page_enabled'=> $storefront_brand_page_enabled,
-                    'setting_home_page_seo'=> $setting_home_page_seo,
-
-                    // New Storefront Settings
-                    // 'storeFrontSettings'=> $storeFrontSettings,
-            ]);
+        //             // New Storefront Settings
+        //             // 'storeFrontSettings'=> $storeFrontSettings,
+        //     ]);
 
             $this->app->bind(\App\Payment\IPayPalPayment::class,\App\Payment\PaypalPayment::class);
             $this->app->bind(\App\Payment\IStripePayment::class,\App\Payment\StripePayment::class);

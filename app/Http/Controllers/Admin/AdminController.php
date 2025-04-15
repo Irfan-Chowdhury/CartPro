@@ -50,7 +50,7 @@ class AdminController extends Controller
 
         //We will convert it in ExpiryReminder later
         $this->autoDataUpdate();
-        
+
         $top_brands = OrderDetail::with('brand.brandTranslation','brand.brandTranslationEnglish')
                             ->select('brand_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')
@@ -58,7 +58,7 @@ class AdminController extends Controller
                             ->get()
                             ->take(5);
 
-        $top_categories = OrderDetail::with('category.catTranslation','category.categoryTranslationDefaultEnglish')
+        $top_categories = OrderDetail::with('category.translations')
                             ->select('category_id', DB::raw('count(*) as total, sum(subtotal) as total_amount'))
                             ->orderBy('total_amount','DESC')
                             ->groupBy('category_id')
@@ -87,9 +87,9 @@ class AdminController extends Controller
         // $topVisitedPages = Analytics::fetchMostVisitedPages(Period::days(365))->take(10);
         // $topReferrers = Analytics::fetchTopReferrers(Period::days(365))->take(10);
         // $topUserTypes = Analytics::fetchUserTypes(Period::days(365))->take(10);
-        
+
         //return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids','browsers','topVisitedPages','topReferrers','topUserTypes'));
-                                                
+
         return view('admin.pages.home',compact('orders','products','total_customers','top_brands','top_categories','top_products','category_ids'));
     }
 

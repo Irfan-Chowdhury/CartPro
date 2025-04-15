@@ -15,6 +15,11 @@ class Product extends Model
         'brand_id',
         'tax_class_id',
         'slug',
+        'name',
+        'description',
+        'short_description',
+        'meta_title',
+        'meta_description',
         'price',
         'weight',
         'weight_base_calculation',
@@ -37,47 +42,39 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
-
-    // New
-    public function productTranslations(){
-        $locale = Session::get('currentLocal');
-    	return $this->hasMany(ProductTranslation::class,'product_id')
-                    ->where('local',$locale)
-                    ->orWhere('local','en');
+    // Vendora
+    public function translations()
+    {
+        return $this->hasMany(ProductTranslation::class,'product_id');
     }
 
-    public function productTranslation(){  // Remove Later
-    	$locale = Session::get('currentLocal');
-    	return $this->hasOne(ProductTranslation::class,'product_id')
-                ->where('local',$locale);
-    }
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
 
-    public function productTranslationEnglish(){ // Remove Later
-    	return $this->hasOne(ProductTranslation::class,'product_id')
-                        ->where('local','en');
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'category_product','product_id','category_id');
     }
 
-    public function productCategoryTranslation()
+    public function brand()
     {
-        $locale = Session::get('currentLocal');
-    	return $this->hasOne(CategoryTranslation::class,'category_id')
-                ->where('local',$locale);
+        return $this->belongsTo(Brand::class);
     }
 
-    public function productCategoryTranslationEnglish()
+    public function attributes()
     {
-    	 return $this->hasOne(CategoryTranslation::class,'category_id')
-                        ->where('local','en');
-    }
-
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Attribute::class);
     }
 
     public function baseImage()
@@ -91,20 +88,66 @@ class Product extends Model
         return $this->hasMany(ProductImage::class,'product_id');
     }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
+    // Vendora End
+
+
+
+
+
+    // New
+    public function productTranslations(){
+        $locale = Session::get('currentLocale');
+    	return $this->hasMany(ProductTranslation::class,'product_id')
+                    ->where('local',$locale)
+                    ->orWhere('local','en');
     }
 
-    public function attributes()
-    {
-        return $this->belongsToMany(Attribute::class,'product_attribute_value')
-                    ->withPivot('attribute_value_id');
+    public function productTranslation(){  // Remove Later
+    	$locale = Session::get('currentLocale');
+    	return $this->hasOne(ProductTranslation::class,'product_id')
+                ->where('local',$locale);
     }
+
+    public function productTranslationEnglish(){ // Remove Later
+    	return $this->hasOne(ProductTranslation::class,'product_id')
+                        ->where('local','en');
+    }
+
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class);
+    // }
+
+    public function productCategoryTranslation()
+    {
+        $locale = Session::get('currentLocale');
+    	return $this->hasOne(CategoryTranslation::class,'category_id')
+                ->where('locale',$locale);
+    }
+
+    public function productCategoryTranslationEnglish()
+    {
+    	 return $this->hasOne(CategoryTranslation::class,'category_id')
+                        ->where('local','en');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+
+
+
+    // public function attributes()
+    // {
+    //     return $this->belongsToMany(Attribute::class,'product_attribute_value')
+    //                 ->withPivot('attribute_value_id');
+    // }
 
     public function brandTranslation()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
     	return $this->hasOne(BrandTranslation::class,'brand_id','brand_id')
                 ->where('local',$locale);
     }
@@ -130,7 +173,7 @@ class Product extends Model
     // Product
     public function attributeTranslations()
     {
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         return $this->hasMany(AttributeTranslation::class,'attribute_id')
                     ->where('locale',$locale)
                     ->orWhere('locale','en');

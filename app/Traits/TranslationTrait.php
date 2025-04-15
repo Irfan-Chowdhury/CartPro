@@ -9,7 +9,7 @@ trait TranslationTrait{
     {
         //In our database some translation table's column name with local and updated column with locale that's why we have to check both name. We will update later.
 
-        $locale = Session::get('currentLocal');
+        $locale = Session::get('currentLocale');
         $translation_value = null;
 
         if ($translations) {

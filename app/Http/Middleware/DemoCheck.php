@@ -9,9 +9,7 @@ class DemoCheck
 {
     public function handle(Request $request, Closure $next)
     {
-        if (env('USER_VERIFIED')!=1) {
-            // return response()->json(['demo' => ['Disabled for demo !']]);
-
+        if (config('app.product_mode') === 'DEMO') {
             if($request->ajax()){
                 return response()->json(['errors' => ['Disabled for demo !']], 422);
             }else {

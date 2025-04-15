@@ -1,14 +1,9 @@
 <!-- Sidebar-->
 <nav class="side-navbar">
     <span class="brand-big" id="site_logo_main">
-        @if(isset($setting_store->admin_logo) && Illuminate\Support\Facades\File::exists(public_path($setting_store->admin_logo)))
-            <img src="{{asset($setting_store->admin_logo)}}" width="150">
-            &nbsp; &nbsp;
-        @else
-        <img src="https://dummyimage.com/150x150/e5e8ec/e5e8ec&text=Dashboard Logo" width="150">
-            &nbsp; &nbsp;
-        @endif
+        <img src="{{$adminLogo}}" width="150">
     </span>
+
     <!-- Sidebar Navigation Menus-->
     <ul id="side-main-menu" class="side-menu list-unstyled">
         <li class="{{Request::is('admin/dashboard') ? 'active' : ''}}"><a href="{{url('/admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{__('file.Dashboard') }}</span></a></li>
@@ -157,7 +152,7 @@
                     @can('tax')
                         <li class="{{Route::current()->getName()=='admin.tax.index' ? 'active' : ''}}"><a href="{{route('admin.tax.index')}}">{{__('file.Taxes')}}</a></li>
                     @endcan
-                    <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocal'))}}">{{__('file.Translations')}}</a></li>
+                    <li class="{{Request::is('languages/*') || Request::is('languages/*')}}"><a href="{{route('languages.translations.index',Session::get('currentLocale'))}}">{{__('file.Translations')}}</a></li>
 
                     @can('currency-rate')
                         <li class="{{Route::current()->getName()=='admin.currency_rate.index' ? 'active' : ''}}"><a href="{{route('admin.currency_rate.index')}}">{{__('file.Currency Rates')}}</a></li>
