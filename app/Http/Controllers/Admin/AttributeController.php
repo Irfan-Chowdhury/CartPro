@@ -30,6 +30,8 @@ class AttributeController extends Controller
 
     public function index()
     {
+        // dd($this->attributeService->dataTable());
+
         if (auth()->user()->can('attribute-view')){
             return view('admin.pages.attribute.index');
         }
@@ -59,13 +61,16 @@ class AttributeController extends Controller
 
     public function edit($id)
     {
-        $attribute                 = $this->attributeService->findAttribute($id);
+        $attributeSets             = $this->attributeSetService->getAllAttributeSet();
+        $attribute                 = $this->attributeService->findAttributeWithValues($id);
+
+
         $attributeTranslation      = $this->attributeService->findAttributeTranslation($id);
         $attributeValueIds         = $this->attributeService->getAttributeValueIds($id);
         $attributeValueTranslation = $this->attributeService->getAttribiuteValueTranslation($attributeValueIds);
-        $attributeSets             = $this->attributeSetService->getAllAttributeSet();
-        $categories                = $this->categoryService->getAllCategories();
-        return view('admin.pages.attribute.edit',compact('attribute','attributeTranslation','attributeValueTranslation','attributeSets','categories'));
+
+        // return view('admin.pages.attribute.edit',compact('attribute','attributeTranslation','attributeValueTranslation','attributeSets','categories'));
+        return view('admin.pages.attribute.edit',compact('attributeSets','attribute'));
     }
 
 

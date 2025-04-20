@@ -8,11 +8,12 @@ use App\Models\Brand;
 use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\imageHandleTrait;
 use App\Traits\SlugTrait;
+use App\Traits\WordCheckTrait;
 use Illuminate\Support\Facades\File;
 
 class BrandService
 {
-    use SlugTrait, imageHandleTrait, ArrayToObjectConvertionTrait;
+    use SlugTrait, imageHandleTrait, ArrayToObjectConvertionTrait, WordCheckTrait;
 
     private $brandContract;
     private $brandTranslationContract;
@@ -24,21 +25,38 @@ class BrandService
 
     public function getAllBrands()
     {
-        $brandData = Brand::with('translations')
-                    ->get()
+        $onlyActive = !$this->wordCheckInURL('brands');
+
+        return $this->getBrands($onlyActive);
+    }
+
+    private function getBrands($onlyActive = false)
+    {
+        $query = Brand::with('translations')
+                    ->orderBy('is_active','DESC')
+                    ->orderBy('id','DESC');
+
+        if ($onlyActive) {
+            $query->where('is_active', 1);
+        }
+
+        $result = $query->get()
                     ->map(function($brand){
                         return [
                             'id'=>$brand->id,
                             'slug'=>$brand->slug,
                             'is_active'=>$brand->is_active,
                             'brand_logo'=> isset($brand->brand_logo) && file_exists(public_path($brand->brand_logo)) ? asset($brand->brand_logo) : 'https://dummyimage.com/50x50/000000/0f6954.png&text=Brand',
-                            'brand_name'=>$brand->translation->brand_name,
+                            'brand_name'=>$brand->translation->brand_name ?? null,
                         ];
                     });
 
 
-        return $this->arrayToObject($brandData);
+        return $this->arrayToObject($result);
     }
+
+
+
 
     public function dataTable($data)
     {

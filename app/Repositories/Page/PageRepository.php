@@ -6,6 +6,7 @@ use App\Contracts\Page\PageContract;
 use App\Models\Page;
 use App\Traits\ActiveInactiveTrait;
 use App\Traits\TranslationTrait;
+use Illuminate\Support\Facades\DB;
 
 class PageRepository implements PageContract
 {
@@ -13,7 +14,7 @@ class PageRepository implements PageContract
 
     public function getAll()
     {
-        $data = Page::with('pageTranslations')
+        $data = Page::with('translations')
                 ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
@@ -22,13 +23,13 @@ class PageRepository implements PageContract
                         'id'         =>$page->id,
                         'slug'       => $page->slug,
                         'is_active'  =>$page->is_active,
-                        'locale'     => $this->translations($page->pageTranslations)->locale ?? null,
-                        'page_name'  => $this->translations($page->pageTranslations)->page_name ?? null,
-                        'body'       => $this->translations($page->pageTranslations)->body ?? null,
-                        'meta_title' => $this->translations($page->pageTranslations)->meta_title ?? null,
-                        'meta_description' => $this->translations($page->pageTranslations)->meta_description ?? null,
-                        'meta_url'   => $this->translations($page->pageTranslations)->meta_url ?? null,
-                        'meta_type'  => $this->translations($page->pageTranslations)->meta_type ?? null,
+                        'locale'     => $page->translation->locale ?? null,
+                        'page_name'  => $page->translation->page_name ?? null,
+                        'body'       => $page->translation->body ?? null,
+                        'meta_title' => $page->translation->meta_title ?? null,
+                        'meta_description' => $page->translation->meta_description ?? null,
+                        'meta_url'   => $page->translation->meta_url ?? null,
+                        'meta_type'  => $page->translation->meta_type ?? null,
                     ];
                 });
 

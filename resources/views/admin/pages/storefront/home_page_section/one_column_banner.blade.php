@@ -6,13 +6,11 @@
             <div class="col-md-10">
                 <form id="oneColumnBannerSubmit">
                     @csrf
-
-                    <!-- DB_ROW_ID-48:  => setting[47] -->
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Section Status')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" @if($setting[47]->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_enabled" class="form-check-input">
+                                <input type="checkbox" @if($setting->storefront_one_column_banner_enabled->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_enabled" class="form-check-input">
                                 <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable one column banner section')</label>
                             </div>
                         </div>
@@ -20,7 +18,6 @@
                     <br>
 
                     <!-- Banner -->
-                    <!-- DB_ROW_ID-49-51:  => setting[48-50] -->
                     <h5 class="text-bold">{{__('file.Banner')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -45,9 +42,9 @@
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_one_column_banner_call_to_action_url" placeholder="@lang('file.Type URL')" class="form-control"
-                                value="{{$setting[49]->plain_value}}">
+                                value="{{$setting->storefront_one_column_banner_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[50]->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_one_column_banner_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_one_column_banner_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>

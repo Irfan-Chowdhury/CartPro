@@ -13,7 +13,7 @@
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
                                 {{-- <input type="checkbox" @if($setting[130]->plain_value==1) checked @endif value="1" name="storefront_flash_sale_and_vertical_products_section_enabled" class="form-check-input"> --}}
-                                <input type="checkbox" {{$setting[130]->plain_value ? 'checked':'' }} name="storefront_flash_sale_and_vertical_products_section_enabled" class="form-check-input">
+                                <input type="checkbox" {{$setting->storefront_flash_sale_and_vertical_products_section_enabled->plain_value ? 'checked':'' }} name="storefront_flash_sale_and_vertical_products_section_enabled" class="form-check-input">
                                 <label class="form-check-label" for="exampleCheck1">{{__('file.Flash Sale & Vertical Products')}}</label>
                             </div>
                         </div>
@@ -25,15 +25,15 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>{{__('file.Title')}}</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_flash_sale_title" class="form-control" placeholder="{{__('file.Title')}}" value="{{$setting[131]->settingTranslation->value ?? null}}">
+                            <input type="text" name="storefront_flash_sale_title" class="form-control" placeholder="{{__('file.Title')}}" value="{{$setting->storefront_flash_sale_title->value ?? null}}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>{{__('file.Active Campaign')}}</b></label>
                         <div class="col-sm-8">
                             <select name="storefront_flash_sale_active_campaign_flash_id" id="" class="form-control">
-                                @forelse ($flash_sales as $item)
-                                    <option value="{{$item->id}}">{{$item->flashSaleTranslation->campaign_name ?? null}}</option>
+                                @forelse ($flashSales as $item)
+                                    <option value="{{$item->id}}">{{$item->campaign_name}}</option>
                                 @empty
                                 @endforelse
                             </select>
@@ -51,7 +51,6 @@
                     @include('admin.pages.storefront.home_page_section.flash_sale_vertical_product.tab3')
 
 
-                    <!-- DB_ROW_ID-:  => setting[] -->
                     <div class="form-group row mt-5">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-8">

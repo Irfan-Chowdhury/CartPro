@@ -613,7 +613,8 @@ if (Session::has('currency_symbol')){
                                             });
                                         }
                                     }
-                                    var image = "{{url('/')}}/"+'public'+value.options.image;
+                                    // var image = "{{url('/')}}/"+'public'+value.options.image;
+                                    var image = value.options.image;
                                     html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
                                                 '<img src="'+image+'">'+
                                                 '</a></div><div class="shp__pro__details"><h2>'+

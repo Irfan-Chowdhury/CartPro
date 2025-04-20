@@ -13,6 +13,38 @@ class FlashSale extends Model
     protected $dates = ['deleted_at'];
 
 
+    /**
+    * ---------------------------
+    * vendora Start
+    * ---------------------------
+    */
+    public function translations()
+    {
+        return $this->hasMany(FlashSaleTranslations::class,'flash_sale_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('local', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('local', 'en');
+        }
+
+        return $translation;
+    }
+
+
+    /**
+    * ---------------------------
+    * vendora End
+    * ---------------------------
+    */
+
+
     public function flashSaleTranslations()
     {
     	return $this->hasMany(FlashSaleTranslations::class,'flash_sale_id');

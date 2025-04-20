@@ -84,7 +84,7 @@ class CartController extends Controller
 
             $data['price'] = $productPrice;
             $data['weight'] =  $product->weight ?? 0;
-            $data['options']['image']= $product->baseImage->image;
+            $data['options']['image']= isset($product->baseImage->image) && file_exists(public_path($product->baseImage->image)) ? asset($product->baseImage->image) : 'https://dummyimage.com/180x40/12787d/ffffff&text=CartPro';
             $data['options']['product_id'] = $product->id;
 
             // if (!empty($attribute_name_arr) && !empty($request->value_ids)) {

@@ -15,12 +15,18 @@ use App\Models\Brand;
 use App\Models\Color;
 use App\Models\FlashSale;
 use App\Models\FooterDescription;
+use App\Services\BrandService;
+use App\Services\CategoryService;
+use App\Services\FlashSaleService;
+use App\Services\PageService;
+use App\Services\TagService;
 use App\Traits\ENVFilePutContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\imageHandleTrait;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 use function GuzzleHttp\json_decode;
 
@@ -28,86 +34,54 @@ class StoreFrontController extends Controller
 {
     use imageHandleTrait, ENVFilePutContent;
 
-    public function index()
+    public function index(PageService $pageService, TagService $tagService, BrandService $brandService, CategoryService $categoryService, FlashSaleService $flashSale)
     {
         $locale = Session::get('currentLocale');
         $colors = Color::all();
 
-        $setting = Setting::with(['settingTranslations'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        },'settingTranslation','settingTranslationDefaultEnglish'])->get();
+        $setting = app('setting');
 
-        $pages = Page::with(['pageTranslations'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-            ->orWhere('locale','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
+        $pages = $pageService->getPages();
 
-        $products = Product::with('productTranslation','productTranslationEnglish')
-                    ->where('is_active',1)
-                    ->get();
+        $menus = [];
 
-        $menus = Menu::with(['menuTranslations'=> function ($query) use ($locale){
-            $query->where('locale',$locale)
-                ->orWhere('locale','en')
-                ->orderBy('id','DESC');
-            }])
-            ->where('is_active',1)
-            ->get();
+        $tags = $tagService->getAllTag();
+        $array_footer_tags = isset($setting->storefront_footer_tag_id->plain_value) ? json_decode($setting->storefront_footer_tag_id->plain_value) : null;
 
-        $tags = Tag::with(['tagTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-                ->orWhere('local','en')
-                ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
 
         $storefront_images = StorefrontImage::select('title','type','image')->get();
         $total_storefront_images = count($storefront_images);
 
-        $categories = Category::with(['categoryTranslation'=> function ($query) use ($locale){
-            $query->where('local',$locale)
-            ->orWhere('local','en')
-            ->orderBy('id','DESC');
-        }])
-        ->where('is_active',1)
-        ->get();
+
+        $brands = $brandService->getAllBrands();
+        $array_brands = isset($setting->storefront_top_brands->plain_value) ? json_decode($setting->storefront_top_brands->plain_value) : null;
 
 
-        $array_tags = Setting::where('key','storefront_footer_tag_id')->pluck('plain_value');
-        if ($array_tags[0] == NULL) {
-            $array_footer_tags = [];
-        }else {
-            $array_footer_tags = json_decode($array_tags[0]);
-        }
+        $categories = $categoryService->getAllCategories();
 
-        $brands = Brand::with(['brandTranslation','brandTranslationEnglish'])
-        ->where('is_active',1)
-        ->get();
-
-        $array_brands = Setting::where('key','storefront_top_brands')->pluck('plain_value');
-        if ($array_brands[0] == NULL) {
-            $array_brands = [];
-        }else {
-            $array_brands = json_decode($array_brands[0]);
-        }
-
-        $flash_sales = FlashSale::with('flashSaleTranslation')->where('is_active',1)->get();
+        $flashSales = $flashSale->getFlashSales();
 
         $footer_description = FooterDescription::where('locale',$locale)->first();
         if (!$footer_description) {
             $footer_description = FooterDescription::where('locale','en')->first();
         }
 
+        // Menu::with(['menuTranslations'=> function ($query) use ($locale){
+        //     $query->where('locale',$locale)
+        //         ->orWhere('locale','en')
+        //         ->orderBy('id','DESC');
+        //     }])
+        //     ->where('is_active',1)
+        //     ->get();
 
 
-        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','products','menus','storefront_images',
-                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flash_sales','footer_description'));
+        // DB::enableQueryLog();
+        // dd(DB::getQueryLog());
+
+
+
+        return view('admin.pages.storefront.index',compact('locale','colors','setting','pages','menus','storefront_images',
+                        'tags','total_storefront_images','array_footer_tags','categories','brands','array_brands','flashSales','footer_description'));
 
     }
 

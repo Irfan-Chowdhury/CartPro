@@ -18,15 +18,18 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Welcome Text')</b></label>
                         <div class="col-sm-8">
                             <!-- setting[0] => DB_ROW_ID-1: storefront_welcome_text -->
-                            <input type="text" name="storefront_welcome_text" id="storefront_welcome_text" class="form-control" id="inputEmail3" placeholder="Type Text"
-                            @forelse ($setting[0]->settingTranslations as $key => $item)
+                            <input type="text" name="storefront_welcome_text" id="storefront_welcome_text" class="form-control" id="inputEmail3"
+                            placeholder="Type Text" value="{{$setting->storefront_welcome_text->value}}"
+
+                            {{-- @forelse ($setting[0]->settingTranslations as $key => $item)
                                 @if ($item->locale==$locale)
                                     value="{{$item->value}}" @break
                                 @elseif($item->locale=='en')
                                     value="{{$item->value}}" @break
                                 @endif
                             @empty
-                            @endforelse >
+                            @endforelse --}}
+                            >
                         </div>
                     </div>
 
@@ -47,7 +50,7 @@
                             </ul>
 
                             <h6>@lang('file.Custom color')</h6>
-                            <input type="text" id="color-input-theme" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting[1]->plain_value != NULL ? $setting[1]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                            <input type="text" id="color-input-theme" name="storefront_theme_color" class="form-control colorpicker-element" value="{{$setting->storefront_theme_color->plain_value}}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
 
@@ -68,7 +71,7 @@
                                 <li class="color-change" data-color="#6453f7" style="background-color:#6453f7"></li>
                             </ul>
                             <h6>@lang('file.Custom color')</h6>
-                            <input type="text" id="color-input-navbar" name="storefront_navbar_background_color" class="form-control colorpicker-element" value="{{$setting[152]->plain_value != NULL ? $setting[152]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                            <input type="text" id="color-input-navbar" name="storefront_navbar_background_color" class="form-control colorpicker-element" value="{{$setting->storefront_navbar_background_color->plain_value}}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
 
@@ -76,13 +79,13 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label"><b>@lang('file.Nav Text Color')</b></label>
                         <div class="col-sm-6">
-                            <h6>color Presets</h6>
+                            <h6>Color Presets</h6>
                             <ul id="switcher" class="p-0">
                                 <li class="color-change-navtext" data-color="#FFF" data-hover-color="#e5e8ec" style="background-color:#FFF;border:1px solid #666"></li>
                                 <li class="color-change-navtext" data-color="#021523" data-hover-color="#666" style="background-color:#021523"></li>
                             </ul>
                             <h6>@lang('file.Custom color')</h6>
-                            <input type="text" readonly id="color-input-text" name="storefront_nav_text_color" class="form-control colorpicker-element" value="{{$setting[153]->plain_value != NULL ? $setting[153]->plain_value : '' }}" data-colorpicker-id="1" data-original-title="" title="">
+                            <input type="text" readonly id="color-input-text" name="storefront_nav_text_color" class="form-control colorpicker-element" value="{{$setting->storefront_nav_text_color->plain_value}}" data-colorpicker-id="1" data-original-title="" title="">
                         </div>
                     </div>
 
@@ -90,11 +93,11 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Slider Format')</b> <span class="text-danger"></span></label>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting[148]->plain_value=='full_width') checked @endif id="slider_format" value="full_width">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting->store_front_slider_format->plain_value=='full_width') checked @endif id="slider_format" value="full_width">
                             <label class="form-check-label">{{__('file.Full Width')}}</label>
                         </div>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting[148]->plain_value=='half_width') checked @endif id="slider_format" value="half_width">
+                            <input class="form-check-input" type="radio" name="store_front_slider_format" @if($setting->store_front_slider_format->plain_value=='half_width') checked @endif id="slider_format" value="half_width">
                             <label class="form-check-label">{{__('file.Half Width')}}</label>
                         </div>
                     </div>
@@ -104,15 +107,8 @@
                         <div class="col-sm-8">
                             <select name="storefront_terms_and_condition_page" id="storefront_terms_and_condition_page" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('file.Select Terms & Condition')}}'>
                                 <option value="{{NULL}}">NONE</option>
-                                @foreach ($pages as $item)
-                                    @forelse ($item->pageTranslations as $key => $value)
-                                        @if ($value->locale==$locale)
-                                            <option value="{{$item->id}}" {{ $item->id == $setting[4]->plain_value ? 'selected="selected"' : '' }}>{{$value->page_name}}</option> @break
-                                        @elseif($value->locale=='en')
-                                            <option value="{{$item->id}}" {{ $item->id == $setting[4]->plain_value ? 'selected="selected"' : '' }}>{{$value->page_name}}</option> @break
-                                        @endif
-                                    @empty
-                                    @endforelse
+                                @foreach ($pages as $page)
+                                    <option value="{{$page->id}}" {{ $page->id == $setting->storefront_terms_and_condition_page->plain_value ? 'selected="selected"' : '' }}>{{$page->page_name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -125,14 +121,7 @@
                             <select name="storefront_privacy_policy_page" id="storefront_privacy_policy_page" class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title='{{__('Select Footer Menu')}}'>
                                 <option value="{{NULL}}">NONE</option>
                                 @foreach ($pages as $item)
-                                    @forelse ($item->pageTranslations as $key => $value)
-                                        @if ($value->locale==$locale)
-                                            <option value="{{$item->id}}" {{ $item->id == $setting[5]->plain_value ? 'selected="selected"' : '' }}>{{$value->page_name}}</option> @break
-                                        @elseif($value->locale=='en')
-                                            <option value="{{$item->id}}" {{ $item->id == $setting[5]->plain_value ? 'selected="selected"' : '' }}>{{$value->page_name}}</option> @break
-                                        @endif
-                                    @empty
-                                    @endforelse
+                                    <option value="{{$page->id}}" {{ $page->id == $setting->storefront_privacy_policy_page->plain_value ? 'selected="selected"' : '' }}>{{$page->page_name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -142,15 +131,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Address')</b></label>
                         <div class="col-sm-8">
-                            <input type="text" name="storefront_address" id="storefront_address" class="form-control" placeholder="@lang('file.Address')"
-                            @forelse ($setting[6]->settingTranslations as $key => $item)
-                                @if ($item->locale==$locale)
-                                    value="{{$item->value}}" @break
-                                @elseif($item->locale=='en')
-                                    value="{{$item->value}}" @break
-                                @endif
-                            @empty
-                            @endforelse >
+                            <input type="text" name="storefront_address" id="storefront_address" class="form-control" placeholder="@lang('file.Address')" value="{{$setting->storefront_address->value}}">
                         </div>
                     </div>
 
@@ -158,14 +139,14 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Shop Page')</b></label>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="checkbox" name="storefront_shop_page_enabled" @if($setting[150]->plain_value==1) checked  @endif value="1">
+                            <input class="form-check-input" type="checkbox" name="storefront_shop_page_enabled" @if($setting->storefront_shop_page_enabled->plain_value==1) checked  @endif value="1">
                             <label class="form-check-label">@lang('file.Enable') @lang('file.Shop Page')</label>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Brand Page')</b></label>
                         <div class="form-check ml-3">
-                            <input class="form-check-input" type="checkbox" name="storefront_brand_page_enabled" @if($setting[151]->plain_value==1) checked @endif value="1">
+                            <input class="form-check-input" type="checkbox" name="storefront_brand_page_enabled" @if($setting->storefront_brand_page_enabled->plain_value==1) checked @endif value="1">
                             <label class="form-check-label">@lang('file.Enable') @lang('file.Brand Page')</label>
                         </div>
                     </div>

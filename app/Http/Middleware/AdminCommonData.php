@@ -45,7 +45,6 @@ class AdminCommonData
 
 
         self::adminLogo($storefrontImages);
-
         self::headerSection($orders, $adminLogo);
         self::sidebarSection($adminLogo);
 

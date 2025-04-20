@@ -3,14 +3,16 @@ namespace App\Services;
 
 use App\Contracts\Page\PageContract;
 use App\Contracts\Page\PageTranslationContract;
+use App\Models\Page;
 use App\Traits\SlugTrait;
+use App\Traits\WordCheckTrait;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class PageService
 {
-    use SlugTrait;
+    use SlugTrait, WordCheckTrait;
 
 
     private $pageContract;
@@ -21,8 +23,41 @@ class PageService
         $this->pageTranslationContract = $pageTranslationContract;
     }
 
-    public function getAllPages(){
-        return $this->pageContract->getAll(); //This is use when we use map()->format
+
+    public function getAllPages()
+    {
+        $onlyActive = !$this->wordCheckInURL('online-store/pages');
+
+        return $this->getPages($onlyActive);
+    }
+
+    public function getPages($onlyActive = false)
+    {
+        $query = Page::with('translations')
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC');
+
+        if ($onlyActive) {
+            $query->where('is_active', 1);
+        }
+
+        $result = $query->get()
+                ->map(function($page){
+                    return [
+                        'id'         => $page->id,
+                        'slug'       => $page->slug,
+                        'is_active'  => $page->is_active,
+                        'locale'     => $page->translation->locale ?? null,
+                        'page_name'  => $page->translation->page_name ?? null,
+                        'body'       => $page->translation->body ?? null,
+                        'meta_title' => $page->translation->meta_title ?? null,
+                        'meta_description' => $page->translation->meta_description ?? null,
+                        'meta_url'   => $page->translation->meta_url ?? null,
+                        'meta_type'  => $page->translation->meta_type ?? null,
+                    ];
+                });
+
+        return json_decode(json_encode($result), FALSE);
     }
 
     public function dataTable()

@@ -5,13 +5,15 @@ use App\Contracts\Attribute\AttributeContract;
 use App\Contracts\Attribute\AttributeTranslationContract;
 use App\Contracts\AttributeValue\AttributeValueContract;
 use App\Contracts\AttributeValue\AttributeValueTranslationContract;
+use App\Models\Attribute;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\WordCheckTrait;
 use App\Traits\SlugTrait;
 use Illuminate\Support\Facades\Session;
 
 class AttributeService
 {
-    use WordCheckTrait,SlugTrait;
+    use WordCheckTrait,SlugTrait, ArrayToObjectConvertionTrait;
 
     private $attributeContract;
     private $attributeTranslationContract;
@@ -27,18 +29,49 @@ class AttributeService
 
     public function getAllAttribute()
     {
-        if ($this->wordCheckInURL('attributes')) {
-            return $this->attributeContract->getAll();
-        }else{
-            return $this->attributeContract->getAllActiveData();
-        }
+        $onlyActive = !$this->wordCheckInURL('attributes');
+
+        return $this->getAttributes($onlyActive);
     }
+
+    public function getAttributes($onlyActive = false)
+    {
+        $query = Attribute::with('translations','attributeSet.translations')
+                    ->orderBy('is_active', 'DESC')
+                    ->orderBy('id', 'DESC')
+                    ->whereHas('attributeSet', function($query){
+                        $query->where('is_active',1);
+                    });
+
+        if ($onlyActive) {
+            $query->where('is_active', 1);
+        }
+
+        $result = $query->get()
+                ->map(function($attribute){
+                    return [
+                        'id'         => $attribute->id,
+                        'slug'       => $attribute->slug,
+                        'attribute_set_id' => $attribute->attribute_set_id,
+                        'is_filterable' => $attribute->is_filterable,
+                        'is_active'  =>$attribute->is_active,
+                        'attribute_name'  => $attribute->translation->attribute_name ?? null,
+                        'attribute_set_name'  => $attribute->attributeSet->translation->attribute_set_name ?? null,
+
+                    ];
+                });
+
+        return $this->arrayToObject($result);
+    }
+
 
     public function dataTable()
     {
+        $attributes = $this->getAllAttribute();
+
         if (request()->ajax())
         {
-            $attributes = $this->getAllAttribute();
+            // $attributes = $this->getAllAttribute();
 
             return datatables()->of($attributes)
                 ->setRowId(function ($row){
@@ -85,6 +118,8 @@ class AttributeService
     }
 
 
+
+
     public function storeAttribute($request)
     {
         $data = $this->requestHandleData($request);
@@ -108,6 +143,17 @@ class AttributeService
             }
         }
         return;
+    }
+
+
+    public function findAttributeWithValues($attributeId)
+    {
+        return Attribute::select('id', 'slug', 'name','attribute_set_id','is_active')
+                            ->with('attributeValues:id,attribute_id,name')
+                            ->whereHas('attributeValues')
+                            ->findOrFail($attributeId);
+
+        // dd($result);
     }
 
 

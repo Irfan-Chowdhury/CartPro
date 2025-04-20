@@ -110,7 +110,7 @@
                         $(this).siblings('.check_icon').show();
 
                         $.ajax({
-                            url: "{{ route('languages.translations.update') }}",
+                            url: "{{ route('languages.translations.edit') }}",
                             type: "GET",
                             data: {
                                 language:language,

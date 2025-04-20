@@ -13,31 +13,13 @@
                         <div class="col-sm-8">
                             <div class="form-check">
                                 <select name="storefront_footer_tag_id[]" class="form-control selectpicker" multiple="multiple" data-live-search="true" data-live-search-style="begins" title='{{__('Select Tag')}}'>
-                                    @foreach ($tags as $item)
-                                        @forelse ($item->tagTranslation as $key => $value)
-                                            @if ($value->local==$locale)
-                                                    <option value="{{$item->id}}"
-                                                        @foreach($array_footer_tags as $key2 => $footerTag)
-                                                            @if($array_footer_tags[$key2] == $item->id)
-                                                                selected
-                                                            @endif
-                                                        @endforeach>
-                                                        {{$value->tag_name}}
-                                                    </option>
-                                                    @break
-                                            @elseif($value->locale=='en')
-                                                <option value="{{$item->id}}"
-                                                    @foreach($array_footer_tags as $key2 => $footerTag)
-                                                        @if($array_footer_tags[$key2] == $item->id)
-                                                            selected
-                                                        @endif
-                                                    @endforeach>
-                                                    {{$value->tag_name}}
-                                                </option>
-                                                @break
+                                    @foreach ($tags as $tag)
+                                        <option value="{{$tag->id}}"
+                                            @if (in_array($tag->id, $array_footer_tags))
+                                                selected
                                             @endif
-                                        @empty
-                                        @endforelse
+                                            <span>{{ $tag->tag_name }}</span>
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -46,25 +28,16 @@
                     <br>
 
                     <!-- Footer Copyright Text -->
-                    <!-- DB_ROW_ID-36:  => setting[35] -->
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>{{__('file.Footer Copyright Text')}}</b></label>
                         <div class="col-sm-8">
                             <div class="form-check">
                                 <input type="text" name="storefront_copyright_text" placeholder="Type Copyright Text" class="form-control"
-                                @forelse ($setting[35]->settingTranslations as $key => $item)
-                                    @if ($item->locale==$locale)
-                                        value="{{htmlspecialchars_decode($item->value)}}" @break
-                                    @elseif($item->locale=='en')
-                                        value="{{$item->value}}" @break
-                                    @endif
-                                @empty
-                                @endforelse >
+                                value="{{htmlspecialchars_decode($setting->storefront_copyright_text->value)}}">
                             </div>
                         </div>
                     </div>
                     <br>
-
 
 
                     <!-- Accepted Payment Methods Image -->

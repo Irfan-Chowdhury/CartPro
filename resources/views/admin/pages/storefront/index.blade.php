@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="general-settings-general" data-toggle="list" href="#general" role="tab" aria-controls="home">@lang('file.General')</a>
-                            <a class="list-group-item list-group-item-action" id="menus-settings-menus" data-toggle="list" href="#menus" role="tab" aria-controls="messages">@lang('file.Menus')</a>
+                            {{-- <a class="list-group-item list-group-item-action" id="menus-settings-menus" data-toggle="list" href="#menus" role="tab" aria-controls="messages">@lang('file.Menus')</a> --}}
                             <a class="list-group-item list-group-item-action" id="social-settings-social" data-toggle="list" href="#social_settings" role="tab" aria-controls="social">@lang('file.Social Links')</a>
                             <a class="list-group-item list-group-item-action" id="feature-settings-feature" data-toggle="list" href="#feature" role="tab" aria-controls="settings">@lang('file.Features')</a>
                             <a class="list-group-item list-group-item-action" id="logo-settings-logo" data-toggle="list" href="#logo" role="tab" aria-controls="profile">@lang('file.Logo')</a>
@@ -61,14 +61,14 @@
                     <div class="card-body">
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action" id="slider_banner_home_page_section" data-toggle="list" href="#slider_banner" role="tab" aria-controls="home">@lang('file.Slider Banners')</a>
-                            <a class="list-group-item list-group-item-action" id="three_column_full_width_banners-home_page_section" data-toggle="list" href="#three_column_full_width_banners" role="tab" aria-controls="messages">@lang('file.Three Column Full Width Banners')</a>
-                            <a class="list-group-item list-group-item-action" id="product_tabs_one-home_page_section" data-toggle="list" href="#product_tabs_one" role="tab" aria-controls="settings">@lang('file.Product Tabs')</a>
-                            <a class="list-group-item list-group-item-action" id="three_column_banners-home_page_section" data-toggle="list" href="#three_column_banners" role="tab" aria-controls="settings">@lang('file.Three Column Banners')</a>
-                            <a class="list-group-item list-group-item-action" id="flash_sale_and_vertical_products-home_page_section" data-toggle="list" href="#flash_sale_and_vertical_products" role="tab" aria-controls="profile">@lang('file.Flash Sale & Vertical Products')</a>
-                            <a class="list-group-item list-group-item-action" id="two_column_banners-home_page_section" data-toggle="list" href="#two_column_banners" role="tab" aria-controls="newsletter">@lang('file.Two Column Banners')</a>
                             <a class="list-group-item list-group-item-action" id="one_column_banner-home_page_section" data-toggle="list" href="#one_column_banner" role="tab" aria-controls="settings">@lang('file.One Column Banner')</a>
+                            <a class="list-group-item list-group-item-action" id="two_column_banners-home_page_section" data-toggle="list" href="#two_column_banners" role="tab" aria-controls="newsletter">@lang('file.Two Column Banners')</a>
+                            <a class="list-group-item list-group-item-action" id="three_column_banners-home_page_section" data-toggle="list" href="#three_column_banners" role="tab" aria-controls="settings">@lang('file.Three Column Banners')</a>
+                            <a class="list-group-item list-group-item-action" id="three_column_full_width_banners-home_page_section" data-toggle="list" href="#three_column_full_width_banners" role="tab" aria-controls="messages">@lang('file.Three Column Full Width Banners')</a>
                             <a class="list-group-item list-group-item-action" id="top_brands-home_page_section" data-toggle="list" href="#top_brands" role="tab" aria-controls="profile">@lang('file.Top Brands')</a>
                             <a class="list-group-item list-group-item-action" id="top_categories-home_page_section" data-toggle="list" href="#top_categories" role="tab" aria-controls="profile">@lang('file.Top Categories')</a>
+                            <a class="list-group-item list-group-item-action" id="product_tabs_one-home_page_section" data-toggle="list" href="#product_tabs_one" role="tab" aria-controls="settings">@lang('file.Product Tabs')</a>
+                            <a class="list-group-item list-group-item-action" id="flash_sale_and_vertical_products-home_page_section" data-toggle="list" href="#flash_sale_and_vertical_products" role="tab" aria-controls="profile">@lang('file.Flash Sale & Vertical Products')</a>
                         </div>
                     </div>
                 </div>
@@ -83,64 +83,55 @@
                     <!----------------------------------- General Setting ------------------------------------------>
 
                     <!-- general -->
-                    <!-- setting[0-12] => DB_ROW_ID-[1-13]: -->
                     <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-settings-general">
                         @include('admin.pages.storefront.general_setting.general')
                     </div>
 
 
                     <!-- menus -->
-                    <!-- setting[7-13] => DB_ROW_ID-[8-14]: -->
                     <div class="tab-pane fade" id="menus" role="tabpanel" aria-labelledby="menus-settings-menus">
-                        @include('admin.pages.storefront.general_setting.menu')
+                        {{-- @include('admin.pages.storefront.general_setting.menu') --}}
                     </div>
 
 
                     <!-- Social Link -->
-                    <!-- setting[14-17] => DB_ROW_ID-[15-18]: -->
                     <div class="tab-pane fade" aria-labelledby="social-settings-social" id="social_settings" role="tabpanel">
                         @include('admin.pages.storefront.general_setting.social')
                     </div>
 
 
                     <!-- Feature -->
-                    <!-- setting[18-33] => DB_ROW_ID-[19-34]: -->
                     <div class="tab-pane fade" aria-labelledby="feature-settings-feature" id="feature" role="tabpanel">
                         @include('admin.pages.storefront.general_setting.feature')
                     </div>
 
 
                     <!-- Logo -->
-                    <!-- DB_ROW_ID-[35-] => setting[34-] -->
                     <div class="tab-pane fade" aria-labelledby="logo-settings-logo" id="logo" role="tabpanel">
                         @include('admin.pages.storefront.general_setting.logo')
                     </div>
 
                     <!-- Top Banner -->
-                    <!-- DB_ROW_ID-[35-] => setting[34-] -->
                     <div class="tab-pane fade" aria-labelledby="topbanner-settings-topbanner" id="top_banner" role="tabpanel">
                         @include('admin.pages.storefront.general_setting.top-banner')
                     </div>
 
 
                     <!-- Footer -->
-                    <!-- DB_ROW_ID-[35-37] => setting[34-36] -->
                     <div class="tab-pane fade" aria-labelledby="footer-settings-footer" id="footer">
                         @include('admin.pages.storefront.general_setting.footer')
                     </div>
 
 
                     <!-- Newslater -->
-                    <!-- DB_ROW_ID-[38] => setting[37] -->
                     <div class="tab-pane fade" aria-labelledby="newsletter-settings-newsletter" id="newsletter">
                         @include('admin.pages.storefront.general_setting.newsletter')
                     </div>
 
 
                     <!-- Product Page -->
-                    <!-- DB_ROW_ID-[39-41] => setting[38-40] -->
                     <div class="tab-pane fade" aria-labelledby="product_page-settings-product_page" id="product_page">
-                        @include('admin.pages.storefront.general_setting.product_page')
+                        {{-- @include('admin.pages.storefront.general_setting.product_page') --}}
                     </div>
 
 
@@ -148,45 +139,32 @@
                     <!----------------------------------- Home Page Section ------------------------------------------>
 
                     <!-- Slider Banner -->
-                    <!-- DB_ROW_ID-[42-47] => setting[41-46] -->
                     <div class="tab-pane fade" aria-labelledby="slider_banner_home_page_section" id="slider_banner">
                         @include('admin.pages.storefront.home_page_section.slider_banner')
                     </div>
 
                     <!-- One Column Banner -->
-                    <!-- DB_ROW_ID-[48-51] => setting[47-50] -->
                     <div class="tab-pane fade" aria-labelledby="one_column_banner-home_page_section" id="one_column_banner">
                         @include('admin.pages.storefront.home_page_section.one_column_banner')
                     </div>
 
                     <!-- Two Column Banner -->
-                    <!-- DB_ROW_ID-[52-58] => setting[51-57] -->
                     <div class="tab-pane fade" aria-labelledby="two_column_banners-home_page_section" id="two_column_banners">
                         @include('admin.pages.storefront.home_page_section.two_column_banners')
                     </div>
 
                     <!-- Three Column Banner -->
-                    <!-- DB_ROW_ID-[59-68] => setting[58-67] -->
                     <div class="tab-pane fade" aria-labelledby="three_column_banners-home_page_section" id="three_column_banners">
                         @include('admin.pages.storefront.home_page_section.three_column_banners')
                     </div>
 
 
                     <!-- Three Column Full Width Banner -->
-                    <!-- DB_ROW_ID-[69-79] => setting[68-78] -->
                     <div class="tab-pane fade" aria-labelledby="three_column_full_width_banners-home_page_section" id="three_column_full_width_banners">
                         @include('admin.pages.storefront.home_page_section.three_column_full_width_banners')
                     </div>
 
-
-                    <!-- Featured Categories -->
-                    <!-- DB_ROW_ID-[] => setting[] -->
-                    <div class="tab-pane fade" aria-labelledby="featured_categories-home_page_section" id="featured_categories">
-                        @include('admin.pages.storefront.home_page_section.featured_categories')
-                    </div>
-
                     <!-- Top Brands -->
-                    <!-- DB_ROW_ID-[80-81] => setting[79-80] -->
                     <div class="tab-pane fade" aria-labelledby="top_brands-home_page_section" id="top_brands">
                         @include('admin.pages.storefront.home_page_section.top_brands')
                     </div>
@@ -196,24 +174,21 @@
                         @include('admin.pages.storefront.home_page_section.top_categories')
                     </div>
 
-
-                    <!-- DB_ROW_ID-[] => setting[] -->
-                    <div class="tab-pane fade" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
-                        @include('admin.pages.storefront.home_page_section.flash_sale_and_vertical_products')
+                    <!-- Product Tabs One -->
+                    <div class="tab-pane fade" aria-labelledby="product_tabs_one-home_page_section" id="product_tabs_one">
+                        @include('admin.pages.storefront.home_page_section.product_tabs_one')
                     </div>
 
 
-                    <!-- Product Tabs One -->
-                    <!-- DB_ROW_ID-[82-102] => setting[81-101] -->
-                    <div class="tab-pane fade" aria-labelledby="product_tabs_one-home_page_section" id="product_tabs_one">
-                        @include('admin.pages.storefront.home_page_section.product_tabs_one')
+                    <div class="tab-pane fade" aria-labelledby="flash_sale_and_vertical_products-home_page_section" id="flash_sale_and_vertical_products">
+                        @include('admin.pages.storefront.home_page_section.flash_sale_and_vertical_products')
                     </div>
 
 
                     <!-- Product Tabs Two -->
                     <!-- DB_ROW_ID-[103-124] => setting[102-123] -->
                     <div class="tab-pane fade" aria-labelledby="product_tabs_two-home_page_section" id="product_tabs_two">
-                        @include('admin.pages.storefront.home_page_section.product_tabs_two')
+                        {{-- @include('admin.pages.storefront.home_page_section.product_tabs_two') --}}
                     </div>
 
               </div>

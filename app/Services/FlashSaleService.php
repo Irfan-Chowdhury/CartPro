@@ -4,10 +4,14 @@ namespace App\Services;
 use App\Contracts\FlashSale\FlashSaleContract;
 use App\Contracts\FlashSale\FlashSaleProductContract;
 use App\Contracts\FlashSale\FlashSaleTranslationContract;
+use App\Models\FlashSale;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Utilities\Message;
 
 class FlashSaleService extends Message
 {
+    use ArrayToObjectConvertionTrait;
+
     private $flashSaleContract, $flashSaleTranslationContract, $flashSaleProductContract;
     public function __construct(FlashSaleContract $flashSaleContract, FlashSaleTranslationContract $flashSaleTranslationContract, FlashSaleProductContract $flashSaleProductContract){
         $this->flashSaleContract = $flashSaleContract;
@@ -56,5 +60,23 @@ class FlashSaleService extends Message
             $this->flashSaleContract->bulkAction($type, $ids);
             return $type=='active' ? Message::activeSuccessMessage() : Message::inactiveSuccessMessage();
         }
+    }
+
+    public function getFlashSales()
+    {
+        $query = FlashSale::with('translations')
+        ->where('is_active',1)
+        ->get()
+        ->map(function($flashSale){
+            return [
+                'id' => $flashSale->id,
+                'slug' => $flashSale->slug,
+                'is_active' => $flashSale->is_active,
+                'campaign_name' => $flashSale->translation->campaign_name ?? null,
+            ];
+        });
+
+        return $this->arrayToObject($query);
+
     }
 }

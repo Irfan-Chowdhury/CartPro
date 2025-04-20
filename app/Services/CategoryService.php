@@ -42,7 +42,7 @@ class CategoryService extends StatusHandlerService
         // if (request()->routeIs('specific.route.name')) {
         if (!$this->wordCheckInURL('categories')) {
             $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
-            return DB::table('categories')
+            $categories = DB::table('categories')
                 ->select('categories.id', 'categories.slug', 'categories.image', 'categories.is_active', 'category_translations.category_name')
                 ->leftJoin('category_translations', function ($join) use ($locale) {
                     $join->on('categories.id', '=', 'category_translations.category_id')
@@ -51,27 +51,39 @@ class CategoryService extends StatusHandlerService
                                 ->orWhere('category_translations.locale', 'en');
                         });
                 })
+                ->where([
+                    'categories.deleted_at'=> NULL,
+                    'categories.is_active'=> 1,
+                ])
                 ->orderBy('categories.is_active', 'DESC')
                 ->orderBy('categories.id', 'ASC')
-                ->get();
+                ->get()
+                ->map(function($category) {
+                    return [
+                        'id'=> $category->id,
+                        'slug'=> $category->slug,
+                        'image'=> isset($category->image) && Storage::disk('public')->exists($category->image) ? url("storage/{$category->image}") : url("images/empty.jpg"),
+                        'is_active'=> $category->is_active,
+                        'category_name'=> $category->category_name,
+                    ];
+                });
         }
-
-
-
-        $categories = Category::with(['translations','parentCategory.translations'])
-            // ->where('parent_id', null)
-            ->orderBy('is_active','DESC')
-            ->orderBy('id','ASC')
-            ->get()
-            ->map(function($category) {
-                return [
-                    'id'=> $category->id,
-                    'image'=> $category->image,
-                    'is_active'=> $category->is_active,
-                    'category_name'=> $category->translation->category_name,
-                    'parent_category_name'=> $category->parentTranslation->category_name ?? 'NONE',
-                ];
-            });
+        else {
+            $categories = Category::with(['translations','parentCategory.translations'])
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','ASC')
+                ->get()
+                ->map(function($category) {
+                    return [
+                        'id'=> $category->id,
+                        'slug'=> $category->slug,
+                        'image'=> isset($category->image) && Storage::disk('public')->exists($category->image) ? url("storage/{$category->image}") : url("images/empty.jpg"),
+                        'is_active'=> $category->is_active,
+                        'category_name'=> $category->translation->category_name,
+                        'parent_category_name'=> $category->parentTranslation->category_name ?? 'NONE',
+                    ];
+                });
+        }
 
         return json_decode(json_encode($categories), FALSE);
     }

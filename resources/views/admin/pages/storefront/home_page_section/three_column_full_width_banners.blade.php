@@ -12,7 +12,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Section Status')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" @if($setting[68]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_enabled" class="form-check-input">
+                                <input type="checkbox" @if($setting->storefront_three_column_full_width_banners_enabled->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_enabled" class="form-check-input">
                                 <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable three column full width banners section')</label>
                             </div>
                         </div>
@@ -44,7 +44,6 @@
                     </div> --}}
 
                     <!-- Banners - 1 -->
-                    <!-- DB_ROW_ID-71-73:  => setting[70-72] -->
                     <h5 class="mt-3 text-bold">{{__('file.Banners - 1')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -68,9 +67,9 @@
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_three_column_full_width_banners_1_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[71]->plain_value}}">
+                                value="{{$setting->storefront_three_column_full_width_banners_1_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[72]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_1_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_three_column_full_width_banners_1_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_1_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>
@@ -78,7 +77,6 @@
 
 
                     <!-- Banners - 2 -->
-                    <!-- DB_ROW_ID-74-76:  => setting[73-75] -->
                     <h5 class="mt-5 text-bold">{{__('file.Banners - 2')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -103,9 +101,9 @@
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_three_column_full_width_banners_2_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[74]->plain_value}}">
+                                value="{{$setting->storefront_three_column_full_width_banners_2_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[75]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_2_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_three_column_full_width_banners_2_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_2_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>
@@ -113,7 +111,6 @@
 
 
                     <!-- Banners - 3 -->
-                    <!-- DB_ROW_ID-77-79:  => setting[76-78] -->
                     <h5 class="mt-5 text-bold">{{__('file.Banners - 3')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -138,9 +135,9 @@
                         <div class="col-md-6">
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_three_column_full_width_banners_3_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[77]->plain_value}}">
+                                value="{{$setting->storefront_three_column_full_width_banners_3_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[78]->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_3_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_three_column_full_width_banners_3_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_three_column_full_width_banners_3_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>

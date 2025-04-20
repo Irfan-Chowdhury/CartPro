@@ -22,7 +22,6 @@ class AttributeSetRepository implements AttributeSetContract
     {
         return AttributeSet::with('attributeSetTranslations')
                 ->where('is_active',1)
-                ->orderBy('is_active','DESC')
                 ->orderBy('id','DESC')
                 ->get()
                 ->map->format();

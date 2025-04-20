@@ -123,6 +123,8 @@ class HomeController extends FrontBaseController
 
     public function product_details(string $productSlug, $category_id)
     {
+        // return Cart::content();
+
         $productDetailResult = $this->productService->getProductBySlug($productSlug);
 
         // $productDetailResult = Cache::remember('productDetailResult', 300, function () use ($productSlug) {

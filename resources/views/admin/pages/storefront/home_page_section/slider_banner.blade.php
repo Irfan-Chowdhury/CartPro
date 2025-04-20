@@ -8,7 +8,6 @@
                     @csrf
 
                     <!-- Banner 1 -->
-                    <!-- DB_ROW_ID-42-44:  => setting[41-43] -->
                     <h5 class="text-bold">{{__('file.Banner 1')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -34,22 +33,15 @@
                             {{-- New Added --}}
                             <label class="col-form-label"><b>{{__('file.Title')}}</b></label>
                             <input type="text" name="storefront_slider_banner_1_title" placeholder="{{__('file.Title')}}" class="form-control"
-                                @forelse ($setting[124]->settingTranslations as $key => $item)
-                                    @if ($item->locale==$locale)
-                                        value="{{$item->value}}" @break
-                                    @elseif($item->locale=='en')
-                                        value="{{$item->value}}" @break
-                                    @endif
-                                @empty
-                                @endforelse >
+                                value="{{$setting->storefront_slider_banner_1_title->value}}">
                             <br>
 
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_slider_banner_1_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[42]->plain_value}}">
+                                value="{{$setting->storefront_slider_banner_1_call_to_action_url->plain_value}}">
                             <br><br>
 
-                            <input type="checkbox" class="m-1" @if($setting[43]->plain_value==1) checked @endif value="1" name="storefront_slider_banner_1_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_slider_banner_1_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_slider_banner_1_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>
@@ -57,7 +49,6 @@
                     <br><br><br>
 
                     <!-- Banner 2 -->
-                    <!-- DB_ROW_ID-45-47:  => setting[44-46] -->
                     <h5 class="text-bold">{{__('file.Banner 2')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -83,27 +74,19 @@
                             {{-- New Added --}}
                             <label class="col-form-label"><b>{{__('file.Title')}}</b></label>
                             <input type="text" name="storefront_slider_banner_2_title" placeholder="{{__('file.Title')}}" class="form-control"
-                                @forelse ($setting[125]->settingTranslations as $key => $item)
-                                    @if ($item->locale==$locale)
-                                        value="{{$item->value}}" @break
-                                    @elseif($item->locale=='en')
-                                        value="{{$item->value}}" @break
-                                    @endif
-                                @empty
-                                @endforelse >
+                                value="{{$setting->storefront_slider_banner_2_title->value}}">
                             <br>
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_slider_banner_2_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[45]->plain_value}}">
+                                value="{{$setting->storefront_slider_banner_2_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[46]->plain_value==1) checked @endif value="1" name="storefront_slider_banner_2_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_slider_banner_2_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_slider_banner_2_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>
                     <br><br><br>
 
                     <!-- Banner 3 -->
-                    <!-- DB_ROW_ID-45-47:  => setting[44-46] -->
                     <h5 class="text-bold">{{__('file.Banner 3')}}</h5><br>
                     <div class="row">
                         <div class="col-md-6">
@@ -126,23 +109,23 @@
                         </div>
 
                         <div class="col-md-6">
-                            {{-- New Added --}}
                             <label class="col-form-label"><b>{{__('file.Title')}}</b></label>
                             <input type="text" name="storefront_slider_banner_3_title" placeholder="Type the Title" class="form-control"
-                                @forelse ($setting[127]->settingTranslations as $key => $item)
+                                    value="{{$setting->storefront_slider_banner_3_title->value}}">
+                                {{-- @forelse ($setting[127]->settingTranslations as $key => $item)
                                     @if ($item->locale==$locale)
                                         value="{{$item->value}}" @break
                                     @elseif($item->locale=='en')
                                         value="{{$item->value}}" @break
                                     @endif
                                 @empty
-                                @endforelse >
+                                @endforelse > --}}
                             <br>
                             <label class="col-form-label"><b>{{__('file.Call to Action URL')}}</b></label>
                             <input type="text" name="storefront_slider_banner_3_call_to_action_url" placeholder="{{__('file.Call to Action URL')}}" class="form-control"
-                                value="{{$setting[128]->plain_value}}">
+                                value="{{$setting->storefront_slider_banner_3_call_to_action_url->plain_value}}">
                             <br><br>
-                            <input type="checkbox" class="m-1" @if($setting[129]->plain_value==1) checked @endif value="1" name="storefront_slider_banner_3_open_in_new_window">
+                            <input type="checkbox" class="m-1" @if($setting->storefront_slider_banner_3_open_in_new_window->plain_value==1) checked @endif value="1" name="storefront_slider_banner_3_open_in_new_window">
                             <label for="inputEmail3" class="ml-2 p-0 col-form-label"><b>{{__('file.Open in new window')}}</b></label>
                         </div>
                     </div>

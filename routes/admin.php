@@ -475,7 +475,7 @@ Route::group(['middleware' => ['XSS','set_locale','maintenance_mode','adminCommo
 
             });
 
-            Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.update');
+            Route::get('languages',[LocaleFileController::class,'update'])->name('languages.translations.edit');
 
             //FAQ
             Route::prefix('faq')->group(function () {

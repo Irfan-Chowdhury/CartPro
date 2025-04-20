@@ -154,7 +154,7 @@ if (Session::has('currency_symbol')){
                         </div>
 
 
-                      
+
                         <div class="shop-products-wrapper">
                             <div class="product-grid shopProductsField">
                                 @forelse ($products as $item)

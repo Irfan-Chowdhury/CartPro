@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Contracts\Tag\TagContract;
 use App\Contracts\Tag\TagTranslationContract;
+use App\Models\Tag;
 use App\Traits\SlugTrait;
 use App\Traits\WordCheckTrait;
 
@@ -18,11 +19,34 @@ class TagService
 
     public function getAllTag()
     {
-        if ($this->wordCheckInURL('tags')) {
-            return $this->tagContract->getAll();
-        }else{
-            return $this->tagContract->getAllActiveData();
+        $onlyActive = !$this->wordCheckInURL('tags');
+
+        return $this->getTags($onlyActive);
+    }
+
+
+    private function getTags($onlyActive = false)
+    {
+        $query = Tag::with('translations')
+                ->orderBy('is_active','DESC')
+                ->orderBy('id','DESC');
+
+        if ($onlyActive) {
+            $query->where('is_active', 1);
         }
+
+        $result = $query->get()
+                ->map(function($tag){
+                    return [
+                        'id'=>$tag->id,
+                        'is_active'=>$tag->is_active,
+                        'tag_name'=> $tag->translation->tag_name ?? null,
+                        'local'=> $tag->translation->local ?? null,
+                    ];
+                });
+
+        return json_decode(json_encode($result), FALSE);
+
     }
 
     public function dataTable()

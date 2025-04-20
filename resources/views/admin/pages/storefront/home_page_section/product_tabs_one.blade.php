@@ -12,7 +12,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><b>@lang('file.Section Status')</b></label>
                         <div class="col-sm-8">
                             <div class="form-check mt-1">
-                                <input type="checkbox" @if($setting[81]->plain_value==1) checked @endif value="1" name="storefront_product_tabs_1_section_enabled" class="form-check-input">
+                                <input type="checkbox" @if($setting->storefront_product_tabs_1_section_enabled->plain_value==1) checked @endif value="1" name="storefront_product_tabs_1_section_enabled" class="form-check-input">
                                 <label class="p-0 form-check-label" for="exampleCheck1">@lang('file.Enable product tabs one section')</label>
                             </div>
                         </div>
@@ -49,15 +49,19 @@
 
     </div>
 </div>
+{{-- // var check_type2 = @json($setting[88]->plain_value); //tab2
+// var check_type3 = @json($setting[93]->plain_value); //tab3
+// var check_type4 = @json($setting[98]->plain_value); //tab4 --}}
 
 <script>
     // $('#productField1').empty();
 
     $(document).ready(function(){
-        var check_type1 = @json($setting[83]->plain_value); //tab1
-        var check_type2 = @json($setting[88]->plain_value); //tab2
-        var check_type3 = @json($setting[93]->plain_value); //tab3
-        var check_type4 = @json($setting[98]->plain_value); //tab4
+        var check_type1 = @json($setting->storefront_product_tabs_1_section_tab_1_product_type->plain_value); //tab1
+        var check_type1 = @json($setting->storefront_product_tabs_1_section_tab_2_product_type->plain_value); //tab2
+        var check_type1 = @json($setting->storefront_product_tabs_1_section_tab_3_product_type->plain_value); //tab3
+        var check_type1 = @json($setting->storefront_product_tabs_1_section_tab_4_product_type->plain_value); //tab3
+
         if (check_type1!='category_products') {
             $('#categoryFeild_1').hide();
         }

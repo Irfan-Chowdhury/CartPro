@@ -11,6 +11,43 @@ class Page extends Model
     protected $dates = ['deleted_at'];
 
 
+    /**
+    * ---------------------------
+    * vendora Start
+    * ---------------------------
+    */
+    public function translations()
+    {
+        return $this->hasMany(PageTranslation::class,'page_id');
+    }
+
+    public function getTranslationAttribute()
+    {
+        $locale = Session::has('currentLocale') ? Session::get('currentLocale') : app()->getLocale();
+
+        // Try to find the translation in the requested locale
+        $translation = $this->translations->firstWhere('locale', $locale);
+
+        if (!$translation) {
+            $translation = $this->translations->firstWhere('locale', 'en');
+        }
+
+        return $translation;
+    }
+
+
+    /**
+    * ---------------------------
+    * vendora End
+    * ---------------------------
+    */
+
+
+
+
+
+
+
     public function pageTranslations()
     {
         $locale = Session::get('currentLocale');

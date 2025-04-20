@@ -3,11 +3,13 @@ namespace App\Services;
 
 use App\Contracts\AttributeSet\AttributeSetContract;
 use App\Contracts\AttributeSet\AttributeSetTranslationContract;
+use App\Models\AttributeSet;
+use App\Traits\ArrayToObjectConvertionTrait;
 use App\Traits\WordCheckTrait;
 
 class AttributeSetService
 {
-    use WordCheckTrait;
+    use WordCheckTrait, ArrayToObjectConvertionTrait;
 
     private $attributeSetContract;
     private $attributeSetTranslationContract;
@@ -19,14 +21,35 @@ class AttributeSetService
 
     public function getAllAttributeSet()
     {
-        if ($this->wordCheckInURL('attribute-sets')) {
-            $data = $this->attributeSetContract->getAll();
-        }else{
-            $data =  $this->attributeSetContract->getAllActiveData();
+        $onlyActive = !$this->wordCheckInURL('attribute-sets');
+
+        return $this->getAllSets($onlyActive);
+    }
+
+    public function getAllSets($onlyActive = false)
+    {
+        $query = AttributeSet::with('translations')
+                    ->orderBy('is_active', 'DESC')
+                    ->orderBy('id', 'DESC');
+
+        if ($onlyActive) {
+            $query->where('is_active', 1);
         }
 
-        return json_decode(json_encode($data), FALSE); //This is use when we use map()->format
+        $result = $query->get()
+                    ->map(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'is_active' => $item->is_active,
+                            'name' => $item->translation->attribute_set_name ?? null
+                        ];
+                    });
+
+        return $this->arrayToObject($result);
     }
+
+
+
 
     public function getAllWithAttributesAndValues()
     {
@@ -44,7 +67,7 @@ class AttributeSetService
             })
             ->addColumn('attribute_set_name', function ($row)
             {
-                return $row->attribute_set_name;
+                return $row->name;
             })
             ->addColumn('action', function ($row)
             {
