@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
+use App\Services\FlashSaleService;
 
 class HomeService
 {
+
+    public function __construct(private FlashSaleService $flashSaleService)
+    {
+        $this->flashSaleService = $flashSaleService;
+    }
 
     public function getHomeData()
     {
@@ -29,6 +35,8 @@ class HomeService
         $sliderBanners = $this->getSliderBanner($settings);
 
         $storefrontImages = self::getStorefrontImages();
+
+        $threeColumnBannerFull = self::getThreeColumnBannerFull($settings);
 
         $threeColumnBanner = self::getThreeColumnBanner($settings);
 
@@ -44,6 +52,16 @@ class HomeService
 
         $productDetailsTab = self::getProductTabsData($settings);
 
+
+        $isflashSaleAndVerticalEnabled = $settings->storefront_flash_sale_and_vertical_products_section_enabled->plain_value;
+        $activeCampaignFlashId = $settings->storefront_flash_sale_active_campaign_flash_id->plain_value;
+        $getFlashSale = $isflashSaleAndVerticalEnabled && isset($activeCampaignFlashId)
+                    ? $this->flashSaleService->getFlashSaleById($activeCampaignFlashId)
+                    : null;
+
+        $verticalCategoryProducts = $this->flashSaleService->getVerticalProducts($settings);
+
+
         $arrayData = [
             'sliders' => $sliders,
             'sliderBanners' => $sliderBanners,
@@ -57,13 +75,17 @@ class HomeService
                     'oneColumnBannerCallToActionURL'   => $settings->storefront_one_column_banner_call_to_action_url->plain_value,
                     'storefrontOneColumnBannerOpenInNewWindow'   => $settings->storefront_one_column_banner_open_in_new_window->plain_value
                 ],
-                'threeColumnBanner' => [ //web
-                    'isThreeColumnBannerFullEnabled' => (boolean) $settings->storefront_three_column_full_width_banners_enabled->plain_value,
-                    'banners' => $threeColumnBanner
-                ],
                 'twoColumnBanner' => [ //web
                     'isTwoColumnBannerFullEnabled' => (boolean) $settings->storefront_two_column_banner_enabled->plain_value,
                     'banners' => $twoColumnBanner
+                ],
+                'threeColumnBanner' => [ //web
+                    'isThreeColumnBannerEnabled' => (boolean) $settings->storefront_three_column_banners_enabled->plain_value,
+                    'banners' => $threeColumnBanner
+                ],
+                'threeColumnBannerFull' => [ //web
+                    'isThreeColumnBannerFullEnabled' => (boolean) $settings->storefront_three_column_full_width_banners_enabled->plain_value,
+                    'banners' => $threeColumnBannerFull
                 ],
                 'oneColumnBannerAgain' => $oneColumnBanner, //web
                 'storefrontFeature' => [
@@ -94,6 +116,17 @@ class HomeService
                 'storeFrontSliderFormat' => $settings->store_front_slider_format->plain_value ?? 'full_width', //web
                 'isTopCategorySectionEnabled' => (boolean) $settings->storefront_top_categories_section_enabled->plain_value, //web
             ],
+            'flashSaleData' => (object) [
+                'storefrontFlashSaleTitle' => $settings->storefront_flash_sale_title->value ?? null,
+                'flashSaleWithProducts' => $getFlashSale,
+                'vertical' => (object) [
+                    'title_1' => $settings->storefront_vertical_product_1_title->value ?? null,
+                    'title_2' => $settings->storefront_vertical_product_2_title->value ?? null,
+                    'title_3' => $settings->storefront_vertical_product_3_title->value ?? null,
+                    'catgoryWiseProducts' => $verticalCategoryProducts
+                ]
+                // 'verticalProduct_1_title' => $settings->storefront_vertical_product_1_title->value ?? null,
+            ],
             'homeFooterDescription' => $homeFooterDescription,
             'trendProducts' => $orderDetailProducts,
             'changeCurrencyRate' => $changeCurrencyRate,
@@ -101,6 +134,11 @@ class HomeService
         ];
 
         return self::arrayToObject($arrayData);
+    }
+
+    public function getFlashSaleProductsData($settings)
+    {
+
     }
 
     public function getSliders()
@@ -155,6 +193,23 @@ class HomeService
         $threeColumnBanner = [];
 
         for ($i=0; $i < 3; $i++) {
+            $keyActionUrl ='storefront_three_column_banners_'.($i+1).'_call_to_action_url';
+            $keyNewWindow ='storefront_three_column_banners_'.($i+1).'_open_in_new_window';
+            $keyImage = "storefront_three_column_banners_image_" . ($i + 1) ;
+
+            $threeColumnBanner[$i]['actionUrl'] = $settings->$keyActionUrl->plain_value ?? null;
+            $threeColumnBanner[$i]['isNewWindow'] = (boolean) $settings->$keyNewWindow->plain_value;
+            $threeColumnBanner[$i]['image'] = $settings->$keyImage->storeFrontImage->image ?? null;
+        }
+
+        return self::arrayToObject($threeColumnBanner);
+    }
+
+    public function getThreeColumnBannerFull($settings)
+    {
+        $threeColumnBanner = [];
+
+        for ($i=0; $i < 3; $i++) {
             $keyActionUrl ='storefront_slider_banner_'.($i+1).'_call_to_action_url';
             $keyNewWindow ='storefront_slider_banner_'.($i+1).'_open_in_new_window';
             $keyImage = "storefront_three_column_full_width_banners_image_" . ($i + 1) ;
@@ -166,6 +221,7 @@ class HomeService
 
         return self::arrayToObject($threeColumnBanner);
     }
+
     public function getTwoColumnBanner($settings)
     {
         $twoColumnBanner = [];

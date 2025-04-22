@@ -37,6 +37,10 @@ class FlashSale extends Model
         return $translation;
     }
 
+    public function flashSaleProducts()
+    {
+    	return $this->hasMany(FlashSaleProduct::class,'flash_sale_id');
+    }
 
     /**
     * ---------------------------
@@ -50,10 +54,7 @@ class FlashSale extends Model
     	return $this->hasMany(FlashSaleTranslations::class,'flash_sale_id');
     }
 
-    public function flashSaleProducts()
-    {
-    	return $this->hasMany(FlashSaleProduct::class,'flash_sale_id');
-    }
+
 
     //latest
     public function flashSaleTranslation()

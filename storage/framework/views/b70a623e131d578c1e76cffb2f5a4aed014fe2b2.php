@@ -1,11 +1,11 @@
-@php
+<?php
     if (Session::has('currency_symbol')){
         $CHANGE_CURRENCY_SYMBOL = Session::get('currency_symbol');
     }else{
         $CHANGE_CURRENCY_SYMBOL = env('DEFAULT_CURRENCY_SYMBOL');
         Session::put('currency_symbol',$CHANGE_CURRENCY_SYMBOL);
     }
-@endphp
+?>
 
 
 <!DOCTYPE html>
@@ -16,47 +16,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="LionCoders" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    @yield('meta_info')
+    <?php echo $__env->yieldContent('meta_info'); ?>
 
     <!-- Document Title -->
-    @if ($settingStore)
-        <title>@yield('title',$settingStore->store_name)</title>
-    @endif
+    <?php if($settingStore): ?>
+        <title><?php echo $__env->yieldContent('title',$settingStore->store_name); ?></title>
+    <?php endif; ?>
     <!-- Links -->
-    <link rel="icon" type="image/png" href="{{asset($faviconLogoPath)}}"/>
+    <link rel="icon" type="image/png" href="<?php echo e(asset($faviconLogoPath)); ?>"/>
 
     <!-- Bootstrap CSS -->
-    <link href="{{asset('frontend/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/css/bootstrap.min.css')); ?>" rel="stylesheet">
     <!-- style CSS -->
-    <link href="{{asset('frontend/css/cartpro-style.css')}}" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/css/cartpro-style.css')); ?>" rel="stylesheet">
 
     <!-- Plugins CSS -->
-    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('frontend/css/plugins.css')}}">
-    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{asset('frontend/css/plugins.css')}}"></noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="<?php echo e(asset('frontend/css/plugins.css')); ?>">
+    <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="<?php echo e(asset('frontend/css/plugins.css')); ?>"></noscript>
 
     <!-- google fonts-->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap"></noscript>
 
-    @yield('extra_css')
+    <?php echo $__env->yieldContent('extra_css'); ?>
 
     <style>
-        :root {--theme-color: {{$storefront_theme_color ?? "#0071df"}};--navbg-color:{{$storefront_navbg_color ?? "#FFF"}};--menu-text-color:{{$storefront_menu_text_color ?? "#59b210"}};--menu-text-hover-color:{{$storefront_menu_text_hover_color ?? ""}}}
+        :root {--theme-color: <?php echo e($storefront_theme_color ?? "#0071df"); ?>;--navbg-color:<?php echo e($storefront_navbg_color ?? "#FFF"); ?>;--menu-text-color:<?php echo e($storefront_menu_text_color ?? "#59b210"); ?>;--menu-text-hover-color:<?php echo e($storefront_menu_text_hover_color ?? ""); ?>}
     </style>
 
-    @if (!env('USER_VERIFIED')==1)
+    <?php if(!env('USER_VERIFIED')==1): ?>
         <style>
             #switcher {list-style: none;margin: 0;padding: 0;overflow: hidden;}#switcher li {float: left;width: 30px;height: 30px;margin: 0 15px 15px 0;border-radius: 3px;}#demo {border-right: 1px solid #d5d5d5;width: 250px;height: 100%;left: -250px;position: fixed;padding: 50px 30px;background-color: #fff;transition: all 0.3s;z-index: 999;}#demo.open {left: 0;}.demo-btn {background-color: #fff;border: 1px solid #d5d5d5;border-left: none;border-bottom-right-radius: 3px;border-top-right-radius: 3px;color: var(--theme-color);font-size: 30px;height: 40px;position: absolute;right: -40px;text-align: center;top: 45%;width: 40px;}
         </style>
-    @endif
+    <?php endif; ?>
 
 
 </head>
 
 <body>
-    @if (!env('USER_VERIFIED')==1)
+    <?php if(!env('USER_VERIFIED')==1): ?>
     <div id="demo">
         <h6>Theme Colors</h6>
         <ul id="switcher" class="p-0">
@@ -88,36 +88,36 @@
         </ul>
         <div class="demo-btn"><i class="las la-cog"></i></div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!--Header-->
-    @include('frontend.includes.header')
+    <?php echo $__env->make('frontend.includes.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <div class="center loader"></div>
 
-    @yield('frontend_content')
+    <?php echo $__env->yieldContent('frontend_content'); ?>
 
     <div class="shop__filters">
     </div>
 
     <!--Footer-->
-    @include('frontend.includes.footer')
+    <?php echo $__env->make('frontend.includes.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
     <!--Plugin js -->
-    <script src="{{asset('frontend/js/plugin.js')}}"></script>
+    <script src="<?php echo e(asset('frontend/js/plugin.js')); ?>"></script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 
     <!-- Sweetalert2 -->
-    <script src="{{asset('frontend/js/sweetalert2@11.js')}}"></script>
+    <script src="<?php echo e(asset('frontend/js/sweetalert2@11.js')); ?>"></script>
 
     <!-- Main js -->
-    <script src="{{asset('frontend/js/main.js')}}"></script>
+    <script src="<?php echo e(asset('frontend/js/main.js')); ?>"></script>
 
-    <script src="{{asset('js/share.js')}}"></script>
+    <script src="<?php echo e(asset('js/share.js')); ?>"></script>
 
-    @if (!env('USER_VERIFIED')==1)
+    <?php if(!env('USER_VERIFIED')==1): ?>
     <script>
         (function ($) {
             "use strict";
@@ -147,7 +147,7 @@
 
         })(jQuery);
     </script>
-    @endif
+    <?php endif; ?>
 
     <script>
         (function ($) {
@@ -159,7 +159,7 @@
 
             $(document).ready(function() {
                 $('#newsletter-modal').modal('toggle');
-                @if(session()->has('type'))
+                <?php if(session()->has('type')): ?>
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -175,9 +175,10 @@
                         icon: 'success',
                         title: 'Successfully added on your cart'
                     })
-                @endif
+                <?php endif; ?>
 
-                let amountConvertToCurrency = parseFloat($('.cart_total').text()) * {{$changeCurrencyRate}}
+                let amountConvertToCurrency = parseFloat($('.cart_total').text()) * <?php echo e($changeCurrencyRate); ?>
+
                 $('.cart_total').text(amountConvertToCurrency.toFixed(2));
                 $('.total_price').text(amountConvertToCurrency.toFixed(2));
             });
@@ -213,7 +214,7 @@
                     title: 'Successfully added on your cart'
                 })
                 $.ajax({
-                    url: "{{route('product.add_to_cart')}}",
+                    url: "<?php echo e(route('product.add_to_cart')); ?>",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -223,7 +224,7 @@
                     success: function (data) {
                         console.log(data);
                         if (data.type=='success') {
-                            let amountConvertToCurrency = parseFloat(data.cart_total) * {{$changeCurrencyRate}};
+                            let amountConvertToCurrency = parseFloat(data.cart_total) * <?php echo e($changeCurrencyRate); ?>;
                             let moneySymbol = "<?php echo ($CHANGE_CURRENCY_SYMBOL!=NULL ? $CHANGE_CURRENCY_SYMBOL : env('DEFAULT_CURRENCY_SYMBOL')) ?>";
 
                             $('.cart_count').text(data.cart_count);
@@ -233,7 +234,7 @@
                             var html = '';
                             var cart_content = data.cart_content;
                             $.each( cart_content, function( key, value ) {
-                                let singleProductCurrency = parseFloat(value.price) * {{$changeCurrencyRate}};
+                                let singleProductCurrency = parseFloat(value.price) * <?php echo e($changeCurrencyRate); ?>;
                                 // For Attribute
                                 if (value.options.attributes) {
                                     var data = value.options.attributes;
@@ -245,7 +246,7 @@
                                         });
                                     }
                                 }
-                                //var image = "{{url('/')}}/"+'public'+value.options.image;
+                                //var image = "<?php echo e(url('/')); ?>/"+'public'+value.options.image;
                                 var image = value.options.image;
                                 html += '<div id="'+value.rowId+'" class="shp__single__product"><div class="shp__pro__thumb"><a href="#">'+
                                             '<img src="'+image+'">'+
@@ -291,7 +292,7 @@
                 event.preventDefault();
                 var rowId = $(this).data('id');
                 $.ajax({
-                    url: "{{ route('cart.remove') }}",
+                    url: "<?php echo e(route('cart.remove')); ?>",
                     type: "GET",
                     data: {rowId:rowId},
                     success: function (data) {
@@ -315,7 +316,7 @@
                         $('#search_field').show();
                         $('#result').html('<li>loading...</li>');
                         $.ajax({
-                            url: "{{ route('cartpro.data_ajax_search') }}",
+                            url: "<?php echo e(route('cartpro.data_ajax_search')); ?>",
                             type: "GET",
                             data: {search_txt:txt},
                             success: function (data) {
@@ -337,7 +338,7 @@
             $("#newsLatterSubmitForm").on("submit",function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "{{route('cartpro.newslatter_store')}}",
+                    url: "<?php echo e(route('cartpro.newslatter_store')); ?>",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -378,7 +379,7 @@
             $("#newsLatterSubmitFormPopUp").on("submit",function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "{{route('cartpro.newslatter_store')}}",
+                    url: "<?php echo e(route('cartpro.newslatter_store')); ?>",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -488,7 +489,7 @@
                 var product_slug = $(this).data('product_slug');
 
                 $.ajax({
-                    url: "{{ route('wishlist.add') }}",
+                    url: "<?php echo e(route('wishlist.add')); ?>",
                     type: "GET",
                     data: {
                         product_id:product_id,
@@ -541,7 +542,8 @@
             return true;
         }
     </script>
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
 
+<?php /**PATH /var/www/html/resources/views/frontend/layouts/master.blade.php ENDPATH**/ ?>

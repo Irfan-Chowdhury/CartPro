@@ -45,6 +45,7 @@ use App\Http\Resources\ProductDetailsResource;
 use App\Models\SettingTranslation;
 use App\Models\StorefrontImage;
 use App\Services\CategoryService;
+use App\Services\FlashSaleService;
 use App\Services\HomeService;
 use App\Services\ProductService;
 use App\Traits\ArrayToObjectConvertionTrait;
@@ -60,14 +61,16 @@ class HomeController extends FrontBaseController
     private $categoryService;
     private $productService;
     private $homeService;
+    private $flashSaleService;
 
-    public function __construct(SliderService $sliderService, BrandService $brandService, CategoryService $categoryService, ProductService $productService, HomeService $homeService)
+    public function __construct(SliderService $sliderService, BrandService $brandService, CategoryService $categoryService, ProductService $productService, HomeService $homeService, FlashSaleService $flashSaleService)
     {
         $this->sliderService = $sliderService;
         $this->brandService  = $brandService;
         $this->categoryService  = $categoryService;
         $this->productService  = $productService;
         $this->homeService  = $homeService;
+        $this->flashSaleService  = $flashSaleService;
     }
 
 
@@ -86,12 +89,15 @@ class HomeController extends FrontBaseController
             return $this->homeService->getHomeData();
         });
 
+        // $homeData = $this->homeService->getHomeData();
+
         $sliders = $homeData->sliders;
 
         $sliderBanners = $homeData->sliderBanners;
 
         $categories = $homeData->categories;
 
+        $threeColumnBannerFull = $homeData->settings->threeColumnBannerFull;
         $threeColumnBanner = $homeData->settings->threeColumnBanner;
         $twoColumnBanner = $homeData->settings->twoColumnBanner;
         $oneColumnBanner = $homeData->settings->oneColumnBannerAgain;
@@ -104,6 +110,8 @@ class HomeController extends FrontBaseController
         $menu = null;
 
 
+        $flashSaleData = $homeData->flashSaleData;
+        $vertical = $flashSaleData->vertical;
 
         return view('frontend.pages.home',compact(
             'locale',
@@ -111,12 +119,15 @@ class HomeController extends FrontBaseController
             'homeData',
             'sliders',
             'sliderBanners',
+            'threeColumnBannerFull',
             'threeColumnBanner',
             'productDetailsTab',
             'twoColumnBanner',
             'trendProducts',
             'oneColumnBanner',
             'socialShareLinks',
+            'flashSaleData',
+            'vertical',
             'menu' //depricated
         ));
     }
