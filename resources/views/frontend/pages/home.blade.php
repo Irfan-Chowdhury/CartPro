@@ -9,7 +9,7 @@
     <meta product="og:url" @isset($settingHomePageSeo->meta_url) content="{{ $settingHomePageSeo->meta_url }}" @endisset>
     <meta product="og:type" @isset($settingHomePageSeo->meta_type) content="{{ $settingHomePageSeo->meta_type }}" @endisset>
     @isset($settingHomePageSeo->meta_image)
-        <meta product="og:image" content="{{ asset($settingHomePageSeo->meta_image) }}">
+        <meta product="og:image" content="{{ $settingHomePageSeo->meta_image }}">
     @endisset
 @endsection
 
@@ -193,7 +193,7 @@
                 <div class="row">
                     @foreach ($threeColumnBannerFull->banners as $item)
                         <div class="col-sm-4">
-                            <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($item->image)}}" alt=""></a>
+                            <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{$item->image}}" alt=""></a>
                         </div>
                     @endforeach
                 </div>
@@ -523,7 +523,7 @@
                 <div class="row">
                     @foreach ($twoColumnBanner->banners as $item)
                         <div class="col-sm-6">
-                            <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($item->image)}}" alt=""></a>
+                            <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{$item->image}}" alt=""></a>
                         </div>
                     @endforeach
                 </div>
@@ -763,24 +763,15 @@
 
 
     <!--Three Coloumn Banner --->
-    @if ($threeColumnBanner)
+    @if ($threeColumnBanner->isThreeColumnBannerEnabled)
     <section>
         <div class="container">
             <div class="row">
                 @foreach ($threeColumnBanner->banners as $item)
                     <div class="col-sm-4">
-                        <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($item->image)}}" alt=""></a>
+                        <a href="{{$item->actionUrl}}" target="{{$item->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{$item->image}}" alt=""></a>
                     </div>
                 @endforeach
-                {{-- <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_three_column_banners_1_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_1_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_1)}}" alt=""></a>
-                </div>
-                <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_three_column_banners_2_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_2_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_2)}}" alt=""></a>
-                </div>
-                <div class="col-sm-4">
-                    <a href="{{$settings_new['storefront_three_column_banners_3_call_to_action_url']->plain_value}}" target="{{$settings_new['storefront_three_column_banners_3_open_in_new_window']->plain_value==1 ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($three_column_banners_image_3)}}" alt=""></a>
-                </div> --}}
             </div>
         </div>
     </section>
@@ -1056,7 +1047,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <a href="{{$oneColumnBanner->actionUrl}}" target="{{$oneColumnBanner->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{asset($oneColumnBanner->image)}}" alt=""></a>
+                <a href="{{$oneColumnBanner->actionUrl}}" target="{{$oneColumnBanner->isNewWindow ? '__blank' : '' }}"><img class="lazy" data-src="{{$oneColumnBanner->image}}" alt=""></a>
             </div>
         </div>
     </div>

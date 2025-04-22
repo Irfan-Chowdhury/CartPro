@@ -120,12 +120,8 @@ class HomeService
                 'storefrontFlashSaleTitle' => $settings->storefront_flash_sale_title->value ?? null,
                 'flashSaleWithProducts' => $getFlashSale,
                 'vertical' => (object) [
-                    'title_1' => $settings->storefront_vertical_product_1_title->value ?? null,
-                    'title_2' => $settings->storefront_vertical_product_2_title->value ?? null,
-                    'title_3' => $settings->storefront_vertical_product_3_title->value ?? null,
                     'catgoryWiseProducts' => $verticalCategoryProducts
                 ]
-                // 'verticalProduct_1_title' => $settings->storefront_vertical_product_1_title->value ?? null,
             ],
             'homeFooterDescription' => $homeFooterDescription,
             'trendProducts' => $orderDetailProducts,
@@ -136,10 +132,6 @@ class HomeService
         return self::arrayToObject($arrayData);
     }
 
-    public function getFlashSaleProductsData($settings)
-    {
-
-    }
 
     public function getSliders()
     {
@@ -190,6 +182,7 @@ class HomeService
 
     public function getThreeColumnBanner($settings)
     {
+
         $threeColumnBanner = [];
 
         for ($i=0; $i < 3; $i++) {
